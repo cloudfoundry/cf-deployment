@@ -1,0 +1,30 @@
+#!/bin/bash
+
+set -e -x
+
+
+if [ $# -ne 2 ]; then
+  echo "Usage: create_releases PATH_TO_CF_RELEASE PATH_TO_ETCD_RELEASE"
+  exit 1
+fi
+
+CF_RELEASE_PATH=$1
+ETCD_RELEASE_PATH=$2
+
+if [ ! -d $CF_RELEASE_PATH ]; then
+  echo "PATH_TO_CF_RELEASE is invalid"
+  exit 1
+fi
+
+if [ ! -d $ETCD_RELEASE_PATH ]; then
+  echo "PATH_TO_ETCD_RELEASE is invalid"
+  exit 1
+fi
+
+pushd $CF_RELEASE_PATH
+  bosh -n create release --force
+popd
+
+pushd $ETCD_RELEASE_PATH
+  bosh -n create release --force
+popd
