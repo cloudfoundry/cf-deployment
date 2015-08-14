@@ -2,11 +2,17 @@
 
 set -e -x
 
-SCRIPT_DIR=$(dirname $0)
-RELEASE_DIR=$SCRIPT_DIR/../tmp/releases
+pushd $(dirname $0)
+  SCRIPT_DIR=$(pwd)
+popd
 
-rm -rf $RELEASE_DIR
-mkdir -p $RELEASE_DIR
+RELEASE_DIR=${SCRIPT_DIR}/../outputs/releases
+rm -rf ${RELEASE_DIR}
+mkdir -p ${RELEASE_DIR}
+
+OUTPUT_DIR=${SCRIPT_DIR}/../outputs/create_release
+rm -rf ${OUTPUT_DIR}
+mkdir -p ${OUTPUT_DIR}
 
 if [ $# -ne 2 ]; then
   echo "Usage: create_releases PATH_TO_CF_RELEASE PATH_TO_ETCD_RELEASE"
@@ -16,36 +22,40 @@ fi
 CF_RELEASE_PATH=$1
 ETCD_RELEASE_PATH=$2
 
-if [ ! -d $CF_RELEASE_PATH ]; then
+if [ ! -d ${CF_RELEASE_PATH} ]; then
   echo "PATH_TO_CF_RELEASE is invalid"
   exit 1
 fi
 
-if [ ! -d $ETCD_RELEASE_PATH ]; then
+if [ ! -d ${ETCD_RELEASE_PATH} ]; then
   echo "PATH_TO_ETCD_RELEASE is invalid"
   exit 1
 fi
 
-pushd $CF_RELEASE_PATH
-  CF_RELEASE_TARBALL=$(bosh -n create release --force --name cf --with-tarball | grep "Release tarball" | sed 's/.*: //')
+pushd ${CF_RELEASE_PATH}
+  bosh -n create release --force --name cf --with-tarball | tee ${OUTPUT_DIR}/cf.out
   EXIT_STATUS=${PIPESTATUS[0]}
 
-  if [ ! $EXIT_STATUS -eq 0 ]; then
+  if [ ! ${EXIT_STATUS} -eq 0 ]; then
     echo "Failed to create cf release"
     exit 1
   fi
 
-popd
-mv $CF_RELEASE_TARBALL $RELEASE_DIR
+  CF_RELEASE_TARBALL=$(grep "Release tarball" ${OUTPUT_DIR}/cf.out | sed 's/.*: //')
 
-pushd $ETCD_RELEASE_PATH
-  ETCD_RELEASE_TARBALL=$(bosh -n create release --force --name etcd --with-tarball | grep "Release tarball" | sed 's/.*: //')
+  mv ${CF_RELEASE_TARBALL} ${RELEASE_DIR}
+popd
+
+pushd ${ETCD_RELEASE_PATH}
+  bosh -n create release --force --name etcd --with-tarball | tee ${OUTPUT_DIR}/etcd.out
   EXIT_STATUS=${PIPESTATUS[0]}
 
-  if [ ! $EXIT_STATUS -eq 0 ]; then
+  if [ ! ${EXIT_STATUS} -eq 0 ]; then
     echo "Failed to create etcd release"
     exit 1
   fi
 
+  ETCD_RELEASE_TARBALL=$(grep "Release tarball" ${OUTPUT_DIR}/etcd.out | sed 's/.*: //')
+
+  mv ${ETCD_RELEASE_TARBALL} ${RELEASE_DIR}
 popd
-mv $ETCD_RELEASE_TARBALL $RELEASE_DIR
