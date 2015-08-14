@@ -2,6 +2,11 @@
 
 set -e -x
 
+SCRIPT_DIR=$(dirname $0)
+RELEASE_DIR=$SCRIPT_DIR/../tmp/releases
+
+rm -rf $RELEASE_DIR
+mkdir -p $RELEASE_DIR
 
 if [ $# -ne 2 ]; then
   echo "Usage: create_releases PATH_TO_CF_RELEASE PATH_TO_ETCD_RELEASE"
@@ -22,9 +27,25 @@ if [ ! -d $ETCD_RELEASE_PATH ]; then
 fi
 
 pushd $CF_RELEASE_PATH
-  bosh -n create release --force
+  CF_RELEASE_TARBALL=$(bosh -n create release --force --name cf --with-tarball | grep "Release tarball" | sed 's/.*: //')
+  EXIT_STATUS=${PIPESTATUS[0]}
+
+  if [ ! $EXIT_STATUS -eq 0 ]; then
+    echo "Failed to create cf release"
+    exit 1
+  fi
+
 popd
+mv $CF_RELEASE_TARBALL $RELEASE_DIR
 
 pushd $ETCD_RELEASE_PATH
-  bosh -n create release --force
+  ETCD_RELEASE_TARBALL=$(bosh -n create release --force --name etcd --with-tarball | grep "Release tarball" | sed 's/.*: //')
+  EXIT_STATUS=${PIPESTATUS[0]}
+
+  if [ ! $EXIT_STATUS -eq 0 ]; then
+    echo "Failed to create etcd release"
+    exit 1
+  fi
+
 popd
+mv $ETCD_RELEASE_TARBALL $RELEASE_DIR
