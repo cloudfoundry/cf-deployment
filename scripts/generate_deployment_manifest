@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -e -x
+
+pushd $(dirname $0) > /dev/null
+  SCRIPT_DIR=$(pwd)
+popd > /dev/null
+
+TEMPLATES_DIR=${SCRIPT_DIR}/../templates
+
+if [ $# -lt 3 ]; then
+  echo "Usage: generate_deployment_manifest <aws|openstack|warden|vsphere> PATH_TO_CF_RELEASE [stubs...]"
+  exit 1
+fi
+
+INFRASTRUCTURE=$1
+CF_RELEASE_PATH=$2
+
+shift
+shift
+
+if [ ! -d ${CF_RELEASE_PATH} ]; then
+  echo "PATH_TO_CF_RELEASE is invalid"
+  exit 1
+fi
+
+${CF_RELEASE_PATH}/generate_deployment_manifest ${INFRASTRUCTURE} ${TEMPLATES_DIR}/releases.yml ${TEMPLATES_DIR}/job_templates.yml $@
