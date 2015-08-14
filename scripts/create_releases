@@ -27,7 +27,7 @@ if [ ! -d ${CF_RELEASE_PATH} ]; then
   exit 1
 fi
 
-if [ ! -d ${ETCD_RELEASE_PATH} ]; then
+if [ ! -e ${ETCD_RELEASE_PATH} ]; then
   echo "PATH_TO_ETCD_RELEASE is invalid"
   exit 1
 fi
@@ -46,16 +46,20 @@ pushd ${CF_RELEASE_PATH}
   mv ${CF_RELEASE_TARBALL} ${RELEASE_DIR}
 popd
 
-pushd ${ETCD_RELEASE_PATH}
-  bosh -n create release --force --name etcd --with-tarball 2>&1 | tee ${OUTPUT_DIR}/etcd.out
-  EXIT_STATUS=${PIPESTATUS[0]}
+if [ -d ${ETCD_RELEASE_PATH} ]; then
+  pushd ${ETCD_RELEASE_PATH}
+    bosh -n create release --force --name etcd --with-tarball 2>&1 | tee ${OUTPUT_DIR}/etcd.out
+    EXIT_STATUS=${PIPESTATUS[0]}
 
-  if [ ! ${EXIT_STATUS} -eq 0 ]; then
-    echo "Failed to create etcd release"
-    exit 1
-  fi
+    if [ ! ${EXIT_STATUS} -eq 0 ]; then
+      echo "Failed to create etcd release"
+      exit 1
+    fi
 
-  ETCD_RELEASE_TARBALL=$(grep "Release tarball" ${OUTPUT_DIR}/etcd.out | sed 's/.*: //')
+    ETCD_RELEASE_TARBALL=$(grep "Release tarball" ${OUTPUT_DIR}/etcd.out | sed 's/.*: //')
 
-  mv ${ETCD_RELEASE_TARBALL} ${RELEASE_DIR}
-popd
+    mv ${ETCD_RELEASE_TARBALL} ${RELEASE_DIR}
+  popd
+else
+  cp ${ETCD_RELEASE_PATH} ${RELEASE_DIR}
+fi
