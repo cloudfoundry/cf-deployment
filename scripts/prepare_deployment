@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -e -x
+
+pushd $(dirname $0) > /dev/null
+  SCRIPT_DIR=$(pwd)
+popd > /dev/null
+
+if [ $# -lt 4 ]; then
+  echo "Usage: generate_deployment_manifest <aws|openstack|warden|vsphere> PATH_TO_CF_RELEASE PATH_TO_ETCD_RELEASE [stubs...]"
+  exit 1
+fi
+
+INFRASTRUCTURE=$1
+CF_RELEASE_PATH=$2
+ETCD_RELEASE_PATH=$3
+
+shift
+shift
+shift
+
+${SCRIPT_DIR}/create_releases ${CF_RELEASE_PATH} ${ETCD_RELEASE_PATH} > /dev/null
+
+${SCRIPT_DIR}/generate_deployment_manifest ${INFRASTRUCTURE} ${CF_RELEASE_PATH} $@
