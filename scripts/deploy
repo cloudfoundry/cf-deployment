@@ -1,0 +1,37 @@
+#!/bin/bash
+
+set -e -x
+
+pushd $(dirname $0) > /dev/null
+  SCRIPT_DIR=$(pwd)
+popd > /dev/null
+
+if [ $# -lt 4 ]; then
+  echo "Usage: deploy <aws|openstack|warden|vsphere> PATH_TO_CF_RELEASE PATH_TO_ETCD_RELEASE [stubs...]"
+  exit 1
+fi
+
+INFRASTRUCTURE=$1
+CF_RELEASE_PATH=$2
+ETCD_RELEASE_PATH=$3
+
+OUTPUTS=${SCRIPT_DIR}/../outputs
+RELEASE_DIR=${OUTPUTS}/releases
+MANIFESTS=${OUTPUTS}/manifests
+rm -rf ${MANIFESTS}
+mkdir -p ${MANIFESTS}
+
+shift
+shift
+shift
+
+${SCRIPT_DIR}/prepare_deployment ${INFRASTRUCTURE} ${CF_RELEASE_PATH} ${ETCD_RELEASE_PATH} $@ > ${MANIFESTS}/cf.yml
+
+
+#upload all releases
+for i in ${RELEASE_DIR}/*.tgz; do
+  bosh upload release $i --rebase --skip-if-exists
+done
+
+#deploy
+bosh -n --deployment ${MANIFESTS}/cf.yml deploy

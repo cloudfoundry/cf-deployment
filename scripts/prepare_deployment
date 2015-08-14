@@ -7,7 +7,7 @@ pushd $(dirname $0) > /dev/null
 popd > /dev/null
 
 if [ $# -lt 4 ]; then
-  echo "Usage: generate_deployment_manifest <aws|openstack|warden|vsphere> PATH_TO_CF_RELEASE PATH_TO_ETCD_RELEASE [stubs...]"
+  echo "Usage: prepare_deployment <aws|openstack|warden|vsphere> PATH_TO_CF_RELEASE PATH_TO_ETCD_RELEASE [stubs...]"
   exit 1
 fi
 
@@ -19,6 +19,6 @@ shift
 shift
 shift
 
-${SCRIPT_DIR}/create_releases ${CF_RELEASE_PATH} ${ETCD_RELEASE_PATH} > /dev/null
+${SCRIPT_DIR}/create_releases ${CF_RELEASE_PATH} ${ETCD_RELEASE_PATH} 1>&2
 
 ${SCRIPT_DIR}/generate_deployment_manifest ${INFRASTRUCTURE} ${CF_RELEASE_PATH} $@
