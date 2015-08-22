@@ -32,6 +32,8 @@ if [ ! -e ${ETCD_RELEASE_PATH} ]; then
   exit 1
 fi
 
+export BOSH_USE_BUNDLER=true
+
 pushd ${CF_RELEASE_PATH}
   bosh -n create release --force --name cf --with-tarball 2>&1 | tee ${OUTPUT_DIR}/cf.out
   EXIT_STATUS=${PIPESTATUS[0]}

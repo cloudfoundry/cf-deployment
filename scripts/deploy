@@ -27,6 +27,7 @@ shift
 
 ${SCRIPT_DIR}/prepare_deployment ${INFRASTRUCTURE} ${CF_RELEASE_PATH} ${ETCD_RELEASE_PATH} $@ > ${MANIFESTS}/cf.yml
 
+export BOSH_USE_BUNDLER=true
 
 #upload all releases
 for i in ${RELEASE_DIR}/*.tgz; do
