@@ -31,7 +31,7 @@ export BOSH_USE_BUNDLER=true
 
 #upload all releases
 for i in ${RELEASE_DIR}/*.tgz; do
-  bosh upload release $i --rebase --skip-if-exists
+  bosh upload release $i
 done
 
 #deploy

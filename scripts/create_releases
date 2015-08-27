@@ -6,6 +6,8 @@ pushd $(dirname $0)
   SCRIPT_DIR=$(pwd)
 popd
 
+CF_DEPLOYMENT_DIR=$(cd $SCRIPT_DIR/.. && pwd)
+
 RELEASE_DIR=${SCRIPT_DIR}/../outputs/releases
 rm -rf ${RELEASE_DIR}
 mkdir -p ${RELEASE_DIR}
@@ -34,8 +36,15 @@ fi
 
 export BOSH_USE_BUNDLER=true
 
+date=$(date +%s)
+
+cat > $CF_DEPLOYMENT_DIR/stubs/version.yml <<EOF
+---
+release_version_overrides: $date
+EOF
+
 pushd ${CF_RELEASE_PATH}
-  bosh -n create release --force --name cf --with-tarball 2>&1 | tee ${OUTPUT_DIR}/cf.out
+  bosh -n create release --force --name cf --version $date --with-tarball 2>&1 | tee ${OUTPUT_DIR}/cf.out
   EXIT_STATUS=${PIPESTATUS[0]}
 
   if [ ! ${EXIT_STATUS} -eq 0 ]; then
@@ -50,7 +59,7 @@ popd
 
 if [ -d ${ETCD_RELEASE_PATH} ]; then
   pushd ${ETCD_RELEASE_PATH}
-    bosh -n create release --force --name etcd --with-tarball 2>&1 | tee ${OUTPUT_DIR}/etcd.out
+    bosh -n create release --force --name etcd --version $date --with-tarball 2>&1 | tee ${OUTPUT_DIR}/etcd.out
     EXIT_STATUS=${PIPESTATUS[0]}
 
     if [ ! ${EXIT_STATUS} -eq 0 ]; then

@@ -6,6 +6,8 @@ pushd $(dirname $0) > /dev/null
   SCRIPT_DIR=$(pwd)
 popd > /dev/null
 
+STUBS_DIR=${SCRIPT_DIR}/../stubs
+
 if [ $# -lt 4 ]; then
   echo "Usage: prepare_deployment <aws|openstack|warden|vsphere> PATH_TO_CF_RELEASE PATH_TO_ETCD_RELEASE [stubs...]"
   exit 1
@@ -21,4 +23,4 @@ shift
 
 ${SCRIPT_DIR}/create_releases ${CF_RELEASE_PATH} ${ETCD_RELEASE_PATH} 1>&2
 
-${SCRIPT_DIR}/generate_deployment_manifest ${INFRASTRUCTURE} ${CF_RELEASE_PATH} $@
+${SCRIPT_DIR}/generate_deployment_manifest ${INFRASTRUCTURE} ${CF_RELEASE_PATH} $@ ${STUBS_DIR}/version.yml
