@@ -24,4 +24,4 @@ if [ ! -d ${CF_RELEASE_PATH} ]; then
   exit 1
 fi
 
-${CF_RELEASE_PATH}/generate_deployment_manifest ${INFRASTRUCTURE} ${STUBS_DIR}/releases.yml ${STUBS_DIR}/job_templates.yml $@
+${CF_RELEASE_PATH}/scripts/generate_deployment_manifest ${INFRASTRUCTURE} ${STUBS_DIR}/releases.yml ${STUBS_DIR}/job_templates.yml $@

@@ -38,13 +38,9 @@ export BOSH_USE_BUNDLER=true
 
 date=$(date +%s)
 
-cat > $CF_DEPLOYMENT_DIR/stubs/version.yml <<EOF
----
-release_version_overrides: $date
-EOF
-
 pushd ${CF_RELEASE_PATH}
-  bosh -n create release --force --name cf --version $date --with-tarball 2>&1 | tee ${OUTPUT_DIR}/cf.out
+  CF_RELEASE_VERSION=$(tail releases/**/index.yml | grep " version" | tail -1 | grep -E -o "[0-9.]+")+dev.${date}
+  bosh -n create release --force --name cf --version ${CF_RELEASE_VERSION} --with-tarball 2>&1 | tee ${OUTPUT_DIR}/cf.out
   EXIT_STATUS=${PIPESTATUS[0]}
 
   if [ ! ${EXIT_STATUS} -eq 0 ]; then
@@ -59,7 +55,8 @@ popd
 
 if [ -d ${ETCD_RELEASE_PATH} ]; then
   pushd ${ETCD_RELEASE_PATH}
-    bosh -n create release --force --name etcd --version $date --with-tarball 2>&1 | tee ${OUTPUT_DIR}/etcd.out
+    ETCD_VERSION=$(tail releases/**/index.yml | grep " version" | tail -1 | grep -E -o "[0-9.]+")+dev.${date}
+    bosh -n create release --force --name etcd --version ${ETCD_VERSION} --with-tarball 2>&1 | tee ${OUTPUT_DIR}/etcd.out
     EXIT_STATUS=${PIPESTATUS[0]}
 
     if [ ! ${EXIT_STATUS} -eq 0 ]; then
@@ -72,5 +69,15 @@ if [ -d ${ETCD_RELEASE_PATH} ]; then
     mv ${ETCD_RELEASE_TARBALL} ${RELEASE_DIR}
   popd
 else
+  ETCD_VERSION=$(basename ${ETCD_RELEASE_PATH} | grep -o -E "[0-9.]*[0-9]")
   cp ${ETCD_RELEASE_PATH} ${RELEASE_DIR}
 fi
+
+cat > $CF_DEPLOYMENT_DIR/stubs/versions.yml <<EOF
+---
+releases:
+- name: cf
+  version: ${CF_RELEASE_VERSION}
+- name: etcd
+  version: ${ETCD_VERSION}
+EOF
