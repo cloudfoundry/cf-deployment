@@ -69,7 +69,7 @@ if [ -d ${ETCD_RELEASE_PATH} ]; then
     mv ${ETCD_RELEASE_TARBALL} ${RELEASE_DIR}
   popd
 else
-  ETCD_VERSION=$(tar -x -O -f ${ETCD_RELEASE_PATH} release.MF | grep -E '^version:' | grep -o -E "[0-9.]*[0-9]")
+  ETCD_VERSION=$(tar -x -O -f ${ETCD_RELEASE_PATH} ./release.MF | grep -E '^version:' | grep -o -E "[0-9.]*[0-9]")
   cp ${ETCD_RELEASE_PATH} ${RELEASE_DIR}
 fi
 
