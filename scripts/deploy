@@ -6,14 +6,15 @@ pushd $(dirname $0) > /dev/null
   SCRIPT_DIR=$(pwd)
 popd > /dev/null
 
-if [ $# -lt 4 ]; then
-  echo "Usage: deploy <aws|openstack|warden|vsphere> PATH_TO_CF_RELEASE PATH_TO_ETCD_RELEASE [stubs...]"
+if [ $# -lt 5 ]; then
+  echo "Usage: deploy <aws|openstack|warden|vsphere> PATH_TO_CF_RELEASE PATH_TO_ETCD_RELEASE PATH_TO_CONSUL_RELEASE [stubs...]"
   exit 1
 fi
 
 INFRASTRUCTURE=$1
 CF_RELEASE_PATH=$2
 ETCD_RELEASE_PATH=$3
+CONSUL_RELEASE_PATH=$4
 
 OUTPUTS=${SCRIPT_DIR}/../outputs
 RELEASE_DIR=${OUTPUTS}/releases
@@ -24,8 +25,9 @@ mkdir -p ${MANIFESTS}
 shift
 shift
 shift
+shift
 
-${SCRIPT_DIR}/prepare_deployment ${INFRASTRUCTURE} ${CF_RELEASE_PATH} ${ETCD_RELEASE_PATH} $@ > ${MANIFESTS}/cf.yml
+${SCRIPT_DIR}/prepare_deployment ${INFRASTRUCTURE} ${CF_RELEASE_PATH} ${ETCD_RELEASE_PATH} ${CONSUL_RELEASE_PATH} $@ > ${MANIFESTS}/cf.yml
 
 export BOSH_USE_BUNDLER=true
 
