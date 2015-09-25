@@ -18,10 +18,9 @@ CF_RELEASE_PATH=$2
 
 shift
 shift
-
 if [ ! -d ${CF_RELEASE_PATH} ]; then
   echo "PATH_TO_CF_RELEASE is invalid"
   exit 1
 fi
 
-${CF_RELEASE_PATH}/scripts/generate_deployment_manifest ${INFRASTRUCTURE} ${STUBS_DIR}/releases.yml ${STUBS_DIR}/job_templates.yml $@
+${CF_RELEASE_PATH}/scripts/generate_deployment_manifest ${INFRASTRUCTURE} ${STUBS_DIR}/job_templates.yml $@

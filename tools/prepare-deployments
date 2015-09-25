@@ -1,0 +1,180 @@
+#!/bin/bash
+
+pushd $(dirname $0)
+  TOOLS_DIR=$(pwd)
+popd
+
+INFRASTRUCTURE=$1
+
+if [ "$#" -lt "1" ]; then
+  echo "USAGE: prepare-deployments INFRASTRUCTURE [path-to-config-file]"
+  exit 1
+fi
+
+#if [ "$infrastructure" != "aws" ]; then
+#  echo "AWS is the only supported infrastructure currently."
+#  exit 1
+#fi
+
+CONFIG_PATH=$2
+
+#create variables with default values
+CF_RELEASE="integration-latest"
+ETCD_RELEASE="integration-latest"
+CONSUL_RELEASE="integration-latest"
+STEMCELL_RELEASE="integration-latest"
+STUBS=""
+DEPLOYMENTS_DIR="./outputs/manifests"
+
+#parse json and replace default values
+TEMP=$(cat ${CONFIG_PATH} | jq -r .cf)
+if [ "${TEMP}" != "" ]; then
+  if [[ "${TEMP}" == ~* ]]; then
+    echo "Please specify absolute path for cf release path"
+    exit 1
+  else
+    CF_RELEASE=${TEMP}
+  fi
+fi
+
+TEMP=$(cat ${CONFIG_PATH} | jq -r .etcd)
+if [ "${TEMP}" != "" ]; then
+  if [[ "${TEMP}" == ~* ]]; then
+    echo "Please specify absolute path for etcd release path"
+    exit 1
+  else
+    ETCD_RELEASE=${TEMP}
+  fi
+fi
+
+
+TEMP=$(cat ${CONFIG_PATH} | jq -r .stemcell)
+if [ "${TEMP}" != "" ]; then
+  if [[ "${TEMP}" == ~* ]]; then
+    echo "Please specify absolute path for stemcell"
+    exit 1
+  else
+    STEMCELL_RELEASE=${TEMP}
+  fi
+fi
+
+
+TEMP=$(cat ${CONFIG_PATH} | jq -r .stubs[])
+TEMP=(${TEMP})
+for var in "${TEMP[@]}"
+do
+  if [ "${var}" != "" ]; then
+    STUBS="${STUBS} ${var}"
+    var="${var%\"}"
+    var="${var#\"}"
+    if [[ "${var}" == ~* ]]; then
+      echo "Please specify absolute path for every stub"
+      exit 1
+    fi
+  fi
+done
+
+if [ -d "$CF_RELEASE" ]; then
+  CF_RELEASE_VERSION="create"
+  CF_RELEASE_URL="file://${CF_RELEASE}"
+  CF_RELEASE_SCHEME="path"
+elif [ "$CF_RELEASE" = "integration-latest" ]; then
+  GIT_COMMIT=$(cat ${TOOLS_DIR}/../blessed_versions.yml | grep commit | awk '{print $2;}')
+  dir=`mktemp -d -t cf-`
+  pushd ${dir} 
+    git clone https://github.com/cloudfoundry/cf-release.git
+    pushd cf-release
+      git checkout $GIT_COMMIT
+      ./scripts/update
+      CF_RELEASE_VERSION="create"
+      CF_RELEASE_URL="file://${dir}/cf-release"
+      CF_RELEASE_SCHEME="path"
+      CF_RELEASE="${dir}/cf-release"
+    popd
+  popd
+else
+  echo "Invalid cf-release configuration. CF-Release must be the file path to cf-release or integration-latest"
+  exit 1
+fi
+
+if [ -d $ETCD_RELEASE ]; then
+  ETCD_RELEASE_VERSION="create"
+  ETCD_RELEASE_LOCATION="path: file://${ETCD_RELEASE}"
+elif [ -e $ETCD_RELEASE ]; then
+  ETCD_VERSION=$(tar -x -O -f ${ETCD_RELEASE} ./release.MF | grep -E '^version:' | grep -o -E "[0-9.]*[0-9]")
+  ETCD_RELEASE_LOCATION="path file://${ETCD_RELEASE}"
+elif [ "${ETCD_RELEASE}" == "director-latest" ]; then
+  ETCD_RELEASE_VERSION="latest"
+  ETCD_RELEASE_LOCATION=""
+elif [ "${ETCD_RELEASE}" == "integration-latest" ]; then
+  ETCD_RELEASE_VERSION=$(grep etcd: -A3 ${TOOLS_DIR}/../blessed_versions.yml | grep version: | awk '{print $2};')
+  ETCD_RELEASE_LOCATION="url: $(grep etcd: -A3 ${TOOLS_DIR}/../blessed_versions.yml | grep url: | awk '{print $2};')"
+  ETCD_SHA1="sha1: $(grep etcd: -A3 ${TOOLS_DIR}/../blessed_versions.yml | grep sha1: | awk '{print $2};')"
+else 
+  echo "Invalid etcd release configuration. Etcd must be a tarball, consul-release folder, integration-latest or director-latest"
+  exit 1
+fi
+
+if [ -d $CONSUL_RELEASE ]; then
+  CONSUL_RELEASE_VERSION="create"
+  CONSUL_RELEASE_LOCATION="path: file://${CONSUL_RELEASE}"
+elif [ -e $CONSUL_RELEASE ]; then
+  CONSUL_VERSION=$(tar -x -O -f ${CONSUL_RELEASE} ./release.MF | grep -E '^version:' | grep -o -E "[0-9.]*[0-9]")
+  CONSUL_RELEASE_LOCATION="path file://${CONSUL_RELEASE}"
+elif [ "${CONSUL_RELEASE}" == "director-latest" ]; then
+  CONSUL_RELEASE_VERSION="latest"
+  CONSUL_RELEASE_LOCATION=""
+elif [ "${CONSUL_RELEASE}" == "integration-latest" ]; then
+  echo "" #skipped for now. There is no consul release in blessed file.
+  #CONSUL_RELEASE_VERSION=$(grep consul: -A3 ${TOOLS_DIR}/../blessed_versions.yml | grep version: | awk '{print $2};')
+  #CONSUL_RELEASE_LOCATION="url: $(grep consul: -A3 ${TOOLS_DIR}/../blessed_versions.yml | grep url: | awk '{print $2};')"
+  #CONSUL_SHA1="sha1: $(grep consul: -A3 ${TOOLS_DIR}/../blessed_versions.yml | grep sha1: | awk '{print $2};')"
+else 
+  echo "Invalid consul release configuration. Consul must be a tarball, consul-release folder, integration-latest or director-latest "
+  exit 1
+fi
+
+if [ -e $STEMCELL_RELEASE ]; then
+cat > ${DEPLOYMENTS_DIR}/stemcell.yml <<EOF
+---
+meta:
+  stemcell:
+    name: $(tar -x -O -f ${STEMCELL_RELEASE} ./stemcell.MF | grep -E '^name:' -m1 | awk '{print $2};')
+    version: $(tar -x -O -f ${STEMCELL_RELEASE} ./stemcell.MF | grep -E '^version:' | grep -o -E "[0-9.]*[0-9]")
+    sha1: $(tar -x -O -f ${STEMCELL_RELEASE} ./stemcell.MF | grep -E '^sha1:' | awk '{print $2};')
+    path: file://${STEMCELL_RELEASE}
+EOF
+
+elif [ "$STEMCELL_RELEASE" == "integration-latest" ]; then
+cat > ${DEPLOYMENTS_DIR}/stemcell.yml <<EOF
+---
+meta:
+  stemcell:
+    name: $(grep stemcell: -A5 ${TOOLS_DIR}/../blessed_versions.yml | grep 'type:' | awk '{print $2};')
+    version: $(grep stemcell: -A5 ${TOOLS_DIR}/../blessed_versions.yml | grep version: | awk '{print $2};')
+    url: $(grep stemcell: -A5 ${TOOLS_DIR}/../blessed_versions.yml | grep url: | awk '{print $2};')
+    sha1: $(grep stemcell: -A5 ${TOOLS_DIR}/../blessed_versions.yml | grep sha1: | awk '{print $2};')
+EOF
+
+elif [ "$STEMCELL_RELEASE" == "director-latest" ]; then
+  continue
+else
+  echo "Invalid stemcell configuration. The stemcell must be a tarball, integration-latest or director-latest"
+  exit 1
+fi
+
+cat > ${DEPLOYMENTS_DIR}/release.yml <<EOF
+---
+releases:
+  - name: cf
+    version: ${CF_RELEASE_VERSION}
+    ${CF_RELEASE_SCHEME}: ${CF_RELEASE_URL}
+  - name: etcd
+    version: ${ETCD_RELEASE_VERSION}
+    ${ETCD_RELEASE_LOCATION}
+    ${ETCD_SHA1}
+  - name: consul
+    version: latest 
+EOF
+
+${TOOLS_DIR}/../scripts/generate_deployment_manifest ${INFRASTRUCTURE} ${CF_RELEASE} ${DEPLOYMENTS_DIR}/release.yml ${DEPLOYMENTS_DIR}/stemcell.yml ${STUBS} > "${DEPLOYMENTS_DIR}/cf-deployment-manifest.yml"

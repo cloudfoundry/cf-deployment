@@ -55,6 +55,10 @@ STEMCELL_VERSION=$(tar -xOf ${STEMCELL_PATH} stemcell.MF | grep version | head -
 STEMCELL_NAME=$(tar -xOf ${STEMCELL_PATH} stemcell.MF | grep name | head -1 | awk '{print $2;}')
 STEMCELL_SHA1=$(sha1sum ${STEMCELL_PATH} | awk '{print $1;}')
 
+#prepare-deployments script relies on the `commit` tag for cf.
+#Currently prepare deployment uses this information naively by
+#calling grep. If you wish to cange this file to have more commits
+#then prepare-deployment will need to be updated as well.
 cat > $CF_DEPLOYMENT_DIR/blessed_versions.yml <<EOF
 ---
 releases:
