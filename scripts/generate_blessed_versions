@@ -59,26 +59,37 @@ STEMCELL_SHA1=$(sha1sum ${STEMCELL_PATH} | awk '{print $1;}')
 #Currently prepare deployment uses this information naively by
 #calling grep. If you wish to cange this file to have more commits
 #then prepare-deployment will need to be updated as well.
-cat > $CF_DEPLOYMENT_DIR/blessed_versions.yml <<EOF
----
-releases:
-  cf:
-    commit: ${CF_RELEASE_COMMIT}
-  etcd:
-    version: ${ETCD_VERSION}
-    sha1: ${ETCD_SHA}
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/etcd-release?v=${ETCD_VERSION}
-stemcell:
-  aws:
-    type: ${STEMCELL_NAME}
-    version: ${STEMCELL_VERSION}
-    url: https://bosh.io/d/stemcells/bosh-aws-xen-hvm-ubuntu-trusty-go_agent?v=${STEMCELL_VERSION}
-    sha1: ${STEMCELL_SHA1}
+cat > $CF_DEPLOYMENT_DIR/blessed_versions.json <<EOF
+{
+  "releases": [
+    {
+      "cf": {
+        "commit": "${CF_RELEASE_COMMIT}"
+      }
+    },
+    {
+      "etcd": {
+        "version": "${ETCD_VERSION}",
+        "sha1": "${ETCD_SHA}",
+        "url": "https://bosh.io/d/github.com/cloudfoundry-incubator/etcd-release?v=${ETCD_VERSION}"
+      }
+    }
+  ],
+
+  "stemcell": {
+    "aws": {
+      "type": "${STEMCELL_NAME}",
+      "version": "${STEMCELL_VERSION}",
+      "url": "https://bosh.io/d/stemcells/bosh-aws-xen-hvm-ubuntu-trusty-go_agent?v=${STEMCELL_VERSION}",
+      "sha1": "${STEMCELL_SHA1}"
+    }
+  }
+}
 EOF
 
-cat $CF_DEPLOYMENT_DIR/blessed_versions.yml
+cat $CF_DEPLOYMENT_DIR/blessed_versions.json
 
-git add $CF_DEPLOYMENT_DIR/blessed_versions.yml
+git add $CF_DEPLOYMENT_DIR/blessed_versions.json
 git config user.name "CF MEGA BOT"
 git config user.email "cf-mega@pivotal.io"
 git commit -m "Update blessing"
