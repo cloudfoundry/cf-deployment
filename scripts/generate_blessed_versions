@@ -63,16 +63,14 @@ cat > $CF_DEPLOYMENT_DIR/blessed_versions.json <<EOF
 {
   "releases": [
     {
-      "cf": {
-        "commit": "${CF_RELEASE_COMMIT}"
-      }
+      "name": "cf",
+      "commit": "${CF_RELEASE_COMMIT}"
     },
     {
-      "etcd": {
-        "version": "${ETCD_VERSION}",
-        "sha1": "${ETCD_SHA}",
-        "url": "https://bosh.io/d/github.com/cloudfoundry-incubator/etcd-release?v=${ETCD_VERSION}"
-      }
+      "name": "etcd",
+      "version": "${ETCD_VERSION}",
+      "sha1": "${ETCD_SHA}",
+      "url": "https://bosh.io/d/github.com/cloudfoundry-incubator/etcd-release?v=${ETCD_VERSION}"
     }
   ],
 
