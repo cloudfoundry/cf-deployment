@@ -108,23 +108,6 @@ determine_release_location() {
     esac
 }
 
-determine_cf_release_location() {
-  if [ "${1}" == "integration-latest" ]; then
-    git_commit=$(grep commit "${TOOLS_DIR}/../blessed_versions.json" | awk '{gsub(/"/, "", $2); print $2;}')
-    dir=$(mktemp -d -t cf-)
-    pushd "${dir}" > /dev/null
-       git clone https://github.com/cloudfoundry/cf-release.git > /dev/null
-       pushd cf-release > /dev/null
-         git checkout "${git_commit}" > /dev/null
-         ./scripts/update > /dev/null
-         echo "${dir}/cf-release"
-       popd > /dev/null
-     popd > /dev/null
-  else
-    echo "${1}"
-  fi
-}
-
 validate_path() {
   if [ "${1:0:1}" != "/" ]; then
     echo "Stub path ${1} should be absolute." 1>&2
@@ -176,8 +159,26 @@ if [ "${cf_release_thing}" != "integration-latest" ] ; then
   validate_path "${cf_release_thing}"
 fi
 
+cf_release_location=""
+determine_cf_release_location() {
+  if [ "${1}" == "integration-latest" ]; then
+    git_commit=$(grep commit "${TOOLS_DIR}/../blessed_versions.json" | awk '{gsub(/"/, "", $2); print $2;}')
+    dir=$(mktemp -d -t cf-)
+    pushd "${dir}" > /dev/null
+       git clone https://github.com/cloudfoundry/cf-release.git > /dev/null
+       pushd cf-release > /dev/null
+         git checkout "${git_commit}" > /dev/null
+         ./scripts/update > /dev/null
+         cf_release_location="${dir}/cf-release"
+       popd > /dev/null
+     popd > /dev/null
+  else
+    cf_release_location="${1}"
+  fi
+}
+
 cf_version=$(determine_version "${cf_release_thing}" 'cf')
-cf_release_location=$(determine_cf_release_location "${cf_release_thing}" 'cf')
+determine_cf_release_location "${cf_release_thing}" 'cf'
 
 stemcell_thing=$(jq -r '.stemcell' "${PATH_TO_CONFIG_FILE}" )
 stemcell_thing=${stemcell_thing:-"integration-latest"}
