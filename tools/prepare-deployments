@@ -9,33 +9,33 @@ fi
 
 infrastructure="${1:?}"
 
-pushd $(dirname $0)
+pushd $(dirname "${0}")
    TOOLS_DIR=$(pwd)
 popd
 
 PATH_TO_CONFIG_FILE="${2:-${TOOLS_DIR}/config.json}"
 
-DEPLOYMENTS_DIR=$( cat $PATH_TO_CONFIG_FILE | jq -r 'if .["deployments-dir"] then .["deployments-dir"] else "" end')
+DEPLOYMENTS_DIR=$( jq -r 'if .["deployments-dir"] then .["deployments-dir"] else "" end' "${PATH_TO_CONFIG_FILE}")
 DEPLOYMENTS_DIR="${DEPLOYMENTS_DIR:-./outputs/manifests/}"
 
-if [ ! -d $DEPLOYMENTS_DIR ]; then
+if [ ! -d "${DEPLOYMENTS_DIR}" ]; then
   echo "deployments-dir must be a directory" 1>&2
   exit 1
 fi
 
 determine_version() {
 
-  if [ ${2} == "cf" ]; then
-    if [ ${1} == "integration-latest" ]; then
+  if [ "${2}" == "cf" ]; then
+    if [ "${1}" == "integration-latest" ]; then
       echo "create"
       exit 0
     fi
   fi
 
-  case ${1} in
+  case "${1}" in
 
     "integration-latest")
-      cat blessed_versions.json | jq ".releases[] | select(.name == \"${2}\") | .version"
+      jq ".releases[] | select(.name == \"${2}\") | .version" blessed_versions.json
       ;;
 
     "director-latest")
@@ -43,7 +43,7 @@ determine_version() {
       ;;
 
     *.tgz)
-      echo $(tar -x -O -f ${1} ./release.MF |  grep -E '^version:' | awk '{print $2};')
+      tar -x -O -f "${1}" ./release.MF |  grep -E '^version:' | awk '{print $2};'
       ;;
 
     *)
@@ -53,12 +53,12 @@ determine_version() {
 }
 
 determine_stemcell_version() {
-  case ${1} in
+  case "${1}" in
     *.tgz)
-      echo $(tar -x -O -f ${1} stemcell.MF |  grep -E '^version:' | awk '{print $2};')
+      tar -x -O -f "${1}" stemcell.MF |  grep -E '^version:' | awk '{print $2};'
     ;;
     "integration-latest")
-      cat blessed_versions.json | jq ".stemcells[] | select(.name == \"${2}\") | .version"
+      jq ".stemcells[] | select(.name == \"${2}\") | .version" blessed_versions.json 
     ;;
     "director-latest")
       echo "latest"
@@ -66,21 +66,21 @@ determine_stemcell_version() {
   esac
 }
 
-determin_stemcell_sha1() {
-  case ${1} in
+determine_stemcell_sha1() {
+  case "${1}" in
     "director-latest")
       echo ""
     ;;
     *)
-      echo "sha1: $(cat blessed_versions.json | jq ".stemcells[] | select(.name == \"${2}\") | .sha1")"
+      echo "sha1: $(jq ".stemcells[] | select(.name == \"${2}\") | .sha1" blessed_versions.json)"
     ;;
   esac
 }
 
-determin_stemcell_location() {
-  case ${1} in
+determine_stemcell_location() {
+  case "${1}" in
      "integration-latest")
-      echo "url: $(cat blessed_versions.json | jq ".stemcells[] | select(.name == \"${2}\") | .url")"
+      echo "url: $(jq ".stemcells[] | select(.name == \"${2}\") | .url" blessed_versions.json)"
     ;;
     *.tgz)
       echo "path: file://${1}"
@@ -92,10 +92,10 @@ determin_stemcell_location() {
 }
 
 determine_release_location() {
-  case ${1} in
+  case "${1}" in
 
     "integration-latest")
-        cat blessed_versions.json | jq ".releases[] | select(.name == \"${2}\") | .url"
+        jq ".releases[] | select(.name == \"${2}\") | .url" blessed_versions.json
       ;;
 
     "director-latest")
@@ -109,13 +109,13 @@ determine_release_location() {
 }
 
 determine_cf_release_location() {
-  if [ ${1} == "integration-latest" ]; then
-    git_commit=$(cat ${TOOLS_DIR}/../blessed_versions.json | grep commit | awk '{gsub(/"/, "", $2); print $2;}')
-    dir=`mktemp -d -t cf-`
-    pushd ${dir} > /dev/null
+  if [ "${1}" == "integration-latest" ]; then
+    git_commit=$(grep commit "${TOOLS_DIR}/../blessed_versions.json" | awk '{gsub(/"/, "", $2); print $2;}')
+    dir=$(mktemp -d -t cf-)
+    pushd "${dir}" > /dev/null
        git clone https://github.com/cloudfoundry/cf-release.git > /dev/null
        pushd cf-release > /dev/null
-         git checkout ${git_commit} > /dev/null
+         git checkout "${git_commit}" > /dev/null
          ./scripts/update > /dev/null
          echo "${dir}/cf-release"
        popd > /dev/null
@@ -131,13 +131,13 @@ validate_path() {
     exit 1;
   fi
 
-  if [ ! -e ${1} ]; then
+  if [ ! -e "${1}" ]; then
     echo "File or folder ${1} does not exists" 1>&2
     exit 1;
   fi
 }
 
-stubs_thing=$( cat $PATH_TO_CONFIG_FILE | jq -r 'if .stubs then .stubs[] else "" end' )
+stubs_thing=$(jq -r 'if .stubs then .stubs[] else "" end' "${PATH_TO_CONFIG_FILE}" )
 stubs_locations=""
 
 if [ "${stubs_thing}" != "" ]; then
@@ -148,51 +148,52 @@ if [ "${stubs_thing}" != "" ]; then
         stubs_locations="${stubs_locations} ${var}"
         var="${var%\"}"
         var="${var#\"}"
-        validate_path ${var}
+        validate_path "${var}"
      fi
   done
 fi
 
-etcd_release_thing=$( cat $PATH_TO_CONFIG_FILE | jq -r '.etcd' )
-if [ ${etcd_release_thing} == "" ] || [ ${etcd_release_thing} == "null" ]; then
+etcd_release_thing=$(jq -r '.etcd' "${PATH_TO_CONFIG_FILE}" )
+etcd_release_thing=${etcd_release_thing:-"integration-latest"}
+if [ "${etcd_release_thing}" == "null" ]; then
   etcd_release_thing="integration-latest"
-else
-  if [ ${etcd_release_thing} != "integration-latest" ] && [ ${etcd_release_thing} != "director-latest" ]; then
-    validate_path ${etcd_release_thing}
-  fi
+fi
+
+if [ ${etcd_release_thing} != "integration-latest" ] && [ ${etcd_release_thing} != "director-latest" ]; then
+  validate_path ${etcd_release_thing}
 fi
 
 etcd_version=$(determine_version ${etcd_release_thing} 'etcd')
 etcd_release_location=$(determine_release_location ${etcd_release_thing} 'etcd')
 
-
-cf_release_thing=$( cat $PATH_TO_CONFIG_FILE | jq -r '.cf' )
-if [ ${cf_release_thing} == "" ] || [ ${cf_release_thing} == "null" ]; then
+cf_release_thing=$(jq -r '.cf' "${PATH_TO_CONFIG_FILE}" )
+cf_release_thing=${cf_release_thing:-"integration-latest"}
+if [ "${cf_release_thing}" == "null" ]; then
   cf_release_thing="integration-latest"
-else
-  if [ ${cf_release_thing} != "integration-latest" ] ; then
-    validate_path ${cf_release_thing}
-  fi
 fi
 
-cf_version=$(determine_version ${cf_release_thing} 'cf')
-cf_release_location=$(determine_cf_release_location ${cf_release_thing} 'cf')
+if [ "${cf_release_thing}" != "integration-latest" ] ; then
+  validate_path "${cf_release_thing}"
+fi
 
-stemcell_thing=$(cat $PATH_TO_CONFIG_FILE | jq -r '.stemcell')
-if [ ${stemcell_thing} == "" ] || [ ${stemcell_thing} == "null" ]; then
+cf_version=$(determine_version "${cf_release_thing}" 'cf')
+cf_release_location=$(determine_cf_release_location "${cf_release_thing}" 'cf')
+
+stemcell_thing=$(jq -r '.stemcell' "${PATH_TO_CONFIG_FILE}" )
+stemcell_thing=${stemcell_thing:-"integration-latest"}
+if [ "${stemcell_thing}" == "null" ]; then
   stemcell_thing="integration-latest"
-else
-  if [ ${stemcell_thing} != "integration-latest" ] && [ ${stemcell_thing} != "director-latest" ]; then
-    echo ${stemcell_thing}
-    validate_path ${stemcell_thing}
-  fi
 fi
 
-stemcell_version=$(determine_stemcell_version ${stemcell_thing} ${infrastructure})
-stemcell_location=$(determin_stemcell_location ${stemcell_thing} ${infrastructure})
-stemcell_sha1=$(determin_stemcell_sha1 ${stemcell_thing} ${infrastructure})
+if [ ${stemcell_thing} != "integration-latest" ] && [ ${stemcell_thing} != "director-latest" ]; then echo ${stemcell_thing}
+  validate_path ${stemcell_thing}
+fi
 
-cat > ${DEPLOYMENTS_DIR}/stemcell.yml <<EOF
+stemcell_version=$(determine_stemcell_version "${stemcell_thing}" "${infrastructure}")
+stemcell_location=$(determine_stemcell_location "${stemcell_thing}" "${infrastructure}")
+stemcell_sha1=$(determine_stemcell_sha1 "${stemcell_thing}" "${infrastructure}")
+
+cat > "${DEPLOYMENTS_DIR}/stemcell.yml" <<EOF
 ---
 meta:
   stemcell:
@@ -202,7 +203,7 @@ meta:
     ${stemcell_sha1}
 EOF
 
-cat > $DEPLOYMENTS_DIR/releases.yml <<EOT
+cat > "$DEPLOYMENTS_DIR/releases.yml" <<EOT
 ---
 releases:
   - name: cf
@@ -213,9 +214,9 @@ releases:
     url: ${etcd_release_location}
 EOT
 
-${TOOLS_DIR}/../scripts/generate_deployment_manifest \
-  ${infrastructure} \
-  ${cf_release_location} \
-  ${DEPLOYMENTS_DIR}/releases.yml \
-  ${DEPLOYMENTS_DIR}/stemcell.yml \
-  ${stubs_locations} > "${DEPLOYMENTS_DIR}/cf-deployment-manifest.yml"
+"${TOOLS_DIR}/../scripts/generate_deployment_manifest" \
+  "${infrastructure}" \
+  "${cf_release_location}" \
+  "${DEPLOYMENTS_DIR}/releases.yml" \
+  "${DEPLOYMENTS_DIR}/stemcell.yml" \
+  "${stubs_locations}" > "${DEPLOYMENTS_DIR}/cf-deployment-manifest.yml"

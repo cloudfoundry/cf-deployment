@@ -141,8 +141,6 @@ describe "Manifest Generation" do
           end
         end
 
-        # TODO: used shared examples with this and integration-latest above
-
         context 'when cf-release is empty', integration: true do
           let(:config) do
             {
