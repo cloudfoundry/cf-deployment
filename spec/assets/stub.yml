@@ -1,0 +1,103 @@
+---
+director_uuid: ya-karandash
+meta:
+  environment: goobers-multi-az
+
+networks:
+  - name: cf1
+    type: manual
+    subnets:
+      - range: 10.10.16.0/20
+        name: default_unused
+        reserved:
+          - 10.10.16.2 - 10.10.16.9
+          - 10.10.18.0 - 10.10.18.255
+        static:
+          - 10.10.16.10 - 10.10.16.255
+        gateway: 10.10.16.1
+        dns:
+          - 10.10.0.2 # amazon has only 1 DNS server for the whole VPC at x.x.0.2
+        cloud_properties:
+          security_groups:
+            - cf
+          subnet: (( properties.template_only.aws.subnet_ids.cf1 ))
+
+  - name: cf2
+    type: manual
+    subnets:
+      - range: 10.10.80.0/20
+        name: default_unused
+        reserved:
+          - 10.10.80.2 - 10.10.80.9
+        static:
+          - 10.10.80.10 - 10.10.80.255
+        gateway: 10.10.80.1
+        dns:
+          - 10.10.0.2 # amazon has only 1 DNS server for the whole VPC at x.x.0.2
+        cloud_properties:
+          security_groups:
+            - cf
+          subnet: (( properties.template_only.aws.subnet_ids.cf2 ))
+
+properties:
+  domain: test_cf.yakarandash.com
+  template_only:
+    aws:
+      access_key_id: YAKARANDASH
+      secret_access_key: YASEKRETNYYKARANDASH
+      availability_zone: us-east-1a
+      availability_zone2: us-east-2a
+      subnet_ids:
+        cf1: subnet-goobers
+        cf2: subnet-goobers
+
+  ccdb:
+  dea_next:
+    disk_mb: 9001
+    memory_mb: 256kb
+  uaadb:
+
+  uaa:
+    jwt:
+      signing_key: yakarandash
+
+      verification_key: verify_the_karandash
+    cc:
+      client_secret: skycow
+    admin:
+      client_secret: super-secret-pencil
+    batch:
+      username: ya
+      password: karandash
+    clients:
+      login:
+        secret: asd;lkghjarfgkjs
+      gorouter:
+        secret: hotpotato
+      notifications:
+        secret: notificationsmgmtsecret
+      doppler:
+        secret: adfjsklfhdsds
+      cloud_controller_username_lookup:
+        secret: username_lookup_secret
+    scim:
+      users:
+
+  nats:
+    user: nats
+    password: natsaverygoodpassword
+
+
+  cc:
+    bulk_api_password: zbTuuLaap44jadlas2l312lk
+    staging_upload_user: zxsfhgjg
+    staging_upload_password: ZNVfdase9
+    db_encryption_key: "4493e8ec89f6"
+
+  router:
+    status:
+      user: router
+      password: router
+
+  loggregator_endpoint:
+    shared_secret: asdasdas

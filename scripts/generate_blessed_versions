@@ -74,14 +74,14 @@ cat > $CF_DEPLOYMENT_DIR/blessed_versions.json <<EOF
     }
   ],
 
-  "stemcell": {
-    "aws": {
+  "stemcells": [
+    { "name": "aws",
       "type": "${STEMCELL_NAME}",
       "version": "${STEMCELL_VERSION}",
       "url": "https://bosh.io/d/stemcells/bosh-aws-xen-hvm-ubuntu-trusty-go_agent?v=${STEMCELL_VERSION}",
       "sha1": "${STEMCELL_SHA1}"
     }
-  }
+  ]
 }
 EOF
 

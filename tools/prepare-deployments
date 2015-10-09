@@ -1,24 +1,43 @@
 #!/bin/sh
 
-set -eux
+set -eu
 
-DEPLOYMENTS_DIR=$( cat $2 | jq -r '.["deployments-dir"]')
-
-if [ ! -d $DEPLOYMENTS_DIR ]; then
-  echo "deployments-dir must be a directory"
-  exit 1
+CF_DEPLOYMENT_TRACE=${CF_DEPLOYMENT_TRACE:-}
+if [ ! -z "${CF_DEPLOYMENT_TRACE}" ]; then
+  set -x
 fi
+
+infrastructure="${1:?}"
 
 pushd $(dirname $0)
    TOOLS_DIR=$(pwd)
 popd
 
+PATH_TO_CONFIG_FILE="${2:-${TOOLS_DIR}/config.json}"
+
+DEPLOYMENTS_DIR=$( cat $PATH_TO_CONFIG_FILE | jq -r 'if .["deployments-dir"] then .["deployments-dir"] else "" end')
+DEPLOYMENTS_DIR="${DEPLOYMENTS_DIR:-./outputs/manifests/}"
+
+if [ ! -d $DEPLOYMENTS_DIR ]; then
+  echo "deployments-dir must be a directory" 1>&2
+  exit 1
+fi
+
 determine_version() {
+
+  if [ ${2} == "cf" ]; then
+    if [ ${1} == "integration-latest" ]; then
+      echo "create"
+      exit 0
+    fi
+  fi
+
   case ${1} in
 
     "integration-latest")
-        cat blessed_versions.json | jq -r '.releases' | grep version | awk '{gsub(/"/, "", $2); gsub(/,/, "", $2); print $2;}'
+      cat blessed_versions.json | jq ".releases[] | select(.name == \"${2}\") | .version"
       ;;
+
     "director-latest")
       echo "latest"
       ;;
@@ -30,28 +49,60 @@ determine_version() {
     *)
       echo "create"
       ;;
-    esac
+  esac
+}
+
+determine_stemcell_version() {
+  case ${1} in
+    *.tgz)
+      echo $(tar -x -O -f ${1} stemcell.MF |  grep -E '^version:' | awk '{print $2};')
+    ;;
+    "integration-latest")
+      cat blessed_versions.json | jq ".stemcells[] | select(.name == \"${2}\") | .version"
+    ;;
+    "director-latest")
+      echo "latest"
+    ;;
+  esac
+}
+
+determin_stemcell_sha1() {
+  case ${1} in
+    "director-latest")
+      echo ""
+    ;;
+    *)
+      echo "sha1: $(cat blessed_versions.json | jq ".stemcells[] | select(.name == \"${2}\") | .sha1")"
+    ;;
+  esac
+}
+
+determin_stemcell_location() {
+  case ${1} in
+     "integration-latest")
+      echo "url: $(cat blessed_versions.json | jq ".stemcells[] | select(.name == \"${2}\") | .url")"
+    ;;
+    *.tgz)
+      echo "path: file://${1}"
+    ;;
+    "director-latest")
+      echo ""
+    ;;
+  esac
 }
 
 determine_release_location() {
   case ${1} in
 
     "integration-latest")
-        cat blessed_versions.json | jq -r '.releases' | grep url | awk '{print $2;}'
+        cat blessed_versions.json | jq ".releases[] | select(.name == \"${2}\") | .url"
       ;;
 
     "director-latest")
       echo ""
       ;;
 
-    *.tgz)
-      echo "file://${1}"
-      ;;
-
     *)
-      if [ "${1:0:1}" != "/" ]; then
-        exit 1
-      fi
       echo "file://${1}"
       ;;
     esac
@@ -66,253 +117,105 @@ determine_cf_release_location() {
        pushd cf-release > /dev/null
          git checkout ${git_commit} > /dev/null
          ./scripts/update > /dev/null
-         echo "file://${dir}/cf-release"
+         echo "${dir}/cf-release"
        popd > /dev/null
      popd > /dev/null
   else
-    determine_release_location ${1}
+    echo "${1}"
   fi
 }
 
-determine_cf_release_scheme() {
-  if [ ${1} == 'integration-latest' ]; then
-    echo 'path'
-  else
-    echo 'url'
+validate_path() {
+  if [ "${1:0:1}" != "/" ]; then
+    echo "Stub path ${1} should be absolute." 1>&2
+    exit 1;
+  fi
+
+  if [ ! -e ${1} ]; then
+    echo "File or folder ${1} does not exists" 1>&2
+    exit 1;
   fi
 }
 
-etcd_release_thing=$( cat $2 | jq -r '.etcd' )
+stubs_thing=$( cat $PATH_TO_CONFIG_FILE | jq -r 'if .stubs then .stubs[] else "" end' )
+stubs_locations=""
+
+if [ "${stubs_thing}" != "" ]; then
+  stubs_thing=(${stubs_thing})
+  for var in "${stubs_thing[@]}"
+    do
+       if [ "${var}" != "" ]; then
+        stubs_locations="${stubs_locations} ${var}"
+        var="${var%\"}"
+        var="${var#\"}"
+        validate_path ${var}
+     fi
+  done
+fi
+
+etcd_release_thing=$( cat $PATH_TO_CONFIG_FILE | jq -r '.etcd' )
 if [ ${etcd_release_thing} == "" ] || [ ${etcd_release_thing} == "null" ]; then
   etcd_release_thing="integration-latest"
+else
+  if [ ${etcd_release_thing} != "integration-latest" ] && [ ${etcd_release_thing} != "director-latest" ]; then
+    validate_path ${etcd_release_thing}
+  fi
 fi
 
-etcd_version=$(determine_version ${etcd_release_thing})
-etcd_release_location=$(determine_release_location ${etcd_release_thing})
+etcd_version=$(determine_version ${etcd_release_thing} 'etcd')
+etcd_release_location=$(determine_release_location ${etcd_release_thing} 'etcd')
 
-cf_release_thing=$( cat $2 | jq -r '.cf' )
+
+cf_release_thing=$( cat $PATH_TO_CONFIG_FILE | jq -r '.cf' )
 if [ ${cf_release_thing} == "" ] || [ ${cf_release_thing} == "null" ]; then
   cf_release_thing="integration-latest"
+else
+  if [ ${cf_release_thing} != "integration-latest" ] ; then
+    validate_path ${cf_release_thing}
+  fi
 fi
 
-cf_version=$(determine_version ${cf_release_thing})
-cf_release_location=$(determine_cf_release_location ${cf_release_thing})
-cf_release_scheme=$(determine_cf_release_scheme ${cf_release_thing})
+cf_version=$(determine_version ${cf_release_thing} 'cf')
+cf_release_location=$(determine_cf_release_location ${cf_release_thing} 'cf')
+
+stemcell_thing=$(cat $PATH_TO_CONFIG_FILE | jq -r '.stemcell')
+if [ ${stemcell_thing} == "" ] || [ ${stemcell_thing} == "null" ]; then
+  stemcell_thing="integration-latest"
+else
+  if [ ${stemcell_thing} != "integration-latest" ] && [ ${stemcell_thing} != "director-latest" ]; then
+    echo ${stemcell_thing}
+    validate_path ${stemcell_thing}
+  fi
+fi
+
+stemcell_version=$(determine_stemcell_version ${stemcell_thing} ${infrastructure})
+stemcell_location=$(determin_stemcell_location ${stemcell_thing} ${infrastructure})
+stemcell_sha1=$(determin_stemcell_sha1 ${stemcell_thing} ${infrastructure})
+
+cat > ${DEPLOYMENTS_DIR}/stemcell.yml <<EOF
+---
+meta:
+  stemcell:
+    name: ${infrastructure}
+    version: ${stemcell_version}
+    ${stemcell_location}
+    ${stemcell_sha1}
+EOF
 
 cat > $DEPLOYMENTS_DIR/releases.yml <<EOT
 ---
 releases:
   - name: cf
     version: ${cf_version}
-    ${cf_release_scheme}: ${cf_release_location}
+    path: ${cf_release_location}
   - name: etcd
     version: ${etcd_version}
     url: ${etcd_release_location}
 EOT
 
-cat $DEPLOYMENTS_DIR/releases.yml
-# cat > ${DEPLOYMENTS_DIR}/release.yml <<EOF
-# ---
-# releases:
-#   - name: cf
-#     version: ${CF_RELEASE_VERSION}
-#     ${CF_RELEASE_SCHEME}: ${CF_RELEASE_URL}
-#   - name: etcd
-#     version: ${ETCD_RELEASE_VERSION}
-#     ${ETCD_RELEASE_LOCATION}
-#     ${ETCD_SHA1}
-#   - name: consul
-#     version: latest 
-# EOF
-
-
-###################################################################
-#### HERE THAR BE DRAGONS #########################################
-###################################################################
-
-# pushd $(dirname $0)
-#   TOOLS_DIR=$(pwd)
-# popd
-
-# INFRASTRUCTURE=$1
-
-# if [ "$#" -lt "1" ]; then
-#   echo "USAGE: prepare-deployments INFRASTRUCTURE [path-to-config-file]"
-#   exit 1
-# fi
-
-# #if [ "$infrastructure" != "aws" ]; then
-# #  echo "AWS is the only supported infrastructure currently."
-# #  exit 1
-# #fi
-
-# CONFIG_PATH=$2
-
-# #create variables with default values
-# CF_RELEASE="integration-latest"
-# ETCD_RELEASE="integration-latest"
-# CONSUL_RELEASE="integration-latest"
-# STEMCELL_RELEASE="integration-latest"
-# STUBS=""
-# DEPLOYMENTS_DIR="./outputs/manifests"
-
-# #parse json and replace default values
-# TEMP=$(cat ${CONFIG_PATH} | jq -r .cf)
-# if [ "${TEMP}" != "" ]; then
-#   if [[ "${TEMP}" == ~* ]]; then
-#     echo "Please specify absolute path for cf release path"
-#     exit 1
-#   else
-#     CF_RELEASE=${TEMP}
-#   fi
-# fi
-
-# TEMP=$(cat ${CONFIG_PATH} | jq -r .etcd)
-# if [ "${TEMP}" != "" ]; then
-#   if [[ "${TEMP}" == ~* ]]; then
-#     echo "Please specify absolute path for etcd release path"
-#     exit 1
-#   else
-#     ETCD_RELEASE=${TEMP}
-#   fi
-# fi
-
-
-# TEMP=$(cat ${CONFIG_PATH} | jq -r .stemcell)
-# if [ "${TEMP}" != "" ]; then
-#   if [[ "${TEMP}" == ~* ]]; then
-#     echo "Please specify absolute path for stemcell"
-#     exit 1
-#   else
-#     STEMCELL_RELEASE=${TEMP}
-#   fi
-# fi
-
-
-# TEMP=$(cat ${CONFIG_PATH} | jq -r .stubs[])
-# TEMP=(${TEMP})
-# for var in "${TEMP[@]}"
-# do
-#   if [ "${var}" != "" ]; then
-#     STUBS="${STUBS} ${var}"
-#     var="${var%\"}"
-#     var="${var#\"}"
-#     if [[ "${var}" == ~* ]]; then
-#       echo "Please specify absolute path for every stub"
-#       exit 1
-#     fi
-#   fi
-# done
-
-# # MAKE SURE THAT CF RELEASE ALSO SUPPORTS URLS AND DIRECTOR LATEST
-# if [ -d "$CF_RELEASE" ]; then
-#   CF_RELEASE_VERSION="create"
-#   CF_RELEASE_URL="file://${CF_RELEASE}"
-#   CF_RELEASE_SCHEME="path"
-# elif [ "$CF_RELEASE" = "integration-latest" ]; then
-#   GIT_COMMIT=$(cat ${TOOLS_DIR}/../blessed_versions.yml | grep commit | awk '{print $2;}')
-#   dir=`mktemp -d -t cf-`
-#   pushd ${dir} 
-#     git clone https://github.com/cloudfoundry/cf-release.git
-#     pushd cf-release
-#       git checkout $GIT_COMMIT
-#       ./scripts/update
-#       CF_RELEASE_VERSION="create"
-#       CF_RELEASE_URL="file://${dir}/cf-release"
-#       CF_RELEASE_SCHEME="path"
-#       CF_RELEASE="${dir}/cf-release"
-#     popd
-#   popd
-# elif [ -e "$CF_RELEASE" ]; then
-#   # ETCD_VERSION=$(tar -x -O -f ${ETCD_RELEASE} ./release.MF | grep -E '^version:' | grep -o -E "[0-9.]*[0-9]")
-#   # ETCD_RELEASE_LOCATION="path: file://${ETCD_RELEASE}"
-#   echo "this is fine, we'll just use this tarball"
-# else
-#   echo "Invalid cf-release configuration. CF-Release must be the file path to cf-release or integration-latest"
-#   exit 1
-# fi
-
-# if [ -d $ETCD_RELEASE ]; then
-#   ETCD_RELEASE_VERSION="create"
-#   ETCD_RELEASE_LOCATION="path: file://${ETCD_RELEASE}"
-# elif [ -e $ETCD_RELEASE ]; then
-#   ETCD_VERSION=$(tar -x -O -f ${ETCD_RELEASE} ./release.MF | grep -E '^version:' | grep -o -E "[0-9.]*[0-9]")
-#   ETCD_RELEASE_LOCATION="path: file://${ETCD_RELEASE}"
-# elif [ "${ETCD_RELEASE}" == "director-latest" ]; then
-#   ETCD_RELEASE_VERSION="latest"
-#   ETCD_RELEASE_LOCATION=""
-# elif [ "${ETCD_RELEASE}" == "integration-latest" ]; then
-#   ETCD_RELEASE_VERSION=$(grep etcd: -A3 ${TOOLS_DIR}/../blessed_versions.yml | grep version: | awk '{print $2};')
-#   ETCD_RELEASE_LOCATION="url: $(grep etcd: -A3 ${TOOLS_DIR}/../blessed_versions.yml | grep url: | awk '{print $2};')"
-#   ETCD_SHA1="sha1: $(grep etcd: -A3 ${TOOLS_DIR}/../blessed_versions.yml | grep sha1: | awk '{print $2};')"
-# else 
-#   echo "Invalid etcd release configuration. Etcd must be a tarball, consul-release folder, integration-latest or director-latest"
-#   exit 1
-# fi
-
-# if [ -d $CONSUL_RELEASE ]; then
-#   CONSUL_RELEASE_VERSION="create"
-#   CONSUL_RELEASE_LOCATION="path: file://${CONSUL_RELEASE}"
-# elif [ -e $CONSUL_RELEASE ]; then
-#   CONSUL_VERSION=$(tar -x -O -f ${CONSUL_RELEASE} ./release.MF | grep -E '^version:' | grep -o -E "[0-9.]*[0-9]")
-#   CONSUL_RELEASE_LOCATION="path file://${CONSUL_RELEASE}"
-# elif [ "${CONSUL_RELEASE}" == "director-latest" ]; then
-#   CONSUL_RELEASE_VERSION="latest"
-#   CONSUL_RELEASE_LOCATION=""
-# elif [ "${CONSUL_RELEASE}" == "integration-latest" ]; then
-#   echo "" #skipped for now. There is no consul release in blessed file.
-#   #CONSUL_RELEASE_VERSION=$(grep consul: -A3 ${TOOLS_DIR}/../blessed_versions.yml | grep version: | awk '{print $2};')
-#   #CONSUL_RELEASE_LOCATION="url: $(grep consul: -A3 ${TOOLS_DIR}/../blessed_versions.yml | grep url: | awk '{print $2};')"
-#   #CONSUL_SHA1="sha1: $(grep consul: -A3 ${TOOLS_DIR}/../blessed_versions.yml | grep sha1: | awk '{print $2};')"
-# else 
-#   echo "Invalid consul release configuration. Consul must be a tarball, consul-release folder, integration-latest or director-latest "
-#   exit 1
-# fi
-
-
-# # DON'T FORGET TO CONSIDER STEMCELLS THAT EXIST AT REMOTE URLS
-
-# if [ -e $STEMCELL_RELEASE ]; then
-# cat > ${DEPLOYMENTS_DIR}/stemcell.yml <<EOF
-# ---
-# meta:
-#   stemcell:
-#     name: $(tar -x -O -f ${STEMCELL_RELEASE} ./stemcell.MF | grep -E '^name:' -m1 | awk '{print $2};')
-#     version: $(tar -x -O -f ${STEMCELL_RELEASE} ./stemcell.MF | grep -E '^version:' | grep -o -E "[0-9.]*[0-9]")
-#     sha1: $(tar -x -O -f ${STEMCELL_RELEASE} ./stemcell.MF | grep -E '^sha1:' | awk '{print $2};')
-#     path: file://${STEMCELL_RELEASE}
-# EOF
-
-# elif [ "$STEMCELL_RELEASE" == "integration-latest" ]; then
-# cat > ${DEPLOYMENTS_DIR}/stemcell.yml <<EOF
-# ---
-# meta:
-#   stemcell:
-#     name: $(grep stemcell: -A5 ${TOOLS_DIR}/../blessed_versions.yml | grep 'type:' | awk '{print $2};')
-#     version: $(grep stemcell: -A5 ${TOOLS_DIR}/../blessed_versions.yml | grep version: | awk '{print $2};')
-#     url: $(grep stemcell: -A5 ${TOOLS_DIR}/../blessed_versions.yml | grep url: | awk '{print $2};')
-#     sha1: $(grep stemcell: -A5 ${TOOLS_DIR}/../blessed_versions.yml | grep sha1: | awk '{print $2};')
-# EOF
-
-# elif [ "$STEMCELL_RELEASE" == "director-latest" ]; then
-#   continue
-# else
-#   echo "Invalid stemcell configuration. The stemcell must be a tarball, integration-latest or director-latest"
-#   exit 1
-# fi
-
-# cat > ${DEPLOYMENTS_DIR}/release.yml <<EOF
-# ---
-# releases:
-#   - name: cf
-#     version: ${CF_RELEASE_VERSION}
-#     ${CF_RELEASE_SCHEME}: ${CF_RELEASE_URL}
-#   - name: etcd
-#     version: ${ETCD_RELEASE_VERSION}
-#     ${ETCD_RELEASE_LOCATION}
-#     ${ETCD_SHA1}
-#   - name: consul
-#     version: latest 
-# EOF
-
-# ${TOOLS_DIR}/../scripts/generate_deployment_manifest ${INFRASTRUCTURE} ${CF_RELEASE} ${DEPLOYMENTS_DIR}/release.yml ${DEPLOYMENTS_DIR}/stemcell.yml ${STUBS} > "${DEPLOYMENTS_DIR}/cf-deployment-manifest.yml"
+${TOOLS_DIR}/../scripts/generate_deployment_manifest \
+  ${infrastructure} \
+  ${cf_release_location} \
+  ${DEPLOYMENTS_DIR}/releases.yml \
+  ${DEPLOYMENTS_DIR}/stemcell.yml \
+  ${stubs_locations} > "${DEPLOYMENTS_DIR}/cf-deployment-manifest.yml"
