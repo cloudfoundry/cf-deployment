@@ -3,6 +3,7 @@ require 'tempfile'
 require 'json'
 require 'pry'
 require 'open3'
+require 'support/yaml_eq'
 
 describe "Manifest Generation" do
   # shared_examples "generating manifests" do |infrastructure|
@@ -258,7 +259,7 @@ describe "Manifest Generation" do
               'name' => 'aws',
               'version' => '5+goobers.123',
               'path' => "file://#{stemcell_temp_dir}/stemcell-release.tgz",
-              'sha1' => "b8603fcb27062d3d1af04748d8bb502e1e597afe"
+              'sha1' => blessed_versions['stemcells'][0]['sha1']
             }
           end
           let(:config) do
@@ -583,10 +584,12 @@ describe "Manifest Generation" do
 
       context 'correct config is provided' do
         let(:config) do
-          stubs_pathes = ["#{File.dirname(__FILE__)}/assets/stub.yml"]
+          stubs_paths = ["#{File.dirname(__FILE__)}/assets/stub.yml"]
           {
             'cf' => cf_release_path,
-            'stubs' => stubs_pathes,
+            'etcd' => 'director-latest',
+            'stemcell' => 'director-latest',
+            'stubs' => stubs_paths,
             'deployments-dir' => "#{deployments_dir}"
           }
         end
@@ -595,7 +598,7 @@ describe "Manifest Generation" do
           `./tools/prepare-deployments aws #{config_file.path}`
           expected_release_yaml = YAML.load_file("#{File.dirname(__FILE__)}/fixtures/manifest.yml")
           release_yaml = YAML.load_file("#{deployments_dir}/cf-deployment-manifest.yml")
-          expect(release_yaml).to eq(expected_release_yaml)
+          expect(release_yaml.to_yaml).to yaml_eq(expected_release_yaml.to_yaml)
         end
       end
 
@@ -655,10 +658,12 @@ describe "Manifest Generation" do
 
       context 'no deployments dir is specified' do
         let(:config) do
-          stubs_pathes = ["#{File.dirname(__FILE__)}/assets/stub.yml"]
+          stubs_paths = ["#{File.dirname(__FILE__)}/assets/stub.yml"]
           {
             'cf' => cf_release_path,
-            'stubs' => stubs_pathes
+            'etcd' => 'director-latest',
+            'stemcell' => 'director-latest',
+            'stubs' => stubs_paths
           }
         end
 
@@ -666,7 +671,7 @@ describe "Manifest Generation" do
           `./tools/prepare-deployments aws #{config_file.path}`
           expected_release_yaml = YAML.load_file("#{File.dirname(__FILE__)}/fixtures/manifest.yml")
           release_yaml = YAML.load_file("#{File.dirname(__FILE__)}/../outputs/manifests/cf-deployment-manifest.yml")
-          expect(release_yaml).to eq(expected_release_yaml)
+          expect(release_yaml.to_yaml).to yaml_eq(expected_release_yaml.to_yaml)
         end
       end
     end

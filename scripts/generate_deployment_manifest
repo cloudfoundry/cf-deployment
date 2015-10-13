@@ -1,12 +1,15 @@
 #!/bin/bash
 
-set -e
+set -euf -o pipefail
 
-pushd $(dirname $0) > /dev/null
-  SCRIPT_DIR=$(pwd)
-popd > /dev/null
+CF_DEPLOYMENT_TRACE=${CF_DEPLOYMENT_TRACE:-}
+if [ ! -z "${CF_DEPLOYMENT_TRACE}" ]; then
+  set -x
+fi
 
-STUBS_DIR=${SCRIPT_DIR}/../stubs
+mydir="$(cd "$(dirname "$0")" && pwd)"
+
+STUBS_DIR=${mydir}/../stubs
 
 if [ $# -lt 3 ]; then
   echo "Usage: generate_deployment_manifest <aws|openstack|warden|vsphere> PATH_TO_CF_RELEASE [stubs...]"
@@ -18,9 +21,12 @@ CF_RELEASE_PATH=$2
 
 shift
 shift
-if [ ! -d ${CF_RELEASE_PATH} ]; then
+if [ ! -d "${CF_RELEASE_PATH}" ]; then
   echo "PATH_TO_CF_RELEASE is invalid"
   exit 1
 fi
 
-${CF_RELEASE_PATH}/scripts/generate_deployment_manifest ${INFRASTRUCTURE} ${STUBS_DIR}/job_templates.yml $@
+"${CF_RELEASE_PATH}/scripts/generate_deployment_manifest" \
+  "${INFRASTRUCTURE}" \
+  "${STUBS_DIR}/job_templates.yml" \
+  "$@"

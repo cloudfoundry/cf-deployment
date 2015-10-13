@@ -132,7 +132,7 @@ jobs:
   - name: etcd
     release: etcd
   - name: etcd_metrics_server
-    release: cf
+    release: etcd
   - name: metron_agent
     release: cf
   update:
@@ -152,7 +152,7 @@ jobs:
   - name: etcd
     release: etcd
   - name: etcd_metrics_server
-    release: cf
+    release: etcd
   - name: metron_agent
     release: cf
   update:
@@ -1192,8 +1192,8 @@ releases:
   path: /Users/pivotal/workspace/cf-deployment/spec/../tmp/cf-release
   version: create
 - name: etcd
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/etcd-release?v=11
-  version: '11'
+  url: 
+  version: latest
 resource_pools:
 - cloud_properties:
     availability_zone: us-east-1a
@@ -1208,7 +1208,7 @@ resource_pools:
   network: cf1
   stemcell:
     name: aws
-    version: '3093'
+    version: latest
 - cloud_properties:
     availability_zone: us-east-2a
     ephemeral_disk:
@@ -1222,7 +1222,7 @@ resource_pools:
   network: cf2
   stemcell:
     name: aws
-    version: '3093'
+    version: latest
 - cloud_properties:
     availability_zone: us-east-1a
     ephemeral_disk:
@@ -1236,7 +1236,7 @@ resource_pools:
   network: cf1
   stemcell:
     name: aws
-    version: '3093'
+    version: latest
 - cloud_properties:
     availability_zone: us-east-2a
     ephemeral_disk:
@@ -1250,7 +1250,7 @@ resource_pools:
   network: cf2
   stemcell:
     name: aws
-    version: '3093'
+    version: latest
 - cloud_properties:
     availability_zone: us-east-1a
     ephemeral_disk:
@@ -1264,7 +1264,7 @@ resource_pools:
   network: cf1
   stemcell:
     name: aws
-    version: '3093'
+    version: latest
 - cloud_properties:
     availability_zone: us-east-2a
     ephemeral_disk:
@@ -1278,7 +1278,7 @@ resource_pools:
   network: cf2
   stemcell:
     name: aws
-    version: '3093'
+    version: latest
 - cloud_properties:
     availability_zone: us-east-1a
     ephemeral_disk:
@@ -1292,7 +1292,7 @@ resource_pools:
   network: cf1
   stemcell:
     name: aws
-    version: '3093'
+    version: latest
 - cloud_properties:
     availability_zone: us-east-2a
     ephemeral_disk:
@@ -1306,7 +1306,7 @@ resource_pools:
   network: cf2
   stemcell:
     name: aws
-    version: '3093'
+    version: latest
 - cloud_properties:
     availability_zone: us-east-1a
     elbs:
@@ -1322,7 +1322,7 @@ resource_pools:
   network: cf1
   stemcell:
     name: aws
-    version: '3093'
+    version: latest
 - cloud_properties:
     availability_zone: us-east-2a
     elbs:
@@ -1338,7 +1338,7 @@ resource_pools:
   network: cf2
   stemcell:
     name: aws
-    version: '3093'
+    version: latest
 - cloud_properties:
     availability_zone: us-east-1a
     ephemeral_disk:
@@ -1352,7 +1352,7 @@ resource_pools:
   network: cf1
   stemcell:
     name: aws
-    version: '3093'
+    version: latest
 - cloud_properties:
     availability_zone: us-east-1a
     instance_type: c3.xlarge
@@ -1363,7 +1363,7 @@ resource_pools:
   network: cf1
   stemcell:
     name: aws
-    version: '3093'
+    version: latest
 update:
   canaries: 1
   canary_watch_time: 30000-600000

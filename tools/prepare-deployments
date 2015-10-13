@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -eu
+set -euf -o pipefail
 
 CF_DEPLOYMENT_TRACE=${CF_DEPLOYMENT_TRACE:-}
 if [ ! -z "${CF_DEPLOYMENT_TRACE}" ]; then
@@ -9,11 +9,10 @@ fi
 
 infrastructure="${1:?}"
 
-pushd "$(dirname "${0}")"
-   TOOLS_DIR=$(pwd)
-popd
+mydir="$(cd "$(dirname "$0")" && pwd)"
+deployment_dir="$(cd "${mydir}/.." && pwd)"
 
-PATH_TO_CONFIG_FILE="${2:-${TOOLS_DIR}/config.json}"
+PATH_TO_CONFIG_FILE="${2:-${mydir}/config.json}"
 
 DEPLOYMENTS_DIR=$( jq -r 'if .["deployments-dir"] then .["deployments-dir"] else "" end' "${PATH_TO_CONFIG_FILE}")
 DEPLOYMENTS_DIR="${DEPLOYMENTS_DIR:-./outputs/manifests/}"
@@ -120,15 +119,14 @@ validate_path() {
   fi
 }
 
-stubs_thing=$(jq -r 'if .stubs then .stubs[] else "" end' "${PATH_TO_CONFIG_FILE}" )
-stubs_locations=""
+provided_stubs=$(jq -r 'if .stubs then .stubs[] else "" end' "${PATH_TO_CONFIG_FILE}" )
 
-if [ "${stubs_thing}" != "" ]; then
-  stubs_thing=(${stubs_thing})
-  for var in "${stubs_thing[@]}"
+if [ "${provided_stubs}" != "" ]; then
+  provided_stubs=(${provided_stubs})
+  for var in "${provided_stubs[@]}"
     do
        if [ "${var}" != "" ]; then
-        stubs_locations="${stubs_locations} ${var}"
+        # TODO: is the following the same thing as removing all quotes?
         var="${var%\"}"
         var="${var#\"}"
         validate_path "${var}"
@@ -162,7 +160,7 @@ fi
 cf_release_location=""
 determine_cf_release_location() {
   if [ "${1}" == "integration-latest" ]; then
-    git_commit=$(grep commit "${TOOLS_DIR}/../blessed_versions.json" | awk '{gsub(/"/, "", $2); print $2;}')
+    git_commit=$(grep commit "${deployment_dir}/blessed_versions.json" | awk '{gsub(/"/, "", $2); print $2;}')
     dir=$(mktemp -d -t cf-)
     pushd "${dir}" > /dev/null
        git clone https://github.com/cloudfoundry/cf-release.git > /dev/null
@@ -182,7 +180,7 @@ determine_cf_release_location "${cf_release_thing}" 'cf'
 
 stemcell_thing=$(jq -r '.stemcell' "${PATH_TO_CONFIG_FILE}" )
 stemcell_thing=${stemcell_thing:-"integration-latest"}
-if [ "${stemcell_thing}" == "null" ]; then
+if [ "${stemcell_thing}" = "null" ]; then
   stemcell_thing="integration-latest"
 fi
 
@@ -215,9 +213,9 @@ releases:
     url: ${etcd_release_location}
 EOT
 
-"${TOOLS_DIR}/../scripts/generate_deployment_manifest" \
+"${deployment_dir}/scripts/generate_deployment_manifest" \
   "${infrastructure}" \
   "${cf_release_location}" \
   "${DEPLOYMENTS_DIR}/releases.yml" \
   "${DEPLOYMENTS_DIR}/stemcell.yml" \
-  "${stubs_locations}" > "${DEPLOYMENTS_DIR}/cf-deployment-manifest.yml"
+  "${provided_stubs[@]}" > "${DEPLOYMENTS_DIR}/cf-deployment-manifest.yml"
