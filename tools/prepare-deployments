@@ -9,7 +9,7 @@ fi
 
 infrastructure="${1:?}"
 
-pushd $(dirname "${0}")
+pushd "$(dirname "${0}")"
    TOOLS_DIR=$(pwd)
 popd
 

@@ -1,0 +1,23 @@
+#!/bin/sh
+
+set -eux
+
+script_dir="$(cd "$(dirname "$0")" && pwd)"
+
+input_config_file="${1:-}"
+output_config_file=$(mktemp /tmp/bosh-lite-config.XXXXX)
+
+default_cf="$HOME/workspace/cf-release"
+
+if [ -f "${input_config_file}" ]; then
+  # echo "using input_config_file: ${input_config_file}"
+
+  cp "${input_config_file}" "${output_config_file}.mid"
+
+  jq "if .cf == null then setpath([\"cf\"]; \"${default_cf}\") else . end" "${output_config_file}.mid" > "${output_config_file}"
+  cat "${output_config_file}"
+else
+  echo "{ \"cf\": \"${default_cf}\" }" > "${output_config_file}"
+fi
+
+"$script_dir/prepare-deployments" bosh-lite "${output_config_file}"
