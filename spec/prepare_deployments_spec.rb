@@ -6,27 +6,9 @@ require 'open3'
 require 'support/yaml_eq'
 
 describe "Manifest Generation" do
-  # shared_examples "generating manifests" do |infrastructure|
-  #   it "builds the correct manifest for #{infrastructure}" do
-  #     example_manifest = Tempfile.new("example-manifest.yml")
-  #     `./scripts/generate_deployment_manifest #{infrastructure} spec/fixtures/#{infrastructure}/cf-stub.yml > #{example_manifest.path}`
-  #     expect($?.exitstatus).to eq(0)
+  cached_cf_release_path = "#{File.dirname(__FILE__)}/../tmp/cf-release"
 
-  #     expected = File.read("spec/fixtures/#{infrastructure}/cf-manifest.yml.erb")
-  #     lamb_properties = LambProperties.new(infrastructure)
-  #     expected = ERB.new(expected).result(lamb_properties.get_binding)
-  #     actual = File.read(example_manifest.path)
-
-  #     expect(actual).to yaml_eq(expected)
-  #   end
-  # end
-
-  # context "aws" do
-  #   # ds
-  #   it_behaves_like "generating manifests", ds
-  # end
-
-  cf_release_path = "#{File.dirname(__FILE__)}/../tmp/cf-release"
+  let(:cf_release_path) { cached_cf_release_path }
 
   let(:std_out) { command_results[0] }
   let(:std_error) { command_results[1] }
@@ -37,39 +19,38 @@ describe "Manifest Generation" do
   end
 
   before(:all) do
-    unless Dir.exist?(cf_release_path)
-      FileUtils.mkdir_p(cf_release_path)
-      `git clone --depth 1 https://github.com/cloudfoundry/cf-release.git #{cf_release_path}`
-      `#{cf_release_path}/scripts/update`
+    unless Dir.exist?(cached_cf_release_path)
+      FileUtils.mkdir_p(cached_cf_release_path)
+      `git clone --depth 1 https://github.com/cloudfoundry/cf-release.git #{cached_cf_release_path}`
+      `#{cached_cf_release_path}/scripts/update`
     end
+
+    #Clean manifests directory
+    FileUtils.remove(Dir.glob("#{File.dirname(__FILE__)}/../outputs/manifests/*"))
   end
 
   let(:blessed_versions) { JSON.parse(File.read("blessed_versions.json")) }
 
   describe 'prepare-deployments' do
     let(:deployments_dir) { Dir.mktmpdir }
+    let(:stubs_paths) { ["#{File.dirname(__FILE__)}/assets/stub.yml"] }
     let(:config_file) { Tempfile.new("config.json") }
     let(:config) do
       {
         'cf' => cf_release_path,
-        'deployments-dir' => "#{deployments_dir}"
+        'deployments-dir' => "#{deployments_dir}",
+        'stubs' => stubs_paths
       }
     end
+    let(:command) { "./tools/prepare-deployments aws #{config_file.path}" }
 
     before do
       config_file.write(config.to_json)
       config_file.close
     end
 
-    it 'correctly sets the deployments dir' do
-      `./tools/prepare-deployments aws #{config_file.path}`
-
-      expect(Dir.entries(deployments_dir)).to include("releases.yml")
-    end
-
     context 'when the deployments dir is not a directory' do
       let(:deployments_dir) { "goobers" }
-      let(:command) { "./tools/prepare-deployments aws #{config_file.path}" }
 
       it 'requires that the deployments dir exists and is a directory' do
         expect(result).to_not be_success
@@ -87,37 +68,21 @@ describe "Manifest Generation" do
               'path' => cf_release_path
             }
           end
-          let(:config) do
-            {
-              'cf' => cf_release_path,
-              'deployments-dir' => "#{deployments_dir}"
-            }
-          end
 
           it 'correctly sets the stub' do
-            `./tools/prepare-deployments aws #{config_file.path}`
+            expect(result).to be_success
 
             release_yaml = YAML.load_file("#{deployments_dir}/releases.yml")
-            result_cf = get_element_by_name 'cf', release_yaml
+            result_cf = get_release_by_name 'cf', release_yaml
             expect(result_cf).to eq(expected_release_yaml)
           end
 
           context 'when relative path to directory is given' do
-            let(:config) do
-              {
-                'cf' => "~/some_directory",
-                'deployments-dir' => "#{deployments_dir}"
-              }
-            end
+            let(:cf_release_path) { '~/some_directory' }
 
             it 'exits with error' do
-              result = system("./tools/prepare-deployments aws #{config_file.path}")
-              expect(result).to eq(false)
-            end
-
-            it 'does not write the output stubs' do
-              `./tools/prepare-deployments aws #{config_file.path}`
-
+              expect(result).not_to be_success
+              expect(std_error).to include 'should be absolute'
               expect(File.exist?("#{deployments_dir}/releases.yml")).to eq(false)
             end
           end
@@ -127,15 +92,17 @@ describe "Manifest Generation" do
           let(:config) do
             {
               'cf' => "integration-latest",
+              'stubs' => stubs_paths,
               'deployments-dir' => "#{deployments_dir}"
             }
           end
+          let(:command) { "./tools/prepare-deployments aws #{config_file.path}" }
 
           it 'clones repo to temp dir and writes path to this dir to manifest' do
-            `./tools/prepare-deployments aws #{config_file.path}`
+            expect(result).to be_success
 
             release_yaml = YAML.load_file("#{deployments_dir}/releases.yml")
-            result_cf = get_element_by_name 'cf', release_yaml
+            result_cf = get_release_by_name 'cf', release_yaml
             expect(result_cf['name']).to eq('cf')
             expect(result_cf['version']).to eq('create')
             expect(result_cf['path']).to match /\/.*\/cf-release/
@@ -143,17 +110,19 @@ describe "Manifest Generation" do
         end
 
         context 'when cf-release is empty', integration: true do
+          let(:command) { "./tools/prepare-deployments aws #{config_file.path}" }
           let(:config) do
             {
-              'deployments-dir' => "#{deployments_dir}"
+              'deployments-dir' => "#{deployments_dir}",
+              'stubs' => stubs_paths
             }
           end
 
           it 'clones repo to temp dir and writes path to this dir to manifest' do
-            `./tools/prepare-deployments aws #{config_file.path}`
+            expect(result).to be_success
 
             release_yaml = YAML.load_file("#{deployments_dir}/releases.yml")
-            result_cf = get_element_by_name 'cf', release_yaml
+            result_cf = get_release_by_name 'cf', release_yaml
             expect(result_cf['name']).to eq('cf')
             expect(result_cf['version']).to eq('create')
             expect(result_cf['path']).to match /\/.*\/cf-release/
@@ -164,13 +133,15 @@ describe "Manifest Generation" do
           let(:config) do
             {
               'cf' => "../not_absolute",
+              'stubs' => stubs_paths,
               'deployments-dir' => "#{deployments_dir}"
             }
           end
 
           it 'prints an error and exits' do
-            result = system("./tools/prepare-deployments aws #{config_file.path}")
-            expect(result).to eq(false)
+            expect(result).not_to be_success
+            expect(std_error).to include 'should be absolute'
+            expect(File.exist?("#{deployments_dir}/releases.yml")).to eq(false)
           end
         end
 
@@ -179,13 +150,15 @@ describe "Manifest Generation" do
             {
               'cf' => 'not_existing_value',
               'etcd' => 'director-latest',
+              'stubs' => stubs_paths,
               'deployments-dir' => "#{deployments_dir}"
             }
           end
 
           it 'prints error and exits' do
-            result = system("./tools/prepare-deployments aws #{config_file.path}")
-            expect(result).to eq(false)
+            expect(result).not_to be_success
+            expect(std_error).to include 'should be absolute'
+            expect(File.exist?("#{deployments_dir}/releases.yml")).to eq(false)
           end
         end
       end
@@ -196,6 +169,7 @@ describe "Manifest Generation" do
             {
               'cf' => cf_release_path,
               'stemcell' => "director-latest",
+              'stubs' => stubs_paths,
               'deployments-dir' => "#{deployments_dir}"
             }
           end
@@ -208,7 +182,7 @@ describe "Manifest Generation" do
           end
 
           it 'sets up latest as a version' do
-            `./tools/prepare-deployments aws #{config_file.path}`
+            expect(result).to be_success
             stemcell_yaml = YAML.load_file("#{deployments_dir}/stemcell.yml")
             result_stemcell = stemcell_yaml['meta']['stemcell']
             expect(result_stemcell).to eq(expected_release_yaml)
@@ -220,6 +194,7 @@ describe "Manifest Generation" do
             {
               'cf' => cf_release_path,
               'stemcell' => "integration-latest",
+              'stubs' => stubs_paths,
               'deployments-dir' => "#{deployments_dir}"
             }
           end
@@ -244,7 +219,7 @@ describe "Manifest Generation" do
           end
 
           it 'sets up values from blessed version' do
-            `./tools/prepare-deployments aws #{config_file.path}`
+            expect(result).to be_success
             stemcell_yaml = YAML.load_file("#{deployments_dir}/stemcell.yml")
             result_stemcell = stemcell_yaml['meta']['stemcell']
             expect(result_stemcell).to eq(expected_release_yaml)
@@ -266,6 +241,7 @@ describe "Manifest Generation" do
             {
               'cf' => cf_release_path,
               'stemcell' => "#{stemcell_temp_dir}/stemcell-release.tgz",
+              'stubs' => stubs_paths,
               'deployments-dir' => "#{deployments_dir}"
             }
           end
@@ -281,7 +257,7 @@ describe "Manifest Generation" do
           end
 
           it 'correctly sets the stub' do
-            `./tools/prepare-deployments aws #{config_file.path}`
+            expect(result).to be_success
 
             stemcell_yaml = YAML.load_file("#{deployments_dir}/stemcell.yml")
             result_stemcell = stemcell_yaml['meta']['stemcell']
@@ -294,13 +270,15 @@ describe "Manifest Generation" do
             {
               'cf' => cf_release_path,
               'stemcell' => "../not_absolute",
+              'stubs' => stubs_paths,
               'deployments-dir' => "#{deployments_dir}"
             }
           end
 
           it 'prints an error and exits' do
-            result = system("./tools/prepare-deployments aws #{config_file.path}")
-            expect(result).to eq(false)
+            expect(result).not_to be_success
+            expect(std_error).to include 'should be absolute'
+            expect(File.exist?("#{deployments_dir}/releases.yml")).to eq(false)
           end
         end
 
@@ -310,13 +288,15 @@ describe "Manifest Generation" do
               'cf' => cf_release_path,
               'etcd' => 'director-latest',
               'stemcell' => 'not_supported',
+              'stubs' => stubs_paths,
               'deployments-dir' => "#{deployments_dir}"
             }
           end
 
           it 'prints error and exits' do
-            result = system("./tools/prepare-deployments aws #{config_file.path}")
-            expect(result).to eq(false)
+            expect(result).not_to be_success
+            expect(std_error).to include 'should be absolute'
+            expect(File.exist?("#{deployments_dir}/releases.yml")).to eq(false)
           end
         end
 
@@ -325,6 +305,7 @@ describe "Manifest Generation" do
             {
               'cf' => cf_release_path,
               'etcd' => 'director-latest',
+              'stubs' => stubs_paths,
               'deployments-dir' => "#{deployments_dir}"
             }
           end
@@ -349,7 +330,7 @@ describe "Manifest Generation" do
           end
 
           it 'sets up values from blessed version' do
-            `./tools/prepare-deployments aws #{config_file.path}`
+            expect(result).to be_success
             stemcell_yaml = YAML.load_file("#{deployments_dir}/stemcell.yml")
             result_stemcell = stemcell_yaml['meta']['stemcell']
             expect(result_stemcell).to eq(expected_release_yaml)
@@ -371,15 +352,16 @@ describe "Manifest Generation" do
             {
               'cf' => cf_release_path,
               'etcd' => etcd_temp_dir,
+              'stubs' => stubs_paths,
               'deployments-dir' => "#{deployments_dir}"
             }
           end
 
           it 'correctly sets the stub' do
-            `./tools/prepare-deployments aws #{config_file.path}`
+            expect(result).to be_success
 
             release_yaml = YAML.load_file("#{deployments_dir}/releases.yml")
-            result_etcd = get_element_by_name 'etcd', release_yaml
+            result_etcd = get_release_by_name 'etcd', release_yaml
             expect(result_etcd).to eq(expected_release_yaml)
           end
 
@@ -388,18 +370,14 @@ describe "Manifest Generation" do
               {
                 'cf' => cf_release_path,
                 'etcd' => "~/some_directory",
+                'stubs' => stubs_paths,
                 'deployments-dir' => "#{deployments_dir}"
               }
             end
 
             it 'exits with error' do
-              result = system("./tools/prepare-deployments aws #{config_file.path}")
-              expect(result).to eq(false)
-            end
-
-            it 'does not write the output stubs' do
-              `./tools/prepare-deployments aws #{config_file.path}`
-
+              expect(result).not_to be_success
+              expect(std_error).to include 'should be absolute'
               expect(File.exist?("#{deployments_dir}/releases.yml")).to eq(false)
             end
           end
@@ -411,6 +389,7 @@ describe "Manifest Generation" do
             {
               'cf' => cf_release_path,
               'etcd' => "integration-latest",
+              'stubs' => stubs_paths,
               'deployments-dir' => "#{deployments_dir}"
             }
           end
@@ -432,9 +411,9 @@ describe "Manifest Generation" do
           end
 
           it 'clones repo to temp dir and writes path to this dir to manifest' do
-            `./tools/prepare-deployments aws #{config_file.path}`
+            expect(result).to be_success
             release_yaml = YAML.load_file("#{deployments_dir}/releases.yml")
-            result_etcd = get_element_by_name 'etcd', release_yaml
+            result_etcd = get_release_by_name 'etcd', release_yaml
             expect(result_etcd).to eq(expected_release_yaml)
           end
         end
@@ -451,15 +430,16 @@ describe "Manifest Generation" do
             {
               'cf' => cf_release_path,
               'etcd' => "director-latest",
+              'stubs' => stubs_paths,
               'deployments-dir' => "#{deployments_dir}"
             }
           end
 
           it 'correctly sets the stub' do
-            `./tools/prepare-deployments aws #{config_file.path}`
+            expect(result).to be_success
 
             release_yaml = YAML.load_file("#{deployments_dir}/releases.yml")
-            result_etcd = get_element_by_name 'etcd', release_yaml
+            result_etcd = get_release_by_name 'etcd', release_yaml
             expect(result_etcd).to eq(expected_release_yaml)
           end
         end
@@ -477,6 +457,7 @@ describe "Manifest Generation" do
             {
               'cf' => cf_release_path,
               'etcd' => "#{etcd_temp_dir}/etcd-release.tgz",
+              'stubs' => stubs_paths,
               'deployments-dir' => "#{deployments_dir}"
             }
           end
@@ -492,10 +473,10 @@ describe "Manifest Generation" do
           end
 
           it 'correctly sets the stub' do
-            `./tools/prepare-deployments aws #{config_file.path}`
+            expect(result).to be_success
 
             release_yaml = YAML.load_file("#{deployments_dir}/releases.yml")
-            result_etcd = get_element_by_name 'etcd', release_yaml
+            result_etcd = get_release_by_name 'etcd', release_yaml
             expect(result_etcd).to eq(expected_release_yaml)
           end
         end
@@ -505,13 +486,15 @@ describe "Manifest Generation" do
             {
               'cf' => cf_release_path,
               'etcd' => "../not_absolute",
+              'stubs' => stubs_paths,
               'deployments-dir' => "#{deployments_dir}"
             }
           end
 
           it 'prints an error and exits' do
-            result = system("./tools/prepare-deployments aws #{config_file.path}")
-            expect(result).to eq(false)
+            expect(result).not_to be_success
+            expect(std_error).to include 'should be absolute'
+            expect(File.exist?("#{deployments_dir}/releases.yml")).to eq(false)
           end
         end
 
@@ -520,13 +503,15 @@ describe "Manifest Generation" do
             {
               'cf' => cf_release_path,
               'etcd' => 'not_supported',
+              'stubs' => stubs_paths,
               'deployments-dir' => "#{deployments_dir}"
             }
           end
 
           it 'prints error and exits' do
-            result = system("./tools/prepare-deployments aws #{config_file.path}")
-            expect(result).to eq(false)
+            expect(result).not_to be_success
+            expect(std_error).to include 'should be absolute'
+            expect(File.exist?("#{deployments_dir}/releases.yml")).to eq(false)
           end
         end
 
@@ -534,6 +519,7 @@ describe "Manifest Generation" do
           let(:config) do
             {
               'cf' => cf_release_path,
+              'stubs' => stubs_paths,
               'deployments-dir' => "#{deployments_dir}"
             }
           end
@@ -555,16 +541,16 @@ describe "Manifest Generation" do
           end
 
           it 'clones repo to temp dir and writes path to this dir to manifest' do
-            `./tools/prepare-deployments aws #{config_file.path}`
+            expect(result).to be_success
             release_yaml = YAML.load_file("#{deployments_dir}/releases.yml")
-            result_etcd = get_element_by_name 'etcd', release_yaml
+            result_etcd = get_release_by_name 'etcd', release_yaml
             expect(result_etcd).to eq(expected_release_yaml)
           end
         end
       end
     end
 
-    describe "generating manifest" do
+    describe 'generating manifest' do
       context 'when one of the stubs is not an absolute path' do
         let(:config) do
           {
@@ -595,64 +581,22 @@ describe "Manifest Generation" do
         end
 
         it 'generates manifest' do
-          `./tools/prepare-deployments aws #{config_file.path}`
-          expected_release_yaml = YAML.load_file("#{File.dirname(__FILE__)}/fixtures/manifest.yml")
+          expect(result).to be_success
           release_yaml = YAML.load_file("#{deployments_dir}/cf-deployment-manifest.yml")
-          expect(release_yaml.to_yaml).to yaml_eq(expected_release_yaml.to_yaml)
+          etcd_release = get_release_by_name('etcd', release_yaml)
+          expect(etcd_release['version']).to eq('latest')
+          cf_release = get_release_by_name('cf', release_yaml)
+          expect(cf_release['version']).to eq('create')
+          expect(cf_release['path']).to eq(cf_release_path)
         end
       end
 
-      context 'no config is provided' do
-        let(:expected_etcd_yaml) do
-          blessed_version=nil
-          blessed_url=nil
-          blessed_versions['releases'].each { |release|
-            if release['name'] == 'etcd'
-              blessed_version = release['version']
-              blessed_url = release['url']
-            end
-          }
-          {
-            'name' => 'etcd',
-            'version' => "#{blessed_version}",
-            'url' => "#{blessed_url}"
-          }
-        end
+      context 'no config is provided', integration: true do
+        let(:command) { "./tools/prepare-deployments aws" }
 
-        let(:expected_stemcell_yaml) do
-          blessed_version=nil
-          blessed_url=nil
-          blessed_sha1=nil
-          blessed_versions['stemcells'].each { |stemcell|
-            if stemcell['name'] == 'aws'
-              blessed_version = stemcell['version']
-              blessed_url = stemcell['url']
-              blessed_sha1 = stemcell['sha1']
-            end
-          }
-          {
-            'name' => 'aws',
-            'version' => "#{blessed_version}",
-            'url' => "#{blessed_url}",
-            'sha1' => "#{blessed_sha1}"
-          }
-        end
-
-        it 'uses default values' do
-          `./tools/prepare-deployments aws`
-          release_yaml = YAML.load_file("#{File.dirname(__FILE__)}/../outputs/manifests/releases.yml")
-
-          result_etcd = get_element_by_name 'etcd', release_yaml
-          expect(result_etcd).to eq(expected_etcd_yaml)
-
-          cf_yaml = get_element_by_name 'cf', release_yaml
-          expect(cf_yaml['name']).to eq('cf')
-          expect(cf_yaml['version']).to eq('create')
-          expect(cf_yaml['path']).to match /\/.*\/cf-release/
-
-          stemcell_yaml = YAML.load_file("#{File.dirname(__FILE__)}/../outputs/manifests/stemcell.yml")
-          result_stemcell = stemcell_yaml['meta']['stemcell']
-          expect(result_stemcell).to eq(expected_stemcell_yaml)
+        it 'returns an error' do
+          expect(result).to_not be_success
+          expect(std_error).to include 'No stubs provided'
         end
       end
 
@@ -668,17 +612,33 @@ describe "Manifest Generation" do
         end
 
         it 'write output to ./outputs/manifests' do
-          `./tools/prepare-deployments aws #{config_file.path}`
-          expected_release_yaml = YAML.load_file("#{File.dirname(__FILE__)}/fixtures/manifest.yml")
-          release_yaml = YAML.load_file("#{File.dirname(__FILE__)}/../outputs/manifests/cf-deployment-manifest.yml")
-          expect(release_yaml.to_yaml).to yaml_eq(expected_release_yaml.to_yaml)
+          expect(result).to be_success
+          deployment_manifest_path = "#{File.dirname(__FILE__)}/../outputs/manifests/cf-deployment-manifest.yml"
+          expect(File.exist?(deployment_manifest_path)).to be_truthy
+        end
+      end
+
+      context 'no stubs is provided' do
+        let(:stubs_paths) { [] }
+        it 'fail with stub error' do
+          expect(result).to_not be_success
+          expect(std_error).to include 'No stubs provided'
+        end
+      end
+
+      context 'generate deployemnt manifest has an error' do
+        let(:stubs_paths) { ["#{File.dirname(__FILE__)}/assets/empty_stub.yml"] }
+
+        it 'prints error to stderr' do
+          expect(result).to_not be_success
+          expect(std_error).to include('unresolved nodes')
         end
       end
     end
   end
 end
 
-def get_element_by_name(name, array)
+def get_release_by_name(name, array)
   releases = array['releases']
   releases.each { |e|
     if e['name'] == name

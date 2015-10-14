@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -euf -o pipefail
 
@@ -110,12 +110,12 @@ determine_release_location() {
 validate_path() {
   if [ "${1:0:1}" != "/" ]; then
     echo "Stub path ${1} should be absolute." 1>&2
-    exit 1;
+    exit 1
   fi
 
   if [ ! -e "${1}" ]; then
     echo "File or folder ${1} does not exists" 1>&2
-    exit 1;
+    exit 1
   fi
 }
 
@@ -132,6 +132,9 @@ if [ "${provided_stubs}" != "" ]; then
         validate_path "${var}"
      fi
   done
+else
+  echo "No stubs provided in ${PATH_TO_CONFIG_FILE}" 1>&2
+  exit 1
 fi
 
 etcd_release_thing=$(jq -r '.etcd' "${PATH_TO_CONFIG_FILE}" )
