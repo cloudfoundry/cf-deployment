@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -euf -o pipefail
 
@@ -56,4 +56,4 @@ fi
   warden \
   "${output_config_file}"
 
-bosh deploy
+bosh -d "${deployment_dir}/outputs/manifests/cf.yml" deploy

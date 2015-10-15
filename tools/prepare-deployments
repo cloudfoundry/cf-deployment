@@ -8,6 +8,13 @@ if [ ! -z "${CF_DEPLOYMENT_TRACE}" ]; then
 fi
 
 infrastructure="${1:?}"
+if [ "${infrastructure}" != "aws" ] && \
+    [ "${infrastructure}" != "openstack" ] && \
+    [ "${infrastructure}" != "bosh-lite" ] && \
+    [ "${infrastructure}" != "vsphere" ] ; then
+  echo "Usage: prepare-deployments <aws|bosh-lite|openstack|vsphere> <path_to_config_file>" 1>&2
+  exit 1
+fi
 
 mydir="$(cd "$(dirname "$0")" && pwd)"
 deployment_dir="$(cd "${mydir}/.." && pwd)"
@@ -15,7 +22,7 @@ deployment_dir="$(cd "${mydir}/.." && pwd)"
 PATH_TO_CONFIG_FILE="${2:-${mydir}/config.json}"
 
 DEPLOYMENTS_DIR=$( jq -r 'if .["deployments-dir"] then .["deployments-dir"] else "" end' "${PATH_TO_CONFIG_FILE}")
-DEPLOYMENTS_DIR="${DEPLOYMENTS_DIR:-./outputs/manifests/}"
+DEPLOYMENTS_DIR="${DEPLOYMENTS_DIR:-./outputs/manifests}"
 
 if [ ! -d "${DEPLOYMENTS_DIR}" ]; then
   echo "deployments-dir must be a directory" 1>&2
@@ -51,13 +58,24 @@ determine_version() {
   esac
 }
 
+determine_stemcell_name() {
+  case "${1}" in
+    *.tgz)
+      tar -x -O -f "${1}" ./stemcell.MF |  grep -E '^name:' | awk '{print $2};'
+      ;;
+    *)
+      jq ".stemcells[\"${2}\"].type" blessed_versions.json
+      ;;
+  esac
+}
+
 determine_stemcell_version() {
   case "${1}" in
     *.tgz)
-      tar -x -O -f "${1}" stemcell.MF |  grep -E '^version:' | awk '{print $2};'
+      tar -x -O -f "${1}" ./stemcell.MF |  grep -E '^version:' | awk '{print $2};'
     ;;
     "integration-latest")
-      jq ".stemcells[] | select(.name == \"${2}\") | .version" blessed_versions.json 
+      jq ".stemcells[\"${2}\"].version" blessed_versions.json
     ;;
     "director-latest")
       echo "latest"
@@ -71,7 +89,7 @@ determine_stemcell_sha1() {
       echo ""
     ;;
     *)
-      echo "sha1: $(jq ".stemcells[] | select(.name == \"${2}\") | .sha1" blessed_versions.json)"
+      echo "sha1: $(jq ".stemcells[\"${2}\"].sha1" blessed_versions.json)"
     ;;
   esac
 }
@@ -79,7 +97,7 @@ determine_stemcell_sha1() {
 determine_stemcell_location() {
   case "${1}" in
      "integration-latest")
-      echo "url: $(jq ".stemcells[] | select(.name == \"${2}\") | .url" blessed_versions.json)"
+      echo "url: $(jq ".stemcells[\"${2}\"].url" blessed_versions.json)"
     ;;
     *.tgz)
       echo "path: file://${1}"
@@ -191,6 +209,7 @@ if [ ${stemcell_thing} != "integration-latest" ] && [ ${stemcell_thing} != "dire
   validate_path ${stemcell_thing}
 fi
 
+stemcell_name=$(determine_stemcell_name "${stemcell_thing}" "${infrastructure}")
 stemcell_version=$(determine_stemcell_version "${stemcell_thing}" "${infrastructure}")
 stemcell_location=$(determine_stemcell_location "${stemcell_thing}" "${infrastructure}")
 stemcell_sha1=$(determine_stemcell_sha1 "${stemcell_thing}" "${infrastructure}")
@@ -199,7 +218,7 @@ cat > "${DEPLOYMENTS_DIR}/stemcell.yml" <<EOF
 ---
 meta:
   stemcell:
-    name: ${infrastructure}
+    name: ${stemcell_name}
     version: ${stemcell_version}
     ${stemcell_location}
     ${stemcell_sha1}
@@ -216,9 +235,13 @@ releases:
     url: ${etcd_release_location}
 EOT
 
+if [ "${infrastructure}" = "bosh-lite" ]; then
+  infrastructure="warden"
+fi
+
 "${deployment_dir}/scripts/generate_deployment_manifest" \
   "${infrastructure}" \
   "${cf_release_location}" \
   "${DEPLOYMENTS_DIR}/releases.yml" \
   "${DEPLOYMENTS_DIR}/stemcell.yml" \
-  "${provided_stubs[@]}" > "${DEPLOYMENTS_DIR}/cf-deployment-manifest.yml"
+  "${provided_stubs[@]}" > "${DEPLOYMENTS_DIR}/cf.yml"

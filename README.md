@@ -86,7 +86,7 @@ The config file provides the following values:
 * `cf`: string, either a path to a directory of `cf-release`, or the string `"integration-latest"`
 * `etcd`: string, either a path to a directory of `etcd-release`, a path to a release tarball, the string `"director-latest"`, or the string `"integration-latest"`
 * `stemcell`: string, either a path to a stemcell tarball, the string `"director-latest"`, or the string `"integration-latest"`
-* `stubs`: array, a list of paths to stub files
+* `stubs`: array, a list of paths to stub files (required)
 * `deployments-dir`: string, a path to a directory where manifests will be written
 
 #### Defaults
@@ -97,8 +97,7 @@ The config file provides the following values:
 * `--stubs`: defaults to an empty list
 * `--deployments-dir`: defaults to `./outputs/manifests`
 
-Please note: while stubs are technically optional due to the defaults set in our script
-all default manifests for each IaaS have required properties that must be set in a stub provided by the user.
+Please note: default manifests for each IaaS have required properties that must be set in a stub provided by the user.
 To see an example and instructions for how to create this stub visit our [documentation](http://docs.cloudfoundry.org/deploying/cf-stub-vsphere.html).
 
 When the special version string `integration-latest` is specified the script will read `blessed_versions.json`

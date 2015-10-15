@@ -5,7 +5,7 @@ require 'pry'
 require 'open3'
 require 'support/yaml_eq'
 
-describe "Manifest Generation" do
+describe 'Manifest Generation' do
   cached_cf_release_path = "#{File.dirname(__FILE__)}/../tmp/cf-release"
 
   let(:cf_release_path) { cached_cf_release_path }
@@ -17,6 +17,8 @@ describe "Manifest Generation" do
   let(:command_results) do
     Open3.capture3(command)
   end
+
+  let(:infrastructure) { 'aws' }
 
   before(:all) do
     unless Dir.exist?(cached_cf_release_path)
@@ -42,11 +44,30 @@ describe "Manifest Generation" do
         'stubs' => stubs_paths
       }
     end
-    let(:command) { "./tools/prepare-deployments aws #{config_file.path}" }
+    let(:command) { "./tools/prepare-deployments #{infrastructure} #{config_file.path}" }
 
     before do
       config_file.write(config.to_json)
       config_file.close
+    end
+
+    describe 'infrastructure validation' do
+      context 'infrastructure is not valid' do
+        let(:infrastructure) { 'not_valid' }
+
+        it 'returns an error' do
+          expect(result).to_not be_success
+          expect(std_error).to include('Usage: prepare-deployments <aws|bosh-lite|openstack|vsphere> <path_to_config_file>')
+        end
+      end
+
+      context 'supports bosh-lite infrastructure' do
+        let(:infrastructure) { 'bosh-lite' }
+
+        it 'generates manifest with correct config file' do
+          expect(result).to be_success
+        end
+      end
     end
 
     context 'when the deployments dir is not a directory' do
@@ -58,8 +79,42 @@ describe "Manifest Generation" do
       end
     end
 
-    describe "releases" do
-      context "cf-release" do
+    context 'when no config is provided', integration: true do
+      let(:command) { "./tools/prepare-deployments aws" }
+
+      it 'returns an error' do
+        expect(result).to_not be_success
+        expect(std_error).to include 'No stubs provided'
+      end
+    end
+
+    context 'when no stubs are provided' do
+      let(:stubs_paths) { [] }
+      it 'fail with stub error' do
+        expect(result).to_not be_success
+        expect(std_error).to include 'No stubs provided'
+      end
+    end
+
+    context 'when one of the stubs is not an absolute path' do
+      let(:config) do
+        {
+          'cf' => cf_release_path,
+          'stubs' => [cf_release_path, "not_absolute"],
+          'deployments-dir' => "#{deployments_dir}"
+        }
+      end
+
+      let(:command) { "./tools/prepare-deployments aws #{config_file.path}" }
+
+      it 'prints an error and exits' do
+        expect(result).to_not be_success
+        expect(std_error.strip).to eq('Stub path not_absolute should be absolute.')
+      end
+    end
+
+    describe 'releases' do
+      describe 'cf-release' do
         context 'with a local release directory' do
           let(:expected_release_yaml) do
             {
@@ -176,7 +231,7 @@ describe "Manifest Generation" do
 
           let(:expected_release_yaml) do
             {
-              'name' => 'aws',
+              'name' => blessed_versions['stemcells']['aws']['type'],
               'version' => "latest"
             }
           end
@@ -200,21 +255,12 @@ describe "Manifest Generation" do
           end
 
           let(:expected_release_yaml) do
-            blessed_version=nil
-            blessed_url=nil
-            blessed_sha1=nil
-            blessed_versions['stemcells'].each { |stemcell|
-              if stemcell['name'] == 'aws'
-                blessed_version = stemcell['version']
-                blessed_url = stemcell['url']
-                blessed_sha1 = stemcell['sha1']
-              end
-            }
+            aws_stemcell = blessed_versions['stemcells']['aws']
             {
-              'name' => 'aws',
-              'version' => "#{blessed_version}",
-              'url' => "#{blessed_url}",
-              'sha1' => "#{blessed_sha1}"
+              'name' => aws_stemcell['type'],
+              'version' => aws_stemcell['version'],
+              'url' => aws_stemcell['url'],
+              'sha1' => aws_stemcell['sha1']
             }
           end
 
@@ -229,12 +275,12 @@ describe "Manifest Generation" do
         context 'when tarball is specified' do
 
           let(:stemcell_temp_dir) { Dir.mktmpdir }
-          let(:expected_release_yaml) do
+          let(:expected_stemcell_yaml) do
             {
-              'name' => 'aws',
+              'name' => 'yakarandash',
               'version' => '5+goobers.123',
               'path' => "file://#{stemcell_temp_dir}/stemcell-release.tgz",
-              'sha1' => blessed_versions['stemcells'][0]['sha1']
+              'sha1' => blessed_versions['stemcells'][infrastructure]['sha1']
             }
           end
           let(:config) do
@@ -247,7 +293,10 @@ describe "Manifest Generation" do
           end
 
           before do
-            release_manifest = {'version' => "5+goobers.123"}
+            release_manifest = {
+              'name' => 'yakarandash',
+              'version' => "5+goobers.123"
+            }
 
             manifest_file = File.new("#{stemcell_temp_dir}/stemcell.MF", 'w')
             manifest_file.write(YAML.dump(release_manifest))
@@ -261,7 +310,7 @@ describe "Manifest Generation" do
 
             stemcell_yaml = YAML.load_file("#{deployments_dir}/stemcell.yml")
             result_stemcell = stemcell_yaml['meta']['stemcell']
-            expect(result_stemcell).to eq(expected_release_yaml)
+            expect(result_stemcell).to eq(expected_stemcell_yaml)
           end
         end
 
@@ -310,22 +359,12 @@ describe "Manifest Generation" do
             }
           end
 
-          let(:expected_release_yaml) do
-            blessed_version=nil
-            blessed_url=nil
-            blessed_sha1=nil
-            blessed_versions['stemcells'].each { |stemcell|
-              if stemcell['name'] == 'aws'
-                blessed_version = stemcell['version']
-                blessed_url = stemcell['url']
-                blessed_sha1 = stemcell['sha1']
-              end
-            }
+          let(:expected_stemcell_yaml) do
             {
-              'name' => 'aws',
-              'version' => "#{blessed_version}",
-              'url' => "#{blessed_url}",
-              'sha1' => "#{blessed_sha1}"
+              'name' => blessed_versions['stemcells'][infrastructure]['type'],
+              'version' => blessed_versions['stemcells'][infrastructure]['version'],
+              'url' => blessed_versions['stemcells'][infrastructure]['url'],
+              'sha1' => blessed_versions['stemcells'][infrastructure]['sha1']
             }
           end
 
@@ -333,7 +372,7 @@ describe "Manifest Generation" do
             expect(result).to be_success
             stemcell_yaml = YAML.load_file("#{deployments_dir}/stemcell.yml")
             result_stemcell = stemcell_yaml['meta']['stemcell']
-            expect(result_stemcell).to eq(expected_release_yaml)
+            expect(result_stemcell).to eq(expected_stemcell_yaml)
           end
         end
       end
@@ -551,23 +590,6 @@ describe "Manifest Generation" do
     end
 
     describe 'generating manifest' do
-      context 'when one of the stubs is not an absolute path' do
-        let(:config) do
-          {
-            'cf' => cf_release_path,
-            'stubs' => [cf_release_path, "not_absolute"],
-            'deployments-dir' => "#{deployments_dir}"
-          }
-        end
-
-        let(:command) { "./tools/prepare-deployments aws #{config_file.path}" }
-
-        it 'prints an error and exits' do
-          expect(result).to_not be_success
-          expect(std_error.strip).to eq("Stub path not_absolute should be absolute.")
-        end
-      end
-
       context 'correct config is provided' do
         let(:config) do
           stubs_paths = ["#{File.dirname(__FILE__)}/assets/stub.yml"]
@@ -582,21 +604,12 @@ describe "Manifest Generation" do
 
         it 'generates manifest' do
           expect(result).to be_success
-          release_yaml = YAML.load_file("#{deployments_dir}/cf-deployment-manifest.yml")
+          release_yaml = YAML.load_file("#{deployments_dir}/cf.yml")
           etcd_release = get_release_by_name('etcd', release_yaml)
           expect(etcd_release['version']).to eq('latest')
           cf_release = get_release_by_name('cf', release_yaml)
           expect(cf_release['version']).to eq('create')
           expect(cf_release['path']).to eq(cf_release_path)
-        end
-      end
-
-      context 'no config is provided', integration: true do
-        let(:command) { "./tools/prepare-deployments aws" }
-
-        it 'returns an error' do
-          expect(result).to_not be_success
-          expect(std_error).to include 'No stubs provided'
         end
       end
 
@@ -613,16 +626,8 @@ describe "Manifest Generation" do
 
         it 'write output to ./outputs/manifests' do
           expect(result).to be_success
-          deployment_manifest_path = "#{File.dirname(__FILE__)}/../outputs/manifests/cf-deployment-manifest.yml"
+          deployment_manifest_path = "#{File.dirname(__FILE__)}/../outputs/manifests/cf.yml"
           expect(File.exist?(deployment_manifest_path)).to be_truthy
-        end
-      end
-
-      context 'no stubs is provided' do
-        let(:stubs_paths) { [] }
-        it 'fail with stub error' do
-          expect(result).to_not be_success
-          expect(std_error).to include 'No stubs provided'
         end
       end
 

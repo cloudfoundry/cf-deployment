@@ -73,15 +73,14 @@ cat > $CF_DEPLOYMENT_DIR/blessed_versions.json <<EOF
       "url": "https://bosh.io/d/github.com/cloudfoundry-incubator/etcd-release?v=${ETCD_VERSION}"
     }
   ],
-
-  "stemcells": [
-    { "name": "aws",
+  "stemcells": {
+    "aws": {
       "type": "${STEMCELL_NAME}",
       "version": "${STEMCELL_VERSION}",
       "url": "https://bosh.io/d/stemcells/bosh-aws-xen-hvm-ubuntu-trusty-go_agent?v=${STEMCELL_VERSION}",
       "sha1": "${STEMCELL_SHA1}"
     }
-  ]
+  }
 }
 EOF
 
