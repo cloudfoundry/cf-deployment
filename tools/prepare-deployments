@@ -7,40 +7,68 @@ if [ ! -z "${CF_DEPLOYMENT_TRACE}" ]; then
   set -x
 fi
 
-infrastructure="${1:?}"
+print_error() {
+  echo "${1}" 1>&2
+}
+
+usage() {
+  echo "Usage: prepare-deployments <aws|bosh-lite|openstack|vsphere> <path_to_config_file>"
+}
+
+if [ $# != 2 ]; then
+  print_error "ERROR: invalid number of arguments provided"
+  print_error "$(usage)"
+  exit 1 
+fi
+
+infrastructure="${1}"
+if [ -z "${infrastructure}" ]; then
+  print_error "ERROR: invalid value for infrastructure: ${infrastructure}" 
+  print_error "$(usage)"
+  exit 1
+fi
+
+config_file_path="${2}"
+if [ -z "${config_file_path}" ]; then
+  print_error "ERROR: invalid value for config_file_path: ${config_file_path}" 
+  print_error "$(usage)"
+  exit 1
+fi
+
 if [ "${infrastructure}" != "aws" ] && \
     [ "${infrastructure}" != "openstack" ] && \
     [ "${infrastructure}" != "bosh-lite" ] && \
     [ "${infrastructure}" != "vsphere" ] ; then
-  echo "Usage: prepare-deployments <aws|bosh-lite|openstack|vsphere> <path_to_config_file>" 1>&2
+  print_error "ERROR: invalid infrastructure: ${infrastructure}" 
+  print_error "$(usage)"
+  exit 1
+fi
+
+if [ ! -f "${config_file_path}" ]; then 
+  print_error "ERROR: invalid path to config file: ${config_file_path}" 
+  print_error "$(usage)"
   exit 1
 fi
 
 mydir="$(cd "$(dirname "$0")" && pwd)"
-deployment_dir="$(cd "${mydir}/.." && pwd)"
+cf_deployment_dir="$(cd "${mydir}/.." && pwd)"
 
-PATH_TO_CONFIG_FILE="${2:-${mydir}/config.json}"
+deployments_dir=$( jq -r 'if .["deployments-dir"] then .["deployments-dir"] else "" end' "${config_file_path}")
+deployments_dir="${deployments_dir:-${cf_deployment_dir}/outputs/manifests}"
 
-DEPLOYMENTS_DIR=$( jq -r 'if .["deployments-dir"] then .["deployments-dir"] else "" end' "${PATH_TO_CONFIG_FILE}")
-DEPLOYMENTS_DIR="${DEPLOYMENTS_DIR:-./outputs/manifests}"
-
-if [ ! -d "${DEPLOYMENTS_DIR}" ]; then
+if [ ! -d "${deployments_dir}" ]; then
   echo "deployments-dir must be a directory" 1>&2
   exit 1
 fi
 
 determine_version() {
-
-  if [ "${2}" == "cf" ]; then
-    if [ "${1}" == "integration-latest" ]; then
-      echo "create"
-      exit 0
-    fi
-  fi
-
   case "${1}" in
-
     "integration-latest")
+      if [ "${2}" == "cf" ]; then
+        echo "create"
+        exit 0
+      fi
+
       jq ".releases[] | select(.name == \"${2}\") | .version" blessed_versions.json
       ;;
 
@@ -63,6 +91,7 @@ determine_stemcell_name() {
     *.tgz)
       tar -x -O -f "${1}" ./stemcell.MF |  grep -E '^name:' | awk '{print $2};'
       ;;
+
     *)
       jq ".stemcells[\"${2}\"].type" blessed_versions.json
       ;;
@@ -73,13 +102,15 @@ determine_stemcell_version() {
   case "${1}" in
     *.tgz)
       tar -x -O -f "${1}" ./stemcell.MF |  grep -E '^version:' | awk '{print $2};'
-    ;;
+      ;;
+      
     "integration-latest")
       jq ".stemcells[\"${2}\"].version" blessed_versions.json
-    ;;
+      ;;
+
     "director-latest")
       echo "latest"
-    ;;
+      ;;
   esac
 }
 
@@ -88,6 +119,7 @@ determine_stemcell_sha1() {
     "director-latest")
       echo ""
     ;;
+
     *)
       echo "sha1: $(jq ".stemcells[\"${2}\"].sha1" blessed_versions.json)"
     ;;
@@ -99,9 +131,11 @@ determine_stemcell_location() {
      "integration-latest")
       echo "url: $(jq ".stemcells[\"${2}\"].url" blessed_versions.json)"
     ;;
+
     *.tgz)
       echo "path: file://${1}"
     ;;
+
     "director-latest")
       echo ""
     ;;
@@ -137,7 +171,7 @@ validate_path() {
   fi
 }
 
-provided_stubs=$(jq -r 'if .stubs then .stubs[] else "" end' "${PATH_TO_CONFIG_FILE}" )
+provided_stubs=$(jq -r 'if .stubs then .stubs[] else "" end' "${config_file_path}" )
 
 if [ "${provided_stubs}" != "" ]; then
   provided_stubs=(${provided_stubs})
@@ -151,11 +185,11 @@ if [ "${provided_stubs}" != "" ]; then
      fi
   done
 else
-  echo "No stubs provided in ${PATH_TO_CONFIG_FILE}" 1>&2
+  echo "No stubs provided in ${config_file_path}" 1>&2
   exit 1
 fi
 
-etcd_release_thing=$(jq -r '.etcd' "${PATH_TO_CONFIG_FILE}" )
+etcd_release_thing=$(jq -r '.etcd' "${config_file_path}" )
 etcd_release_thing=${etcd_release_thing:-"integration-latest"}
 if [ "${etcd_release_thing}" == "null" ]; then
   etcd_release_thing="integration-latest"
@@ -168,7 +202,7 @@ fi
 etcd_version=$(determine_version ${etcd_release_thing} 'etcd')
 etcd_release_location=$(determine_release_location ${etcd_release_thing} 'etcd')
 
-cf_release_thing=$(jq -r '.cf' "${PATH_TO_CONFIG_FILE}" )
+cf_release_thing=$(jq -r '.cf' "${config_file_path}" )
 cf_release_thing=${cf_release_thing:-"integration-latest"}
 if [ "${cf_release_thing}" == "null" ]; then
   cf_release_thing="integration-latest"
@@ -181,7 +215,7 @@ fi
 cf_release_location=""
 determine_cf_release_location() {
   if [ "${1}" == "integration-latest" ]; then
-    git_commit=$(grep commit "${deployment_dir}/blessed_versions.json" | awk '{gsub(/"/, "", $2); print $2;}')
+    git_commit=$(grep commit "${cf_deployment_dir}/blessed_versions.json" | awk '{gsub(/"/, "", $2); print $2;}')
     dir=$(mktemp -d -t cf-)
     pushd "${dir}" > /dev/null
        git clone https://github.com/cloudfoundry/cf-release.git > /dev/null
@@ -199,7 +233,7 @@ determine_cf_release_location() {
 cf_version=$(determine_version "${cf_release_thing}" 'cf')
 determine_cf_release_location "${cf_release_thing}" 'cf'
 
-stemcell_thing=$(jq -r '.stemcell' "${PATH_TO_CONFIG_FILE}" )
+stemcell_thing=$(jq -r '.stemcell' "${config_file_path}" )
 stemcell_thing=${stemcell_thing:-"integration-latest"}
 if [ "${stemcell_thing}" = "null" ]; then
   stemcell_thing="integration-latest"
@@ -214,7 +248,7 @@ stemcell_version=$(determine_stemcell_version "${stemcell_thing}" "${infrastruct
 stemcell_location=$(determine_stemcell_location "${stemcell_thing}" "${infrastructure}")
 stemcell_sha1=$(determine_stemcell_sha1 "${stemcell_thing}" "${infrastructure}")
 
-cat > "${DEPLOYMENTS_DIR}/stemcell.yml" <<EOF
+cat > "${deployments_dir}/stemcell.yml" <<EOF
 ---
 meta:
   stemcell:
@@ -224,7 +258,7 @@ meta:
     ${stemcell_sha1}
 EOF
 
-cat > "$DEPLOYMENTS_DIR/releases.yml" <<EOT
+cat > "${deployments_dir}/releases.yml" <<EOT
 ---
 releases:
   - name: cf
@@ -239,9 +273,9 @@ if [ "${infrastructure}" = "bosh-lite" ]; then
   infrastructure="warden"
 fi
 
-"${deployment_dir}/scripts/generate_deployment_manifest" \
+"${cf_deployment_dir}/scripts/generate_deployment_manifest" \
   "${infrastructure}" \
   "${cf_release_location}" \
-  "${DEPLOYMENTS_DIR}/releases.yml" \
-  "${DEPLOYMENTS_DIR}/stemcell.yml" \
-  "${provided_stubs[@]}" > "${DEPLOYMENTS_DIR}/cf.yml"
+  "${deployments_dir}/releases.yml" \
+  "${deployments_dir}/stemcell.yml" \
+  "${provided_stubs[@]}" > "${deployments_dir}/cf.yml"

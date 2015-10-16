@@ -75,7 +75,7 @@ describe 'Manifest Generation' do
 
       it 'requires that the deployments dir exists and is a directory' do
         expect(result).to_not be_success
-        expect(std_error.strip).to eq("deployments-dir must be a directory")
+        expect(std_error.strip).to include "deployments-dir must be a directory"
       end
     end
 
@@ -84,7 +84,8 @@ describe 'Manifest Generation' do
 
       it 'returns an error' do
         expect(result).to_not be_success
-        expect(std_error).to include 'No stubs provided'
+        expect(std_error).to include 'invalid number of arguments'
+        expect(std_error).to include 'Usage: '
       end
     end
 
@@ -109,7 +110,7 @@ describe 'Manifest Generation' do
 
       it 'prints an error and exits' do
         expect(result).to_not be_success
-        expect(std_error.strip).to eq('Stub path not_absolute should be absolute.')
+        expect(std_error.strip).to include 'Stub path not_absolute should be absolute.'
       end
     end
 
@@ -636,7 +637,7 @@ describe 'Manifest Generation' do
 
         it 'prints error to stderr' do
           expect(result).to_not be_success
-          expect(std_error).to include('unresolved nodes')
+            expect(std_error).to include('unresolved nodes')
         end
       end
     end
