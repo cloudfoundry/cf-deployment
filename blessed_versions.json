@@ -2,7 +2,7 @@
   "releases": [
     {
       "name": "cf",
-      "commit": "7b9888901723bbf06bb372206dca2627f00fec58"
+      "commit": "c13af55c9bc11aea72c513505a624b48ed92ef07"
     },
     {
       "name": "etcd",
@@ -11,13 +11,12 @@
       "url": "https://bosh.io/d/github.com/cloudfoundry-incubator/etcd-release?v=15"
     }
   ],
-
-  "stemcells": [
-    { "name": "aws",
+  "stemcells": {
+    "aws": {
       "type": "bosh-aws-xen-hvm-ubuntu-trusty-go_agent",
       "version": "3100",
       "url": "https://bosh.io/d/stemcells/bosh-aws-xen-hvm-ubuntu-trusty-go_agent?v=3100",
       "sha1": "849134f21dd21d294084f4376179227254909bb4"
     }
-  ]
+  }
 }
