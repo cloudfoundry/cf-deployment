@@ -57,7 +57,7 @@ pushd ${CF_RELEASE_PATH}
 
   CF_RELEASE_TARBALL=$(grep "Release tarball" ${OUTPUT_DIR}/cf.out | sed 's/.*: //')
 
-  mv ${CF_RELEASE_TARBALL} ${RELEASE_DIR}
+  mv ${CF_RELEASE_TARBALL} ${RELEASE_DIR}/cf.tgz
 popd
 
 if [ -d ${ETCD_RELEASE_PATH} ]; then
@@ -77,7 +77,7 @@ if [ -d ${ETCD_RELEASE_PATH} ]; then
   popd
 else
   ETCD_VERSION=$(tar -x -O -f ${ETCD_RELEASE_PATH} ./release.MF | grep -E '^version:' | grep -o -E "[0-9.]*[0-9]")
-  cp ${ETCD_RELEASE_PATH} ${RELEASE_DIR}
+  cp ${ETCD_RELEASE_PATH} ${RELEASE_DIR}/etcd.tgz
 fi
 
 if [ -d ${CONSUL_RELEASE_PATH} ]; then
@@ -101,7 +101,7 @@ if [ -d ${CONSUL_RELEASE_PATH} ]; then
   popd
 else
   CONSUL_VERSION=$(tar -x -O -f ${CONSUL_RELEASE_PATH} ./release.MF | grep -E '^version:' | grep -o -E "[0-9.]*[0-9]")
-  cp ${CONSUL_RELEASE_PATH} ${RELEASE_DIR}
+  cp ${CONSUL_RELEASE_PATH} ${RELEASE_DIR}/consul.tgz
 fi
 
 cat > $CF_DEPLOYMENT_DIR/stubs/versions.yml <<EOF
