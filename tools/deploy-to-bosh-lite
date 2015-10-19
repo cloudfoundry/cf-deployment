@@ -42,8 +42,8 @@ director_stub_file=$(mktemp /tmp/bosh-lite-director-stub.XXXXX)
 echo "director_uuid: $(bosh status --uuid)" > "${director_stub_file}"
 
 CF_RELEASE_DIR="${CF_RELEASE_DIR:-$deployment_dir}"
-add_stub "${CF_RELEASE_DIR}/bosh-lite/stubs/dev-security-groups.yml"
-add_stub "${CF_RELEASE_DIR}/bosh-lite/stubs/property_overrides.yml" 
+add_stub "${CF_RELEASE_DIR}/stubs/bosh-lite/dev-security-groups.yml"
+add_stub "${CF_RELEASE_DIR}/stubs/bosh-lite/property_overrides.yml"
 add_stub "${director_stub_file}"
 add_stub "${CF_RELEASE_DIR}/templates/cf-minimal-dev.yml"
 

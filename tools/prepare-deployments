@@ -89,7 +89,7 @@ determine_version() {
 determine_stemcell_name() {
   case "${1}" in
     *.tgz)
-      tar -x -O -f "${1}" ./stemcell.MF |  grep -E '^name:' | awk '{print $2};'
+      tar -x -O -f "${1}" stemcell.MF |  grep -E '^name:' | awk '{print $2};'
       ;;
 
     *)
@@ -101,7 +101,7 @@ determine_stemcell_name() {
 determine_stemcell_version() {
   case "${1}" in
     *.tgz)
-      tar -x -O -f "${1}" ./stemcell.MF |  grep -E '^version:' | awk '{print $2};'
+      tar -x -O -f "${1}" stemcell.MF |  grep -E '^version:' | awk '{print $2};'
       ;;
       
     "integration-latest")
@@ -216,7 +216,7 @@ cf_release_location=""
 determine_cf_release_location() {
   if [ "${1}" == "integration-latest" ]; then
     git_commit=$(grep commit "${cf_deployment_dir}/blessed_versions.json" | awk '{gsub(/"/, "", $2); print $2;}')
-    dir=$(mktemp -d -t cf-)
+    dir=$(mktemp -d -t cf-XXXXXX)
     pushd "${dir}" > /dev/null
        git clone https://github.com/cloudfoundry/cf-release.git > /dev/null
        pushd cf-release > /dev/null
@@ -273,9 +273,11 @@ if [ "${infrastructure}" = "bosh-lite" ]; then
   infrastructure="warden"
 fi
 
-"${cf_deployment_dir}/scripts/generate_deployment_manifest" \
+stubs_dir="${cf_deployment_dir}/stubs"
+
+"${cf_release_location}/scripts/generate_deployment_manifest" \
   "${infrastructure}" \
-  "${cf_release_location}" \
   "${deployments_dir}/releases.yml" \
   "${deployments_dir}/stemcell.yml" \
+  "${stubs_dir}/job_templates.yml" \
   "${provided_stubs[@]}" > "${deployments_dir}/cf.yml"

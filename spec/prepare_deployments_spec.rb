@@ -612,6 +612,13 @@ describe 'Manifest Generation' do
           expect(cf_release['version']).to eq('create')
           expect(cf_release['path']).to eq(cf_release_path)
         end
+
+        it 'includes the job templates stubs' do
+          expect(result).to be_success
+          release_yaml = YAML.load_file("#{deployments_dir}/cf.yml")
+          etcd_job = get_job_by_name('etcd_z1', release_yaml)
+          expect(etcd_job['templates'][0]['release']).to eq('etcd')
+        end
       end
 
       context 'no deployments dir is specified' do
@@ -644,9 +651,18 @@ describe 'Manifest Generation' do
   end
 end
 
-def get_release_by_name(name, array)
-  releases = array['releases']
+def get_release_by_name(name, manifest)
+  releases = manifest['releases']
   releases.each { |e|
+    if e['name'] == name
+      return e
+    end
+  }
+end
+
+def get_job_by_name(name, manifest)
+  jobs = manifest['jobs']
+  jobs.each { |e|
     if e['name'] == name
       return e
     end
