@@ -110,7 +110,7 @@ describe 'Manifest Generation' do
 
       it 'prints an error and exits' do
         expect(result).to_not be_success
-        expect(std_error.strip).to include 'Stub path not_absolute should be absolute.'
+        expect(std_error.strip).to include 'not_absolute should be absolute.'
       end
     end
 

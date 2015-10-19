@@ -8,11 +8,10 @@ if [ ! -z "${CF_DEPLOYMENT_TRACE}" ]; then
 fi
 
 mydir="$(cd "$(dirname "$0")" && pwd)"
-
-STUBS_DIR=${mydir}/../stubs
+templates_dir="$(cd "${mydir}/../templates" && pwd )"
 
 if [ $# -lt 3 ]; then
-  echo "Usage: generate_deployment_manifest <aws|openstack|warden|vsphere> PATH_TO_CF_RELEASE [stubs...]"
+  echo "Usage: generate_deployment_manifest <aws|openstack|warden|vsphere> CF_RELEASE_PATH [stubs...]"
   exit 1
 fi
 
@@ -22,11 +21,11 @@ CF_RELEASE_PATH=$2
 shift
 shift
 if [ ! -d "${CF_RELEASE_PATH}" ]; then
-  echo "PATH_TO_CF_RELEASE is invalid"
+  echo "CF_RELEASE_PATH is invalid"
   exit 1
 fi
 
 "${CF_RELEASE_PATH}/scripts/generate_deployment_manifest" \
   "${INFRASTRUCTURE}" \
-  "${STUBS_DIR}/job_templates.yml" \
+  "${templates_dir}/job_templates.yml" \
   "$@"

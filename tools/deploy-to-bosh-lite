@@ -45,7 +45,7 @@ CF_RELEASE_DIR="${CF_RELEASE_DIR:-$deployment_dir}"
 add_stub "${CF_RELEASE_DIR}/stubs/bosh-lite/dev-security-groups.yml"
 add_stub "${CF_RELEASE_DIR}/stubs/bosh-lite/property_overrides.yml"
 add_stub "${director_stub_file}"
-add_stub "${CF_RELEASE_DIR}/templates/cf-minimal-dev.yml"
+add_stub "${CF_RELEASE_DIR}/stubs/bosh-lite/cf-minimal-dev.yml"
 
 BOSH_RELEASES_DIR="${BOSH_RELEASES_DIR:-$HOME/workspace}"
 if [ -f "${BOSH_RELEASES_DIR}/diego-release/stubs-for-cf-release/enable_diego_ssh_in_cf.yml" ]; then

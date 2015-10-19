@@ -161,12 +161,12 @@ determine_release_location() {
 
 validate_path() {
   if [ "${1:0:1}" != "/" ]; then
-    echo "Stub path ${1} should be absolute." 1>&2
+    echo "Path ${1} should be absolute." 1>&2
     exit 1
   fi
 
   if [ ! -e "${1}" ]; then
-    echo "File or folder ${1} does not exists" 1>&2
+    echo "File or folder ${1} does not exist" 1>&2
     exit 1
   fi
 }
@@ -273,11 +273,12 @@ if [ "${infrastructure}" = "bosh-lite" ]; then
   infrastructure="warden"
 fi
 
-stubs_dir="${cf_deployment_dir}/stubs"
+templates_dir="${cf_deployment_dir}/templates"
 
 "${cf_release_location}/scripts/generate_deployment_manifest" \
   "${infrastructure}" \
   "${deployments_dir}/releases.yml" \
   "${deployments_dir}/stemcell.yml" \
-  "${stubs_dir}/job_templates.yml" \
-  "${provided_stubs[@]}" > "${deployments_dir}/cf.yml"
+  "${templates_dir}/job_templates.yml" \
+  "${provided_stubs[@]}" \
+   > "${deployments_dir}/cf.yml"
