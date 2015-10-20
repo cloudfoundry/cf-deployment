@@ -3,6 +3,7 @@ require 'tempfile'
 require 'json'
 require 'pry'
 require 'open3'
+require 'fileutils'
 require 'support/yaml_eq'
 
 describe 'Manifest Generation' do
@@ -640,8 +641,11 @@ describe 'Manifest Generation' do
         end
 
         it 'writes output to ./outputs/manifests' do
+          directory = "#{File.dirname(__FILE__)}/../outputs/manifests"
+          FileUtils::mkdir_p directory
+
           expect(result).to be_success
-          deployment_manifest_path = "#{File.dirname(__FILE__)}/../outputs/manifests/cf.yml"
+          deployment_manifest_path = "#{directory}/cf.yml"
           expect(File.exist?(deployment_manifest_path)).to be_truthy
         end
       end
