@@ -14,6 +14,13 @@ describe 'Manifest Generation' do
   let(:std_error) { command_results[1] }
   let(:result) { command_results[2] }
 
+  after(:each) do |example|
+    if example.exception
+      puts std_out
+      puts std_error
+    end
+  end
+
   let(:command_results) do
     Open3.capture3(command)
   end
@@ -632,14 +639,14 @@ describe 'Manifest Generation' do
           }
         end
 
-        it 'write output to ./outputs/manifests' do
+        it 'writes output to ./outputs/manifests' do
           expect(result).to be_success
           deployment_manifest_path = "#{File.dirname(__FILE__)}/../outputs/manifests/cf.yml"
           expect(File.exist?(deployment_manifest_path)).to be_truthy
         end
       end
 
-      context 'generate deployemnt manifest has an error' do
+      context 'generate deployment manifest has an error' do
         let(:stubs_paths) { ["#{File.dirname(__FILE__)}/assets/empty_stub.yml"] }
 
         it 'prints error to stderr' do
