@@ -1,75 +1,30 @@
 # cf-deployment
----
-
-##About
-
-cf-deployment is a collection of tools for deploying Cloud Foundry.
-
-##Tools
-
-###`scripts/create_releases`
-*Usage:* `create_releases PATH_TO_CF_RELEASE PATH_TO_ETCD_RELEASE PATH_TO_CONSUL_RELEASE`
-
-*Arguments:*
-
-* `PATH_TO_CF_RELEASE`: Path to the cf-release directory.
-* `PATH_TO_ETCD_RELEASE`: Path to the etcd-release directory, or an etcd-release tarball.
-* `PATH_TO_CONSUL_RELEASE`: Path to the consul-release directory, or a consul-release tarball.
-
-*Description:* Creates cf-release and places the release tarball in the `outputs/releases` folder. The same will be done for etcd/consul-release unless a tarball is given, then it is simply copied.
 
 
-###`scripts/generate_deployment_manifest`
-*Usage:* `generate_deployment_manifest <aws|openstack|warden|vsphere> PATH_TO_CF_RELEASE PATH_TO_STUB [PATHS_TO_ADDITIONAL_STUBS...]`
+### About
+
+cf-deployment is a collection of tools to facilitate deploying Cloud Foundry with BOSH.
+
+### Tools
+
+#### Prepare Deployments
+*Usage:*  
+`./tools/prepare_deployments <aws> PATH_TO_CONFIG_FILE`
 
 *Arguments:*
-
-* `INFRASTRUCTURE`: Must be aws, openstack, warden, or vsphere.
-* `PATH_TO_CF_RELEASE`: Path to the cf-release directory.
-* `PATH_TO_STUB`, `PATHS_TO_ADDITIONAL_STUBS`: Paths for YAML stubs to be merged into the manifest. At minimum, you are required to provide a stub that has the `director_uuid` value for the BOSH director to which you will deploy.
-
-*Description:* Generates a deployment manifest for the given infrastructure and writes it to standard output.
-
-
-###`scripts/prepare_deployment`
-*Usage:* `prepare_deployment <aws|openstack|warden|vsphere> PATH_TO_CF_RELEASE PATH_TO_ETCD_RELEASE PATH_TO_CONSUL_RELEASE PATH_TO_STUB [PATHS_TO_ADDITIONAL_STUBS...]`
-
-*Arguments:*
-
-* `INFRASTRUCTURE`: Must be aws, openstack, warden, or vsphere.
-* `PATH_TO_CF_RELEASE`: Path to the cf-release directory.
-* `PATH_TO_ETCD_RELEASE`: Path to the etcd-release directory, or an etcd-release tarball.
-* `PATH_TO_CONSUL_RELEASE`: Path to the consul-release directory, or a consul-release tarball.
-* `PATH_TO_STUB`, `PATHS_TO_ADDITIONAL_STUBS`: Paths for YAML stubs to be merged into the manifest. At minimum, you are required to provide a stub that has the `director_uuid` value for the BOSH director to which you will deploy.
-
-*Description:* Calls the `create_releases` script followed by the `generate_deployment_manifest` script.
-
-
-###`scripts/deploy`
-*Usage:* `deploy <aws|openstack|warden|vsphere> PATH_TO_CF_RELEASE PATH_TO_ETCD_RELEASE PATH_TO_CONSUL_RELEASE PATH_TO_STUB [PATHS_TO_ADDITIONAL_STUBS...]`
-
-*Arguments:*
-
-* `INFRASTRUCTURE`: Must be aws, openstack, warden, or vsphere.
-* `PATH_TO_CF_RELEASE`: Path to the cf-release directory.
-* `PATH_TO_ETCD_RELEASE`: Path to the etcd-release directory, or an etcd-release tarball.
-* `PATH_TO_CONSUL_RELEASE`: Path to the consul-release directory, or a consul-release tarball.
-* `PATH_TO_STUB`, `PATHS_TO_ADDITIONAL_STUBS`: Paths for YAML stubs to be merged into the manifest. At minimum, you are required to provide a stub that has the `director_uuid` value for the BOSH director to which you will deploy.
-
-*Description:* Calls the `prepare_deployment` script and saves the manifest as `outputs/manifests/cf.yml`. Uploads the releases in the `outputs/releases` folder to the currently targeted BOSH director. Deploys the generated manifest to the currently targeted BOSH director.
-
-**NOTE:** You must already have uploaded a compatible stemcell to the director for the deploy to work.
-
-###`tools/prepare_deployments`
-*Usage:* `prepare_deployments <aws> PATH_TO_CONFIG_FILE
-
-*Arguments:*
-
+* `aws`: The infrastructure for which to generate the manifests. Currently only `aws` is supported.
 * `PATH_TO_CONFIG_FILE`: Path to the config file.
 
-*Description:* Generates a CF-Deployment manifest given a config file which contains the versions of each release to be used.
+*Description:*  
+Generates a Cloud Foundry deployment manifest called `cf.yml` placed in either a specified or default directory (see references to `deployments-dir` below). The config file you pass to `./tools/prepare_deployments` must be a JSON file specifying some or all of the following properties:
 
-The config file you pass to `./tools/prepare_deployments` has the following form, for example:
+* `cf`: (string, optional) either a path to a directory of `cf-release`, or the string `"integration-latest"`
+* `etcd`: (string, optional) either a path to a directory of `etcd-release`, a path to a release tarball, the string `"director-latest"`, or the string `"integration-latest"`
+* `stemcell`: (string, optional) either a path to a stemcell tarball, the string `"director-latest"`, or the string `"integration-latest"`
+* `stubs`: (array of strings, required): a non-empty list of paths to stub files
+* `deployments-dir`: (string, optional) a path to a directory where manifests will be written
+
+For example:
 
 ```json
 {
@@ -81,31 +36,81 @@ The config file you pass to `./tools/prepare_deployments` has the following form
 }
 ```
 
-The config file provides the following values:
+NOTE: The manifest templates each IaaS require certain properties to be set in a stub provided by the user.
+To see an example and instructions for how to create this stub visit our [documentation](http://docs.cloudfoundry.org/deploying/).
 
-* `cf`: string, either a path to a directory of `cf-release`, or the string `"integration-latest"`
-* `etcd`: string, either a path to a directory of `etcd-release`, a path to a release tarball, the string `"director-latest"`, or the string `"integration-latest"`
-* `stemcell`: string, either a path to a stemcell tarball, the string `"director-latest"`, or the string `"integration-latest"`
-* `stubs`: array, a list of paths to stub files (required)
-* `deployments-dir`: string, a path to a directory where manifests will be written
+*Defaults:*  
+For each property (other than `stubs`) that is not specified in the config file, the following default values exist:
 
-#### Defaults
+* `cf`: defaults to `"integration-latest"`
+* `etcd`: defaults to `"integration-latest"`
+* `stemcell`: defaults to `"integration-latest"`
+* `deployments-dir`: defaults to `./outputs/manifests`
 
-* `--cf`: defaults to `"integration-latest"`
-* `--etcd`: defaults to `"integration-latest"`
-* `--stemcell`: defaults to `"integration-latest"`
-* `--stubs`: defaults to an empty list
-* `--deployments-dir`: defaults to `./outputs/manifests`
+##### Explanation of `director-latest` and `integration-latest`
 
-Please note: default manifests for each IaaS have required properties that must be set in a stub provided by the user.
-To see an example and instructions for how to create this stub visit our [documentation](http://docs.cloudfoundry.org/deploying/cf-stub-vsphere.html).
-
-When the special version string `integration-latest` is specified the script will read `blessed_versions.json`
-and fill in the proper values for each release. The exception to this is `cf` in which case it will clone
-the `cf-release` repo into a temporary directory, check out the git commit sha specified for `cf-release`
+When the special version string `integration-latest` is specified for a release or stemcell, this tool will read `blessed_versions.json`
+and fill in the proper values in the deployment manifest for that release or stemcell. The exception to this is `cf` in which case it will clone the `cf-release` repo into a temporary directory, check out the git commit SHA specified for `cf-release`
 in `blessed_versions.json`, and specify `create` as the version in the generated deployment manifest. Note that
-the "create" version keyword is not currently supported in bosh, [see this branch of work](https://github.com/njbennett/bosh/tree/mega-remote-releases).
+the `create` version keyword is a work-in-progress feature, expected to be officially supported in BOSH by early November 2015. [See this branch of work](https://github.com/njbennett/bosh/tree/mega-remote-releases).
 
-When the special version string `director-latest` is specified the script will set the version of the release
+When the special version string `director-latest` is specified the script will set the version of the release or stemcell
 in the generated deployment manifest to `latest`. The exception to this is `cf` which does not support
-`director-latest` as version or location parameter.
+`director-latest`.
+
+----
+
+### Scripts (to be replaced by above Tools)
+#### Create Releases
+*Usage:*  
+`./scripts/create_releases PATH_TO_CF_RELEASE PATH_TO_ETCD_RELEASE PATH_TO_CONSUL_RELEASE`
+
+*Arguments:*  
+* `PATH_TO_CF_RELEASE`: Path to the cf-release directory.
+* `PATH_TO_ETCD_RELEASE`: Path to the etcd-release directory, or an etcd-release tarball.
+* `PATH_TO_CONSUL_RELEASE`: Path to the consul-release directory, or a consul-release tarball.
+
+**Description:**  
+Creates cf-release and places the release tarball in the `outputs/releases` folder. The same will be done for etcd/consul-release unless a tarball is given, then it is simply copied.
+
+#### Generate Deployment Manifest
+*Usage:*  
+`./scripts/generate_deployment_manifest <aws|openstack|warden|vsphere> PATH_TO_CF_RELEASE PATH_TO_STUB [PATHS_TO_ADDITIONAL_STUBS...]`
+
+*Arguments:*  
+* `INFRASTRUCTURE`: Must be aws, openstack, warden, or vsphere.
+* `PATH_TO_CF_RELEASE`: Path to the cf-release directory.
+* `PATH_TO_STUB`, `PATHS_TO_ADDITIONAL_STUBS`: Paths for YAML stubs to be merged into the manifest. At minimum, you are required to provide a stub that has the `director_uuid` value for the BOSH director to which you will deploy.
+
+*Description:*  
+Generates a deployment manifest for the given infrastructure and writes it to standard output.
+
+#### Prepare Deployment
+*Usage:*  
+`./scripts/prepare_deployment <aws|openstack|warden|vsphere> PATH_TO_CF_RELEASE PATH_TO_ETCD_RELEASE PATH_TO_CONSUL_RELEASE PATH_TO_STUB [PATHS_TO_ADDITIONAL_STUBS...]`
+
+*Arguments:*  
+* `INFRASTRUCTURE`: Must be aws, openstack, warden, or vsphere.
+* `PATH_TO_CF_RELEASE`: Path to the cf-release directory.
+* `PATH_TO_ETCD_RELEASE`: Path to the etcd-release directory, or an etcd-release tarball.
+* `PATH_TO_CONSUL_RELEASE`: Path to the consul-release directory, or a consul-release tarball.
+* `PATH_TO_STUB`, `PATHS_TO_ADDITIONAL_STUBS`: Paths for YAML stubs to be merged into the manifest. At minimum, you are required to provide a stub that has the `director_uuid` value for the BOSH director to which you will deploy.
+
+*Description:*  
+Calls the `create_releases` script followed by the `generate_deployment_manifest` script.
+
+#### Deploy  
+*Usage:*  
+`./scripts/deploy <aws|openstack|warden|vsphere> PATH_TO_CF_RELEASE PATH_TO_ETCD_RELEASE PATH_TO_CONSUL_RELEASE PATH_TO_STUB [PATHS_TO_ADDITIONAL_STUBS...]`
+
+*Arguments:*  
+* `INFRASTRUCTURE`: Must be aws, openstack, warden, or vsphere.
+* `PATH_TO_CF_RELEASE`: Path to the cf-release directory.
+* `PATH_TO_ETCD_RELEASE`: Path to the etcd-release directory, or an etcd-release tarball.
+* `PATH_TO_CONSUL_RELEASE`: Path to the consul-release directory, or a consul-release tarball.
+* `PATH_TO_STUB`, `PATHS_TO_ADDITIONAL_STUBS`: Paths for YAML stubs to be merged into the manifest. At minimum, you are required to provide a stub that has the `director_uuid` value for the BOSH director to which you will deploy.
+
+*Description:*  
+Calls the `prepare_deployment` script and saves the manifest as `outputs/manifests/cf.yml`. Uploads the releases in the `outputs/releases` folder to the currently targeted BOSH director. Deploys the generated manifest to the currently targeted BOSH director.
+
+NOTE: You must already have uploaded a compatible stemcell to the director for the deploy to work.
