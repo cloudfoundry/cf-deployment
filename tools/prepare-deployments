@@ -1,12 +1,5 @@
 #!/bin/bash
 
-set -euf -o pipefail
-
-CF_DEPLOYMENT_TRACE=${CF_DEPLOYMENT_TRACE:-}
-if [ ! -z "${CF_DEPLOYMENT_TRACE}" ]; then
-  set -x
-fi
-
 print_error() {
   echo "${1}" 1>&2
 }
@@ -15,53 +8,84 @@ usage() {
   echo "Usage: prepare-deployments <aws|bosh-lite|openstack|vsphere> <path_to_config_file>"
 }
 
-if [ $# != 2 ]; then
-  print_error "ERROR: invalid number of arguments provided"
-  print_error "$(usage)"
-  exit 1 
-fi
+validate_num_args() {
+  # USAGE: validate_num_args [num: int]
+  # EXAMPLE: validate_num_args 1
 
-infrastructure="${1}"
-if [ -z "${infrastructure}" ]; then
-  print_error "ERROR: invalid value for infrastructure: ${infrastructure}" 
-  print_error "$(usage)"
-  exit 1
-fi
+  if [ ${1} != 2 ]; then
+    print_error "ERROR: invalid number of arguments provided"
+    print_error "$(usage)"
+    exit 1 
+  fi
+}
 
-config_file_path="${2}"
-if [ -z "${config_file_path}" ]; then
-  print_error "ERROR: invalid value for config_file_path: ${config_file_path}" 
-  print_error "$(usage)"
-  exit 1
-fi
+validate_infrastructure() {
+  # USAGE: validate_infrastructure [infrastructure: string]
+  # EXAMPLE: validate_infrastructure aws
 
-if [ "${infrastructure}" != "aws" ] && \
-    [ "${infrastructure}" != "openstack" ] && \
-    [ "${infrastructure}" != "bosh-lite" ] && \
-    [ "${infrastructure}" != "vsphere" ] ; then
-  print_error "ERROR: invalid infrastructure: ${infrastructure}" 
-  print_error "$(usage)"
-  exit 1
-fi
+  local infrastructure="${1}"
 
-if [ ! -f "${config_file_path}" ]; then 
-  print_error "ERROR: invalid path to config file: ${config_file_path}" 
-  print_error "$(usage)"
-  exit 1
-fi
+  if [ -z "${infrastructure}" ]; then
+    print_error "ERROR: infrastructure should not be empty" 
+    print_error "$(usage)"
+    exit 1
+  fi
 
-mydir="$(cd "$(dirname "$0")" && pwd)"
-cf_deployment_dir="$(cd "${mydir}/.." && pwd)"
+  if [ "${infrastructure}" != "aws" ] && \
+      [ "${infrastructure}" != "openstack" ] && \
+      [ "${infrastructure}" != "bosh-lite" ] && \
+      [ "${infrastructure}" != "vsphere" ] ; then
+    print_error "ERROR: invalid infrastructure: ${infrastructure}" 
+    print_error "$(usage)"
+    exit 1
+  fi
+}
 
-deployments_dir=$( jq -r 'if .["deployments-dir"] then .["deployments-dir"] else "" end' "${config_file_path}")
-deployments_dir="${deployments_dir:-${cf_deployment_dir}/outputs/manifests}"
+validate_config_file_path() {
+  # USAGE: validate_config_file_path [path: string]
+  # EXAMPLE: validate_config_file_path "/path/to/config.json"
 
-if [ ! -d "${deployments_dir}" ]; then
-  echo "deployments-dir must be a directory" 1>&2
-  exit 1
-fi
+  local config_file_path="${1}"
 
-determine_version() {
+  if [ -z "${config_file_path}" ]; then
+    print_error "ERROR: config_file_path should not be empty"
+    print_error "$(usage)"
+    exit 1
+  fi
+
+  if [ ! -f "${config_file_path}" ]; then 
+    print_error "ERROR: invalid path to config file: ${config_file_path}" 
+    print_error "$(usage)"
+    exit 1
+  fi
+}
+
+determine_deployments_dir() {
+  # USAGE: determine_deployments_dir [config_file_path: string] [default_deployments_dir: string]
+  # EXAMPLE: determine_deployments_dir "/path/to/config.json" "/path/to/deployments/dir"
+  # NOTE: default deployments dir should in most cases be ${cf_deployment_dir}/outputs/manifests
+
+  local config_file_path=${1}
+  local default_deployments_dir=${2}
+  local deployments_dir=$( jq -r 'if .["deployments-dir"] then .["deployments-dir"] else "" end' "${config_file_path}")
+  deployments_dir="${deployments_dir:-${default_deployments_dir}}"
+
+  echo "${deployments_dir}"
+}
+
+validate_deployments_dir() {
+  # USAGE: validate_deployments_dir [path: string]
+  # EXAMPLE: validate_deployments_dir "/path/to/deployments/dir"
+
+  local deployments_dir=${1}
+
+  if [ ! -d "${deployments_dir}" ]; then
+    echo "deployments-dir must be a directory" 1>&2
+    exit 1
+  fi
+}
+
+determine_release_version() {
   case "${1}" in
     "integration-latest")
       if [ "${2}" == "cf" ]; then
@@ -133,7 +157,7 @@ determine_stemcell_location() {
     ;;
 
     *.tgz)
-      echo "path: file://${1}"
+      echo "url: file://${1}"
     ;;
 
     "director-latest")
@@ -171,114 +195,227 @@ validate_path() {
   fi
 }
 
-provided_stubs=$(jq -r 'if .stubs then .stubs[] else "" end' "${config_file_path}" )
+determine_stubs() {
+  # USAGE: determine_stubs [path: string]
+  # EXAMPLE: determine_stubs "/path/to/config.json"
 
-if [ "${provided_stubs}" != "" ]; then
-  provided_stubs=(${provided_stubs})
-  for var in "${provided_stubs[@]}"
-    do
-       if [ "${var}" != "" ]; then
-        # TODO: is the following the same thing as removing all quotes?
-        var="${var%\"}"
-        var="${var#\"}"
-        validate_path "${var}"
-     fi
-  done
-else
-  echo "No stubs provided in ${config_file_path}" 1>&2
-  exit 1
-fi
+  local config_file_path=${1}
+  local stubs=$(jq -r 'if .stubs then .stubs[] else "" end' "${config_file_path}" )
 
-etcd_release_thing=$(jq -r '.etcd' "${config_file_path}" )
-etcd_release_thing=${etcd_release_thing:-"integration-latest"}
-if [ "${etcd_release_thing}" == "null" ]; then
-  etcd_release_thing="integration-latest"
-fi
+  echo "${stubs}"
+}
 
-if [ ${etcd_release_thing} != "integration-latest" ] && [ ${etcd_release_thing} != "director-latest" ]; then
-  validate_path ${etcd_release_thing}
-fi
+validate_stubs() {
+  # USAGE: validate_stubs [stubs: string]
+  # EXAMPLE: validate_stubs "/path/to/stub.yml /path/to/other/stub.yml"
 
-etcd_version=$(determine_version ${etcd_release_thing} 'etcd')
-etcd_release_location=$(determine_release_location ${etcd_release_thing} 'etcd')
+  local stubs=${1}
 
-cf_release_thing=$(jq -r '.cf' "${config_file_path}" )
-cf_release_thing=${cf_release_thing:-"integration-latest"}
-if [ "${cf_release_thing}" == "null" ]; then
-  cf_release_thing="integration-latest"
-fi
-
-if [ "${cf_release_thing}" != "integration-latest" ] ; then
-  validate_path "${cf_release_thing}"
-fi
-
-cf_release_location=""
-determine_cf_release_location() {
-  if [ "${1}" == "integration-latest" ]; then
-    git_commit=$(grep commit "${cf_deployment_dir}/blessed_versions.json" | awk '{gsub(/"/, "", $2); print $2;}')
-    dir=$(mktemp -d -t cf-XXXXXX)
-    pushd "${dir}" > /dev/null
-       git clone https://github.com/cloudfoundry/cf-release.git > /dev/null
-       pushd cf-release > /dev/null
-         git checkout "${git_commit}" > /dev/null
-         ./scripts/update > /dev/null
-         cf_release_location="${dir}/cf-release"
-       popd > /dev/null
-     popd > /dev/null
+  if [ "${stubs}" != "" ]; then
+    stubs=(${stubs})
+    for var in "${stubs[@]}"
+      do
+         if [ "${var}" != "" ]; then
+          # TODO: is the following the same thing as removing all quotes?
+          local var="${var%\"}"
+          var="${var#\"}"
+          validate_path "${var}"
+       fi
+    done
   else
-    cf_release_location="${1}"
+    echo "No stubs provided" 1>&2
+    exit 1
   fi
 }
 
-cf_version=$(determine_version "${cf_release_thing}" 'cf')
-determine_cf_release_location "${cf_release_thing}" 'cf'
+determine_variant() {
+  # USAGE: determine_variant [path: string] [name: string]
+  # EXAMPLE: determine_variant "/path/to/config.json" "etcd"
 
-stemcell_thing=$(jq -r '.stemcell' "${config_file_path}" )
-stemcell_thing=${stemcell_thing:-"integration-latest"}
-if [ "${stemcell_thing}" = "null" ]; then
-  stemcell_thing="integration-latest"
-fi
+  local config_file_path=${1}
+  local name=${2}
+  local variant=$(jq -r "if .[\"${name}\"] then .[\"${name}\"] else \"\" end" "${config_file_path}")
 
-if [ ${stemcell_thing} != "integration-latest" ] && [ ${stemcell_thing} != "director-latest" ]; then echo ${stemcell_thing}
-  validate_path ${stemcell_thing}
-fi
+  echo "${variant:-"integration-latest"}"
+}
 
-stemcell_name=$(determine_stemcell_name "${stemcell_thing}" "${infrastructure}")
-stemcell_version=$(determine_stemcell_version "${stemcell_thing}" "${infrastructure}")
-stemcell_location=$(determine_stemcell_location "${stemcell_thing}" "${infrastructure}")
-stemcell_sha1=$(determine_stemcell_sha1 "${stemcell_thing}" "${infrastructure}")
+validate_etcd_release_variant() {
+  # USAGE: validate_etcd_release_variant [variant: string]
+  # EXAMPLE: validate_etcd_release_variant "/path/to/etcd.tar.gz"
 
-cat > "${deployments_dir}/stemcell.yml" <<EOF
+  local variant=${1}
+
+  if [ ${variant} != "integration-latest" ] && [ ${variant} != "director-latest" ]; then
+    validate_path ${variant}
+  fi
+}
+
+validate_cf_release_variant() {
+  # USAGE: validate_cf_release_variant [variant: string]
+  # EXAMPLE: validate_cf_release_variant "/path/to/cf.tar.gz"
+
+  local variant=${1}
+
+  if [ "${variant}" != "integration-latest" ] ; then
+    validate_path "${variant}"
+  fi
+}
+
+determine_cf_release_location() {
+  # USAGE: determine_cf_release_location [variant: string] [cf_deployment_dir: string]
+  # EXAMPLE: determine_cf_release_location "/path/to/cf.tar.gz" "/cf-deployment"
+
+  local variant=${1}
+  local cf_deployment_dir=${2}
+
+  if [ "${variant}" == "integration-latest" ]; then
+    local dir=$(mktemp -d -t cf-XXXXXX)
+    local cf_release_location="${dir}/cf-release"
+    clone_cf_release "${dir}" "${cf_deployment_dir}"
+  else
+    local cf_release_location="${variant}"
+  fi
+
+  echo "${cf_release_location}"
+}
+
+clone_cf_release() {
+  local dir=${1}
+  local cf_deployment_dir=${2}
+  local git_commit=$(grep commit "${cf_deployment_dir}/blessed_versions.json" | awk '{gsub(/"/, "", $2); print $2;}')
+
+  pushd "${dir}" > /dev/null
+     git clone https://github.com/cloudfoundry/cf-release.git > /dev/null
+     pushd cf-release > /dev/null
+       git checkout "${git_commit}" > /dev/null
+       ./scripts/update > /dev/null
+     popd > /dev/null
+   popd > /dev/null
+}
+
+validate_stemcell_variant() {
+  # USAGE: validate_stemcell_variant [variant: string]
+  # EXAMPLE: validate_stemcell_variant "/path/to/stemcell.tar.gz"
+
+  local variant=${1}
+
+  if [ ${variant} != "integration-latest" ] && [ ${variant} != "director-latest" ]; then
+    validate_path ${variant}
+  fi
+}
+
+print_stemcells_stub() {
+  # USAGE: print_stemcells_stub [name: string] [version: string] [location: string] [sha1: string]
+  # EXAMPLE: print_stemcells_stub "stemcell" "1.0.0" "/path/to/stemcell.tar.gz" "8a1aaf746ada2a80fab03a58c91575ffe82885ac"
+
+  local name=${1}
+  local version=${2}
+  local location=${3}
+  local sha1=${4}
+
+  cat <<EOF
 ---
 meta:
   stemcell:
-    name: ${stemcell_name}
-    version: ${stemcell_version}
-    ${stemcell_location}
-    ${stemcell_sha1}
+    name: ${name}
+    version: ${version}
+    ${location}
+    ${sha1}
 EOF
+}
 
-cat > "${deployments_dir}/releases.yml" <<EOT
+print_releases_stub() {
+  # USAGE: print_release_stub [cf_version: string] [cf_release_location: string] [etcd_version: string] [etcd_release_location: string]
+  # EXAMPLE: print_release_stub "222" "/path/to/cf.tar.gz" "0.15.0" "/path/to/etcd.tar.gz"
+
+  local cf_version=${1}
+  local cf_release_location=${2}
+  local etcd_version=${3}
+  local etcd_release_location=${4}
+
+  cat <<EOF
 ---
 releases:
   - name: cf
     version: ${cf_version}
-    path: ${cf_release_location}
+    url: ${cf_release_location}
   - name: etcd
     version: ${etcd_version}
     url: ${etcd_release_location}
-EOT
+EOF
+}
 
-if [ "${infrastructure}" = "bosh-lite" ]; then
-  infrastructure="warden"
+main() {
+  set -euf -o pipefail
+
+  CF_DEPLOYMENT_TRACE=${CF_DEPLOYMENT_TRACE:-}
+  if [ ! -z "${CF_DEPLOYMENT_TRACE}" ]; then
+    set -x
+  fi
+
+  local mydir=${1}
+  local infrastructure=${2}
+  local config_file_path=${3}
+  local intermediate_dir=${4}
+
+  validate_infrastructure "${infrastructure}"
+  validate_config_file_path "${config_file_path}"
+
+  local cf_deployment_dir="$(cd "${mydir}/.." && pwd)"
+  local deployments_dir=$(determine_deployments_dir "${config_file_path}" "${cf_deployment_dir}/outputs/manifests")
+
+  validate_deployments_dir "${deployments_dir}"
+
+  local stubs="$(determine_stubs "${config_file_path}")"
+
+  validate_stubs "${stubs}"
+
+  local etcd_release_variant=$(determine_variant "${config_file_path}" "etcd")
+
+  validate_etcd_release_variant "${etcd_release_variant}"
+
+  local etcd_version=$(determine_release_version ${etcd_release_variant} 'etcd')
+  local etcd_release_location=$(determine_release_location ${etcd_release_variant} 'etcd')
+
+  local cf_release_variant=$(determine_variant "${config_file_path}" "cf")
+
+  validate_cf_release_variant "${cf_release_variant}"
+
+  local cf_version=$(determine_release_version "${cf_release_variant}" 'cf')
+  local cf_release_location=$(determine_cf_release_location "${cf_release_variant}" "${cf_deployment_dir}")
+
+  local stemcell_variant=$(determine_variant "${config_file_path}" "stemcell")
+
+  validate_stemcell_variant "${stemcell_variant}"
+
+  local stemcell_name=$(determine_stemcell_name "${stemcell_variant}" "${infrastructure}")
+  local stemcell_version=$(determine_stemcell_version "${stemcell_variant}" "${infrastructure}")
+  local stemcell_location=$(determine_stemcell_location "${stemcell_variant}" "${infrastructure}")
+  local stemcell_sha1=$(determine_stemcell_sha1 "${stemcell_variant}" "${infrastructure}")
+
+  local intermediate_dir="${intermediate_dir}"
+  mkdir -p "${intermediate_dir}"
+
+  echo "$(print_stemcells_stub "${stemcell_name}" "${stemcell_version}" "${stemcell_location}" "${stemcell_sha1}")" > "${intermediate_dir}/stemcells.yml" 
+  echo "$(print_releases_stub "${cf_version}" "${cf_release_location}" "${etcd_version}" "${etcd_release_location}")"  > "${intermediate_dir}/releases.yml"
+
+  if [ "${infrastructure}" = "bosh-lite" ]; then
+    infrastructure="warden"
+  fi
+
+  templates_dir="${cf_deployment_dir}/templates"
+
+  "${cf_release_location}/scripts/generate_deployment_manifest" \
+    "${infrastructure}" \
+    "${intermediate_dir}/releases.yml" \
+    "${intermediate_dir}/stemcells.yml" \
+    "${templates_dir}/job_templates.yml" \
+    "${stubs[@]}" \
+     > "${deployments_dir}/cf.yml"
+}
+
+if [ "$(basename ${0})" = "prepare-deployments" ]; then
+  validate_num_args $#
+  main "$(cd "$(dirname "$0")" && pwd)" $1 $2 $(mktemp -d -t intermediate-XXXXXX)
 fi
 
-templates_dir="${cf_deployment_dir}/templates"
-
-"${cf_release_location}/scripts/generate_deployment_manifest" \
-  "${infrastructure}" \
-  "${deployments_dir}/releases.yml" \
-  "${deployments_dir}/stemcell.yml" \
-  "${templates_dir}/job_templates.yml" \
-  "${provided_stubs[@]}" \
-   > "${deployments_dir}/cf.yml"
