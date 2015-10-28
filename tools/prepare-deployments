@@ -289,7 +289,7 @@ clone_cf_release() {
   git clone https://github.com/cloudfoundry/cf-release.git > /dev/null
   cd cf-release
   git checkout "${git_commit}" > /dev/null
-  ./scripts/update > /dev/null
+  git submodule update --init -- src/loggregator > /dev/null
   cd "$cwd"
 }
 
