@@ -67,7 +67,7 @@ describe 'Manifest Generation' do
 
     describe 'validate_num_args' do
       context 'if it has not 2 args' do
-        let(:command) { "source ./tools/prepare-deployments && validate_num_args 1" }
+        let(:command) { ". ./tools/prepare-deployments && validate_num_args 1" }
         it 'prints an error' do
           expect(result).to_not be_success
           expect(std_error).to include('ERROR: invalid number of arguments provided')
@@ -75,7 +75,7 @@ describe 'Manifest Generation' do
       end
 
       context 'if it has 2 args' do
-        let(:command) { "source ./tools/prepare-deployments && validate_num_args 2" }
+        let(:command) { ". ./tools/prepare-deployments && validate_num_args 2" }
         it 'prints nothing' do
           expect(result).to be_success
           expect(std_error).to be_empty
@@ -85,7 +85,7 @@ describe 'Manifest Generation' do
 
     describe 'validate_infrastructure' do
       context 'when the infrastructure is valid' do
-        let(:command) { "source ./tools/prepare-deployments && validate_infrastructure aws" }
+        let(:command) { ". ./tools/prepare-deployments && validate_infrastructure aws" }
         it 'prints nothing' do
           expect(result).to be_success
           expect(std_error).to be_empty
@@ -93,7 +93,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when the infrastructure is empty' do
-        let(:command) { "source ./tools/prepare-deployments && validate_infrastructure ''" }
+        let(:command) { ". ./tools/prepare-deployments && validate_infrastructure ''" }
         it 'prints an error' do
           expect(result).to_not be_success
           expect(std_error).to include "ERROR: infrastructure should not be empty"
@@ -101,7 +101,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when the infrastructure is invalid' do
-        let(:command) { "source ./tools/prepare-deployments && validate_infrastructure banana" }
+        let(:command) { ". ./tools/prepare-deployments && validate_infrastructure banana" }
         it 'prints an error' do
           expect(result).to_not be_success
           expect(std_error).to include("ERROR: invalid infrastructure: banana")
@@ -111,7 +111,7 @@ describe 'Manifest Generation' do
 
     describe 'validate_config_file_path' do
       context 'when the config file path is valid' do
-        let(:command) { "source ./tools/prepare-deployments && validate_config_file_path #{config_file.path}" }
+        let(:command) { ". ./tools/prepare-deployments && validate_config_file_path #{config_file.path}" }
         it 'succeeds' do
           expect(result).to be_success
           expect(std_error).to be_empty
@@ -119,7 +119,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when the config file path is empty' do
-        let(:command) { "source ./tools/prepare-deployments && validate_config_file_path ''" }
+        let(:command) { ". ./tools/prepare-deployments && validate_config_file_path ''" }
         it 'prints an error' do
           expect(result).to_not be_success
           expect(std_error).to include("ERROR: config_file_path should not be empty")
@@ -127,7 +127,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when the config file path is empty' do
-        let(:command) { "source ./tools/prepare-deployments && validate_config_file_path '/banana/path/file.json'" }
+        let(:command) { ". ./tools/prepare-deployments && validate_config_file_path '/banana/path/file.json'" }
         it 'succeeds' do
           expect(result).to_not be_success
           expect(std_error).to include("ERROR: invalid path to config file: /banana/path/file.json")
@@ -137,7 +137,7 @@ describe 'Manifest Generation' do
 
     describe 'determine_deployments_dir' do
       context 'when the config file contains a deployment-dir field' do
-        let(:command) { "source ./tools/prepare-deployments && determine_deployments_dir #{config_file.path} /default/deployments/dir" }
+        let(:command) { ". ./tools/prepare-deployments && determine_deployments_dir #{config_file.path} /default/deployments/dir" }
         it 'prints the deployments_dir found from the config file' do
           expect(result).to be_success
           expect(std_out).to include(deployments_dir)
@@ -145,7 +145,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when the config file does not contain a deployment-dir field' do
-        let(:command) { "source ./tools/prepare-deployments && determine_deployments_dir #{config_file.path} /default/deployments/dir" }
+        let(:command) { ". ./tools/prepare-deployments && determine_deployments_dir #{config_file.path} /default/deployments/dir" }
         let(:config) do
           {
             'cf' => cf_release_path,
@@ -162,7 +162,7 @@ describe 'Manifest Generation' do
 
     describe 'validate_deployments_dir' do
       context 'deployments dir exists' do
-        let(:command) { "source ./tools/prepare-deployments && validate_deployments_dir #{deployments_dir}" }
+        let(:command) { ". ./tools/prepare-deployments && validate_deployments_dir #{deployments_dir}" }
         it 'prints nothing' do
           expect(result).to be_success
           expect(std_error).to be_empty
@@ -170,7 +170,7 @@ describe 'Manifest Generation' do
       end
 
       context 'deployments dir does not exist' do
-        let(:command) { "source ./tools/prepare-deployments && validate_deployments_dir /banana/dir" }
+        let(:command) { ". ./tools/prepare-deployments && validate_deployments_dir /banana/dir" }
         it 'prints an error' do
           expect(result).to_not be_success
           expect(std_error).to include("deployments-dir must be a directory")
@@ -180,7 +180,7 @@ describe 'Manifest Generation' do
 
     describe 'determine_release_version' do
       context 'when version is integration-latest for cf-release' do
-        let(:command) { "source ./tools/prepare-deployments && determine_release_version integration-latest cf" }
+        let(:command) { ". ./tools/prepare-deployments && determine_release_version integration-latest cf" }
 
         it 'prints create as a version' do
           expect(result).to be_success
@@ -189,7 +189,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when version is integration-latest not for cf-release' do
-        let(:command) { "source ./tools/prepare-deployments && determine_release_version integration-latest etcd" }
+        let(:command) { ". ./tools/prepare-deployments && determine_release_version integration-latest etcd" }
         let(:blessed_version) do
           blessed_versions['releases'].each { |release|
             return release['version'] if release['name'] == 'etcd'
@@ -202,7 +202,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when version is director-latest' do
-        let(:command) { "source ./tools/prepare-deployments && determine_release_version director-latest etcd" }
+        let(:command) { ". ./tools/prepare-deployments && determine_release_version director-latest etcd" }
         it 'prints latest' do
           expect(result).to be_success
           expect(std_out).to include("latest")
@@ -211,7 +211,7 @@ describe 'Manifest Generation' do
 
       context 'when version is tarball' do
         let(:release_temp_dir) { Dir.mktmpdir }
-        let(:command) { "source ./tools/prepare-deployments && determine_release_version #{release_temp_dir}/release.tgz etcd" }
+        let(:command) { ". ./tools/prepare-deployments && determine_release_version #{release_temp_dir}/release.tgz etcd" }
         before { create_tarball_with_manifest(release_temp_dir, "release") }
 
         it 'look inside tarball.release.MF and peeks a version' do
@@ -221,7 +221,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when version is release folder' do
-        let(:command) { "source ./tools/prepare-deployments && determine_release_version /tmp/release/dir etcd" }
+        let(:command) { ". ./tools/prepare-deployments && determine_release_version /tmp/release/dir etcd" }
         it 'prints "create"' do
           expect(result).to be_success
           expect(std_out).to include("create")
@@ -232,7 +232,7 @@ describe 'Manifest Generation' do
     describe 'determine_stemcell_name' do
       context 'when tarball is provided' do
         let(:stemcell_temp_dir) { Dir.mktmpdir }
-        let(:command) { "source ./tools/prepare-deployments && determine_stemcell_name #{stemcell_temp_dir}/stemcell.tgz" }
+        let(:command) { ". ./tools/prepare-deployments && determine_stemcell_name #{stemcell_temp_dir}/stemcell.tgz" }
         before { create_tarball_with_manifest(stemcell_temp_dir, "stemcell") }
         it 'peeks inside tarball and returns a name' do
           expect(result).to be_success
@@ -241,7 +241,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when tarball is not provided' do
-        let(:command) { "source ./tools/prepare-deployments && determine_stemcell_name not_a_tarball aws" }
+        let(:command) { ". ./tools/prepare-deployments && determine_stemcell_name not_a_tarball aws" }
         let(:aws_stemcell) { blessed_versions['stemcells']['aws']['type'] }
         it 'gets name from blessed_versions' do
           expect(result).to be_success
@@ -253,7 +253,7 @@ describe 'Manifest Generation' do
     describe 'determine_stemcell_version' do
       context 'when tarball is provided' do
         let(:stemcell_temp_dir) { Dir.mktmpdir }
-        let(:command) { "source ./tools/prepare-deployments && determine_stemcell_version #{stemcell_temp_dir}/stemcell.tgz" }
+        let(:command) { ". ./tools/prepare-deployments && determine_stemcell_version #{stemcell_temp_dir}/stemcell.tgz" }
         before { create_tarball_with_manifest(stemcell_temp_dir, "stemcell") }
         it 'peeks inside tarball and gets the version' do
           expect(result).to be_success
@@ -262,7 +262,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when providing "integration-latest"' do
-        let(:command) { "source ./tools/prepare-deployments && determine_stemcell_version integration-latest aws" }
+        let(:command) { ". ./tools/prepare-deployments && determine_stemcell_version integration-latest aws" }
         let(:stemcell_version) { blessed_versions['stemcells']['aws']['version'] }
         it 'prints the stemcell version out of the blessed_versions' do
           expect(result).to be_success
@@ -271,7 +271,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when providing "director-latest"' do
-        let(:command) { "source ./tools/prepare-deployments && determine_stemcell_version director-latest" }
+        let(:command) { ". ./tools/prepare-deployments && determine_stemcell_version director-latest" }
         it 'prints "latest"' do
           expect(result).to be_success
           expect(std_out).to include("latest")
@@ -281,7 +281,7 @@ describe 'Manifest Generation' do
 
     describe 'determine_stemcell_sha1' do
       context 'when "director-latest" is provided' do
-        let(:command) { "source ./tools/prepare-deployments && determine_stemcell_sha1 director-latest" }
+        let(:command) { ". ./tools/prepare-deployments && determine_stemcell_sha1 director-latest" }
         it 'prints nothing' do
           expect(result).to be_success
           expect(std_out.strip).to be_empty
@@ -289,7 +289,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when "director-latest" is not provided' do
-        let(:command) { "source ./tools/prepare-deployments && determine_stemcell_sha1 integration-latest aws" }
+        let(:command) { ". ./tools/prepare-deployments && determine_stemcell_sha1 integration-latest aws" }
         let(:stemcell_sha1) { blessed_versions['stemcells']['aws']['sha1'] }
         it 'prints the sha1 from blessed_versions' do
           expect(result).to be_success
@@ -300,7 +300,7 @@ describe 'Manifest Generation' do
 
     describe 'determione_stemcell_location' do
       context 'when "integration-latest" is provided' do
-        let(:command) { "source ./tools/prepare-deployments && determine_stemcell_location integration-latest aws" }
+        let(:command) { ". ./tools/prepare-deployments && determine_stemcell_location integration-latest aws" }
         let(:stemcell_location) { blessed_versions['stemcells']['aws']['url'] }
         it 'takes url from blessed_versions' do
           expect(result).to be_success
@@ -310,7 +310,7 @@ describe 'Manifest Generation' do
 
       context 'when tarball is provided' do
         let(:stemcell_temp_dir) { Dir.mktmpdir }
-        let(:command) { "source ./tools/prepare-deployments && determine_stemcell_location #{stemcell_temp_dir}/stemcell.tgz" }
+        let(:command) { ". ./tools/prepare-deployments && determine_stemcell_location #{stemcell_temp_dir}/stemcell.tgz" }
         before { create_tarball_with_manifest(stemcell_temp_dir, "stemcell") }
         it 'returns path to this tarball' do
           expect(result).to be_success
@@ -319,7 +319,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when "director-latest" is provided' do
-        let(:command) { "source ./tools/prepare-deployments && determine_stemcell_location director-latest"}
+        let(:command) { ". ./tools/prepare-deployments && determine_stemcell_location director-latest"}
         it 'prints nothing' do
           expect(result).to be_success
           expect(std_out.strip).to be_empty
@@ -329,7 +329,7 @@ describe 'Manifest Generation' do
 
     describe 'determine_release_location' do
       context 'when "integration-latest" is provided' do
-        let(:command) { "source ./tools/prepare-deployments && determine_stemcell_location integration-latest aws" }
+        let(:command) { ". ./tools/prepare-deployments && determine_stemcell_location integration-latest aws" }
         let(:stemcell_url) { blessed_versions['stemcells']['aws']['url'] }
         it 'prints the url from the blessed_versions' do
           expect(result).to be_success
@@ -338,7 +338,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when "director-latest" is provided' do
-        let(:command) { "source ./tools/prepare-deployments && determine_stemcell_location director-latest" }
+        let(:command) { ". ./tools/prepare-deployments && determine_stemcell_location director-latest" }
         it 'prints nothing' do
           expect(result).to be_success
           expect(std_out.strip).to be_empty
@@ -346,7 +346,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when a file path is provided' do
-        let(:command) { "source ./tools/prepare-deployments && determine_stemcell_location /path/to/release/tarball.tgz" }
+        let(:command) { ". ./tools/prepare-deployments && determine_stemcell_location /path/to/release/tarball.tgz" }
         it 'prints the path' do
           expect(result).to be_success
           expect(std_out).to include("file:///path/to/release/tarball.tgz")
@@ -356,14 +356,14 @@ describe 'Manifest Generation' do
 
     describe 'validate_path' do
        context 'when path is not absolute' do
-         let(:command) { "source ./tools/prepare-deployments && validate_path path/to/banana" }
+         let(:command) { ". ./tools/prepare-deployments && validate_path path/to/banana" }
          it 'prints an error' do
            expect(result).to_not be_success
            expect(std_error).to include('Path path/to/banana should be absolute.')
          end
        end
        context 'when path does not exist' do
-         let(:command) { "source ./tools/prepare-deployments && validate_path /path/to/banana" }
+         let(:command) { ". ./tools/prepare-deployments && validate_path /path/to/banana" }
          it 'prints an error' do
            expect(result).to_not be_success
            expect(std_error).to include('File or folder /path/to/banana does not exist')
@@ -373,7 +373,7 @@ describe 'Manifest Generation' do
 
     describe 'determine_stubs' do
       context 'when stubs are provided' do
-        let(:command) { "source ./tools/prepare-deployments && determine_stubs #{config_file.path}" }
+        let(:command) { ". ./tools/prepare-deployments && determine_stubs #{config_file.path}" }
         let(:config) do
           {
             'cf' => cf_release_path,
@@ -389,7 +389,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when stubs are not provided' do
-        let(:command) { "source ./tools/prepare-deployments && determine_stubs #{config_file.path}" }
+        let(:command) { ". ./tools/prepare-deployments && determine_stubs #{config_file.path}" }
         let(:config) do
           {
             'cf' => cf_release_path,
@@ -405,7 +405,7 @@ describe 'Manifest Generation' do
 
     describe 'validate_stubs' do
       context 'when stubs are not provided' do
-        let(:command) { "source ./tools/prepare-deployments && validate_stubs ''" }
+        let(:command) { ". ./tools/prepare-deployments && validate_stubs ''" }
         it 'prints an error' do
           expect(result).not_to be_success
           expect(std_error).to include("No stubs provided")
@@ -414,7 +414,7 @@ describe 'Manifest Generation' do
 
       context 'when stubs are provided' do
         context 'when all stubs have valid paths' do
-          let(:command) { "source ./tools/prepare-deployments && validate_stubs '#{stub_path} #{stub_path}'" }
+          let(:command) { ". ./tools/prepare-deployments && validate_stubs '#{stub_path} #{stub_path}'" }
           it 'prints nothing' do
             expect(result).to be_success
             expect(std_out.strip).to be_empty
@@ -422,7 +422,7 @@ describe 'Manifest Generation' do
         end
 
         context 'when a stub has an invalid path' do
-          let(:command) { "source ./tools/prepare-deployments && validate_stubs '#{stub_path} /banana/#{stub_path}'" }
+          let(:command) { ". ./tools/prepare-deployments && validate_stubs '#{stub_path} /banana/#{stub_path}'" }
           it 'prints an error' do
             expect(result).not_to be_success
             expect(std_error).to include("File or folder /banana/#{stub_path} does not exist")
@@ -433,7 +433,7 @@ describe 'Manifest Generation' do
 
     describe 'determine_variant' do
       context 'when no variant is provided' do
-        let(:command) { "source ./tools/prepare-deployments && determine_variant #{config_file.path} etcd" }
+        let(:command) { ". ./tools/prepare-deployments && determine_variant #{config_file.path} etcd" }
         it 'prints "integration-latest"' do
           expect(result).to be_success
           expect(std_out).to include("integration-latest")
@@ -441,7 +441,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when empty variant is provided' do
-        let(:command) { "source ./tools/prepare-deployments && determine_variant #{config_file.path} etcd" }
+        let(:command) { ". ./tools/prepare-deployments && determine_variant #{config_file.path} etcd" }
         let(:config) do
           {
             'etcd' => '',
@@ -456,7 +456,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when variant is provided' do
-        let(:command) { "source ./tools/prepare-deployments && determine_variant #{config_file.path} cf" }
+        let(:command) { ". ./tools/prepare-deployments && determine_variant #{config_file.path} cf" }
         it 'prints variant value' do
           expect(result).to be_success
           expect(std_out).to include(cf_release_path)
@@ -466,7 +466,7 @@ describe 'Manifest Generation' do
 
     describe 'validate_etcd_release_variant' do
       context 'when variant is not integration-latest and not director-latest and not a valid path' do
-        let(:command) { "source ./tools/prepare-deployments && validate_etcd_release_variant banana" }
+        let(:command) { ". ./tools/prepare-deployments && validate_etcd_release_variant banana" }
         it 'prints error' do
           expect(result).to_not be_success
           expect(std_error).to include('Path banana should be absolute')
@@ -474,7 +474,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when variant is integration-latest' do
-        let(:command) { "source ./tools/prepare-deployments && validate_etcd_release_variant integration-latest" }
+        let(:command) { ". ./tools/prepare-deployments && validate_etcd_release_variant integration-latest" }
         it 'prints nothing' do
           expect(result).to be_success
           expect(std_error).to be_empty
@@ -482,7 +482,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when variant is director-latest' do
-        let(:command) { "source ./tools/prepare-deployments && validate_etcd_release_variant director-latest" }
+        let(:command) { ". ./tools/prepare-deployments && validate_etcd_release_variant director-latest" }
         it 'prints nothing' do
           expect(result).to be_success
           expect(std_error).to be_empty
@@ -490,7 +490,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when variant is a valid path' do
-        let(:command) { "source ./tools/prepare-deployments && validate_etcd_release_variant #{config_file.path}" }
+        let(:command) { ". ./tools/prepare-deployments && validate_etcd_release_variant #{config_file.path}" }
         it 'prints nothing' do
           expect(result).to be_success
           expect(std_error).to be_empty
@@ -500,7 +500,7 @@ describe 'Manifest Generation' do
 
     describe 'validate_cf_release_variant' do
       context 'when variant is not integration-latest and not a valid path' do
-        let(:command) { "source ./tools/prepare-deployments && validate_cf_release_variant banana" }
+        let(:command) { ". ./tools/prepare-deployments && validate_cf_release_variant banana" }
         it 'prints error' do
           expect(result).to_not be_success
           expect(std_error).to include('Path banana should be absolute')
@@ -508,7 +508,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when variant is integration-latest' do
-        let(:command) { "source ./tools/prepare-deployments && validate_cf_release_variant integration-latest" }
+        let(:command) { ". ./tools/prepare-deployments && validate_cf_release_variant integration-latest" }
         it 'prints nothing' do
           expect(result).to be_success
           expect(std_error).to be_empty
@@ -516,7 +516,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when variant is a valid path' do
-        let(:command) { "source ./tools/prepare-deployments && validate_cf_release_variant #{config_file.path}" }
+        let(:command) { ". ./tools/prepare-deployments && validate_cf_release_variant #{config_file.path}" }
         it 'prints nothing' do
           expect(result).to be_success
           expect(std_error).to be_empty
@@ -526,15 +526,15 @@ describe 'Manifest Generation' do
 
     describe 'determine_cf_release_location' do
       context 'when variant is not integration-latest' do
-        let(:command) { "source ./tools/prepare-deployments && determine_cf_release_location not-integration-latest" }
+        let(:command) { ". ./tools/prepare-deployments && determine_cf_release_location not-integration-latest" }
         it 'returns variant' do
           expect(result).to be_success
           expect(std_out).to include('not-integration-latest')
         end
       end
 
-      context 'when variant is integration-latest' do
-        let(:command) { "source ./tools/prepare-deployments && determine_cf_release_location integration-latest" }
+      context 'when variant is integration-latest', clone: true do
+        let(:command) { ". ./tools/prepare-deployments && determine_cf_release_location integration-latest" }
         it 'returns a temp directory that contains cf-release' do
           expect(result).to be_success
           expect(std_out).to include('/cf-release')
@@ -545,7 +545,7 @@ describe 'Manifest Generation' do
     describe 'clone_cf_release', clone: true do
       context 'correct dir and cf_deployment are provided' do
         let(:tmp_dir) {Dir.mktmpdir}
-        let(:command) { "source ./tools/prepare-deployments && clone_cf_release #{tmp_dir} ." }
+        let(:command) { ". ./tools/prepare-deployments && clone_cf_release #{tmp_dir} ." }
         let(:blessed_commitish) do
           blessed_versions['releases'].each { |release|
             return release['commit'] if release['name'] == 'cf'
@@ -560,7 +560,7 @@ describe 'Manifest Generation' do
 
     describe 'validate_stemcell_variant' do
       context 'when variant is not integration-latest and not director-latest and not a valid path' do
-        let(:command) { "source ./tools/prepare-deployments && validate_stemcell_variant banana" }
+        let(:command) { ". ./tools/prepare-deployments && validate_stemcell_variant banana" }
         it 'prints error' do
           expect(result).to_not be_success
           expect(std_error).to include('Path banana should be absolute')
@@ -568,7 +568,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when variant is integration-latest' do
-        let(:command) { "source ./tools/prepare-deployments && validate_stemcell_variant integration-latest" }
+        let(:command) { ". ./tools/prepare-deployments && validate_stemcell_variant integration-latest" }
         it 'prints nothing' do
           expect(result).to be_success
           expect(std_error).to be_empty
@@ -576,7 +576,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when variant is director-latest' do
-        let(:command) { "source ./tools/prepare-deployments && validate_stemcell_variant director-latest" }
+        let(:command) { ". ./tools/prepare-deployments && validate_stemcell_variant director-latest" }
         it 'prints nothing' do
           expect(result).to be_success
           expect(std_error).to be_empty
@@ -584,7 +584,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when variant is a valid path' do
-        let(:command) { "source ./tools/prepare-deployments && validate_stemcell_variant #{config_file.path}" }
+        let(:command) { ". ./tools/prepare-deployments && validate_stemcell_variant #{config_file.path}" }
         it 'prints nothing' do
           expect(result).to be_success
           expect(std_error).to be_empty
@@ -594,7 +594,7 @@ describe 'Manifest Generation' do
 
     describe 'print_stemcells_stub' do
       context 'everything is provided' do
-        let(:command) { "source ./tools/prepare-deployments && print_stemcells_stub banana 1 'url: banana' 'sha1: banana'" }
+        let(:command) { ". ./tools/prepare-deployments && print_stemcells_stub banana 1 'url: banana' 'sha1: banana'" }
         it 'prints stemcell stub' do
           expect(result).to be_success
           expect(std_out).to include(<<HEREDOC
@@ -613,7 +613,7 @@ HEREDOC
     end
     describe 'print_releases_stub' do
       context 'everything is provided' do
-        let(:command) { "source ./tools/prepare-deployments && print_releases_stub 1 banana 1 banana" }
+        let(:command) { ". ./tools/prepare-deployments && print_releases_stub 1 banana 1 banana" }
         it 'prints stemcell stub' do
           expect(result).to be_success
           expect(std_out).to include(<<HEREDOC
@@ -634,7 +634,7 @@ HEREDOC
   end
 
   describe 'prepare-deployments integration tests' do
-    let(:command) { "source ./tools/prepare-deployments && main #{File.dirname(__FILE__)} #{infrastructure} #{config_file.path} #{intermediate_dir}" }
+    let(:command) { ". ./tools/prepare-deployments && main #{File.dirname(__FILE__)} #{infrastructure} #{config_file.path} #{intermediate_dir}" }
 
     describe 'infrastructure validation' do
       context 'infrastructure is not valid' do
@@ -691,7 +691,7 @@ HEREDOC
         }
       end
 
-      let(:command) { "source ./tools/prepare-deployments && main #{File.dirname(__FILE__)} aws #{config_file.path} #{intermediate_dir}" }
+      let(:command) { ". ./tools/prepare-deployments && main #{File.dirname(__FILE__)} aws #{config_file.path} #{intermediate_dir}" }
 
       it 'prints an error and exits' do
         expect(result).to_not be_success
@@ -737,7 +737,7 @@ HEREDOC
               'deployments-dir' => "#{deployments_dir}"
             }
           end
-          let(:command) { "source ./tools/prepare-deployments && main #{File.dirname(__FILE__)} aws #{config_file.path} #{intermediate_dir}" }
+          let(:command) { ". ./tools/prepare-deployments && main #{File.dirname(__FILE__)} aws #{config_file.path} #{intermediate_dir}" }
 
           it 'clones repo to temp dir and writes path to this dir to manifest' do
             expect(result).to be_success
@@ -751,7 +751,7 @@ HEREDOC
         end
 
         context 'when cf-release is empty', clone: true do
-          let(:command) { "source ./tools/prepare-deployments && main #{File.dirname(__FILE__)} aws #{config_file.path} #{intermediate_dir}" }
+          let(:command) { ". ./tools/prepare-deployments && main #{File.dirname(__FILE__)} aws #{config_file.path} #{intermediate_dir}" }
           let(:config) do
             {
               'deployments-dir' => "#{deployments_dir}",
