@@ -212,7 +212,7 @@ describe 'Manifest Generation' do
       context 'when version is tarball' do
         let(:release_temp_dir) { Dir.mktmpdir }
         let(:command) { ". ./tools/prepare-deployments && determine_release_version #{release_temp_dir}/release.tgz etcd" }
-        before { create_tarball_with_manifest(release_temp_dir, "release") }
+        before { create_release_tarball_with_manifest(release_temp_dir) }
 
         it 'look inside tarball.release.MF and peeks a version' do
           expect(result).to be_success
@@ -233,7 +233,7 @@ describe 'Manifest Generation' do
       context 'when tarball is provided' do
         let(:stemcell_temp_dir) { Dir.mktmpdir }
         let(:command) { ". ./tools/prepare-deployments && determine_stemcell_name #{stemcell_temp_dir}/stemcell.tgz" }
-        before { create_tarball_with_manifest(stemcell_temp_dir, "stemcell") }
+        before { create_stemcell_tarball_with_manifest(stemcell_temp_dir) }
         it 'peeks inside tarball and returns a name' do
           expect(result).to be_success
           expect(std_out).to include('yakarandash')
@@ -254,7 +254,7 @@ describe 'Manifest Generation' do
       context 'when tarball is provided' do
         let(:stemcell_temp_dir) { Dir.mktmpdir }
         let(:command) { ". ./tools/prepare-deployments && determine_stemcell_version #{stemcell_temp_dir}/stemcell.tgz" }
-        before { create_tarball_with_manifest(stemcell_temp_dir, "stemcell") }
+        before { create_stemcell_tarball_with_manifest(stemcell_temp_dir) }
         it 'peeks inside tarball and gets the version' do
           expect(result).to be_success
           expect(std_out).to include("5+goobers.123")
@@ -293,7 +293,7 @@ describe 'Manifest Generation' do
         let(:stemcell_sha1) { blessed_versions['stemcells']['aws']['sha1'] }
         it 'prints the sha1 from blessed_versions' do
           expect(result).to be_success
-          expect(std_out).to include(stemcell_sha1)
+          expect(std_out).to include("sha1: \"#{stemcell_sha1}\"")
         end
       end
     end
@@ -311,7 +311,7 @@ describe 'Manifest Generation' do
       context 'when tarball is provided' do
         let(:stemcell_temp_dir) { Dir.mktmpdir }
         let(:command) { ". ./tools/prepare-deployments && determine_stemcell_location #{stemcell_temp_dir}/stemcell.tgz" }
-        before { create_tarball_with_manifest(stemcell_temp_dir, "stemcell") }
+        before { create_stemcell_tarball_with_manifest(stemcell_temp_dir) }
         it 'returns path to this tarball' do
           expect(result).to be_success
           expect(std_out).to include("url: file://#{stemcell_temp_dir}/stemcell.tgz")
@@ -878,7 +878,7 @@ HEREDOC
           end
 
           before do
-            create_tarball_with_manifest(stemcell_temp_dir, "stemcell")
+            create_stemcell_tarball_with_manifest(stemcell_temp_dir)
           end
 
           it 'correctly sets the stub' do
@@ -1247,15 +1247,28 @@ def get_job_by_name(name, manifest)
   }
 end
 
-def create_tarball_with_manifest(dir, type)
-  release_manifest = {
+def create_stemcell_tarball_with_manifest(dir)
+  manifest = {
     'name' => 'yakarandash',
     'version' => "5+goobers.123"
   }
 
-  manifest_file = File.new("#{dir}/#{type}.MF", 'w')
-  manifest_file.write(YAML.dump(release_manifest))
+  manifest_file = File.new("#{dir}/stemcell.MF", 'w')
+  manifest_file.write(YAML.dump(manifest))
   manifest_file.close
 
-  `cd #{dir} && tar -czf ./#{type}.tgz #{type}.MF`
+  `cd #{dir} && tar -czf ./stemcell.tgz stemcell.MF`
+end
+
+def create_release_tarball_with_manifest(dir)
+  manifest = {
+    'name' => 'yakarandash',
+    'version' => "5+goobers.123"
+  }
+
+  manifest_file = File.new("#{dir}/release.MF", 'w')
+  manifest_file.write(YAML.dump(manifest))
+  manifest_file.close
+
+  `cd #{dir} && tar -czf ./release.tgz ./release.MF`
 end

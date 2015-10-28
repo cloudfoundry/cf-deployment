@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 print_error() {
   echo "${1}" 1>&2
@@ -12,7 +12,7 @@ validate_num_args() {
   # USAGE: validate_num_args [num: int]
   # EXAMPLE: validate_num_args 1
 
-  if [ ${1} != 2 ]; then
+  if [ "${1}" != 2 ]; then
     print_error "ERROR: invalid number of arguments provided"
     print_error "$(usage)"
     exit 1 
@@ -65,9 +65,9 @@ determine_deployments_dir() {
   # EXAMPLE: determine_deployments_dir "/path/to/config.json" "/path/to/deployments/dir"
   # NOTE: default deployments dir should in most cases be ${cf_deployment_dir}/outputs/manifests
 
-  local config_file_path=${1}
-  local default_deployments_dir=${2}
-  local deployments_dir=$( jq -r 'if .["deployments-dir"] then .["deployments-dir"] else "" end' "${config_file_path}")
+  local config_file_path="${1}"
+  local default_deployments_dir="${2}"
+  local deployments_dir="$( jq -r 'if .["deployments-dir"] then .["deployments-dir"] else "" end' "${config_file_path}")"
   deployments_dir="${deployments_dir:-${default_deployments_dir}}"
 
   echo "${deployments_dir}"
@@ -77,7 +77,7 @@ validate_deployments_dir() {
   # USAGE: validate_deployments_dir [path: string]
   # EXAMPLE: validate_deployments_dir "/path/to/deployments/dir"
 
-  local deployments_dir=${1}
+  local deployments_dir="${1}"
 
   if [ ! -d "${deployments_dir}" ]; then
     echo "deployments-dir must be a directory" 1>&2
@@ -88,7 +88,7 @@ validate_deployments_dir() {
 determine_release_version() {
   case "${1}" in
     "integration-latest")
-      if [ "${2}" == "cf" ]; then
+      if [ "${2}" = "cf" ]; then
         echo "create"
         exit 0
       fi
@@ -145,7 +145,7 @@ determine_stemcell_sha1() {
     ;;
 
     *)
-      echo "sha1: $(jq ".stemcells[\"${2}\"].sha1" blessed_versions.json)"
+      echo "sha1: \"$(jq -r ".stemcells[\"${2}\"].sha1" blessed_versions.json)\""
     ;;
   esac
 }
@@ -153,7 +153,7 @@ determine_stemcell_sha1() {
 determine_stemcell_location() {
   case "${1}" in
      "integration-latest")
-      echo "url: $(jq ".stemcells[\"${2}\"].url" blessed_versions.json)"
+      echo "url: \"$(jq -r ".stemcells[\"${2}\"].url" blessed_versions.json)\""
     ;;
 
     *.tgz)
@@ -184,13 +184,15 @@ determine_release_location() {
 }
 
 validate_path() {
-  if [ "${1:0:1}" != "/" ]; then
-    echo "Path ${1} should be absolute." 1>&2
+  local path="${1}"
+
+  if [ "$(echo "${path}" | head -c 1)" != "/" ]; then
+    echo "Path ${path} should be absolute." 1>&2
     exit 1
   fi
 
-  if [ ! -e "${1}" ]; then
-    echo "File or folder ${1} does not exist" 1>&2
+  if [ ! -e "${path}" ]; then
+    echo "File or folder ${path} does not exist" 1>&2
     exit 1
   fi
 }
@@ -199,8 +201,8 @@ determine_stubs() {
   # USAGE: determine_stubs [path: string]
   # EXAMPLE: determine_stubs "/path/to/config.json"
 
-  local config_file_path=${1}
-  local stubs=$(jq -r 'if .stubs then .stubs[] else "" end' "${config_file_path}" )
+  local config_file_path="${1}"
+  local stubs="$(jq -r 'if .stubs then .stubs[] else "" end' "${config_file_path}" )"
 
   echo "${stubs}"
 }
@@ -209,13 +211,11 @@ validate_stubs() {
   # USAGE: validate_stubs [stubs: string]
   # EXAMPLE: validate_stubs "/path/to/stub.yml /path/to/other/stub.yml"
 
-  local stubs=${1}
+  local stubs="${1}"
 
   if [ "${stubs}" != "" ]; then
-    stubs=(${stubs})
-    for var in "${stubs[@]}"
-      do
-         if [ "${var}" != "" ]; then
+    for var in ${stubs}; do
+       if [ "${var}" != "" ]; then
           # TODO: is the following the same thing as removing all quotes?
           local var="${var%\"}"
           var="${var#\"}"
@@ -232,9 +232,9 @@ determine_variant() {
   # USAGE: determine_variant [path: string] [name: string]
   # EXAMPLE: determine_variant "/path/to/config.json" "etcd"
 
-  local config_file_path=${1}
-  local name=${2}
-  local variant=$(jq -r "if .[\"${name}\"] then .[\"${name}\"] else \"\" end" "${config_file_path}")
+  local config_file_path="${1}"
+  local name="${2}"
+  local variant="$(jq -r "if .[\"${name}\"] then .[\"${name}\"] else \"\" end" "${config_file_path}")"
 
   echo "${variant:-"integration-latest"}"
 }
@@ -243,10 +243,10 @@ validate_etcd_release_variant() {
   # USAGE: validate_etcd_release_variant [variant: string]
   # EXAMPLE: validate_etcd_release_variant "/path/to/etcd.tar.gz"
 
-  local variant=${1}
+  local variant="${1}"
 
-  if [ ${variant} != "integration-latest" ] && [ ${variant} != "director-latest" ]; then
-    validate_path ${variant}
+  if [ "${variant}" != "integration-latest" ] && [ "${variant}" != "director-latest" ]; then
+    validate_path "${variant}"
   fi
 }
 
@@ -254,7 +254,7 @@ validate_cf_release_variant() {
   # USAGE: validate_cf_release_variant [variant: string]
   # EXAMPLE: validate_cf_release_variant "/path/to/cf.tar.gz"
 
-  local variant=${1}
+  local variant="${1}"
 
   if [ "${variant}" != "integration-latest" ] ; then
     validate_path "${variant}"
@@ -265,11 +265,11 @@ determine_cf_release_location() {
   # USAGE: determine_cf_release_location [variant: string] [cf_deployment_dir: string]
   # EXAMPLE: determine_cf_release_location "/path/to/cf.tar.gz" "/cf-deployment"
 
-  local variant=${1}
-  local cf_deployment_dir=${2}
+  local variant="${1}"
+  local cf_deployment_dir="${2}"
 
-  if [ "${variant}" == "integration-latest" ]; then
-    local dir=$(mktemp -d -t cf-XXXXXX)
+  if [ "${variant}" = "integration-latest" ]; then
+    local dir="$(mktemp -d -t cf-XXXXXX)"
     local cf_release_location="${dir}/cf-release"
     clone_cf_release "${dir}" "${cf_deployment_dir}"
   else
@@ -280,27 +280,27 @@ determine_cf_release_location() {
 }
 
 clone_cf_release() {
-  local dir=${1}
-  local cf_deployment_dir=${2}
-  local git_commit=$(grep commit "${cf_deployment_dir}/blessed_versions.json" | awk '{gsub(/"/, "", $2); print $2;}')
+  local dir="${1}"
+  local cf_deployment_dir="${2}"
+  local git_commit="$(grep commit "${cf_deployment_dir}/blessed_versions.json" | awk '{gsub(/"/, "", $2); print $2;}')"
+  local cwd="${PWD}"
 
-  pushd "${dir}" > /dev/null
-     git clone https://github.com/cloudfoundry/cf-release.git > /dev/null
-     pushd cf-release > /dev/null
-       git checkout "${git_commit}" > /dev/null
-       ./scripts/update > /dev/null
-     popd > /dev/null
-   popd > /dev/null
+  cd "${dir}"
+  git clone https://github.com/cloudfoundry/cf-release.git > /dev/null
+  cd cf-release
+  git checkout "${git_commit}" > /dev/null
+  ./scripts/update > /dev/null
+  cd "$cwd"
 }
 
 validate_stemcell_variant() {
   # USAGE: validate_stemcell_variant [variant: string]
   # EXAMPLE: validate_stemcell_variant "/path/to/stemcell.tar.gz"
 
-  local variant=${1}
+  local variant="${1}"
 
-  if [ ${variant} != "integration-latest" ] && [ ${variant} != "director-latest" ]; then
-    validate_path ${variant}
+  if [ "${variant}" != "integration-latest" ] && [ "${variant}" != "director-latest" ]; then
+    validate_path "${variant}"
   fi
 }
 
@@ -308,10 +308,10 @@ print_stemcells_stub() {
   # USAGE: print_stemcells_stub [name: string] [version: string] [location: string] [sha1: string]
   # EXAMPLE: print_stemcells_stub "stemcell" "1.0.0" "/path/to/stemcell.tar.gz" "8a1aaf746ada2a80fab03a58c91575ffe82885ac"
 
-  local name=${1}
-  local version=${2}
-  local location=${3}
-  local sha1=${4}
+  local name="${1}"
+  local version="${2}"
+  local location="${3}"
+  local sha1="${4}"
 
   cat <<EOF
 ---
@@ -328,10 +328,10 @@ print_releases_stub() {
   # USAGE: print_release_stub [cf_version: string] [cf_release_location: string] [etcd_version: string] [etcd_release_location: string]
   # EXAMPLE: print_release_stub "222" "/path/to/cf.tar.gz" "0.15.0" "/path/to/etcd.tar.gz"
 
-  local cf_version=${1}
-  local cf_release_location=${2}
-  local etcd_version=${3}
-  local etcd_release_location=${4}
+  local cf_version="${1}"
+  local cf_release_location="${2}"
+  local etcd_version="${3}"
+  local etcd_release_location="${4}"
 
   cat <<EOF
 ---
@@ -346,23 +346,22 @@ EOF
 }
 
 main() {
-  set -euf -o pipefail
+  set -euf
 
-  CF_DEPLOYMENT_TRACE=${CF_DEPLOYMENT_TRACE:-}
-  if [ ! -z "${CF_DEPLOYMENT_TRACE}" ]; then
+  if [ ! -z "${CF_DEPLOYMENT_TRACE:-}" ]; then
     set -x
   fi
 
-  local mydir=${1}
-  local infrastructure=${2}
-  local config_file_path=${3}
-  local intermediate_dir=${4}
+  local mydir="${1}"
+  local infrastructure="${2}"
+  local config_file_path="${3}"
+  local intermediate_dir="${4}"
 
   validate_infrastructure "${infrastructure}"
   validate_config_file_path "${config_file_path}"
 
   local cf_deployment_dir="$(cd "${mydir}/.." && pwd)"
-  local deployments_dir=$(determine_deployments_dir "${config_file_path}" "${cf_deployment_dir}/outputs/manifests")
+  local deployments_dir="$(determine_deployments_dir "${config_file_path}" "${cf_deployment_dir}/outputs/manifests")"
 
   validate_deployments_dir "${deployments_dir}"
 
@@ -370,28 +369,28 @@ main() {
 
   validate_stubs "${stubs}"
 
-  local etcd_release_variant=$(determine_variant "${config_file_path}" "etcd")
+  local etcd_release_variant="$(determine_variant "${config_file_path}" "etcd")"
 
   validate_etcd_release_variant "${etcd_release_variant}"
 
-  local etcd_version=$(determine_release_version ${etcd_release_variant} 'etcd')
-  local etcd_release_location=$(determine_release_location ${etcd_release_variant} 'etcd')
+  local etcd_version="$(determine_release_version "${etcd_release_variant}" 'etcd')"
+  local etcd_release_location="$(determine_release_location "${etcd_release_variant}" 'etcd')"
 
-  local cf_release_variant=$(determine_variant "${config_file_path}" "cf")
+  local cf_release_variant="$(determine_variant "${config_file_path}" "cf")"
 
   validate_cf_release_variant "${cf_release_variant}"
 
-  local cf_version=$(determine_release_version "${cf_release_variant}" 'cf')
-  local cf_release_location=$(determine_cf_release_location "${cf_release_variant}" "${cf_deployment_dir}")
+  local cf_version="$(determine_release_version "${cf_release_variant}" 'cf')"
+  local cf_release_location="$(determine_cf_release_location "${cf_release_variant}" "${cf_deployment_dir}")"
 
-  local stemcell_variant=$(determine_variant "${config_file_path}" "stemcell")
+  local stemcell_variant="$(determine_variant "${config_file_path}" "stemcell")"
 
   validate_stemcell_variant "${stemcell_variant}"
 
-  local stemcell_name=$(determine_stemcell_name "${stemcell_variant}" "${infrastructure}")
-  local stemcell_version=$(determine_stemcell_version "${stemcell_variant}" "${infrastructure}")
-  local stemcell_location=$(determine_stemcell_location "${stemcell_variant}" "${infrastructure}")
-  local stemcell_sha1=$(determine_stemcell_sha1 "${stemcell_variant}" "${infrastructure}")
+  local stemcell_name="$(determine_stemcell_name "${stemcell_variant}" "${infrastructure}")"
+  local stemcell_version="$(determine_stemcell_version "${stemcell_variant}" "${infrastructure}")"
+  local stemcell_location="$(determine_stemcell_location "${stemcell_variant}" "${infrastructure}")"
+  local stemcell_sha1="$(determine_stemcell_sha1 "${stemcell_variant}" "${infrastructure}")"
 
   local intermediate_dir="${intermediate_dir}"
   mkdir -p "${intermediate_dir}"
@@ -403,19 +402,19 @@ main() {
     infrastructure="warden"
   fi
 
-  templates_dir="${cf_deployment_dir}/templates"
+  local templates_dir="${cf_deployment_dir}/templates"
 
   "${cf_release_location}/scripts/generate_deployment_manifest" \
     "${infrastructure}" \
     "${intermediate_dir}/releases.yml" \
     "${intermediate_dir}/stemcells.yml" \
     "${templates_dir}/job_templates.yml" \
-    "${stubs[@]}" \
+    ${stubs} \
      > "${deployments_dir}/cf.yml"
 }
 
-if [ "$(basename ${0})" = "prepare-deployments" ]; then
+if [ "$(basename "${0}")" = "prepare-deployments" ]; then
   validate_num_args $#
-  main "$(cd "$(dirname "$0")" && pwd)" $1 $2 $(mktemp -d -t intermediate-XXXXXX)
+  main "$(cd "$(dirname "$0")" && pwd)" "$1" "$2" "$(mktemp -d -t intermediate-XXXXXX)"
 fi
 
