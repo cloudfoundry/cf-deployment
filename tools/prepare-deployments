@@ -404,6 +404,8 @@ main() {
 
   local templates_dir="${cf_deployment_dir}/templates"
 
+  # https://github.com/koalaman/shellcheck/wiki/SC2086
+  # shellcheck disable=2086
   "${cf_release_location}/scripts/generate_deployment_manifest" \
     "${infrastructure}" \
     "${intermediate_dir}/releases.yml" \
