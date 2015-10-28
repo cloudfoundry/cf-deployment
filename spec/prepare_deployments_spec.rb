@@ -51,7 +51,7 @@ describe 'Manifest Generation' do
     unless Dir.exist?(cached_cf_release_path)
       FileUtils.mkdir_p(cached_cf_release_path)
       `git clone --depth 1 https://github.com/cloudfoundry/cf-release.git #{cached_cf_release_path}`
-      `#{cached_cf_release_path}/scripts/update`
+      `cd #{cached_cf_release_path} && git submodule update --init -- src/loggregator`
     end
   end
 
