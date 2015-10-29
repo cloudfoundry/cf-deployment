@@ -51,7 +51,7 @@ describe 'Manifest Generation' do
     unless Dir.exist?(cached_cf_release_path)
       FileUtils.mkdir_p(cached_cf_release_path)
       `git clone --depth 1 https://github.com/cloudfoundry/cf-release.git #{cached_cf_release_path}`
-      `cd #{cached_cf_release_path} && git submodule update --init -- src/loggregator`
+      `#{cached_cf_release_path}/scripts/update`
     end
   end
 
@@ -107,6 +107,33 @@ describe 'Manifest Generation' do
           expect(std_error).to include("ERROR: invalid infrastructure: banana")
         end
       end
+
+      context 'when the infrastructure is not yet supported' do
+        let(:command) { ". ./tools/prepare-deployments && validate_infrastructure #{infrastructure}" }
+        context 'when the infrastructure is openstack' do
+          let(:infrastructure) { "openstack" }
+          it 'prints an error' do
+            expect(result).to_not be_success
+            expect(std_error).to include("ERROR: invalid infrastructure: openstack")
+          end
+        end
+
+        context 'when the infrastructure is bosh-lite' do
+          let(:infrastructure) { "bosh-lite" }
+          it 'prints an error' do
+            expect(result).to_not be_success
+            expect(std_error).to include("ERROR: invalid infrastructure: bosh-lite")
+          end
+        end
+
+        context 'when the infrastructure is vsphere' do
+          let(:infrastructure) { "vsphere" }
+          it 'prints an error' do
+            expect(result).to_not be_success
+            expect(std_error).to include("ERROR: invalid infrastructure: vsphere")
+          end
+        end
+      end
     end
 
     describe 'validate_config_file_path' do
@@ -145,7 +172,8 @@ describe 'Manifest Generation' do
       end
 
       context 'when the config file does not contain a deployment-dir field' do
-        let(:command) { ". ./tools/prepare-deployments && determine_deployments_dir #{config_file.path} /default/deployments/dir" }
+        let(:default_deployments_dir) { Dir.mktmpdir }
+        let(:command) { ". ./tools/prepare-deployments && determine_deployments_dir #{config_file.path} #{default_deployments_dir}" }
         let(:config) do
           {
             'cf' => cf_release_path,
@@ -153,9 +181,18 @@ describe 'Manifest Generation' do
           }
         end
 
+        before do
+          FileUtils.rm_rf(default_deployments_dir)
+        end
+
         it 'prints the default deployments_dir' do
           expect(result).to be_success
-          expect(std_out).to include("/default/deployments/dir")
+          expect(std_out).to include(default_deployments_dir)
+        end
+
+        it 'ensures the directory exists' do
+          expect(result).to be_success
+          expect(Dir.exists?(default_deployments_dir)).to equal(true)
         end
       end
     end
@@ -173,7 +210,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && validate_deployments_dir /banana/dir" }
         it 'prints an error' do
           expect(result).to_not be_success
-          expect(std_error).to include("deployments-dir must be a directory")
+          expect(std_error).to include("deployments-dir \"/banana/dir\" must be a directory")
         end
       end
     end
@@ -642,12 +679,12 @@ HEREDOC
 
         it 'returns an error' do
           expect(result).to_not be_success
-          expect(std_error).to include('Usage: prepare-deployments <aws|bosh-lite|openstack|vsphere> <path_to_config_file>')
+          expect(std_error).to include('Usage: prepare-deployments <aws> <path_to_config_file>')
         end
       end
 
-      context 'supports bosh-lite infrastructure' do
-        let(:infrastructure) { 'bosh-lite' }
+      context 'supports aws infrastructure' do
+        let(:infrastructure) { 'aws' }
 
         it 'generates manifest with correct config file' do
           expect(result).to be_success
@@ -660,7 +697,7 @@ HEREDOC
 
       it 'requires that the deployments dir exists and is a directory' do
         expect(result).to_not be_success
-        expect(std_error.strip).to include "deployments-dir must be a directory"
+        expect(std_error.strip).to include "deployments-dir \"goobers\" must be a directory"
       end
     end
 

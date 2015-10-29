@@ -5,7 +5,7 @@ print_error() {
 }
 
 usage() {
-  echo "Usage: prepare-deployments <aws|bosh-lite|openstack|vsphere> <path_to_config_file>"
+  echo "Usage: prepare-deployments <aws> <path_to_config_file>"
 }
 
 validate_num_args() {
@@ -31,10 +31,7 @@ validate_infrastructure() {
     exit 1
   fi
 
-  if [ "${infrastructure}" != "aws" ] && \
-      [ "${infrastructure}" != "openstack" ] && \
-      [ "${infrastructure}" != "bosh-lite" ] && \
-      [ "${infrastructure}" != "vsphere" ] ; then
+  if [ "${infrastructure}" != "aws" ]; then
     print_error "ERROR: invalid infrastructure: ${infrastructure}" 
     print_error "$(usage)"
     exit 1
@@ -68,7 +65,10 @@ determine_deployments_dir() {
   local config_file_path="${1}"
   local default_deployments_dir="${2}"
   local deployments_dir="$( jq -r 'if .["deployments-dir"] then .["deployments-dir"] else "" end' "${config_file_path}")"
-  deployments_dir="${deployments_dir:-${default_deployments_dir}}"
+  if [ "${deployments_dir}" = "" ]; then
+     deployments_dir="${default_deployments_dir}"
+     mkdir -p "${default_deployments_dir}"
+  fi
 
   echo "${deployments_dir}"
 }
@@ -80,7 +80,7 @@ validate_deployments_dir() {
   local deployments_dir="${1}"
 
   if [ ! -d "${deployments_dir}" ]; then
-    echo "deployments-dir must be a directory" 1>&2
+    print_error "deployments-dir \"${deployments_dir}\" must be a directory"
     exit 1
   fi
 }
@@ -289,7 +289,7 @@ clone_cf_release() {
   git clone https://github.com/cloudfoundry/cf-release.git > /dev/null
   cd cf-release
   git checkout "${git_commit}" > /dev/null
-  git submodule update --init -- src/loggregator > /dev/null
+  ./scripts/update > /dev/null
   cd "$cwd"
 }
 
