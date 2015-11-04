@@ -1,0 +1,59 @@
+#!/bin/bash
+
+set -euf -o pipefail
+
+CF_DEPLOYMENT_TRACE=${CF_DEPLOYMENT_TRACE:-}
+if [ ! -z "${CF_DEPLOYMENT_TRACE}" ]; then
+  set -x
+fi
+
+mydir="$(cd "$(dirname "$0")" && pwd)"
+deployment_dir="$(cd "$mydir/.." && pwd)"
+
+# Ensure that bosh-lite director is targeted
+EXPECTED_DIRECTOR_NAME="Bosh Lite Director"
+
+[ "$(bosh status | grep "Name" | grep -q "${EXPECTED_DIRECTOR_NAME}"; echo $?)" != "0" ] && \
+  echo "Can only target $EXPECTED_DIRECTOR_NAME. Please use 'bosh target' before running this script." && \
+  exit 1
+
+input_config_file="${1:-}"
+output_config_file=$(mktemp /tmp/bosh-lite-config.XXXXX)
+
+# add stub, appending to the array of stubs if it already exists, creating it otherwise
+add_stub() {
+  cp "${output_config_file}" "${output_config_file}.mid"
+  jq ".stubs |= .+ [\"${1}\"]" "${output_config_file}.mid" > "${output_config_file}"
+}
+
+default_cf="$HOME/workspace/cf-release"
+
+if [ -f "${input_config_file}" ]; then
+  cp "${input_config_file}" "${output_config_file}.mid"
+
+  jq "if .cf == null then setpath([\"cf\"]; \"${default_cf}\") else . end" "${output_config_file}.mid" > "${output_config_file}"
+  cat "${output_config_file}"
+else
+  echo "{ \"cf\": \"${default_cf}\" }" > "${output_config_file}"
+fi
+
+director_stub_file=$(mktemp /tmp/bosh-lite-director-stub.XXXXX)
+
+echo "director_uuid: $(bosh status --uuid)" > "${director_stub_file}"
+
+CF_RELEASE_DIR="${CF_RELEASE_DIR:-$deployment_dir}"
+add_stub "${CF_RELEASE_DIR}/stubs/bosh-lite/dev-security-groups.yml"
+add_stub "${CF_RELEASE_DIR}/stubs/bosh-lite/property_overrides.yml"
+add_stub "${director_stub_file}"
+add_stub "${CF_RELEASE_DIR}/stubs/bosh-lite/cf-minimal-dev.yml"
+
+BOSH_RELEASES_DIR="${BOSH_RELEASES_DIR:-$HOME/workspace}"
+if [ -f "${BOSH_RELEASES_DIR}/diego-release/stubs-for-cf-release/enable_diego_ssh_in_cf.yml" ]; then
+  add_stub "${BOSH_RELEASES_DIR}/diego-release/stubs-for-cf-release/enable_diego_ssh_in_cf.yml"
+fi
+
+"$mydir/prepare-deployments" \
+  warden \
+  "${output_config_file}"
+
+bosh -d "${deployment_dir}/outputs/manifests/cf.yml" deploy
