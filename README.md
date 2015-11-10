@@ -37,7 +37,7 @@ For example:
 ```
 
 NOTE: The manifest templates each IaaS require certain properties to be set in a stub provided by the user.
-To see an example and instructions for how to create this stub visit our [documentation](http://docs.cloudfoundry.org/deploying/).
+To see an example and instructions for how to create this stub visit our [documentation]http://docs.cloudfoundry.org/deploying/ec2/cf-stub-aws.html).
 
 *Defaults:*  
 For each property (other than `stubs`) that is not specified in the config file, the following default values exist:
