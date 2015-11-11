@@ -18,7 +18,7 @@ cf-deployment is a collection of tools to facilitate deploying Cloud Foundry wit
 *Description:*  
 Generates a Cloud Foundry deployment manifest called `cf.yml` placed in either a specified or default directory (see references to `deployments-dir` below). The config file you pass to `./tools/prepare_deployments` must be a JSON file specifying some or all of the following properties:
 
-* `cf`: (string, optional) either a path to a directory of `cf-release`, or the string `"integration-latest"`
+* `cf`: (string, optional) either a path to a directory of `cf-release`, or the string `"integration-latest"`; when using a path to a directory, make sure all submodules, including recursive submodules, have been initialized
 * `etcd`: (string, optional) either a path to a directory of `etcd-release`, a path to a release tarball, the string `"director-latest"`, or the string `"integration-latest"`
 * `stemcell`: (string, optional) either a path to a stemcell tarball, the string `"director-latest"`, or the string `"integration-latest"`
 * `stubs`: (array of strings, required): a non-empty list of paths to stub files
