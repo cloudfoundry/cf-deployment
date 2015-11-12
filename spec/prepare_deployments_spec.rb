@@ -12,8 +12,8 @@ describe 'Manifest Generation' do
 
   let(:cf_release_path) { cached_cf_release_path }
 
-  let(:std_out) { command_results[0] }
-  let(:std_error) { command_results[1] }
+  let(:stdout) { command_results[0] }
+  let(:stderr) { command_results[1] }
   let(:result) { command_results[2] }
 
   let(:intermediate_dir) { Dir.mktmpdir }
@@ -36,8 +36,8 @@ describe 'Manifest Generation' do
 
   after(:each) do |example|
     if example.exception
-      puts std_out
-      puts std_error
+      puts stdout
+      puts stderr
     end
   end
 
@@ -70,7 +70,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && validate_num_args 1" }
         it 'prints an error' do
           expect(result).to_not be_success
-          expect(std_error).to include('ERROR: invalid number of arguments provided')
+          expect(stderr).to include('ERROR: invalid number of arguments provided')
         end
       end
 
@@ -78,7 +78,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && validate_num_args 2" }
         it 'prints nothing' do
           expect(result).to be_success
-          expect(std_error).to be_empty
+          expect(stderr).to be_empty
         end
       end
     end
@@ -88,7 +88,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && validate_infrastructure aws" }
         it 'prints nothing' do
           expect(result).to be_success
-          expect(std_error).to be_empty
+          expect(stderr).to be_empty
         end
       end
 
@@ -96,7 +96,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && validate_infrastructure ''" }
         it 'prints an error' do
           expect(result).to_not be_success
-          expect(std_error).to include "ERROR: infrastructure should not be empty"
+          expect(stderr).to include("ERROR: infrastructure should not be empty")
         end
       end
 
@@ -104,7 +104,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && validate_infrastructure banana" }
         it 'prints an error' do
           expect(result).to_not be_success
-          expect(std_error).to include("ERROR: invalid infrastructure: banana")
+          expect(stderr).to include("ERROR: invalid infrastructure: banana")
         end
       end
 
@@ -114,7 +114,7 @@ describe 'Manifest Generation' do
           let(:infrastructure) { "openstack" }
           it 'prints an error' do
             expect(result).to_not be_success
-            expect(std_error).to include("ERROR: invalid infrastructure: openstack")
+            expect(stderr).to include("ERROR: invalid infrastructure: openstack")
           end
         end
 
@@ -122,7 +122,7 @@ describe 'Manifest Generation' do
           let(:infrastructure) { "bosh-lite" }
           it 'prints an error' do
             expect(result).to_not be_success
-            expect(std_error).to include("ERROR: invalid infrastructure: bosh-lite")
+            expect(stderr).to include("ERROR: invalid infrastructure: bosh-lite")
           end
         end
 
@@ -130,7 +130,7 @@ describe 'Manifest Generation' do
           let(:infrastructure) { "vsphere" }
           it 'prints an error' do
             expect(result).to_not be_success
-            expect(std_error).to include("ERROR: invalid infrastructure: vsphere")
+            expect(stderr).to include("ERROR: invalid infrastructure: vsphere")
           end
         end
       end
@@ -141,7 +141,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && validate_config_file_path #{config_file.path}" }
         it 'succeeds' do
           expect(result).to be_success
-          expect(std_error).to be_empty
+          expect(stderr).to be_empty
         end
       end
 
@@ -149,7 +149,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && validate_config_file_path ''" }
         it 'prints an error' do
           expect(result).to_not be_success
-          expect(std_error).to include("ERROR: config_file_path should not be empty")
+          expect(stderr).to include("ERROR: config_file_path should not be empty")
         end
       end
 
@@ -157,7 +157,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && validate_config_file_path '/banana/path/file.json'" }
         it 'succeeds' do
           expect(result).to_not be_success
-          expect(std_error).to include("ERROR: invalid path to config file: /banana/path/file.json")
+          expect(stderr).to include("ERROR: invalid path to config file: /banana/path/file.json")
         end
       end
     end
@@ -167,7 +167,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && determine_deployments_dir #{config_file.path} /default/deployments/dir" }
         it 'prints the deployments_dir found from the config file' do
           expect(result).to be_success
-          expect(std_out).to include(deployments_dir)
+          expect(stdout).to eq(deployments_dir)
         end
       end
 
@@ -187,7 +187,7 @@ describe 'Manifest Generation' do
 
         it 'prints the default deployments_dir' do
           expect(result).to be_success
-          expect(std_out).to include(default_deployments_dir)
+          expect(stdout).to eq(default_deployments_dir)
         end
 
         it 'ensures the directory exists' do
@@ -202,7 +202,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && validate_deployments_dir #{deployments_dir}" }
         it 'prints nothing' do
           expect(result).to be_success
-          expect(std_error).to be_empty
+          expect(stderr).to be_empty
         end
       end
 
@@ -210,7 +210,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && validate_deployments_dir /banana/dir" }
         it 'prints an error' do
           expect(result).to_not be_success
-          expect(std_error).to include("deployments-dir \"/banana/dir\" must be a directory")
+          expect(stderr).to include("deployments-dir \"/banana/dir\" must be a directory")
         end
       end
     end
@@ -221,7 +221,7 @@ describe 'Manifest Generation' do
 
         it 'prints create as a version' do
           expect(result).to be_success
-          expect(std_out).to include("create")
+          expect(stdout).to eq("create")
         end
       end
 
@@ -232,9 +232,10 @@ describe 'Manifest Generation' do
             return release['version'] if release['name'] == 'etcd'
           }
         end
+
         it 'prints version from blessed_versiond' do
           expect(result).to be_success
-          expect(std_out).to include(blessed_version)
+          expect(stdout).to eq(blessed_version)
         end
       end
 
@@ -242,7 +243,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && determine_release_version director-latest etcd" }
         it 'prints latest' do
           expect(result).to be_success
-          expect(std_out).to include("latest")
+          expect(stdout).to eq("latest")
         end
       end
 
@@ -253,7 +254,7 @@ describe 'Manifest Generation' do
 
         it 'look inside tarball.release.MF and peeks a version' do
           expect(result).to be_success
-          expect(std_out).to include("5+goobers.123")
+          expect(stdout).to eq("5+goobers.123")
         end
       end
 
@@ -261,7 +262,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && determine_release_version /tmp/release/dir etcd" }
         it 'prints "create"' do
           expect(result).to be_success
-          expect(std_out).to include("create")
+          expect(stdout).to eq("create")
         end
       end
     end
@@ -273,7 +274,7 @@ describe 'Manifest Generation' do
         before { create_stemcell_tarball_with_manifest(stemcell_temp_dir) }
         it 'peeks inside tarball and returns a name' do
           expect(result).to be_success
-          expect(std_out).to include('yakarandash')
+          expect(stdout).to eq('yakarandash')
         end
       end
 
@@ -282,7 +283,7 @@ describe 'Manifest Generation' do
         let(:aws_stemcell) { blessed_versions['stemcells']['aws']['type'] }
         it 'gets name from blessed_versions' do
           expect(result).to be_success
-          expect(std_out).to include(aws_stemcell)
+          expect(stdout).to eq(aws_stemcell)
         end
       end
     end
@@ -294,7 +295,7 @@ describe 'Manifest Generation' do
         before { create_stemcell_tarball_with_manifest(stemcell_temp_dir) }
         it 'peeks inside tarball and gets the version' do
           expect(result).to be_success
-          expect(std_out).to include("5+goobers.123")
+          expect(stdout).to eq("5+goobers.123")
         end
       end
 
@@ -303,7 +304,7 @@ describe 'Manifest Generation' do
         let(:stemcell_version) { blessed_versions['stemcells']['aws']['version'] }
         it 'prints the stemcell version out of the blessed_versions' do
           expect(result).to be_success
-          expect(std_out).to include(stemcell_version)
+          expect(stdout).to eq(stemcell_version)
         end
       end
 
@@ -311,7 +312,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && determine_stemcell_version director-latest" }
         it 'prints "latest"' do
           expect(result).to be_success
-          expect(std_out).to include("latest")
+          expect(stdout).to eq("latest")
         end
       end
     end
@@ -321,7 +322,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && determine_stemcell_sha1 director-latest" }
         it 'prints nothing' do
           expect(result).to be_success
-          expect(std_out.strip).to be_empty
+          expect(stdout).to be_empty
         end
       end
 
@@ -330,18 +331,18 @@ describe 'Manifest Generation' do
         let(:stemcell_sha1) { blessed_versions['stemcells']['aws']['sha1'] }
         it 'prints the sha1 from blessed_versions' do
           expect(result).to be_success
-          expect(std_out).to include("sha1: \"#{stemcell_sha1}\"")
+          expect(stdout).to eq("sha1: \"#{stemcell_sha1}\"")
         end
       end
     end
 
-    describe 'determione_stemcell_location' do
+    describe 'determine_stemcell_location' do
       context 'when "integration-latest" is provided' do
         let(:command) { ". ./tools/prepare-deployments && determine_stemcell_location integration-latest aws" }
         let(:stemcell_location) { blessed_versions['stemcells']['aws']['url'] }
         it 'takes url from blessed_versions' do
           expect(result).to be_success
-          expect(std_out).to include("url: \"#{stemcell_location}\"")
+          expect(stdout).to eq("url: \"#{stemcell_location}\"")
         end
       end
 
@@ -351,7 +352,7 @@ describe 'Manifest Generation' do
         before { create_stemcell_tarball_with_manifest(stemcell_temp_dir) }
         it 'returns path to this tarball' do
           expect(result).to be_success
-          expect(std_out).to include("url: file://#{stemcell_temp_dir}/stemcell.tgz")
+          expect(stdout).to eq("url: \"file://#{stemcell_temp_dir}/stemcell.tgz\"")
         end
       end
 
@@ -359,7 +360,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && determine_stemcell_location director-latest"}
         it 'prints nothing' do
           expect(result).to be_success
-          expect(std_out.strip).to be_empty
+          expect(stdout).to be_empty
         end
       end
     end
@@ -370,7 +371,7 @@ describe 'Manifest Generation' do
         let(:stemcell_url) { blessed_versions['stemcells']['aws']['url'] }
         it 'prints the url from the blessed_versions' do
           expect(result).to be_success
-          expect(std_out).to include(stemcell_url)
+          expect(stdout).to eq("url: \"#{stemcell_url}\"")
         end
       end
 
@@ -378,7 +379,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && determine_stemcell_location director-latest" }
         it 'prints nothing' do
           expect(result).to be_success
-          expect(std_out.strip).to be_empty
+          expect(stdout).to be_empty
         end
       end
 
@@ -386,7 +387,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && determine_stemcell_location /path/to/release/tarball.tgz" }
         it 'prints the path' do
           expect(result).to be_success
-          expect(std_out).to include("file:///path/to/release/tarball.tgz")
+          expect(stdout).to eq("url: \"file:///path/to/release/tarball.tgz\"")
         end
       end
     end
@@ -396,14 +397,14 @@ describe 'Manifest Generation' do
          let(:command) { ". ./tools/prepare-deployments && validate_path path/to/banana" }
          it 'prints an error' do
            expect(result).to_not be_success
-           expect(std_error).to include('Path path/to/banana should be absolute.')
+           expect(stderr).to include('Path path/to/banana should be absolute.')
          end
        end
        context 'when path does not exist' do
          let(:command) { ". ./tools/prepare-deployments && validate_path /path/to/banana" }
          it 'prints an error' do
            expect(result).to_not be_success
-           expect(std_error).to include('File or folder /path/to/banana does not exist')
+           expect(stderr).to include('File or folder /path/to/banana does not exist')
          end
        end
     end
@@ -420,8 +421,7 @@ describe 'Manifest Generation' do
         end
         it 'returns stubs' do
           expect(result).to be_success
-          expect(std_out).to include("/path/to/stub.yml")
-          expect(std_out).to include("/another/stub.yml")
+          expect(stdout).to eq("/path/to/stub.yml\n/another/stub.yml")
         end
       end
 
@@ -433,9 +433,10 @@ describe 'Manifest Generation' do
             'deployments-dir' => "#{deployments_dir}",
           }
         end
-        it 'returns stubs' do
+
+        it 'prints nothing' do
           expect(result).to be_success
-          expect(std_out.strip).to be_empty
+          expect(stdout).to be_empty
         end
       end
     end
@@ -445,7 +446,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && validate_stubs ''" }
         it 'prints an error' do
           expect(result).not_to be_success
-          expect(std_error).to include("No stubs provided")
+          expect(stderr).to include("No stubs provided")
         end
       end
 
@@ -454,7 +455,7 @@ describe 'Manifest Generation' do
           let(:command) { ". ./tools/prepare-deployments && validate_stubs '#{stub_path} #{stub_path}'" }
           it 'prints nothing' do
             expect(result).to be_success
-            expect(std_out.strip).to be_empty
+            expect(stdout).to be_empty
           end
         end
 
@@ -462,7 +463,7 @@ describe 'Manifest Generation' do
           let(:command) { ". ./tools/prepare-deployments && validate_stubs '#{stub_path} /banana/#{stub_path}'" }
           it 'prints an error' do
             expect(result).not_to be_success
-            expect(std_error).to include("File or folder /banana/#{stub_path} does not exist")
+            expect(stderr).to include("File or folder /banana/#{stub_path} does not exist")
           end
         end
       end
@@ -473,7 +474,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && determine_variant #{config_file.path} etcd" }
         it 'prints "integration-latest"' do
           expect(result).to be_success
-          expect(std_out).to include("integration-latest")
+          expect(stdout).to eq("integration-latest")
         end
       end
 
@@ -488,7 +489,7 @@ describe 'Manifest Generation' do
         end
         it 'prints "integration-latest"' do
           expect(result).to be_success
-          expect(std_out).to include("integration-latest")
+          expect(stdout).to eq("integration-latest")
         end
       end
 
@@ -496,7 +497,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && determine_variant #{config_file.path} cf" }
         it 'prints variant value' do
           expect(result).to be_success
-          expect(std_out).to include(cf_release_path)
+          expect(stdout).to eq(cf_release_path)
         end
       end
     end
@@ -506,7 +507,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && validate_etcd_release_variant banana" }
         it 'prints error' do
           expect(result).to_not be_success
-          expect(std_error).to include('Path banana should be absolute')
+          expect(stderr).to include('Path banana should be absolute')
         end
       end
 
@@ -514,7 +515,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && validate_etcd_release_variant integration-latest" }
         it 'prints nothing' do
           expect(result).to be_success
-          expect(std_error).to be_empty
+          expect(stderr).to be_empty
         end
       end
 
@@ -522,7 +523,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && validate_etcd_release_variant director-latest" }
         it 'prints nothing' do
           expect(result).to be_success
-          expect(std_error).to be_empty
+          expect(stderr).to be_empty
         end
       end
 
@@ -530,7 +531,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && validate_etcd_release_variant #{config_file.path}" }
         it 'prints nothing' do
           expect(result).to be_success
-          expect(std_error).to be_empty
+          expect(stderr).to be_empty
         end
       end
     end
@@ -540,7 +541,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && validate_cf_release_variant banana" }
         it 'prints error' do
           expect(result).to_not be_success
-          expect(std_error).to include('Path banana should be absolute')
+          expect(stderr).to include('Path banana should be absolute')
         end
       end
 
@@ -548,7 +549,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && validate_cf_release_variant integration-latest" }
         it 'prints nothing' do
           expect(result).to be_success
-          expect(std_error).to be_empty
+          expect(stderr).to be_empty
         end
       end
 
@@ -556,17 +557,17 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && validate_cf_release_variant #{config_file.path}" }
         it 'prints nothing' do
           expect(result).to be_success
-          expect(std_error).to be_empty
+          expect(stderr).to be_empty
         end
       end
     end
 
     describe 'determine_cf_release_location' do
       context 'when variant is not integration-latest' do
-        let(:command) { ". ./tools/prepare-deployments && determine_cf_release_location not-integration-latest" }
+        let(:command) { ". ./tools/prepare-deployments && determine_cf_release_location /path/to/cf-release" }
         it 'returns variant' do
           expect(result).to be_success
-          expect(std_out).to include('not-integration-latest')
+          expect(stdout).to eq('/path/to/cf-release')
         end
       end
 
@@ -574,7 +575,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && determine_cf_release_location integration-latest" }
         it 'returns a temp directory that contains cf-release' do
           expect(result).to be_success
-          expect(std_out).to include('/cf-release')
+          expect(stdout).to equal('/cf-release')
         end
       end
     end
@@ -590,7 +591,7 @@ describe 'Manifest Generation' do
         end
         it 'clones repo to dir' do
           expect(result).to be_success
-          expect(`cd #{tmp_dir}/cf-release && git show | head -n 1 | cut -d' ' -f2`).to include(blessed_commitish)
+          expect(`cd #{tmp_dir}/cf-release && git show | head -n 1 | cut -d' ' -f2`).to eq(blessed_commitish)
         end
       end
     end
@@ -600,7 +601,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && validate_stemcell_variant banana" }
         it 'prints error' do
           expect(result).to_not be_success
-          expect(std_error).to include('Path banana should be absolute')
+          expect(stderr).to include('Path banana should be absolute')
         end
       end
 
@@ -608,7 +609,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && validate_stemcell_variant integration-latest" }
         it 'prints nothing' do
           expect(result).to be_success
-          expect(std_error).to be_empty
+          expect(stderr).to be_empty
         end
       end
 
@@ -616,7 +617,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && validate_stemcell_variant director-latest" }
         it 'prints nothing' do
           expect(result).to be_success
-          expect(std_error).to be_empty
+          expect(stderr).to be_empty
         end
       end
 
@@ -624,7 +625,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && validate_stemcell_variant #{config_file.path}" }
         it 'prints nothing' do
           expect(result).to be_success
-          expect(std_error).to be_empty
+          expect(stderr).to be_empty
         end
       end
     end
@@ -634,7 +635,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && print_stemcells_stub banana 1 'url: banana' 'sha1: banana'" }
         it 'prints stemcell stub' do
           expect(result).to be_success
-          expect(std_out).to include(<<HEREDOC
+          expect(stdout).to eq(<<HEREDOC
 ---
 meta:
   stemcell:
@@ -653,7 +654,7 @@ HEREDOC
         let(:command) { ". ./tools/prepare-deployments && print_releases_stub 1 banana 1 banana" }
         it 'prints stemcell stub' do
           expect(result).to be_success
-          expect(std_out).to include(<<HEREDOC
+          expect(stdout).to eq(<<HEREDOC
 ---
 releases:
   - name: cf
@@ -679,7 +680,7 @@ HEREDOC
 
         it 'returns an error' do
           expect(result).to_not be_success
-          expect(std_error).to include('Usage: prepare-deployments <aws> <path_to_config_file>')
+          expect(stderr).to include('Usage: prepare-deployments <aws> <path_to_config_file>')
         end
       end
 
@@ -697,7 +698,7 @@ HEREDOC
 
       it 'requires that the deployments dir exists and is a directory' do
         expect(result).to_not be_success
-        expect(std_error.strip).to include "deployments-dir \"goobers\" must be a directory"
+        expect(stderr).to include "deployments-dir \"goobers\" must be a directory"
       end
     end
 
@@ -706,8 +707,8 @@ HEREDOC
 
       it 'returns an error' do
         expect(result).to_not be_success
-        expect(std_error).to include 'invalid number of arguments'
-        expect(std_error).to include 'Usage: '
+        expect(stderr).to include 'invalid number of arguments'
+        expect(stderr).to include 'Usage: '
       end
     end
 
@@ -715,7 +716,7 @@ HEREDOC
       let(:stubs_paths) { [] }
       it 'fail with stub error' do
         expect(result).to_not be_success
-        expect(std_error).to include 'No stubs provided'
+        expect(stderr).to include 'No stubs provided'
       end
     end
 
@@ -732,7 +733,7 @@ HEREDOC
 
       it 'prints an error and exits' do
         expect(result).to_not be_success
-        expect(std_error.strip).to include 'not_absolute should be absolute.'
+        expect(stderr).to include 'not_absolute should be absolute.'
       end
     end
 
@@ -743,7 +744,7 @@ HEREDOC
             {
               'name' => 'cf',
               'version' => 'create',
-              'url' => cf_release_path
+              'url' => "file://#{cf_release_path}"
             }
           end
 
@@ -760,7 +761,7 @@ HEREDOC
 
             it 'exits with error' do
               expect(result).not_to be_success
-              expect(std_error).to include 'should be absolute'
+              expect(stderr).to include 'should be absolute'
               expect(File.exist?("#{intermediate_dir}/releases.yml")).to eq(false)
             end
           end
@@ -818,7 +819,7 @@ HEREDOC
 
           it 'prints an error and exits' do
             expect(result).not_to be_success
-            expect(std_error).to include 'should be absolute'
+            expect(stderr).to include 'should be absolute'
             expect(File.exist?("#{intermediate_dir}/releases.yml")).to eq(false)
           end
         end
@@ -835,7 +836,7 @@ HEREDOC
 
           it 'prints error and exits' do
             expect(result).not_to be_success
-            expect(std_error).to include 'should be absolute'
+            expect(stderr).to include 'should be absolute'
             expect(File.exist?("#{intermediate_dir}/releases.yml")).to eq(false)
           end
         end
@@ -877,21 +878,16 @@ HEREDOC
             }
           end
 
-          let(:expected_release_yaml) do
-            aws_stemcell = blessed_versions['stemcells']['aws']
-            {
-              'name' => aws_stemcell['type'],
-              'version' => aws_stemcell['version'],
-              'url' => aws_stemcell['url'],
-              'sha1' => aws_stemcell['sha1']
-            }
-          end
+          let(:aws_stemcell) { blessed_versions['stemcells']['aws'] }
 
           it 'sets up values from blessed version' do
             expect(result).to be_success
             stemcell_yaml = YAML.load_file("#{intermediate_dir}/stemcells.yml")
             result_stemcell = stemcell_yaml['meta']['stemcell']
-            expect(result_stemcell).to eq(expected_release_yaml)
+            expect(result_stemcell['name']).to eq(aws_stemcell['type'])
+            expect(result_stemcell['version'].to_s).to eq(aws_stemcell['version'])
+            expect(result_stemcell['url']).to eq(aws_stemcell['url'])
+            expect(result_stemcell['sha1']).to eq(aws_stemcell['sha1'])
           end
         end
 
@@ -939,7 +935,7 @@ HEREDOC
 
           it 'prints an error and exits' do
             expect(result).not_to be_success
-            expect(std_error).to include 'should be absolute'
+            expect(stderr).to include 'should be absolute'
             expect(File.exist?("#{intermediate_dir}/releases.yml")).to eq(false)
           end
         end
@@ -957,7 +953,7 @@ HEREDOC
 
           it 'prints error and exits' do
             expect(result).not_to be_success
-            expect(std_error).to include 'should be absolute'
+            expect(stderr).to include 'should be absolute'
             expect(File.exist?("#{intermediate_dir}/releases.yml")).to eq(false)
           end
         end
@@ -985,7 +981,10 @@ HEREDOC
             expect(result).to be_success
             stemcell_yaml = YAML.load_file("#{intermediate_dir}/stemcells.yml")
             result_stemcell = stemcell_yaml['meta']['stemcell']
-            expect(result_stemcell).to eq(expected_stemcell_yaml)
+            expect(result_stemcell['name']).to eq(expected_stemcell_yaml['name'])
+            expect(result_stemcell['version'].to_s).to eq(expected_stemcell_yaml['version'])
+            expect(result_stemcell['url']).to eq(expected_stemcell_yaml['url'])
+            expect(result_stemcell['sha1']).to eq(expected_stemcell_yaml['sha1'])
           end
         end
       end
@@ -1029,7 +1028,7 @@ HEREDOC
 
             it 'exits with error' do
               expect(result).not_to be_success
-              expect(std_error).to include 'should be absolute'
+              expect(stderr).to include 'should be absolute'
               expect(File.exist?("#{intermediate_dir}/releases.yml")).to eq(false)
             end
           end
@@ -1066,7 +1065,9 @@ HEREDOC
             expect(result).to be_success
             release_yaml = YAML.load_file("#{intermediate_dir}/releases.yml")
             result_etcd = get_release_by_name 'etcd', release_yaml
-            expect(result_etcd).to eq(expected_release_yaml)
+            expect(result_etcd['name']).to eq(expected_release_yaml['name'])
+            expect(result_etcd['version'].to_s).to eq(expected_release_yaml['version'])
+            expect(result_etcd['url']).to eq(expected_release_yaml['url'])
           end
         end
 
@@ -1145,7 +1146,7 @@ HEREDOC
 
           it 'prints an error and exits' do
             expect(result).not_to be_success
-            expect(std_error).to include 'should be absolute'
+            expect(stderr).to include 'should be absolute'
             expect(File.exist?("#{intermediate_dir}/releases.yml")).to eq(false)
           end
         end
@@ -1162,7 +1163,7 @@ HEREDOC
 
           it 'prints error and exits' do
             expect(result).not_to be_success
-            expect(std_error).to include 'should be absolute'
+            expect(stderr).to include 'should be absolute'
             expect(File.exist?("#{intermediate_dir}/releases.yml")).to eq(false)
           end
         end
@@ -1196,7 +1197,9 @@ HEREDOC
             expect(result).to be_success
             release_yaml = YAML.load_file("#{intermediate_dir}/releases.yml")
             result_etcd = get_release_by_name 'etcd', release_yaml
-            expect(result_etcd).to eq(expected_release_yaml)
+            expect(result_etcd['name']).to eq(expected_release_yaml['name'])
+            expect(result_etcd['version'].to_s).to eq(expected_release_yaml['version'])
+            expect(result_etcd['url']).to eq(expected_release_yaml['url'])
           end
         end
       end
@@ -1222,7 +1225,7 @@ HEREDOC
           expect(etcd_release['version']).to eq('latest')
           cf_release = get_release_by_name('cf', release_yaml)
           expect(cf_release['version']).to eq('create')
-          expect(cf_release['url']).to eq(cf_release_path)
+          expect(cf_release['url']).to eq("file://#{cf_release_path}")
         end
 
         it 'includes the job templates stubs' do
@@ -1259,7 +1262,7 @@ HEREDOC
 
         it 'prints error to stderr' do
           expect(result).to_not be_success
-            expect(std_error).to include('unresolved nodes')
+            expect(stderr).to include('unresolved nodes')
         end
       end
     end
