@@ -575,7 +575,7 @@ describe 'Manifest Generation' do
         let(:command) { ". ./tools/prepare-deployments && determine_cf_release_location integration-latest" }
         it 'returns a temp directory that contains cf-release' do
           expect(result).to be_success
-          expect(stdout).to equal('/cf-release')
+          expect(stdout).to include('/cf-release')
         end
       end
     end
@@ -591,7 +591,7 @@ describe 'Manifest Generation' do
         end
         it 'clones repo to dir' do
           expect(result).to be_success
-          expect(`cd #{tmp_dir}/cf-release && git show | head -n 1 | cut -d' ' -f2`).to eq(blessed_commitish)
+          expect(`cd #{tmp_dir}/cf-release && git show | head -n 1 | cut -d' ' -f2`).to include(blessed_commitish)
         end
       end
     end
