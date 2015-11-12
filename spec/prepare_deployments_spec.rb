@@ -651,6 +651,24 @@ HEREDOC
     end
     describe 'print_releases_stub' do
       context 'everything is provided' do
+        let(:command) { ". ./tools/prepare-deployments && print_releases_stub 1 banana 1 banana 'sha1: 1234edf'" }
+        it 'prints stemcell stub' do
+          expect(result).to be_success
+          expect(stdout).to eq(<<HEREDOC
+---
+releases:
+  - name: cf
+    version: 1
+    url: banana
+  - name: etcd
+    version: 1
+    url: banana
+    sha1: 1234edf
+HEREDOC
+)
+        end
+      end
+      context 'no sha1 for etcd is provided' do
         let(:command) { ". ./tools/prepare-deployments && print_releases_stub 1 banana 1 banana" }
         it 'prints stemcell stub' do
           expect(result).to be_success
@@ -663,11 +681,11 @@ releases:
   - name: etcd
     version: 1
     url: banana
+    
 HEREDOC
 )
         end
       end
-
     end
   end
 
