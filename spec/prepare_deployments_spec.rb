@@ -367,16 +367,20 @@ describe 'Manifest Generation' do
 
     describe 'determine_release_location' do
       context 'when "integration-latest" is provided' do
-        let(:command) { ". ./tools/prepare-deployments && determine_stemcell_location integration-latest aws" }
-        let(:stemcell_url) { blessed_versions['stemcells']['aws']['url'] }
+        let(:command) { ". ./tools/prepare-deployments && determine_release_location integration-latest etcd" }
+        let(:release_url) do
+          blessed_versions['releases'].each do |release|
+            return release['url'] if release['name'] == 'etcd'
+          end
+        end
         it 'prints the url from the blessed_versions' do
           expect(result).to be_success
-          expect(stdout).to eq("url: \"#{stemcell_url}\"")
+          expect(stdout).to eq(release_url)
         end
       end
 
       context 'when "director-latest" is provided' do
-        let(:command) { ". ./tools/prepare-deployments && determine_stemcell_location director-latest" }
+        let(:command) { ". ./tools/prepare-deployments && determine_release_location director-latest" }
         it 'prints nothing' do
           expect(result).to be_success
           expect(stdout).to be_empty
@@ -384,10 +388,10 @@ describe 'Manifest Generation' do
       end
 
       context 'when a file path is provided' do
-        let(:command) { ". ./tools/prepare-deployments && determine_stemcell_location /path/to/release/tarball.tgz" }
+        let(:command) { ". ./tools/prepare-deployments && determine_release_location /path/to/release/tarball.tgz" }
         it 'prints the path' do
           expect(result).to be_success
-          expect(stdout).to eq("url: \"file:///path/to/release/tarball.tgz\"")
+          expect(stdout).to eq("file:///path/to/release/tarball.tgz")
         end
       end
     end
@@ -784,7 +788,7 @@ HEREDOC
             result_cf = get_release_by_name 'cf', release_yaml
             expect(result_cf['name']).to eq('cf')
             expect(result_cf['version']).to eq('create')
-            expect(result_cf['url']).to match /file\:\/\/\/.*\/cf-release/
+            expect(result_cf['url']).to match /file:\/\/\/.*\/cf-release/
           end
         end
 

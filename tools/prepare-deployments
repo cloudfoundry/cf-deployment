@@ -177,11 +177,11 @@ determine_release_location() {
   case "${1}" in
 
     "integration-latest")
-        jq ".releases[] | select(.name == \"${2}\") | .url" blessed_versions.json
+      printf "%s" "$(jq -r ".releases[] | select(.name == \"${2}\") | .url" blessed_versions.json)"
       ;;
 
     "director-latest")
-      echo ""
+      printf ""
       ;;
 
     *)
