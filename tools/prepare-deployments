@@ -283,6 +283,7 @@ determine_cf_release_location() {
     local dir="$(mktemp -d -t cf-XXXXXX)"
     local cf_release_location="${dir}/cf-release"
     clone_cf_release "${dir}" "${cf_deployment_dir}"
+    local cf_release_location="file://${cf_release_location}"
   else
     local cf_release_location="${variant}"
   fi

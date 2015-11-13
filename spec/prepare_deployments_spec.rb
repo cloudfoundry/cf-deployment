@@ -576,6 +576,7 @@ describe 'Manifest Generation' do
         it 'returns a temp directory that contains cf-release' do
           expect(result).to be_success
           expect(stdout).to include('/cf-release')
+          expect(stdout).to include('file://')
         end
       end
     end
