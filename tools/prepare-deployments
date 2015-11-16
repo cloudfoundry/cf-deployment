@@ -150,6 +150,10 @@ determine_stemcell_sha1() {
       printf ""
     ;;
 
+    *.tgz)
+      printf ""
+    ;;
+
     *)
       printf "sha1: \"%s\"" "$(jq -r ".stemcells[\"${2}\"].sha1" blessed_versions.json)"
     ;;
@@ -188,6 +192,19 @@ determine_release_location() {
       filepath "${1}"
       ;;
     esac
+}
+
+determine_release_sha1() {
+  case "${1}" in
+
+    "integration-latest")
+      printf "sha1: %s" "$(jq -r ".releases[] | select(.name == \"${2}\") | .sha1" blessed_versions.json)"
+      ;;
+
+    *)
+      printf ""
+      ;;
+  esac
 }
 
 filepath() {
@@ -344,6 +361,7 @@ print_releases_stub() {
   local cf_release_location="${2}"
   local etcd_version="${3}"
   local etcd_release_location="${4}"
+  local etcd_release_sha1="${5}"
 
   cat <<EOF
 ---
@@ -354,6 +372,7 @@ releases:
   - name: etcd
     version: ${etcd_version}
     url: ${etcd_release_location}
+    ${etcd_release_sha1}
 EOF
 }
 
@@ -387,6 +406,7 @@ main() {
 
   local etcd_version="$(determine_release_version "${etcd_release_variant}" 'etcd')"
   local etcd_release_location="$(determine_release_location "${etcd_release_variant}" 'etcd')"
+  local etcd_release_sha1="$(determine_release_sha1 "${etcd_release_variant}" 'etcd')"
 
   local cf_release_variant="$(determine_variant "${config_file_path}" "cf")"
 
@@ -409,7 +429,7 @@ main() {
   mkdir -p "${intermediate_dir}"
 
   echo "$(print_stemcells_stub "${stemcell_name}" "${stemcell_version}" "${stemcell_location}" "${stemcell_sha1}")" > "${intermediate_dir}/stemcells.yml" 
-  echo "$(print_releases_stub "${cf_version}" "${cf_release_filepath}" "${etcd_version}" "${etcd_release_location}")"  > "${intermediate_dir}/releases.yml"
+  echo "$(print_releases_stub "${cf_version}" "${cf_release_filepath}" "${etcd_version}" "${etcd_release_location}" "${etcd_release_sha1}")"  > "${intermediate_dir}/releases.yml"
 
   if [ "${infrastructure}" = "bosh-lite" ]; then
     infrastructure="warden"

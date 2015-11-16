@@ -326,12 +326,53 @@ describe 'Manifest Generation' do
         end
       end
 
-      context 'when "director-latest" is not provided' do
+      context 'when local tarball is provided' do
+        let(:command) { ". ./tools/prepare-deployments && determine_stemcell_sha1 stemcell.tgz" }
+        it 'prints nothing' do
+          expect(result).to be_success
+          expect(stdout).to be_empty
+        end
+      end
+
+      context 'when "integration-latest" is provided' do
         let(:command) { ". ./tools/prepare-deployments && determine_stemcell_sha1 integration-latest aws" }
         let(:stemcell_sha1) { blessed_versions['stemcells']['aws']['sha1'] }
         it 'prints the sha1 from blessed_versions' do
           expect(result).to be_success
           expect(stdout).to eq("sha1: \"#{stemcell_sha1}\"")
+        end
+      end
+    end
+
+
+    describe 'determine_release_sha1' do
+      context 'when "director-latest" is provided' do
+        let(:command) { ". ./tools/prepare-deployments && determine_release_sha1 director-latest etcd" }
+        it 'prints nothing' do
+          expect(result).to be_success
+          expect(stdout).to be_empty
+        end
+      end
+
+      context 'when local tarball is provided' do
+        let(:command) { ". ./tools/prepare-deployments && determine_release_sha1 stemcell.tgz" }
+        it 'prints nothing' do
+          expect(result).to be_success
+          expect(stdout).to be_empty
+        end
+      end
+
+      context 'when "integration-latest" is provided' do
+        let(:command) { ". ./tools/prepare-deployments && determine_release_sha1 integration-latest etcd" }
+        let(:release_sha1) do
+          blessed_versions['releases'].each do |release|
+            return release['sha1'] if release['name'] == 'etcd'
+          end
+        end
+
+        it 'prints the sha1 from blessed_versions' do
+          expect(result).to be_success
+          expect(stdout).to eq("sha1: #{release_sha1}")
         end
       end
     end
@@ -653,9 +694,10 @@ HEREDOC
         end
       end
     end
+
     describe 'print_releases_stub' do
       context 'everything is provided' do
-        let(:command) { ". ./tools/prepare-deployments && print_releases_stub 1 banana 1 banana" }
+        let(:command) { ". ./tools/prepare-deployments && print_releases_stub 1 banana 1 banana 'sha1: bananasha'" }
         it 'prints stemcell stub' do
           expect(result).to be_success
           expect(stdout).to eq(<<HEREDOC
@@ -667,11 +709,11 @@ releases:
   - name: etcd
     version: 1
     url: banana
+    sha1: bananasha
 HEREDOC
 )
         end
       end
-
     end
   end
 
@@ -901,8 +943,7 @@ HEREDOC
             {
               'name' => 'yakarandash',
               'version' => '5+goobers.123',
-              'url' => "file://#{stemcell_temp_dir}/stemcell.tgz",
-              'sha1' => blessed_versions['stemcells'][infrastructure]['sha1']
+              'url' => "file://#{stemcell_temp_dir}/stemcell.tgz"
             }
           end
           let(:config) do
