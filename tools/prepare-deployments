@@ -64,7 +64,8 @@ determine_deployments_dir() {
 
   local config_file_path="${1}"
   local default_deployments_dir="${2}"
-  local deployments_dir="$( jq -r 'if .["deployments-dir"] then .["deployments-dir"] else "" end' "${config_file_path}")"
+  local deployments_dir
+  deployments_dir="$( jq -r 'if .["deployments-dir"] then .["deployments-dir"] else "" end' "${config_file_path}")"
   if [ "${deployments_dir}" = "" ]; then
      deployments_dir="${default_deployments_dir}"
      mkdir -p "${default_deployments_dir}"
@@ -93,7 +94,8 @@ determine_release_version() {
         exit 0
       fi
 
-      local version="$(jq -r ".releases[] | select(.name == \"${2}\") | .version" blessed_versions.json)"
+      local version
+      version="$(jq -r ".releases[] | select(.name == \"${2}\") | .version" blessed_versions.json)"
       printf "%s" "${version}"
       ;;
 
@@ -102,7 +104,8 @@ determine_release_version() {
       ;;
 
     *.tgz)
-      local version="$(tar -x -O -f "${1}" ./release.MF |  grep -E '^version:' | awk '{print $2};')"
+      local version
+      version="$(tar -x -O -f "${1}" ./release.MF |  grep -E '^version:' | awk '{print $2};')"
       printf "%s" "${version}"
       ;;
 
@@ -115,12 +118,14 @@ determine_release_version() {
 determine_stemcell_name() {
   case "${1}" in
     *.tgz)
-      local name="$(tar -x -O -f "${1}" stemcell.MF |  grep -E '^name:' | awk '{print $2};')"
+      local name
+      name="$(tar -x -O -f "${1}" stemcell.MF |  grep -E '^name:' | awk '{print $2};')"
       printf "%s" "${name}"
       ;;
 
     *)
-      local name="$(jq -r ".stemcells[\"${2}\"].type" blessed_versions.json)"
+      local name
+      name="$(jq -r ".stemcells[\"${2}\"].type" blessed_versions.json)"
       printf "%s" "${name}"
       ;;
   esac
@@ -129,12 +134,14 @@ determine_stemcell_name() {
 determine_stemcell_version() {
   case "${1}" in
     *.tgz)
-      local version="$(tar -x -O -f "${1}" stemcell.MF |  grep -E '^version:' | awk '{print $2};')"
+      local version
+      version="$(tar -x -O -f "${1}" stemcell.MF |  grep -E '^version:' | awk '{print $2};')"
       printf "%s" "${version}"
       ;;
 
     "integration-latest")
-      local version="$(jq -r ".stemcells[\"${2}\"].version" blessed_versions.json)"
+      local version
+      version="$(jq -r ".stemcells[\"${2}\"].version" blessed_versions.json)"
       printf "%s" "${version}"
       ;;
 
@@ -167,7 +174,8 @@ determine_stemcell_location() {
     ;;
 
     *.tgz)
-      local location="$(filepath "${1}")"
+      local location
+      location="$(filepath "${1}")"
       printf "url: \"%s\"" "${location}"
     ;;
 
@@ -230,7 +238,8 @@ determine_stubs() {
   # EXAMPLE: determine_stubs "/path/to/config.json"
 
   local config_file_path="${1}"
-  local stubs="$(jq -r 'if .stubs then .stubs[] else "" end' "${config_file_path}" )"
+  local stubs
+  stubs="$(jq -r 'if .stubs then .stubs[] else "" end' "${config_file_path}" )"
 
   printf "%s" "${stubs}"
 }
@@ -262,7 +271,8 @@ determine_variant() {
 
   local config_file_path="${1}"
   local name="${2}"
-  local variant="$(jq -r "if .[\"${name}\"] then .[\"${name}\"] else \"\" end" "${config_file_path}")"
+  local variant
+  variant="$(jq -r "if .[\"${name}\"] then .[\"${name}\"] else \"\" end" "${config_file_path}")"
 
   printf "%s" "${variant:-"integration-latest"}"
 }
@@ -297,7 +307,8 @@ determine_cf_release_location() {
   local cf_deployment_dir="${2}"
 
   if [ "${variant}" = "integration-latest" ]; then
-    local dir="$(mktemp -d -t cf-XXXXXX)"
+    local dir
+    dir="$(mktemp -d -t cf-XXXXXX)"
     local cf_release_location="${dir}/cf-release"
     clone_cf_release "${dir}" "${cf_deployment_dir}"
     local cf_release_location="${cf_release_location}"
@@ -311,7 +322,8 @@ determine_cf_release_location() {
 clone_cf_release() {
   local dir="${1}"
   local cf_deployment_dir="${2}"
-  local git_commit="$(grep commit "${cf_deployment_dir}/blessed_versions.json" | awk '{gsub(/"/, "", $2); print $2;}')"
+  local git_commit
+  git_commit="$(grep commit "${cf_deployment_dir}/blessed_versions.json" | awk '{gsub(/"/, "", $2); print $2;}')"
   local cwd="${PWD}"
 
   cd "${dir}"
@@ -391,39 +403,55 @@ main() {
   validate_infrastructure "${infrastructure}"
   validate_config_file_path "${config_file_path}"
 
-  local cf_deployment_dir="$(cd "${mydir}/.." && pwd)"
-  local deployments_dir="$(determine_deployments_dir "${config_file_path}" "${cf_deployment_dir}/outputs/manifests")"
+  local cf_deployment_dir
+  cf_deployment_dir="$(cd "${mydir}/.." && pwd)"
+  local deployments_dir
+  deployments_dir="$(determine_deployments_dir "${config_file_path}" "${cf_deployment_dir}/outputs/manifests")"
 
   validate_deployments_dir "${deployments_dir}"
 
-  local stubs="$(determine_stubs "${config_file_path}")"
+  local stubs
+  stubs="$(determine_stubs "${config_file_path}")"
 
   validate_stubs "${stubs}"
 
-  local etcd_release_variant="$(determine_variant "${config_file_path}" "etcd")"
+  local etcd_release_variant
+  etcd_release_variant="$(determine_variant "${config_file_path}" "etcd")"
 
   validate_etcd_release_variant "${etcd_release_variant}"
 
-  local etcd_version="$(determine_release_version "${etcd_release_variant}" 'etcd')"
-  local etcd_release_location="$(determine_release_location "${etcd_release_variant}" 'etcd')"
-  local etcd_release_sha1="$(determine_release_sha1 "${etcd_release_variant}" 'etcd')"
+  local etcd_version
+  etcd_version="$(determine_release_version "${etcd_release_variant}" 'etcd')"
+  local etcd_release_location
+  etcd_release_location="$(determine_release_location "${etcd_release_variant}" 'etcd')"
+  local etcd_release_sha1
+  etcd_release_sha1="$(determine_release_sha1 "${etcd_release_variant}" 'etcd')"
 
-  local cf_release_variant="$(determine_variant "${config_file_path}" "cf")"
+  local cf_release_variant
+  cf_release_variant="$(determine_variant "${config_file_path}" "cf")"
 
   validate_cf_release_variant "${cf_release_variant}"
 
-  local cf_version="$(determine_release_version "${cf_release_variant}" 'cf')"
-  local cf_release_location="$(determine_cf_release_location "${cf_release_variant}" "${cf_deployment_dir}")"
-  local cf_release_filepath="$(filepath "${cf_release_location}")"
+  local cf_version
+  cf_version="$(determine_release_version "${cf_release_variant}" 'cf')"
+  local cf_release_location
+  cf_release_location="$(determine_cf_release_location "${cf_release_variant}" "${cf_deployment_dir}")"
+  local cf_release_filepath
+  cf_release_filepath="$(filepath "${cf_release_location}")"
 
-  local stemcell_variant="$(determine_variant "${config_file_path}" "stemcell")"
+  local stemcell_variant
+  stemcell_variant="$(determine_variant "${config_file_path}" "stemcell")"
 
   validate_stemcell_variant "${stemcell_variant}"
 
-  local stemcell_name="$(determine_stemcell_name "${stemcell_variant}" "${infrastructure}")"
-  local stemcell_version="$(determine_stemcell_version "${stemcell_variant}" "${infrastructure}")"
-  local stemcell_location="$(determine_stemcell_location "${stemcell_variant}" "${infrastructure}")"
-  local stemcell_sha1="$(determine_stemcell_sha1 "${stemcell_variant}" "${infrastructure}")"
+  local stemcell_name
+  stemcell_name="$(determine_stemcell_name "${stemcell_variant}" "${infrastructure}")"
+  local stemcell_version
+  stemcell_version="$(determine_stemcell_version "${stemcell_variant}" "${infrastructure}")"
+  local stemcell_location
+  stemcell_location="$(determine_stemcell_location "${stemcell_variant}" "${infrastructure}")"
+  local stemcell_sha1
+  stemcell_sha1="$(determine_stemcell_sha1 "${stemcell_variant}" "${infrastructure}")"
 
   local intermediate_dir="${intermediate_dir}"
   mkdir -p "${intermediate_dir}"
