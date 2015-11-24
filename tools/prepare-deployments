@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -euf
+
 print_error() {
   echo "${1}" 1>&2
 }
@@ -95,7 +97,7 @@ determine_release_version() {
       fi
 
       local version
-      version="$(jq -r ".releases[] | select(.name == \"${2}\") | .version" blessed_versions.json)"
+      version="$(jq -r ".releases[] | select(.name == \"${2}\") | .version" "${3}")"
       printf "%s" "${version}"
       ;;
 
@@ -125,7 +127,7 @@ determine_stemcell_name() {
 
     *)
       local name
-      name="$(jq -r ".stemcells[\"${2}\"].type" blessed_versions.json)"
+      name="$(jq -r ".stemcells[\"${2}\"].type" "${3}")"
       printf "%s" "${name}"
       ;;
   esac
@@ -141,7 +143,7 @@ determine_stemcell_version() {
 
     "integration-latest")
       local version
-      version="$(jq -r ".stemcells[\"${2}\"].version" blessed_versions.json)"
+      version="$(jq -r ".stemcells[\"${2}\"].version" "${3}")"
       printf "%s" "${version}"
       ;;
 
@@ -162,7 +164,7 @@ determine_stemcell_sha1() {
     ;;
 
     *)
-      printf "sha1: \"%s\"" "$(jq -r ".stemcells[\"${2}\"].sha1" blessed_versions.json)"
+      printf "sha1: \"%s\"" "$(jq -r ".stemcells[\"${2}\"].sha1" "${3}")"
     ;;
   esac
 }
@@ -170,7 +172,7 @@ determine_stemcell_sha1() {
 determine_stemcell_location() {
   case "${1}" in
      "integration-latest")
-      printf "url: \"%s\"" "$(jq -r ".stemcells[\"${2}\"].url" blessed_versions.json)"
+      printf "url: \"%s\"" "$(jq -r ".stemcells[\"${2}\"].url" "${3}")"
     ;;
 
     *.tgz)
@@ -189,7 +191,7 @@ determine_release_location() {
   case "${1}" in
 
     "integration-latest")
-      printf "%s" "$(jq -r ".releases[] | select(.name == \"${2}\") | .url" blessed_versions.json)"
+      printf "%s" "$(jq -r ".releases[] | select(.name == \"${2}\") | .url" "${3}")"
       ;;
 
     "director-latest")
@@ -206,7 +208,7 @@ determine_release_sha1() {
   case "${1}" in
 
     "integration-latest")
-      printf "sha1: %s" "$(jq -r ".releases[] | select(.name == \"${2}\") | .sha1" blessed_versions.json)"
+      printf "sha1: %s" "$(jq -r ".releases[] | select(.name == \"${2}\") | .sha1" "${3}")"
       ;;
 
     *)
@@ -253,7 +255,6 @@ validate_stubs() {
   if [ "${stubs}" != "" ]; then
     for var in ${stubs}; do
        if [ "${var}" != "" ]; then
-          # TODO: is the following the same thing as removing all quotes?
           local var="${var%\"}"
           var="${var#\"}"
           validate_path "${var}"
@@ -300,18 +301,16 @@ validate_cf_release_variant() {
 }
 
 determine_cf_release_location() {
-  # USAGE: determine_cf_release_location [variant: string] [cf_deployment_dir: string]
+  # USAGE: determine_cf_release_location [variant: string] [blessed_versions_file: string]
   # EXAMPLE: determine_cf_release_location "/path/to/cf.tar.gz" "/cf-deployment"
 
   local variant="${1}"
-  local cf_deployment_dir="${2}"
 
   if [ "${variant}" = "integration-latest" ]; then
     local dir
     dir="$(mktemp -d -t cf-XXXXXX)"
     local cf_release_location="${dir}/cf-release"
-    clone_cf_release "${dir}" "${cf_deployment_dir}"
-    local cf_release_location="${cf_release_location}"
+    clone_cf_release "${dir}" "${2}"
   else
     local cf_release_location="${variant}"
   fi
@@ -321,9 +320,12 @@ determine_cf_release_location() {
 
 clone_cf_release() {
   local dir="${1}"
-  local cf_deployment_dir="${2}"
   local git_commit
-  git_commit="$(grep commit "${cf_deployment_dir}/blessed_versions.json" | awk '{gsub(/"/, "", $2); print $2;}')"
+  if [ ! -f "${2}" ]; then
+    print_error "${2} is not a file"
+    exit 1
+  fi
+  git_commit="$(grep commit "${2}" | awk '{gsub(/"/, "", $2); print $2;}')"
   local cwd="${PWD}"
 
   cd "${dir}"
@@ -389,16 +391,11 @@ EOF
 }
 
 main() {
-  set -euf
-
-  if [ ! -z "${CF_DEPLOYMENT_TRACE:-}" ]; then
-    set -x
-  fi
-
   local mydir="${1}"
   local infrastructure="${2}"
   local config_file_path="${3}"
   local intermediate_dir="${4}"
+  local blessed_versions_file="${5:?"blessed_versions_file not provided"}"
 
   validate_infrastructure "${infrastructure}"
   validate_config_file_path "${config_file_path}"
@@ -406,7 +403,7 @@ main() {
   local cf_deployment_dir
   cf_deployment_dir="$(cd "${mydir}/.." && pwd)"
   local deployments_dir
-  deployments_dir="$(determine_deployments_dir "${config_file_path}" "${cf_deployment_dir}/outputs/manifests")"
+  deployments_dir="$(determine_deployments_dir "${config_file_path}" "${cf_deployment_dir}/outputs/manifests" "${blessed_versions_file}")"
 
   validate_deployments_dir "${deployments_dir}"
 
@@ -416,48 +413,48 @@ main() {
   validate_stubs "${stubs}"
 
   local etcd_release_variant
-  etcd_release_variant="$(determine_variant "${config_file_path}" "etcd")"
+  etcd_release_variant="$(determine_variant "${config_file_path}" "etcd" "${blessed_versions_file}")"
 
   validate_etcd_release_variant "${etcd_release_variant}"
 
   local etcd_version
-  etcd_version="$(determine_release_version "${etcd_release_variant}" 'etcd')"
+  etcd_version="$(determine_release_version "${etcd_release_variant}" 'etcd' "${blessed_versions_file}")"
   local etcd_release_location
-  etcd_release_location="$(determine_release_location "${etcd_release_variant}" 'etcd')"
+  etcd_release_location="$(determine_release_location "${etcd_release_variant}" 'etcd' "${blessed_versions_file}")"
   local etcd_release_sha1
-  etcd_release_sha1="$(determine_release_sha1 "${etcd_release_variant}" 'etcd')"
+  etcd_release_sha1="$(determine_release_sha1 "${etcd_release_variant}" 'etcd' "${blessed_versions_file}")"
 
   local cf_release_variant
-  cf_release_variant="$(determine_variant "${config_file_path}" "cf")"
+  cf_release_variant="$(determine_variant "${config_file_path}" "cf" "${blessed_versions_file}")"
 
   validate_cf_release_variant "${cf_release_variant}"
 
   local cf_version
-  cf_version="$(determine_release_version "${cf_release_variant}" 'cf')"
+  cf_version="$(determine_release_version "${cf_release_variant}" "cf" "${blessed_versions_file}")"
   local cf_release_location
-  cf_release_location="$(determine_cf_release_location "${cf_release_variant}" "${cf_deployment_dir}")"
+  cf_release_location="$(determine_cf_release_location "${cf_release_variant}" "${blessed_versions_file}")"
   local cf_release_filepath
   cf_release_filepath="$(filepath "${cf_release_location}")"
 
   local stemcell_variant
-  stemcell_variant="$(determine_variant "${config_file_path}" "stemcell")"
+  stemcell_variant="$(determine_variant "${config_file_path}" "stemcell" "${blessed_versions_file}")"
 
   validate_stemcell_variant "${stemcell_variant}"
 
   local stemcell_name
-  stemcell_name="$(determine_stemcell_name "${stemcell_variant}" "${infrastructure}")"
+  stemcell_name="$(determine_stemcell_name "${stemcell_variant}" "${infrastructure}" "${blessed_versions_file}")"
   local stemcell_version
-  stemcell_version="$(determine_stemcell_version "${stemcell_variant}" "${infrastructure}")"
+  stemcell_version="$(determine_stemcell_version "${stemcell_variant}" "${infrastructure}" "${blessed_versions_file}")"
   local stemcell_location
-  stemcell_location="$(determine_stemcell_location "${stemcell_variant}" "${infrastructure}")"
+  stemcell_location="$(determine_stemcell_location "${stemcell_variant}" "${infrastructure}" "${blessed_versions_file}")"
   local stemcell_sha1
-  stemcell_sha1="$(determine_stemcell_sha1 "${stemcell_variant}" "${infrastructure}")"
+  stemcell_sha1="$(determine_stemcell_sha1 "${stemcell_variant}" "${infrastructure}" "${blessed_versions_file}")"
 
   local intermediate_dir="${intermediate_dir}"
   mkdir -p "${intermediate_dir}"
 
-  echo "$(print_stemcells_stub "${stemcell_name}" "${stemcell_version}" "${stemcell_location}" "${stemcell_sha1}")" > "${intermediate_dir}/stemcells.yml" 
-  echo "$(print_releases_stub "${cf_version}" "${cf_release_filepath}" "${etcd_version}" "${etcd_release_location}" "${etcd_release_sha1}")"  > "${intermediate_dir}/releases.yml"
+  print_stemcells_stub "${stemcell_name}" "${stemcell_version}" "${stemcell_location}" "${stemcell_sha1}" > "${intermediate_dir}/stemcells.yml" 
+  print_releases_stub "${cf_version}" "${cf_release_filepath}" "${etcd_version}" "${etcd_release_location}" "${etcd_release_sha1}"  > "${intermediate_dir}/releases.yml"
 
   if [ "${infrastructure}" = "bosh-lite" ]; then
     infrastructure="warden"
@@ -478,6 +475,16 @@ main() {
 
 if [ "$(basename "${0}")" = "prepare-deployments" ]; then
   validate_num_args $#
-  main "$(cd "$(dirname "$0")" && pwd)" "$1" "$2" "$(mktemp -d -t intermediate-XXXXXX)"
+
+  if [ ! -z "${CF_DEPLOYMENT_TRACE:-}" ]; then
+    set -x
+  fi
+
+  my_dir="$( cd "$( dirname "${0}" )" && pwd )"
+  base_dir="$( cd "${my_dir}/.." && pwd )"
+
+  blessed_versions_file="${base_dir}/blessed_versions.json"
+
+  main "$(cd "$(dirname "$0")" && pwd)" "$1" "$2" "$(mktemp -d -t intermediate-XXXXXX)" "${blessed_versions_file}"
 fi
 

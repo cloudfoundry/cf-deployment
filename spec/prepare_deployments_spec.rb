@@ -61,7 +61,8 @@ describe 'Manifest Generation' do
     FileUtils.rm_rf(outputs_dir)
   end
 
-  let(:blessed_versions) { JSON.parse(File.read("blessed_versions.json")) }
+  let(:blessed_versions_file) { "blessed_versions.json" }
+  let(:blessed_versions) { JSON.parse(File.read(blessed_versions_file)) }
 
   describe 'prepare-deployments unit tests'  do
 
@@ -226,14 +227,14 @@ describe 'Manifest Generation' do
       end
 
       context 'when version is integration-latest not for cf-release' do
-        let(:command) { ". ./tools/prepare-deployments && determine_release_version integration-latest etcd" }
+        let(:command) { ". ./tools/prepare-deployments && determine_release_version integration-latest etcd #{blessed_versions_file}" }
         let(:blessed_version) do
           blessed_versions['releases'].each { |release|
             return release['version'] if release['name'] == 'etcd'
           }
         end
 
-        it 'prints version from blessed_versiond' do
+        it 'prints version from blessed_versions' do
           expect(result).to be_success
           expect(stdout).to eq(blessed_version)
         end
@@ -279,7 +280,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when tarball is not provided' do
-        let(:command) { ". ./tools/prepare-deployments && determine_stemcell_name not_a_tarball aws" }
+        let(:command) { ". ./tools/prepare-deployments && determine_stemcell_name not_a_tarball aws #{blessed_versions_file}" }
         let(:aws_stemcell) { blessed_versions['stemcells']['aws']['type'] }
         it 'gets name from blessed_versions' do
           expect(result).to be_success
@@ -300,7 +301,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when providing "integration-latest"' do
-        let(:command) { ". ./tools/prepare-deployments && determine_stemcell_version integration-latest aws" }
+        let(:command) { ". ./tools/prepare-deployments && determine_stemcell_version integration-latest aws #{blessed_versions_file}" }
         let(:stemcell_version) { blessed_versions['stemcells']['aws']['version'] }
         it 'prints the stemcell version out of the blessed_versions' do
           expect(result).to be_success
@@ -335,7 +336,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when "integration-latest" is provided' do
-        let(:command) { ". ./tools/prepare-deployments && determine_stemcell_sha1 integration-latest aws" }
+        let(:command) { ". ./tools/prepare-deployments && determine_stemcell_sha1 integration-latest aws #{blessed_versions_file}" }
         let(:stemcell_sha1) { blessed_versions['stemcells']['aws']['sha1'] }
         it 'prints the sha1 from blessed_versions' do
           expect(result).to be_success
@@ -363,7 +364,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when "integration-latest" is provided' do
-        let(:command) { ". ./tools/prepare-deployments && determine_release_sha1 integration-latest etcd" }
+        let(:command) { ". ./tools/prepare-deployments && determine_release_sha1 integration-latest etcd #{blessed_versions_file}" }
         let(:release_sha1) do
           blessed_versions['releases'].each do |release|
             return release['sha1'] if release['name'] == 'etcd'
@@ -379,7 +380,7 @@ describe 'Manifest Generation' do
 
     describe 'determine_stemcell_location' do
       context 'when "integration-latest" is provided' do
-        let(:command) { ". ./tools/prepare-deployments && determine_stemcell_location integration-latest aws" }
+        let(:command) { ". ./tools/prepare-deployments && determine_stemcell_location integration-latest aws #{blessed_versions_file}" }
         let(:stemcell_location) { blessed_versions['stemcells']['aws']['url'] }
         it 'takes url from blessed_versions' do
           expect(result).to be_success
@@ -408,7 +409,7 @@ describe 'Manifest Generation' do
 
     describe 'determine_release_location' do
       context 'when "integration-latest" is provided' do
-        let(:command) { ". ./tools/prepare-deployments && determine_release_location integration-latest etcd" }
+        let(:command) { ". ./tools/prepare-deployments && determine_release_location integration-latest etcd #{blessed_versions_file}" }
         let(:release_url) do
           blessed_versions['releases'].each do |release|
             return release['url'] if release['name'] == 'etcd'
@@ -617,7 +618,7 @@ describe 'Manifest Generation' do
       end
 
       context 'when variant is integration-latest', clone: true do
-        let(:command) { ". ./tools/prepare-deployments && determine_cf_release_location integration-latest" }
+        let(:command) { ". ./tools/prepare-deployments && determine_cf_release_location integration-latest #{blessed_versions_file}" }
         it 'returns a temp directory that contains cf-release' do
           expect(result).to be_success
           expect(stdout).to include('/cf-release')
@@ -626,9 +627,9 @@ describe 'Manifest Generation' do
     end
 
     describe 'clone_cf_release', clone: true do
-      context 'correct dir and cf_deployment are provided' do
+      context 'correct dir and blessed_versions_file are provided' do
         let(:tmp_dir) {Dir.mktmpdir}
-        let(:command) { ". ./tools/prepare-deployments && clone_cf_release #{tmp_dir} ." }
+        let(:command) { ". ./tools/prepare-deployments && clone_cf_release #{tmp_dir} #{blessed_versions_file}" }
         let(:blessed_commitish) do
           blessed_versions['releases'].each { |release|
             return release['commit'] if release['name'] == 'cf'
@@ -718,7 +719,7 @@ HEREDOC
   end
 
   describe 'prepare-deployments integration tests' do
-    let(:command) { ". ./tools/prepare-deployments && main #{File.dirname(__FILE__)} #{infrastructure} #{config_file.path} #{intermediate_dir}" }
+    let(:command) { ". ./tools/prepare-deployments && main #{File.dirname(__FILE__)} #{infrastructure} #{config_file.path} #{intermediate_dir} #{blessed_versions_file}" }
 
     describe 'infrastructure validation' do
       context 'infrastructure is not valid' do
@@ -775,7 +776,7 @@ HEREDOC
         }
       end
 
-      let(:command) { ". ./tools/prepare-deployments && main #{File.dirname(__FILE__)} aws #{config_file.path} #{intermediate_dir}" }
+      let(:command) { ". ./tools/prepare-deployments && main #{File.dirname(__FILE__)} aws #{config_file.path} #{intermediate_dir} #{blessed_versions_file}" }
 
       it 'prints an error and exits' do
         expect(result).to_not be_success
@@ -821,7 +822,7 @@ HEREDOC
               'deployments-dir' => "#{deployments_dir}"
             }
           end
-          let(:command) { ". ./tools/prepare-deployments && main #{File.dirname(__FILE__)} aws #{config_file.path} #{intermediate_dir}" }
+          let(:command) { ". ./tools/prepare-deployments && main #{File.dirname(__FILE__)} aws #{config_file.path} #{intermediate_dir} #{blessed_versions_file}" }
 
           it 'clones repo to temp dir and writes path to this dir to manifest' do
             expect(result).to be_success
@@ -835,7 +836,7 @@ HEREDOC
         end
 
         context 'when cf-release is empty', clone: true do
-          let(:command) { ". ./tools/prepare-deployments && main #{File.dirname(__FILE__)} aws #{config_file.path} #{intermediate_dir}" }
+          let(:command) { ". ./tools/prepare-deployments && main #{File.dirname(__FILE__)} aws #{config_file.path} #{intermediate_dir} #{blessed_versions_file}" }
           let(:config) do
             {
               'deployments-dir' => "#{deployments_dir}",
