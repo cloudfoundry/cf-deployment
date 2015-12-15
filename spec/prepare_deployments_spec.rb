@@ -582,6 +582,40 @@ describe 'Manifest Generation' do
       end
     end
 
+    describe 'validate_consul_release_variant' do
+      context 'when variant is not integration-latest and not director-latest and not a valid path' do
+        let(:command) { ". ./tools/prepare-deployments && validate_consul_release_variant banana" }
+        it 'prints error' do
+          expect(result).to_not be_success
+          expect(stderr).to include('Path banana should be absolute')
+        end
+      end
+
+      context 'when variant is integration-latest' do
+        let(:command) { ". ./tools/prepare-deployments && validate_consul_release_variant integration-latest" }
+        it 'prints nothing' do
+          expect(result).to be_success
+          expect(stderr).to be_empty
+        end
+      end
+
+      context 'when variant is director-latest' do
+        let(:command) { ". ./tools/prepare-deployments && validate_consul_release_variant director-latest" }
+        it 'prints nothing' do
+          expect(result).to be_success
+          expect(stderr).to be_empty
+        end
+      end
+
+      context 'when variant is a valid path' do
+        let(:command) { ". ./tools/prepare-deployments && validate_consul_release_variant #{config_file.path}" }
+        it 'prints nothing' do
+          expect(result).to be_success
+          expect(stderr).to be_empty
+        end
+      end
+    end
+
     describe 'validate_cf_release_variant' do
       context 'when variant is not integration-latest and not a valid path' do
         let(:command) { ". ./tools/prepare-deployments && validate_cf_release_variant banana" }
@@ -696,21 +730,28 @@ HEREDOC
       end
     end
 
-    describe 'print_releases_stub' do
-      context 'everything is provided' do
-        let(:command) { ". ./tools/prepare-deployments && print_releases_stub 1 banana 1 banana 'sha1: bananasha'" }
-        it 'prints stemcell stub' do
+    describe 'print_release_stub_header' do
+        let(:command) { ". ./tools/prepare-deployments && print_release_stub_header" }
+        it 'prints release stub header' do
           expect(result).to be_success
           expect(stdout).to eq(<<HEREDOC
 ---
 releases:
-  - name: cf
-    version: 1
-    url: banana
-  - name: etcd
-    version: 1
-    url: banana
-    sha1: bananasha
+HEREDOC
+)
+        end
+    end
+
+    describe 'print_release' do
+      context 'everything is provided' do
+        let(:command) { ". ./tools/prepare-deployments && print_release my-release 1 my-release-url 'sha1: my-release-sha'" }
+        it 'prints release' do
+          expect(result).to be_success
+          expect(stdout).to eq(<<HEREDOC
+- name: my-release
+  version: 1
+  url: my-release-url
+  sha1: my-release-sha
 HEREDOC
 )
         end

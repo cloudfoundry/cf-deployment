@@ -278,6 +278,17 @@ determine_variant() {
   printf "%s" "${variant:-"integration-latest"}"
 }
 
+validate_consul_release_variant() {
+  # USAGE: validate_consul_release_variant [variant: string]
+  # EXAMPLE: validate_consul_release_variant "/path/to/consul.tar.gz"
+
+  local variant="${1}"
+
+  if [ "${variant}" != "integration-latest" ] && [ "${variant}" != "director-latest" ]; then
+    validate_path "${variant}"
+  fi
+}
+
 validate_etcd_release_variant() {
   # USAGE: validate_etcd_release_variant [variant: string]
   # EXAMPLE: validate_etcd_release_variant "/path/to/etcd.tar.gz"
@@ -368,8 +379,8 @@ EOF
 }
 
 print_releases_stub() {
-  # USAGE: print_release_stub [cf_version: string] [cf_release_location: string] [etcd_version: string] [etcd_release_location: string]
-  # EXAMPLE: print_release_stub "222" "/path/to/cf.tar.gz" "0.15.0" "/path/to/etcd.tar.gz"
+  # USAGE: print_releases_stub [cf_version: string] [cf_release_location: string] 
+  # EXAMPLE: print_releases_stub "222" "/path/to/cf.tar.gz" "0.15.0" "/path/to/etcd.tar.gz"
 
   local cf_version="${1}"
   local cf_release_location="${2}"
@@ -377,17 +388,45 @@ print_releases_stub() {
   local etcd_release_location="${4}"
   local etcd_release_sha1="${5}"
 
+  print_release_stub_header
+
+  print_release \
+    "cf" \
+    "${cf_version}" \
+    "${cf_release_location}"
+
+  print_release \
+    "etcd" \
+    "${etcd_version}" \
+    "${etcd_release_location}" \
+    "${etcd_release_sha1}"
+}
+
+print_release_stub_header() {
   cat <<EOF
 ---
 releases:
-  - name: cf
-    version: ${cf_version}
-    url: ${cf_release_location}
-  - name: etcd
-    version: ${etcd_version}
-    url: ${etcd_release_location}
-    ${etcd_release_sha1}
 EOF
+}
+
+print_release() {
+  # USAGE: print_release [release_name: string] [release_version: string] [release_location: string] <release_sha_key_value: string: string>
+  # EXAMPLE: print_release "222" "/path/to/cf.tar.gz" "0.15.0" "/path/to/etcd.tar.gz" 'sha: "my-release-sha"'
+
+  local name="${1}"
+  local version="${2}"
+  local location="${3}"
+  local sha1="${4:-}" # optional
+
+  cat <<EOF
+- name: ${name}
+  version: ${version}
+  url: ${location}
+EOF
+
+  if [ ! -z "${sha1}" ]; then
+  echo "  ${sha1}"
+  fi
 }
 
 main() {
@@ -417,12 +456,24 @@ main() {
 
   validate_etcd_release_variant "${etcd_release_variant}"
 
+  local consul_release_variant
+  consul_release_variant="$(determine_variant "${config_file_path}" "consul" "${blessed_versions_file}")"
+
+  validate_etcd_release_variant "${etcd_release_variant}"
+
   local etcd_version
   etcd_version="$(determine_release_version "${etcd_release_variant}" 'etcd' "${blessed_versions_file}")"
   local etcd_release_location
   etcd_release_location="$(determine_release_location "${etcd_release_variant}" 'etcd' "${blessed_versions_file}")"
   local etcd_release_sha1
   etcd_release_sha1="$(determine_release_sha1 "${etcd_release_variant}" 'etcd' "${blessed_versions_file}")"
+
+  local consul_version
+  consul_version="$(determine_release_version "${consul_release_variant}" 'consul' "${blessed_versions_file}")"
+  local consul_release_location
+  consul_release_location="$(determine_release_location "${consul_release_variant}" 'consul' "${blessed_versions_file}")"
+  local consul_release_sha1
+  consul_release_sha1="$(determine_release_sha1 "${consul_release_variant}" 'consul' "${blessed_versions_file}")"
 
   local cf_release_variant
   cf_release_variant="$(determine_variant "${config_file_path}" "cf" "${blessed_versions_file}")"
@@ -453,8 +504,33 @@ main() {
   local intermediate_dir="${intermediate_dir}"
   mkdir -p "${intermediate_dir}"
 
-  print_stemcells_stub "${stemcell_name}" "${stemcell_version}" "${stemcell_location}" "${stemcell_sha1}" > "${intermediate_dir}/stemcells.yml" 
-  print_releases_stub "${cf_version}" "${cf_release_filepath}" "${etcd_version}" "${etcd_release_location}" "${etcd_release_sha1}"  > "${intermediate_dir}/releases.yml"
+  print_stemcells_stub \
+    "${stemcell_name}" \
+    "${stemcell_version}" \
+    "${stemcell_location}" \
+    "${stemcell_sha1}" \
+    > "${intermediate_dir}/stemcells.yml" 
+
+  {
+    print_release_stub_header
+
+    print_release \
+      "cf" \
+      "${cf_version}" \
+      "${cf_release_filepath}"
+
+    print_release \
+      "etcd" \
+      "${etcd_version}" \
+      "${etcd_release_location}" \
+      "${etcd_release_sha1}"
+
+    print_release \
+      "consul" \
+      "${consul_version}" \
+      "${consul_release_location}" \
+      "${consul_release_sha1}"
+  } > "${intermediate_dir}/releases.yml"
 
   if [ "${infrastructure}" = "bosh-lite" ]; then
     infrastructure="warden"
