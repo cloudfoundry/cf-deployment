@@ -6,4 +6,4 @@ allow_inline_declare_and_assign="SC2155"
 # https://github.com/koalaman/shellcheck/wiki/SC2005
 allow_useless_echo="SC2005"
 
-SHELLCHECK_OPTS="-e $allow_inline_declare_and_assign -e $allow_useless_echo" shellcheck $@
+SHELLCHECK_OPTS="-e $allow_inline_declare_and_assign -e $allow_useless_echo" shellcheck "$@"
