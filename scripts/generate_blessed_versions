@@ -1,0 +1,107 @@
+#!/bin/bash
+
+set -e -x
+
+pushd $(dirname $0)
+  SCRIPT_DIR=$(pwd)
+popd
+
+CF_DEPLOYMENT_DIR=$(cd $SCRIPT_DIR/.. && pwd)
+
+RELEASE_DIR=${SCRIPT_DIR}/../outputs/releases
+rm -rf ${RELEASE_DIR}
+mkdir -p ${RELEASE_DIR}
+
+OUTPUT_DIR=${SCRIPT_DIR}/../outputs/create_release
+rm -rf ${OUTPUT_DIR}
+mkdir -p ${OUTPUT_DIR}
+
+if [ $# -ne 4 ]; then
+  echo "Usage: create_releases PATH_TO_CF_RELEASE PATH_TO_ETCD_RELEASE PATH_TO_CONSUL_RELEASE PATH_TO_CONSUL_RELEASE"
+  exit 1
+fi
+
+STEMCELL_PATH=$1
+CF_RELEASE_PATH=$2
+ETCD_RELEASE_PATH=$3
+CONSUL_RELEASE_PATH=$4
+
+if [ ! -e ${STEMCELL_PATH} ]; then
+  echo "PATH_TO_STEMCELL is invalid"
+  exit 1
+fi
+
+if [ ! -d ${CF_RELEASE_PATH} ]; then
+  echo "PATH_TO_CF_RELEASE is invalid"
+  exit 1
+fi
+
+if [ ! -e ${ETCD_RELEASE_PATH} ]; then
+  echo "PATH_TO_ETCD_RELEASE is invalid"
+  exit 1
+fi
+
+if [ ! -e ${CONSUL_RELEASE_PATH} ]; then
+  echo "PATH_TO_CONSUL_RELEASE is invalid"
+  exit 1
+fi
+
+
+export BOSH_USE_BUNDLER=true
+
+date=$(date +%s)
+
+pushd ${CF_RELEASE_PATH}
+  CF_RELEASE_COMMIT=$(git rev-parse HEAD)
+popd
+
+ETCD_VERSION=$(tar -x -O -f ${ETCD_RELEASE_PATH} ./release.MF | grep -E '^version:' | grep -o -E "[0-9.]*[0-9]")
+ETCD_SHA=$(sha1sum ${ETCD_RELEASE_PATH} | awk '{print $1;}')
+CONSUL_VERSION=$(tar -x -O -f ${CONSUL_RELEASE_PATH} ./release.MF | grep -E '^version:' | grep -o -E "[0-9.]*[0-9]")
+CONSUL_SHA=$(sha1sum ${CONSUL_RELEASE_PATH} | awk '{print $1;}')
+STEMCELL_VERSION=$(tar -xOf ${STEMCELL_PATH} stemcell.MF | grep version | head -1 | grep -o -E "[0-9.]*[0-9]")
+STEMCELL_NAME=$(tar -xOf ${STEMCELL_PATH} stemcell.MF | grep name | head -1 | awk '{print $2;}')
+STEMCELL_SHA1=$(sha1sum ${STEMCELL_PATH} | awk '{print $1;}')
+
+#prepare-deployments script relies on the `commit` tag for cf.
+#Currently prepare deployment uses this information naively by
+#calling grep. If you wish to cange this file to have more commits
+#then prepare-deployment will need to be updated as well.
+cat > $CF_DEPLOYMENT_DIR/blessed_versions.json <<EOF
+{
+  "releases": [
+    {
+      "name": "cf",
+      "commit": "${CF_RELEASE_COMMIT}"
+    },
+    {
+      "name": "etcd",
+      "version": "${ETCD_VERSION}",
+      "sha1": "${ETCD_SHA}",
+      "url": "https://bosh.io/d/github.com/cloudfoundry-incubator/etcd-release?v=${ETCD_VERSION}"
+    },
+    {
+      "name": "consul",
+      "version": "${CONSUL_VERSION}",
+      "sha1": "${CONSUL_SHA}",
+      "url": "https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=${CONSUL_VERSION}"
+    }
+  ],
+  "stemcells": {
+    "aws": {
+      "type": "${STEMCELL_NAME}",
+      "version": "${STEMCELL_VERSION}",
+      "url": "https://bosh.io/d/stemcells/bosh-aws-xen-hvm-ubuntu-trusty-go_agent?v=${STEMCELL_VERSION}",
+      "sha1": "${STEMCELL_SHA1}"
+    }
+  }
+}
+EOF
+
+cat $CF_DEPLOYMENT_DIR/blessed_versions.json
+
+git add $CF_DEPLOYMENT_DIR/blessed_versions.json
+git config user.name "CF MEGA BOT"
+git config user.email "cf-mega@pivotal.io"
+git commit -m "Update blessing"
+
