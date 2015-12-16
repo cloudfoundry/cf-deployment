@@ -56,4 +56,7 @@ fi
   warden \
   "${output_config_file}"
 
-bosh -d "${deployment_dir}/outputs/manifests/cf.yml" deploy
+bosh \
+  -d "${deployment_dir}/outputs/manifests/cf.yml" \
+  deploy \
+  --redact-diff
