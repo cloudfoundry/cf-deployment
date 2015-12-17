@@ -18,11 +18,27 @@ cf-deployment is a collection of tools to facilitate deploying Cloud Foundry wit
 *Description:*  
 Generates a Cloud Foundry deployment manifest called `cf.yml` placed in either a specified or default directory (see references to `deployments-dir` below). The config file you pass to `./tools/prepare_deployments` must be a JSON file specifying some or all of the following properties:
 
-* `cf`: (string, optional) either a path to a directory of `cf-release`, or the string `"integration-latest"`; when using a path to a directory, make sure all submodules, including recursive submodules, have been initialized
-* `etcd`: (string, optional) either a path to a directory of `etcd-release`, a path to a release tarball, the string `"director-latest"`, or the string `"integration-latest"`
-* `stemcell`: (string, optional) either a path to a stemcell tarball, the string `"director-latest"`, or the string `"integration-latest"`
-* `stubs`: (array of strings, required): a non-empty list of paths to stub files
-* `deployments-dir`: (string, optional) a path to a directory where manifests will be written
+* `cf`: (string, optional)
+  * a path to a directory of `cf-release`; when using a path to a directory, make sure all submodules, including recursive submodules, have been initialized
+  * the string `"integration-latest"`
+* `etcd`: (string, optional)
+  * a path to a directory of `etcd-release`
+  * a path to a release tarball
+  * the string `"director-latest"`
+  * the string `"integration-latest"`
+* `consul`: (string, optional)
+  * a path to a directory of `consul-release`
+  * a path to a release tarball
+  * the string `"director-latest"`
+  * the string `"integration-latest"`
+* `stemcell`: (string, optional)
+  * a path to a stemcell tarball
+  * the string `"director-latest"`
+  * the string `"integration-latest"`
+* `stubs`: (array of strings, required)
+  * a non-empty list of paths to stub files
+* `deployments-dir`: (string, optional)
+  * a path to a directory where manifests will be written
 
 For example:
 
@@ -30,6 +46,7 @@ For example:
 {
   "cf": "/Users/pivotal/workspace/cf-release",
   "etcd": "integration-latest",
+  "consul": "/Users/pivotal/Downloads/consul-release-v23.tgz",
   "stemcell": "/Users/pivotal/Downloads/light-bosh-stemcell-3058-aws-xen-hvm-ubuntu-trusty-go_agent.tgz",
   "stubs": ["/Users/pivotal/workspace/deployment1/properties-stub.yml", "/Users/pivotal/workspace/deployment1/instances-stub.yml"],
   "deployments-dir": "/Users/pivotal/workspace/deployment1/artifacts"
@@ -50,6 +67,7 @@ For each property (other than `stubs`) that is not specified in the config file,
 
 * `cf`: defaults to `"integration-latest"`
 * `etcd`: defaults to `"integration-latest"`
+* `consul`: defaults to `"integration-latest"`
 * `stemcell`: defaults to `"integration-latest"`
 * `deployments-dir`: defaults to `./outputs/manifests`
 
