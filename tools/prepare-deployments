@@ -320,10 +320,14 @@ determine_cf_release_location() {
   if [ "${variant}" = "integration-latest" ]; then
     local dir
     dir="$(mktemp -d -t cf-XXXXXX)"
-    local cf_release_location="${dir}/cf-release"
+
+    local cf_release_location
+    cf_release_location="${dir}/cf-release"
+
     clone_cf_release "${dir}" "${2}"
   else
-    local cf_release_location="${variant}"
+    local cf_release_location
+    cf_release_location="${variant}"
   fi
 
   printf "%s" "${cf_release_location}"
@@ -376,30 +380,6 @@ meta:
     ${location}
     ${sha1}
 EOF
-}
-
-print_releases_stub() {
-  # USAGE: print_releases_stub [cf_version: string] [cf_release_location: string] 
-  # EXAMPLE: print_releases_stub "222" "/path/to/cf.tar.gz" "0.15.0" "/path/to/etcd.tar.gz"
-
-  local cf_version="${1}"
-  local cf_release_location="${2}"
-  local etcd_version="${3}"
-  local etcd_release_location="${4}"
-  local etcd_release_sha1="${5}"
-
-  print_release_stub_header
-
-  print_release \
-    "cf" \
-    "${cf_version}" \
-    "${cf_release_location}"
-
-  print_release \
-    "etcd" \
-    "${etcd_version}" \
-    "${etcd_release_location}" \
-    "${etcd_release_sha1}"
 }
 
 print_release_stub_header() {
