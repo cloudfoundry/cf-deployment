@@ -455,6 +455,8 @@ main() {
   local consul_release_sha1
   consul_release_sha1="$(determine_release_sha1 "${consul_release_variant}" 'consul' "${blessed_versions_file}")"
 
+  validate_consul_release_variant "${consul_release_variant}"
+
   local cf_release_variant
   cf_release_variant="$(determine_variant "${config_file_path}" "cf" "${blessed_versions_file}")"
 

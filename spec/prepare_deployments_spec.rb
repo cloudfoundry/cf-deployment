@@ -1290,6 +1290,221 @@ HEREDOC
           end
         end
       end
+
+      context 'consul release' do
+        context 'with a local release directory' do
+          let(:consul_temp_dir) { Dir.mktmpdir }
+          let(:expected_release_yaml) do
+            {
+              'name' => 'consul',
+              'version' => 'create',
+              'url' => "file://#{consul_temp_dir}"
+            }
+          end
+          let(:config) do
+            {
+              'cf' => cf_release_path,
+              'consul' => consul_temp_dir,
+              'stubs' => stubs_paths,
+              'deployments-dir' => "#{deployments_dir}"
+            }
+          end
+
+          it 'correctly sets the stub' do
+            expect(result).to be_success
+
+            release_yaml = YAML.load_file("#{intermediate_dir}/releases.yml")
+            result_consul = get_release_by_name 'consul', release_yaml
+            expect(result_consul).to eq(expected_release_yaml)
+          end
+
+          context 'when relative path to directory is given' do
+            let(:config) do
+              {
+                'cf' => cf_release_path,
+                'consul' => "~/some_directory",
+                'stubs' => stubs_paths,
+                'deployments-dir' => "#{deployments_dir}"
+              }
+            end
+
+            it 'exits with error' do
+              expect(result).not_to be_success
+              expect(stderr).to include 'should be absolute'
+              expect(File.exist?("#{intermediate_dir}/releases.yml")).to eq(false)
+            end
+          end
+        end
+
+        context 'when integration-latest is specified' do
+          let(:consul_temp_dir) { Dir.mktmpdir }
+          let(:config) do
+            {
+              'cf' => cf_release_path,
+              'consul' => "integration-latest",
+              'stubs' => stubs_paths,
+              'deployments-dir' => "#{deployments_dir}"
+            }
+          end
+
+          let(:expected_release_yaml) do
+            blessed_version=nil
+            blessed_url=nil
+            blessed_versions['releases'].each { |release|
+              if release['name'] == 'consul'
+                blessed_version = release['version']
+                blessed_url = release['url']
+              end
+            }
+            {
+              'name' => 'consul',
+              'version' => "#{blessed_version}",
+              'url' => "#{blessed_url}"
+            }
+          end
+
+          it 'clones repo to temp dir and writes path to this dir to manifest' do
+            expect(result).to be_success
+            release_yaml = YAML.load_file("#{intermediate_dir}/releases.yml")
+            result_consul = get_release_by_name 'consul', release_yaml
+            expect(result_consul['name']).to eq(expected_release_yaml['name'])
+            expect(result_consul['version'].to_s).to eq(expected_release_yaml['version'])
+            expect(result_consul['url']).to eq(expected_release_yaml['url'])
+          end
+        end
+
+        context 'when director-latest is specified' do
+          let(:expected_release_yaml) do
+            {
+              'name' => 'consul',
+              'version' => 'latest',
+              'url' => nil,
+            }
+          end
+          let(:config) do
+            {
+              'cf' => cf_release_path,
+              'consul' => "director-latest",
+              'stubs' => stubs_paths,
+              'deployments-dir' => "#{deployments_dir}"
+            }
+          end
+
+          it 'correctly sets the stub' do
+            expect(result).to be_success
+
+            release_yaml = YAML.load_file("#{intermediate_dir}/releases.yml")
+            result_consul = get_release_by_name 'consul', release_yaml
+            expect(result_consul).to eq(expected_release_yaml)
+          end
+        end
+
+        context 'when a tarball is specified' do
+          let(:consul_temp_dir) { Dir.mktmpdir }
+          let(:expected_release_yaml) do
+            {
+              'name' => 'consul',
+              'version' => '5+goobers.123',
+              'url' => "file://#{consul_temp_dir}/consul-release.tgz"
+            }
+          end
+          let(:config) do
+            {
+              'cf' => cf_release_path,
+              'consul' => "#{consul_temp_dir}/consul-release.tgz",
+              'stubs' => stubs_paths,
+              'deployments-dir' => "#{deployments_dir}"
+            }
+          end
+
+          before do
+            release_manifest = {'version' => "5+goobers.123"}
+
+            manifest_file = File.new("#{consul_temp_dir}/release.MF", 'w')
+            manifest_file.write(YAML.dump(release_manifest))
+            manifest_file.close
+
+            `cd #{consul_temp_dir} && tar -czf ./consul-release.tgz ./release.MF`
+          end
+
+          it 'correctly sets the stub' do
+            expect(result).to be_success
+
+            release_yaml = YAML.load_file("#{intermediate_dir}/releases.yml")
+            result_consul = get_release_by_name 'consul', release_yaml
+            expect(result_consul).to eq(expected_release_yaml)
+          end
+        end
+
+        context 'when path is not an absolute path' do
+          let(:config) do
+            {
+              'cf' => cf_release_path,
+              'consul' => "../not_absolute",
+              'stubs' => stubs_paths,
+              'deployments-dir' => "#{deployments_dir}"
+            }
+          end
+
+          it 'prints an error and exits' do
+            expect(result).not_to be_success
+            expect(stderr).to include 'should be absolute'
+            expect(File.exist?("#{intermediate_dir}/releases.yml")).to eq(false)
+          end
+        end
+
+        context 'when input value is not supported' do
+          let(:config) do
+            {
+              'cf' => cf_release_path,
+              'consul' => 'not_supported',
+              'stubs' => stubs_paths,
+              'deployments-dir' => "#{deployments_dir}"
+            }
+          end
+
+          it 'prints error and exits' do
+            expect(result).not_to be_success
+            expect(stderr).to include 'should be absolute'
+            expect(File.exist?("#{intermediate_dir}/releases.yml")).to eq(false)
+          end
+        end
+
+        context 'when no value is specified' do
+          let(:config) do
+            {
+              'cf' => cf_release_path,
+              'stubs' => stubs_paths,
+              'deployments-dir' => "#{deployments_dir}"
+            }
+          end
+
+          let(:expected_release_yaml) do
+            blessed_version=nil
+            blessed_url=nil
+            blessed_versions['releases'].each { |release|
+              if release['name'] == 'consul'
+                blessed_version = release['version']
+                blessed_url = release['url']
+              end
+            }
+            {
+              'name' => 'consul',
+              'version' => "#{blessed_version}",
+              'url' => "#{blessed_url}"
+            }
+          end
+
+          it 'clones repo to temp dir and writes path to this dir to manifest' do
+            expect(result).to be_success
+            release_yaml = YAML.load_file("#{intermediate_dir}/releases.yml")
+            result_consul = get_release_by_name 'consul', release_yaml
+            expect(result_consul['name']).to eq(expected_release_yaml['name'])
+            expect(result_consul['version'].to_s).to eq(expected_release_yaml['version'])
+            expect(result_consul['url']).to eq(expected_release_yaml['url'])
+          end
+        end
+      end
     end
 
     describe 'generating manifest' do
