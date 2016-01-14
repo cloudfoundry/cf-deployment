@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -euf
 
@@ -17,7 +17,7 @@ validate_num_args() {
   if [ "${1}" != 2 ]; then
     print_error "ERROR: invalid number of arguments provided"
     print_error "$(usage)"
-    exit 1 
+    exit 1
   fi
 }
 
@@ -28,13 +28,13 @@ validate_infrastructure() {
   local infrastructure="${1}"
 
   if [ -z "${infrastructure}" ]; then
-    print_error "ERROR: infrastructure should not be empty" 
+    print_error "ERROR: infrastructure should not be empty"
     print_error "$(usage)"
     exit 1
   fi
 
   if [ "${infrastructure}" != "aws" ]; then
-    print_error "ERROR: invalid infrastructure: ${infrastructure}" 
+    print_error "ERROR: invalid infrastructure: ${infrastructure}"
     print_error "$(usage)"
     exit 1
   fi
@@ -52,8 +52,8 @@ validate_config_file_path() {
     exit 1
   fi
 
-  if [ ! -f "${config_file_path}" ]; then 
-    print_error "ERROR: invalid path to config file: ${config_file_path}" 
+  if [ ! -f "${config_file_path}" ]; then
+    print_error "ERROR: invalid path to config file: ${config_file_path}"
     print_error "$(usage)"
     exit 1
   fi
@@ -491,7 +491,7 @@ main() {
     "${stemcell_version}" \
     "${stemcell_location}" \
     "${stemcell_sha1}" \
-    > "${intermediate_dir}/stemcells.yml" 
+    > "${intermediate_dir}/stemcells.yml"
 
   {
     print_release_stub_header
@@ -543,6 +543,11 @@ if [ "$(basename "${0}")" = "prepare-deployments" ]; then
 
   blessed_versions_file="${base_dir}/blessed_versions.json"
 
-  main "$(cd "$(dirname "$0")" && pwd)" "$1" "$2" "$(mktemp -d -t intermediate-XXXXXX)" "${blessed_versions_file}"
+  main \
+    "$(cd "$(dirname "$0")" && pwd)" \
+    "$1" \
+    "$2" \
+    "$(mktemp -d -t intermediate-XXXXXX)" \
+    "${blessed_versions_file}"
 fi
 
