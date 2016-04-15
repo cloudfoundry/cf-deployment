@@ -56,11 +56,11 @@ For example:
 NOTE: The manifest templates each IaaS require certain properties to be set in a stub provided by the user.
 To see instructions for the current recommendations on how to create this stub for the various IaaSes, check out the following links:
 
-* [AWS](https://docs.cloudfoundry.org/deploying/ec2/cf-stub-aws.html)
-* [vSphere](https://docs.cloudfoundry.org/deploying/vsphere/cf-stub-vsphere.html) (not currently supported by this tool)
-* [vCloud](https://docs.cloudfoundry.org/deploying/vcloud/cf-stub-vcloud.html) (not currently supported by this tool)
-* [OpenStack](https://docs.cloudfoundry.org/deploying/openstack/cf-stub-openstack.html) (not currently supported by this tool)
-* [BOSH-Lite](https://docs.cloudfoundry.org/deploying/boshlite/#create-stub) (not currently supported by this tool)
+* [AWS](https://docs.cloudfoundry.org/deploying/aws/cf-stub.html)
+* [vSphere](https://docs.cloudfoundry.org/deploying/common/vsphere-vcloud-cf-stub.html) (not currently supported by this tool)
+* [vCloud](https://docs.cloudfoundry.org/deploying/common/vsphere-vcloud-cf-stub.html) (not currently supported by this tool)
+* [OpenStack](https://docs.cloudfoundry.org/deploying/openstack/cf-stub.html) (not currently supported by this tool)
+* [BOSH-Lite](https://docs.cloudfoundry.org/deploying/boshlite/create_a_manifest.html#create-stub) (not currently supported by this tool)
 
 *Defaults:*  
 For each property (other than `stubs`) that is not specified in the config file, the following default values exist:
