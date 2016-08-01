@@ -1,6 +1,0 @@
-#!/bin/sh
-
-mydir="$(cd "$(dirname "$0")" && pwd)"
-basedir="$(cd "${mydir}/.." && pwd)"
-
-ag -l '#!.*sh' "${basedir}" | xargs shellcheck

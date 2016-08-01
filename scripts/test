@@ -1,6 +1,0 @@
-#!/bin/sh
-
-mydir="$(cd "$(dirname "$0")" && pwd)"
-
-"${mydir}/shellcheck_all_sh_files"
-bundle exec rspec "${@}"
