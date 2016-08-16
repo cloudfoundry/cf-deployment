@@ -1,0 +1,1252 @@
+---
+name: cf-2.0
+properties_shared_across_every_instance_group:
+  metron: &2
+    syslog_daemon_config:
+      enable: false
+    metron_agent:
+      deployment: "((metron_agent_deployment_name))"
+      protocols:
+      - tls
+      tls:
+        client_cert: "((metron_metron_agent_tls_client_cert))"
+        client_key: "((metron_metron_agent_tls_client_key))"
+      etcd:
+        client_cert: "((etcd_client_cert))"
+        client_key: "((etcd_client_key))"
+    metron_endpoint:
+      shared_secret: "((dropsonde_shared_secret))"
+    loggregator:
+      tls:
+        ca_cert: "((loggregator_tls_ca_cert))"
+      etcd:
+        require_ssl: true
+        ca_cert: "((etcd_ca_cert))"
+        machines:
+        - etcd.service.cf.internal
+update:
+  canaries: 0
+  canary_watch_time: 30000-600000
+  max_in_flight: 5
+  serial: false
+  update_watch_time: 5000-600000
+instance_groups:
+- name: consul
+  azs:
+  - z1
+  - z2
+  - z3
+  instances: 3
+  persistent_disk_type: 5GB
+  vm_type: m3.medium
+  stemcell: default
+  update:
+    max_in_flight: 1
+  networks:
+  - name: private
+    static_ips: &1
+    - 10.0.31.190
+    - 10.0.47.190
+    - 10.0.63.190
+  jobs:
+  - name: consul_agent
+    release: consul
+    properties:
+      consul:
+        agent:
+          mode: server
+          domain: cf.internal
+          servers: &4
+            lan: *1
+        encrypt_keys: "((consul_encrypt_keys))"
+        agent_cert: "((consul_agent_cert))"
+        agent_key: "((consul_agent_agent_key))"
+        ca_cert: "((consul_agent_ca_cert))"
+        server_cert: "((consul_agent_server_cert))"
+        server_key: "((consul_agent_server_key))"
+  - name: metron_agent
+    release: loggregator
+    properties: *2
+- name: nats
+  azs:
+  - z1
+  - z2
+  instances: 2
+  vm_type: c3.large
+  stemcell: default
+  networks:
+  - name: private
+    static_ips: &3
+    - 10.0.31.191
+    - 10.0.47.191
+  jobs:
+  - name: nats_stream_forwarder
+    release: nats
+    properties:
+      nats: &6
+        machines: *3
+        password: "((nats_password))"
+        port: 4222
+        user: "((nats_user))"
+  - name: nats
+    release: nats
+    properties:
+      nats:
+        machines: *3
+        password: "((nats_password))"
+        port: 4222
+        user: "((nats_user))"
+        debug: true
+        monitor_port: 9222
+        prof_port: 6060
+        trace: false
+  - name: metron_agent
+    release: loggregator
+    properties: *2
+- name: etcd
+  azs:
+  - z1
+  - z2
+  - z3
+  instances: 3
+  persistent_disk_type: 5GB
+  vm_type: m3.medium
+  stemcell: default
+  update:
+    serial: true
+    max_in_flight: 1
+  networks:
+  - name: private
+    static_ips:
+    - 10.0.31.192
+    - 10.0.47.192
+    - 10.0.63.192
+  jobs:
+  - name: etcd
+    release: etcd
+    properties:
+      etcd:
+        advertise_urls_dns_suffix: etcd.service.cf.internal
+        cluster:
+        - instances: 3
+          name: etcd
+        peer_require_ssl: true
+        require_ssl: true
+        ca_cert: "((etcd_ca_cert))"
+        client_cert: "((etcd_client_cert))"
+        client_key: "((etcd_client_key))"
+        server_cert: "((etcd_server_cert))"
+        server_key: "((etcd_server_key))"
+        peer_ca_cert: "((etcd_peer_ca_cert))"
+        peer_cert: "((etcd_peer_cert))"
+        peer_key: "((etcd_peer_key))"
+  - name: consul_agent
+    release: consul
+    properties:
+      consul:
+        agent:
+          mode: client
+          domain: cf.internal
+          servers: *4
+          services:
+            etcd: {}
+        encrypt_keys: "((consul_encrypt_keys))"
+        agent_cert: "((consul_agent_cert))"
+        agent_key: "((consul_agent_agent_key))"
+        ca_cert: "((consul_agent_ca_cert))"
+        server_cert: "((consul_agent_server_cert))"
+        server_key: "((consul_agent_server_key))"
+  - name: etcd_metrics_server
+    release: etcd
+    properties:
+      etcd_metrics_server:
+        nats:
+          machines: *3
+          password: "((nats_password))"
+          username: nats
+        etcd:
+          dns_suffix: etcd.service.cf.internal
+          require_ssl: true
+          ca_cert: "((etcd_ca_cert))"
+          client_cert: "((etcd_client_cert))"
+          client_key: "((etcd_client_key))"
+  - name: metron_agent
+    release: loggregator
+    properties: *2
+- name: mysql
+  azs:
+  - z1
+  persistent_disk_type: 10GB
+  instances: 1
+  vm_type: m3.large
+  vm_extensions:
+  - 10GB_ephemeral_disk
+  stemcell: default
+  update:
+    serial: true
+  networks:
+  - name: private
+    static_ips:
+    - 10.0.31.193
+  jobs:
+  - name: mysql
+    release: cf-mysql
+    properties:
+      network_name: private
+      cf_mysql:
+        mysql:
+          admin_password: "((cf_mysql_mysql_admin_password))"
+          roadmin_password: "((cf_mysql_mysql_roadmin_password))"
+          cluster_health:
+            password: "((cf_mysql_mysql_cluster_health_password))"
+          bootstrap_endpoint:
+            username: "((cf_mysql_mysql_bootstrap_endpoint_username))"
+            password: "((cf_mysql_mysql_bootstrap_endpoint_password))"
+          seeded_databases:
+          - name: cloud_controller
+            username: "((cf_mysql_mysql_seeded_databases_cc_username))"
+            password: "((cf_mysql_mysql_seeded_databases_cc_password))"
+          - name: uaa
+            username: "((cf_mysql_mysql_seeded_databases_uaa_username))"
+            password: "((cf_mysql_mysql_seeded_databases_uaa_password))"
+          - name: diego
+            username: "((cf_mysql_mysql_seeded_databases_diego_username))"
+            password: "((cf_mysql_mysql_seeded_databases_diego_password))"
+          database_startup_timeout: 600
+          cluster_ips:
+          - 10.0.31.193
+  - name: metron_agent
+    release: loggregator
+    properties: *2
+- name: diego-bbs
+  azs:
+  - z1
+  - z2
+  instances: 2
+  vm_type: m3.large
+  stemcell: default
+  networks:
+  - name: private
+  jobs:
+  - name: consul_agent
+    release: consul
+    properties:
+      consul:
+        agent:
+          mode: client
+          domain: cf.internal
+          servers: *4
+        encrypt_keys: "((consul_encrypt_keys))"
+        agent_cert: "((consul_agent_cert))"
+        agent_key: "((consul_agent_agent_key))"
+        ca_cert: "((consul_agent_ca_cert))"
+        server_cert: "((consul_agent_server_cert))"
+        server_key: "((consul_agent_server_key))"
+  - name: bbs
+    release: diego
+    properties:
+      diego:
+        bbs:
+          active_key_label: key-2016-06
+          encryption_keys:
+          - label: key-2016-06
+            passphrase: "((diego_bbs_encryption_keys_passphrase))"
+          sql:
+            db_connection_string: "((diego_bbs_sql_db_connection_string))"
+          etcd:
+            machines: []
+            ca_cert: nil
+            client_cert: nil
+            client_key: nil
+          ca_cert: "((diego_bbs_ca_cert))"
+          server_cert: "((diego_bbs_server_cert))"
+          server_key: "((diego_bbs_server_key))"
+  - name: metron_agent
+    release: loggregator
+    properties: *2
+- name: uaa
+  azs:
+  - z1
+  - z2
+  instances: 2
+  vm_type: m3.medium
+  vm_extensions:
+  - 10GB_ephemeral_disk
+  stemcell: default
+  networks:
+  - name: private
+  jobs:
+  - name: consul_agent
+    release: consul
+    properties:
+      consul:
+        agent:
+          mode: client
+          domain: cf.internal
+          servers: *4
+          services:
+            uaa: {}
+        encrypt_keys: "((consul_encrypt_keys))"
+        agent_cert: "((consul_agent_cert))"
+        agent_key: "((consul_agent_agent_key))"
+        ca_cert: "((consul_agent_ca_cert))"
+        server_cert: "((consul_agent_server_cert))"
+        server_key: "((consul_agent_server_key))"
+  - name: uaa
+    release: uaa
+    properties:
+      uaa:
+        sslCertificate: "((uaa_sslCertificate))"
+        sslPrivateKey: "((uaa_sslPrivateKey))"
+        zones:
+          internal:
+            hostnames:
+            - uaa.service.cf.internal
+        url: "((uaa_url))"
+        admin:
+          client_secret: "((uaa_admin_client_secret))"
+        scim:
+          users:
+          - name: "((uaa_scim_users_admin_name))"
+            password: "((uaa_scim_users_admin_password))"
+            groups:
+            - cloud_controller.admin
+            - doppler.firehose
+            - openid
+            - routing.router_groups.read
+            - scim.read
+            - scim.write
+        login:
+          client_secret: "((uaa_login_client_secret))"
+        jwt:
+          signing_key: "((uaa_jwt_signing_key))"
+          verification_key: "((uaa_jwt_verification_key))"
+        clients:
+          cc-service-dashboards:
+            authorities: clients.read,clients.write,clients.admin
+            authorized-grant-types: client_credentials
+            scope: openid,cloud_controller_service_permissions.read
+            secret: "((uaa_clients_cc-service-dashboards_secret))"
+          cc_routing:
+            authorities: routing.router_groups.read
+            authorized-grant-types: client_credentials
+            secret: "((uaa_clients_cc-routing_secret))"
+          cf:
+            access-token-validity: 600
+            authorities: uaa.none
+            authorized-grant-types: password,refresh_token
+            override: true
+            refresh-token-validity: 2592000
+            scope: cloud_controller.read,cloud_controller.write,openid,password.write,cloud_controller.admin,scim.read,scim.write,doppler.firehose,uaa.user,routing.router_groups.read
+          cloud_controller_username_lookup:
+            authorities: scim.userids
+            authorized-grant-types: client_credentials
+            secret: "((uaa_clients_cloud_controller_username_lookup_secret))"
+          doppler:
+            authorities: uaa.resource
+            override: true
+            secret: "((uaa_clients_doppler_secret))"
+          gorouter:
+            authorities: routing.routes.read
+            authorized-grant-types: client_credentials,refresh_token
+            secret: "((uaa_clients_gorouter_secret))"
+          ssh-proxy:
+            authorized-grant-types: authorization_code
+            autoapprove: true
+            override: true
+            redirect-uri: "/login"
+            scope: openid,cloud_controller.read,cloud_controller.write
+            secret: "((uaa_clients_ssh-proxy_secret))"
+          tcp_emitter:
+            authorities: routing.routes.write,routing.routes.read,routing.router_groups.read
+            authorized-grant-types: client_credentials,refresh_token
+            secret: "((uaa_clients_tcp_emitter_secret))"
+          tcp_router:
+            authorities: routing.routes.read,routing.router_groups.read
+            authorized-grant-types: client_credentials,refresh_token
+            secret: "((uaa_clients_tcp_router_secret))"
+      uaadb:
+        address: 10.0.31.193
+        databases:
+        - name: uaa
+          tag: uaa
+        db_scheme: mysql
+        port: 3306
+        roles:
+        - name: "((cf_mysql_mysql_seeded_databases_uaa_username))"
+          password: "((cf_mysql_mysql_seeded_databases_uaa_password))"
+          tag: admin
+  - name: route_registrar
+    release: routing
+    properties:
+      route_registrar:
+        routes:
+        - health_check:
+            name: uaa-healthcheck
+            script_path: "/var/vcap/jobs/uaa/bin/health_check"
+          name: uaa
+          port: 8080
+          registration_interval: 4s
+          tags:
+            component: uaa
+          uris:
+          - "((uaa_uri))"
+          - "((uaa_subdomain_uri))"
+          - "((login_uri))"
+          - "((login_subdomain_uri))"
+      nats:
+        machines: *3
+        password: "((nats_password))"
+        port: 4222
+        user: "((nats_user))"
+  - name: metron_agent
+    release: loggregator
+    properties: *2
+  - name: statsd-injector
+    release: loggregator
+- name: diego-brain
+  azs:
+  - z1
+  - z2
+  instances: 2
+  vm_type: m3.medium
+  vm_extensions:
+  - ssh-proxy-lb
+  stemcell: default
+  networks:
+  - name: private
+  jobs:
+  - name: consul_agent
+    release: consul
+    properties:
+      consul:
+        agent:
+          mode: client
+          domain: cf.internal
+          servers: *4
+        encrypt_keys: "((consul_encrypt_keys))"
+        agent_cert: "((consul_agent_cert))"
+        agent_key: "((consul_agent_agent_key))"
+        ca_cert: "((consul_agent_ca_cert))"
+        server_cert: "((consul_agent_server_cert))"
+        server_key: "((consul_agent_server_key))"
+  - name: ssh_proxy
+    release: diego
+    properties:
+      diego:
+        ssl:
+          skip_cert_verify: true
+        ssh_proxy:
+          enable_cf_auth: true
+          host_key: "((diego_ssh_proxy_host_key))"
+          uaa_secret: "((uaa_clients_ssh-proxy_secret))"
+          uaa_token_url: "((uaa_token_url))"
+          bbs: &5
+            ca_cert: "((diego_bbs_ca_cert))"
+            client_cert: "((diego_bbs_client_cert))"
+            client_key: "((diego_bbs_client_key))"
+  - name: file_server
+    release: diego
+  - name: auctioneer
+    release: diego
+    properties:
+      diego:
+        auctioneer:
+          bbs: *5
+  - name: metron_agent
+    release: loggregator
+    properties: *2
+- name: diego-cell
+  azs:
+  - z1
+  - z2
+  instances: 2
+  vm_type: r3.xlarge
+  vm_extensions:
+  - 100GB_ephemeral_disk
+  stemcell: default
+  networks:
+  - name: private
+  jobs:
+  - name: consul_agent
+    release: consul
+    properties:
+      consul:
+        agent:
+          mode: client
+          domain: cf.internal
+          servers: *4
+        encrypt_keys: "((consul_encrypt_keys))"
+        agent_cert: "((consul_agent_cert))"
+        agent_key: "((consul_agent_agent_key))"
+        ca_cert: "((consul_agent_ca_cert))"
+        server_cert: "((consul_agent_server_cert))"
+        server_key: "((consul_agent_server_key))"
+  - name: cflinuxfs2-rootfs-setup
+    release: cflinuxfs2-rootfs
+  - name: garden
+    release: garden-linux
+    properties:
+      garden:
+        default_container_grace_time: 0
+        deny_networks:
+        - 0.0.0.0/0
+        persistent_image_list:
+        - "/var/vcap/packages/cflinuxfs2/rootfs"
+  - name: rep
+    release: diego
+    properties:
+      diego:
+        rep:
+          bbs: *5
+          preloaded_rootfses:
+          - cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs
+        ssl:
+          skip_cert_verify: true
+  - name: metron_agent
+    release: loggregator
+    properties: *2
+- name: router
+  azs:
+  - z1
+  - z2
+  instances: 2
+  vm_type: m3.medium
+  vm_extensions:
+  - router-lb
+  stemcell: default
+  networks:
+  - name: private
+  jobs:
+  - name: consul_agent
+    release: consul
+    properties:
+      consul:
+        agent:
+          mode: client
+          domain: cf.internal
+          servers: *4
+          services:
+            gorouter: {}
+        encrypt_keys: "((consul_encrypt_keys))"
+        agent_cert: "((consul_agent_cert))"
+        agent_key: "((consul_agent_agent_key))"
+        ca_cert: "((consul_agent_ca_cert))"
+        server_cert: "((consul_agent_server_cert))"
+        server_key: "((consul_agent_server_key))"
+  - name: gorouter
+    release: routing
+    properties:
+      nats: *6
+      router:
+        status:
+          password: "((router_status_password))"
+          user: "((router_status_user))"
+        route_services_secret: "((router_route_services_secret))"
+        ssl_skip_validation: true
+      uaa:
+        clients:
+          gorouter:
+            secret: "((uaa_clients_gorouter_secret))"
+        ssl:
+          port: 1234
+  - name: metron_agent
+    release: loggregator
+    properties: *2
+- name: tcp-router
+  azs:
+  - z1
+  - z2
+  instances: 0
+  vm_type: m3.medium
+  stemcell: default
+  networks:
+  - name: private
+  jobs:
+  - name: haproxy
+    release: routing
+  - name: router_configurer
+    release: routing
+    properties:
+      skip_ssl_validation: true
+      uaa:
+        tls_port: 8443
+      router_configurer:
+        oauth_secret: "((uaa_clients_tcp_router_secret))"
+  - name: consul_agent
+    release: consul
+    properties:
+      consul:
+        agent:
+          mode: client
+          domain: cf.internal
+          servers: *4
+        encrypt_keys: "((consul_encrypt_keys))"
+        agent_cert: "((consul_agent_cert))"
+        agent_key: "((consul_agent_agent_key))"
+        ca_cert: "((consul_agent_ca_cert))"
+        server_cert: "((consul_agent_server_cert))"
+        server_key: "((consul_agent_server_key))"
+  - name: metron_agent
+    release: loggregator
+    properties: *2
+- name: route-emitter
+  azs:
+  - z1
+  - z2
+  instances: 2
+  vm_type: m3.medium
+  stemcell: default
+  networks:
+  - name: private
+  jobs:
+  - name: route_emitter
+    release: diego
+    properties:
+      diego:
+        route_emitter:
+          nats: *6
+          bbs:
+            ca_cert: "((diego_bbs_ca_cert))"
+            client_cert: "((diego_bbs_client_cert))"
+            client_key: "((diego_bbs_client_key))"
+            require_ssl: true
+  - name: consul_agent
+    release: consul
+    properties:
+      consul:
+        agent:
+          mode: client
+          domain: cf.internal
+          servers: *4
+        encrypt_keys: "((consul_encrypt_keys))"
+        agent_cert: "((consul_agent_cert))"
+        agent_key: "((consul_agent_agent_key))"
+        ca_cert: "((consul_agent_ca_cert))"
+        server_cert: "((consul_agent_server_cert))"
+        server_key: "((consul_agent_server_key))"
+  - name: metron_agent
+    release: loggregator
+    properties: *2
+- name: blobstore
+  azs:
+  - z1
+  instances: 1
+  vm_type: m3.large
+  vm_extensions:
+  - 10GB_ephemeral_disk
+  persistent_disk_type: 100GB
+  stemcell: default
+  networks:
+  - name: private
+  jobs:
+  - name: blobstore
+    release: capi
+    properties:
+      system_domain: "((system_domain))"
+      blobstore:
+        admin_users:
+        - username: "((blobstore_admin_users_username))"
+          password: "((blobstore_admin_users_password))"
+        secure_link:
+          secret: "((blobstore_secure_link_secret))"
+        tls:
+          cert: "((blobstore_tls_cert))"
+          private_key: "((blobstore_tls_private_key))"
+          ca_cert: "((blobstore_tls_ca_cert))"
+  - name: route_registrar
+    release: routing
+    properties:
+      route_registrar:
+        routes:
+        - name: blobstore
+          port: 8080
+          registration_interval: 20s
+          tags:
+            component: blobstore
+          uris:
+          - "((blobstore_uri))"
+      nats:
+        machines: *3
+        password: "((nats_password))"
+        port: 4222
+        user: "((nats_user))"
+  - name: consul_agent
+    release: consul
+    properties:
+      consul:
+        agent:
+          mode: server
+          domain: cf.internal
+          servers: *4
+          services:
+            blobstore: {}
+        encrypt_keys: "((consul_encrypt_keys))"
+        agent_cert: "((consul_agent_cert))"
+        agent_key: "((consul_agent_agent_key))"
+        ca_cert: "((consul_agent_ca_cert))"
+        server_cert: "((consul_agent_server_cert))"
+        server_key: "((consul_agent_server_key))"
+  - name: metron_agent
+    release: loggregator
+    properties: *2
+- name: api
+  azs:
+  - z1
+  - z2
+  instances: 2
+  vm_type: m3.large
+  vm_extensions:
+  - 50GB_ephemeral_disk
+  stemcell: default
+  networks:
+  - name: private
+  jobs:
+  - name: cloud_controller_ng
+    release: capi
+    properties:
+      router:
+        route_services_secret: "((router_route_services_secret))"
+      doppler: &8
+        port: 4443
+      logger_endpoint: &9
+        port: 4443
+      hm9000:
+        port: -1
+      ssl: &16
+        skip_cert_verify: true
+      system_domain: "((system_domain))"
+      system_domain_organization: default_org
+      app_domains: &17
+      - "((app_domain))"
+      app_ssh: &18
+        host_key_fingerprint: "((diego_ssh_proxy_host_key_fingerprint))"
+        oauth_client_id: ssh-proxy
+      nats:
+        machines: *3
+        password: "((nats_password))"
+        port: 4222
+        user: "((nats_user))"
+      uaa:
+        clients:
+          cc_routing:
+            secret: "((uaa_clients_cc-routing_secret))"
+          cloud_controller_username_lookup:
+            secret: "((uaa_clients_cloud_controller_username_lookup_secret))"
+          cc-service-dashboards:
+            secret: "((uaa_clients_cc-service-dashboards_secret))"
+        url: "((uaa_url))"
+        jwt:
+          verification_key: "((uaa_jwt_verification_key))"
+      cc:
+        default_running_security_groups: &11
+        - public_networks
+        - dns
+        default_staging_security_groups: &12
+        - public_networks
+        - dns
+        security_group_definitions: &13
+        - name: public_networks
+          rules:
+          - destination: 0.0.0.0-9.255.255.255
+            protocol: all
+          - destination: 11.0.0.0-169.253.255.255
+            protocol: all
+          - destination: 169.255.0.0-172.15.255.255
+            protocol: all
+          - destination: 172.32.0.0-192.167.255.255
+            protocol: all
+          - destination: 192.169.0.0-255.255.255.255
+            protocol: all
+        - name: dns
+          rules:
+          - destination: 0.0.0.0/0
+            ports: '53'
+            protocol: tcp
+          - destination: 0.0.0.0/0
+            ports: '53'
+            protocol: udp
+        install_buildpacks: &10
+        - name: java_buildpack
+          package: buildpack_java
+        - name: ruby_buildpack
+          package: ruby-buildpack
+        - name: nodejs_buildpack
+          package: nodejs-buildpack
+        - name: go_buildpack
+          package: go-buildpack
+        - name: python_buildpack
+          package: python-buildpack
+        - name: php_buildpack
+          package: php-buildpack
+        - name: staticfile_buildpack
+          package: staticfile-buildpack
+        - name: binary_buildpack
+          package: binary-buildpack
+        default_to_diego_backend: true
+        db_encryption_key: "((cc_db_encryption_key))"
+        bulk_api_password: "((cc_bulk_api_password))"
+        internal_api_password: "((cc_internal_api_password))"
+        staging_upload_user: "((cc_staging_upload_user))"
+        staging_upload_password: "((cc_staging_upload_password))"
+        quota_definitions: &14
+          default:
+            memory_limit: 102400
+            non_basic_services_allowed: true
+            total_routes: 1000
+            total_services: -1
+        buildpacks: &7
+          blobstore_type: webdav
+          webdav_config:
+            blobstore_timeout: 5
+            password: "((blobstore_admin_users_password))"
+            private_endpoint: "((blobstore_private_url))"
+            public_endpoint: "((blobstore_public_url))"
+            username: "((blobstore_admin_users_username))"
+        resource_pool: *7
+        packages: *7
+        droplets: *7
+      ccdb: &15
+        databases:
+        - name: cloud_controller
+          tag: cc
+        address: 10.0.31.193
+        db_scheme: mysql
+        port: 3306
+        roles:
+        - name: "((cf_mysql_mysql_seeded_databases_cc_username))"
+          password: "((cf_mysql_mysql_seeded_databases_cc_password))"
+          tag: admin
+  - name: cloud_controller_worker
+    release: capi
+    properties:
+      doppler: *8
+      logger_endpoint: *9
+      hm9000:
+        port: -1
+      cc:
+        db_encryption_key: "((cc_db_encryption_key))"
+        default_to_diego_backend: true
+        install_buildpacks: *10
+        default_running_security_groups: *11
+        default_staging_security_groups: *12
+        security_group_definitions: *13
+        internal_api_password: "((cc_internal_api_password))"
+        bulk_api_password: "((cc_bulk_api_password))"
+        quota_definitions: *14
+        staging_upload_user: "((cc_staging_upload_user))"
+        staging_upload_password: "((cc_staging_upload_password))"
+        resource_pool: *7
+        packages: *7
+        droplets: *7
+        buildpacks: *7
+      ccdb: *15
+      ssl: *16
+      system_domain: "((system_domain))"
+      system_domain_organization: default_org
+      app_domains: *17
+      app_ssh: *18
+      nats:
+        machines: *3
+        password: "((nats_password))"
+        port: 4222
+        user: "((nats_user))"
+      uaa:
+        clients:
+          cc-service-dashboards:
+            secret: "((uaa_clients_cc-service-dashboards_secret))"
+        url: "((uaa_url))"
+        jwt:
+          verification_key: "((uaa_jwt_verification_key))"
+  - name: java-buildpack
+    release: cf
+  - name: java-offline-buildpack
+    release: cf
+  - name: go-buildpack
+    release: cf
+  - name: binary-buildpack
+    release: cf
+  - name: nodejs-buildpack
+    release: cf
+  - name: ruby-buildpack
+    release: cf
+  - name: php-buildpack
+    release: cf
+  - name: python-buildpack
+    release: cf
+  - name: staticfile-buildpack
+    release: cf
+  - name: route_registrar
+    release: routing
+    properties:
+      route_registrar:
+        routes:
+        - name: api
+          registration_interval: 20s
+          port: 9022
+          uris:
+          - "((api_uri))"
+      nats:
+        machines: *3
+        password: "((nats_password))"
+        port: 4222
+        user: "((nats_user))"
+  - name: consul_agent
+    release: consul
+    properties:
+      consul:
+        agent:
+          mode: client
+          domain: cf.internal
+          servers: *4
+          services:
+            cloud_controller_ng: {}
+            routing-api: {}
+        encrypt_keys: "((consul_encrypt_keys))"
+        agent_cert: "((consul_agent_cert))"
+        agent_key: "((consul_agent_agent_key))"
+        ca_cert: "((consul_agent_ca_cert))"
+        server_cert: "((consul_agent_server_cert))"
+        server_key: "((consul_agent_server_key))"
+  - name: statsd-injector
+    release: loggregator
+  - name: metron_agent
+    release: loggregator
+    properties: *2
+  - name: routing-api
+    release: routing
+    properties:
+      routing_api:
+        system_domain: "((system_domain))"
+        etcd:
+          servers:
+          - etcd.service.cf.internal
+          client_cert: "((etcd_client_cert))"
+          client_key: "((etcd_client_key))"
+          ca_cert: "((etcd_ca_cert))"
+          require_ssl: true
+        router_groups:
+        - name: default-tcp
+          type: tcp
+          reservable_ports: 1024-65535
+      skip_ssl_validation: true
+      uaa:
+        tls_port: 8443
+- name: cc_clock
+  azs:
+  - z1
+  instances: 1
+  vm_type: m3.large
+  vm_extensions:
+  - 5GB_ephemeral_disk
+  stemcell: default
+  networks:
+  - name: private
+  jobs:
+  - name: cloud_controller_clock
+    release: capi
+    properties:
+      doppler: *8
+      logger_endpoint: *9
+      hm9000:
+        port: -1
+      cc:
+        db_encryption_key: "((cc_db_encryption_key))"
+        default_to_diego_backend: true
+        install_buildpacks: *10
+        default_running_security_groups: *11
+        default_staging_security_groups: *12
+        security_group_definitions: *13
+        internal_api_password: "((cc_internal_api_password))"
+        bulk_api_password: "((cc_bulk_api_password))"
+        quota_definitions: *14
+        staging_upload_user: "((cc_staging_upload_user))"
+        staging_upload_password: "((cc_staging_upload_password))"
+        resource_pool: *7
+        packages: *7
+        droplets: *7
+        buildpacks: *7
+      ccdb: *15
+      ssl: *16
+      system_domain: "((system_domain))"
+      system_domain_organization: default_org
+      app_domains: *17
+      app_ssh: *18
+      nats:
+        machines: *3
+        password: "((nats_password))"
+        port: 4222
+        user: "((nats_user))"
+      uaa:
+        clients:
+          cc-service-dashboards:
+            secret: "((uaa_clients_cc-service-dashboards_secret))"
+        url: "((uaa_url))"
+        jwt:
+          verification_key: "((uaa_jwt_verification_key))"
+  - name: statsd-injector
+    release: loggregator
+  - name: metron_agent
+    release: loggregator
+    properties: *2
+- name: cc_bridge
+  azs:
+  - z1
+  - z2
+  instances: 2
+  vm_type: m3.medium
+  vm_extensions:
+  - 5GB_ephemeral_disk
+  stemcell: default
+  networks:
+  - name: private
+  jobs:
+  - name: consul_agent
+    release: consul
+    properties:
+      consul:
+        agent:
+          mode: client
+          domain: cf.internal
+          servers: *4
+        encrypt_keys: "((consul_encrypt_keys))"
+        agent_cert: "((consul_agent_cert))"
+        agent_key: "((consul_agent_agent_key))"
+        ca_cert: "((consul_agent_ca_cert))"
+        server_cert: "((consul_agent_server_cert))"
+        server_key: "((consul_agent_server_key))"
+  - name: stager
+    release: capi
+    properties:
+      diego:
+        ssl: *16
+      capi:
+        stager:
+          bbs: *5
+          cc:
+            basic_auth_password: "((cc_internal_api_password))"
+  - name: nsync
+    release: capi
+    properties:
+      diego:
+        ssl: *16
+      capi:
+        nsync:
+          bbs: *5
+          cc:
+            basic_auth_password: "((cc_internal_api_password))"
+            base_url: "((api_url))"
+          diego_privileged_containers: true
+  - name: tps
+    release: capi
+    properties:
+      diego:
+        ssl: *16
+      capi:
+        tps:
+          traffic_controller_url: ''
+          bbs: *5
+          cc:
+            basic_auth_password: "((cc_internal_api_password))"
+  - name: cc_uploader
+    release: capi
+    properties:
+      diego:
+        ssl: *16
+  - name: metron_agent
+    release: loggregator
+    properties: *2
+- name: doppler
+  azs:
+  - z1
+  - z2
+  instances: 2
+  vm_type: m3.medium
+  vm_extensions:
+  - 5GB_ephemeral_disk
+  stemcell: default
+  networks:
+  - name: private
+  jobs:
+  - name: doppler
+    release: loggregator
+    properties:
+      doppler:
+        etcd:
+          client_cert: "((etcd_client_cert))"
+          client_key: "((etcd_client_key))"
+        syslog_skip_cert_verify: true
+        tls:
+          enable: true
+          server_cert: "((doppler_tls_server_cert))"
+          server_key: "((doppler_tls_server_key))"
+      loggregator:
+        etcd:
+          require_ssl: true
+          ca_cert: "((etcd_ca_cert))"
+          machines:
+          - etcd.service.cf.internal
+        tls:
+          ca_cert: "((loggregator_tls_ca_cert))"
+      doppler_endpoint:
+        shared_secret: "((dropsonde_shared_secret))"
+  - name: syslog_drain_binder
+    release: loggregator
+    properties:
+      syslog_drain_binder:
+        etcd:
+          client_cert: "((etcd_client_cert))"
+          client_key: "((etcd_client_key))"
+      loggregator:
+        etcd:
+          require_ssl: true
+          ca_cert: "((etcd_ca_cert))"
+          machines:
+          - etcd.service.cf.internal
+      system_domain: "((system_domain))"
+      cc:
+        bulk_api_password: "((cc_bulk_api_password))"
+        srv_api_uri: "((api_url))"
+      ssl: *16
+  - name: metron_agent
+    release: loggregator
+    properties: *2
+  - name: consul_agent
+    release: consul
+    properties:
+      consul:
+        agent:
+          mode: client
+          domain: cf.internal
+          servers: *4
+        encrypt_keys: "((consul_encrypt_keys))"
+        agent_cert: "((consul_agent_cert))"
+        agent_key: "((consul_agent_agent_key))"
+        ca_cert: "((consul_agent_ca_cert))"
+        server_cert: "((consul_agent_server_cert))"
+        server_key: "((consul_agent_server_key))"
+- name: log_controller
+  azs:
+  - z1
+  - z2
+  instances: 2
+  vm_type: t2.small
+  vm_extensions:
+  - 5GB_ephemeral_disk
+  stemcell: default
+  networks:
+  - name: private
+  jobs:
+  - name: loggregator_trafficcontroller
+    release: loggregator
+    properties:
+      traffic_controller:
+        etcd:
+          client_cert: "((etcd_client_cert))"
+          client_key: "((etcd_client_key))"
+      uaa:
+        clients:
+          doppler:
+            secret: "((uaa_clients_doppler_secret))"
+        url: "((uaa_url))"
+      loggregator:
+        etcd:
+          require_ssl: true
+          ca_cert: "((etcd_ca_cert))"
+          machines:
+          - etcd.service.cf.internal
+      system_domain: "((system_domain))"
+      ssl: *16
+      cc:
+        srv_api_uri: "((api_url))"
+  - name: route_registrar
+    release: routing
+    properties:
+      route_registrar:
+        routes:
+        - name: loggregator
+          port: 8080
+          registration_interval: 20s
+          uris:
+          - "((loggregator_uri))"
+        - name: doppler
+          port: 8081
+          registration_interval: 20s
+          uris:
+          - "((doppler_uri))"
+          - "((doppler_subdomain_uri))"
+      nats:
+        machines: *3
+        password: "((nats_password))"
+        port: 4222
+        user: "((nats_user))"
+  - name: metron_agent
+    release: loggregator
+    properties: *2
+  - name: consul_agent
+    release: consul
+    properties:
+      consul:
+        agent:
+          mode: client
+          domain: cf.internal
+          servers: *4
+        encrypt_keys: "((consul_encrypt_keys))"
+        agent_cert: "((consul_agent_cert))"
+        agent_key: "((consul_agent_agent_key))"
+        ca_cert: "((consul_agent_ca_cert))"
+        server_cert: "((consul_agent_server_cert))"
+        server_key: "((consul_agent_server_key))"
+releases:
+- name: capi
+  url: https://bosh.io/d/github.com/cloudfoundry/capi-release?v=1.2.0
+  version: 1.2.0
+  sha1: 1c5b1ef270a1b63091d3f0b5928256346525a318
+- name: consul
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=106
+  version: '106'
+  sha1: 6ab517f28b595a4794c48282359fe4365648e921
+- name: diego
+  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=0.1482.0
+  version: 0.1482.0
+  sha1: 4d7740d58d2245b531d5fb5a3c87ab55cdd4a76b
+- name: etcd
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/etcd-release?v=64
+  version: '64'
+  sha1: 7345569e73c80681124d3cd97a3dc1be372b0381
+- name: loggregator
+  url: https://bosh.io/d/github.com/cloudfoundry/loggregator?v=61
+  version: '61'
+  sha1: 279f52eda0acf1fecfe450faee173a92e6c13486
+- name: nats
+  url: https://bosh.io/d/github.com/cloudfoundry/nats-release?v=9
+  version: '9'
+  sha1: 4d036477c80e28a609086fca66005c8e824c5118
+- name: cf-mysql
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-mysql-release?v=26
+  version: '26'
+  sha1: 43aa3449855a60b774c66cc5ab3f02caa43974dc
+- name: uaa
+  url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=13
+  version: '13'
+  sha1: 5229c6e8793c4061950b4e0738fc66612bc016ba
+- name: garden-linux
+  url: https://bosh.io/d/github.com/cloudfoundry/garden-linux-release?v=0.342.0
+  version: 0.342.0
+  sha1: 5da920b05879f66d813526793e2a73706b36b9cb
+- name: cflinuxfs2-rootfs
+  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-rootfs-release?v=1.24.0
+  version: 1.24.0
+  sha1: 8c9a302b9026b84752169d729a6557d3e88adfdd
+- name: routing
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.137.0
+  version: 0.137.0
+  sha1: c38599bc2ff30187fb63e734934c6b0b9d166a9c
+- name: cf
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-release?v=240
+  version: '240'
+  sha1: 7dba7cc0c9c4beca699d8c876ac046890e13bb9e
+stemcells:
+- alias: default
+  os: ubuntu-trusty
+  version: '3262.7'
