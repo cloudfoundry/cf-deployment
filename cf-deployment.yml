@@ -85,14 +85,12 @@ instance_groups:
     properties:
       nats: &6
         password: "((nats_password))"
-        port: 4222
         user: "((nats_user))"
   - name: nats
     release: nats
     properties:
       nats:
         password: "((nats_password))"
-        port: 4222
         user: "((nats_user))"
         debug: true
         monitor_port: 9222
@@ -393,7 +391,6 @@ instance_groups:
           - "((login_subdomain_uri))"
       nats:
         password: "((nats_password))"
-        port: 4222
         user: "((nats_user))"
   - name: metron_agent
     release: loggregator
@@ -664,7 +661,6 @@ instance_groups:
           - "((blobstore_uri))"
       nats:
         password: "((nats_password))"
-        port: 4222
         user: "((nats_user))"
   - name: consul_agent
     release: consul
@@ -719,7 +715,6 @@ instance_groups:
         oauth_client_id: ssh-proxy
       nats:
         password: "((nats_password))"
-        port: 4222
         user: "((nats_user))"
       uaa:
         clients:
@@ -842,7 +837,6 @@ instance_groups:
       app_ssh: *18
       nats:
         password: "((nats_password))"
-        port: 4222
         user: "((nats_user))"
       uaa:
         clients:
@@ -881,7 +875,6 @@ instance_groups:
           - "((api_uri))"
       nats:
         password: "((nats_password))"
-        port: 4222
         user: "((nats_user))"
   - name: consul_agent
     release: consul
@@ -966,7 +959,6 @@ instance_groups:
       app_ssh: *18
       nats:
         password: "((nats_password))"
-        port: 4222
         user: "((nats_user))"
       uaa:
         clients:
@@ -1168,7 +1160,6 @@ instance_groups:
           - "((doppler_subdomain_uri))"
       nats:
         password: "((nats_password))"
-        port: 4222
         user: "((nats_user))"
   - name: metron_agent
     release: loggregator
