@@ -76,9 +76,6 @@ instance_groups:
   stemcell: default
   networks:
   - name: private
-    static_ips: &3
-    - 10.0.31.191
-    - 10.0.47.191
   jobs:
   - name: nats_stream_forwarder
     release: nats
