@@ -84,7 +84,6 @@ instance_groups:
     release: nats
     properties:
       nats: &6
-        machines: *3
         password: "((nats_password))"
         port: 4222
         user: "((nats_user))"
@@ -92,7 +91,6 @@ instance_groups:
     release: nats
     properties:
       nats:
-        machines: *3
         password: "((nats_password))"
         port: 4222
         user: "((nats_user))"
@@ -161,7 +159,6 @@ instance_groups:
     properties:
       etcd_metrics_server:
         nats:
-          machines: *3
           password: "((nats_password))"
           username: nats
         etcd:
@@ -395,7 +392,6 @@ instance_groups:
           - "((login_uri))"
           - "((login_subdomain_uri))"
       nats:
-        machines: *3
         password: "((nats_password))"
         port: 4222
         user: "((nats_user))"
@@ -667,7 +663,6 @@ instance_groups:
           uris:
           - "((blobstore_uri))"
       nats:
-        machines: *3
         password: "((nats_password))"
         port: 4222
         user: "((nats_user))"
@@ -723,7 +718,6 @@ instance_groups:
         host_key_fingerprint: "((diego_ssh_proxy_host_key_fingerprint))"
         oauth_client_id: ssh-proxy
       nats:
-        machines: *3
         password: "((nats_password))"
         port: 4222
         user: "((nats_user))"
@@ -847,7 +841,6 @@ instance_groups:
       app_domains: *17
       app_ssh: *18
       nats:
-        machines: *3
         password: "((nats_password))"
         port: 4222
         user: "((nats_user))"
@@ -887,7 +880,6 @@ instance_groups:
           uris:
           - "((api_uri))"
       nats:
-        machines: *3
         password: "((nats_password))"
         port: 4222
         user: "((nats_user))"
@@ -973,7 +965,6 @@ instance_groups:
       app_domains: *17
       app_ssh: *18
       nats:
-        machines: *3
         password: "((nats_password))"
         port: 4222
         user: "((nats_user))"
@@ -1176,7 +1167,6 @@ instance_groups:
           - "((doppler_uri))"
           - "((doppler_subdomain_uri))"
       nats:
-        machines: *3
         password: "((nats_password))"
         port: 4222
         user: "((nats_user))"
