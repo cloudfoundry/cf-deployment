@@ -158,10 +158,6 @@ instance_groups:
     release: etcd
     properties:
       etcd_metrics_server:
-        nats:
-          machines: *3
-          password: "((nats_password))"
-          username: nats
         etcd:
           dns_suffix: etcd.service.cf.internal
           require_ssl: true
