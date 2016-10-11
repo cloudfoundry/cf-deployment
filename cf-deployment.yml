@@ -189,6 +189,8 @@ instance_groups:
       network_name: private
       cf_mysql:
         mysql:
+          galera_healthcheck:
+            db_password: "((cf_mysql_galera_healthcheck_password))"
           admin_password: "((cf_mysql_mysql_admin_password))"
           roadmin_password: "((cf_mysql_mysql_roadmin_password))"
           cluster_health:
