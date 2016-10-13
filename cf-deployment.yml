@@ -125,6 +125,8 @@ instance_groups:
   instances: 3
   persistent_disk_type: 5GB
   vm_type: m3.medium
+  vm_extensions:
+  - 5GB_ephemeral_disk
   stemcell: default
   update:
     serial: true
@@ -141,7 +143,6 @@ instance_groups:
     properties:
       etcd:
         advertise_urls_dns_suffix: etcd.service.cf.internal
-        disable_network_diagnostics: true
         cluster:
         - instances: 3
           name: etcd
