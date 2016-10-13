@@ -138,6 +138,22 @@ instance_groups:
     - 10.0.47.192
     - 10.0.63.192
   jobs:
+  - name: consul_agent
+    release: consul
+    properties:
+      consul:
+        agent:
+          mode: client
+          domain: cf.internal
+          servers: *4
+          services:
+            etcd: {}
+        encrypt_keys: "((consul_encrypt_keys))"
+        agent_cert: "((consul_agent_cert))"
+        agent_key: "((consul_agent_agent_key))"
+        ca_cert: "((consul_agent_ca_cert))"
+        server_cert: "((consul_agent_server_cert))"
+        server_key: "((consul_agent_server_key))"
   - name: etcd
     release: etcd
     properties:
@@ -156,22 +172,6 @@ instance_groups:
         peer_ca_cert: "((etcd_peer_ca_cert))"
         peer_cert: "((etcd_peer_cert))"
         peer_key: "((etcd_peer_key))"
-  - name: consul_agent
-    release: consul
-    properties:
-      consul:
-        agent:
-          mode: client
-          domain: cf.internal
-          servers: *4
-          services:
-            etcd: {}
-        encrypt_keys: "((consul_encrypt_keys))"
-        agent_cert: "((consul_agent_cert))"
-        agent_key: "((consul_agent_agent_key))"
-        ca_cert: "((consul_agent_ca_cert))"
-        server_cert: "((consul_agent_server_cert))"
-        server_key: "((consul_agent_server_key))"
   - name: etcd_metrics_server
     release: etcd
     properties:
@@ -592,16 +592,6 @@ instance_groups:
   networks:
   - name: private
   jobs:
-  - name: haproxy
-    release: routing
-  - name: router_configurer
-    release: routing
-    properties:
-      skip_ssl_validation: true
-      uaa:
-        tls_port: 8443
-      router_configurer:
-        oauth_secret: "((uaa_clients_tcp_router_secret))"
   - name: consul_agent
     release: consul
     properties:
@@ -616,6 +606,16 @@ instance_groups:
         ca_cert: "((consul_agent_ca_cert))"
         server_cert: "((consul_agent_server_cert))"
         server_key: "((consul_agent_server_key))"
+  - name: haproxy
+    release: routing
+  - name: router_configurer
+    release: routing
+    properties:
+      skip_ssl_validation: true
+      uaa:
+        tls_port: 8443
+      router_configurer:
+        oauth_secret: "((uaa_clients_tcp_router_secret))"
   - name: metron_agent
     release: loggregator
     properties: *2
@@ -629,17 +629,6 @@ instance_groups:
   networks:
   - name: private
   jobs:
-  - name: route_emitter
-    release: diego
-    properties:
-      diego:
-        route_emitter:
-          nats: *6
-          bbs:
-            ca_cert: "((diego_bbs_ca_cert))"
-            client_cert: "((diego_bbs_client_cert))"
-            client_key: "((diego_bbs_client_key))"
-            require_ssl: true
   - name: consul_agent
     release: consul
     properties:
@@ -654,6 +643,17 @@ instance_groups:
         ca_cert: "((consul_agent_ca_cert))"
         server_cert: "((consul_agent_server_cert))"
         server_key: "((consul_agent_server_key))"
+  - name: route_emitter
+    release: diego
+    properties:
+      diego:
+        route_emitter:
+          nats: *6
+          bbs:
+            ca_cert: "((diego_bbs_ca_cert))"
+            client_cert: "((diego_bbs_client_cert))"
+            client_key: "((diego_bbs_client_key))"
+            require_ssl: true
   - name: metron_agent
     release: loggregator
     properties: *2
@@ -669,6 +669,22 @@ instance_groups:
   networks:
   - name: private
   jobs:
+  - name: consul_agent
+    release: consul
+    properties:
+      consul:
+        agent:
+          mode: client
+          domain: cf.internal
+          servers: *4
+          services:
+            blobstore: {}
+        encrypt_keys: "((consul_encrypt_keys))"
+        agent_cert: "((consul_agent_cert))"
+        agent_key: "((consul_agent_agent_key))"
+        ca_cert: "((consul_agent_ca_cert))"
+        server_cert: "((consul_agent_server_cert))"
+        server_key: "((consul_agent_server_key))"
   - name: blobstore
     release: capi
     properties:
@@ -700,22 +716,6 @@ instance_groups:
         password: "((nats_password))"
         port: 4222
         user: "((nats_user))"
-  - name: consul_agent
-    release: consul
-    properties:
-      consul:
-        agent:
-          mode: client
-          domain: cf.internal
-          servers: *4
-          services:
-            blobstore: {}
-        encrypt_keys: "((consul_encrypt_keys))"
-        agent_cert: "((consul_agent_cert))"
-        agent_key: "((consul_agent_agent_key))"
-        ca_cert: "((consul_agent_ca_cert))"
-        server_cert: "((consul_agent_server_cert))"
-        server_key: "((consul_agent_server_key))"
   - name: metron_agent
     release: loggregator
     properties: *2
@@ -731,6 +731,23 @@ instance_groups:
   networks:
   - name: private
   jobs:
+  - name: consul_agent
+    release: consul
+    properties:
+      consul:
+        agent:
+          mode: client
+          domain: cf.internal
+          servers: *4
+          services:
+            cloud_controller_ng: {}
+            routing-api: {}
+        encrypt_keys: "((consul_encrypt_keys))"
+        agent_cert: "((consul_agent_cert))"
+        agent_key: "((consul_agent_agent_key))"
+        ca_cert: "((consul_agent_ca_cert))"
+        server_cert: "((consul_agent_server_cert))"
+        server_key: "((consul_agent_server_key))"
   - name: cloud_controller_ng
     release: capi
     properties:
@@ -920,23 +937,6 @@ instance_groups:
         password: "((nats_password))"
         port: 4222
         user: "((nats_user))"
-  - name: consul_agent
-    release: consul
-    properties:
-      consul:
-        agent:
-          mode: client
-          domain: cf.internal
-          servers: *4
-          services:
-            cloud_controller_ng: {}
-            routing-api: {}
-        encrypt_keys: "((consul_encrypt_keys))"
-        agent_cert: "((consul_agent_cert))"
-        agent_key: "((consul_agent_agent_key))"
-        ca_cert: "((consul_agent_ca_cert))"
-        server_cert: "((consul_agent_server_cert))"
-        server_key: "((consul_agent_server_key))"
   - name: statsd-injector
     release: loggregator
   - name: metron_agent
@@ -1113,6 +1113,20 @@ instance_groups:
   networks:
   - name: private
   jobs:
+  - name: consul_agent
+    release: consul
+    properties:
+      consul:
+        agent:
+          mode: client
+          domain: cf.internal
+          servers: *4
+        encrypt_keys: "((consul_encrypt_keys))"
+        agent_cert: "((consul_agent_cert))"
+        agent_key: "((consul_agent_agent_key))"
+        ca_cert: "((consul_agent_ca_cert))"
+        server_cert: "((consul_agent_server_cert))"
+        server_key: "((consul_agent_server_key))"
   - name: doppler
     release: loggregator
     properties:
@@ -1156,6 +1170,18 @@ instance_groups:
   - name: metron_agent
     release: loggregator
     properties: *2
+- name: log_controller
+  azs:
+  - z1
+  - z2
+  instances: 2
+  vm_type: t2.small
+  vm_extensions:
+  - 5GB_ephemeral_disk
+  stemcell: default
+  networks:
+  - name: private
+  jobs:
   - name: consul_agent
     release: consul
     properties:
@@ -1170,18 +1196,6 @@ instance_groups:
         ca_cert: "((consul_agent_ca_cert))"
         server_cert: "((consul_agent_server_cert))"
         server_key: "((consul_agent_server_key))"
-- name: log_controller
-  azs:
-  - z1
-  - z2
-  instances: 2
-  vm_type: t2.small
-  vm_extensions:
-  - 5GB_ephemeral_disk
-  stemcell: default
-  networks:
-  - name: private
-  jobs:
   - name: loggregator_trafficcontroller
     release: loggregator
     properties:
@@ -1228,20 +1242,6 @@ instance_groups:
   - name: metron_agent
     release: loggregator
     properties: *2
-  - name: consul_agent
-    release: consul
-    properties:
-      consul:
-        agent:
-          mode: client
-          domain: cf.internal
-          servers: *4
-        encrypt_keys: "((consul_encrypt_keys))"
-        agent_cert: "((consul_agent_cert))"
-        agent_key: "((consul_agent_agent_key))"
-        ca_cert: "((consul_agent_ca_cert))"
-        server_cert: "((consul_agent_server_cert))"
-        server_key: "((consul_agent_server_key))"
 releases:
 - name: capi
   url: https://bosh.io/d/github.com/cloudfoundry/capi-release?v=1.7.0
