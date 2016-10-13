@@ -125,6 +125,7 @@ instance_groups:
     properties:
       etcd:
         advertise_urls_dns_suffix: etcd.service.cf.internal
+        disable_network_diagnostics: true
         cluster:
         - instances: 3
           name: etcd
