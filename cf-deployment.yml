@@ -88,8 +88,6 @@ instance_groups:
           mode: client
           domain: cf.internal
           servers: *3
-          services:
-            etcd: {}
         encrypt_keys: "((consul_encrypt_keys))"
         agent_cert: "((consul_agent_cert))"
         agent_key: "((consul_agent_agent_key))"
@@ -209,8 +207,6 @@ instance_groups:
           mode: client
           domain: cf.internal
           servers: *3
-          services:
-            etcd: {}
         encrypt_keys: "((consul_encrypt_keys))"
         agent_cert: "((consul_agent_cert))"
         agent_key: "((consul_agent_agent_key))"
@@ -980,8 +976,6 @@ instance_groups:
           mode: client
           domain: cf.internal
           servers: *3
-          services:
-            etcd: {}
         encrypt_keys: "((consul_encrypt_keys))"
         agent_cert: "((consul_agent_cert))"
         agent_key: "((consul_agent_agent_key))"
