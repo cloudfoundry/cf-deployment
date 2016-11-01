@@ -26,10 +26,10 @@ properties_shared_across_every_instance_group:
         - etcd.service.cf.internal
 update:
   canaries: 0
-  canary_watch_time: 30000
+  canary_watch_time: 30000-1200000
   max_in_flight: 5
   serial: false
-  update_watch_time: 600000
+  update_watch_time: 5000-1200000
 instance_groups:
 - name: consul
   azs:
