@@ -26,10 +26,10 @@ properties_shared_across_every_instance_group:
         - etcd.service.cf.internal
 update:
   canaries: 0
-  canary_watch_time: 30000
+  canary_watch_time: 30000-1200000
   max_in_flight: 5
   serial: false
-  update_watch_time: 5000
+  update_watch_time: 5000-1200000
 instance_groups:
 - name: consul
   azs:
@@ -73,6 +73,8 @@ instance_groups:
   - z2
   instances: 2
   vm_type: c3.large
+  vm_extensions:
+  - 5GB_ephemeral_disk
   stemcell: default
   networks:
   - name: private
@@ -88,8 +90,6 @@ instance_groups:
           mode: client
           domain: cf.internal
           servers: *3
-          services:
-            etcd: {}
         encrypt_keys: "((consul_encrypt_keys))"
         agent_cert: "((consul_agent_cert))"
         agent_key: "((consul_agent_agent_key))"
@@ -209,8 +209,6 @@ instance_groups:
           mode: client
           domain: cf.internal
           servers: *3
-          services:
-            etcd: {}
         encrypt_keys: "((consul_encrypt_keys))"
         agent_cert: "((consul_agent_cert))"
         agent_key: "((consul_agent_agent_key))"
@@ -980,8 +978,6 @@ instance_groups:
           mode: client
           domain: cf.internal
           servers: *3
-          services:
-            etcd: {}
         encrypt_keys: "((consul_encrypt_keys))"
         agent_cert: "((consul_agent_cert))"
         agent_key: "((consul_agent_agent_key))"
@@ -1244,13 +1240,13 @@ instance_groups:
     properties: *2
 releases:
 - name: capi
-  url: https://bosh.io/d/github.com/cloudfoundry/capi-release?v=1.8.0
-  version: 1.8.0
-  sha1: db40786bc0c1214fe20e663014927fc6693212bf
+  url: https://bosh.io/d/github.com/cloudfoundry/capi-release?v=1.10.0
+  version: 1.10.0
+  sha1: 5021acc1aee1fa92f75dec9927073f8febdccf3b
 - name: consul
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=131
-  version: '131'
-  sha1: 4427bc16e37644e1b99066ebadbd4a6b57398f1f
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=133
+  version: '133'
+  sha1: ee72ca4a259701f82403d3c139517b81389a74c8
 - name: diego
   url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=0.1487.0
   version: 0.1487.0
@@ -1276,9 +1272,9 @@ releases:
   version: '20'
   sha1: 3d7d72229d660b566444bd09548cc7727a18480d
 - name: garden-runc
-  url: https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.0.1
-  version: 1.0.1
-  sha1: 9f844f35b1f0b0854b9f8f2a3cba6b67535479fc
+  url: https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.0.2
+  version: 1.0.2
+  sha1: 9b509e9ef5d075af66af80f8e7b4891c7b88d1b6
 - name: cflinuxfs2-rootfs
   url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-rootfs-release?v=1.38.0
   version: 1.38.0
