@@ -73,6 +73,8 @@ instance_groups:
   - z2
   instances: 2
   vm_type: c3.large
+  vm_extensions:
+  - 5GB_ephemeral_disk
   stemcell: default
   networks:
   - name: private
