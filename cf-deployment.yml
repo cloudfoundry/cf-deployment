@@ -89,7 +89,7 @@ instance_groups:
           domain: cf.internal
           servers: *3
           services:
-            etcd: {}
+            nats: {}
         encrypt_keys: "((consul_encrypt_keys))"
         agent_cert: "((consul_agent_cert))"
         agent_key: "((consul_agent_agent_key))"
@@ -210,7 +210,7 @@ instance_groups:
           domain: cf.internal
           servers: *3
           services:
-            etcd: {}
+            mysql: {}
         encrypt_keys: "((consul_encrypt_keys))"
         agent_cert: "((consul_agent_cert))"
         agent_key: "((consul_agent_agent_key))"
@@ -981,7 +981,7 @@ instance_groups:
           domain: cf.internal
           servers: *3
           services:
-            etcd: {}
+            cc_clock: {}
         encrypt_keys: "((consul_encrypt_keys))"
         agent_cert: "((consul_agent_cert))"
         agent_key: "((consul_agent_agent_key))"
