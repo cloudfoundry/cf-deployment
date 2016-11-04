@@ -904,23 +904,23 @@ instance_groups:
         jwt:
           verification_key: "((uaa_jwt_verification_key))"
   - name: java-buildpack
-    release: cf
+    release: java-buildpack-release
   - name: java-offline-buildpack
-    release: cf
+    release: java-offline-buildpack-release
   - name: go-buildpack
-    release: cf
+    release: go-buildpack-release
   - name: binary-buildpack
-    release: cf
+    release: binary-buildpack-release
   - name: nodejs-buildpack
-    release: cf
+    release: nodejs-buildpack-release
   - name: ruby-buildpack
-    release: cf
+    release: ruby-buildpack-release
   - name: php-buildpack
-    release: cf
+    release: php-buildpack-release
   - name: python-buildpack
-    release: cf
+    release: python-buildpack-release
   - name: staticfile-buildpack
-    release: cf
+    release: staticfile-buildpack-release
   - name: route_registrar
     release: routing
     properties:
@@ -1284,10 +1284,6 @@ releases:
   url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.141.0
   version: 0.141.0
   sha1: fa4ba9a4ee045bdfb81b5c95b126c95f496ebf2b
-- name: cf
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-release?v=246
-  version: '246'
-  sha1: 50ddad48110e24170b215eec653d407480638c9a
 stemcells:
 - alias: default
   os: ubuntu-trusty
