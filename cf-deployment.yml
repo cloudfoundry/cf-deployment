@@ -925,7 +925,8 @@ instance_groups:
     release: staticfile-buildpack
   - name: route_registrar
     release: routing
-    properties: route_registrar:
+    properties:
+      route_registrar:
         routes: - name: api
           registration_interval: 20s
           port: 9022
