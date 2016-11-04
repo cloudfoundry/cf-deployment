@@ -927,7 +927,8 @@ instance_groups:
     release: routing
     properties:
       route_registrar:
-        routes: - name: api
+        routes:
+        - name: api
           registration_interval: 20s
           port: 9022
           uris:
