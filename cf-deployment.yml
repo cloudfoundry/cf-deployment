@@ -45,10 +45,7 @@ instance_groups:
     serial: true
   networks:
   - name: private
-    static_ips: &1
-    - 10.0.31.190
-    - 10.0.47.190
-    - 10.0.63.190
+    static_ips: ((consul_static_ips))
   jobs:
   - name: consul_agent
     release: consul
@@ -57,8 +54,8 @@ instance_groups:
         agent:
           mode: server
           domain: cf.internal
-          servers: &3
-            lan: *1
+          servers:
+            lan: ((consul_static_ips))
         encrypt_keys: "((consul_encrypt_keys))"
         agent_cert: "((consul_agent_cert))"
         agent_key: "((consul_agent_agent_key))"
@@ -79,9 +76,7 @@ instance_groups:
   stemcell: default
   networks:
   - name: private
-    static_ips: &4
-    - 10.0.31.191
-    - 10.0.47.191
+    static_ips: ((nats_static_ips))
   jobs:
   - name: consul_agent
     release: consul
@@ -90,7 +85,8 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers:
+            lan: ((consul_static_ips))
         encrypt_keys: "((consul_encrypt_keys))"
         agent_cert: "((consul_agent_cert))"
         agent_key: "((consul_agent_agent_key))"
@@ -101,7 +97,7 @@ instance_groups:
     release: nats
     properties:
       nats: &6
-        machines: *4
+        machines: ((nats_static_ips))
         password: "((nats_password))"
         port: 4222
         user: "((nats_user))"
@@ -134,10 +130,7 @@ instance_groups:
     max_in_flight: 1
   networks:
   - name: private
-    static_ips:
-    - 10.0.31.192
-    - 10.0.47.192
-    - 10.0.63.192
+    static_ips: ((etcd_static_ips))
   jobs:
   - name: consul_agent
     release: consul
@@ -146,7 +139,8 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers:
+            lan: ((consul_static_ips))
           services:
             etcd: {}
         encrypt_keys: "((consul_encrypt_keys))"
@@ -199,8 +193,7 @@ instance_groups:
     serial: true
   networks:
   - name: private
-    static_ips:
-    - 10.0.31.193
+    static_ips: ((mysql_static_ips))
   jobs:
   - name: consul_agent
     release: consul
@@ -209,7 +202,8 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers:
+            lan: ((consul_static_ips))
         encrypt_keys: "((consul_encrypt_keys))"
         agent_cert: "((consul_agent_cert))"
         agent_key: "((consul_agent_agent_key))"
@@ -241,8 +235,7 @@ instance_groups:
             username: "((cf_mysql_mysql_seeded_databases_diego_username))"
             password: "((cf_mysql_mysql_seeded_databases_diego_password))"
           database_startup_timeout: 600
-          cluster_ips:
-          - 10.0.31.193
+          cluster_ips: ((mysql_static_ips))
   - name: metron_agent
     release: loggregator
     properties: *2
@@ -263,7 +256,8 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers:
+            lan: ((consul_static_ips))
         encrypt_keys: "((consul_encrypt_keys))"
         agent_cert: "((consul_agent_cert))"
         agent_key: "((consul_agent_agent_key))"
@@ -311,7 +305,8 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers:
+            lan: ((consul_static_ips))
           services:
             uaa: {}
         encrypt_keys: "((consul_encrypt_keys))"
@@ -394,7 +389,7 @@ instance_groups:
             authorized-grant-types: client_credentials,refresh_token
             secret: "((uaa_clients_tcp_router_secret))"
       uaadb:
-        address: 10.0.31.193
+        address: ((mysql_address))
         databases:
         - name: uaa
           tag: uaa
@@ -423,7 +418,7 @@ instance_groups:
           - "((login_uri))"
           - "((login_subdomain_uri))"
       nats:
-        machines: *4
+        machines: ((nats_static_ips))
         password: "((nats_password))"
         port: 4222
         user: "((nats_user))"
@@ -451,7 +446,8 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers:
+            lan: ((consul_static_ips))
         encrypt_keys: "((consul_encrypt_keys))"
         agent_cert: "((consul_agent_cert))"
         agent_key: "((consul_agent_agent_key))"
@@ -503,7 +499,8 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers:
+            lan: ((consul_static_ips))
         encrypt_keys: "((consul_encrypt_keys))"
         agent_cert: "((consul_agent_cert))"
         agent_key: "((consul_agent_agent_key))"
@@ -553,7 +550,8 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers:
+            lan: ((consul_static_ips))
           services:
             gorouter: {}
         encrypt_keys: "((consul_encrypt_keys))"
@@ -598,7 +596,8 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers:
+            lan: ((consul_static_ips))
         encrypt_keys: "((consul_encrypt_keys))"
         agent_cert: "((consul_agent_cert))"
         agent_key: "((consul_agent_agent_key))"
@@ -635,7 +634,8 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers:
+            lan: ((consul_static_ips))
         encrypt_keys: "((consul_encrypt_keys))"
         agent_cert: "((consul_agent_cert))"
         agent_key: "((consul_agent_agent_key))"
@@ -675,7 +675,8 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers:
+            lan: ((consul_static_ips))
           services:
             blobstore: {}
         encrypt_keys: "((consul_encrypt_keys))"
@@ -711,7 +712,7 @@ instance_groups:
           uris:
           - "((blobstore_uri))"
       nats:
-        machines: *4
+        machines: ((nats_static_ips))
         password: "((nats_password))"
         port: 4222
         user: "((nats_user))"
@@ -737,7 +738,8 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers:
+            lan: ((consul_static_ips))
           services:
             cloud_controller_ng: {}
             routing-api: {}
@@ -768,7 +770,7 @@ instance_groups:
         host_key_fingerprint: "((diego_ssh_proxy_host_key_fingerprint))"
         oauth_client_id: ssh-proxy
       nats:
-        machines: *4
+        machines: ((nats_static_ips))
         password: "((nats_password))"
         port: 4222
         user: "((nats_user))"
@@ -859,7 +861,7 @@ instance_groups:
         databases:
         - name: cloud_controller
           tag: cc
-        address: 10.0.31.193
+        address: ((mysql_address))
         db_scheme: mysql
         port: 3306
         roles:
@@ -896,7 +898,7 @@ instance_groups:
       app_domains: *17
       app_ssh: *18
       nats:
-        machines: *4
+        machines: ((nats_static_ips))
         password: "((nats_password))"
         port: 4222
         user: "((nats_user))"
@@ -938,7 +940,7 @@ instance_groups:
           uris:
           - "((api_uri))"
       nats:
-        machines: *4
+        machines: ((nats_static_ips))
         password: "((nats_password))"
         port: 4222
         user: "((nats_user))"
@@ -984,7 +986,8 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers:
+            lan: ((consul_static_ips))
         encrypt_keys: "((consul_encrypt_keys))"
         agent_cert: "((consul_agent_cert))"
         agent_key: "((consul_agent_agent_key))"
@@ -1021,7 +1024,7 @@ instance_groups:
       app_domains: *17
       app_ssh: *18
       nats:
-        machines: *4
+        machines: ((nats_static_ips))
         password: "((nats_password))"
         port: 4222
         user: "((nats_user))"
@@ -1056,7 +1059,8 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers:
+            lan: ((consul_static_ips))
         encrypt_keys: "((consul_encrypt_keys))"
         agent_cert: "((consul_agent_cert))"
         agent_key: "((consul_agent_agent_key))"
@@ -1123,7 +1127,8 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers:
+            lan: ((consul_static_ips))
         encrypt_keys: "((consul_encrypt_keys))"
         agent_cert: "((consul_agent_cert))"
         agent_key: "((consul_agent_agent_key))"
@@ -1192,7 +1197,8 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers:
+            lan: ((consul_static_ips))
         encrypt_keys: "((consul_encrypt_keys))"
         agent_cert: "((consul_agent_cert))"
         agent_key: "((consul_agent_agent_key))"
@@ -1236,9 +1242,8 @@ instance_groups:
           registration_interval: 20s
           uris:
           - "((doppler_uri))"
-          - "((doppler_subdomain_uri))"
       nats:
-        machines: *4
+        machines: ((nats_static_ips))
         password: "((nats_password))"
         port: 4222
         user: "((nats_user))"
