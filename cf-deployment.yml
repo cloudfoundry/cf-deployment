@@ -1092,7 +1092,6 @@ instance_groups:
         ssl: *16
       capi:
         tps:
-          traffic_controller_url: ''
           bbs: *5
           cc:
             basic_auth_password: "((cc_internal_api_password))"
@@ -1193,6 +1192,8 @@ instance_groups:
           mode: client
           domain: cf.internal
           servers: *3
+          services:
+            loggregator_trafficcontroller: {}
         encrypt_keys: "((consul_encrypt_keys))"
         agent_cert: "((consul_agent_cert))"
         agent_key: "((consul_agent_agent_key))"
