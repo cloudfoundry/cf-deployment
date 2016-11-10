@@ -1145,6 +1145,9 @@ instance_groups:
           - etcd.service.cf.internal
         tls:
           ca_cert: "((loggregator_tls_ca_cert))"
+          doppler:
+            cert: "((loggregator_tls_doppler_cert))"
+            key: "((loggregator_tls_doppler_key))"
       doppler_endpoint:
         shared_secret: "((dropsonde_shared_secret))"
   - name: syslog_drain_binder
@@ -1177,6 +1180,9 @@ instance_groups:
   vm_extensions:
   - 5GB_ephemeral_disk
   stemcell: default
+  update:
+    max_in_flight: 1
+    serial: true
   networks:
   - name: private
   jobs:
@@ -1209,6 +1215,11 @@ instance_groups:
             secret: "((uaa_clients_doppler_secret))"
         url: "((uaa_url))"
       loggregator:
+        tls:
+          ca_cert: "((loggregator_tls_ca_cert))"
+          trafficcontroller:
+            cert: "((loggregator_tls_tc_cert))"
+            key: "((loggregator_tls_tc_key))"
         etcd:
           require_ssl: true
           ca_cert: "((etcd_ca_cert))"
