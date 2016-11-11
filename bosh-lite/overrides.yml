@@ -1,0 +1,379 @@
+---
+- type: replace
+  path: /instance_groups/name=consul/networks/name=private/static_ips
+  value: &consul_ips
+    - 10.244.0.2
+- type: replace
+  path: /instance_groups/name=nats/networks/name=private/static_ips
+  value: &nats_ips
+    - 10.244.0.6
+- type: replace
+  path: /instance_groups/name=mysql/networks/name=private/static_ips
+  value:
+    - &mysql_ip 10.244.0.10
+- type: replace
+  path: /instance_groups/name=router/networks
+  value:
+    - name: private
+      static_ips: [&router_ip 10.244.0.22]
+
+- type: replace
+  path: /stemcells
+  value:
+    - alias: default
+      os: ubuntu-trusty
+      version: 3309
+- type: replace
+  path: /releases/-
+  value:
+    name: cf
+    url: https://bosh.io/d/github.com/cloudfoundry/cf-release?v=246
+    version: 246
+    sha1: 50ddad48110e24170b215eec653d407480638c9a
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: ha_proxy
+    azs:
+    - z1
+    instances: 1
+    persistent_disk_type: 5GB
+    vm_type: m3.medium
+    stemcell: default
+    update: {}
+    networks:
+    - name: private
+      static_ips:
+      - 10.244.0.34
+    jobs:
+    - name: consul_agent
+      release: consul
+      properties:
+        consul:
+          agent:
+            mode: server
+            domain: cf.internal
+            servers:
+              lan: 10.244.0.2
+          encrypt_keys: "((consul_encrypt_keys))"
+          agent_cert: "((consul_agent_cert))"
+          agent_key: "((consul_agent_agent_key))"
+          ca_cert: "((consul_agent_ca_cert))"
+          server_cert: "((consul_agent_server_cert))"
+          server_key: "((consul_agent_server_key))"
+    - name: metron_agent
+      release: loggregator
+      properties:
+        syslog_daemon_config:
+          enable: false
+        metron_agent:
+          deployment: "((metron_agent_deployment_name))"
+          tls:
+            client_cert: "((metron_metron_agent_tls_client_cert))"
+            client_key: "((metron_metron_agent_tls_client_key))"
+          etcd:
+            client_cert: "((etcd_client_cert))"
+            client_key: "((etcd_client_key))"
+        metron_endpoint:
+          shared_secret: "((dropsonde_shared_secret))"
+        loggregator: &2
+          tls:
+            ca_cert: "((loggregator_tls_ca_cert))"
+            trafficcontroller:
+              cert: "((loggregator_tls_tc_cert))"
+              key: "((loggregator_tls_tc_key))"
+            metron:
+              cert: "((metron_metron_agent_tls_client_cert))"
+              key: "((metron_metron_agent_tls_client_key))"
+            doppler:
+              cert: "((loggregator_tls_doppler_cert))"
+              key: "((loggregator_tls_doppler_key))"
+          etcd:
+            require_ssl: true
+            ca_cert: "((etcd_ca_cert))"
+            machines:
+              - etcd.service.cf.internal
+    - name: haproxy
+      release: cf
+      properties:
+        syslog_daemon_config:
+          enable: false
+        metron_agent:
+          deployment: "((metron_agent_deployment_name))"
+          tls:
+            client_cert: "((metron_metron_agent_tls_client_cert))"
+            client_key: "((metron_metron_agent_tls_client_key))"
+          etcd:
+            client_cert: "((etcd_client_cert))"
+            client_key: "((etcd_client_key))"
+        metron_endpoint:
+          shared_secret: "((dropsonde_shared_secret))"
+        loggregator: &2
+          tls:
+            ca_cert: "((loggregator_tls_ca_cert))"
+            trafficcontroller:
+              cert: "((loggregator_tls_tc_cert))"
+              key: "((loggregator_tls_tc_key))"
+            metron:
+              cert: "((metron_metron_agent_tls_client_cert))"
+              key: "((metron_metron_agent_tls_client_key))"
+            doppler:
+              cert: "((loggregator_tls_doppler_cert))"
+              key: "((loggregator_tls_doppler_key))"
+          etcd:
+            require_ssl: true
+            ca_cert: "((etcd_ca_cert))"
+            machines:
+              - etcd.service.cf.internal
+        ha_proxy:
+          ssl_pem: |
+            -----BEGIN CERTIFICATE-----
+            MIICsjCCAZoCCQC+xvE/1ZQgFzANBgkqhkiG9w0BAQUFADAaMRgwFgYDVQQDFA8q
+            LmJvc2gtbGl0ZS5jb20wIBcNMTUxMDA4MjIwNDQ3WhgPMjI4OTA3MjIyMjA0NDda
+            MBoxGDAWBgNVBAMUDyouYm9zaC1saXRlLmNvbTCCASIwDQYJKoZIhvcNAQEBBQAD
+            ggEPADCCAQoCggEBAK09Q520xrKx75uew3mAS+y4uyRPZPEjt/pYdBl40PXIwaqO
+            X7LGoc9lNZS/eAPX6xeVFmZbLZReQ5+Fm0moeLzsh58W9jjkWWk7oGISmxfoQz9B
+            X9Eh0NHCrtKXMrCPlr+2RI/qLinJDqn87UEZqwX+84JU8hBZ8RD8D7YnfuDteySV
+            SYOEUjkiN/pIWmbJQY1sjEyk1zH1Hiy8kmnait2sX8Td2S/aV6EJBgODOstzEtnf
+            HFDIfoTJxbSK/0TbF6qBaSl0CLaOop9FX2ULEZUgAuIW4dG2k/xnpMLdz7A0ZsSU
+            Haw9okZ5wNuYk1RSqhnqw+9KUWgXwV6RlMvtXMkCAwEAATANBgkqhkiG9w0BAQUF
+            AAOCAQEAShOqAFLIc93yIjhcnN7L4ZXFo+CvOgklJqFeBbwRshsEptbaddDJYmRr
+            ZXzOE7MiTOBM8YzKqtHvl/ZguXmIAXSZlnq6kuJHdPtcZOqu1x2GAvWWOzn9Xl4m
+            T3RmwF3NgiX0jgNMkkm8i8jfT7uN9BnHxMv65b9yKeM0sRFN5XigA43DDQnfF3j4
+            FQ9jwpmS7zOx2wn6FayOgoE4rgJfV/9637ZprQOMfUbZPKgQQplDn6bvK13rj9g9
+            zCC9W0fy29l7VDuAOOSI5xzsoYyH6DfX7oySxn291hidSCb/buadNG4dgI4keMGw
+            u5K8QQYmlSY91IJtuRRITYXGmIiPpg==
+            -----END CERTIFICATE-----
+            -----BEGIN RSA PRIVATE KEY-----
+            MIIEogIBAAKCAQEArT1DnbTGsrHvm57DeYBL7Li7JE9k8SO3+lh0GXjQ9cjBqo5f
+            ssahz2U1lL94A9frF5UWZlstlF5Dn4WbSah4vOyHnxb2OORZaTugYhKbF+hDP0Ff
+            0SHQ0cKu0pcysI+Wv7ZEj+ouKckOqfztQRmrBf7zglTyEFnxEPwPtid+4O17JJVJ
+            g4RSOSI3+khaZslBjWyMTKTXMfUeLLySadqK3axfxN3ZL9pXoQkGA4M6y3MS2d8c
+            UMh+hMnFtIr/RNsXqoFpKXQIto6in0VfZQsRlSAC4hbh0baT/Gekwt3PsDRmxJQd
+            rD2iRnnA25iTVFKqGerD70pRaBfBXpGUy+1cyQIDAQABAoIBACXzdt2UnbbF3jzU
+            QfRbE8bvDSg+MFnXPlWcjQqLehNuAGcxu2s5snbxsBQ/Abat1XWcFoUj0k9feyb2
+            KPew7YpNssQ6ToRWGfRAuLjjZJCPNDQmSSxSYSGiqZO+xb8CJb8n2ctBPQ2wWwMI
+            Qp1xVxMAMC5MF59XZMUYwwRfkJ8LawB90+S9BjHcU3GqoPECLFkgEeIj3mrnmpAD
+            vhIeYvQj2W5JCpxLUA+7lnyoqnx8OTOXvBPAsKwO1Hx88yCitnxXro7i0ZAw4ErH
+            zrnMgWkFDvRiS3ta/QS2RcBBiZHKX/gRRT/AvqJ+Erveu0BcZ9AVy1UpPB0w9rBK
+            PTxS2BECgYEA3MLd6Og+xQpw4UNhy9EjeDE/b/rZK4w/vfD3WE5J3Nm4HGdSA6Q4
+            YmQYVg+VuCLR+HHsk58LxEf+cU0MNgDJR1/rFZRmociF+G0i7/7DuhFm891wWWGW
+            Iz7XeGWHi+LIeYWkteuflrkmvy/7xqArgcNqnirGhba6706MZz0G0YUCgYEAyOR5
+            aF7qRpLXHgMOPOzJKC4ceWA5rY8rcdJZFI7aNq5MJF9o+fNNt8YRJ1hQTzs5K/R+
+            HwBJel8J6CoPQo9WUXnj0md4M67sCZSBqWANMO/J0f4VkbLS/lwch+ZPS8jt3Z4z
+            umYW4QnloIKXxORfySo7r9DzZSgmxuDE8PVWn3UCgYAFTwpXF36q7l1YjW5EoHrh
+            4Q1NfBLM4UqHHsxT604LaZDr3fAy9jgE5bNQHn/TNcMm3lZ6FlEKH1EXGGs6wToV
+            5VCZ7D+rlE7kcntsmgvK5bA8HQ8elyItJs23r3la+9EmWvhjB4+G6FzuLBE57ZAe
+            RrzBoPW1MXe9WX423VjUoQKBgGea5T49jSc+fbDdtI8ZMxkExuyWAskOyEIYUJa4
+            obOHqn8rsZEOuKspfBlFg42JJpATtKO6WyrALvTMFDiogcTdTvBpKmXFNbgvHbvD
+            bKorUHN7TZZpmkVSLeisj4KvKnWcLGNaWTxQBVwFXc5OVVQC8utWoOAvl+gDba4z
+            aSwtAoGANdquHRNbigPj2y0cRoexYJwKgpfGEK4HXitsKZUUg09gVfagM1HynVFz
+            RA0LVac0oJZFdMYZyU/PXCySS237xUD2/0oySYJIK9E0C4ZxKD+DoAk5Z097z0LM
+            7rxStMCBWB2x4ommvEnpdgntEKkl4buIDatvmbdmdwkY3+X65Ks=
+            -----END RSA PRIVATE KEY-----
+        router:
+          servers:
+            - 10.244.0.22
+
+# ----- Scale Down ------
+- type: replace
+  path: /instance_groups/name=consul/azs
+  value:
+  - z1
+- type: replace
+  path: /instance_groups/name=consul/instances
+  value: 1
+- type: replace
+  path: /instance_groups/name=nats/azs
+  value:
+  - z1
+- type: replace
+  path: /instance_groups/name=nats/instances
+  value: 1
+- type: replace
+  path: /instance_groups/name=etcd/azs
+  value:
+  - z1
+- type: replace
+  path: /instance_groups/name=etcd/instances
+  value: 1
+- type: replace
+  path: /instance_groups/name=etcd/jobs/name=etcd/properties/etcd/cluster
+  value:
+  - instances: 1
+    name: etcd
+- type: replace
+  path: /instance_groups/name=diego-bbs/azs
+  value:
+  - z1
+- type: replace
+  path: /instance_groups/name=diego-bbs/instances
+  value: 1
+- type: replace
+  path: /instance_groups/name=uaa/azs
+  value:
+  - z1
+- type: replace
+  path: /instance_groups/name=uaa/instances
+  value: 1
+- type: replace
+  path: /instance_groups/name=diego-brain/azs
+  value:
+  - z1
+- type: replace
+  path: /instance_groups/name=diego-brain/instances
+  value: 1
+- type: replace
+  path: /instance_groups/name=diego-cell/azs
+  value:
+  - z1
+- type: replace
+  path: /instance_groups/name=diego-cell/instances
+  value: 1
+- type: replace
+  path: /instance_groups/name=router/azs
+  value:
+  - z1
+- type: replace
+  path: /instance_groups/name=router/instances
+  value: 1
+- type: replace
+  path: /instance_groups/name=tcp-router/azs
+  value:
+  - z1
+- type: replace
+  path: /instance_groups/name=tcp-router/instances
+  value: 1
+- type: replace
+  path: /instance_groups/name=route-emitter/azs
+  value:
+  - z1
+- type: replace
+  path: /instance_groups/name=route-emitter/instances
+  value: 1
+- type: replace
+  path: /instance_groups/name=api/azs
+  value:
+  - z1
+- type: replace
+  path: /instance_groups/name=api/instances
+  value: 1
+- type: replace
+  path: /instance_groups/name=cc_bridge/azs
+  value:
+  - z1
+- type: replace
+  path: /instance_groups/name=cc_bridge/instances
+  value: 1
+- type: replace
+  path: /instance_groups/name=doppler/azs
+  value:
+  - z1
+- type: replace
+  path: /instance_groups/name=doppler/instances
+  value: 1
+- type: replace
+  path: /instance_groups/name=log_controller/azs
+  value:
+  - z1
+- type: replace
+  path: /instance_groups/name=log_controller/instances
+  value: 1
+# --------------------------------------------------------------------------------------------
+- type: replace
+  path: /instance_groups/name=consul/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=etcd/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=nats/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=mysql/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=diego-bbs/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=diego-brain/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=router/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=tcp-router/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=route-emitter/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=blobstore/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=cc_clock/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=api/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=cc_bridge/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=doppler/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=log_controller/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=log_controller/jobs/name=route_registrar/properties/nats/machines
+  value: *nats_ips
+- type: replace
+  path: /instance_groups/name=nats/jobs/name=nats_stream_forwarder/properties/nats/machines
+  value: *nats_ips
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=route_registrar/properties/nats/machines
+  value: *nats_ips
+- type: replace
+  path: /instance_groups/name=api/jobs/name=route_registrar/properties/nats/machines
+  value: *nats_ips
+- type: replace
+  path: /instance_groups/name=blobstore/jobs/name=route_registrar/properties/nats/machines
+  value: *nats_ips
+- type: replace
+  path: /instance_groups/name=router/jobs/name=gorouter/properties/nats/machines
+  value: *nats_ips
+- type: replace
+  path: /instance_groups/name=route-emitter/jobs/name=route_emitter/properties/diego/route_emitter/nats/machines
+  value: *nats_ips
+- type: replace
+  path: /instance_groups/name=mysql/jobs/name=mysql/properties/cf_mysql/mysql/cluster_ips
+  value:
+    - *mysql_ip
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/address
+  value: *mysql_ip
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ccdb/address
+  value: *mysql_ip
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_worker/properties/ccdb/address
+  value: *mysql_ip
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_worker/properties/nats/machines
+  value: *nats_ips
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/nats/machines
+  value: *nats_ips
+- type: replace
+  path: /instance_groups/name=cc_clock/jobs/name=cloud_controller_clock/properties/ccdb/address
+  value: *mysql_ip
+- type: replace
+  path: /instance_groups/name=cc_clock/jobs/name=cloud_controller_clock/properties/nats/machines
+  value: *nats_ips
