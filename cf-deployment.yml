@@ -1220,6 +1220,9 @@ instance_groups:
           trafficcontroller:
             cert: "((loggregator_tls_tc_cert))"
             key: "((loggregator_tls_tc_key))"
+          metron:
+            cert: "((metron_metron_agent_tls_client_cert))"
+            key: "((metron_metron_agent_tls_client_key))"
         etcd:
           require_ssl: true
           ca_cert: "((etcd_ca_cert))"
