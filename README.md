@@ -6,7 +6,16 @@
 This repo contains a canonical manifest for deploying Cloud Foundry. It will replace the [manifest generation scripts in cf-release](https://github.com/cloudfoundry/cf-release/tree/master/templates). It will also contain scripts and other tools for aiding in deployment.
 
 ## Usage
-`bosh -e my-env -d cf deploy cf-deployment.yml -l path/to/vars/file.yml`
+To deploy:
+```
+bosh -e my-env -d cf deploy cf-deployemnt/cf-deployment.yml -l env-repo/deployment-vars.yml
+```
+
+## Deployment variables
+
+Technically speaking, `cf-deployment.yml` is a manifest template that requires one additional step of environment-specific configuration, mostly for credentials and system domain. To do this we use the `-l`/`--var-files` flags in the new BOSH CLI. These flags read in a `.yml` file and use configuration present there to fill out the template provided by `cf-deployment`.
+
+The easiest way to get a file for deployment variables is to generate them with [cf-filler](https://github.com/rosenhouse/cf-filler). It's a go binary that generates a yaml file with all of the necessary variables to populate the template in cf-deployment.
 
 ## Dependencies and assumptions
 
