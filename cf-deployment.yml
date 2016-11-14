@@ -572,9 +572,9 @@ instance_groups:
     properties:
       nats: *6
       router:
-        enable_ssl: null
-        ssl_cert: null
-        ssl_key: null
+        enable_ssl: 
+        ssl_cert: 
+        ssl_key: 
         status:
           password: "((router_status_password))"
           user: "((router_status_user))"
@@ -1298,9 +1298,9 @@ releases:
   version: '137'
   sha1: ac7dda874ddddea244fb8b47ffd9560601a92e49
 - name: diego
-  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=0.1489.0
-  version: 0.1489.0
-  sha1: bff4b270c821f122f30ac4bb1a9a966e8be0b819
+  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=0.1490.0
+  version: 0.1490.0
+  sha1: 7154de722856b7aecbd4d08eae6c8dfd13e068cb
 - name: etcd
   url: https://bosh.io/d/github.com/cloudfoundry-incubator/etcd-release?v=85
   version: '85'
