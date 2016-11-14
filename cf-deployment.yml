@@ -6,8 +6,6 @@ properties_shared_across_every_instance_group:
       enable: false
     metron_agent:
       deployment: "((metron_agent_deployment_name))"
-      protocols:
-      - tls
       tls:
         client_cert: "((metron_metron_agent_tls_client_cert))"
         client_key: "((metron_metron_agent_tls_client_key))"
