@@ -566,6 +566,9 @@ instance_groups:
     properties:
       nats: *6
       router:
+        enable_ssl: null
+        ssl_cert: null
+        ssl_key: null
         status:
           password: "((router_status_password))"
           user: "((router_status_user))"
