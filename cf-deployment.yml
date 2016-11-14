@@ -19,9 +19,15 @@ properties_shared_across_every_instance_group:
     loggregator:
       tls:
         ca_cert: "((loggregator_tls_ca_cert))"
+        trafficcontroller:
+          cert: "((loggregator_tls_tc_cert))"
+          key: "((loggregator_tls_tc_key))"
         metron:
           cert: "((metron_metron_agent_tls_client_cert))"
           key: "((metron_metron_agent_tls_client_key))"
+        doppler:
+          cert: "((loggregator_tls_doppler_cert))"
+          key: "((loggregator_tls_doppler_key))"
       etcd:
         require_ssl: true
         ca_cert: "((etcd_ca_cert))"
@@ -1144,31 +1150,48 @@ instance_groups:
           server_cert: "((doppler_tls_server_cert))"
           server_key: "((doppler_tls_server_key))"
       loggregator:
+        tls:
+          ca_cert: "((loggregator_tls_ca_cert))"
+          trafficcontroller:
+            cert: "((loggregator_tls_tc_cert))"
+            key: "((loggregator_tls_tc_key))"
+          metron:
+            cert: "((metron_metron_agent_tls_client_cert))"
+            key: "((metron_metron_agent_tls_client_key))"
+          doppler:
+            cert: "((loggregator_tls_doppler_cert))"
+            key: "((loggregator_tls_doppler_key))"
         etcd:
           require_ssl: true
           ca_cert: "((etcd_ca_cert))"
           machines:
           - etcd.service.cf.internal
-        tls:
-          ca_cert: "((loggregator_tls_ca_cert))"
-          doppler:
-            cert: "((loggregator_tls_doppler_cert))"
-            key: "((loggregator_tls_doppler_key))"
       doppler_endpoint:
         shared_secret: "((dropsonde_shared_secret))"
   - name: syslog_drain_binder
     release: loggregator
     properties:
-      syslog_drain_binder:
-        etcd:
-          client_cert: "((etcd_client_cert))"
-          client_key: "((etcd_client_key))"
       loggregator:
+        tls:
+          ca_cert: "((loggregator_tls_ca_cert))"
+          trafficcontroller:
+            cert: "((loggregator_tls_tc_cert))"
+            key: "((loggregator_tls_tc_key))"
+          metron:
+            cert: "((metron_metron_agent_tls_client_cert))"
+            key: "((metron_metron_agent_tls_client_key))"
+          doppler:
+            cert: "((loggregator_tls_doppler_cert))"
+            key: "((loggregator_tls_doppler_key))"
         etcd:
           require_ssl: true
           ca_cert: "((etcd_ca_cert))"
           machines:
           - etcd.service.cf.internal
+      syslog_drain_binder:
+        etcd:
+          client_cert: "((etcd_client_cert))"
+          client_key: "((etcd_client_key))"
       system_domain: "((system_domain))"
       cc:
         bulk_api_password: "((cc_bulk_api_password))"
@@ -1229,6 +1252,9 @@ instance_groups:
           metron:
             cert: "((metron_metron_agent_tls_client_cert))"
             key: "((metron_metron_agent_tls_client_key))"
+          doppler:
+            cert: "((loggregator_tls_doppler_cert))"
+            key: "((loggregator_tls_doppler_key))"
         etcd:
           require_ssl: true
           ca_cert: "((etcd_ca_cert))"
