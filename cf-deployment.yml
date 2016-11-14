@@ -19,6 +19,9 @@ properties_shared_across_every_instance_group:
     loggregator:
       tls:
         ca_cert: "((loggregator_tls_ca_cert))"
+        metron:
+          cert: "((metron_metron_agent_tls_client_cert))"
+          key: "((metron_metron_agent_tls_client_key))"
       etcd:
         require_ssl: true
         ca_cert: "((etcd_ca_cert))"
