@@ -570,9 +570,9 @@ instance_groups:
     properties:
       nats: *6
       router:
-        enable_ssl: 
-        ssl_cert: 
-        ssl_key: 
+        enable_ssl: true
+        ssl_cert: "((router_ssl_cert))"
+        ssl_key: "((router_ssl_key))"
         status:
           password: "((router_status_password))"
           user: "((router_status_user))"

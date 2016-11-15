@@ -13,9 +13,14 @@ bosh -e my-env -d cf deploy cf-deployemnt/cf-deployment.yml -l env-repo/deployme
 
 ## Deployment variables
 
-Technically speaking, `cf-deployment.yml` is a manifest template that requires one additional step of environment-specific configuration, mostly for credentials and system domain. To do this we use the `-l`/`--var-files` flags in the new BOSH CLI. These flags read in a `.yml` file and use configuration present there to fill out the template provided by `cf-deployment`.
+`cf-deployment.yml` requires additional data to provide environment-specific or sensitive configuration such as credentials and system domain. To do this we use the `-l`/`--var-files` flags in the new BOSH CLI. These flags read in a list of `.yml` files and use values present there to fill out the template represented by `cf-deployment`.
 
-The easiest way to get a file for deployment variables is to generate them with [cf-filler](https://github.com/rosenhouse/cf-filler). It's a go binary that generates a yaml file with all of the necessary variables to populate the template in cf-deployment.
+The easiest way to get a file for deployment variables is to generate them with [cf-filler](https://github.com/rosenhouse/cf-filler). It's a go binary that generates a yaml file with all of the necessary variables to hydrate cf-deployment.
+
+## Ops Files
+The configuration of CF represented by `cf-deployment.yml` is intended to be a workable, secure, fully-featured default. However, the need occasionally arises to make different configuration choices. We accomplish this with the `-o`/`--ops-file` flags. These flags read a single `.yml` file that details operations to be performed on the manifest before variables are filled. We've packaged some common manifest modifications in the `opsfiles` directory. Here's a brief summary:
+
+- `opsfiles/disable-router-tls-termination.yml` - this file eliminates keys related to performing tls/ssl termination within the gorouter job. It's useful for deployments where tls termination is performed prior to the gorouter - for instance, on AWS, such termination is commonly done at the ELB. This also eliminates the need to specify `((router_ssl_cert))` and `((router_ssl_key))` in the var files.
 
 ## Dependencies and assumptions
 
