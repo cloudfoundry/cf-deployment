@@ -1,0 +1,162 @@
+strings:
+  app_domain: "((system_domain))"
+
+  uaa_uri:           "uaa.((system_domain))"
+  uaa_subdomain_uri: "*.uaa.((system_domain))"
+  uaa_url:           "https://uaa.((system_domain))"
+  uaa_token_url:     "https://uaa.((system_domain))/oauth/token"
+
+  login_uri:           "login.((system_domain))"
+  login_subdomain_uri: "*.login.((system_domain))"
+
+  api_uri: "api.((system_domain))"
+  api_url: "https://api.((system_domain))"
+
+  loggregator_uri:              "loggregator.((system_domain))"
+  doppler_uri:                  "doppler.((system_domain))"
+  doppler_subdomain_uri:        "*.doppler.((system_domain))"
+  metron_agent_deployment_name: "((system_domain))"
+
+  blobstore_uri:         "blobstore.((system_domain))"
+  blobstore_public_url:  "https://blobstore.((system_domain))"
+  blobstore_private_url: "https://blobstore.service.cf.internal:4443"
+
+  uaa_scim_users_admin_name:                           "admin"
+  blobstore_admin_users_username:                      "blobstore-user"
+  cc_staging_upload_user:                              "staging_user"
+  cf_mysql_mysql_galera_healthcheck_endpoint_username: "galera_healthcheck"
+  cf_mysql_mysql_seeded_databases_cc_username:         "cloud_controller"
+  cf_mysql_mysql_seeded_databases_diego_username:      "diego"
+  cf_mysql_mysql_seeded_databases_uaa_username:        "uaa"
+  nats_user:          "nats"
+  router_status_user: "router-status"
+
+passwords:
+- blobstore_admin_users_password
+- blobstore_secure_link_secret
+- cc_bulk_api_password
+- cc_db_encryption_key
+- cc_internal_api_password
+- cc_staging_upload_password
+- cf_mysql_mysql_admin_password
+- cf_mysql_mysql_cluster_health_password
+- cf_mysql_mysql_galera_healthcheck_endpoint_password
+- cf_mysql_mysql_galera_healthcheck_password
+- cf_mysql_mysql_roadmin_password
+- cf_mysql_mysql_seeded_databases_cc_password
+- cf_mysql_mysql_seeded_databases_diego_password
+- cf_mysql_mysql_seeded_databases_uaa_password
+- nats_password
+- router_status_password
+- uaa_scim_users_admin_password
+- dropsonde_shared_secret
+- router_route_services_secret
+- uaa_admin_client_secret
+- uaa_clients_cc-routing_secret
+- uaa_clients_cc-service-dashboards_secret
+- uaa_clients_cloud_controller_username_lookup_secret
+- uaa_clients_doppler_secret
+- uaa_clients_gorouter_secret
+- uaa_clients_ssh-proxy_secret
+- uaa_clients_tcp_emitter_secret
+- uaa_clients_tcp_router_secret
+- uaa_login_client_secret
+- diego_bbs_encryption_keys_passphrase
+
+password_arrays:
+- varname: consul_encrypt_keys
+  count: 1
+
+ssh_keys:
+- varname_privatekey: diego_ssh_proxy_host_key
+  varname_fingerprint: diego_ssh_proxy_host_key_fingerprint
+
+basic_key_pairs:
+- varname_privatekey: uaa_jwt_signing_key
+  varname_publickey:  uaa_jwt_verification_key
+
+cert_sets:
+- ca:
+    varname_ca: etcd_ca_cert
+    commonName: etcdCA
+  certkeypairs:
+  - varname_cert: etcd_server_cert
+    varname_key:  etcd_server_key
+    commonname:   etcd.service.cf.internal
+    domains:
+    - "*.etcd.service.cf.internal"
+    - "etcd.service.cf.internal"
+  - varname_cert: etcd_client_cert
+    varname_key:  etcd_client_key
+    commonname:   clientName
+
+- ca:
+    varname_ca: etcd_peer_ca_cert
+    commonname: peerCA
+  certkeypairs:
+  - varname_cert: etcd_peer_cert
+    varname_key:  etcd_peer_key
+    commonname:   etcd.service.cf.internal
+    domains:
+    - "*.etcd.service.cf.internal"
+    - "etcd.service.cf.internal"
+
+- ca:
+    varname_ca: blobstore_tls_ca_cert
+    commonname: blobstore_ca
+  certkeypairs:
+  - varname_cert: blobstore_tls_cert
+    varname_key:  blobstore_tls_private_key
+    commonname:   blobstore.service.cf.internal
+
+- ca:
+    varname_ca: consul_agent_ca_cert
+    commonname: consulCA
+  certkeypairs:
+  - varname_cert: consul_agent_cert
+    varname_key:  consul_agent_agent_key
+    commonname:   consul_agent
+  - varname_cert: consul_agent_server_cert
+    varname_key:  consul_agent_server_key
+    commonname:   server.dc1.cf.internal
+
+- ca:
+    varname_ca: diego_bbs_ca_cert
+    commonname: diegoCA
+  certkeypairs:
+  - varname_cert: diego_bbs_client_cert
+    varname_key:  diego_bbs_client_key
+    commonname:   bbs_client
+  - varname_cert: diego_bbs_server_cert
+    varname_key:  diego_bbs_server_key
+    commonname:   bbs.service.cf.internal
+
+- ca:
+    varname_ca: loggregator_tls_ca_cert
+    commonname: loggregatorCA
+  certkeypairs:
+  - varname_cert: doppler_tls_server_cert
+    varname_key:  doppler_tls_server_key
+    commonname:   doppler
+  - varname_cert: metron_metron_agent_tls_client_cert
+    varname_key:  metron_metron_agent_tls_client_key
+    commonname:   metron_agent
+  - varname_cert: loggregator_tls_doppler_cert
+    varname_key:  loggregator_tls_doppler_key
+    commonname:   doppler
+  - varname_cert: loggregator_tls_tc_cert
+    varname_key:  loggregator_tls_tc_key
+    commonname:   trafficcontroller
+
+- ca:
+    commonname: uaaCA
+  certkeypairs:
+  - varname_cert: uaa_sslCertificate
+    varname_key:  uaa_sslPrivateKey
+    commonname:   uaa.service.cf.internal
+
+- ca:
+    commonname: goRouterCA
+  certkeypairs:
+  - varname_cert: router_ssl_cert
+    varname_key:  router_ssl_key
