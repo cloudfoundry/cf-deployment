@@ -333,7 +333,7 @@ instance_groups:
           internal:
             hostnames:
             - uaa.service.cf.internal
-        url: "((uaa_url))"
+        url: "https://uaa.((system_domain))"
         admin:
           client_secret: "((uaa_admin_client_secret))"
         scim:
@@ -421,10 +421,10 @@ instance_groups:
           tags:
             component: uaa
           uris:
-          - "((uaa_uri))"
-          - "((uaa_subdomain_uri))"
-          - "((login_uri))"
-          - "((login_subdomain_uri))"
+          - "uaa.((system_domain))"
+          - "*.uaa.((system_domain))"
+          - "login.((system_domain))"
+          - "*.login.((system_domain))"
       nats:
         machines: *4
         password: "((nats_password))"
@@ -471,7 +471,7 @@ instance_groups:
           enable_cf_auth: true
           host_key: "((diego_ssh_proxy_host_key))"
           uaa_secret: "((uaa_clients_ssh-proxy_secret))"
-          uaa_token_url: "((uaa_token_url))"
+          uaa_token_url: "https://uaa.((system_domain))/oauth/token"
           bbs: &5
             ca_cert: "((diego_bbs_ca_cert))"
             client_cert: "((diego_bbs_client_cert))"
@@ -715,7 +715,7 @@ instance_groups:
           tags:
             component: blobstore
           uris:
-          - "((blobstore_uri))"
+          - "blobstore.((system_domain))"
       nats:
         machines: *4
         password: "((nats_password))"
@@ -786,7 +786,7 @@ instance_groups:
             secret: "((uaa_clients_cloud_controller_username_lookup_secret))"
           cc-service-dashboards:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
-        url: "((uaa_url))"
+        url: "https://uaa.((system_domain))"
         jwt:
           verification_key: "((uaa_jwt_verification_key))"
       cc:
@@ -855,8 +855,8 @@ instance_groups:
           webdav_config:
             blobstore_timeout: 5
             password: "((blobstore_admin_users_password))"
-            private_endpoint: "((blobstore_private_url))"
-            public_endpoint: "((blobstore_public_url))"
+            private_endpoint: "https://blobstore.service.cf.internal:4443"
+            public_endpoint: "https://blobstore.((system_domain))"
             username: "((blobstore_admin_users_username))"
         resource_pool: *7
         packages: *7
@@ -910,7 +910,7 @@ instance_groups:
         clients:
           cc-service-dashboards:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
-        url: "((uaa_url))"
+        url: "https://uaa.((system_domain))"
         jwt:
           verification_key: "((uaa_jwt_verification_key))"
   - name: binary-buildpack
@@ -942,7 +942,7 @@ instance_groups:
           registration_interval: 20s
           port: 9022
           uris:
-          - "((api_uri))"
+          - "api.((system_domain))"
       nats:
         machines: *4
         password: "((nats_password))"
@@ -1035,7 +1035,7 @@ instance_groups:
         clients:
           cc-service-dashboards:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
-        url: "((uaa_url))"
+        url: "https://uaa.((system_domain))"
         jwt:
           verification_key: "((uaa_jwt_verification_key))"
   - name: statsd-injector
@@ -1089,7 +1089,7 @@ instance_groups:
           bbs: *5
           cc:
             basic_auth_password: "((cc_internal_api_password))"
-            base_url: "((api_url))"
+            base_url: "https://api.((system_domain))"
           diego_privileged_containers: true
   - name: tps
     release: capi
@@ -1193,7 +1193,7 @@ instance_groups:
       system_domain: "((system_domain))"
       cc:
         bulk_api_password: "((cc_bulk_api_password))"
-        srv_api_uri: "((api_url))"
+        srv_api_uri: "https://api.((system_domain))"
       ssl: *16
   - name: metron_agent
     release: loggregator
@@ -1240,7 +1240,7 @@ instance_groups:
         clients:
           doppler:
             secret: "((uaa_clients_doppler_secret))"
-        url: "((uaa_url))"
+        url: "https://uaa.((system_domain))"
       loggregator:
         tls:
           ca_cert: "((loggregator_tls_ca_cert))"
@@ -1261,7 +1261,7 @@ instance_groups:
       system_domain: "((system_domain))"
       ssl: *16
       cc:
-        srv_api_uri: "((api_url))"
+        srv_api_uri: "https://api.((system_domain))"
   - name: route_registrar
     release: routing
     properties:
@@ -1271,13 +1271,13 @@ instance_groups:
           port: 8080
           registration_interval: 20s
           uris:
-          - "((loggregator_uri))"
+          - "loggregator.((system_domain))"
         - name: doppler
           port: 8081
           registration_interval: 20s
           uris:
-          - "((doppler_uri))"
-          - "((doppler_subdomain_uri))"
+          - "doppler.((system_domain))"
+          - "*.doppler.((system_domain))"
       nats:
         machines: *4
         password: "((nats_password))"
