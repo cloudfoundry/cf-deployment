@@ -283,7 +283,12 @@ instance_groups:
           - label: key-2016-06
             passphrase: "((diego_bbs_encryption_keys_passphrase))"
           sql:
-            db_connection_string: "((diego_bbs_sql_db_connection_string))"
+            db_host: "((diego_bbs_sql_db_host))"
+            db_port: "((diego_bbs_sql_db_port))"
+            db_schema: "((diego_bbs_sql_db_schema))"
+            db_username: "((diego_bbs_sql_db_username))"
+            db_password: "((diego_bbs_sql_db_password))"
+            db_driver: "((diego_bbs_sql_db_driver))"
           etcd:
             machines: []
             ca_cert: nil
