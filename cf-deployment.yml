@@ -763,10 +763,6 @@ instance_groups:
     properties:
       router:
         route_services_secret: "((router_route_services_secret))"
-      doppler: &8
-        port: 4443
-      logger_endpoint: &9
-        port: 4443
       hm9000:
         port: -1
       ssl: &16
@@ -880,8 +876,6 @@ instance_groups:
   - name: cloud_controller_worker
     release: capi
     properties:
-      doppler: *8
-      logger_endpoint: *9
       hm9000:
         port: -1
       cc:
@@ -1005,8 +999,6 @@ instance_groups:
   - name: cloud_controller_clock
     release: capi
     properties:
-      doppler: *8
-      logger_endpoint: *9
       hm9000:
         port: -1
       cc:
