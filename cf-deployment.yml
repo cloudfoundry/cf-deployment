@@ -5,30 +5,30 @@ properties_shared_across_every_instance_group:
     syslog_daemon_config:
       enable: false
     metron_agent:
-      deployment: "((metron_agent_deployment_name))"
+      deployment: "((system_domain))"
       tls:
-        client_cert: "((metron_metron_agent_tls_client_cert))"
-        client_key: "((metron_metron_agent_tls_client_key))"
+        client_cert: "((metron_agent_tls_client.certificate))"
+        client_key: "((metron_agent_tls_client.private_key))"
       etcd:
-        client_cert: "((etcd_client_cert))"
-        client_key: "((etcd_client_key))"
+        client_cert: "((etcd_client.certificate))"
+        client_key: "((etcd_client.private_key))"
     metron_endpoint:
       shared_secret: "((dropsonde_shared_secret))"
     loggregator:
       tls:
-        ca_cert: "((loggregator_tls_ca_cert))"
+        ca_cert: "((loggregator_ca.certificate))"
         trafficcontroller:
-          cert: "((loggregator_tls_tc_cert))"
-          key: "((loggregator_tls_tc_key))"
+          cert: "((loggregator_tls_tc.certificate))"
+          key: "((loggregator_tls_tc.private_key))"
         metron:
-          cert: "((metron_metron_agent_tls_client_cert))"
-          key: "((metron_metron_agent_tls_client_key))"
+          cert: "((metron_agent_tls_client.certificate))"
+          key: "((metron_agent_tls_client.private_key))"
         doppler:
-          cert: "((loggregator_tls_doppler_cert))"
-          key: "((loggregator_tls_doppler_key))"
+          cert: "((loggregator_tls_doppler.certificate))"
+          key: "((loggregator_tls_doppler.private_key))"
       etcd:
         require_ssl: true
-        ca_cert: "((etcd_ca_cert))"
+        ca_cert: "((etcd_server.ca))"
         machines:
         - etcd.service.cf.internal
 update:
@@ -66,12 +66,12 @@ instance_groups:
           domain: cf.internal
           servers: &3
             lan: *1
-        encrypt_keys: "((consul_encrypt_keys))"
-        agent_cert: "((consul_agent_cert))"
-        agent_key: "((consul_agent_agent_key))"
-        ca_cert: "((consul_agent_ca_cert))"
-        server_cert: "((consul_agent_server_cert))"
-        server_key: "((consul_agent_server_key))"
+        encrypt_keys: [((consul_encrypt_key))]
+        agent_cert: "((consul_agent.certificate))"
+        agent_key: "((consul_agent.private_key))"
+        ca_cert: "((consul_agent.ca))"
+        server_cert: "((consul_server.certificate))"
+        server_key: "((consul_server.private_key))"
   - name: metron_agent
     release: loggregator
     properties: *2
@@ -98,12 +98,12 @@ instance_groups:
           mode: client
           domain: cf.internal
           servers: *3
-        encrypt_keys: "((consul_encrypt_keys))"
-        agent_cert: "((consul_agent_cert))"
-        agent_key: "((consul_agent_agent_key))"
-        ca_cert: "((consul_agent_ca_cert))"
-        server_cert: "((consul_agent_server_cert))"
-        server_key: "((consul_agent_server_key))"
+        encrypt_keys: [((consul_encrypt_key))]
+        agent_cert: "((consul_agent.certificate))"
+        agent_key: "((consul_agent.private_key))"
+        ca_cert: "((consul_agent.ca))"
+        server_cert: "((consul_server.certificate))"
+        server_key: "((consul_server.private_key))"
   - name: nats_stream_forwarder
     release: nats
     properties:
@@ -111,13 +111,13 @@ instance_groups:
         machines: *4
         password: "((nats_password))"
         port: 4222
-        user: "((nats_user))"
+        user: "nats"
   - name: nats
     release: nats
     properties:
       nats:
         password: "((nats_password))"
-        user: "((nats_user))"
+        user: "nats"
         debug: true
         monitor_port: 9222
         prof_port: 6060
@@ -152,12 +152,12 @@ instance_groups:
           servers: *3
           services:
             etcd: {}
-        encrypt_keys: "((consul_encrypt_keys))"
-        agent_cert: "((consul_agent_cert))"
-        agent_key: "((consul_agent_agent_key))"
-        ca_cert: "((consul_agent_ca_cert))"
-        server_cert: "((consul_agent_server_cert))"
-        server_key: "((consul_agent_server_key))"
+        encrypt_keys: [((consul_encrypt_key))]
+        agent_cert: "((consul_agent.certificate))"
+        agent_key: "((consul_agent.private_key))"
+        ca_cert: "((consul_agent.ca))"
+        server_cert: "((consul_server.certificate))"
+        server_key: "((consul_server.private_key))"
   - name: etcd
     release: etcd
     properties:
@@ -168,14 +168,14 @@ instance_groups:
           name: etcd
         peer_require_ssl: true
         require_ssl: true
-        ca_cert: "((etcd_ca_cert))"
-        client_cert: "((etcd_client_cert))"
-        client_key: "((etcd_client_key))"
-        server_cert: "((etcd_server_cert))"
-        server_key: "((etcd_server_key))"
-        peer_ca_cert: "((etcd_peer_ca_cert))"
-        peer_cert: "((etcd_peer_cert))"
-        peer_key: "((etcd_peer_key))"
+        ca_cert: "((etcd_client.ca))"
+        client_cert: "((etcd_client.certificate))"
+        client_key: "((etcd_client.private_key))"
+        server_cert: "((etcd_server.certificate))"
+        server_key: "((etcd_server.private_key))"
+        peer_ca: "((etcd_peer.ca))"
+        peer_cert: "((etcd_peer.certificate))"
+        peer_key: "((etcd_peer.private_key))"
   - name: etcd_metrics_server
     release: etcd
     properties:
@@ -183,9 +183,9 @@ instance_groups:
         etcd:
           dns_suffix: etcd.service.cf.internal
           require_ssl: true
-          ca_cert: "((etcd_ca_cert))"
-          client_cert: "((etcd_client_cert))"
-          client_key: "((etcd_client_key))"
+          ca_cert: "((etcd_server.ca))"
+          client_cert: "((etcd_client.certificate))"
+          client_key: "((etcd_client.private_key))"
   - name: metron_agent
     release: loggregator
     properties: *2
@@ -213,12 +213,12 @@ instance_groups:
           mode: client
           domain: cf.internal
           servers: *3
-        encrypt_keys: "((consul_encrypt_keys))"
-        agent_cert: "((consul_agent_cert))"
-        agent_key: "((consul_agent_agent_key))"
-        ca_cert: "((consul_agent_ca_cert))"
-        server_cert: "((consul_agent_server_cert))"
-        server_key: "((consul_agent_server_key))"
+        encrypt_keys: [((consul_encrypt_key))]
+        agent_cert: "((consul_agent.certificate))"
+        agent_key: "((consul_agent.private_key))"
+        ca_cert: "((consul_agent.ca))"
+        server_cert: "((consul_server.certificate))"
+        server_key: "((consul_server.private_key))"
   - name: mysql
     release: cf-mysql
     properties:
@@ -227,7 +227,7 @@ instance_groups:
         mysql:
           galera_healthcheck:
             db_password: "((cf_mysql_mysql_galera_healthcheck_password))"
-            endpoint_username: "((cf_mysql_mysql_galera_healthcheck_endpoint_username))"
+            endpoint_username: "galera_healthcheck"
             endpoint_password: "((cf_mysql_mysql_galera_healthcheck_endpoint_password))"
           admin_password: "((cf_mysql_mysql_admin_password))"
           roadmin_password: "((cf_mysql_mysql_roadmin_password))"
@@ -235,13 +235,13 @@ instance_groups:
             password: "((cf_mysql_mysql_cluster_health_password))"
           seeded_databases:
           - name: cloud_controller
-            username: "((cf_mysql_mysql_seeded_databases_cc_username))"
+            username: "cloud_controller"
             password: "((cf_mysql_mysql_seeded_databases_cc_password))"
           - name: uaa
-            username: "((cf_mysql_mysql_seeded_databases_uaa_username))"
+            username: "uaa"
             password: "((cf_mysql_mysql_seeded_databases_uaa_password))"
           - name: diego
-            username: "((cf_mysql_mysql_seeded_databases_diego_username))"
+            username: "diego"
             password: "((cf_mysql_mysql_seeded_databases_diego_password))"
           database_startup_timeout: 600
           cluster_ips:
@@ -267,12 +267,12 @@ instance_groups:
           mode: client
           domain: cf.internal
           servers: *3
-        encrypt_keys: "((consul_encrypt_keys))"
-        agent_cert: "((consul_agent_cert))"
-        agent_key: "((consul_agent_agent_key))"
-        ca_cert: "((consul_agent_ca_cert))"
-        server_cert: "((consul_agent_server_cert))"
-        server_key: "((consul_agent_server_key))"
+        encrypt_keys: [((consul_encrypt_key))]
+        agent_cert: "((consul_agent.certificate))"
+        agent_key: "((consul_agent.private_key))"
+        ca_cert: "((consul_agent.ca))"
+        server_cert: "((consul_server.certificate))"
+        server_key: "((consul_server.private_key))"
   - name: bbs
     release: diego
     properties:
@@ -283,15 +283,15 @@ instance_groups:
           - label: key-2016-06
             passphrase: "((diego_bbs_encryption_keys_passphrase))"
           sql:
-            db_connection_string: "((diego_bbs_sql_db_connection_string))"
+            db_connection_string: "mysql://diego:((cf_mysql_mysql_seeded_databases_diego_password))@10.0.31.193:3306/diego"
           etcd:
             machines: []
             ca_cert: nil
             client_cert: nil
             client_key: nil
-          ca_cert: "((diego_bbs_ca_cert))"
-          server_cert: "((diego_bbs_server_cert))"
-          server_key: "((diego_bbs_server_key))"
+          ca_cert: "((diego_bbs.ca))"
+          server_cert: "((diego_bbs_server.certificate))"
+          server_key: "((diego_bbs_server.private_key))"
   - name: metron_agent
     release: loggregator
     properties: *2
@@ -317,28 +317,28 @@ instance_groups:
           servers: *3
           services:
             uaa: {}
-        encrypt_keys: "((consul_encrypt_keys))"
-        agent_cert: "((consul_agent_cert))"
-        agent_key: "((consul_agent_agent_key))"
-        ca_cert: "((consul_agent_ca_cert))"
-        server_cert: "((consul_agent_server_cert))"
-        server_key: "((consul_agent_server_key))"
+        encrypt_keys: [((consul_encrypt_key))]
+        agent_cert: "((consul_agent.certificate))"
+        agent_key: "((consul_agent.private_key))"
+        ca_cert: "((consul_agent.ca))"
+        server_cert: "((consul_server.certificate))"
+        server_key: "((consul_server.private_key))"
   - name: uaa
     release: uaa
     properties:
       uaa:
-        sslCertificate: "((uaa_sslCertificate))"
-        sslPrivateKey: "((uaa_sslPrivateKey))"
+        sslCertificate: "((uaa_ssl.certificate))"
+        sslPrivateKey: "((uaa_ssl.private_key))"
         zones:
           internal:
             hostnames:
             - uaa.service.cf.internal
-        url: "((uaa_url))"
+        url: "uaa.((system_domain))"
         admin:
           client_secret: "((uaa_admin_client_secret))"
         scim:
           users:
-          - name: "((uaa_scim_users_admin_name))"
+          - name: "admin"
             password: "((uaa_scim_users_admin_password))"
             groups:
             - cloud_controller.admin
@@ -350,8 +350,8 @@ instance_groups:
         login:
           client_secret: "((uaa_login_client_secret))"
         jwt:
-          signing_key: "((uaa_jwt_signing_key))"
-          verification_key: "((uaa_jwt_verification_key))"
+          signing_key: "((uaa_jwt_signing_key.private_key))"
+          verification_key: "((uaa_jwt_signing_key.public_key))"
         clients:
           cc-service-dashboards:
             authorities: clients.read,clients.write,clients.admin
@@ -404,7 +404,7 @@ instance_groups:
         db_scheme: mysql
         port: 3306
         roles:
-        - name: "((cf_mysql_mysql_seeded_databases_uaa_username))"
+        - name: "uaa"
           password: "((cf_mysql_mysql_seeded_databases_uaa_password))"
           tag: admin
   - name: route_registrar
@@ -421,15 +421,15 @@ instance_groups:
           tags:
             component: uaa
           uris:
-          - "((uaa_uri))"
-          - "((uaa_subdomain_uri))"
-          - "((login_uri))"
-          - "((login_subdomain_uri))"
+          - "uaa.((system_domain))"
+          - "*.uaa.((system_domain))"
+          - "login.((system_domain))"
+          - "*.login.((system_domain))"
       nats:
         machines: *4
         password: "((nats_password))"
         port: 4222
-        user: "((nats_user))"
+        user: "nats"
   - name: metron_agent
     release: loggregator
     properties: *2
@@ -455,12 +455,12 @@ instance_groups:
           mode: client
           domain: cf.internal
           servers: *3
-        encrypt_keys: "((consul_encrypt_keys))"
-        agent_cert: "((consul_agent_cert))"
-        agent_key: "((consul_agent_agent_key))"
-        ca_cert: "((consul_agent_ca_cert))"
-        server_cert: "((consul_agent_server_cert))"
-        server_key: "((consul_agent_server_key))"
+        encrypt_keys: [((consul_encrypt_key))]
+        agent_cert: "((consul_agent.certificate))"
+        agent_key: "((consul_agent.private_key))"
+        ca_cert: "((consul_agent.ca))"
+        server_cert: "((consul_server.certificate))"
+        server_key: "((consul_server.private_key))"
   - name: ssh_proxy
     release: diego
     properties:
@@ -469,13 +469,13 @@ instance_groups:
           skip_cert_verify: true
         ssh_proxy:
           enable_cf_auth: true
-          host_key: "((diego_ssh_proxy_host_key))"
+          host_key: "((diego_ssh_proxy_host_key.private_key))"
           uaa_secret: "((uaa_clients_ssh-proxy_secret))"
-          uaa_token_url: "((uaa_token_url))"
+          uaa_token_url: "https://uaa.((system_domain))/oauth/token"
           bbs: &5
-            ca_cert: "((diego_bbs_ca_cert))"
-            client_cert: "((diego_bbs_client_cert))"
-            client_key: "((diego_bbs_client_key))"
+            ca_cert: "((diego_bbs.ca))"
+            client_cert: "((diego_bbs_client.certificate))"
+            client_key: "((diego_bbs_client.private_key))"
   - name: file_server
     release: diego
   - name: auctioneer
@@ -507,12 +507,12 @@ instance_groups:
           mode: client
           domain: cf.internal
           servers: *3
-        encrypt_keys: "((consul_encrypt_keys))"
-        agent_cert: "((consul_agent_cert))"
-        agent_key: "((consul_agent_agent_key))"
-        ca_cert: "((consul_agent_ca_cert))"
-        server_cert: "((consul_agent_server_cert))"
-        server_key: "((consul_agent_server_key))"
+        encrypt_keys: [((consul_encrypt_key))]
+        agent_cert: "((consul_agent.certificate))"
+        agent_key: "((consul_agent.private_key))"
+        ca_cert: "((consul_agent.ca))"
+        server_cert: "((consul_server.certificate))"
+        server_key: "((consul_server.private_key))"
   - name: cflinuxfs2-rootfs-setup
     release: cflinuxfs2-rootfs
   - name: garden
@@ -559,23 +559,23 @@ instance_groups:
           servers: *3
           services:
             gorouter: {}
-        encrypt_keys: "((consul_encrypt_keys))"
-        agent_cert: "((consul_agent_cert))"
-        agent_key: "((consul_agent_agent_key))"
-        ca_cert: "((consul_agent_ca_cert))"
-        server_cert: "((consul_agent_server_cert))"
-        server_key: "((consul_agent_server_key))"
+        encrypt_keys: [((consul_encrypt_key))]
+        agent_cert: "((consul_agent.certificate))"
+        agent_key: "((consul_agent.private_key))"
+        ca_cert: "((consul_agent.ca))"
+        server_cert: "((consul_server.certificate))"
+        server_key: "((consul_server.private_key))"
   - name: gorouter
     release: routing
     properties:
       nats: *6
       router:
         enable_ssl: true
-        ssl_cert: "((router_ssl_cert))"
-        ssl_key: "((router_ssl_key))"
+        ssl_cert: "((router_ssl.certificate))"
+        ssl_key: "((router_ssl.private_key))"
         status:
           password: "((router_status_password))"
-          user: "((router_status_user))"
+          user: "router-status"
         route_services_secret: "((router_route_services_secret))"
         ssl_skip_validation: true
       uaa:
@@ -605,12 +605,12 @@ instance_groups:
           mode: client
           domain: cf.internal
           servers: *3
-        encrypt_keys: "((consul_encrypt_keys))"
-        agent_cert: "((consul_agent_cert))"
-        agent_key: "((consul_agent_agent_key))"
-        ca_cert: "((consul_agent_ca_cert))"
-        server_cert: "((consul_agent_server_cert))"
-        server_key: "((consul_agent_server_key))"
+        encrypt_keys: [((consul_encrypt_key))]
+        agent_cert: "((consul_agent.certificate))"
+        agent_key: "((consul_agent.private_key))"
+        ca_cert: "((consul_agent.ca))"
+        server_cert: "((consul_server.certificate))"
+        server_key: "((consul_server.private_key))"
   - name: haproxy
     release: routing
   - name: router_configurer
@@ -642,12 +642,12 @@ instance_groups:
           mode: client
           domain: cf.internal
           servers: *3
-        encrypt_keys: "((consul_encrypt_keys))"
-        agent_cert: "((consul_agent_cert))"
-        agent_key: "((consul_agent_agent_key))"
-        ca_cert: "((consul_agent_ca_cert))"
-        server_cert: "((consul_agent_server_cert))"
-        server_key: "((consul_agent_server_key))"
+        encrypt_keys: [((consul_encrypt_key))]
+        agent_cert: "((consul_agent.certificate))"
+        agent_key: "((consul_agent.private_key))"
+        ca_cert: "((consul_agent.ca))"
+        server_cert: "((consul_server.certificate))"
+        server_key: "((consul_server.private_key))"
   - name: route_emitter
     release: diego
     properties:
@@ -655,9 +655,9 @@ instance_groups:
         route_emitter:
           nats: *6
           bbs:
-            ca_cert: "((diego_bbs_ca_cert))"
-            client_cert: "((diego_bbs_client_cert))"
-            client_key: "((diego_bbs_client_key))"
+            ca_cert: "((diego_bbs.ca))"
+            client_cert: "((diego_bbs_client.certificate))"
+            client_key: "((diego_bbs_client.private_key))"
             require_ssl: true
   - name: metron_agent
     release: loggregator
@@ -684,26 +684,26 @@ instance_groups:
           servers: *3
           services:
             blobstore: {}
-        encrypt_keys: "((consul_encrypt_keys))"
-        agent_cert: "((consul_agent_cert))"
-        agent_key: "((consul_agent_agent_key))"
-        ca_cert: "((consul_agent_ca_cert))"
-        server_cert: "((consul_agent_server_cert))"
-        server_key: "((consul_agent_server_key))"
+        encrypt_keys: [((consul_encrypt_key))]
+        agent_cert: "((consul_agent.certificate))"
+        agent_key: "((consul_agent.private_key))"
+        ca_cert: "((consul_agent.ca))"
+        server_cert: "((consul_server.certificate))"
+        server_key: "((consul_server.private_key))"
   - name: blobstore
     release: capi
     properties:
       system_domain: "((system_domain))"
       blobstore:
         admin_users:
-        - username: "((blobstore_admin_users_username))"
+        - username: "blobstore-user"
           password: "((blobstore_admin_users_password))"
         secure_link:
           secret: "((blobstore_secure_link_secret))"
         tls:
-          cert: "((blobstore_tls_cert))"
-          private_key: "((blobstore_tls_private_key))"
-          ca_cert: "((blobstore_tls_ca_cert))"
+          cert: "((blobstore_tls.certificate))"
+          private_key: "((blobstore_tls.private_key))"
+          ca_cert: "((blobstore_tls.ca))"
   - name: route_registrar
     release: routing
     properties:
@@ -715,12 +715,12 @@ instance_groups:
           tags:
             component: blobstore
           uris:
-          - "((blobstore_uri))"
+          - "blobstore.((system_domain))"
       nats:
         machines: *4
         password: "((nats_password))"
         port: 4222
-        user: "((nats_user))"
+        user: "nats"
   - name: metron_agent
     release: loggregator
     properties: *2
@@ -747,12 +747,12 @@ instance_groups:
           services:
             cloud_controller_ng: {}
             routing-api: {}
-        encrypt_keys: "((consul_encrypt_keys))"
-        agent_cert: "((consul_agent_cert))"
-        agent_key: "((consul_agent_agent_key))"
-        ca_cert: "((consul_agent_ca_cert))"
-        server_cert: "((consul_agent_server_cert))"
-        server_key: "((consul_agent_server_key))"
+        encrypt_keys: [((consul_encrypt_key))]
+        agent_cert: "((consul_agent.certificate))"
+        agent_key: "((consul_agent.private_key))"
+        ca_cert: "((consul_agent.ca))"
+        server_cert: "((consul_server.certificate))"
+        server_key: "((consul_server.private_key))"
   - name: cloud_controller_ng
     release: capi
     properties:
@@ -769,15 +769,15 @@ instance_groups:
       system_domain: "((system_domain))"
       system_domain_organization: default_org
       app_domains: &17
-      - "((app_domain))"
+      - "((system_domain))"
       app_ssh: &18
-        host_key_fingerprint: "((diego_ssh_proxy_host_key_fingerprint))"
+        host_key_fingerprint: "((diego_ssh_proxy_host_key.public_key_fingerprint))"
         oauth_client_id: ssh-proxy
       nats:
         machines: *4
         password: "((nats_password))"
         port: 4222
-        user: "((nats_user))"
+        user: "nats"
       uaa:
         clients:
           cc_routing:
@@ -786,9 +786,9 @@ instance_groups:
             secret: "((uaa_clients_cloud_controller_username_lookup_secret))"
           cc-service-dashboards:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
-        url: "((uaa_url))"
+        url: "uaa.((system_domain))"
         jwt:
-          verification_key: "((uaa_jwt_verification_key))"
+          verification_key: "((uaa_jwt_signing_key.public_key))"
       cc:
         default_running_security_groups: &11
         - public_networks
@@ -842,7 +842,7 @@ instance_groups:
         db_encryption_key: "((cc_db_encryption_key))"
         bulk_api_password: "((cc_bulk_api_password))"
         internal_api_password: "((cc_internal_api_password))"
-        staging_upload_user: "((cc_staging_upload_user))"
+        staging_upload_user: "staging_user"
         staging_upload_password: "((cc_staging_upload_password))"
         quota_definitions: &14
           default:
@@ -855,9 +855,9 @@ instance_groups:
           webdav_config:
             blobstore_timeout: 5
             password: "((blobstore_admin_users_password))"
-            private_endpoint: "((blobstore_private_url))"
-            public_endpoint: "((blobstore_public_url))"
-            username: "((blobstore_admin_users_username))"
+            private_endpoint: "https://blobstore.service.cf.internal:4443"
+            public_endpoint: "https://blobstore.((system_domain))"
+            username: "blobstore-user"
         resource_pool: *7
         packages: *7
         droplets: *7
@@ -869,7 +869,7 @@ instance_groups:
         db_scheme: mysql
         port: 3306
         roles:
-        - name: "((cf_mysql_mysql_seeded_databases_cc_username))"
+        - name: "cloud_controller"
           password: "((cf_mysql_mysql_seeded_databases_cc_password))"
           tag: admin
   - name: cloud_controller_worker
@@ -889,7 +889,7 @@ instance_groups:
         internal_api_password: "((cc_internal_api_password))"
         bulk_api_password: "((cc_bulk_api_password))"
         quota_definitions: *14
-        staging_upload_user: "((cc_staging_upload_user))"
+        staging_upload_user: "staging_user"
         staging_upload_password: "((cc_staging_upload_password))"
         resource_pool: *7
         packages: *7
@@ -905,14 +905,14 @@ instance_groups:
         machines: *4
         password: "((nats_password))"
         port: 4222
-        user: "((nats_user))"
+        user: "nats"
       uaa:
         clients:
           cc-service-dashboards:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
-        url: "((uaa_url))"
+        url: "uaa.((system_domain))"
         jwt:
-          verification_key: "((uaa_jwt_verification_key))"
+          verification_key: "((uaa_jwt_signing_key.public_key))"
   - name: binary-buildpack
     release: binary-buildpack
   - name: dotnet-core-buildpack
@@ -942,12 +942,12 @@ instance_groups:
           registration_interval: 20s
           port: 9022
           uris:
-          - "((api_uri))"
+          - "api.((system_domain))"
       nats:
         machines: *4
         password: "((nats_password))"
         port: 4222
-        user: "((nats_user))"
+        user: "nats"
   - name: statsd-injector
     release: loggregator
   - name: metron_agent
@@ -961,9 +961,9 @@ instance_groups:
         etcd:
           servers:
           - etcd.service.cf.internal
-          client_cert: "((etcd_client_cert))"
-          client_key: "((etcd_client_key))"
-          ca_cert: "((etcd_ca_cert))"
+          client_cert: "((etcd_client.certificate))"
+          client_key: "((etcd_client.private_key))"
+          ca_cert: "((etcd_server.ca))"
           require_ssl: true
         router_groups:
         - name: default-tcp
@@ -991,12 +991,12 @@ instance_groups:
           mode: client
           domain: cf.internal
           servers: *3
-        encrypt_keys: "((consul_encrypt_keys))"
-        agent_cert: "((consul_agent_cert))"
-        agent_key: "((consul_agent_agent_key))"
-        ca_cert: "((consul_agent_ca_cert))"
-        server_cert: "((consul_agent_server_cert))"
-        server_key: "((consul_agent_server_key))"
+        encrypt_keys: [((consul_encrypt_key))]
+        agent_cert: "((consul_agent.certificate))"
+        agent_key: "((consul_agent.private_key))"
+        ca_cert: "((consul_agent.ca))"
+        server_cert: "((consul_server.certificate))"
+        server_key: "((consul_server.private_key))"
   - name: cloud_controller_clock
     release: capi
     properties:
@@ -1014,7 +1014,7 @@ instance_groups:
         internal_api_password: "((cc_internal_api_password))"
         bulk_api_password: "((cc_bulk_api_password))"
         quota_definitions: *14
-        staging_upload_user: "((cc_staging_upload_user))"
+        staging_upload_user: "staging_user"
         staging_upload_password: "((cc_staging_upload_password))"
         resource_pool: *7
         packages: *7
@@ -1030,14 +1030,14 @@ instance_groups:
         machines: *4
         password: "((nats_password))"
         port: 4222
-        user: "((nats_user))"
+        user: "nats"
       uaa:
         clients:
           cc-service-dashboards:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
-        url: "((uaa_url))"
+        url: "uaa.((system_domain))"
         jwt:
-          verification_key: "((uaa_jwt_verification_key))"
+          verification_key: "((uaa_jwt_signing_key.public_key))"
   - name: statsd-injector
     release: loggregator
   - name: metron_agent
@@ -1063,12 +1063,12 @@ instance_groups:
           mode: client
           domain: cf.internal
           servers: *3
-        encrypt_keys: "((consul_encrypt_keys))"
-        agent_cert: "((consul_agent_cert))"
-        agent_key: "((consul_agent_agent_key))"
-        ca_cert: "((consul_agent_ca_cert))"
-        server_cert: "((consul_agent_server_cert))"
-        server_key: "((consul_agent_server_key))"
+        encrypt_keys: [((consul_encrypt_key))]
+        agent_cert: "((consul_agent.certificate))"
+        agent_key: "((consul_agent.private_key))"
+        ca_cert: "((consul_agent.ca))"
+        server_cert: "((consul_server.certificate))"
+        server_key: "((consul_server.private_key))"
   - name: stager
     release: capi
     properties:
@@ -1089,7 +1089,7 @@ instance_groups:
           bbs: *5
           cc:
             basic_auth_password: "((cc_internal_api_password))"
-            base_url: "((api_url))"
+            base_url: "https://api.((system_domain))"
           diego_privileged_containers: true
   - name: tps
     release: capi
@@ -1129,39 +1129,39 @@ instance_groups:
           mode: client
           domain: cf.internal
           servers: *3
-        encrypt_keys: "((consul_encrypt_keys))"
-        agent_cert: "((consul_agent_cert))"
-        agent_key: "((consul_agent_agent_key))"
-        ca_cert: "((consul_agent_ca_cert))"
-        server_cert: "((consul_agent_server_cert))"
-        server_key: "((consul_agent_server_key))"
+        encrypt_keys: [((consul_encrypt_key))]
+        agent_cert: "((consul_agent.certificate))"
+        agent_key: "((consul_agent.private_key))"
+        ca_cert: "((consul_agent.ca))"
+        server_cert: "((consul_server.certificate))"
+        server_key: "((consul_server.private_key))"
   - name: doppler
     release: loggregator
     properties:
       doppler:
         etcd:
-          client_cert: "((etcd_client_cert))"
-          client_key: "((etcd_client_key))"
+          client_cert: "((etcd_client.certificate))"
+          client_key: "((etcd_client.private_key))"
         syslog_skip_cert_verify: true
         tls:
           enable: true
-          server_cert: "((doppler_tls_server_cert))"
-          server_key: "((doppler_tls_server_key))"
+          server_cert: "((doppler_tls_server.certificate))"
+          server_key: "((doppler_tls_server.private_key))"
       loggregator:
         tls:
-          ca_cert: "((loggregator_tls_ca_cert))"
+          ca_cert: "((loggregator_ca.certificate))"
           trafficcontroller:
-            cert: "((loggregator_tls_tc_cert))"
-            key: "((loggregator_tls_tc_key))"
+            cert: "((loggregator_tls_tc.certificate))"
+            key: "((loggregator_tls_tc.private_key))"
           metron:
-            cert: "((metron_metron_agent_tls_client_cert))"
-            key: "((metron_metron_agent_tls_client_key))"
+            cert: "((metron_agent_tls_client.certificate))"
+            key: "((metron_agent_tls_client.private_key))"
           doppler:
-            cert: "((loggregator_tls_doppler_cert))"
-            key: "((loggregator_tls_doppler_key))"
+            cert: "((loggregator_tls_doppler.certificate))"
+            key: "((loggregator_tls_doppler.private_key))"
         etcd:
           require_ssl: true
-          ca_cert: "((etcd_ca_cert))"
+          ca_cert: "((etcd_server.ca))"
           machines:
           - etcd.service.cf.internal
       doppler_endpoint:
@@ -1171,29 +1171,29 @@ instance_groups:
     properties:
       loggregator:
         tls:
-          ca_cert: "((loggregator_tls_ca_cert))"
+          ca_cert: "((loggregator_ca.certificate))"
           trafficcontroller:
-            cert: "((loggregator_tls_tc_cert))"
-            key: "((loggregator_tls_tc_key))"
+            cert: "((loggregator_tls_tc.certificate))"
+            key: "((loggregator_tls_tc.private_key))"
           metron:
-            cert: "((metron_metron_agent_tls_client_cert))"
-            key: "((metron_metron_agent_tls_client_key))"
+            cert: "((metron_agent_tls_client.certificate))"
+            key: "((metron_agent_tls_client.private_key))"
           doppler:
-            cert: "((loggregator_tls_doppler_cert))"
-            key: "((loggregator_tls_doppler_key))"
+            cert: "((loggregator_tls_doppler.certificate))"
+            key: "((loggregator_tls_doppler.private_key))"
         etcd:
           require_ssl: true
-          ca_cert: "((etcd_ca_cert))"
+          ca_cert: "((etcd_server.ca))"
           machines:
           - etcd.service.cf.internal
       syslog_drain_binder:
         etcd:
-          client_cert: "((etcd_client_cert))"
-          client_key: "((etcd_client_key))"
+          client_cert: "((etcd_client.certificate))"
+          client_key: "((etcd_client.private_key))"
       system_domain: "((system_domain))"
       cc:
         bulk_api_password: "((cc_bulk_api_password))"
-        srv_api_uri: "((api_url))"
+        srv_api_uri: "https://api.((system_domain))"
       ssl: *16
   - name: metron_agent
     release: loggregator
@@ -1223,45 +1223,45 @@ instance_groups:
           servers: *3
           services:
             loggregator_trafficcontroller: {}
-        encrypt_keys: "((consul_encrypt_keys))"
-        agent_cert: "((consul_agent_cert))"
-        agent_key: "((consul_agent_agent_key))"
-        ca_cert: "((consul_agent_ca_cert))"
-        server_cert: "((consul_agent_server_cert))"
-        server_key: "((consul_agent_server_key))"
+        encrypt_keys: [((consul_encrypt_key))]
+        agent_cert: "((consul_agent.certificate))"
+        agent_key: "((consul_agent.private_key))"
+        ca_cert: "((consul_agent.ca))"
+        server_cert: "((consul_server.certificate))"
+        server_key: "((consul_server.private_key))"
   - name: loggregator_trafficcontroller
     release: loggregator
     properties:
       traffic_controller:
         etcd:
-          client_cert: "((etcd_client_cert))"
-          client_key: "((etcd_client_key))"
+          client_cert: "((etcd_client.certificate))"
+          client_key: "((etcd_client.private_key))"
       uaa:
         clients:
           doppler:
             secret: "((uaa_clients_doppler_secret))"
-        url: "((uaa_url))"
+        url: "uaa.((system_domain))"
       loggregator:
         tls:
-          ca_cert: "((loggregator_tls_ca_cert))"
+          ca_cert: "((loggregator_ca.certificate))"
           trafficcontroller:
-            cert: "((loggregator_tls_tc_cert))"
-            key: "((loggregator_tls_tc_key))"
+            cert: "((loggregator_tls_tc.certificate))"
+            key: "((loggregator_tls_tc.private_key))"
           metron:
-            cert: "((metron_metron_agent_tls_client_cert))"
-            key: "((metron_metron_agent_tls_client_key))"
+            cert: "((metron_agent_tls_client.certificate))"
+            key: "((metron_agent_tls_client.private_key))"
           doppler:
-            cert: "((loggregator_tls_doppler_cert))"
-            key: "((loggregator_tls_doppler_key))"
+            cert: "((loggregator_tls_doppler.certificate))"
+            key: "((loggregator_tls_doppler.private_key))"
         etcd:
           require_ssl: true
-          ca_cert: "((etcd_ca_cert))"
+          ca_cert: "((etcd_server.ca))"
           machines:
           - etcd.service.cf.internal
       system_domain: "((system_domain))"
       ssl: *16
       cc:
-        srv_api_uri: "((api_url))"
+        srv_api_uri: "https://api.((system_domain))"
   - name: route_registrar
     release: routing
     properties:
@@ -1271,18 +1271,18 @@ instance_groups:
           port: 8080
           registration_interval: 20s
           uris:
-          - "((loggregator_uri))"
+          - "loggregator.((system_domain))"
         - name: doppler
           port: 8081
           registration_interval: 20s
           uris:
-          - "((doppler_uri))"
-          - "((doppler_subdomain_uri))"
+          - "doppler.((system_domain))"
+          - "*.doppler.((system_domain))"
       nats:
         machines: *4
         password: "((nats_password))"
         port: 4222
-        user: "((nats_user))"
+        user: "nats"
   - name: metron_agent
     release: loggregator
     properties: *2
@@ -1375,3 +1375,189 @@ stemcells:
 - alias: default
   os: ubuntu-trusty
   version: '3309'
+
+variables:
+- name: blobstore_admin_users_password
+  type: password
+- name: blobstore_secure_link_secret
+  type: password
+- name: cc_bulk_api_password
+  type: password
+- name: cc_db_encryption_key
+  type: password
+- name: cc_internal_api_password
+  type: password
+- name: cc_staging_upload_password
+  type: password
+- name: cf_mysql_mysql_admin_password
+  type: password
+- name: cf_mysql_mysql_cluster_health_password
+  type: password
+- name: cf_mysql_mysql_galera_healthcheck_endpoint_password
+  type: password
+- name: cf_mysql_mysql_galera_healthcheck_password
+  type: password
+- name: cf_mysql_mysql_roadmin_password
+  type: password
+- name: cf_mysql_mysql_seeded_databases_cc_password
+  type: password
+- name: cf_mysql_mysql_seeded_databases_diego_password
+  type: password
+- name: cf_mysql_mysql_seeded_databases_uaa_password
+  type: password
+- name: nats_password
+  type: password
+- name: router_status_password
+  type: password
+- name: uaa_scim_users_admin_password
+  type: password
+- name: dropsonde_shared_secret
+  type: password
+- name: router_route_services_secret
+  type: password
+- name: uaa_admin_client_secret
+  type: password
+- name: uaa_clients_cc-routing_secret
+  type: password
+- name: uaa_clients_cc-service-dashboards_secret
+  type: password
+- name: uaa_clients_cloud_controller_username_lookup_secret
+  type: password
+- name: uaa_clients_doppler_secret
+  type: password
+- name: uaa_clients_gorouter_secret
+  type: password
+- name: uaa_clients_ssh-proxy_secret
+  type: password
+- name: uaa_clients_tcp_emitter_secret
+  type: password
+- name: uaa_clients_tcp_router_secret
+  type: password
+- name: uaa_login_client_secret
+  type: password
+- name: diego_bbs_encryption_keys_passphrase
+  type: password
+- name: consul_encrypt_key
+  type: password
+- name: diego_ssh_proxy_host_key
+  type: ssh
+- name: uaa_jwt_signing_key
+  type: rsa
+
+- name: etcd_ca
+  type: certificate
+  options:
+    common_name: etcdCA
+- name: etcd_server
+  type: certificate
+  options:
+    ca: etcd_ca
+    common_name: etcd.service.cf.internal
+    alternative_domains:
+    - "*.etcd.service.cf.internal"
+    - "etcd.service.cf.internal"
+- name: etcd_client
+  type: certificate
+  options:
+    ca: etcd_ca
+    common_name: clientName
+
+- name: etcd_peer_ca
+  type: certificate
+  options:
+    common_name: peerCA
+- name: etcd_peer
+  type: certificate
+  options:
+    ca: etcd_peer_ca
+    common_name: etcd.service.cf.internal
+    alternative_domains:
+    - "*.etcd.service.cf.internal"
+    - "etcd.service.cf.internal"
+
+- name: blobstore_ca
+  type: certificate
+  options:
+    common_name: blobstore_ca
+- name: blobstore_tls
+  type: certificate
+  options:
+    ca: blobstore_ca
+    common_name: blobstore.service.cf.internal
+
+- name: consul_agent_ca
+  type: certificate
+  options:
+    common_name: consulCA
+- name: consul_agent
+  type: certificate
+  options:
+    ca: consul_agent_ca
+    common_name: consul_agent
+- name: consul_server
+  type: certificate
+  options:
+    ca: consul_agent_ca
+    common_name: server.dc1.cf.internal
+
+- name: diego_bbs
+  type: certificate
+  options:
+    common_name: diegoCA
+- name: diego_bbs_client
+  type: certificate
+  options:
+    ca: diego_bbs
+    common_name: bbs_client
+- name: diego_bbs_server
+  type: certificate
+  options:
+    ca: diego_bbs
+    common_name: bbs.service.cf.internal
+
+- name: loggregator_ca
+  type: certificate
+  options:
+    common_name: loggregatorCA
+- name: doppler_tls_server
+  type: certificate
+  options:
+    ca: loggregator_ca
+    common_name: doppler
+- name: metron_agent_tls_client
+  type: certificate
+  options:
+    ca: loggregator_ca
+    common_name: metron_agent
+- name: loggregator_tls_doppler
+  type: certificate
+  options:
+    ca: loggregator_ca
+    common_name: doppler
+- name: loggregator_tls_tc
+  type: certificate
+  options:
+    ca: loggregator_ca
+    common_name: trafficcontroller
+
+- name: router_ca
+  type: certificate
+  options:
+    common_name: routerCA
+- name: router_ssl
+  type: certificate
+  options:
+    ca: router_ca
+    common_name: routerSSL
+    alternative_domains:
+    - ((system_domain))
+
+- name: uaa_ca
+  type: certificate
+  options:
+    common_name: uaaCA
+- name: uaa_ssl
+  type: certificate
+  options:
+    ca: uaa_ca
+    common_name: uaa.service.cf.internal
