@@ -283,12 +283,12 @@ instance_groups:
           - label: key-2016-06
             passphrase: "((diego_bbs_encryption_keys_passphrase))"
           sql:
-            db_host: "((diego_bbs_sql_db_host))"
-            db_port: "((diego_bbs_sql_db_port))"
-            db_schema: "((diego_bbs_sql_db_schema))"
-            db_username: "((diego_bbs_sql_db_username))"
+            db_host: 10.0.31.193
+            db_port: 3306
+            db_schema: diego
+            db_username: diego
             db_password: "((diego_bbs_sql_db_password))"
-            db_driver: "((diego_bbs_sql_db_driver))"
+            db_driver: mysql
           etcd:
             machines: []
             ca_cert: nil
