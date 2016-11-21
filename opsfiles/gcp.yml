@@ -187,6 +187,9 @@
   path: /instance_groups/name=api/jobs/name=cloud_controller_worker/properties/ccdb/address
   value: *mysql_ip
 - type: replace
+  path: /instance_groups/name=diego-bbs/jobs/name=bbs/properties/diego/bbs/sql/db_host
+  value: *mysql_ip
+- type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_worker/properties/nats/machines
   value: *nats_ips
 - type: replace
