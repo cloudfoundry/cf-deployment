@@ -83,20 +83,6 @@
   - 5GB_ephemeral_disk
   - cf-internet-required
 
-# --- remove 4443 port overrides ---
-- type: remove
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/doppler
-- type: remove
-  path: /instance_groups/name=api/jobs/name=cloud_controller_worker/properties/doppler
-- type: remove
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/logger_endpoint
-- type: remove
-  path: /instance_groups/name=api/jobs/name=cloud_controller_worker/properties/logger_endpoint
-- type: remove
-  path: /instance_groups/name=cc_clock/jobs/name=cloud_controller_clock/properties/doppler
-- type: remove
-  path: /instance_groups/name=cc_clock/jobs/name=cloud_controller_clock/properties/logger_endpoint
-
 # --- change static IPs ---
 - type: replace
   path: /instance_groups/name=mysql/networks/name=private/static_ips
