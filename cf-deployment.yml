@@ -331,6 +331,10 @@ instance_groups:
   - name: uaa
     release: uaa
     properties:
+      login:
+        saml:
+          serviceProviderKey: "((uaa_login_saml_serviceProviderKey))"
+          serviceProviderCertificate: "((uaa_login_saml_serviceProviderCertificate))"
       uaa:
         sslCertificate: "((uaa_sslCertificate))"
         sslPrivateKey: "((uaa_sslPrivateKey))"
@@ -354,9 +358,6 @@ instance_groups:
             - scim.write
         login:
           client_secret: "((uaa_login_client_secret))"
-          saml:
-            serviceProviderKey: "((uaa_login_saml_serviceProviderKey))"
-            serviceProviderCertificate: "((uaa_login_saml_serviceProviderCertificate))"
         jwt:
           signing_key: "((uaa_jwt_signing_key))"
           verification_key: "((uaa_jwt_verification_key))"
