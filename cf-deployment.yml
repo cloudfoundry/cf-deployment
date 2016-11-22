@@ -354,6 +354,7 @@ instance_groups:
             - scim.write
         login:
           client_secret: "((uaa_login_client_secret))"
+          serviceProviderKey: "((uaa_login_serviceProviderKey))"
         jwt:
           signing_key: "((uaa_jwt_signing_key))"
           verification_key: "((uaa_jwt_verification_key))"
