@@ -765,13 +765,13 @@ instance_groups:
         route_services_secret: "((router_route_services_secret))"
       hm9000:
         port: -1
-      ssl: &16
+      ssl: &14
         skip_cert_verify: true
       system_domain: "((system_domain))"
       system_domain_organization: default_org
-      app_domains: &17
+      app_domains: &15
       - "((app_domain))"
-      app_ssh: &18
+      app_ssh: &16
         host_key_fingerprint: "((diego_ssh_proxy_host_key_fingerprint))"
         oauth_client_id: ssh-proxy
       nats:
@@ -791,13 +791,13 @@ instance_groups:
         jwt:
           verification_key: "((uaa_jwt_verification_key))"
       cc:
-        default_running_security_groups: &11
+        default_running_security_groups: &9
         - public_networks
         - dns
-        default_staging_security_groups: &12
+        default_staging_security_groups: &10
         - public_networks
         - dns
-        security_group_definitions: &13
+        security_group_definitions: &11
         - name: public_networks
           rules:
           - destination: 0.0.0.0-9.255.255.255
@@ -818,7 +818,7 @@ instance_groups:
           - destination: 0.0.0.0/0
             ports: '53'
             protocol: udp
-        install_buildpacks: &10
+        install_buildpacks: &8
         - name: binary_buildpack
           package: binary-buildpack
         - name: dotnet_core_buildpack
@@ -845,7 +845,7 @@ instance_groups:
         internal_api_password: "((cc_internal_api_password))"
         staging_upload_user: "((cc_staging_upload_user))"
         staging_upload_password: "((cc_staging_upload_password))"
-        quota_definitions: &14
+        quota_definitions: &12
           default:
             memory_limit: 102400
             non_basic_services_allowed: true
@@ -862,7 +862,7 @@ instance_groups:
         resource_pool: *7
         packages: *7
         droplets: *7
-      ccdb: &15
+      ccdb: &13
         databases:
         - name: cloud_controller
           tag: cc
@@ -881,25 +881,25 @@ instance_groups:
       cc:
         db_encryption_key: "((cc_db_encryption_key))"
         default_to_diego_backend: true
-        install_buildpacks: *10
-        default_running_security_groups: *11
-        default_staging_security_groups: *12
-        security_group_definitions: *13
+        install_buildpacks: *8
+        default_running_security_groups: *9
+        default_staging_security_groups: *10
+        security_group_definitions: *11
         internal_api_password: "((cc_internal_api_password))"
         bulk_api_password: "((cc_bulk_api_password))"
-        quota_definitions: *14
+        quota_definitions: *12
         staging_upload_user: "((cc_staging_upload_user))"
         staging_upload_password: "((cc_staging_upload_password))"
         resource_pool: *7
         packages: *7
         droplets: *7
         buildpacks: *7
-      ccdb: *15
-      ssl: *16
+      ccdb: *13
+      ssl: *14
       system_domain: "((system_domain))"
       system_domain_organization: default_org
-      app_domains: *17
-      app_ssh: *18
+      app_domains: *15
+      app_ssh: *16
       nats:
         machines: *4
         password: "((nats_password))"
@@ -1004,25 +1004,25 @@ instance_groups:
       cc:
         db_encryption_key: "((cc_db_encryption_key))"
         default_to_diego_backend: true
-        install_buildpacks: *10
-        default_running_security_groups: *11
-        default_staging_security_groups: *12
-        security_group_definitions: *13
+        install_buildpacks: *8
+        default_running_security_groups: *9
+        default_staging_security_groups: *10
+        security_group_definitions: *11
         internal_api_password: "((cc_internal_api_password))"
         bulk_api_password: "((cc_bulk_api_password))"
-        quota_definitions: *14
+        quota_definitions: *12
         staging_upload_user: "((cc_staging_upload_user))"
         staging_upload_password: "((cc_staging_upload_password))"
         resource_pool: *7
         packages: *7
         droplets: *7
         buildpacks: *7
-      ccdb: *15
-      ssl: *16
+      ccdb: *13
+      ssl: *14
       system_domain: "((system_domain))"
       system_domain_organization: default_org
-      app_domains: *17
-      app_ssh: *18
+      app_domains: *15
+      app_ssh: *16
       nats:
         machines: *4
         password: "((nats_password))"
@@ -1070,7 +1070,7 @@ instance_groups:
     release: capi
     properties:
       diego:
-        ssl: *16
+        ssl: *14
       capi:
         stager:
           bbs: *5
@@ -1080,7 +1080,7 @@ instance_groups:
     release: capi
     properties:
       diego:
-        ssl: *16
+        ssl: *14
       capi:
         nsync:
           bbs: *5
@@ -1092,7 +1092,7 @@ instance_groups:
     release: capi
     properties:
       diego:
-        ssl: *16
+        ssl: *14
       capi:
         tps:
           bbs: *5
@@ -1102,7 +1102,7 @@ instance_groups:
     release: capi
     properties:
       diego:
-        ssl: *16
+        ssl: *14
   - name: metron_agent
     release: loggregator
     properties: *2
@@ -1191,7 +1191,7 @@ instance_groups:
       cc:
         bulk_api_password: "((cc_bulk_api_password))"
         srv_api_uri: "((api_url))"
-      ssl: *16
+      ssl: *14
   - name: metron_agent
     release: loggregator
     properties: *2
@@ -1256,7 +1256,7 @@ instance_groups:
           machines:
           - etcd.service.cf.internal
       system_domain: "((system_domain))"
-      ssl: *16
+      ssl: *14
       cc:
         srv_api_uri: "((api_url))"
   - name: route_registrar
@@ -1293,9 +1293,9 @@ releases:
   version: '139'
   sha1: 9baa88d434c7e7d87161391b3b4e8afcf7a6472f
 - name: diego
-  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=0.1490.0
-  version: 0.1490.0
-  sha1: 7154de722856b7aecbd4d08eae6c8dfd13e068cb
+  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=0.1491.0
+  version: 0.1491.0
+  sha1: b30c9ad37e3ff5da6a65bd5852127ea27ff1b278
 - name: etcd
   url: https://bosh.io/d/github.com/cloudfoundry-incubator/etcd-release?v=86
   version: '86'
