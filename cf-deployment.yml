@@ -557,6 +557,8 @@ instance_groups:
   - name: consul_agent_windows
     release: consul
     properties:
+      syslog_daemon_config:
+        enable: false
       consul:
         agent:
           mode: client
@@ -570,9 +572,14 @@ instance_groups:
         server_key: "((consul_agent_server_key))"
   - name: garden-windows
     release: garden-windows
+    properties:
+      syslog_daemon_config:
+        enable: false
   - name: rep_windows
     release: diego
     properties:
+      syslog_daemon_config:
+        enable: false
       diego:
         rep:
           bbs: *5
