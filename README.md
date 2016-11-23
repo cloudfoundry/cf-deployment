@@ -21,6 +21,7 @@ The easiest way to get a file for deployment variables is to generate them with 
 The configuration of CF represented by `cf-deployment.yml` is intended to be a workable, secure, fully-featured default. However, the need occasionally arises to make different configuration choices. We accomplish this with the `-o`/`--ops-file` flags. These flags read a single `.yml` file that details operations to be performed on the manifest before variables are filled. We've packaged some common manifest modifications in the `opsfiles` directory. Here's a brief summary:
 
 - `opsfiles/disable-router-tls-termination.yml` - this file eliminates keys related to performing tls/ssl termination within the gorouter job. It's useful for deployments where tls termination is performed prior to the gorouter - for instance, on AWS, such termination is commonly done at the ELB. This also eliminates the need to specify `((router_ssl_cert))` and `((router_ssl_key))` in the var files.
+- `opsfiles/change-logging-port-for-aws-elb.yml` - this file overrides the loggregator ports to 4443, since it is required under AWS to have a separate port from the standard HTTPS port (443) for loggregator traffic in order to use the AWS load balancer.
 
 ## Dependencies and assumptions
 
