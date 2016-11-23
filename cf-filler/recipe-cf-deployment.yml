@@ -30,6 +30,7 @@ strings:
   cf_mysql_mysql_seeded_databases_uaa_username:        "uaa"
   nats_user:          "nats"
   router_status_user: "router-status"
+  uaa_login_saml_serviceProviderKeyPassword: ""
 
 passwords:
 - blobstore_admin_users_password
@@ -155,6 +156,13 @@ cert_sets:
   - varname_cert: uaa_sslCertificate
     varname_key:  uaa_sslPrivateKey
     commonname:   uaa.service.cf.internal
+
+- ca:
+    commonname: uaa_samlCA
+  certkeypairs:
+  - varname_cert: uaa_login_saml_serviceProviderCertificate
+    varname_key:  uaa_login_saml_serviceProviderKey
+    commonname:   uaaSamlProvider
 
 - ca:
     commonname: goRouterCA
