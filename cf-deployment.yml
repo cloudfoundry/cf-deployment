@@ -547,6 +547,55 @@ instance_groups:
   - name: metron_agent
     release: loggregator
     properties: *2
+- name: windows-cell
+  azs:
+  - z1
+  - z2
+  instances: 0
+  vm_type: r3.xlarge
+  vm_extensions:
+  - 100GB_ephemeral_disk
+  stemcell: windows
+  networks:
+  - name: private
+  jobs:
+  - name: consul_agent_windows
+    release: consul
+    properties:
+      syslog_daemon_config:
+        enable: false
+      consul:
+        agent:
+          mode: client
+          domain: cf.internal
+          servers: *3
+        encrypt_keys: "((consul_encrypt_keys))"
+        agent_cert: "((consul_agent_cert))"
+        agent_key: "((consul_agent_agent_key))"
+        ca_cert: "((consul_agent_ca_cert))"
+        server_cert: "((consul_agent_server_cert))"
+        server_key: "((consul_agent_server_key))"
+  - name: garden-windows
+    release: garden-windows
+    properties:
+      syslog_daemon_config:
+        enable: false
+  - name: rep_windows
+    release: diego
+    properties:
+      syslog_daemon_config:
+        enable: false
+      diego:
+        rep:
+          bbs: *5
+          require_tls: false
+          preloaded_rootfses:
+          - windows2012R2:/tmp/windows2012R2
+        ssl:
+          skip_cert_verify: true
+  - name: metron_agent_windows
+    release: loggregator
+    properties: *2
 - name: router
   azs:
   - z1
@@ -867,6 +916,11 @@ instance_groups:
         resource_pool: *7
         packages: *7
         droplets: *7
+        stacks:
+        - name: "cflinuxfs2"
+          description: "Cloud Foundry Linux-based filesystem"
+        - name: "windows2012R2"
+          description: "Windows Server 2012 R2"
       ccdb: &13
         databases:
         - name: cloud_controller
@@ -1373,7 +1427,14 @@ releases:
   url: https://bosh.io/d/github.com/cloudfoundry/staticfile-buildpack-release?v=1.3.13
   version: 1.3.13
   sha1: 0741ad6d39cf258c317151e1227e0ccfe1fd7579
+- name: garden-windows
+  version: 0.0.9
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/garden-windows-bosh-release?v=0.0.9
+  sha1: c72b842e9b18c6fc2525f3ac9ec3973fb3797e47
 stemcells:
 - alias: default
   os: ubuntu-trusty
   version: '3312'
+- alias: windows
+  os: windows2012R2
+  version: latest
