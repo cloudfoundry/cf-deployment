@@ -64,6 +64,33 @@
     - destination: 10.244.0.34
       protocol: all
 
+# ----- Move SSH Proxy from diego-brain to router ----
+- type: remove
+  path: /instance_groups/name=diego-brain/vm_extensions
+- type: remove
+  path: /instance_groups/name=diego-brain/jobs/name=ssh_proxy
+- type: replace
+  path: /instance_groups/name=router/vm_extensions/-
+  value: ssh-proxy-lb
+- type: replace
+  path: /instance_groups/name=router/jobs/-
+  value:
+    name: ssh_proxy
+    release: diego
+    properties:
+      diego:
+        ssl:
+          skip_cert_verify: true
+        ssh_proxy:
+          enable_cf_auth: true
+          host_key: "((diego_ssh_proxy_host_key))"
+          uaa_secret: "((uaa_clients_ssh-proxy_secret))"
+          uaa_token_url: "((uaa_token_url))"
+          bbs: &5
+            ca_cert: "((diego_bbs_ca_cert))"
+            client_cert: "((diego_bbs_client_cert))"
+            client_key: "((diego_bbs_client_key))"
+
 # ----- Scale Down ------
 - type: replace
   path: /instance_groups/name=consul/azs
