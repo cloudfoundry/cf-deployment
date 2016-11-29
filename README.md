@@ -8,7 +8,14 @@ This repo contains a canonical manifest for deploying Cloud Foundry. It will rep
 ## Usage
 To deploy:
 ```
-bosh -e my-env -d cf deploy cf-deployemnt/cf-deployment.yml -l env-repo/deployment-vars.yml
+bosh -e my-env -d cf deploy cf-deployment/cf-deployment.yml [ -o opsfiles/CUSTOMIZATION1 ] [ -o opsfiles/CUSTOMIZATION2 ] -l env-repo/deployment-vars.yml
+```
+
+## Example
+To deploy to bosh lite:
+```
+cf-filler -recipe cf-filler/recipe-cf-deployment.yml -dnsname bosh-lite.com > deployment-vars.yml
+bosh -e lite -d cf deploy cf-deployment.yml -o opsfiles/bosh-lite.yml -l deployment-vars.yml
 ```
 
 ## Deployment variables
