@@ -47,30 +47,30 @@ instance_groups:
       syslog_daemon_config:
         enable: false
       metron_agent:
-        deployment: "((metron_agent_deployment_name))"
+        deployment: "((system_domain))"
         tls:
-          client_cert: "((metron_metron_agent_tls_client_cert))"
-          client_key: "((metron_metron_agent_tls_client_key))"
+          client_cert: "((metron_agent_tls_client.certificate))"
+          client_key: "((metron_agent_tls_client.private_key))"
         etcd:
-          client_cert: "((etcd_client_cert))"
-          client_key: "((etcd_client_key))"
+          client_cert: "((etcd_client.certificate))"
+          client_key: "((etcd_client.private_key))"
       metron_endpoint:
         shared_secret: "((dropsonde_shared_secret))"
       loggregator:
         tls:
-          ca_cert: "((loggregator_tls_ca_cert))"
+          ca_cert: "((loggregator_ca.certificate))"
           trafficcontroller:
-            cert: "((loggregator_tls_tc_cert))"
-            key: "((loggregator_tls_tc_key))"
+            cert: "((loggregator_tls_tc.certificate))"
+            key: "((loggregator_tls_tc.private_key))"
           metron:
-            cert: "((metron_metron_agent_tls_client_cert))"
-            key: "((metron_metron_agent_tls_client_key))"
+            cert: "((metron_agent_tls_client.certificate))"
+            key: "((metron_agent_tls_client.private_key))"
           doppler:
-            cert: "((loggregator_tls_doppler_cert))"
-            key: "((loggregator_tls_doppler_key))"
+            cert: "((loggregator_tls_doppler.certificate))"
+            key: "((loggregator_tls_doppler.private_key))"
         etcd:
           require_ssl: true
-          ca_cert: "((etcd_ca_cert))"
+          ca_cert: "((etcd_server.ca))"
           machines:
           - etcd.service.cf.internal
 
@@ -172,7 +172,7 @@ instance_groups:
         client_key: "((etcd_client.private_key))"
         server_cert: "((etcd_server.certificate))"
         server_key: "((etcd_server.private_key))"
-        peer_ca: "((etcd_peer.ca))"
+        peer_ca_cert: "((etcd_peer.ca))"
         peer_cert: "((etcd_peer.certificate))"
         peer_key: "((etcd_peer.private_key))"
   - name: etcd_metrics_server
@@ -332,9 +332,9 @@ instance_groups:
     properties:
       login:
         saml:
-          serviceProviderKey: "((uaa_login_saml_serviceProviderKey))"
-          serviceProviderKeyPassword: "((uaa_login_saml_serviceProviderKeyPassword))"
-          serviceProviderCertificate: "((uaa_login_saml_serviceProviderCertificate))"
+          serviceProviderKey: "((uaa_login_saml.private_key))"
+          serviceProviderKeyPassword: ""
+          serviceProviderCertificate: "((uaa_login_saml.certificate))"
       uaa:
         sslCertificate: "((uaa_ssl.certificate))"
         sslPrivateKey: "((uaa_ssl.private_key))"
@@ -891,7 +891,7 @@ instance_groups:
         security_group_definitions: *11
         internal_api_password: "((cc_internal_api_password))"
         bulk_api_password: "((cc_bulk_api_password))"
-        quota_definitions: *14
+        quota_definitions: *12
         staging_upload_user: "staging_user"
         staging_upload_password: "((cc_staging_upload_password))"
         resource_pool: *7
@@ -902,8 +902,8 @@ instance_groups:
       ssl: *14
       system_domain: "((system_domain))"
       system_domain_organization: default_org
-      app_domains: *15
-      app_ssh: *16
+      app_domains: *17
+      app_ssh: *18
       nats:
         machines: *4
         password: "((nats_password))"
@@ -1014,7 +1014,7 @@ instance_groups:
         security_group_definitions: *11
         internal_api_password: "((cc_internal_api_password))"
         bulk_api_password: "((cc_bulk_api_password))"
-        quota_definitions: *14
+        quota_definitions: *12
         staging_upload_user: "staging_user"
         staging_upload_password: "((cc_staging_upload_password))"
         resource_pool: *7
@@ -1025,8 +1025,8 @@ instance_groups:
       ssl: *14
       system_domain: "((system_domain))"
       system_domain_organization: default_org
-      app_domains: *15
-      app_ssh: *16
+      app_domains: *17
+      app_ssh: *18
       nats:
         machines: *4
         password: "((nats_password))"
@@ -1195,7 +1195,7 @@ instance_groups:
       cc:
         bulk_api_password: "((cc_bulk_api_password))"
         srv_api_uri: "https://api.((system_domain))"
-      ssl: *16
+      ssl: *14
   - name: metron_agent
     release: loggregator
     properties: *2
@@ -1495,11 +1495,16 @@ variables:
   options:
     ca: consul_agent_ca
     common_name: consul_agent
+    ext_key_usage:
+    - client_auth
 - name: consul_server
   type: certificate
   options:
     ca: consul_agent_ca
     common_name: server.dc1.cf.internal
+    ext_key_usage:
+    - client_auth
+    - server_auth
 
 - name: diego_bbs
   type: certificate
@@ -1562,4 +1567,8 @@ variables:
   options:
     ca: uaa_ca
     common_name: uaa.service.cf.internal
->>>>>>> use `variables` section for now to generate creds until releases are augmented with type information for properties
+
+- name: uaa_login_saml
+  type: certificate
+  options:
+    common_name: uaa_login_saml

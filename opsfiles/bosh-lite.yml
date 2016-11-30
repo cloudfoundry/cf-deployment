@@ -83,13 +83,13 @@
           skip_cert_verify: true
         ssh_proxy:
           enable_cf_auth: true
-          host_key: "((diego_ssh_proxy_host_key))"
+          host_key: "((diego_ssh_proxy_host_key.private_key))"
           uaa_secret: "((uaa_clients_ssh-proxy_secret))"
-          uaa_token_url: "((uaa_token_url))"
+          uaa_token_url: "https://uaa.((system_domain))/oauth/token"
           bbs: &5
-            ca_cert: "((diego_bbs_ca_cert))"
-            client_cert: "((diego_bbs_client_cert))"
-            client_key: "((diego_bbs_client_key))"
+            ca_cert: "((diego_bbs.ca))"
+            client_cert: "((diego_bbs_client.certificate))"
+            client_key: "((diego_bbs_client.private_key))"
 
 # ----- Scale Down ------
 - type: replace
