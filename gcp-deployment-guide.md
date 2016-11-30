@@ -10,10 +10,48 @@ This document contains IaaS-specific notes and instructions for using `cf-deploy
 1. Terraform environment: https://github.com/cloudfoundry-incubator/cf-gcp-infrastructure/blob/master/README.md
 1. Update DNS in Route 53 to contain the name servers made by terraform
 
+1. Generate ssh key for director manifest and add to GCP
+  ```
+  ssh-keygen -t rsa -f /PATH/TO/DIRECTOR/SSH_KEY -C vcap  -N ""
+  paste -d: <(echo vcap) /PATH/TO/DIRECTOR/SSH_KEY.pub > /PATH/TO/DIRECTOR/SSH_KEY.gcp_pub
+  gcloud auth activate-service-account --key-file /PATH/TO/GOOGLE_AUTH_JSON
+  gcloud config set project PROJECT_ID
+  gcloud config set compute/region REGION
+  gcloud config set compute/zone ZONE
+  gcloud compute project-info add-metadata --metadata-from-file sshKeys=/PATH/TO/DIRECTOR/SSH_KEY.gcp_pub
+  ```
+  
+1. Generate director certificate
+  ```
+  cf-gcp-infrastructure/deployments/generate-certs.sh director DIRECTOR_IP bosh.ENV_NAME.cf-app.com /TARGET_DIRECTORY/FOR/CERTS
+  ```
+  
+1. Generate Bosh deployment var file containing the following keys:
+  ```
+  project: PROJECT_ID
+  zone: ZONE
+  env_name: ENV_NAME
+  director_ip: DIRECTOR_IP
+  nats_password: SOME_PASSWORD
+  postgres_password: SOME_PASSWORD
+  blobstore_director_password: SOME_PASSWORD
+  blobstore_agent_password: SOME_PASSWORD
+  hm_password:  SOME_PASSWORD
+  mbus_password: SOME_PASSWORD
+  director_cert: contents of /TARGET_DIRECTORY/FOR/CERTS/director.crt
+  director_key: contents of /TARGET_DIRECTORY/FOR/CERTS/director.key
+  google_cpi_json_key: stringified GOOGLE_AUTH_JSON content
+  director_username: BOSH_USERNAME
+  director_password: BOSH_PASSWORD
+  director_ssh_key_path: /PATH/TO/DIRECTOR/SSH_KEY
+  ```
+  
+1. Deploy bosh
   ```
   bosh interpolate -l DEPLOYMENT_VAR_FILE --var-errs cf-gcp-infrastructure/bosh/bosh.yml > /dev/null
   bosh create-env --var-file DEPLOYMENT_VAR_FILE cf-gcp-infrastructure/bosh/bosh.yml
   ```
+  
 1. Save the `bosh-state.json` file now located at `cf-gcp-infrastructure/bosh/bosh-state.json`
 1. Upload cloud config
   ```
