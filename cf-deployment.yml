@@ -48,9 +48,6 @@ instance_groups:
         enable: false
       metron_agent:
         deployment: "((metron_agent_deployment_name))"
-        tls:
-          client_cert: "((metron_metron_agent_tls_client_cert))"
-          client_key: "((metron_metron_agent_tls_client_key))"
         etcd:
           client_cert: "((etcd_client_cert))"
           client_key: "((etcd_client_key))"
@@ -62,9 +59,6 @@ instance_groups:
           trafficcontroller:
             cert: "((loggregator_tls_tc_cert))"
             key: "((loggregator_tls_tc_key))"
-          metron:
-            cert: "((metron_metron_agent_tls_client_cert))"
-            key: "((metron_metron_agent_tls_client_key))"
           doppler:
             cert: "((loggregator_tls_doppler_cert))"
             key: "((loggregator_tls_doppler_key))"
@@ -1153,9 +1147,6 @@ instance_groups:
           trafficcontroller:
             cert: "((loggregator_tls_tc_cert))"
             key: "((loggregator_tls_tc_key))"
-          metron:
-            cert: "((metron_metron_agent_tls_client_cert))"
-            key: "((metron_metron_agent_tls_client_key))"
           doppler:
             cert: "((loggregator_tls_doppler_cert))"
             key: "((loggregator_tls_doppler_key))"
@@ -1175,9 +1166,6 @@ instance_groups:
           trafficcontroller:
             cert: "((loggregator_tls_tc_cert))"
             key: "((loggregator_tls_tc_key))"
-          metron:
-            cert: "((metron_metron_agent_tls_client_cert))"
-            key: "((metron_metron_agent_tls_client_key))"
           doppler:
             cert: "((loggregator_tls_doppler_cert))"
             key: "((loggregator_tls_doppler_key))"
@@ -1247,9 +1235,6 @@ instance_groups:
           trafficcontroller:
             cert: "((loggregator_tls_tc_cert))"
             key: "((loggregator_tls_tc_key))"
-          metron:
-            cert: "((metron_metron_agent_tls_client_cert))"
-            key: "((metron_metron_agent_tls_client_key))"
           doppler:
             cert: "((loggregator_tls_doppler_cert))"
             key: "((loggregator_tls_doppler_key))"
