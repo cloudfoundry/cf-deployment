@@ -1139,8 +1139,6 @@ instance_groups:
         syslog_skip_cert_verify: true
         tls:
           enable: true
-          server_cert: "((doppler_tls_server_cert))"
-          server_key: "((doppler_tls_server_key))"
       loggregator:
         tls:
           ca_cert: "((loggregator_tls_ca_cert))"
