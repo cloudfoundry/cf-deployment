@@ -972,6 +972,7 @@ instance_groups:
           type: tcp
           reservable_ports: 1024-65535
       uaa:
+        ca_cert: "((uaa_ca_cert))"
         tls_port: 8443
       consul:
         servers: 10.0.31.190,10.0.47.190,10.0.63.190
