@@ -2,7 +2,9 @@
 This document contains IaaS-specific notes and instructions for using `cf-deployment` with GCP. See the main [README](https://github.com/cloudfoundry/cf-deployment/blob/master/README.md) for more general information about `cf-deployment`.
 
 ## Environment Setup
-
+1. You'll need to make sure your GCP quotas are large enough. You can request a quota increase and ask for the following increases:
+  - 100 CPUs
+  - 50 In-use IP addresses
 1. Clone the cf-deployment repository
   ```
   git clone git@github.com:cloudfoundry/cf-deployment.git
@@ -46,7 +48,7 @@ This document contains IaaS-specific notes and instructions for using `cf-deploy
   director_ssh_key_path: /PATH/TO/DIRECTOR/SSH_KEY
   ```
   
-1. Deploy bosh
+1. Deploy bosh. NB: You need the new [BOSH CLI](https://github.com/cloudfoundry/bosh-cli) to run `create-env`.
   ```
   bosh interpolate -l DEPLOYMENT_VAR_FILE --var-errs cf-gcp-infrastructure/bosh/bosh.yml > /dev/null
   bosh create-env --var-file DEPLOYMENT_VAR_FILE cf-gcp-infrastructure/bosh/bosh.yml

@@ -389,6 +389,10 @@ instance_groups:
             authorities: routing.routes.read
             authorized-grant-types: client_credentials,refresh_token
             secret: "((uaa_clients_gorouter_secret))"
+          routing_api_client:
+            authorities: routing.routes.write,routing.routes.read,routing.router_groups.read
+            authorized_grant_type: client_credentials
+            secret: "((uaa_clients_routing_api_client_secret))"
           ssh-proxy:
             authorized-grant-types: authorization_code
             autoapprove: true
@@ -586,12 +590,14 @@ instance_groups:
           user: "router-status"
         route_services_secret: "((router_route_services_secret))"
         ssl_skip_validation: true
+      routing_api:
+        enabled: true
       uaa:
         clients:
           gorouter:
             secret: "((uaa_clients_gorouter_secret))"
         ssl:
-          port: 1234
+          port: 8443
   - name: metron_agent
     release: loggregator
     properties: *4
@@ -971,9 +977,11 @@ instance_groups:
         - name: default-tcp
           type: tcp
           reservable_ports: 1024-65535
-      skip_ssl_validation: true
       uaa:
+        ca_cert: "((uaa_ca_cert))"
         tls_port: 8443
+      consul:
+        servers: 10.0.31.190,10.0.47.190,10.0.63.190
 - name: cc_clock
   azs:
   - z1
@@ -1374,7 +1382,7 @@ releases:
 stemcells:
 - alias: default
   os: ubuntu-trusty
-  version: '3312.3'
+  version: '3312.5'
 
 variables:
 - name: blobstore_admin_users_password
