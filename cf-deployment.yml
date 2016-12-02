@@ -342,7 +342,7 @@ instance_groups:
           internal:
             hostnames:
             - uaa.service.cf.internal
-        url: "uaa.((system_domain))"
+        url: "https://uaa.((system_domain))"
         admin:
           client_secret: "((uaa_admin_client_secret))"
         scim:
@@ -791,7 +791,7 @@ instance_groups:
             secret: "((uaa_clients_cloud_controller_username_lookup_secret))"
           cc-service-dashboards:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
-        url: "uaa.((system_domain))"
+        url: "https://uaa.((system_domain))"
         jwt:
           verification_key: "((uaa_jwt_signing_key.public_key))"
       cc:
@@ -913,7 +913,7 @@ instance_groups:
         clients:
           cc-service-dashboards:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
-        url: "uaa.((system_domain))"
+        url: "https://uaa.((system_domain))"
         jwt:
           verification_key: "((uaa_jwt_signing_key.public_key))"
   - name: binary-buildpack
@@ -1036,7 +1036,7 @@ instance_groups:
         clients:
           cc-service-dashboards:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
-        url: "uaa.((system_domain))"
+        url: "https://uaa.((system_domain))"
         jwt:
           verification_key: "((uaa_jwt_signing_key.public_key))"
   - name: statsd-injector
@@ -1241,7 +1241,7 @@ instance_groups:
         clients:
           doppler:
             secret: "((uaa_clients_doppler_secret))"
-        url: "uaa.((system_domain))"
+        url: "https://uaa.((system_domain))"
       loggregator:
         tls:
           ca_cert: "((loggregator_ca.certificate))"
