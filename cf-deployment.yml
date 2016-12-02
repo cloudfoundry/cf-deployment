@@ -590,6 +590,8 @@ instance_groups:
         clients:
           gorouter:
             secret: "((uaa_clients_gorouter_secret))"
+        ssl:
+          port: 8334
   - name: metron_agent
     release: loggregator
     properties: *4
