@@ -1457,11 +1457,15 @@ variables:
     alternative_names:
     - "*.etcd.service.cf.internal"
     - "etcd.service.cf.internal"
+    ext_key_usage:
+    - server_auth
 - name: etcd_client
   type: certificate
   options:
     ca: etcd_ca
     common_name: clientName
+    ext_key_usage:
+    - client_auth
 
 - name: etcd_peer_ca
   type: certificate
@@ -1475,6 +1479,9 @@ variables:
     alternative_names:
     - "*.etcd.service.cf.internal"
     - "etcd.service.cf.internal"
+    ext_key_usage:
+    - client_auth
+    - server_auth
 
 - name: blobstore_ca
   type: certificate
@@ -1497,6 +1504,7 @@ variables:
     common_name: consul_agent
     ext_key_usage:
     - client_auth
+    - server_auth
 - name: consul_server
   type: certificate
   options:
@@ -1514,12 +1522,16 @@ variables:
   type: certificate
   options:
     ca: diego_bbs
-    common_name: bbs_client
+    common_name: 'bbs client'
+    ext_key_usage:
+    - client_auth
 - name: diego_bbs_server
   type: certificate
   options:
     ca: diego_bbs
     common_name: bbs.service.cf.internal
+    ext_key_usage:
+    - server_auth
     alternative_names:
     - '*.bbs.service.cf.internal'
     - bbs.service.cf.internal
@@ -1533,21 +1545,29 @@ variables:
   options:
     ca: loggregator_ca
     common_name: doppler
+    ext_key_usage:
+    - server_auth
 - name: metron_agent_tls_client
   type: certificate
   options:
     ca: loggregator_ca
     common_name: metron_agent
+    ext_key_usage:
+    - client_auth
 - name: loggregator_tls_doppler
   type: certificate
   options:
     ca: loggregator_ca
     common_name: doppler
+    ext_key_usage:
+    - server_auth
 - name: loggregator_tls_tc
   type: certificate
   options:
     ca: loggregator_ca
     common_name: trafficcontroller
+    ext_key_usage:
+    - client_auth
 
 - name: router_ca
   type: certificate
