@@ -79,7 +79,7 @@ basic_key_pairs:
 cert_sets:
 - ca:
     varname_ca: etcd_ca_cert
-    commonName: etcdCA
+    commonname: etcdCA
   certkeypairs:
   - varname_cert: etcd_server_cert
     varname_key:  etcd_server_key
@@ -136,12 +136,6 @@ cert_sets:
     varname_ca: loggregator_tls_ca_cert
     commonname: loggregatorCA
   certkeypairs:
-  - varname_cert: doppler_tls_server_cert
-    varname_key:  doppler_tls_server_key
-    commonname:   doppler
-  - varname_cert: metron_metron_agent_tls_client_cert
-    varname_key:  metron_metron_agent_tls_client_key
-    commonname:   metron_agent
   - varname_cert: loggregator_tls_doppler_cert
     varname_key:  loggregator_tls_doppler_key
     commonname:   doppler

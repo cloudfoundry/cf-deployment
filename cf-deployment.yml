@@ -33,7 +33,7 @@ instance_groups:
         agent:
           mode: server
           domain: cf.internal
-          servers: &3
+          servers: &2
             lan: *1
         encrypt_keys: [((consul_encrypt_key))]
         agent_cert: "((consul_agent.certificate))"
@@ -43,7 +43,7 @@ instance_groups:
         server_key: "((consul_server.private_key))"
   - name: metron_agent
     release: loggregator
-    properties: &2
+    properties: &4
       syslog_daemon_config:
         enable: false
       metron_agent:
@@ -73,7 +73,6 @@ instance_groups:
           ca_cert: "((etcd_server.ca))"
           machines:
           - etcd.service.cf.internal
-
 - name: nats
   azs:
   - z1
@@ -85,7 +84,7 @@ instance_groups:
   stemcell: default
   networks:
   - name: private
-    static_ips: &4
+    static_ips: &3
     - 10.0.31.191
     - 10.0.47.191
   jobs:
@@ -96,7 +95,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers: *2
         encrypt_keys: [((consul_encrypt_key))]
         agent_cert: "((consul_agent.certificate))"
         agent_key: "((consul_agent.private_key))"
@@ -107,7 +106,7 @@ instance_groups:
     release: nats
     properties:
       nats: &6
-        machines: *4
+        machines: *3
         password: "((nats_password))"
         port: 4222
         user: "nats"
@@ -123,7 +122,7 @@ instance_groups:
         trace: false
   - name: metron_agent
     release: loggregator
-    properties: *2
+    properties: *4
 - name: etcd
   azs:
   - z1
@@ -148,7 +147,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers: *2
           services:
             etcd: {}
         encrypt_keys: [((consul_encrypt_key))]
@@ -187,7 +186,7 @@ instance_groups:
           client_key: "((etcd_client.private_key))"
   - name: metron_agent
     release: loggregator
-    properties: *2
+    properties: *4
 - name: mysql
   azs:
   - z1
@@ -211,7 +210,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers: *2
         encrypt_keys: [((consul_encrypt_key))]
         agent_cert: "((consul_agent.certificate))"
         agent_key: "((consul_agent.private_key))"
@@ -247,7 +246,7 @@ instance_groups:
           - 10.0.31.193
   - name: metron_agent
     release: loggregator
-    properties: *2
+    properties: *4
 - name: diego-bbs
   azs:
   - z1
@@ -265,7 +264,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers: *2
         encrypt_keys: [((consul_encrypt_key))]
         agent_cert: "((consul_agent.certificate))"
         agent_key: "((consul_agent.private_key))"
@@ -298,7 +297,7 @@ instance_groups:
           server_key: "((diego_bbs_server.private_key))"
   - name: metron_agent
     release: loggregator
-    properties: *2
+    properties: *4
 - name: uaa
   azs:
   - z1
@@ -318,7 +317,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers: *2
           services:
             uaa: {}
         encrypt_keys: [((consul_encrypt_key))]
@@ -435,13 +434,13 @@ instance_groups:
           - "login.((system_domain))"
           - "*.login.((system_domain))"
       nats:
-        machines: *4
+        machines: *3
         password: "((nats_password))"
         port: 4222
         user: "nats"
   - name: metron_agent
     release: loggregator
-    properties: *2
+    properties: *4
   - name: statsd-injector
     release: loggregator
 - name: diego-brain
@@ -463,7 +462,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers: *2
         encrypt_keys: [((consul_encrypt_key))]
         agent_cert: "((consul_agent.certificate))"
         agent_key: "((consul_agent.private_key))"
@@ -495,7 +494,7 @@ instance_groups:
           bbs: *5
   - name: metron_agent
     release: loggregator
-    properties: *2
+    properties: *4
 - name: diego-cell
   azs:
   - z1
@@ -515,7 +514,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers: *2
         encrypt_keys: [((consul_encrypt_key))]
         agent_cert: "((consul_agent.certificate))"
         agent_key: "((consul_agent.private_key))"
@@ -545,7 +544,7 @@ instance_groups:
           skip_cert_verify: true
   - name: metron_agent
     release: loggregator
-    properties: *2
+    properties: *4
 - name: router
   azs:
   - z1
@@ -565,7 +564,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers: *2
           services:
             gorouter: {}
         encrypt_keys: [((consul_encrypt_key))]
@@ -595,7 +594,7 @@ instance_groups:
           port: 1234
   - name: metron_agent
     release: loggregator
-    properties: *2
+    properties: *4
 - name: tcp-router
   azs:
   - z1
@@ -613,7 +612,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers: *2
         encrypt_keys: [((consul_encrypt_key))]
         agent_cert: "((consul_agent.certificate))"
         agent_key: "((consul_agent.private_key))"
@@ -632,7 +631,7 @@ instance_groups:
         oauth_secret: "((uaa_clients_tcp_router_secret))"
   - name: metron_agent
     release: loggregator
-    properties: *2
+    properties: *4
 - name: route-emitter
   azs:
   - z1
@@ -650,7 +649,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers: *2
         encrypt_keys: [((consul_encrypt_key))]
         agent_cert: "((consul_agent.certificate))"
         agent_key: "((consul_agent.private_key))"
@@ -670,7 +669,7 @@ instance_groups:
             require_ssl: true
   - name: metron_agent
     release: loggregator
-    properties: *2
+    properties: *4
 - name: blobstore
   azs:
   - z1
@@ -690,7 +689,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers: *2
           services:
             blobstore: {}
         encrypt_keys: [((consul_encrypt_key))]
@@ -726,13 +725,13 @@ instance_groups:
           uris:
           - "blobstore.((system_domain))"
       nats:
-        machines: *4
+        machines: *3
         password: "((nats_password))"
         port: 4222
         user: "nats"
   - name: metron_agent
     release: loggregator
-    properties: *2
+    properties: *4
 - name: api
   azs:
   - z1
@@ -752,7 +751,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers: *2
           services:
             cloud_controller_ng: {}
             routing-api: {}
@@ -779,7 +778,7 @@ instance_groups:
         host_key_fingerprint: "((diego_ssh_proxy_host_key.public_key_fingerprint))"
         oauth_client_id: ssh-proxy
       nats:
-        machines: *4
+        machines: *3
         password: "((nats_password))"
         port: 4222
         user: "nats"
@@ -905,7 +904,7 @@ instance_groups:
       app_domains: *17
       app_ssh: *18
       nats:
-        machines: *4
+        machines: *3
         password: "((nats_password))"
         port: 4222
         user: "nats"
@@ -947,7 +946,7 @@ instance_groups:
           uris:
           - "api.((system_domain))"
       nats:
-        machines: *4
+        machines: *3
         password: "((nats_password))"
         port: 4222
         user: "nats"
@@ -955,7 +954,7 @@ instance_groups:
     release: loggregator
   - name: metron_agent
     release: loggregator
-    properties: *2
+    properties: *4
   - name: routing-api
     release: routing
     properties:
@@ -993,7 +992,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers: *2
         encrypt_keys: [((consul_encrypt_key))]
         agent_cert: "((consul_agent.certificate))"
         agent_key: "((consul_agent.private_key))"
@@ -1028,7 +1027,7 @@ instance_groups:
       app_domains: *17
       app_ssh: *18
       nats:
-        machines: *4
+        machines: *3
         password: "((nats_password))"
         port: 4222
         user: "nats"
@@ -1043,7 +1042,7 @@ instance_groups:
     release: loggregator
   - name: metron_agent
     release: loggregator
-    properties: *2
+    properties: *4
 - name: cc_bridge
   azs:
   - z1
@@ -1063,7 +1062,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers: *2
         encrypt_keys: [((consul_encrypt_key))]
         agent_cert: "((consul_agent.certificate))"
         agent_key: "((consul_agent.private_key))"
@@ -1109,7 +1108,7 @@ instance_groups:
         ssl: *14
   - name: metron_agent
     release: loggregator
-    properties: *2
+    properties: *4
 - name: doppler
   azs:
   - z1
@@ -1129,7 +1128,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers: *2
         encrypt_keys: [((consul_encrypt_key))]
         agent_cert: "((consul_agent.certificate))"
         agent_key: "((consul_agent.private_key))"
@@ -1198,7 +1197,7 @@ instance_groups:
       ssl: *14
   - name: metron_agent
     release: loggregator
-    properties: *2
+    properties: *4
 - name: log_controller
   azs:
   - z1
@@ -1221,7 +1220,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *3
+          servers: *2
           services:
             loggregator_trafficcontroller: {}
         encrypt_keys: [((consul_encrypt_key))]
@@ -1280,34 +1279,34 @@ instance_groups:
           - "doppler.((system_domain))"
           - "*.doppler.((system_domain))"
       nats:
-        machines: *4
+        machines: *3
         password: "((nats_password))"
         port: 4222
         user: "nats"
   - name: metron_agent
     release: loggregator
-    properties: *2
+    properties: *4
 releases:
 - name: capi
   url: https://bosh.io/d/github.com/cloudfoundry/capi-release?v=1.11.0
   version: 1.11.0
   sha1: eb7abdc7bc724f48a6b4cdb0b200bee84af1e413
 - name: consul
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=139
-  version: '139'
-  sha1: 9baa88d434c7e7d87161391b3b4e8afcf7a6472f
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=141
+  version: '141'
+  sha1: d84e1507a8371b861dcb4bf77bcffb73ac66ebbe
 - name: diego
-  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=1.0.0
-  version: 1.0.0
-  sha1: edcb3790cf0e4bb5e71b7839d1d363bbb5cef7c7
+  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=1.1.0
+  version: 1.1.0
+  sha1: 2376d87327f8dd00009844eb0dae50365835e2d4
 - name: etcd
   url: https://bosh.io/d/github.com/cloudfoundry-incubator/etcd-release?v=86
   version: '86'
   sha1: 54387b1692150c649a3d0947bc7efc25ffadbe20
 - name: loggregator
-  url: https://bosh.io/d/github.com/cloudfoundry/loggregator?v=66
-  version: '66'
-  sha1: 12a4be7b5e1106f03295caa9910888c2edaf0bb9
+  url: https://bosh.io/d/github.com/cloudfoundry/loggregator?v=67
+  version: '67'
+  sha1: 82eb932c7a67d4ff592d7999e8534ef4b76204a2
 - name: nats
   url: https://bosh.io/d/github.com/cloudfoundry/nats-release?v=14
   version: '14'
@@ -1317,17 +1316,17 @@ releases:
   version: '32'
   sha1: a41bb2cadd4311bc9977ccc2c1fca07ba41ccef2
 - name: uaa
-  url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=23
-  version: '23'
-  sha1: ed0799f760850858499d6a975813215ca19c7579
+  url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=24
+  version: '24'
+  sha1: d0feb5494153217f3d62b346f426ad2b2f43511a
 - name: garden-runc
   url: https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.0.3
   version: 1.0.3
   sha1: 0c04b944d50ec778f5b34304fd4bc8fc0ed83b2b
 - name: cflinuxfs2-rootfs
-  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-rootfs-release?v=1.40.0
-  version: 1.40.0
-  sha1: 5d1f1c8f6f5ec18b0e4a2b02d7d7121395b1fbd4
+  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-rootfs-release?v=1.41.0
+  version: 1.41.0
+  sha1: 7382a768acb671a43b872dd1673db161bf6b3674
 - name: routing
   url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.141.0
   version: 0.141.0
@@ -1375,7 +1374,7 @@ releases:
 stemcells:
 - alias: default
   os: ubuntu-trusty
-  version: '3312'
+  version: '3312.3'
 
 variables:
 - name: blobstore_admin_users_password
