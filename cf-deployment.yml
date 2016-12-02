@@ -1454,7 +1454,7 @@ variables:
   options:
     ca: etcd_ca
     common_name: etcd.service.cf.internal
-    alternative_domains:
+    alternative_names:
     - "*.etcd.service.cf.internal"
     - "etcd.service.cf.internal"
 - name: etcd_client
@@ -1472,7 +1472,7 @@ variables:
   options:
     ca: etcd_peer_ca
     common_name: etcd.service.cf.internal
-    alternative_domains:
+    alternative_names:
     - "*.etcd.service.cf.internal"
     - "etcd.service.cf.internal"
 
@@ -1520,6 +1520,9 @@ variables:
   options:
     ca: diego_bbs
     common_name: bbs.service.cf.internal
+    alternative_names:
+    - '*.bbs.service.cf.internal'
+    - bbs.service.cf.internal
 
 - name: loggregator_ca
   type: certificate
