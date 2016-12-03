@@ -340,7 +340,7 @@ instance_groups:
           client_secret: "((uaa_admin_client_secret))"
         scim:
           users:
-          - name: "((uaa_scim_users_admin_name))"
+          - name: "admin"
             password: "((uaa_scim_users_admin_password))"
             groups:
             - cloud_controller.admin
