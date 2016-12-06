@@ -9,9 +9,9 @@ This document contains IaaS-specific notes and instructions for using `cf-deploy
   ```
   git clone git@github.com:cloudfoundry/cf-deployment.git
   ```
-1. Terraform environment: https://github.com/cloudfoundry-incubator/cf-gcp-infrastructure/blob/master/README.md
-1. Update DNS in Route 53 to contain the name servers made by terraform
-
+1. Terraform environment with [cf-gcp-infrastructure](https://github.com/cloudfoundry-incubator/cf-gcp-infrastructure)
+  1. The terraform process leaves you with two files you need to save. You will also need a place to save a file of environment-specific vars for `cf-deployment`. These can all be placed together in a private repo, trusted to a credential management service, or privately and safely stored otherwise.
+1. Update DNS in Route 53 to contain the Name Servers created by terraform
 1. Generate ssh key for director manifest and add to GCP
   ```
   ssh-keygen -t rsa -f /PATH/TO/DIRECTOR/SSH_KEY -C vcap  -N ""
