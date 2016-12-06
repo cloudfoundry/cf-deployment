@@ -1,7 +1,7 @@
 # cf-deployment
 **This repo is still under initial development. This document describes the intended purpose and use of resources in this repo, but may not live up to those promises until we remove this warning. Having said that, we'd love for members of the CF community to try cf-deployment and give us feedback. Github issues welcome. Find us on the #cf-deployment channel in the cloudfoundry Slack.**
 
-CI pipeline [here][ci-pipeline-link].
+CI pipeline [here](https://runtime.ci.cf-app.com/teams/main/pipelines/cf-deployment).
 
 Please make pull requests against the `develop` branch.
 
