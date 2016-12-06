@@ -21,7 +21,7 @@ instance_groups:
     serial: true
   networks:
   - name: private
-    static_ips: &1
+    static_ips: &consul_ips
     - 10.0.31.190
     - 10.0.47.190
     - 10.0.63.190
@@ -33,8 +33,8 @@ instance_groups:
         agent:
           mode: server
           domain: cf.internal
-          servers: &2
-            lan: *1
+          servers: &consul_machines
+            lan: *consul_ips
         encrypt_keys:
         - "((consul_encrypt_key))"
         agent_cert: "((consul_agent.certificate))"
@@ -44,7 +44,7 @@ instance_groups:
         server_key: "((consul_server.private_key))"
   - name: metron_agent
     release: loggregator
-    properties: &4
+    properties: &metron_agent_properties
       syslog_daemon_config:
         enable: false
       metron_agent:
@@ -85,7 +85,7 @@ instance_groups:
   stemcell: default
   networks:
   - name: private
-    static_ips: &3
+    static_ips: &nats_machines
     - 10.0.31.191
     - 10.0.47.191
   jobs:
@@ -96,7 +96,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *2
+          servers: *consul_machines
         encrypt_keys:
         - "((consul_encrypt_key))"
         agent_cert: "((consul_agent.certificate))"
@@ -107,8 +107,8 @@ instance_groups:
   - name: nats_stream_forwarder
     release: nats
     properties:
-      nats: &6
-        machines: *3
+      nats: &nats_properties
+        machines: *nats_machines
         password: "((nats_password))"
         port: 4222
         user: nats
@@ -124,7 +124,7 @@ instance_groups:
         trace: false
   - name: metron_agent
     release: loggregator
-    properties: *4
+    properties: *metron_agent_properties
 - name: etcd
   azs:
   - z1
@@ -149,7 +149,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *2
+          servers: *consul_machines
           services:
             etcd: {}
         encrypt_keys:
@@ -189,7 +189,7 @@ instance_groups:
           client_key: "((etcd_client.private_key))"
   - name: metron_agent
     release: loggregator
-    properties: *4
+    properties: *metron_agent_properties
 - name: mysql
   azs:
   - z1
@@ -213,7 +213,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *2
+          servers: *consul_machines
         encrypt_keys:
         - "((consul_encrypt_key))"
         agent_cert: "((consul_agent.certificate))"
@@ -250,7 +250,7 @@ instance_groups:
           - 10.0.31.193
   - name: metron_agent
     release: loggregator
-    properties: *4
+    properties: *metron_agent_properties
 - name: diego-bbs
   azs:
   - z1
@@ -268,7 +268,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *2
+          servers: *consul_machines
         encrypt_keys:
         - "((consul_encrypt_key))"
         agent_cert: "((consul_agent.certificate))"
@@ -302,7 +302,7 @@ instance_groups:
           server_key: "((diego_bbs_server.private_key))"
   - name: metron_agent
     release: loggregator
-    properties: *4
+    properties: *metron_agent_properties
 - name: uaa
   azs:
   - z1
@@ -322,7 +322,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *2
+          servers: *consul_machines
           services:
             uaa: {}
         encrypt_keys:
@@ -444,13 +444,13 @@ instance_groups:
           - login.((system_domain))
           - "*.login.((system_domain))"
       nats:
-        machines: *3
+        machines: *nats_machines
         password: "((nats_password))"
         port: 4222
         user: nats
   - name: metron_agent
     release: loggregator
-    properties: *4
+    properties: *metron_agent_properties
   - name: statsd-injector
     release: loggregator
 - name: diego-brain
@@ -472,7 +472,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *2
+          servers: *consul_machines
         encrypt_keys:
         - "((consul_encrypt_key))"
         agent_cert: "((consul_agent.certificate))"
@@ -491,7 +491,7 @@ instance_groups:
           host_key: "((diego_ssh_proxy_host_key.private_key))"
           uaa_secret: "((uaa_clients_ssh-proxy_secret))"
           uaa_token_url: https://uaa.((system_domain))/oauth/token
-          bbs: &5
+          bbs: &diego_bbs_client_properties
             ca_cert: "((diego_bbs.ca))"
             client_cert: "((diego_bbs_client.certificate))"
             client_key: "((diego_bbs_client.private_key))"
@@ -502,10 +502,10 @@ instance_groups:
     properties:
       diego:
         auctioneer:
-          bbs: *5
+          bbs: *diego_bbs_client_properties
   - name: metron_agent
     release: loggregator
-    properties: *4
+    properties: *metron_agent_properties
 - name: diego-cell
   azs:
   - z1
@@ -525,7 +525,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *2
+          servers: *consul_machines
         encrypt_keys:
         - "((consul_encrypt_key))"
         agent_cert: "((consul_agent.certificate))"
@@ -549,14 +549,14 @@ instance_groups:
     properties:
       diego:
         rep:
-          bbs: *5
+          bbs: *diego_bbs_client_properties
           preloaded_rootfses:
           - cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs
         ssl:
           skip_cert_verify: true
   - name: metron_agent
     release: loggregator
-    properties: *4
+    properties: *metron_agent_properties
 - name: router
   azs:
   - z1
@@ -576,7 +576,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *2
+          servers: *consul_machines
           services:
             gorouter: {}
         encrypt_keys:
@@ -589,7 +589,7 @@ instance_groups:
   - name: gorouter
     release: routing
     properties:
-      nats: *6
+      nats: *nats_properties
       router:
         enable_ssl: true
         ssl_cert: "((router_ssl.certificate))"
@@ -609,7 +609,7 @@ instance_groups:
           port: 8443
   - name: metron_agent
     release: loggregator
-    properties: *4
+    properties: *metron_agent_properties
 - name: tcp-router
   azs:
   - z1
@@ -627,7 +627,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *2
+          servers: *consul_machines
         encrypt_keys:
         - "((consul_encrypt_key))"
         agent_cert: "((consul_agent.certificate))"
@@ -647,7 +647,7 @@ instance_groups:
         oauth_secret: "((uaa_clients_tcp_router_secret))"
   - name: metron_agent
     release: loggregator
-    properties: *4
+    properties: *metron_agent_properties
 - name: route-emitter
   azs:
   - z1
@@ -665,7 +665,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *2
+          servers: *consul_machines
         encrypt_keys:
         - "((consul_encrypt_key))"
         agent_cert: "((consul_agent.certificate))"
@@ -678,7 +678,7 @@ instance_groups:
     properties:
       diego:
         route_emitter:
-          nats: *6
+          nats: *nats_properties
           bbs:
             ca_cert: "((diego_bbs.ca))"
             client_cert: "((diego_bbs_client.certificate))"
@@ -686,7 +686,7 @@ instance_groups:
             require_ssl: true
   - name: metron_agent
     release: loggregator
-    properties: *4
+    properties: *metron_agent_properties
 - name: blobstore
   azs:
   - z1
@@ -706,7 +706,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *2
+          servers: *consul_machines
           services:
             blobstore: {}
         encrypt_keys:
@@ -743,13 +743,13 @@ instance_groups:
           uris:
           - blobstore.((system_domain))
       nats:
-        machines: *3
+        machines: *nats_machines
         password: "((nats_password))"
         port: 4222
         user: nats
   - name: metron_agent
     release: loggregator
-    properties: *4
+    properties: *metron_agent_properties
 - name: api
   azs:
   - z1
@@ -769,7 +769,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *2
+          servers: *consul_machines
           services:
             cloud_controller_ng: {}
             routing-api: {}
@@ -787,17 +787,17 @@ instance_groups:
         route_services_secret: "((router_route_services_secret))"
       hm9000:
         port: -1
-      ssl: &14
+      ssl: &ssl
         skip_cert_verify: true
       system_domain: "((system_domain))"
       system_domain_organization: default_org
-      app_domains: &15
+      app_domains: &app_domains
       - "((system_domain))"
-      app_ssh: &16
+      app_ssh: &app_ssh
         host_key_fingerprint: "((diego_ssh_proxy_host_key.public_key_fingerprint))"
         oauth_client_id: ssh-proxy
       nats:
-        machines: *3
+        machines: *nats_machines
         password: "((nats_password))"
         port: 4222
         user: nats
@@ -813,13 +813,13 @@ instance_groups:
         jwt:
           verification_key: "((uaa_jwt_signing_key.public_key))"
       cc:
-        default_running_security_groups: &9
+        default_running_security_groups: &cc_default_running_security_groups
         - public_networks
         - dns
-        default_staging_security_groups: &10
+        default_staging_security_groups: &cc_default_staging_security_groups
         - public_networks
         - dns
-        security_group_definitions: &11
+        security_group_definitions: &cc_security_group_definitions
         - name: public_networks
           rules:
           - destination: 0.0.0.0-9.255.255.255
@@ -840,7 +840,7 @@ instance_groups:
           - destination: 0.0.0.0/0
             ports: '53'
             protocol: udp
-        install_buildpacks: &8
+        install_buildpacks: &cc_install_buildpacks
         - name: binary_buildpack
           package: binary-buildpack
         - name: dotnet_core_buildpack
@@ -867,13 +867,13 @@ instance_groups:
         internal_api_password: "((cc_internal_api_password))"
         staging_upload_user: staging_user
         staging_upload_password: "((cc_staging_upload_password))"
-        quota_definitions: &12
+        quota_definitions: &quota_definitions
           default:
             memory_limit: 102400
             non_basic_services_allowed: true
             total_routes: 1000
             total_services: -1
-        buildpacks: &7
+        buildpacks: &blobstore-properties
           blobstore_type: webdav
           webdav_config:
             blobstore_timeout: 5
@@ -881,10 +881,10 @@ instance_groups:
             private_endpoint: https://blobstore.service.cf.internal:4443
             public_endpoint: https://blobstore.((system_domain))
             username: blobstore-user
-        resource_pool: *7
-        packages: *7
-        droplets: *7
-      ccdb: &13
+        resource_pool: *blobstore-properties
+        packages: *blobstore-properties
+        droplets: *blobstore-properties
+      ccdb: &ccdb
         databases:
         - name: cloud_controller
           tag: cc
@@ -903,27 +903,27 @@ instance_groups:
       cc:
         db_encryption_key: "((cc_db_encryption_key))"
         default_to_diego_backend: true
-        install_buildpacks: *8
-        default_running_security_groups: *9
-        default_staging_security_groups: *10
-        security_group_definitions: *11
+        install_buildpacks: *cc_install_buildpacks
+        default_running_security_groups: *cc_default_running_security_groups
+        default_staging_security_groups: *cc_default_staging_security_groups
+        security_group_definitions: *cc_security_group_definitions
         internal_api_password: "((cc_internal_api_password))"
         bulk_api_password: "((cc_bulk_api_password))"
-        quota_definitions: *12
+        quota_definitions: *quota_definitions
         staging_upload_user: staging_user
         staging_upload_password: "((cc_staging_upload_password))"
-        resource_pool: *7
-        packages: *7
-        droplets: *7
-        buildpacks: *7
-      ccdb: *13
-      ssl: *14
+        resource_pool: *blobstore-properties
+        packages: *blobstore-properties
+        droplets: *blobstore-properties
+        buildpacks: *blobstore-properties
+      ccdb: *ccdb
+      ssl: *ssl
       system_domain: "((system_domain))"
       system_domain_organization: default_org
-      app_domains: *15
-      app_ssh: *16
+      app_domains: *app_domains
+      app_ssh: *app_ssh
       nats:
-        machines: *3
+        machines: *nats_machines
         password: "((nats_password))"
         port: 4222
         user: nats
@@ -965,7 +965,7 @@ instance_groups:
           uris:
           - api.((system_domain))
       nats:
-        machines: *3
+        machines: *nats_machines
         password: "((nats_password))"
         port: 4222
         user: nats
@@ -973,7 +973,7 @@ instance_groups:
     release: loggregator
   - name: metron_agent
     release: loggregator
-    properties: *4
+    properties: *metron_agent_properties
   - name: routing-api
     release: routing
     properties:
@@ -1011,7 +1011,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *2
+          servers: *consul_machines
         encrypt_keys:
         - "((consul_encrypt_key))"
         agent_cert: "((consul_agent.certificate))"
@@ -1027,27 +1027,27 @@ instance_groups:
       cc:
         db_encryption_key: "((cc_db_encryption_key))"
         default_to_diego_backend: true
-        install_buildpacks: *8
-        default_running_security_groups: *9
-        default_staging_security_groups: *10
-        security_group_definitions: *11
+        install_buildpacks: *cc_install_buildpacks
+        default_running_security_groups: *cc_default_running_security_groups
+        default_staging_security_groups: *cc_default_staging_security_groups
+        security_group_definitions: *cc_security_group_definitions
         internal_api_password: "((cc_internal_api_password))"
         bulk_api_password: "((cc_bulk_api_password))"
-        quota_definitions: *12
+        quota_definitions: *quota_definitions
         staging_upload_user: staging_user
         staging_upload_password: "((cc_staging_upload_password))"
-        resource_pool: *7
-        packages: *7
-        droplets: *7
-        buildpacks: *7
-      ccdb: *13
-      ssl: *14
+        resource_pool: *blobstore-properties
+        packages: *blobstore-properties
+        droplets: *blobstore-properties
+        buildpacks: *blobstore-properties
+      ccdb: *ccdb
+      ssl: *ssl
       system_domain: "((system_domain))"
       system_domain_organization: default_org
-      app_domains: *15
-      app_ssh: *16
+      app_domains: *app_domains
+      app_ssh: *app_ssh
       nats:
-        machines: *3
+        machines: *nats_machines
         password: "((nats_password))"
         port: 4222
         user: nats
@@ -1062,7 +1062,7 @@ instance_groups:
     release: loggregator
   - name: metron_agent
     release: loggregator
-    properties: *4
+    properties: *metron_agent_properties
 - name: cc_bridge
   azs:
   - z1
@@ -1082,7 +1082,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *2
+          servers: *consul_machines
         encrypt_keys:
         - "((consul_encrypt_key))"
         agent_cert: "((consul_agent.certificate))"
@@ -1094,20 +1094,20 @@ instance_groups:
     release: capi
     properties:
       diego:
-        ssl: *14
+        ssl: *ssl
       capi:
         stager:
-          bbs: *5
+          bbs: *diego_bbs_client_properties
           cc:
             basic_auth_password: "((cc_internal_api_password))"
   - name: nsync
     release: capi
     properties:
       diego:
-        ssl: *14
+        ssl: *ssl
       capi:
         nsync:
-          bbs: *5
+          bbs: *diego_bbs_client_properties
           cc:
             basic_auth_password: "((cc_internal_api_password))"
             base_url: https://api.((system_domain))
@@ -1116,20 +1116,20 @@ instance_groups:
     release: capi
     properties:
       diego:
-        ssl: *14
+        ssl: *ssl
       capi:
         tps:
-          bbs: *5
+          bbs: *diego_bbs_client_properties
           cc:
             basic_auth_password: "((cc_internal_api_password))"
   - name: cc_uploader
     release: capi
     properties:
       diego:
-        ssl: *14
+        ssl: *ssl
   - name: metron_agent
     release: loggregator
-    properties: *4
+    properties: *metron_agent_properties
 - name: doppler
   azs:
   - z1
@@ -1149,7 +1149,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *2
+          servers: *consul_machines
         encrypt_keys:
         - "((consul_encrypt_key))"
         agent_cert: "((consul_agent.certificate))"
@@ -1216,10 +1216,10 @@ instance_groups:
       cc:
         bulk_api_password: "((cc_bulk_api_password))"
         srv_api_uri: https://api.((system_domain))
-      ssl: *14
+      ssl: *ssl
   - name: metron_agent
     release: loggregator
-    properties: *4
+    properties: *metron_agent_properties
 - name: log_controller
   azs:
   - z1
@@ -1242,7 +1242,7 @@ instance_groups:
         agent:
           mode: client
           domain: cf.internal
-          servers: *2
+          servers: *consul_machines
           services:
             loggregator_trafficcontroller: {}
         encrypt_keys:
@@ -1282,7 +1282,7 @@ instance_groups:
           machines:
           - etcd.service.cf.internal
       system_domain: "((system_domain))"
-      ssl: *14
+      ssl: *ssl
       cc:
         srv_api_uri: https://api.((system_domain))
   - name: route_registrar
@@ -1302,13 +1302,13 @@ instance_groups:
           - doppler.((system_domain))
           - "*.doppler.((system_domain))"
       nats:
-        machines: *3
+        machines: &nats_machines
         password: "((nats_password))"
         port: 4222
         user: nats
   - name: metron_agent
     release: loggregator
-    properties: *4
+    properties: *metron_agent_properties
 variables:
 - name: blobstore_admin_users_password
   type: password
