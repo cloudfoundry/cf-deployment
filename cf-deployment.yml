@@ -49,9 +49,6 @@ instance_groups:
         enable: false
       metron_agent:
         deployment: "((system_domain))"
-        tls:
-          client_cert: "((metron_agent_tls_client.certificate))"
-          client_key: "((metron_agent_tls_client.private_key))"
         etcd:
           client_cert: "((etcd_client.certificate))"
           client_key: "((etcd_client.private_key))"
@@ -63,9 +60,6 @@ instance_groups:
           trafficcontroller:
             cert: "((loggregator_tls_tc.certificate))"
             key: "((loggregator_tls_tc.private_key))"
-          metron:
-            cert: "((metron_agent_tls_client.certificate))"
-            key: "((metron_agent_tls_client.private_key))"
           doppler:
             cert: "((loggregator_tls_doppler.certificate))"
             key: "((loggregator_tls_doppler.private_key))"
@@ -1175,9 +1169,6 @@ instance_groups:
           trafficcontroller:
             cert: "((loggregator_tls_tc.certificate))"
             key: "((loggregator_tls_tc.private_key))"
-          metron:
-            cert: "((metron_agent_tls_client.certificate))"
-            key: "((metron_agent_tls_client.private_key))"
           doppler:
             cert: "((loggregator_tls_doppler.certificate))"
             key: "((loggregator_tls_doppler.private_key))"
@@ -1197,9 +1188,6 @@ instance_groups:
           trafficcontroller:
             cert: "((loggregator_tls_tc.certificate))"
             key: "((loggregator_tls_tc.private_key))"
-          metron:
-            cert: "((metron_agent_tls_client.certificate))"
-            key: "((metron_agent_tls_client.private_key))"
           doppler:
             cert: "((loggregator_tls_doppler.certificate))"
             key: "((loggregator_tls_doppler.private_key))"
@@ -1270,9 +1258,6 @@ instance_groups:
           trafficcontroller:
             cert: "((loggregator_tls_tc.certificate))"
             key: "((loggregator_tls_tc.private_key))"
-          metron:
-            cert: "((metron_agent_tls_client.certificate))"
-            key: "((metron_agent_tls_client.private_key))"
           doppler:
             cert: "((loggregator_tls_doppler.certificate))"
             key: "((loggregator_tls_doppler.private_key))"
