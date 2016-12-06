@@ -1,6 +1,5 @@
 # cf-deployment
-
-#### This repo is still under incubation. This document describes the intended purpose and use of resources in this repo, but may not live up to those promises until we remove this warning. Having said that, we'd love for members of the CF community to try cf-deployment and give us feedback.
+**This repo is still under incubation. This document describes the intended purpose and use of resources in this repo, but may not live up to those promises until we remove this warning. Having said that, we'd love for members of the CF community to try cf-deployment and give us feedback.**
 
 ## Purpose
 This repo contains a canonical manifest for deploying Cloud Foundry. It will replace the [manifest generation scripts in cf-release](https://github.com/cloudfoundry/cf-release/tree/master/templates). It will also contain scripts and other tools for aiding in deployment.
