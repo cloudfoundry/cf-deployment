@@ -45,9 +45,7 @@ See the rest of this document for more on the new CLI, deployment vars, and conf
 `cf-deployment` assumes that you've uploaded a compatible [cloud-config](http://bosh.io/docs/cloud-config.html) to the BOSH director. The cloud-config produced by `bbl` is compatible by default. For IaaSs not supported by `bbl`, please refer to our IaaS-specific advice in the **Setup and Prerequisites** section above. If your IaaS is not listed there, we have not yet tested cf-deployment with it, and you may need to do some engineering work to figure out the right cloud config (and possibly ops files) to get it working for `cf-deployment`.
 
 ## Deployment variables
-`cf-deployment.yml` requires additional data to provide environment-specific or sensitive configuration such as the system domain and various credentials. To do this we use the `-l`/`--var-files` flags in the new BOSH CLI. These flags read in a list of `.yml` files and use values present there to fill out the template represented by `cf-deployment`.
-
-The easiest way to get a file for deployment variables is to generate them with [cf-filler](https://github.com/rosenhouse/cf-filler). It's a go binary that generates a yaml file with all of the necessary variables to hydrate cf-deployment. While the `cf-filler` repo has a recipe for use with `cf-deployment`, this repo also has such a recipe, in the `cf-filler` directory. This recipe is more up-to-date. Upcoming BOSH functionality should obviate the need for `cf-filler` soon.
+`cf-deployment.yml` requires additional data to provide environment-specific or sensitive configuration such as the system domain and various credentials. To do this we use the `--vars-store` flag in the new BOSH CLI. This flag takes the name of a `yml` file that it will read and write to to generate or use certs, keys, and variables.  Where those values are not present, it will generate new values based on the type information stored in `cf-deployment.yml`.
 
 ## Ops Files
 The configuration of CF represented by `cf-deployment.yml` is intended to be a workable, secure, fully-featured default. When the need arises to make different configuration choices, we accomplish this with the `-o`/`--ops-file` flags. These flags read a single `.yml` file that details operations to be performed on the manifest before variables are generated and filled. We've supplied some common manifest modifications in the `opsfiles` directory. Here's a brief summary:
@@ -60,8 +58,7 @@ The configuration of CF represented by `cf-deployment.yml` is intended to be a w
 To deploy to bosh-lite:
 
 ```
-cf-filler -recipe cf-filler/recipe-cf-deployment.yml -dnsname bosh-lite.com > deployment-vars.yml
-bosh -e lite -d cf deploy cf-deployment.yml -o opsfiles/bosh-lite.yml -l deployment-vars.yml
+bosh -e lite -d cf deploy cf-deployment.yml -o opsfiles/bosh-lite.yml --vars-store deployment-vars.yml
 ```
 
 # Contributing
