@@ -23,16 +23,16 @@ This repo contains a canonical manifest for deploying Cloud Foundry without the 
 - assumes GCP as the default deployment environment. For use with other IaaSs, see the **Ops Files** section below.
 
 # Usage
-To deploy to a configured BOSH director using the new `bosh` CLI and a properly generated vars file:
+To deploy to a configured BOSH director using the new `bosh` CLI:
 
 ```
-bosh -e my-env -d cf deploy cf-deployment/cf-deployment.yml [ -o opsfiles/CUSTOMIZATION1 ] [ -o opsfiles/CUSTOMIZATION2 (etc.) ] -l env-repo/deployment-vars.yml
+bosh -e my-env -d cf deploy cf-deployment/cf-deployment.yml [ -o opsfiles/CUSTOMIZATION1 ] [ -o opsfiles/CUSTOMIZATION2 (etc.) ] --vars-store env-repo/deployment-vars.yml
 ```
 
 See the rest of this document for more on the new CLI, deployment vars, and configuring your BOSH director.
 
 # Setup and Prerequisites
-`cf-deployment` relies on newer BOSH features, and requires a bosh director with a valid cloud-config that has been configured with a certificate authority. It also requires the new alpha `bosh` CLI, which it relies on to fill-in needed variables.
+`cf-deployment` relies on newer BOSH features, and requires a bosh director with a valid cloud-config that has been configured with a certificate authority. It also requires the new alpha `bosh` CLI, which it relies on to generate and fill-in needed variables.
 
 - If you are deploying to GCP, please use `gcp-deployment-guide.md`, also located in this directory. (`bbl` support for GCP is coming soon.)
 - If you are deploying to AWS, please use `bbl`, the bosh-bootloader, to prepare your environment.
