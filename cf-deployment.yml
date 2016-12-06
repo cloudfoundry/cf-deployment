@@ -593,13 +593,13 @@ instance_groups:
           password: "((router_status_password))"
           user: router-status
         route_services_secret: "((router_route_services_secret))"
-        ssl_skip_validation: true
       routing_api:
         enabled: true
       uaa:
         clients:
           gorouter:
             secret: "((uaa_clients_gorouter_secret))"
+        ca_cert: "((uaa_ca.certificate))"
         ssl:
           port: 8443
   - name: metron_agent
