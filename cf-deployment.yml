@@ -421,7 +421,7 @@ instance_groups:
           password: "((cf_mysql_mysql_seeded_databases_uaa_password))"
           tag: admin
   - name: route_registrar
-    release: cf-routing
+    release: routing
     properties:
       route_registrar:
         routes:
@@ -582,7 +582,7 @@ instance_groups:
         server_cert: "((consul_server.certificate))"
         server_key: "((consul_server.private_key))"
   - name: gorouter
-    release: cf-routing
+    release: routing
     properties:
       nats: *nats_properties
       router:
@@ -631,9 +631,9 @@ instance_groups:
         server_cert: "((consul_server.certificate))"
         server_key: "((consul_server.private_key))"
   - name: haproxy
-    release: cf-routing
+    release: routing
   - name: router_configurer
-    release: cf-routing
+    release: routing
     properties:
       skip_ssl_validation: true
       uaa:
@@ -726,7 +726,7 @@ instance_groups:
           private_key: "((blobstore_tls.private_key))"
           ca_cert: "((blobstore_tls.ca))"
   - name: route_registrar
-    release: cf-routing
+    release: routing
     properties:
       route_registrar:
         routes:
@@ -950,7 +950,7 @@ instance_groups:
   - name: staticfile-buildpack
     release: staticfile-buildpack
   - name: route_registrar
-    release: cf-routing
+    release: routing
     properties:
       route_registrar:
         routes:
@@ -970,7 +970,7 @@ instance_groups:
     release: loggregator
     properties: *metron_agent_properties
   - name: routing-api
-    release: cf-routing
+    release: routing
     properties:
       routing_api:
         system_domain: "((system_domain))"
@@ -1270,7 +1270,7 @@ instance_groups:
       cc:
         srv_api_uri: https://api.((system_domain))
   - name: route_registrar
-    release: cf-routing
+    release: routing
     properties:
       route_registrar:
         routes:
@@ -1529,7 +1529,7 @@ releases:
   url: https://bosh.io/d/github.com/cloudfoundry/cf-mysql-release?v=32
   version: '32'
   sha1: a41bb2cadd4311bc9977ccc2c1fca07ba41ccef2
-- name: cf-routing
+- name: routing
   url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.141.0
   version: 0.141.0
   sha1: fa4ba9a4ee045bdfb81b5c95b126c95f496ebf2b
