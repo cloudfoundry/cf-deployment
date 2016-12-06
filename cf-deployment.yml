@@ -1302,7 +1302,7 @@ instance_groups:
           - doppler.((system_domain))
           - "*.doppler.((system_domain))"
       nats:
-        machines: &nats_machines
+        machines: *nats_machines
         password: "((nats_password))"
         port: 4222
         user: nats
