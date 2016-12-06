@@ -353,6 +353,7 @@ instance_groups:
             - doppler.firehose
             - openid
             - routing.router_groups.read
+            - routing.router_groups.write
             - scim.read
             - scim.write
         login:
@@ -376,7 +377,7 @@ instance_groups:
             authorized-grant-types: password,refresh_token
             override: true
             refresh-token-validity: 2592000
-            scope: cloud_controller.read,cloud_controller.write,openid,password.write,cloud_controller.admin,scim.read,scim.write,doppler.firehose,uaa.user,routing.router_groups.read
+            scope: cloud_controller.read,cloud_controller.write,openid,password.write,cloud_controller.admin,scim.read,scim.write,doppler.firehose,uaa.user,routing.router_groups.read,routing.router_groups.write
           cloud_controller_username_lookup:
             authorities: scim.userids
             authorized-grant-types: client_credentials
@@ -420,7 +421,7 @@ instance_groups:
           password: "((cf_mysql_mysql_seeded_databases_uaa_password))"
           tag: admin
   - name: route_registrar
-    release: routing
+    release: cf-routing
     properties:
       route_registrar:
         routes:
@@ -581,7 +582,7 @@ instance_groups:
         server_cert: "((consul_server.certificate))"
         server_key: "((consul_server.private_key))"
   - name: gorouter
-    release: routing
+    release: cf-routing
     properties:
       nats: *nats_properties
       router:
@@ -630,9 +631,9 @@ instance_groups:
         server_cert: "((consul_server.certificate))"
         server_key: "((consul_server.private_key))"
   - name: haproxy
-    release: routing
+    release: cf-routing
   - name: router_configurer
-    release: routing
+    release: cf-routing
     properties:
       skip_ssl_validation: true
       uaa:
@@ -725,7 +726,7 @@ instance_groups:
           private_key: "((blobstore_tls.private_key))"
           ca_cert: "((blobstore_tls.ca))"
   - name: route_registrar
-    release: routing
+    release: cf-routing
     properties:
       route_registrar:
         routes:
@@ -949,7 +950,7 @@ instance_groups:
   - name: staticfile-buildpack
     release: staticfile-buildpack
   - name: route_registrar
-    release: routing
+    release: cf-routing
     properties:
       route_registrar:
         routes:
@@ -969,7 +970,7 @@ instance_groups:
     release: loggregator
     properties: *metron_agent_properties
   - name: routing-api
-    release: routing
+    release: cf-routing
     properties:
       routing_api:
         system_domain: "((system_domain))"
@@ -1269,7 +1270,7 @@ instance_groups:
       cc:
         srv_api_uri: https://api.((system_domain))
   - name: route_registrar
-    release: routing
+    release: cf-routing
     properties:
       route_registrar:
         routes:
@@ -1544,6 +1545,10 @@ releases:
   url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-rootfs-release?v=1.41.0
   version: 1.41.0
   sha1: 7382a768acb671a43b872dd1673db161bf6b3674
+- name: cf-routing
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.141.0
+  version: 0.141.0
+  sha1: fa4ba9a4ee045bdfb81b5c95b126c95f496ebf2b
 - name: binary-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/binary-buildpack-release?v=1.0.5
   version: 1.0.5
