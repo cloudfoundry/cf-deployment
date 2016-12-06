@@ -1161,8 +1161,6 @@ instance_groups:
         syslog_skip_cert_verify: true
         tls:
           enable: true
-          server_cert: "((doppler_tls_server.certificate))"
-          server_key: "((doppler_tls_server.private_key))"
       loggregator:
         tls:
           ca_cert: "((loggregator_ca.certificate))"
@@ -1453,13 +1451,6 @@ variables:
   type: certificate
   options:
     common_name: loggregatorCA
-- name: doppler_tls_server
-  type: certificate
-  options:
-    ca: loggregator_ca
-    common_name: doppler
-    ext_key_usage:
-    - server_auth
 - name: metron_agent_tls_client
   type: certificate
   options:
