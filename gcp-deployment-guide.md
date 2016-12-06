@@ -22,12 +22,12 @@ This document contains IaaS-specific notes and instructions for using `cf-deploy
   gcloud config set compute/zone ZONE
   gcloud compute project-info add-metadata --metadata-from-file sshKeys=/PATH/TO/DIRECTOR/SSH_KEY.gcp_pub
   ```
-  
+
 1. Generate director certificate
   ```
   cf-gcp-infrastructure/deployments/generate-certs.sh director DIRECTOR_IP bosh.ENV_NAME.cf-app.com /TARGET_DIRECTORY/FOR/CERTS
   ```
-  
+
 1. Generate Bosh deployment var file containing the following keys:
   ```
   project: PROJECT_ID
@@ -47,13 +47,13 @@ This document contains IaaS-specific notes and instructions for using `cf-deploy
   director_password: BOSH_PASSWORD
   director_ssh_key_path: /PATH/TO/DIRECTOR/SSH_KEY
   ```
-  
+
 1. Deploy bosh. NB: You need the new [BOSH CLI](https://github.com/cloudfoundry/bosh-cli) to run `create-env`.
   ```
   bosh interpolate -l DEPLOYMENT_VAR_FILE --var-errs cf-gcp-infrastructure/bosh/bosh.yml > /dev/null
   bosh create-env --var-file DEPLOYMENT_VAR_FILE cf-gcp-infrastructure/bosh/bosh.yml
   ```
-  
+
 1. Save the `bosh-state.json` file now located at `cf-gcp-infrastructure/bosh/bosh-state.json`
 1. Upload cloud config
   ```
