@@ -18,6 +18,7 @@ In order to setup a bosh director on GCP, please refer to [the README](https://g
 
    ```
    bosh \
+     -e TARGET_DIRECTOR \
      -n \
      -d cf \
      deploy \
