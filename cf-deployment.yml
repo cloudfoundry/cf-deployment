@@ -596,6 +596,7 @@ instance_groups:
           password: "((router_status_password))"
           user: router-status
         route_services_secret: "((router_route_services_secret))"
+        ssl_skip_validation: true
       routing_api:
         enabled: true
       uaa:
@@ -1544,8 +1545,6 @@ variables:
   options:
     ca: uaa_ca
     common_name: uaa.service.cf.internal
-    ext_key_usage:
-    - server_auth
 - name: uaa_login_saml
   type: certificate
   options:
