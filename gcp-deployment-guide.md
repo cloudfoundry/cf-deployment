@@ -15,13 +15,14 @@ In order to setup a bosh director on GCP, please refer to [the README](https://g
   bosh -n interpolate --vars-store cf-deployment-vars.yml -o opsfiles/gcp.yml --var-errs cf-deployment.yml
   ```
 1. Deploy!
-  ```
-  bosh \
-    -n \
-    -d cf \
-    deploy \
-    --vars-store=cf-deployment-vars.yml \
-    -o opsfiles/gcp.yml \
-    cf-deployment.yml
-  ```
+```
+bosh \
+  -n \
+  -d cf \
+  deploy \
+  --vars-store=cf-deployment-vars.yml \
+  -v system_domain=YOUR_SYSTEM_DOMAIN \
+  -o opsfiles/gcp.yml \
+  cf-deployment.yml
+```
 1. Save the `cf-deployment-vars.yml` file somewhere safe.  We use a private git repository for this purpose, but some choose instead to store it in a secure storage service such as LastPass.  You will need to reuse it if you want to update your cf deployment without rotating credentials.
