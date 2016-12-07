@@ -239,6 +239,9 @@ instance_groups:
           - name: diego
             username: diego
             password: "((cf_mysql_mysql_seeded_databases_diego_password))"
+          - name: routing-api
+            username: routing-api
+            password: "((cf_mysql_mysql_seeded_databases_routing_password))"
           database_startup_timeout: 600
           cluster_ips:
           - 10.0.31.193
@@ -635,11 +638,49 @@ instance_groups:
   - name: router_configurer
     release: routing
     properties:
-      skip_ssl_validation: true
       uaa:
+        ca_cert: "((uaa_ca.certificate))"
         tls_port: 8443
       router_configurer:
         oauth_secret: "((uaa_clients_tcp_router_secret))"
+  - name: metron_agent
+    release: loggregator
+    properties: *metron_agent_properties
+- name: tcp-emitter
+  azs:
+  - z1
+  - z2
+  instances: 0
+  vm_type: m3.medium
+  stemcell: default
+  networks:
+  - name: private
+  jobs:
+  - name: consul_agent
+    release: consul
+    properties:
+      consul:
+        agent:
+          mode: client
+          domain: cf.internal
+          servers: *consul_machines
+        encrypt_keys:
+        - "((consul_encrypt_key))"
+        agent_cert: "((consul_agent.certificate))"
+        agent_key: "((consul_agent.private_key))"
+        ca_cert: "((consul_agent.ca))"
+        server_cert: "((consul_server.certificate))"
+        server_key: "((consul_server.private_key))"
+  - name: tcp_emitter
+    release: routing
+    properties:
+      bbs:
+        client_cert: "((diego_bbs_client.certificate))"
+        client_key: "((diego_bbs_client.private_key))"
+      oauth_secret: "((uaa_clients_tcp_router_secret))"
+      uaa:
+        ca_cert: "((uaa_ca.certificate))"
+        tls_port: 8443
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
@@ -985,6 +1026,13 @@ instance_groups:
         - name: default-tcp
           type: tcp
           reservable_ports: 1024-65535
+        sqldb:
+          type: mysql
+          host: 10.0.31.193
+          port: 3306
+          schema: routing-api
+          username: routing-api
+          password: "((cf_mysql_mysql_seeded_databases_routing_password))"
       uaa:
         ca_cert: "((uaa_ca.certificate))"
         tls_port: 8443
@@ -1320,6 +1368,8 @@ variables:
 - name: cf_mysql_mysql_seeded_databases_cc_password
   type: password
 - name: cf_mysql_mysql_seeded_databases_diego_password
+  type: password
+- name: cf_mysql_mysql_seeded_databases_routing_password
   type: password
 - name: cf_mysql_mysql_seeded_databases_uaa_password
   type: password
