@@ -26,7 +26,8 @@ This repo contains a canonical manifest for deploying Cloud Foundry without the 
 To deploy to a configured BOSH director using the new `bosh` CLI:
 
 ```
-bosh -e my-env -d cf deploy cf-deployment/cf-deployment.yml [ -o opsfiles/CUSTOMIZATION1 ] [ -o opsfiles/CUSTOMIZATION2 (etc.) ] --vars-store env-repo/deployment-vars.yml
+export SYSTEM_DOMAIN=some-domain.that.you.have
+bosh -e my-env -d cf deploy cf-deployment/cf-deployment.yml [ -o opsfiles/CUSTOMIZATION1 ] [ -o opsfiles/CUSTOMIZATION2 (etc.) ] --vars-store env-repo/deployment-vars.yml -v system_domain=$SYSTEM_DOMAIN
 ```
 
 See the rest of this document for more on the new CLI, deployment vars, and configuring your BOSH director.
@@ -58,7 +59,7 @@ The configuration of CF represented by `cf-deployment.yml` is intended to be a w
 To deploy to bosh-lite:
 
 ```
-bosh -e lite -d cf deploy cf-deployment.yml -o opsfiles/bosh-lite.yml --vars-store deployment-vars.yml
+bosh -e lite -d cf deploy cf-deployment.yml -o opsfiles/bosh-lite.yml --vars-store deployment-vars.yml -v system_domain=bosh-lite.com
 ```
 
 # Contributing
