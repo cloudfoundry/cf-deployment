@@ -1545,6 +1545,8 @@ variables:
   options:
     ca: uaa_ca
     common_name: uaa.service.cf.internal
+    alternative_names:
+    - uaa.service.cf.internal
 - name: uaa_login_saml
   type: certificate
   options:
