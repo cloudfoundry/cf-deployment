@@ -809,7 +809,7 @@ instance_groups:
           servers: *consul_machines
           services:
             cloud_controller_ng: {}
-            routing-api: {}
+            routing_api: {}
         encrypt_keys:
         - "((consul_encrypt_key))"
         agent_cert: "((consul_agent.certificate))"
