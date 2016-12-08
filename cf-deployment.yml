@@ -338,8 +338,8 @@ instance_groups:
           serviceProviderKeyPassword: ''
           serviceProviderCertificate: "((uaa_login_saml.certificate))"
       uaa:
-        sslCertificate: "((uaa_server.certificate))"
-        sslPrivateKey: "((uaa_server.private_key))"
+        sslCertificate: "((uaa_ssl.certificate))"
+        sslPrivateKey: "((uaa_ssl.private_key))"
         zones:
           internal:
             hostnames:
@@ -1540,22 +1540,13 @@ variables:
   type: certificate
   options:
     common_name: uaaCA
-- name: uaa_server
+- name: uaa_ssl
   type: certificate
   options:
     ca: uaa_ca
     common_name: uaa.service.cf.internal
     alternative_names:
     - uaa.service.cf.internal
-    ext_key_usage:
-    - server_auth
-- name: uaa_client
-  type: certificate
-  options:
-    ca: uaa_ca
-    common_name: uaaClient
-    ext_key_usage:
-    - client_auth
 - name: uaa_login_saml
   type: certificate
   options:
