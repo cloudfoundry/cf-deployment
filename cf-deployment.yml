@@ -675,10 +675,11 @@ instance_groups:
   - name: tcp_emitter
     release: routing
     properties:
-      bbs:
-        client_cert: "((diego_bbs_client.certificate))"
-        client_key: "((diego_bbs_client.private_key))"
-      oauth_secret: "((uaa_clients_tcp_router_secret))"
+      tps_emitter:
+        bbs:
+          client_cert: "((diego_bbs_client.certificate))"
+          client_key: "((diego_bbs_client.private_key))"
+        oauth_secret: "((uaa_clients_tcp_router_secret))"
       uaa:
         ca_cert: "((uaa_ca.certificate))"
         tls_port: 8443
