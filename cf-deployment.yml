@@ -680,6 +680,8 @@ instance_groups:
           client_cert: "((diego_bbs_client.certificate))"
           client_key: "((diego_bbs_client.private_key))"
         oauth_secret: "((uaa_clients_tcp_router_secret))"
+      bbs:
+        ca_cert: "((diego_bbs.ca))"
       uaa:
         ca_cert: "((uaa_ca.certificate))"
         tls_port: 8443
