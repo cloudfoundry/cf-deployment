@@ -44,6 +44,10 @@
   - cf-internet-required
   - cf-router-network-properties
 - type: replace
+  path: /instance_groups/name=tcp-emitter/vm_extensions?
+  value:
+  - cf-internet-required
+- type: replace
   path: /instance_groups/name=tcp-router/vm_extensions?
   value:
   - cf-internet-required
