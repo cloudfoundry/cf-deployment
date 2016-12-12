@@ -1018,13 +1018,6 @@ instance_groups:
     properties:
       routing_api:
         system_domain: "((system_domain))"
-        etcd:
-          servers:
-          - etcd.service.cf.internal
-          client_cert: "((etcd_client.certificate))"
-          client_key: "((etcd_client.private_key))"
-          ca_cert: "((etcd_server.ca))"
-          require_ssl: true
         router_groups:
         - name: default-tcp
           type: tcp
