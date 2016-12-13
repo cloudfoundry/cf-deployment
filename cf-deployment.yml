@@ -638,7 +638,6 @@ instance_groups:
     release: routing
     properties:
       tcp_router:
-        health_check_port: 8080
         oauth_secret: "((uaa_clients_tcp_router_secret))"
       uaa:
         ca_cert: "((uaa_ca.certificate))"
