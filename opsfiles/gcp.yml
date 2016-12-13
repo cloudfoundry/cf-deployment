@@ -136,6 +136,9 @@
   path: /instance_groups/name=tcp-router/jobs/name=consul_agent/properties/consul/agent/servers/lan
   value: *consul_ips
 - type: replace
+  path: /instance_groups/name=tcp-emitter/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
   path: /instance_groups/name=route-emitter/jobs/name=consul_agent/properties/consul/agent/servers/lan
   value: *consul_ips
 - type: replace
