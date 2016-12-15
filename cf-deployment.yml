@@ -676,10 +676,11 @@ instance_groups:
     properties:
       tcp_emitter:
         oauth_secret: "((uaa_clients_tcp_emitter_secret))"
+        bbs:
+          client_cert: "((diego_bbs_client.certificate))"
+          client_key: "((diego_bbs_client.private_key))"
       bbs:
         api_location: bbs.service.cf.internal:8889
-        client_cert: "((diego_bbs_client.certificate))"
-        client_key: "((diego_bbs_client.private_key))"
         ca_cert: "((diego_bbs.ca))"
       uaa:
         ca_cert: "((uaa_ca.certificate))"
