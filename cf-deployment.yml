@@ -675,12 +675,11 @@ instance_groups:
     release: routing
     properties:
       tcp_emitter:
-        bbs:
-          api_location: "bbs.service.cf.internal"
-          client_cert: "((diego_bbs_client.certificate))"
-          client_key: "((diego_bbs_client.private_key))"
         oauth_secret: "((uaa_clients_tcp_emitter_secret))"
       bbs:
+        api_location: bbs.service.cf.internal:8889
+        client_cert: "((diego_bbs_client.certificate))"
+        client_key: "((diego_bbs_client.private_key))"
         ca_cert: "((diego_bbs.ca))"
       uaa:
         ca_cert: "((uaa_ca.certificate))"
