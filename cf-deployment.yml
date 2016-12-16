@@ -616,6 +616,8 @@ instance_groups:
   instances: 2
   vm_type: m3.medium
   stemcell: default
+  vm_extensions:
+  - tcp-router-lb
   networks:
   - name: private
   jobs:
