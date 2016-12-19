@@ -1195,6 +1195,9 @@ instance_groups:
           mode: client
           domain: cf.internal
           servers: *consul_machines
+          services:
+            doppler:
+              name: doppler
         encrypt_keys:
         - "((consul_encrypt_key))"
         agent_cert: "((consul_agent.certificate))"
