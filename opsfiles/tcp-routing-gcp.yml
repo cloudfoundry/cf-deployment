@@ -10,7 +10,8 @@
     vm_type: m3.medium
     stemcell: default
     vm_extensions:
-    - tcp-router-lb
+    - cf-internet-required
+    - cf-tcp-router-network-properties
     networks:
     - name: private
     jobs:
@@ -76,6 +77,8 @@
     - z2
     instances: 2
     vm_type: m3.medium
+    vm_extensions:
+    - cf-internet-required
     stemcell: default
     networks:
     - name: private
@@ -172,4 +175,3 @@
     authorities: routing.routes.write,routing.routes.read,routing.router_groups.read
     authorized_grant_type: client_credentials
     secret: "((uaa_clients_routing_api_client_secret))"
-
