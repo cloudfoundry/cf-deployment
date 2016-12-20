@@ -1,4 +1,175 @@
 ---
 - type: replace
-  path: /instance_groups/name=tcp-router/instances
-  value: 2
+  path: /instance_groups/-
+  value:
+  - name: tcp-router
+    azs:
+    - z1
+    - z2
+    instances: 2
+    vm_type: m3.medium
+    stemcell: default
+    vm_extensions:
+    - tcp-router-lb
+    networks:
+    - name: private
+    jobs:
+    - name: consul_agent
+      release: consul
+      properties:
+        consul:
+          agent:
+            mode: client
+            domain: cf.internal
+            servers: &consul_machines
+            - 10.0.1.194
+            - 10.0.1.195
+            - 10.0.1.196
+          encrypt_keys:
+          - "((consul_encrypt_key))"
+          agent_cert: "((consul_agent.certificate))"
+          agent_key: "((consul_agent.private_key))"
+          ca_cert: "((consul_agent.ca))"
+          server_cert: "((consul_server.certificate))"
+          server_key: "((consul_server.private_key))"
+    - name: tcp_router
+      release: routing
+      properties:
+        tcp_router:
+          oauth_secret: "((uaa_clients_tcp_router_secret))"
+        uaa:
+          ca_cert: "((uaa_ca.certificate))"
+          tls_port: 8443
+    - name: metron_agent
+      release: loggregator
+      properties: &metron_agent_properties
+        syslog_daemon_config:
+          enable: false
+        metron_agent:
+          deployment: "((system_domain))"
+          etcd:
+            client_cert: "((etcd_client.certificate))"
+            client_key: "((etcd_client.private_key))"
+        metron_endpoint:
+          shared_secret: "((dropsonde_shared_secret))"
+        loggregator:
+          tls:
+            ca_cert: "((loggregator_ca.certificate))"
+            trafficcontroller:
+              cert: "((loggregator_tls_tc.certificate))"
+              key: "((loggregator_tls_tc.private_key))"
+            doppler:
+              cert: "((loggregator_tls_doppler.certificate))"
+              key: "((loggregator_tls_doppler.private_key))"
+          etcd:
+            require_ssl: true
+            ca_cert: "((etcd_server.ca))"
+            machines:
+            - etcd.service.cf.internal
+
+- type: replace
+  path: /instance_groups/-
+  value:
+  - name: tcp-emitter
+    azs:
+    - z1
+    - z2
+    instances: 2
+    vm_type: m3.medium
+    stemcell: default
+    networks:
+    - name: private
+    jobs:
+    - name: consul_agent
+      release: consul
+      properties:
+        consul:
+          agent:
+            mode: client
+            domain: cf.internal
+            servers: *consul_machines
+          encrypt_keys:
+          - "((consul_encrypt_key))"
+          agent_cert: "((consul_agent.certificate))"
+          agent_key: "((consul_agent.private_key))"
+          ca_cert: "((consul_agent.ca))"
+          server_cert: "((consul_server.certificate))"
+          server_key: "((consul_server.private_key))"
+    - name: tcp_emitter
+      release: routing
+      properties:
+        tcp_emitter:
+          oauth_secret: "((uaa_clients_tcp_emitter_secret))"
+          bbs:
+            client_cert: "((diego_bbs_client.certificate))"
+            client_key: "((diego_bbs_client.private_key))"
+        bbs:
+          api_location: bbs.service.cf.internal:8889
+          ca_cert: "((diego_bbs.ca))"
+        uaa:
+          ca_cert: "((uaa_ca.certificate))"
+          tls_port: 8443
+    - name: metron_agent
+      release: loggregator
+      properties: *metron_agent_properties
+
+- type: replace
+  path: /instance_groups/name=api/jobs/-
+  value:
+  - name: routing-api
+    release: routing
+    properties:
+      routing_api:
+        system_domain: "((system_domain))"
+        router_groups:
+        - name: default-tcp
+          type: tcp
+          reservable_ports: 1024-1123
+        sqldb:
+          type: mysql
+          host: 10.0.1.193
+          port: 3306
+          schema: routing-api
+          username: routing-api
+          password: "((cf_mysql_mysql_seeded_databases_routing_password))"
+      uaa:
+        ca_cert: "((uaa_ca.certificate))"
+        tls_port: 8443
+
+- type: replace
+  path: /instance_groups/name=mysql/jobs/name=mysql/properties/cf_mysql/mysql/seeded_databases/-
+  value:
+  - name: routing-api
+    username: routing-api
+    password: "((cf_mysql_mysql_seeded_databases_routing_password))"
+
+- type: replace
+  path: /variables/-
+  value:
+  - name: cf_mysql_mysql_seeded_databases_routing_password
+    type: password
+  - name: uaa_clients_routing_api_client_secret
+    type: password
+
+- type: replace
+  path: /instance_groups/name=router/jobs/name=gorouter/properties/routing_api?
+  value:
+    enabled: true
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/routing_api?
+  value:
+    enabled: true
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=consul_agent/properties/consul/agent/services/-
+  value:
+    routing-api: {}
+
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/routing_api_client?
+  value:
+    authorities: routing.routes.write,routing.routes.read,routing.router_groups.read
+    authorized_grant_type: client_credentials
+    secret: "((uaa_clients_routing_api_client_secret))"
+

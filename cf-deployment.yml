@@ -239,9 +239,6 @@ instance_groups:
           - name: diego
             username: diego
             password: "((cf_mysql_mysql_seeded_databases_diego_password))"
-          - name: routing-api
-            username: routing-api
-            password: "((cf_mysql_mysql_seeded_databases_routing_password))"
           database_startup_timeout: 600
           cluster_ips:
           - 10.0.31.193
@@ -393,10 +390,6 @@ instance_groups:
             authorities: routing.routes.read
             authorized-grant-types: client_credentials,refresh_token
             secret: "((uaa_clients_gorouter_secret))"
-          routing_api_client:
-            authorities: routing.routes.write,routing.routes.read,routing.router_groups.read
-            authorized_grant_type: client_credentials
-            secret: "((uaa_clients_routing_api_client_secret))"
           ssh-proxy:
             authorized-grant-types: authorization_code
             autoapprove: true
@@ -599,8 +592,6 @@ instance_groups:
           user: router-status
         route_services_secret: "((router_route_services_secret))"
         ssl_skip_validation: true
-      routing_api:
-        enabled: true
       uaa:
         clients:
           gorouter:
@@ -608,86 +599,6 @@ instance_groups:
         ca_cert: "((uaa_ca.certificate))"
         ssl:
           port: 8443
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
-- name: tcp-router
-  azs:
-  - z1
-  - z2
-  instances: 2
-  vm_type: m3.medium
-  stemcell: default
-  vm_extensions:
-  - tcp-router-lb
-  networks:
-  - name: private
-  jobs:
-  - name: consul_agent
-    release: consul
-    properties:
-      consul:
-        agent:
-          mode: client
-          domain: cf.internal
-          servers: *consul_machines
-        encrypt_keys:
-        - "((consul_encrypt_key))"
-        agent_cert: "((consul_agent.certificate))"
-        agent_key: "((consul_agent.private_key))"
-        ca_cert: "((consul_agent.ca))"
-        server_cert: "((consul_server.certificate))"
-        server_key: "((consul_server.private_key))"
-  - name: tcp_router
-    release: routing
-    properties:
-      tcp_router:
-        oauth_secret: "((uaa_clients_tcp_router_secret))"
-      uaa:
-        ca_cert: "((uaa_ca.certificate))"
-        tls_port: 8443
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
-- name: tcp-emitter
-  azs:
-  - z1
-  - z2
-  instances: 2
-  vm_type: m3.medium
-  stemcell: default
-  networks:
-  - name: private
-  jobs:
-  - name: consul_agent
-    release: consul
-    properties:
-      consul:
-        agent:
-          mode: client
-          domain: cf.internal
-          servers: *consul_machines
-        encrypt_keys:
-        - "((consul_encrypt_key))"
-        agent_cert: "((consul_agent.certificate))"
-        agent_key: "((consul_agent.private_key))"
-        ca_cert: "((consul_agent.ca))"
-        server_cert: "((consul_server.certificate))"
-        server_key: "((consul_server.private_key))"
-  - name: tcp_emitter
-    release: routing
-    properties:
-      tcp_emitter:
-        oauth_secret: "((uaa_clients_tcp_emitter_secret))"
-        bbs:
-          client_cert: "((diego_bbs_client.certificate))"
-          client_key: "((diego_bbs_client.private_key))"
-      bbs:
-        api_location: bbs.service.cf.internal:8889
-        ca_cert: "((diego_bbs.ca))"
-      uaa:
-        ca_cert: "((uaa_ca.certificate))"
-        tls_port: 8443
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
@@ -815,7 +726,6 @@ instance_groups:
           servers: *consul_machines
           services:
             cloud_controller_ng: {}
-            routing-api: {}
         encrypt_keys:
         - "((consul_encrypt_key))"
         agent_cert: "((consul_agent.certificate))"
@@ -828,8 +738,6 @@ instance_groups:
     properties:
       router:
         route_services_secret: "((router_route_services_secret))"
-      routing_api:
-        enabled: true
       hm9000:
         port: -1
       ssl: &ssl
@@ -1019,25 +927,6 @@ instance_groups:
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
-  - name: routing-api
-    release: routing
-    properties:
-      routing_api:
-        system_domain: "((system_domain))"
-        router_groups:
-        - name: default-tcp
-          type: tcp
-          reservable_ports: 1024-1123
-        sqldb:
-          type: mysql
-          host: 10.0.31.193
-          port: 3306
-          schema: routing-api
-          username: routing-api
-          password: "((cf_mysql_mysql_seeded_databases_routing_password))"
-      uaa:
-        ca_cert: "((uaa_ca.certificate))"
-        tls_port: 8443
 - name: cc_clock
   azs:
   - z1
@@ -1374,8 +1263,6 @@ variables:
   type: password
 - name: cf_mysql_mysql_seeded_databases_diego_password
   type: password
-- name: cf_mysql_mysql_seeded_databases_routing_password
-  type: password
 - name: cf_mysql_mysql_seeded_databases_uaa_password
   type: password
 - name: nats_password
@@ -1405,8 +1292,6 @@ variables:
 - name: uaa_clients_tcp_emitter_secret
   type: password
 - name: uaa_clients_tcp_router_secret
-  type: password
-- name: uaa_clients_routing_api_client_secret
   type: password
 - name: uaa_login_client_secret
   type: password
@@ -1555,25 +1440,6 @@ variables:
   type: certificate
   options:
     common_name: uaa_login_saml
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 releases:
 - name: capi
   url: https://bosh.io/d/github.com/cloudfoundry/capi-release?v=1.14.0
