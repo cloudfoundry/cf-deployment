@@ -21,7 +21,7 @@
   value:
   - alias: default
     os: ubuntu-trusty
-    version: 3309
+    version: 3312.9
 
 # --- Add Bosh Lite Security Groups ---
 - type: replace
@@ -153,6 +153,10 @@
 - type: replace
   path: /instance_groups/name=router/instances
   value: 1
+- type: replace
+  path: /instance_groups/name=tcp-emitter/azs
+  value:
+  - z1
 - type: replace
   path: /instance_groups/name=tcp-router/azs
   value:
