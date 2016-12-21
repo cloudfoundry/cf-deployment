@@ -2,7 +2,7 @@
 - type: replace
   path: /instance_groups/-
   value:
-  - name: tcp-router
+    name: tcp-router
     azs:
     - z1
     - z2
@@ -71,7 +71,7 @@
 - type: replace
   path: /instance_groups/-
   value:
-  - name: tcp-emitter
+    name: tcp-emitter
     azs:
     - z1
     - z2
@@ -119,7 +119,7 @@
 - type: replace
   path: /instance_groups/name=api/jobs/-
   value:
-  - name: routing-api
+    name: routing-api
     release: routing
     properties:
       routing_api:
