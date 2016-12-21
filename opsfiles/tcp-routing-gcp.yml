@@ -90,7 +90,8 @@
           agent:
             mode: client
             domain: cf.internal
-            servers: *consul_machines
+            servers:
+              lan: *consul_machines
           encrypt_keys:
           - "((consul_encrypt_key))"
           agent_cert: "((consul_agent.certificate))"
