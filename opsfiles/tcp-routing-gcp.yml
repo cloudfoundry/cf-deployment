@@ -140,11 +140,12 @@
         tls_port: 8443
 
 - type: replace
-  path: /instance_groups/name=mysql/jobs/name=mysql/properties/cf_mysql/mysql/seeded_databases/-
-  value:
-  - name: routing-api
-    username: routing-api
-    password: "((cf_mysql_mysql_seeded_databases_routing_password))"
+  path: /instance_groups/name=mysql/jobs/name=mysql/properties/cf_mysql/mysql/seeded_databases/name=routing-api?/username
+  value: routing-api
+
+- type: replace
+  path: /instance_groups/name=mysql/jobs/name=mysql/properties/cf_mysql/mysql/seeded_databases/name=routing-api?/password
+  value: "((cf_mysql_mysql_seeded_databases_routing_password))"
 
 - type: replace
   path: /variables/name=cf_mysql_mysql_seeded_databases_routing_password?/type
