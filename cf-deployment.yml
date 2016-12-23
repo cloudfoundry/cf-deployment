@@ -57,12 +57,9 @@ instance_groups:
       loggregator:
         tls:
           ca_cert: "((loggregator_ca.certificate))"
-          trafficcontroller:
-            cert: "((loggregator_tls_tc.certificate))"
-            key: "((loggregator_tls_tc.private_key))"
-          doppler:
-            cert: "((loggregator_tls_doppler.certificate))"
-            key: "((loggregator_tls_doppler.private_key))"
+          metron:
+            cert: "((loggregator_tls_metron.certificate))"
+            key: "((loggregator_tls_metron.private_key))"
         etcd:
           require_ssl: true
           ca_cert: "((etcd_server.ca))"
@@ -1107,9 +1104,6 @@ instance_groups:
       loggregator:
         tls:
           ca_cert: "((loggregator_ca.certificate))"
-          trafficcontroller:
-            cert: "((loggregator_tls_tc.certificate))"
-            key: "((loggregator_tls_tc.private_key))"
           doppler:
             cert: "((loggregator_tls_doppler.certificate))"
             key: "((loggregator_tls_doppler.private_key))"
@@ -1124,14 +1118,6 @@ instance_groups:
     release: loggregator
     properties:
       loggregator:
-        tls:
-          ca_cert: "((loggregator_ca.certificate))"
-          trafficcontroller:
-            cert: "((loggregator_tls_tc.certificate))"
-            key: "((loggregator_tls_tc.private_key))"
-          doppler:
-            cert: "((loggregator_tls_doppler.certificate))"
-            key: "((loggregator_tls_doppler.private_key))"
         etcd:
           require_ssl: true
           ca_cert: "((etcd_server.ca))"
@@ -1199,9 +1185,6 @@ instance_groups:
           trafficcontroller:
             cert: "((loggregator_tls_tc.certificate))"
             key: "((loggregator_tls_tc.private_key))"
-          doppler:
-            cert: "((loggregator_tls_doppler.certificate))"
-            key: "((loggregator_tls_doppler.private_key))"
         etcd:
           require_ssl: true
           ca_cert: "((etcd_server.ca))"
