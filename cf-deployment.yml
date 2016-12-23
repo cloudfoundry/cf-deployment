@@ -1376,11 +1376,11 @@ variables:
   type: certificate
   options:
     common_name: loggregatorCA
-- name: metron_agent_tls_client
+- name: loggregator_tls_metron
   type: certificate
   options:
     ca: loggregator_ca
-    common_name: metron_agent
+    common_name: metron
     ext_key_usage:
     - client_auth
 - name: loggregator_tls_doppler
