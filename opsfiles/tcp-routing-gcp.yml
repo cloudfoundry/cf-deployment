@@ -23,7 +23,10 @@
             mode: client
             domain: cf.internal
             servers:
-              lan: *consul_machines
+              lan: &consul_machines
+              - 10.0.1.194
+              - 10.0.1.195
+              - 10.0.1.196
           encrypt_keys:
           - "((consul_encrypt_key))"
           agent_cert: "((consul_agent.certificate))"
@@ -86,10 +89,7 @@
             mode: client
             domain: cf.internal
             servers:
-              lan: &consul_machines
-              - 10.0.1.194
-              - 10.0.1.195
-              - 10.0.1.196
+              lan: *consul_machines
           encrypt_keys:
           - "((consul_encrypt_key))"
           agent_cert: "((consul_agent.certificate))"
