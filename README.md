@@ -56,7 +56,7 @@ The configuration of CF represented by `cf-deployment.yml` is intended to be a w
 - `opsfiles/disable-router-tls-termination.yml` - this file eliminates keys related to performing tls/ssl termination within the gorouter job. It's useful for deployments where tls termination is performed prior to the gorouter - for instance, on AWS, such termination is commonly done at the ELB. This also eliminates the need to specify `((router_ssl_cert))` and `((router_ssl_key))` in the var files.
 - `opsfiles/change-logging-port-for-aws-elb.yml` - this file overrides the loggregator ports to 4443, since it is required under AWS to have a separate port from the standard HTTPS port (443) for loggregator traffic in order to use the AWS load balancer.
 - `opsfiles/gcp.yml` - this file overrides the static IP addresses assigned to some instance groups, as GCP networking features allow them to all co-exist on the same subnet despite being spread across multiple AZs.
-- `opsfiles/tcp-routing-gcp.yml` - this ops file adds TCP routing for GCP to CF deployment.
+- `opsfiles/tcp-routing-gcp.yml` - this ops file adds TCP router and routing api for GCP to CF deployment.
 
 # Deploying to `bosh-lite`
 To deploy to bosh-lite:
