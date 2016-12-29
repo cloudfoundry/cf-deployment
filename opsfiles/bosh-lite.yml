@@ -93,23 +93,11 @@
 
 # ----- Scale Down ------
 - type: replace
-  path: /instance_groups/name=consul/azs
-  value:
-  - z1
-- type: replace
   path: /instance_groups/name=consul/instances
   value: 1
 - type: replace
-  path: /instance_groups/name=nats/azs
-  value:
-  - z1
-- type: replace
   path: /instance_groups/name=nats/instances
   value: 1
-- type: replace
-  path: /instance_groups/name=etcd/azs
-  value:
-  - z1
 - type: replace
   path: /instance_groups/name=etcd/instances
   value: 1
@@ -119,37 +107,17 @@
   - instances: 1
     name: etcd
 - type: replace
-  path: /instance_groups/name=diego-bbs/azs
-  value:
-  - z1
-- type: replace
   path: /instance_groups/name=diego-bbs/instances
   value: 1
-- type: replace
-  path: /instance_groups/name=uaa/azs
-  value:
-  - z1
 - type: replace
   path: /instance_groups/name=uaa/instances
   value: 1
 - type: replace
-  path: /instance_groups/name=diego-brain/azs
-  value:
-  - z1
-- type: replace
   path: /instance_groups/name=diego-brain/instances
   value: 1
 - type: replace
-  path: /instance_groups/name=diego-cell/azs
-  value:
-  - z1
-- type: replace
   path: /instance_groups/name=diego-cell/instances
   value: 1
-- type: replace
-  path: /instance_groups/name=router/azs
-  value:
-  - z1
 - type: replace
   path: /instance_groups/name=router/instances
   value: 1
@@ -161,30 +129,14 @@
   path: /instance_groups/name=route-emitter/instances
   value: 1
 - type: replace
-  path: /instance_groups/name=api/azs
-  value:
-  - z1
-- type: replace
   path: /instance_groups/name=api/instances
   value: 1
-- type: replace
-  path: /instance_groups/name=cc_bridge/azs
-  value:
-  - z1
 - type: replace
   path: /instance_groups/name=cc_bridge/instances
   value: 1
 - type: replace
-  path: /instance_groups/name=doppler/azs
-  value:
-  - z1
-- type: replace
   path: /instance_groups/name=doppler/instances
   value: 1
-- type: replace
-  path: /instance_groups/name=log_controller/azs
-  value:
-  - z1
 - type: replace
   path: /instance_groups/name=log_controller/instances
   value: 1
