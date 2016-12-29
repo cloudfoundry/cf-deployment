@@ -1,0 +1,25 @@
+# ----- remove undefined vm_extensions -----
+- type: remove
+  path: /instance_groups/name=nats/vm_extensions
+- type: remove
+  path: /instance_groups/name=etcd/vm_extensions
+- type: remove
+  path: /instance_groups/name=uaa/vm_extensions
+- type: remove
+  path: /instance_groups/name=mysql/vm_extensions
+- type: remove
+  path: /instance_groups/name=nats/vm_extensions
+- type: remove
+  path: /instance_groups/name=diego-cell/vm_extensions
+- type: remove
+  path: /instance_groups/name=blobstore/vm_extensions
+- type: remove
+  path: /instance_groups/name=api/vm_extensions
+- type: remove
+  path: /instance_groups/name=cc_clock/vm_extensions
+- type: remove
+  path: /instance_groups/name=cc_bridge/vm_extensions
+- type: remove
+  path: /instance_groups/name=doppler/vm_extensions
+- type: remove
+  path: /instance_groups/name=log_controller/vm_extensions
