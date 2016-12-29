@@ -44,11 +44,6 @@
   - cf-internet-required
   - cf-router-network-properties
 - type: replace
-  path: /instance_groups/name=tcp-router/vm_extensions?
-  value:
-  - cf-internet-required
-  - cf-tcp-router-network-properties
-- type: replace
   path: /instance_groups/name=route-emitter/vm_extensions?
   value:
   - cf-internet-required
@@ -127,9 +122,6 @@
   value: *consul_ips
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=consul_agent/properties/consul/agent/servers/lan
-  value: *consul_ips
-- type: replace
-  path: /instance_groups/name=tcp-router/jobs/name=consul_agent/properties/consul/agent/servers/lan
   value: *consul_ips
 - type: replace
   path: /instance_groups/name=route-emitter/jobs/name=consul_agent/properties/consul/agent/servers/lan

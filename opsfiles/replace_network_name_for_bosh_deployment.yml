@@ -1,0 +1,65 @@
+# ----- replace network private to default for bosh-deployment -----
+- type: replace
+  path: /instance_groups/name=consul/networks
+  value:
+  - name: default
+- type: replace
+  path: /instance_groups/name=nats/networks
+  value:
+  - name: default
+- type: replace
+  path: /instance_groups/name=etcd/networks
+  value:
+  - name: default
+- type: replace
+  path: /instance_groups/name=mysql/networks
+  value:
+  - name: default
+- type: replace
+  path: /instance_groups/name=uaa/networks
+  value:
+  - name: default
+- type: replace
+  path: /instance_groups/name=diego-brain/networks
+  value:
+  - name: default
+- type: replace
+  path: /instance_groups/name=diego-bbs/networks
+  value:
+  - name: default
+- type: replace
+  path: /instance_groups/name=diego-cell/networks
+  value:
+  - name: default
+- type: replace
+  path: /instance_groups/name=router/networks
+  value:
+  - name: default
+- type: replace
+  path: /instance_groups/name=route-emitter/networks
+  value:
+  - name: default
+- type: replace
+  path: /instance_groups/name=blobstore/networks
+  value:
+  - name: default
+- type: replace
+  path: /instance_groups/name=cc_clock/networks
+  value:
+  - name: default
+- type: replace
+  path: /instance_groups/name=cc_bridge/networks
+  value:
+  - name: default
+- type: replace
+  path: /instance_groups/name=doppler/networks
+  value:
+  - name: default
+- type: replace
+  path: /instance_groups/name=log_controller/networks
+  value:
+  - name: default
+- type: replace
+  path: /instance_groups/name=api/networks
+  value:
+  - name: default

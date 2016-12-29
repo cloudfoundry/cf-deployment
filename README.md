@@ -15,11 +15,13 @@ This repo contains a canonical manifest for deploying Cloud Foundry without the 
   - YAML Anchors with human-friendly names are used where the need for duplication has not yet been obviated by BOSH links.
   - Properties are ordered to maximize navigability and present the most useful and important information first.
   - Only necessary configuration is included. Any release default that can safely be used, is. Any properties which can be consumed via BOSH links, are.
-- enables TLS/SSL features on every job which supports TLS.
+- emphasizes security and production-readiness by default.
+  - bosh's `--var-store` feature is used to generate strong passwords, certs, and keys. There are no default credentials, even in bosh-lite.
+  - TLS/SSL features are enabled on every job which supports TLS.
 - uses three AZs, of which two are used to provide redundancy for most instance groups. The third is used only for instance groups that should not have even instance counts, such as etcd and consul.
 - uses Diego natively, does not support DEAs, and enables diego-specific features such as ssh access to apps by default.
 - deploys jobs to handle platform data persistence, using the cf-mysql release for databases and the CAPI release's WebDAV job for blob storage.
-- assumes load-balancing will be handled by the IaaS.
+- assumes load-balancing will be handled by the IaaS or an external deployment.
 - assumes GCP as the default deployment environment. For use with other IaaSs, see the **Ops Files** section below.
 
 # Usage
@@ -45,8 +47,8 @@ See the rest of this document for more on the new CLI, deployment vars, and conf
 ## BOSH `cloud-config`
 `cf-deployment` assumes that you've uploaded a compatible [cloud-config](http://bosh.io/docs/cloud-config.html) to the BOSH director. The cloud-config produced by `bbl` is compatible by default. For IaaSs not supported by `bbl`, please refer to our IaaS-specific advice in the **Setup and Prerequisites** section above. If your IaaS is not listed there, we have not yet tested cf-deployment with it, and you may need to do some engineering work to figure out the right cloud config (and possibly ops files) to get it working for `cf-deployment`.
 
-## Deployment variables
-`cf-deployment.yml` requires additional data to provide environment-specific or sensitive configuration such as the system domain and various credentials. To do this we use the `--vars-store` flag in the new BOSH CLI. This flag takes the name of a `yml` file that it will read and write to to generate or use certs, keys, and variables.  Where those values are not present, it will generate new values based on the type information stored in `cf-deployment.yml`.
+## Deployment variables and the var-store
+`cf-deployment.yml` requires additional information to provide environment-specific or sensitive configuration such as the system domain and various credentials. To do this we use the `--vars-store` flag in the new BOSH CLI. This flag takes the name of a `yml` file that it will read and write to. Where necessary credential values are not present, it will generate new values based on the type information stored in `cf-deployment.yml`. Variables passed in with `-v` or `-l` will override those already in the var store, but will also be stored there for future use. The `-v` flag is also the recommended mechanism for providing the system domain, which `bosh` is not equipped to generate.
 
 ## Ops Files
 The configuration of CF represented by `cf-deployment.yml` is intended to be a workable, secure, fully-featured default. When the need arises to make different configuration choices, we accomplish this with the `-o`/`--ops-file` flags. These flags read a single `.yml` file that details operations to be performed on the manifest before variables are generated and filled. We've supplied some common manifest modifications in the `opsfiles` directory. Here's a brief summary:
@@ -54,6 +56,7 @@ The configuration of CF represented by `cf-deployment.yml` is intended to be a w
 - `opsfiles/disable-router-tls-termination.yml` - this file eliminates keys related to performing tls/ssl termination within the gorouter job. It's useful for deployments where tls termination is performed prior to the gorouter - for instance, on AWS, such termination is commonly done at the ELB. This also eliminates the need to specify `((router_ssl_cert))` and `((router_ssl_key))` in the var files.
 - `opsfiles/change-logging-port-for-aws-elb.yml` - this file overrides the loggregator ports to 4443, since it is required under AWS to have a separate port from the standard HTTPS port (443) for loggregator traffic in order to use the AWS load balancer.
 - `opsfiles/gcp.yml` - this file overrides the static IP addresses assigned to some instance groups, as GCP networking features allow them to all co-exist on the same subnet despite being spread across multiple AZs.
+- `opsfiles/tcp-routing-gcp.yml` - this ops file adds TCP router and routing api for GCP to CF deployment.
 
 # Deploying to `bosh-lite`
 To deploy to bosh-lite:
@@ -74,7 +77,7 @@ The [ci](https://runtime.ci.cf-app.com/teams/main/pipelines/cf-deployment) for `
 ## Editorial Style Guide
 Please observe the following conventions when contributing to `cf-deployment`. We are likely to revert/reject commits and PRs which don't. In general, every line of `cf-deployment.yml` should be clear, necessary for a correctly functioning default deployment, and explicable. Maximizing the legibility and minimizing the size of `cf-deployment.yml` are high priorities. Features under development and optional extensions should be added/enabled via ops files.
 
-1. Global properties shouldn't be used.
+1. Don't use global properties.
   1. To maximize the readability of properties that must be set on many jobs, create a clearly named YAML anchor at the first occurrence of the duplicate properties, then reference that anchor as necessary.
   1. Duplication and the use of YAML anchors indicate properties which _should_ be provided/consumed by Releases using BOSH links, but aren't yet.
 1. Don't include any property in `cf-deployment.yml` which is not necessary for every user of the default configuration.
@@ -84,4 +87,5 @@ Please observe the following conventions when contributing to `cf-deployment`. W
 1. Any property value which isn't necessary for every user of the default configuration to specify should be exposed via ops-files, not vars.
 1. Properties which must be set to reflect IaaS-sensitive contextual conditions, such as the relationship between networks and AZs, should assume GCP and be set appropriately for other IaaSs in an ops file.
 1. Ops files included in the `cf-deployment` repo should not overlap. That is, they should be order-independent, and not address the same properties. If this is not possible, their order must be documented.
+1. All credentials should be bosh-generatable. When adding new passwords, secrets, certs, CAs, and keys, add them to the `variables` section of the manifest. Use the existing variables as a guide for the details necessary to allow bosh to perform credential generation. When testing new credential properties, test with bosh-generated values.
 

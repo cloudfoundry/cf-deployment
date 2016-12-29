@@ -122,8 +122,9 @@
   path: /instance_groups/name=router/instances
   value: 1
 - type: replace
-  path: /instance_groups/name=tcp-router/instances
-  value: 1
+  path: /instance_groups/name=route-emitter/azs
+  value:
+  - z1
 - type: replace
   path: /instance_groups/name=route-emitter/instances
   value: 1
@@ -166,9 +167,6 @@
   value: *consul_ips
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=consul_agent/properties/consul/agent/servers/lan
-  value: *consul_ips
-- type: replace
-  path: /instance_groups/name=tcp-router/jobs/name=consul_agent/properties/consul/agent/servers/lan
   value: *consul_ips
 - type: replace
   path: /instance_groups/name=route-emitter/jobs/name=consul_agent/properties/consul/agent/servers/lan
