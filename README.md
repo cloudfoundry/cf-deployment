@@ -62,8 +62,9 @@ The configuration of CF represented by `cf-deployment.yml` is intended to be a w
 To deploy to bosh-lite:
 
 ```
-bosh -e lite update-cloud-config bosh-lite/cloud-config.yml
-bosh -e lite -d cf deploy cf-deployment.yml -o opsfiles/bosh-lite.yml --vars-store deployment-vars.yml -v system_domain=bosh-lite.com
+export BOSH_CA_CERT=$PWD/bosh-lite/ca/certs/ca.crt
+bosh -e 192.168.50.4 update-cloud-config bosh-lite/cloud-config.yml
+bosh -e 192.168.50.4 -d cf deploy cf-deployment.yml -o opsfiles/bosh-lite.yml --vars-store deployment-vars.yml -v system_domain=bosh-lite.com
 ```
 
 # Contributing
