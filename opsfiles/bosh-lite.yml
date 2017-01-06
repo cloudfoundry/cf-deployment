@@ -67,6 +67,9 @@
   path: /instance_groups/name=router/vm_extensions/-
   value: ssh-proxy-lb
 - type: replace
+  path: /instance_groups/name=router/vm_extensions/-
+  value: ssh-proxy-and-router-lb
+- type: replace
   path: /instance_groups/name=router/jobs/-
   value:
     name: ssh_proxy
