@@ -24,9 +24,9 @@
             domain: cf.internal
             servers:
               lan: &consul_machines
-              - 10.0.1.194
-              - 10.0.1.195
-              - 10.0.1.196
+              - 10.0.31.190
+              - 10.0.47.190
+              - 10.0.63.190
           encrypt_keys:
           - "((consul_encrypt_key))"
           agent_cert: "((consul_agent.certificate))"
@@ -129,7 +129,7 @@
           reservable_ports: 1024-1123
         sqldb:
           type: mysql
-          host: 10.0.1.193
+          host: 10.0.31.193
           port: 3306
           schema: routing-api
           username: routing-api
