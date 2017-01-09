@@ -762,6 +762,8 @@ instance_groups:
         url: https://uaa.((system_domain))
         jwt:
           verification_key: "((uaa_jwt_signing_key.public_key))"
+        ssl:
+          port: 8443
       cc:
         default_running_security_groups: &cc_default_running_security_groups
         - public_networks
@@ -884,6 +886,8 @@ instance_groups:
         url: https://uaa.((system_domain))
         jwt:
           verification_key: "((uaa_jwt_signing_key.public_key))"
+        ssl:
+          port: 8443
   - name: binary-buildpack
     release: binary-buildpack
   - name: dotnet-core-buildpack
@@ -987,6 +991,8 @@ instance_groups:
         url: https://uaa.((system_domain))
         jwt:
           verification_key: "((uaa_jwt_signing_key.public_key))"
+        ssl:
+          port: 8443
   - name: statsd-injector
     release: loggregator
   - name: metron_agent
