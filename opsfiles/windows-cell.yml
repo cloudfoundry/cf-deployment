@@ -1,0 +1,96 @@
+---
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: windows-cell
+    azs:
+    - z1
+    - z2
+    instances: 0
+    vm_type: r3.xlarge
+    vm_extensions:
+    - 100GB_ephemeral_disk
+    stemcell: windows
+    networks:
+    - name: private
+    jobs:
+    - name: consul_agent_windows
+      release: consul
+      properties:
+        syslog_daemon_config:
+          enable: false
+        consul:
+          agent:
+            mode: client
+            domain: cf.internal
+            servers:
+              lan:
+              - 10.0.31.190
+              - 10.0.47.190
+              - 10.0.63.190
+
+          encrypt_keys: "((consul_encrypt_keys))"
+          agent_cert: "((consul_agent_cert))"
+          agent_key: "((consul_agent_agent_key))"
+          ca_cert: "((consul_agent_ca_cert))"
+          server_cert: "((consul_agent_server_cert))"
+          server_key: "((consul_agent_server_key))"
+    - name: garden-windows
+      release: garden-windows
+      properties:
+        syslog_daemon_config:
+          enable: false
+    - name: rep_windows
+      release: diego
+      properties:
+        syslog_daemon_config:
+          enable: false
+        diego:
+          rep:
+            bbs:
+              ca_cert: "((diego_bbs.ca))"
+              client_cert: "((diego_bbs_client.certificate))"
+              client_key: "((diego_bbs_client.private_key))"
+            require_tls: false
+            preloaded_rootfses:
+            - windows2012R2:/tmp/windows2012R2
+          ssl:
+            skip_cert_verify: true
+    - name: metron_agent_windows
+      release: loggregator
+      properties:
+        syslog_daemon_config:
+          enable: false
+        metron_agent:
+          deployment: "((system_domain))"
+          etcd:
+            client_cert: "((etcd_client.certificate))"
+            client_key: "((etcd_client.private_key))"
+        metron_endpoint:
+          shared_secret: "((dropsonde_shared_secret))"
+        loggregator:
+          tls:
+            ca_cert: "((loggregator_ca.certificate))"
+            metron:
+              cert: "((loggregator_tls_metron.certificate))"
+              key: "((loggregator_tls_metron.private_key))"
+          etcd:
+            require_ssl: true
+            ca_cert: "((etcd_server.ca))"
+            machines:
+            - etcd.service.cf.internal
+
+- type: replace
+  path: /releases/-
+  value:
+    name: garden-windows
+    version: 0.0.9
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/garden-windows-bosh-release?v=0.0.9
+    sha1: c72b842e9b18c6fc2525f3ac9ec3973fb3797e47
+
+- type: replace
+  path: /stemcells/-
+  value:
+    alias: windows
+    os: windows2012R2
+    version: latest
