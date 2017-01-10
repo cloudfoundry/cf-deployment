@@ -752,6 +752,7 @@ instance_groups:
         port: 4222
         user: nats
       uaa:
+        ca_cert: "((uaa_ca.certificate))"
         clients:
           cc_routing:
             secret: "((uaa_clients_cc-routing_secret))"
@@ -880,6 +881,7 @@ instance_groups:
         port: 4222
         user: nats
       uaa:
+        ca_cert: "((uaa_ca.certificate))"
         clients:
           cc-service-dashboards:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
@@ -985,6 +987,7 @@ instance_groups:
         port: 4222
         user: nats
       uaa:
+        ca_cert: "((uaa_ca.certificate))"
         clients:
           cc-service-dashboards:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
