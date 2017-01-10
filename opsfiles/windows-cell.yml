@@ -94,3 +94,11 @@
     alias: windows
     os: windows2012R2
     version: latest
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks?
+  value:
+    - name: "cflinuxfs2"
+      description: "Cloud Foundry Linux-based filesystem"
+    - name: "windows2012R2"
+      description: "Windows Server 2012 R2"
