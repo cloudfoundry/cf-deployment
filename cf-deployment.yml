@@ -1386,6 +1386,8 @@ variables:
     ext_key_usage:
     - client_auth
     - server_auth
+    alternative_names:
+    - 127.0.0.1
 - name: consul_server
   type: certificate
   options:
@@ -1428,6 +1430,13 @@ variables:
     alternative_names:
     - "*.bbs.service.cf.internal"
     - bbs.service.cf.internal
+- name: diego_consul_client
+  type: certificate
+  options:
+    ca: consul_agent_ca
+    common_name: diego consul client
+    ext_key_usage:
+    - client_auth
 - name: loggregator_ca
   type: certificate
   options:
