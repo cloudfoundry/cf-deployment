@@ -338,7 +338,7 @@ instance_groups:
           internal:
             hostnames:
             - uaa.service.cf.internal
-        url: https://uaa.service.cf.internal
+        url: https://uaa.((system_domain))
         admin:
           client_secret: "((uaa_admin_client_secret))"
         scim:
