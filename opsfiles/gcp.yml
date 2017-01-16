@@ -2,13 +2,11 @@
 # --- add vm extensions ---
 - type: replace
   path: /instance_groups/name=consul/vm_extensions?
-  value:
-  - internet-not-required
+  value: []
 - type: replace
   path: /instance_groups/name=nats/vm_extensions
   value:
   - 5GB_ephemeral_disk
-  - internet-not-required
 - type: replace
   path: /instance_groups/name=etcd/vm_extensions
   value:
@@ -19,59 +17,47 @@
   - 10GB_ephemeral_disk
 - type: replace
   path: /instance_groups/name=diego-bbs/vm_extensions?
-  value:
-  - internet-not-required
+  value: []
 - type: replace
   path: /instance_groups/name=uaa/vm_extensions
   value:
   - 10GB_ephemeral_disk
-  - internet-not-required
 - type: replace
   path: /instance_groups/name=diego-brain/vm_extensions
   value:
   - diego-ssh-proxy-network-properties
-  - internet-not-required
 - type: replace
   path: /instance_groups/name=diego-cell/vm_extensions
   value:
   - 100GB_ephemeral_disk
-  - internet-not-required
 - type: replace
   path: /instance_groups/name=router/vm_extensions
   value:
   - cf-router-network-properties
-  - internet-not-required
 - type: replace
   path: /instance_groups/name=route-emitter/vm_extensions?
-  value:
-  - internet-not-required
+  value: []
 - type: replace
   path: /instance_groups/name=blobstore/vm_extensions
   value:
   - 10GB_ephemeral_disk
-  - internet-not-required
 - type: replace
   path: /instance_groups/name=api/vm_extensions
   value:
   - 50GB_ephemeral_disk
-  - internet-not-required
 - type: replace
   path: /instance_groups/name=cc_clock/vm_extensions
   value:
   - 5GB_ephemeral_disk
-  - internet-not-required
 - type: replace
   path: /instance_groups/name=cc_bridge/vm_extensions
   value:
   - 5GB_ephemeral_disk
-  - internet-not-required
 - type: replace
   path: /instance_groups/name=doppler/vm_extensions
   value:
   - 5GB_ephemeral_disk
-  - internet-not-required
 - type: replace
   path: /instance_groups/name=log_controller/vm_extensions
   value:
   - 5GB_ephemeral_disk
-  - internet-not-required
