@@ -478,7 +478,7 @@ instance_groups:
           enable_cf_auth: true
           host_key: "((diego_ssh_proxy_host_key.private_key))"
           uaa_secret: "((uaa_clients_ssh-proxy_secret))"
-          uaa_token_url: https://uaa.((system_domain))/oauth/token
+          uaa_token_url: https://uaa.service.cf.internal/oauth/token
           bbs: &diego_bbs_client_properties
             ca_cert: "((diego_bbs.ca))"
             client_cert: "((diego_bbs_client.certificate))"
@@ -760,7 +760,7 @@ instance_groups:
             secret: "((uaa_clients_cloud_controller_username_lookup_secret))"
           cc-service-dashboards:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
-        url: https://uaa.((system_domain))
+        url: https://uaa.service.cf.internal
         jwt:
           verification_key: "((uaa_jwt_signing_key.public_key))"
         ssl:
@@ -885,7 +885,7 @@ instance_groups:
         clients:
           cc-service-dashboards:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
-        url: https://uaa.((system_domain))
+        url: https://uaa.service.cf.internal
         jwt:
           verification_key: "((uaa_jwt_signing_key.public_key))"
         ssl:
@@ -991,7 +991,7 @@ instance_groups:
         clients:
           cc-service-dashboards:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
-        url: https://uaa.((system_domain))
+        url: https://uaa.service.cf.internal
         jwt:
           verification_key: "((uaa_jwt_signing_key.public_key))"
         ssl:
@@ -1185,7 +1185,7 @@ instance_groups:
         clients:
           doppler:
             secret: "((uaa_clients_doppler_secret))"
-        url: https://uaa.((system_domain))
+        url: https://uaa.service.cf.internal
       loggregator:
         tls:
           ca_cert: "((loggregator_ca.certificate))"
