@@ -1,0 +1,24 @@
+---
+- type: replace
+  path: /instance_groups/name=windows-cell/jobs/-
+  value:
+    name: route_emitter
+    release: diego
+    properties:
+      diego:
+        route_emitter:
+          local_mode: true
+          bbs:
+            ca_cert: "((diego_bbs.ca))"
+            client_cert: "((diego_bbs_client.certificate))"
+            client_key: "((diego_bbs_client.private_key))"
+          nats:
+            machines:
+            - 10.0.31.191
+            - 10.0.47.191
+            password: "((nats_password))"
+            port: 4222
+            user: nats
+
+- type: remove
+  path: /instance_groups/name=route-emitter
