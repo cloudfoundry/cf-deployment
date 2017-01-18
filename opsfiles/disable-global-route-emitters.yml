@@ -1,0 +1,8 @@
+---
+# Use the enable-local-route-emitters.yml opsfile to enable
+# local route emitters on your diego cells.
+# If you have windows cells, use the
+# enable-local-route-emitters-windows-cell.yml opsfile.
+
+- type: remove
+  path: /instance_groups/name=route-emitter
