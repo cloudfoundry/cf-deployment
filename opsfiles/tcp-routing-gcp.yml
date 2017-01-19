@@ -42,7 +42,6 @@
         uaa:
           ca_cert: "((uaa_ca.certificate))"
           tls_port: 8443
-        health_check_port: 8080
     - name: metron_agent
       release: loggregator
       properties: &metron_agent_properties
