@@ -1,0 +1,55 @@
+---
+# Default cf-deployment deploys a (mostly) HA configuration.
+# Use this override to only deploy single instances of each job.
+## Note: This also reduces the static IPs used by consul and nats.
+- type: replace
+  path: /instance_groups/name=consul/instances
+  value: 1
+- type: remove
+  path: /instance_groups/name=consul/networks/name=private/static_ips/2
+- type: remove
+  path: /instance_groups/name=consul/networks/name=private/static_ips/1
+- type: replace
+  path: /instance_groups/name=nats/instances
+  value: 1
+- type: remove
+  path: /instance_groups/name=nats/networks/name=private/static_ips/1
+- type: replace
+  path: /instance_groups/name=etcd/instances
+  value: 1
+- type: replace
+  path: /instance_groups/name=etcd/jobs/name=etcd/properties/etcd/cluster/name=etcd/instances
+  value: 1
+- type: replace
+  path: /instance_groups/name=diego-bbs/instances
+  value: 1
+- type: replace
+  path: /instance_groups/name=uaa/instances
+  value: 1
+- type: replace
+  path: /instance_groups/name=consul/instances
+  value: 1
+- type: replace
+  path: /instance_groups/name=diego-brain/instances
+  value: 1
+- type: replace
+  path: /instance_groups/name=diego-cell/instances
+  value: 1
+- type: replace
+  path: /instance_groups/name=router/instances
+  value: 1
+- type: replace
+  path: /instance_groups/name=route-emitter/instances
+  value: 1
+- type: replace
+  path: /instance_groups/name=api/instances
+  value: 1
+- type: replace
+  path: /instance_groups/name=cc_bridge/instances
+  value: 1
+- type: replace
+  path: /instance_groups/name=doppler/instances
+  value: 1
+- type: replace
+  path: /instance_groups/name=log_controller/instances
+  value: 1
