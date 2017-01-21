@@ -105,6 +105,8 @@ instance_groups:
         user: nats
   - name: nats
     release: nats
+    provides:
+      nats: {as: nats, shared: true}
     properties:
       nats:
         password: "((nats_password))"
