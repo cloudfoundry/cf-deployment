@@ -1335,14 +1335,10 @@ variables:
     ext_key_usage:
     - client_auth
     - server_auth
-- name: blobstore_ca
-  type: certificate
-  options:
-    common_name: blobstore_ca
 - name: blobstore_tls
   type: certificate
   options:
-    ca: blobstore_ca
+    ca: service_cf_internal_ca
     common_name: blobstore.service.cf.internal
 - name: consul_agent_ca
   type: certificate
@@ -1364,21 +1360,17 @@ variables:
     ext_key_usage:
     - client_auth
     - server_auth
-- name: diego_bbs
-  type: certificate
-  options:
-    common_name: diegoCA
 - name: diego_bbs_client
   type: certificate
   options:
-    ca: diego_bbs
+    ca: service_cf_internal_ca
     common_name: bbs client
     ext_key_usage:
     - client_auth
 - name: diego_bbs_server
   type: certificate
   options:
-    ca: diego_bbs
+    ca: service_cf_internal_ca
     common_name: bbs.service.cf.internal
     ext_key_usage:
     - server_auth
@@ -1438,14 +1430,14 @@ variables:
   type: certificate
   options:
     common_name: uaa_login_saml
-- name: cc_ca
+- name: service_cf_internal_ca
   type: certificate
   options:
     common_name: ccCA
 - name: cc_ssl
   type: certificate
   options:
-    ca: cc_ca
+    ca: service_cf_internal_ca
     common_name: cloud-controller-ng.service.cf.internal
 
 
