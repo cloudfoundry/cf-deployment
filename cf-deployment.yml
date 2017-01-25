@@ -839,6 +839,10 @@ instance_groups:
         resource_pool: *blobstore-properties
         packages: *blobstore-properties
         droplets: *blobstore-properties
+        mutual_tls:
+          ca_cert: "((cc_ca.certificate))"
+          public_cert: "((cc_ssl.certificate))"
+          private_key: "((cc_ssl.private_key))"
       ccdb: &ccdb
         databases:
         - name: cloud_controller
@@ -1434,12 +1438,15 @@ variables:
   type: certificate
   options:
     common_name: uaa_login_saml
-
-
-
-
-
-
+- name: cc_ca
+  type: certificate
+  options:
+    common_name: ccCA
+- name: cc_ssl
+  type: certificate
+  options:
+    ca: cc_ca
+    common_name: cloud-controller-ng.service.cf.internal
 
 releases:
 - name: capi
