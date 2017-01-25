@@ -1299,6 +1299,10 @@ variables:
   type: ssh
 - name: uaa_jwt_signing_key
   type: rsa
+- name: service_cf_internal_ca
+  type: certificate
+  options:
+    common_name: internalCA
 - name: etcd_ca
   type: certificate
   options:
@@ -1430,10 +1434,6 @@ variables:
   type: certificate
   options:
     common_name: uaa_login_saml
-- name: service_cf_internal_ca
-  type: certificate
-  options:
-    common_name: internalCA
 - name: cc_tls
   type: certificate
   options:
