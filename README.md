@@ -29,7 +29,7 @@ To deploy to a configured BOSH director using the new `bosh` CLI:
 
 ```
 export SYSTEM_DOMAIN=some-domain.that.you.have
-bosh -e my-env -d cf deploy cf-deployment/cf-deployment.yml [ -o opsfiles/CUSTOMIZATION1 ] [ -o opsfiles/CUSTOMIZATION2 (etc.) ] --vars-store env-repo/deployment-vars.yml -v system_domain=$SYSTEM_DOMAIN
+bosh -e my-env -d cf deploy cf-deployment/cf-deployment.yml [ -o operations/CUSTOMIZATION1 ] [ -o operations/CUSTOMIZATION2 (etc.) ] --vars-store env-repo/deployment-vars.yml -v system_domain=$SYSTEM_DOMAIN
 ```
 
 See the rest of this document for more on the new CLI, deployment vars, and configuring your BOSH director.
@@ -51,12 +51,12 @@ See the rest of this document for more on the new CLI, deployment vars, and conf
 `cf-deployment.yml` requires additional information to provide environment-specific or sensitive configuration such as the system domain and various credentials. To do this we use the `--vars-store` flag in the new BOSH CLI. This flag takes the name of a `yml` file that it will read and write to. Where necessary credential values are not present, it will generate new values based on the type information stored in `cf-deployment.yml`. Variables passed in with `-v` or `-l` will override those already in the var store, but will also be stored there for future use. The `-v` flag is also the recommended mechanism for providing the system domain, which `bosh` is not equipped to generate.
 
 ## Ops Files
-The configuration of CF represented by `cf-deployment.yml` is intended to be a workable, secure, fully-featured default. When the need arises to make different configuration choices, we accomplish this with the `-o`/`--ops-file` flags. These flags read a single `.yml` file that details operations to be performed on the manifest before variables are generated and filled. We've supplied some common manifest modifications in the `opsfiles` directory. Here's a brief summary:
+The configuration of CF represented by `cf-deployment.yml` is intended to be a workable, secure, fully-featured default. When the need arises to make different configuration choices, we accomplish this with the `-o`/`--ops-file` flags. These flags read a single `.yml` file that details operations to be performed on the manifest before variables are generated and filled. We've supplied some common manifest modifications in the `operations` directory. Here's a brief summary:
 
-- `opsfiles/disable-router-tls-termination.yml` - this file eliminates keys related to performing tls/ssl termination within the gorouter job. It's useful for deployments where tls termination is performed prior to the gorouter - for instance, on AWS, such termination is commonly done at the ELB. This also eliminates the need to specify `((router_ssl_cert))` and `((router_ssl_key))` in the var files.
-- `opsfiles/change-logging-port-for-aws-elb.yml` - this file overrides the loggregator ports to 4443, since it is required under AWS to have a separate port from the standard HTTPS port (443) for loggregator traffic in order to use the AWS load balancer.
-- `opsfiles/gcp.yml` - this file overrides the static IP addresses assigned to some instance groups, as GCP networking features allow them to all co-exist on the same subnet despite being spread across multiple AZs.
-- `opsfiles/tcp-routing-gcp.yml` - this ops file adds TCP router and routing api for GCP to CF deployment.
+- `operations/disable-router-tls-termination.yml` - this file eliminates keys related to performing tls/ssl termination within the gorouter job. It's useful for deployments where tls termination is performed prior to the gorouter - for instance, on AWS, such termination is commonly done at the ELB. This also eliminates the need to specify `((router_ssl_cert))` and `((router_ssl_key))` in the var files.
+- `operations/change-logging-port-for-aws-elb.yml` - this file overrides the loggregator ports to 4443, since it is required under AWS to have a separate port from the standard HTTPS port (443) for loggregator traffic in order to use the AWS load balancer.
+- `operations/gcp.yml` - this file overrides the static IP addresses assigned to some instance groups, as GCP networking features allow them to all co-exist on the same subnet despite being spread across multiple AZs.
+- `operations/tcp-routing-gcp.yml` - this ops file adds TCP router and routing api for GCP to CF deployment.
 
 # Deploying to `bosh-lite`
 To deploy to bosh-lite:
@@ -64,7 +64,7 @@ To deploy to bosh-lite:
 ```
 export BOSH_CA_CERT=$PWD/bosh-lite/ca/certs/ca.crt
 bosh -e 192.168.50.4 update-cloud-config bosh-lite/cloud-config.yml
-bosh -e 192.168.50.4 -d cf deploy cf-deployment.yml -o opsfiles/bosh-lite.yml --vars-store deployment-vars.yml -v system_domain=bosh-lite.com
+bosh -e 192.168.50.4 -d cf deploy cf-deployment.yml -o operations/bosh-lite.yml --vars-store deployment-vars.yml -v system_domain=bosh-lite.com
 ```
 
 # Contributing

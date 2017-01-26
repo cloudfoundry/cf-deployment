@@ -12,7 +12,7 @@ In order to setup a bosh director on GCP, please refer to [the README](https://g
   ```
 1. Check that you can generate a final manifest without errors (from inside the cf-deployment directory)
   ```
-  bosh -n interpolate --vars-store cf-deployment-vars.yml -o opsfiles/gcp.yml --var-errs cf-deployment.yml
+  bosh -n interpolate --vars-store cf-deployment-vars.yml -o operations/gcp.yml --var-errs cf-deployment.yml
   ```
 1. Deploy!
 
@@ -24,7 +24,7 @@ In order to setup a bosh director on GCP, please refer to [the README](https://g
      deploy \
      --vars-store=cf-deployment-vars.yml \
      -v system_domain=YOUR_SYSTEM_DOMAIN \
-     -o opsfiles/gcp.yml \
+     -o operations/gcp.yml \
      cf-deployment.yml
    ```
    
