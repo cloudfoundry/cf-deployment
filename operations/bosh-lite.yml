@@ -82,7 +82,7 @@
           uaa_secret: "((uaa_clients_ssh-proxy_secret))"
           uaa_token_url: "https://uaa.((system_domain))/oauth/token"
           bbs: &5
-            ca_cert: "((diego_bbs.ca))"
+            ca_cert: "((diego_bbs_client.ca))"
             client_cert: "((diego_bbs_client.certificate))"
             client_key: "((diego_bbs_client.private_key))"
 

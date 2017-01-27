@@ -108,7 +108,7 @@
             client_key: "((diego_bbs_client.private_key))"
         bbs:
           api_location: bbs.service.cf.internal:8889
-          ca_cert: "((diego_bbs.ca))"
+          ca_cert: "((diego_bbs_client.ca))"
         uaa:
           ca_cert: "((uaa_ca.certificate))"
           tls_port: 8443
