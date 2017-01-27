@@ -56,7 +56,7 @@ instance_groups:
         shared_secret: "((dropsonde_shared_secret))"
       loggregator:
         tls:
-          ca_cert: "((loggregator_ca.certificate))"
+          ca_cert: "((loggregator_tls_metron.ca))"
           metron:
             cert: "((loggregator_tls_metron.certificate))"
             key: "((loggregator_tls_metron.private_key))"
@@ -595,7 +595,7 @@ instance_groups:
         clients:
           gorouter:
             secret: "((uaa_clients_gorouter_secret))"
-        ca_cert: "((uaa_ca.certificate))"
+        ca_cert: "((uaa_ssl.ca))"
         ssl:
           port: 8443
   - name: metron_agent
@@ -754,7 +754,7 @@ instance_groups:
         port: 4222
         user: nats
       uaa:
-        ca_cert: "((uaa_ca.certificate))"
+        ca_cert: "((uaa_ssl.ca))"
         clients:
           cc_routing:
             secret: "((uaa_clients_cc-routing_secret))"
@@ -888,7 +888,7 @@ instance_groups:
         port: 4222
         user: nats
       uaa:
-        ca_cert: "((uaa_ca.certificate))"
+        ca_cert: "((uaa_ssl.ca))"
         clients:
           cc-service-dashboards:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
@@ -994,7 +994,7 @@ instance_groups:
         port: 4222
         user: nats
       uaa:
-        ca_cert: "((uaa_ca.certificate))"
+        ca_cert: "((uaa_ssl.ca))"
         clients:
           cc-service-dashboards:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
@@ -1117,7 +1117,7 @@ instance_groups:
           enable: true
       loggregator:
         tls:
-          ca_cert: "((loggregator_ca.certificate))"
+          ca_cert: "((loggregator_tls_doppler.ca))"
           doppler:
             cert: "((loggregator_tls_doppler.certificate))"
             key: "((loggregator_tls_doppler.private_key))"
@@ -1195,7 +1195,7 @@ instance_groups:
         url: https://uaa.((system_domain))
       loggregator:
         tls:
-          ca_cert: "((loggregator_ca.certificate))"
+          ca_cert: "((loggregator_tls_tc.ca))"
           trafficcontroller:
             cert: "((loggregator_tls_tc.certificate))"
             key: "((loggregator_tls_tc.private_key))"
