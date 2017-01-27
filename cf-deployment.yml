@@ -839,7 +839,7 @@ instance_groups:
         resource_pool: *blobstore-properties
         packages: *blobstore-properties
         droplets: *blobstore-properties
-        mutual_tls:
+        mutual_tls: &cc_mutual_tls
           ca_cert: "((cc_tls.ca))"
           public_cert: "((cc_tls.certificate))"
           private_key: "((cc_tls.private_key))"
@@ -875,6 +875,7 @@ instance_groups:
         packages: *blobstore-properties
         droplets: *blobstore-properties
         buildpacks: *blobstore-properties
+        mutual_tls: *cc_mutual_tls
       ccdb: *ccdb
       ssl: *ssl
       system_domain: "((system_domain))"
