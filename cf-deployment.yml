@@ -290,7 +290,7 @@ instance_groups:
             ca_cert: nil
             client_cert: nil
             client_key: nil
-          ca_cert: "((diego_bbs.ca))"
+          ca_cert: "((diego_bbs_server.ca))"
           server_cert: "((diego_bbs_server.certificate))"
           server_key: "((diego_bbs_server.private_key))"
   - name: metron_agent
@@ -482,7 +482,7 @@ instance_groups:
           uaa_secret: "((uaa_clients_ssh-proxy_secret))"
           uaa_token_url: https://uaa.((system_domain))/oauth/token
           bbs: &diego_bbs_client_properties
-            ca_cert: "((diego_bbs.ca))"
+            ca_cert: "((diego_bbs_client.ca))"
             client_cert: "((diego_bbs_client.certificate))"
             client_key: "((diego_bbs_client.private_key))"
   - name: file_server
@@ -633,7 +633,7 @@ instance_groups:
         route_emitter:
           nats: *nats_properties
           bbs:
-            ca_cert: "((diego_bbs.ca))"
+            ca_cert: "((diego_bbs_client.ca))"
             client_cert: "((diego_bbs_client.certificate))"
             client_key: "((diego_bbs_client.private_key))"
             require_ssl: true
