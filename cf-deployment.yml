@@ -742,7 +742,6 @@ instance_groups:
       ssl: &ssl
         skip_cert_verify: true
       system_domain: "((system_domain))"
-      system_domain_organization: default_org
       app_domains: &app_domains
       - "((system_domain))"
       app_ssh: &app_ssh
@@ -879,7 +878,6 @@ instance_groups:
       ccdb: *ccdb
       ssl: *ssl
       system_domain: "((system_domain))"
-      system_domain_organization: default_org
       app_domains: *app_domains
       app_ssh: *app_ssh
       nats:
@@ -985,7 +983,6 @@ instance_groups:
       ccdb: *ccdb
       ssl: *ssl
       system_domain: "((system_domain))"
-      system_domain_organization: default_org
       app_domains: *app_domains
       app_ssh: *app_ssh
       nats:
