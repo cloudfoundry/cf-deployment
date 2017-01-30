@@ -1316,14 +1316,14 @@ variables:
     alternative_names:
     - "*.etcd.service.cf.internal"
     - etcd.service.cf.internal
-    ext_key_usage:
+    extended_key_usage:
     - server_auth
 - name: etcd_client
   type: certificate
   options:
     ca: etcd_ca
     common_name: clientName
-    ext_key_usage:
+    extended_key_usage:
     - client_auth
 - name: etcd_peer_ca
   type: certificate
@@ -1337,7 +1337,7 @@ variables:
     alternative_names:
     - "*.etcd.service.cf.internal"
     - etcd.service.cf.internal
-    ext_key_usage:
+    extended_key_usage:
     - client_auth
     - server_auth
 - name: blobstore_tls
@@ -1354,7 +1354,7 @@ variables:
   options:
     ca: consul_agent_ca
     common_name: consul_agent
-    ext_key_usage:
+    extended_key_usage:
     - client_auth
     - server_auth
 - name: consul_server
@@ -1362,7 +1362,7 @@ variables:
   options:
     ca: consul_agent_ca
     common_name: server.dc1.cf.internal
-    ext_key_usage:
+    extended_key_usage:
     - client_auth
     - server_auth
 - name: diego_bbs_client
@@ -1370,14 +1370,14 @@ variables:
   options:
     ca: service_cf_internal_ca
     common_name: bbs client
-    ext_key_usage:
+    extended_key_usage:
     - client_auth
 - name: diego_bbs_server
   type: certificate
   options:
     ca: service_cf_internal_ca
     common_name: bbs.service.cf.internal
-    ext_key_usage:
+    extended_key_usage:
     - server_auth
     alternative_names:
     - "*.bbs.service.cf.internal"
@@ -1391,7 +1391,7 @@ variables:
   options:
     ca: loggregator_ca
     common_name: metron
-    ext_key_usage:
+    extended_key_usage:
     - client_auth
     - server_auth
 - name: loggregator_tls_doppler
@@ -1399,14 +1399,14 @@ variables:
   options:
     ca: loggregator_ca
     common_name: doppler
-    ext_key_usage:
+    extended_key_usage:
     - server_auth
 - name: loggregator_tls_tc
   type: certificate
   options:
     ca: loggregator_ca
     common_name: trafficcontroller
-    ext_key_usage:
+    extended_key_usage:
     - client_auth
 - name: router_ca
   type: certificate
