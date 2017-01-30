@@ -734,6 +734,8 @@ instance_groups:
         server_key: "((consul_server.private_key))"
   - name: cloud_controller_ng
     release: capi
+    provides:
+      cloud_controller: {as: cloud_controller, shared: true}
     properties:
       router:
         route_services_secret: "((router_route_services_secret))"
