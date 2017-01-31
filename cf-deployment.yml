@@ -1407,14 +1407,10 @@ variables:
     alternative_names:
     - "*.bbs.service.cf.internal"
     - bbs.service.cf.internal
-- name: loggregator_ca
-  type: certificate
-  options:
-    common_name: loggregatorCA
 - name: loggregator_tls_metron
   type: certificate
   options:
-    ca: loggregator_ca
+    ca: service_cf_internal_ca
     common_name: metron
     ext_key_usage:
     - client_auth
@@ -1422,14 +1418,14 @@ variables:
 - name: loggregator_tls_doppler
   type: certificate
   options:
-    ca: loggregator_ca
+    ca: service_cf_internal_ca
     common_name: doppler
     ext_key_usage:
     - server_auth
 - name: loggregator_tls_tc
   type: certificate
   options:
-    ca: loggregator_ca
+    ca: service_cf_internal_ca
     common_name: trafficcontroller
     ext_key_usage:
     - client_auth
