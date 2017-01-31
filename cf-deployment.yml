@@ -547,6 +547,8 @@ instance_groups:
     release: diego
     properties:
       diego:
+        executor:
+          ca_certs_for_downloads: "((blobstore_tls.ca))"
         rep:
           bbs: *diego_bbs_client_properties
           preloaded_rootfses:
