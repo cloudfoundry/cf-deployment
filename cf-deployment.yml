@@ -838,6 +838,7 @@ instance_groups:
         buildpacks: &blobstore-properties
           blobstore_type: webdav
           webdav_config:
+            ca_cert: "((blobstore_tls.ca))"
             blobstore_timeout: 5
             password: "((blobstore_admin_users_password))"
             private_endpoint: https://blobstore.service.cf.internal:4443
