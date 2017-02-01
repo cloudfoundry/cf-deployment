@@ -244,6 +244,58 @@ instance_groups:
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
+- name: router
+  azs:
+  - z1
+  - z2
+  instances: 2
+  vm_type: m3.medium
+  vm_extensions:
+  - router-lb
+  stemcell: default
+  networks:
+  - name: private
+  jobs:
+  - name: consul_agent
+    release: consul
+    properties:
+      consul:
+        agent:
+          mode: client
+          domain: cf.internal
+          servers: *consul_machines
+          services:
+            gorouter: {}
+        encrypt_keys:
+        - "((consul_encrypt_key))"
+        agent_cert: "((consul_agent.certificate))"
+        agent_key: "((consul_agent.private_key))"
+        ca_cert: "((consul_agent.ca))"
+        server_cert: "((consul_server.certificate))"
+        server_key: "((consul_server.private_key))"
+  - name: gorouter
+    release: routing
+    properties:
+      nats: *nats_properties
+      router:
+        enable_ssl: true
+        ssl_cert: "((router_ssl.certificate))"
+        ssl_key: "((router_ssl.private_key))"
+        status:
+          password: "((router_status_password))"
+          user: router-status
+        route_services_secret: "((router_route_services_secret))"
+        ssl_skip_validation: true
+      uaa:
+        clients:
+          gorouter:
+            secret: "((uaa_clients_gorouter_secret))"
+        ca_cert: "((uaa_ssl.ca))"
+        ssl:
+          port: 8443
+  - name: metron_agent
+    release: loggregator
+    properties: *metron_agent_properties
 - name: diego-bbs
   azs:
   - z1
@@ -555,58 +607,6 @@ instance_groups:
           - cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs
         ssl:
           skip_cert_verify: true
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
-- name: router
-  azs:
-  - z1
-  - z2
-  instances: 2
-  vm_type: m3.medium
-  vm_extensions:
-  - router-lb
-  stemcell: default
-  networks:
-  - name: private
-  jobs:
-  - name: consul_agent
-    release: consul
-    properties:
-      consul:
-        agent:
-          mode: client
-          domain: cf.internal
-          servers: *consul_machines
-          services:
-            gorouter: {}
-        encrypt_keys:
-        - "((consul_encrypt_key))"
-        agent_cert: "((consul_agent.certificate))"
-        agent_key: "((consul_agent.private_key))"
-        ca_cert: "((consul_agent.ca))"
-        server_cert: "((consul_server.certificate))"
-        server_key: "((consul_server.private_key))"
-  - name: gorouter
-    release: routing
-    properties:
-      nats: *nats_properties
-      router:
-        enable_ssl: true
-        ssl_cert: "((router_ssl.certificate))"
-        ssl_key: "((router_ssl.private_key))"
-        status:
-          password: "((router_status_password))"
-          user: router-status
-        route_services_secret: "((router_route_services_secret))"
-        ssl_skip_validation: true
-      uaa:
-        clients:
-          gorouter:
-            secret: "((uaa_clients_gorouter_secret))"
-        ca_cert: "((uaa_ssl.ca))"
-        ssl:
-          port: 8443
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
