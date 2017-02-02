@@ -276,7 +276,6 @@ instance_groups:
   - name: gorouter
     release: routing
     properties:
-      nats: *nats_properties
       router:
         enable_ssl: true
         ssl_cert: "((router_ssl.certificate))"
@@ -489,11 +488,6 @@ instance_groups:
           - "*.uaa.((system_domain))"
           - login.((system_domain))
           - "*.login.((system_domain))"
-      nats:
-        machines: *nats_machines
-        password: "((nats_password))"
-        port: 4222
-        user: nats
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
@@ -704,11 +698,6 @@ instance_groups:
             component: blobstore
           uris:
           - blobstore.((system_domain))
-      nats:
-        machines: *nats_machines
-        password: "((nats_password))"
-        port: 4222
-        user: nats
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
@@ -935,11 +924,6 @@ instance_groups:
           port: 9022
           uris:
           - api.((system_domain))
-      nats:
-        machines: *nats_machines
-        password: "((nats_password))"
-        port: 4222
-        user: nats
   - name: statsd-injector
     release: statsd-injector
   - name: metron_agent
@@ -1242,11 +1226,6 @@ instance_groups:
           uris:
           - doppler.((system_domain))
           - "*.doppler.((system_domain))"
-      nats:
-        machines: *nats_machines
-        password: "((nats_password))"
-        port: 4222
-        user: nats
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
