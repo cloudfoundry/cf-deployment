@@ -1144,7 +1144,7 @@ instance_groups:
       loggregator:
         tls:
           ca_cert: "((loggregator_tls_syslogdrainbinder.ca))"
-          metron:
+          syslogdrainbinder:
             cert: "((loggregator_tls_syslogdrainbinder.certificate))"
             key: "((loggregator_tls_syslogdrainbinder.private_key))"
         etcd:
