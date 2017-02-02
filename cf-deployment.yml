@@ -1142,6 +1142,11 @@ instance_groups:
     release: loggregator
     properties:
       loggregator:
+        tls:
+          ca_cert: "((loggregator_tls_syslogdrainbinder.ca))"
+          metron:
+            cert: "((loggregator_tls_syslogdrainbinder.certificate))"
+            key: "((loggregator_tls_syslogdrainbinder.private_key))"
         etcd:
           require_ssl: true
           ca_cert: "((etcd_server.ca))"
@@ -1429,6 +1434,13 @@ variables:
   options:
     ca: service_cf_internal_ca
     common_name: trafficcontroller
+    ext_key_usage:
+    - client_auth
+- name: loggregator_tls_syslogdrainbinder
+  type: certificate
+  options:
+    ca: service_cf_internal_ca
+    common_name: syslogdrainbinder
     ext_key_usage:
     - client_auth
 - name: router_ca
