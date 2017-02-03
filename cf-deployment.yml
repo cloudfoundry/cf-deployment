@@ -1077,6 +1077,9 @@ instance_groups:
           bbs: *diego_bbs_client_properties
           cc:
             basic_auth_password: "((cc_internal_api_password))"
+            ca_cert: "((cc_bridge_tps.ca))"
+            client_cert: "((cc_bridge_tps.certificate))"
+            client_key: "((cc_bridge_tps.private_key))"
   - name: cc_uploader
     release: capi
     properties:
@@ -1480,6 +1483,11 @@ variables:
   options:
     ca: service_cf_internal_ca
     common_name: cloud-controller-ng.service.cf.internal
+- name: cc_bridge_tps
+  type: certificate
+  options:
+    ca: service_cf_internal_ca
+    common_name: tps-cert
 
 releases:
 - name: binary-buildpack
