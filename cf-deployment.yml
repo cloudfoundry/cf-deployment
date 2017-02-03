@@ -498,7 +498,7 @@ instance_groups:
     release: loggregator
     properties: *metron_agent_properties
   - name: statsd-injector
-    release: statsd-injector
+    release: loggregator
 - name: diego-brain
   azs:
   - z1
@@ -941,7 +941,7 @@ instance_groups:
         port: 4222
         user: nats
   - name: statsd-injector
-    release: statsd-injector
+    release: loggregator
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
@@ -1014,7 +1014,7 @@ instance_groups:
         ssl:
           port: 8443
   - name: statsd-injector
-    release: statsd-injector
+    release: loggregator
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
