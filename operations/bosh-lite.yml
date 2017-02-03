@@ -82,7 +82,7 @@
           uaa_secret: "((uaa_clients_ssh-proxy_secret))"
           uaa_token_url: "https://uaa.((system_domain))/oauth/token"
           bbs: &5
-            ca_cert: "((diego_bbs.ca))"
+            ca_cert: "((diego_bbs_client.ca))"
             client_cert: "((diego_bbs_client.certificate))"
             client_key: "((diego_bbs_client.private_key))"
 
@@ -136,7 +136,7 @@
   path: /instance_groups/name=doppler/instances
   value: 1
 - type: replace
-  path: /instance_groups/name=log_controller/instances
+  path: /instance_groups/name=log-api/instances
   value: 1
 # --------------------------------------------------------------------------------------------
 - type: replace
@@ -185,10 +185,10 @@
   path: /instance_groups/name=doppler/jobs/name=consul_agent/properties/consul/agent/servers/lan
   value: *consul_ips
 - type: replace
-  path: /instance_groups/name=log_controller/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  path: /instance_groups/name=log-api/jobs/name=consul_agent/properties/consul/agent/servers/lan
   value: *consul_ips
 - type: replace
-  path: /instance_groups/name=log_controller/jobs/name=route_registrar/properties/nats/machines
+  path: /instance_groups/name=log-api/jobs/name=route_registrar/properties/nats/machines
   value: *nats_ips
 - type: replace
   path: /instance_groups/name=nats/jobs/name=nats_stream_forwarder/properties/nats/machines
