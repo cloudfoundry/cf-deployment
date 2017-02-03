@@ -57,7 +57,7 @@
           shared_secret: "((dropsonde_shared_secret))"
         loggregator:
           tls:
-            ca_cert: "((loggregator_ca.certificate))"
+            ca_cert: "((loggregator_tls_metron.ca))"
             metron:
               cert: "((loggregator_tls_metron.certificate))"
               key: "((loggregator_tls_metron.private_key))"

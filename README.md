@@ -29,7 +29,10 @@ To deploy to a configured BOSH director using the new `bosh` CLI:
 
 ```
 export SYSTEM_DOMAIN=some-domain.that.you.have
-bosh -e my-env -d cf deploy cf-deployment/cf-deployment.yml [ -o operations/CUSTOMIZATION1 ] [ -o operations/CUSTOMIZATION2 (etc.) ] --vars-store env-repo/deployment-vars.yml -v system_domain=$SYSTEM_DOMAIN
+bosh -e my-env -d cf deploy cf-deployment/cf-deployment.yml \
+  --vars-store env-repo/deployment-vars.yml \
+  -v system_domain=$SYSTEM_DOMAIN \
+  [ -o operations/CUSTOMIZATION1 ] [ -o operations/CUSTOMIZATION2 (etc.) ]
 ```
 
 See the rest of this document for more on the new CLI, deployment vars, and configuring your BOSH director.
