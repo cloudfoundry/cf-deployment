@@ -16,7 +16,7 @@ This repo contains a canonical manifest for deploying Cloud Foundry without the 
   - Properties are ordered to maximize navigability and present the most useful and important information first.
   - Only necessary configuration is included. Any release default that can safely be used, is. Any properties which can be consumed via BOSH links, are.
 - emphasizes security and production-readiness by default.
-  - bosh's `--var-store` feature is used to generate strong passwords, certs, and keys. There are no default credentials, even in bosh-lite.
+  - bosh's `--vars-store` feature is used to generate strong passwords, certs, and keys. There are no default credentials, even in bosh-lite.
   - TLS/SSL features are enabled on every job which supports TLS.
 - uses three AZs, of which two are used to provide redundancy for most instance groups. The third is used only for instance groups that should not have even instance counts, such as etcd and consul.
 - uses Diego natively, does not support DEAs, and enables diego-specific features such as ssh access to apps by default.
