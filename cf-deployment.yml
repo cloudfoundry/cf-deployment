@@ -1146,7 +1146,6 @@ instance_groups:
     properties:
       loggregator:
         tls:
-          ca_cert: "((loggregator_tls_syslogdrainbinder.ca))"
           syslogdrainbinder:
             cert: "((loggregator_tls_syslogdrainbinder.certificate))"
             key: "((loggregator_tls_syslogdrainbinder.private_key))"
@@ -1161,6 +1160,8 @@ instance_groups:
           client_key: "((etcd_client.private_key))"
       system_domain: "((system_domain))"
       cc:
+        mutual_tls:
+          ca_cert: "((loggregator_tls_syslogdrainbinder.ca))"
         bulk_api_password: "((cc_bulk_api_password))"
         srv_api_uri: https://api.((system_domain))
       ssl: *ssl
@@ -1447,7 +1448,7 @@ variables:
 - name: loggregator_tls_syslogdrainbinder
   type: certificate
   options:
-    ca: loggregator_ca
+    ca: service_cf_internal_ca
     common_name: syslogdrainbinder
     ext_key_usage:
     - client_auth
