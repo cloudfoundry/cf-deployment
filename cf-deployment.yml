@@ -1144,9 +1144,6 @@ instance_groups:
   - name: syslog_drain_binder
     release: loggregator
     properties:
-      cc:
-        mutual_tls:
-          ca_cert: "((loggregator_tls_syslogdrainbinder.ca))"
       loggregator:
         tls:
           syslogdrainbinder:
@@ -1162,6 +1159,11 @@ instance_groups:
           client_cert: "((etcd_client.certificate))"
           client_key: "((etcd_client.private_key))"
       system_domain: "((system_domain))"
+      cc:
+        mutual_tls:
+          ca_cert: "((loggregator_tls_syslogdrainbinder.ca))"
+        bulk_api_password: "((cc_bulk_api_password))"
+        srv_api_uri: https://api.((system_domain))
       ssl: *ssl
   - name: metron_agent
     release: loggregator
