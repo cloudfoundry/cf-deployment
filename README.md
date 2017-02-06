@@ -32,23 +32,51 @@ Only commits tha that have passed our [CI][cf-deployment-concourse-url]
 are merged to `master`.
 
 ## Purpose
-This repo contains a canonical manifest for deploying Cloud Foundry without the use of `cf-release`, relying instead on individual component releases. It will replace the [manifest generation scripts in cf-release](https://github.com/cloudfoundry/cf-release/tree/master/templates) when `cf-release` is deprecated. It uses several newer features of the BOSH director and CLI. Older directors may need to be upgraded and have their configurations extended in order to support `cf-deployment`.
+This repo contains a canonical manifest
+for deploying Cloud Foundry without the use of `cf-release`,
+relying instead on individual component releases.
+It will replace the [manifest generation scripts in cf-release](https://github.com/cloudfoundry/cf-release/tree/master/templates)
+when `cf-release` is deprecated.
+It uses several newer features
+of the BOSH director and CLI.
+Older directors may need to be upgraded
+and have their configurations extended
+in order to support `cf-deployment`.
 
-`cf-deployment` embodies several opinions about Cloud Foundry deployment. It:
+`cf-deployment` embodies several opinions
+about Cloud Foundry deployment.
+It:
 
 - prioritizes readability and meaning to a human operator.
-  - All properties are set in the jobs which use them. Global properties are not used.
-  - YAML Anchors with human-friendly names are used where the need for duplication has not yet been obviated by BOSH links.
-  - Properties are ordered to maximize navigability and present the most useful and important information first.
-  - Only necessary configuration is included. Any release default that can safely be used, is. Any properties which can be consumed via BOSH links, are.
+  - All properties are set in the jobs which use them.
+  Global properties are not used.
+  - YAML Anchors with human-friendly names are used
+  where the need for duplication has not yet been obviated by BOSH links.
+  - Properties are ordered to maximize navigability
+  and present the most useful and important information first.
+  - Only necessary configuration is included.
+  Any release default that can be safely used, is.
+  Any properties which can be consumed via BOSH links, are.
 - emphasizes security and production-readiness by default.
-  - bosh's `--vars-store` feature is used to generate strong passwords, certs, and keys. There are no default credentials, even in bosh-lite.
+  - bosh's `--vars-store` feature is used
+  to generate strong passwords, certs, and keys.
+  There are no default credentials, even in bosh-lite.
   - TLS/SSL features are enabled on every job which supports TLS.
-- uses three AZs, of which two are used to provide redundancy for most instance groups. The third is used only for instance groups that should not have even instance counts, such as etcd and consul.
-- uses Diego natively, does not support DEAs, and enables diego-specific features such as ssh access to apps by default.
-- deploys jobs to handle platform data persistence, using the cf-mysql release for databases and the CAPI release's WebDAV job for blob storage.
-- assumes load-balancing will be handled by the IaaS or an external deployment.
-- assumes GCP as the default deployment environment. For use with other IaaSs, see the **Ops Files** section below.
+- uses three AZs, of which two are used to provide redundancy for most instance groups.
+The third is used only for instance groups
+that should not have even instance counts,
+such as etcd and consul.
+- uses Diego natively,
+does not support DEAs,
+and enables diego-specific features
+such as ssh access to apps by default.
+- deploys jobs to handle platform data persistence
+using the cf-mysql release for databases
+and the CAPI release's WebDAV job for blob storage.
+- assumes load-balancing will be handled by the IaaS
+or an external deployment.
+- assumes GCP as the default deployment environment.
+For use with other IaaSs, see the **Ops Files** section below.
 
 ## Usage
 To deploy to a configured BOSH director using the new `bosh` CLI:
