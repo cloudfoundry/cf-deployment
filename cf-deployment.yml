@@ -1076,7 +1076,6 @@ instance_groups:
         tps:
           bbs: *diego_bbs_client_properties
           cc:
-            basic_auth_password: "((cc_internal_api_password))"
             ca_cert: "((cc_bridge_tps.ca))"
             client_cert: "((cc_bridge_tps.certificate))"
             client_key: "((cc_bridge_tps.private_key))"
