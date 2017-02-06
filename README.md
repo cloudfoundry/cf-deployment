@@ -1,9 +1,35 @@
-# cf-deployment
-**This repo is still under initial development. This document describes the intended purpose and use of resources in this repo, but may not live up to those promises until we remove this warning. Having said that, we'd love for members of the CF community to try cf-deployment and give us feedback. Github issues welcome. Find us on the #cf-deployment channel in the cloudfoundry Slack.**
+<The way this document looks in the raw
+is intentional.
+For a discussion of the intention,
+Please see
+https://github.com/anEXPer/texts/blob/master/the-art-of-markdown.md>
 
-CI pipeline [here](https://runtime.ci.cf-app.com/teams/main/pipelines/cf-deployment).
+# cf-deployment
+**
+This repo is under initial development.
+This document describes the intended purpose
+and use of
+resources in this repo.
+We don't yet gurantee
+that this repo lives up to those promises.
+When we're more confident
+that we've achieved initial stability,
+this warning will be removed,
+and version tagging will be added.
+We'd love for members of the CF community
+to try cf-deployment and give us feedback.
+Github issues welcome.
+Find us on the #cf-deployment channel in the cloudfoundry Slack
+**
+
+CI pipeline [here][cf-deployment-concourse-url]
 
 Please make pull requests against the `develop` branch.
+
+**NB:** `develop` is the default branch.
+`master` is more stable.
+Only commits tha that have passed our [CI][cf-deployment-concourse-url]
+are merged to `master`.
 
 ## Purpose
 This repo contains a canonical manifest for deploying Cloud Foundry without the use of `cf-release`, relying instead on individual component releases. It will replace the [manifest generation scripts in cf-release](https://github.com/cloudfoundry/cf-release/tree/master/templates) when `cf-release` is deprecated. It uses several newer features of the BOSH director and CLI. Older directors may need to be upgraded and have their configurations extended in order to support `cf-deployment`.
@@ -93,3 +119,4 @@ Please observe the following conventions when contributing to `cf-deployment`. W
 1. Ops files included in the `cf-deployment` repo should not overlap. That is, they should be order-independent, and not address the same properties. If this is not possible, their order must be documented.
 1. All credentials should be bosh-generatable. When adding new passwords, secrets, certs, CAs, and keys, add them to the `variables` section of the manifest. Use the existing variables as a guide for the details necessary to allow bosh to perform credential generation. When testing new credential properties, test with bosh-generated values.
 
+[cf-deployment-concourse-url]: https://runtime.ci.cf-app.com/teams/main/pipelines/cf-deployment
