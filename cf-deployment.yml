@@ -497,8 +497,15 @@ instance_groups:
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
-  - name: statsd-injector
+  - name: statsd_injector
     release: statsd-injector
+    properties: &statsd_injector_tls
+      loggregator:
+        tls:
+          ca_cert: "((loggregator_tls_statsdinjector.ca))"
+          statsd_injector:
+            cert: "((loggregator_tls_statsdinjector.certificate))"
+            key: "((loggregator_tls_statsdinjector.private_key))"
 - name: diego-brain
   azs:
   - z1
@@ -940,8 +947,9 @@ instance_groups:
         password: "((nats_password))"
         port: 4222
         user: nats
-  - name: statsd-injector
+  - name: statsd_injector
     release: statsd-injector
+    properties: *statsd_injector_tls
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
@@ -1013,8 +1021,9 @@ instance_groups:
           verification_key: "((uaa_jwt_signing_key.public_key))"
         ssl:
           port: 8443
-  - name: statsd-injector
+  - name: statsd_injector
     release: statsd-injector
+    properties: *statsd_injector_tls
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
@@ -1421,6 +1430,13 @@ variables:
   type: certificate
   options:
     common_name: loggregatorCA
+- name: loggregator_tls_statsdinjector
+  type: certificate
+  options:
+    ca: loggregator_ca
+    common_name: statsdinjector
+    ext_key_usage:
+    - client_auth
 - name: loggregator_tls_metron
   type: certificate
   options:
