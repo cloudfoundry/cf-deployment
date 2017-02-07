@@ -1483,11 +1483,16 @@ variables:
   options:
     ca: service_cf_internal_ca
     common_name: cloud-controller-ng.service.cf.internal
+    ext_key_usage:
+    - client_auth
+    - server_auth
 - name: cc_bridge_tps
   type: certificate
   options:
     ca: service_cf_internal_ca
     common_name: tps_watcher
+    ext_key_usage:
+    - client_auth
 
 releases:
 - name: binary-buildpack
