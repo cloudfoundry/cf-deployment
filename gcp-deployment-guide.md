@@ -68,38 +68,6 @@ Remember that the cert should be valid for whichever domain you specify in the `
 - `--key`:
 A path to a file with a PEM-encoded SSL key that corresponds to the cert provided in `--cert`.
 
-#### Do it with Concourse
-We've shipped a [Concourse task](https://github.com/cloudfoundry/cf-deployment-concourse-tasks/tree/master/bbl-up)
-for running `bbl up` and `bbl create-lbs`.
-Because Concourse tasks use environment variables for parameters,
-we transparently pass the appropriate parameters for `bbl up`.
-For `bbl create-lbs`,
-you can use the following environment variables,
-which will get translated appropriately to flag arguments:
-- `BBL_LB_CERT`:
-The **contents** (not the path) of the PEM-encoded cert.
-- `BBL_LB_KEY`:
-The **contents** (not the path) of the PEM-encoded key.
-- `LB_DOMAIN`
-
-Here's an example:
-```
-- task: setup-infrastructure
-  file: cf-deployment-concourse-tasks/bbl-up/task.yml
-  params:
-    BBL_IAAS: gcp
-    BBL_GCP_SERVICE_ACCOUNT_KEY: google_account_creds.json
-    BBL_GCP_PROJECT_ID: my-gcp-project
-    BBL_GCP_REGION: us-central1
-    BBL_GCP_ZONE: us-central1-a
-    BBL_LB_CERT: |
-      -----BEGIN CERTIFICATE-----
-      ...
-    BBL_LB_KEY: |
-      -----BEGIN RSA PRIVATE KEY-----
-      ...
-    LB_DOMAIN: my-gcp-project.cf-app.com
-```
 
 #### Save `bbl-state.json`
 However you run `bbl` (command line or with Concourse),
@@ -138,7 +106,36 @@ The version number is specified on the last line of `cf-deployment.yml`.
 
 1. Save the `cf-deployment-vars.yml` file somewhere safe.  We use a private git repository for this purpose, but some choose instead to store it in a secure storage service such as LastPass.  You will need to reuse it if you want to update your cf deployment without rotating credentials.
 
-#### Do it with Concourse
+### Do it all with Concourse
+We've also shipped a number of Concourse tasks
+to help you with this lifecycle.
+The best place to look to understand
+how these tasks working
+is the `task.yml` for each task,
+and
+[nats.yml](https://github.com/cloudfoundry/runtime-ci/blob/master/pipelines/nats.yml)
+to understand how they fit together.
+
+#### `bbl-up`
+Despite its name,
+[`bbl-up`](https://github.com/cloudfoundry/cf-deployment-concourse-tasks/tree/master/bbl-up)
+actually runs both `bbl up` and `bbl create-lbs`.
+Because Concourse tasks use environment variables for parameters,
+we transparently pass the appropriate parameters for `bbl up`.
+For `bbl create-lbs`,
+you can use the following environment variables,
+which will get translated appropriately to flag arguments:
+- `BBL_LB_CERT`:
+The **contents** (not the path) of the PEM-encoded cert.
+- `BBL_LB_KEY`:
+The **contents** (not the path) of the PEM-encoded key.
+- `LB_DOMAIN`
+
+**For an example for how to configure this in your pipeline,
+see the nats pipeline
+[here](https://github.com/cloudfoundry/runtime-ci/blob/97dc43bf0839b736d771b3a09a23bc28f1c03530/pipelines/nats.yml#L112-L130).**
+
+#### `bosh-deploy`
 As we did with `bbl-up`,
 we've shipped a [Concourse task](https://github.com/cloudfoundry/cf-deployment-concourse-tasks/tree/master/bosh-deploy)
 for deploying cf-deployment.
@@ -146,8 +143,8 @@ The task uses `bbl-state.json` as an input
 in order to target and login to the correct director.
 
 
-#### Using your dev release with cf-deployment
-The more interested Concourse task is
+#### `bosh-deploy-with-created-release`
+The more interesting Concourse task is
 [bosh-deploy-with-created-release](https://github.com/cloudfoundry/cf-deployment-concourse-tasks/tree/master/bosh-deploy-with-created-release).
 This task takes an additional release repository as an input,
 builds a dev release from that repo,
@@ -157,20 +154,6 @@ It also applies an ops file
 that ensures that the director uses the dev release
 instead of `latest`.
 
-Here's an example:
-```
-- task: deploy-cf-with-created-release
-  file: cf-deployment-concourse-tasks/bosh-deploy-with-created-release/task.yml
-  input_mapping:
-    bbl-state: my-env-bbl-state
-    release: my-release
-    ops-files: cf-deployment
-    vars-store: my-env-vars-store
-  params:
-    SYSTEM_DOMAIN: my-env.cf-app.com
-  ensure:
-    put: my-env-vars-store
-    params:
-      repository: updated-vars-store
-      rebase: true
-```
+**For an example for how to configure this in your pipeline,
+see that nats pipeline
+[here](https://github.com/cloudfoundry/runtime-ci/blob/97dc43bf0839b736d771b3a09a23bc28f1c03530/pipelines/nats.yml#L241-L254).**
