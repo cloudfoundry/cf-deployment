@@ -499,7 +499,9 @@ instance_groups:
     properties: *metron_agent_properties
   - name: statsd_injector
     release: statsd-injector
-    properties: &statsd_injector_tls
+    properties: &statsd_injector_properties
+      statsd_injector:
+        deployment: "((system_domain))"
       loggregator:
         tls:
           ca_cert: "((loggregator_tls_statsdinjector.ca))"
@@ -949,7 +951,7 @@ instance_groups:
         user: nats
   - name: statsd_injector
     release: statsd-injector
-    properties: *statsd_injector_tls
+    properties: *statsd_injector_properties
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
@@ -1023,7 +1025,7 @@ instance_groups:
           port: 8443
   - name: statsd_injector
     release: statsd-injector
-    properties: *statsd_injector_tls
+    properties: *statsd_injector_properties
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
