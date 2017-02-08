@@ -21,20 +21,18 @@ instance_groups:
     serial: true
   networks:
   - name: private
-    static_ips: &consul_ips
-    - 10.0.31.190
-    - 10.0.47.190
-    - 10.0.63.190
   jobs:
   - name: consul_agent
     release: consul
+    consumes:
+      consul: {from: consul_server}
+    provides:
+      consul: {as: consul_server}
     properties:
       consul:
         agent:
           mode: server
           domain: cf.internal
-          servers: &consul_machines
-            lan: *consul_ips
         encrypt_keys:
         - "((consul_encrypt_key))"
         agent_cert: "((consul_agent.certificate))"
@@ -80,19 +78,8 @@ instance_groups:
   jobs:
   - name: consul_agent
     release: consul
-    properties:
-      consul:
-        agent:
-          mode: client
-          domain: cf.internal
-          servers: *consul_machines
-        encrypt_keys:
-        - "((consul_encrypt_key))"
-        agent_cert: "((consul_agent.certificate))"
-        agent_key: "((consul_agent.private_key))"
-        ca_cert: "((consul_agent.ca))"
-        server_cert: "((consul_server.certificate))"
-        server_key: "((consul_server.private_key))"
+    consumes:
+      consul: {from: consul_server}
   - name: nats
     release: nats
     provides:
@@ -127,21 +114,13 @@ instance_groups:
   jobs:
   - name: consul_agent
     release: consul
+    consumes:
+      consul: {from: consul_server}
     properties:
       consul:
         agent:
-          mode: client
-          domain: cf.internal
-          servers: *consul_machines
           services:
             etcd: {}
-        encrypt_keys:
-        - "((consul_encrypt_key))"
-        agent_cert: "((consul_agent.certificate))"
-        agent_key: "((consul_agent.private_key))"
-        ca_cert: "((consul_agent.ca))"
-        server_cert: "((consul_server.certificate))"
-        server_key: "((consul_server.private_key))"
   - name: etcd
     release: etcd
     properties:
@@ -191,19 +170,8 @@ instance_groups:
   jobs:
   - name: consul_agent
     release: consul
-    properties:
-      consul:
-        agent:
-          mode: client
-          domain: cf.internal
-          servers: *consul_machines
-        encrypt_keys:
-        - "((consul_encrypt_key))"
-        agent_cert: "((consul_agent.certificate))"
-        agent_key: "((consul_agent.private_key))"
-        ca_cert: "((consul_agent.ca))"
-        server_cert: "((consul_server.certificate))"
-        server_key: "((consul_server.private_key))"
+    consumes:
+      consul: {from: consul_server}
   - name: mysql
     release: cf-mysql
     properties:
@@ -248,21 +216,13 @@ instance_groups:
   jobs:
   - name: consul_agent
     release: consul
+    consumes:
+      consul: {from: consul_server}
     properties:
       consul:
         agent:
-          mode: client
-          domain: cf.internal
-          servers: *consul_machines
           services:
             gorouter: {}
-        encrypt_keys:
-        - "((consul_encrypt_key))"
-        agent_cert: "((consul_agent.certificate))"
-        agent_key: "((consul_agent.private_key))"
-        ca_cert: "((consul_agent.ca))"
-        server_cert: "((consul_server.certificate))"
-        server_key: "((consul_server.private_key))"
   - name: gorouter
     release: routing
     properties:
@@ -297,19 +257,8 @@ instance_groups:
   jobs:
   - name: consul_agent
     release: consul
-    properties:
-      consul:
-        agent:
-          mode: client
-          domain: cf.internal
-          servers: *consul_machines
-        encrypt_keys:
-        - "((consul_encrypt_key))"
-        agent_cert: "((consul_agent.certificate))"
-        agent_key: "((consul_agent.private_key))"
-        ca_cert: "((consul_agent.ca))"
-        server_cert: "((consul_server.certificate))"
-        server_key: "((consul_server.private_key))"
+    consumes:
+      consul: {from: consul_server}
   - name: bbs
     release: diego
     properties:
@@ -355,21 +304,13 @@ instance_groups:
   jobs:
   - name: consul_agent
     release: consul
+    consumes:
+      consul: {from: consul_server}
     properties:
       consul:
         agent:
-          mode: client
-          domain: cf.internal
-          servers: *consul_machines
           services:
             uaa: {}
-        encrypt_keys:
-        - "((consul_encrypt_key))"
-        agent_cert: "((consul_agent.certificate))"
-        agent_key: "((consul_agent.private_key))"
-        ca_cert: "((consul_agent.ca))"
-        server_cert: "((consul_server.certificate))"
-        server_key: "((consul_server.private_key))"
   - name: uaa
     release: uaa
     properties:
@@ -506,19 +447,8 @@ instance_groups:
   jobs:
   - name: consul_agent
     release: consul
-    properties:
-      consul:
-        agent:
-          mode: client
-          domain: cf.internal
-          servers: *consul_machines
-        encrypt_keys:
-        - "((consul_encrypt_key))"
-        agent_cert: "((consul_agent.certificate))"
-        agent_key: "((consul_agent.private_key))"
-        ca_cert: "((consul_agent.ca))"
-        server_cert: "((consul_server.certificate))"
-        server_key: "((consul_server.private_key))"
+    consumes:
+      consul: {from: consul_server}
   - name: ssh_proxy
     release: diego
     properties:
@@ -562,19 +492,8 @@ instance_groups:
   jobs:
   - name: consul_agent
     release: consul
-    properties:
-      consul:
-        agent:
-          mode: client
-          domain: cf.internal
-          servers: *consul_machines
-        encrypt_keys:
-        - "((consul_encrypt_key))"
-        agent_cert: "((consul_agent.certificate))"
-        agent_key: "((consul_agent.private_key))"
-        ca_cert: "((consul_agent.ca))"
-        server_cert: "((consul_server.certificate))"
-        server_key: "((consul_server.private_key))"
+    consumes:
+      consul: {from: consul_server}
   - name: cflinuxfs2-rootfs-setup
     release: cflinuxfs2-rootfs
   - name: garden
@@ -621,19 +540,8 @@ instance_groups:
   jobs:
   - name: consul_agent
     release: consul
-    properties:
-      consul:
-        agent:
-          mode: client
-          domain: cf.internal
-          servers: *consul_machines
-        encrypt_keys:
-        - "((consul_encrypt_key))"
-        agent_cert: "((consul_agent.certificate))"
-        agent_key: "((consul_agent.private_key))"
-        ca_cert: "((consul_agent.ca))"
-        server_cert: "((consul_server.certificate))"
-        server_key: "((consul_server.private_key))"
+    consumes:
+      consul: {from: consul_server}
   - name: route_emitter
     release: diego
     properties:
@@ -666,21 +574,13 @@ instance_groups:
   jobs:
   - name: consul_agent
     release: consul
+    consumes:
+      consul: {from: consul_server}
     properties:
       consul:
         agent:
-          mode: client
-          domain: cf.internal
-          servers: *consul_machines
           services:
             blobstore: {}
-        encrypt_keys:
-        - "((consul_encrypt_key))"
-        agent_cert: "((consul_agent.certificate))"
-        agent_key: "((consul_agent.private_key))"
-        ca_cert: "((consul_agent.ca))"
-        server_cert: "((consul_server.certificate))"
-        server_key: "((consul_server.private_key))"
   - name: blobstore
     release: capi
     properties:
@@ -724,21 +624,13 @@ instance_groups:
   jobs:
   - name: consul_agent
     release: consul
+    consumes:
+      consul: {from: consul_server}
     properties:
       consul:
         agent:
-          mode: client
-          domain: cf.internal
-          servers: *consul_machines
           services:
             cloud_controller_ng: {}
-        encrypt_keys:
-        - "((consul_encrypt_key))"
-        agent_cert: "((consul_agent.certificate))"
-        agent_key: "((consul_agent.private_key))"
-        ca_cert: "((consul_agent.ca))"
-        server_cert: "((consul_server.certificate))"
-        server_key: "((consul_server.private_key))"
   - name: cloud_controller_ng
     release: capi
     properties:
@@ -952,19 +844,8 @@ instance_groups:
   jobs:
   - name: consul_agent
     release: consul
-    properties:
-      consul:
-        agent:
-          mode: client
-          domain: cf.internal
-          servers: *consul_machines
-        encrypt_keys:
-        - "((consul_encrypt_key))"
-        agent_cert: "((consul_agent.certificate))"
-        agent_key: "((consul_agent.private_key))"
-        ca_cert: "((consul_agent.ca))"
-        server_cert: "((consul_server.certificate))"
-        server_key: "((consul_server.private_key))"
+    consumes:
+      consul: {from: consul_server}
   - name: cloud_controller_clock
     release: capi
     properties:
@@ -1027,19 +908,8 @@ instance_groups:
   jobs:
   - name: consul_agent
     release: consul
-    properties:
-      consul:
-        agent:
-          mode: client
-          domain: cf.internal
-          servers: *consul_machines
-        encrypt_keys:
-        - "((consul_encrypt_key))"
-        agent_cert: "((consul_agent.certificate))"
-        agent_key: "((consul_agent.private_key))"
-        ca_cert: "((consul_agent.ca))"
-        server_cert: "((consul_server.certificate))"
-        server_key: "((consul_server.private_key))"
+    consumes:
+      consul: {from: consul_server}
   - name: stager
     release: capi
     properties:
@@ -1096,22 +966,14 @@ instance_groups:
   jobs:
   - name: consul_agent
     release: consul
+    consumes:
+      consul: {from: consul_server}
     properties:
       consul:
         agent:
-          mode: client
-          domain: cf.internal
-          servers: *consul_machines
           services:
             doppler:
               name: doppler
-        encrypt_keys:
-        - "((consul_encrypt_key))"
-        agent_cert: "((consul_agent.certificate))"
-        agent_key: "((consul_agent.private_key))"
-        ca_cert: "((consul_agent.ca))"
-        server_cert: "((consul_server.certificate))"
-        server_key: "((consul_server.private_key))"
   - name: doppler
     release: loggregator
     properties:
@@ -1179,21 +1041,13 @@ instance_groups:
   jobs:
   - name: consul_agent
     release: consul
+    consumes:
+      consul: {from: consul_server}
     properties:
       consul:
         agent:
-          mode: client
-          domain: cf.internal
-          servers: *consul_machines
           services:
             loggregator_trafficcontroller: {}
-        encrypt_keys:
-        - "((consul_encrypt_key))"
-        agent_cert: "((consul_agent.certificate))"
-        agent_key: "((consul_agent.private_key))"
-        ca_cert: "((consul_agent.ca))"
-        server_cert: "((consul_server.certificate))"
-        server_key: "((consul_server.private_key))"
   - name: loggregator_trafficcontroller
     release: loggregator
     properties:

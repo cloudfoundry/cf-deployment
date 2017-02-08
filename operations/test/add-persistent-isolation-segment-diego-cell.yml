@@ -15,23 +15,8 @@
     jobs:
     - name: consul_agent
       release: consul
-      properties:
-        consul:
-          agent:
-            mode: client
-            domain: cf.internal
-            servers:
-              lan:
-              - 10.0.31.190
-              - 10.0.47.190
-              - 10.0.63.190
-          encrypt_keys:
-          - "((consul_encrypt_key))"
-          agent_cert: "((consul_agent.certificate))"
-          agent_key: "((consul_agent.private_key))"
-          ca_cert: "((consul_agent.ca))"
-          server_cert: "((consul_server.certificate))"
-          server_key: "((consul_server.private_key))"
+      consumes:
+        consul: {from: consul_server}
     - name: cflinuxfs2-rootfs-setup
       release: cflinuxfs2-rootfs
     - name: garden
