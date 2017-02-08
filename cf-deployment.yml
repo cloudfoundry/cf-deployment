@@ -95,14 +95,6 @@ instance_groups:
         ca_cert: "((consul_agent.ca))"
         server_cert: "((consul_server.certificate))"
         server_key: "((consul_server.private_key))"
-  - name: nats_stream_forwarder
-    release: nats
-    properties:
-      nats: &nats_properties
-        machines: *nats_machines
-        password: "((nats_password))"
-        port: 4222
-        user: nats
   - name: nats
     release: nats
     provides:

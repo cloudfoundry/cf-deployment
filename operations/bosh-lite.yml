@@ -191,9 +191,6 @@
   path: /instance_groups/name=log-api/jobs/name=route_registrar/properties/nats/machines
   value: *nats_ips
 - type: replace
-  path: /instance_groups/name=nats/jobs/name=nats_stream_forwarder/properties/nats/machines
-  value: *nats_ips
-- type: replace
   path: /instance_groups/name=uaa/jobs/name=route_registrar/properties/nats/machines
   value: *nats_ips
 - type: replace
