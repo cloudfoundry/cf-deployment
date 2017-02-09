@@ -54,6 +54,26 @@ bbl up \
 
 #### Load balancers
 `bbl` will also set up your load balancers for you.
+
+##### On certificates
+Before you can create your load balancers,
+you'll need to be able to provide an SSL certificate
+for the domain that your load balancers will use.
+You might already have one,
+especially if you've already used this domain for a previous environment.
+
+If you're deploying a fresh environment with a new domain,
+you can generate a self-signed cert.
+**Don't forget that the common name should match your system domain**:
+```
+openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -nodes
+```
+
+Alternatively, if you want to get a certificate from a trusted Certificate Authority,
+you can skip this cert generation step
+and provide that certificate directly to the `bbl` command below.
+
+##### Create load balancers
 You can run `bbl create-lbs`,
 which takes the following parameters,
 but only as command line flags:
@@ -68,6 +88,27 @@ Remember that the cert should be valid for whichever domain you specify in the `
 - `--key`:
 A path to a file with a PEM-encoded SSL key that corresponds to the cert provided in `--cert`.
 
+##### Update your DNS records to point to your GCP load balancer
+The `create-lbs` command will create an NS record in Google's CloudDNS
+(in your Google Cloud console, look in `Networking/CloudDNS`).
+The data associated with the record will have the following format:
+```
+ns-cloud-e1.googledomains.com.
+ns-cloud-e2.googledomains.com.
+...
+```
+ However you manage your DNS records
+(most of the Cloud Foundry dev teams use Route53),
+you'll need to update your NS records
+(and SOA records, if you have them)
+so that they include all of the data from your Google CloudDNS NS record.
+
+For example, in the Route53 case,
+simply copy the NS record data from Google CloudDNS described above,
+and paste it into the `value` section of the Route53 NS record for your domain.
+
+After a few minutes,
+the your system domain should resolve to your GCP load balancer.
 
 #### Save `bbl-state.json`
 However you run `bbl` (command line or with Concourse),
