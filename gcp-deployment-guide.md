@@ -23,8 +23,9 @@ that use your release and cf-deployment.
 
 ## Step-by-step guide for deploying by hand
 
-### Get yourself a working director with `bbl`
+### 1. Get yourself a working director with `bbl`
 
+#### a. IaaS and Director setup
 To deploy a BOSH director on GCP with `bbl`,
 you'll need to provide certain information,
 either as an environment variable
@@ -52,7 +53,7 @@ bbl up \
   --gcp-zone us-central1-a
 ```
 
-#### Load balancers
+#### b. Load balancers
 `bbl` will also set up your load balancers for you.
 
 ##### On certificates
@@ -110,7 +111,7 @@ and paste it into the `value` section of the Route53 NS record for your domain.
 After a few minutes,
 the your system domain should resolve to your GCP load balancer.
 
-#### Save `bbl-state.json`
+#### c. Save `bbl-state.json`
 However you run `bbl` (command line or with Concourse),
 the side-effect of a successful bbl command is the creation/update of `bbl-state.json`.
 As a deployer, **you must persist this file somehow.**
@@ -121,7 +122,7 @@ We'll likely prioritize work soon
 to persist that file to a more secure location such as Lastpass.
 
 
-### Deploying CF
+### 2. Deploying CF
 1. Upload the current stemcell for `cf`
 by running the command below with the appropriate version number.
 The version number is specified on the last line of `cf-deployment.yml`.
