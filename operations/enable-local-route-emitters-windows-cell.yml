@@ -9,7 +9,7 @@
         route_emitter:
           local_mode: true
           bbs:
-            ca_cert: "((diego_bbs.ca))"
+            ca_cert: "((diego_bbs_client.ca))"
             client_cert: "((diego_bbs_client.certificate))"
             client_key: "((diego_bbs_client.private_key))"
           nats:
