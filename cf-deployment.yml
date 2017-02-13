@@ -949,12 +949,12 @@ instance_groups:
         password: "((nats_password))"
         port: 4222
         user: nats
-  - name: statsd_injector
-    release: statsd-injector
-    properties: *statsd_injector_properties
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
+  - name: statsd_injector
+    release: statsd-injector
+    properties: *statsd_injector_properties
 - name: cc_clock
   azs:
   - z1
