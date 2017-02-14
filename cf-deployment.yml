@@ -642,6 +642,9 @@ instance_groups:
       diego:
         route_emitter:
           nats: *nats_properties
+            machines: *nats_machines
+            port: 4222
+            user: nats
           bbs:
             ca_cert: "((diego_bbs_client.ca))"
             client_cert: "((diego_bbs_client.certificate))"
