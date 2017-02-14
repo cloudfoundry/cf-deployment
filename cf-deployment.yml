@@ -613,6 +613,12 @@ instance_groups:
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
+  - name: cfdot
+    release: diego
+    properties:
+      diego:
+        cfdot:
+          bbs: *diego_bbs_client_properties
 - name: route-emitter
   azs:
   - z1
