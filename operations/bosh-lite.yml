@@ -188,9 +188,6 @@
   path: /instance_groups/name=log-api/jobs/name=consul_agent/properties/consul/agent/servers/lan
   value: *consul_ips
 - type: replace
-  path: /instance_groups/name=nats/jobs/name=nats_stream_forwarder/properties/nats/machines
-  value: *nats_ips
-- type: replace
   path: /instance_groups/name=route-emitter/jobs/name=route_emitter/properties/diego/route_emitter/nats/machines
   value: *nats_ips
 - type: replace
