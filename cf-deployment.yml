@@ -1071,10 +1071,10 @@ instance_groups:
         etcd:
           client_cert: "((etcd_client.certificate))"
           client_key: "((etcd_client.private_key))"
+      loggregator:
+        uaa:
+          client_secret: "((uaa_clients_doppler_secret))"
       uaa:
-        clients:
-          doppler:
-            secret: "((uaa_clients_doppler_secret))"
         url: https://uaa.((system_domain))
       loggregator:
         tls:
