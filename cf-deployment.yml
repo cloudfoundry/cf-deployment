@@ -429,6 +429,7 @@ instance_groups:
           doppler:
             authorities: uaa.resource
             override: true
+            authorized-grant-types: client_credentials
             secret: "((uaa_clients_doppler_secret))"
           gorouter:
             authorities: routing.routes.read
