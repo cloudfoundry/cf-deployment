@@ -45,8 +45,6 @@ instance_groups:
   - name: metron_agent
     release: loggregator
     properties: &metron_agent_properties
-      syslog_daemon_config:
-        enable: false
       metron_agent:
         deployment: "((system_domain))"
         etcd:
