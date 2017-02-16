@@ -1,4 +1,10 @@
 - type: replace
+  path: /instance_groups/name=consul/networks/name=private/static_ips
+  value: &consul_ips
+  - CONSUL_STATIC_IP_1
+  - CONSUL_STATIC_IP_2
+  - CONSUL_STATIC_IP_3
+- type: replace
   path: /instance_groups/name=nats/networks/name=private/static_ips
   value: &nats_ips
   - NATS_STATIC_IP_1
@@ -11,6 +17,57 @@
 
 # ---------------------------------------------------------------------------------------------
 
+- type: replace
+  path: /instance_groups/name=consul/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=etcd/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=nats/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=mysql/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=diego-bbs/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=diego-brain/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=router/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=tcp-router/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=route-emitter/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=blobstore/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=cc_clock/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=api/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=cc_bridge/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=doppler/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
+- type: replace
+  path: /instance_groups/name=log-api/jobs/name=consul_agent/properties/consul/agent/servers/lan
+  value: *consul_ips
 - type: replace
   path: /instance_groups/name=route-emitter/jobs/name=route_emitter/properties/diego/route_emitter/nats/machines
   value: *nats_ips
