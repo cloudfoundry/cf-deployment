@@ -234,7 +234,6 @@ instance_groups:
           password: "((router_status_password))"
           user: router-status
         route_services_secret: "((router_route_services_secret))"
-        ssl_skip_validation: true
       uaa:
         clients:
           gorouter:
@@ -454,8 +453,6 @@ instance_groups:
     release: diego
     properties:
       diego:
-        ssl:
-          skip_cert_verify: true
         ssh_proxy:
           enable_cf_auth: true
           host_key: "((diego_ssh_proxy_host_key.private_key))"
@@ -518,8 +515,6 @@ instance_groups:
           bbs: *diego_bbs_client_properties
           preloaded_rootfses:
           - cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs
-        ssl:
-          skip_cert_verify: true
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
@@ -639,8 +634,6 @@ instance_groups:
         route_services_secret: "((router_route_services_secret))"
       hm9000:
         port: -1
-      ssl: &ssl
-        skip_cert_verify: true
       system_domain: "((system_domain))"
       system_domain_organization: default_org
       app_domains: &app_domains
@@ -778,7 +771,6 @@ instance_groups:
         buildpacks: *blobstore-properties
         mutual_tls: *cc_mutual_tls
       ccdb: *ccdb
-      ssl: *ssl
       system_domain: "((system_domain))"
       system_domain_organization: default_org
       app_domains: *app_domains
@@ -869,7 +861,6 @@ instance_groups:
         droplets: *blobstore-properties
         buildpacks: *blobstore-properties
       ccdb: *ccdb
-      ssl: *ssl
       system_domain: "((system_domain))"
       system_domain_organization: default_org
       app_domains: *app_domains
@@ -914,8 +905,6 @@ instance_groups:
   - name: stager
     release: capi
     properties:
-      diego:
-        ssl: *ssl
       capi:
         stager:
           bbs: *diego_bbs_client_properties
@@ -936,8 +925,6 @@ instance_groups:
   - name: tps
     release: capi
     properties:
-      diego:
-        ssl: *ssl
       capi:
         tps:
           bbs: *diego_bbs_client_properties
@@ -982,7 +969,6 @@ instance_groups:
         etcd:
           client_cert: "((etcd_client.certificate))"
           client_key: "((etcd_client.private_key))"
-        syslog_skip_cert_verify: true
         tls:
           enable: true
       loggregator:
