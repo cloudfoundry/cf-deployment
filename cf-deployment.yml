@@ -1312,10 +1312,12 @@ variables:
 - name: service_cf_internal_ca
   type: certificate
   options:
+    is_ca: true
     common_name: internalCA
 - name: etcd_ca
   type: certificate
   options:
+    is_ca: true
     common_name: etcdCA
 - name: etcd_server
   type: certificate
@@ -1325,18 +1327,19 @@ variables:
     alternative_names:
     - "*.etcd.service.cf.internal"
     - etcd.service.cf.internal
-    ext_key_usage:
+    extended_key_usage:
     - server_auth
 - name: etcd_client
   type: certificate
   options:
     ca: etcd_ca
     common_name: clientName
-    ext_key_usage:
+    extended_key_usage:
     - client_auth
 - name: etcd_peer_ca
   type: certificate
   options:
+    is_ca: true
     common_name: peerCA
 - name: etcd_peer
   type: certificate
@@ -1346,7 +1349,7 @@ variables:
     alternative_names:
     - "*.etcd.service.cf.internal"
     - etcd.service.cf.internal
-    ext_key_usage:
+    extended_key_usage:
     - client_auth
     - server_auth
 - name: blobstore_tls
@@ -1357,13 +1360,14 @@ variables:
 - name: consul_agent_ca
   type: certificate
   options:
+    is_ca: true
     common_name: consulCA
 - name: consul_agent
   type: certificate
   options:
     ca: consul_agent_ca
     common_name: consul_agent
-    ext_key_usage:
+    extended_key_usage:
     - client_auth
     - server_auth
     alternative_names:
@@ -1373,7 +1377,7 @@ variables:
   options:
     ca: consul_agent_ca
     common_name: server.dc1.cf.internal
-    ext_key_usage:
+    extended_key_usage:
     - client_auth
     - server_auth
 - name: diego_auctioneer_client
@@ -1381,14 +1385,14 @@ variables:
   options:
     ca: service_cf_internal_ca
     common_name: auctioneer client
-    ext_key_usage:
+    extended_key_usage:
     - client_auth
 - name: diego_auctioneer_server
   type: certificate
   options:
     ca: service_cf_internal_ca
     common_name: auctioneer.service.cf.internal
-    ext_key_usage:
+    extended_key_usage:
     - server_auth
     alternative_names:
     - "*.auctioneer.service.cf.internal"
@@ -1398,14 +1402,14 @@ variables:
   options:
     ca: service_cf_internal_ca
     common_name: bbs client
-    ext_key_usage:
+    extended_key_usage:
     - client_auth
 - name: diego_bbs_server
   type: certificate
   options:
     ca: service_cf_internal_ca
     common_name: bbs.service.cf.internal
-    ext_key_usage:
+    extended_key_usage:
     - server_auth
     - client_auth
     alternative_names:
@@ -1416,25 +1420,26 @@ variables:
   options:
     ca: consul_agent_ca
     common_name: diego consul client
-    ext_key_usage:
+    extended_key_usage:
     - client_auth
 - name: loggregator_ca
   type: certificate
   options:
+    is_ca: true
     common_name: loggregatorCA
 - name: loggregator_tls_statsdinjector
   type: certificate
   options:
     ca: loggregator_ca
     common_name: statsdinjector
-    ext_key_usage:
+    extended_key_usage:
     - client_auth
 - name: loggregator_tls_metron
   type: certificate
   options:
     ca: loggregator_ca
     common_name: metron
-    ext_key_usage:
+    extended_key_usage:
     - client_auth
     - server_auth
 - name: loggregator_tls_doppler
@@ -1442,7 +1447,7 @@ variables:
   options:
     ca: loggregator_ca
     common_name: doppler
-    ext_key_usage:
+    extended_key_usage:
     - client_auth
     - server_auth
 - name: loggregator_tls_tc
@@ -1450,7 +1455,7 @@ variables:
   options:
     ca: loggregator_ca
     common_name: trafficcontroller
-    ext_key_usage:
+    extended_key_usage:
     - client_auth
     - server_auth
 - name: loggregator_tls_syslogdrainbinder
@@ -1458,11 +1463,12 @@ variables:
   options:
     ca: service_cf_internal_ca
     common_name: syslogdrainbinder
-    ext_key_usage:
+    extended_key_usage:
     - client_auth
 - name: router_ca
   type: certificate
   options:
+    is_ca: true
     common_name: routerCA
 - name: router_ssl
   type: certificate
@@ -1475,6 +1481,7 @@ variables:
 - name: uaa_ca
   type: certificate
   options:
+    is_ca: true
     common_name: uaaCA
 - name: uaa_ssl
   type: certificate
@@ -1486,13 +1493,14 @@ variables:
 - name: uaa_login_saml
   type: certificate
   options:
+    ca: uaa_ca
     common_name: uaa_login_saml
 - name: cc_tls
   type: certificate
   options:
     ca: service_cf_internal_ca
     common_name: cloud-controller-ng.service.cf.internal
-    ext_key_usage:
+    extended_key_usage:
     - client_auth
     - server_auth
 - name: cc_bridge_tps
@@ -1500,7 +1508,7 @@ variables:
   options:
     ca: service_cf_internal_ca
     common_name: tps_watcher
-    ext_key_usage:
+    extended_key_usage:
     - client_auth
 
 releases:
