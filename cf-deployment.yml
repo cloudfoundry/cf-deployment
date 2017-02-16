@@ -914,7 +914,8 @@ instance_groups:
     release: capi
     properties:
       diego:
-        ssl: *ssl
+        ssl: &ssl
+          skip_cert_verify: true
       capi:
         nsync:
           bbs: *diego_bbs_client_properties
