@@ -223,13 +223,13 @@ instance_groups:
           seeded_databases:
           - name: cloud_controller
             username: cloud_controller
-            password: "((cf_mysql_mysql_seeded_databases_cc_password))"
+            password: "((cc_database_password))"
           - name: uaa
             username: uaa
-            password: "((cf_mysql_mysql_seeded_databases_uaa_password))"
+            password: "((uaa_database_password))"
           - name: diego
             username: diego
-            password: "((cf_mysql_mysql_seeded_databases_diego_password))"
+            password: "((diego_database_password))"
           database_startup_timeout: 600
           cluster_ips:
           - 10.0.31.193
@@ -326,7 +326,7 @@ instance_groups:
             db_port: 3306
             db_schema: diego
             db_username: diego
-            db_password: "((cf_mysql_mysql_seeded_databases_diego_password))"
+            db_password: "((diego_database_password))"
             db_driver: mysql
           etcd:
             machines: []
@@ -460,7 +460,7 @@ instance_groups:
         port: 3306
         roles:
         - name: uaa
-          password: "((cf_mysql_mysql_seeded_databases_uaa_password))"
+          password: "((uaa_database_password))"
           tag: admin
   - name: route_registrar
     release: routing
@@ -862,7 +862,7 @@ instance_groups:
         port: 3306
         roles:
         - name: cloud_controller
-          password: "((cf_mysql_mysql_seeded_databases_cc_password))"
+          password: "((cc_database_password))"
           tag: admin
   - name: cloud_controller_worker
     release: capi
@@ -1266,11 +1266,11 @@ variables:
   type: password
 - name: cf_mysql_mysql_roadmin_password
   type: password
-- name: cf_mysql_mysql_seeded_databases_cc_password
+- name: cc_database_password
   type: password
-- name: cf_mysql_mysql_seeded_databases_diego_password
+- name: diego_database_password
   type: password
-- name: cf_mysql_mysql_seeded_databases_uaa_password
+- name: uaa_database_password
   type: password
 - name: nats_password
   type: password
