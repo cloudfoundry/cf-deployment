@@ -889,12 +889,12 @@ instance_groups:
           verification_key: "((uaa_jwt_signing_key.public_key))"
         ssl:
           port: 8443
-  - name: statsd_injector
-    release: statsd-injector
-    properties: *statsd_injector_properties
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
+  - name: statsd_injector
+    release: statsd-injector
+    properties: *statsd_injector_properties
 - name: cc_bridge
   azs:
   - z1
