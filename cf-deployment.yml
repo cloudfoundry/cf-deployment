@@ -227,6 +227,7 @@ instance_groups:
     release: routing
     properties:
       router:
+        ssl_skip_validation: true
         enable_ssl: true
         ssl_cert: "((router_ssl.certificate))"
         ssl_key: "((router_ssl.private_key))"
