@@ -139,6 +139,10 @@
     enabled: true
 
 - type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ssl?/skip_cert_verify
+  value: true
+
+- type: replace
   path: /instance_groups/name=api/jobs/name=consul_agent/properties/consul/agent/services/routing-api?
   value: {}
 
