@@ -26,9 +26,8 @@ CI pipeline [here][cf-deployment-concourse-url]
 
 Please make pull requests against the `develop` branch.
 
-**NB:** `develop` is the default branch.
-`master` is more stable.
-Only commits tha that have passed our [CI][cf-deployment-concourse-url]
+**NB:** `master` is now the default branch.
+Only commits that that have passed our [CI][cf-deployment-concourse-url]
 are merged to `master`.
 
 ## Purpose
