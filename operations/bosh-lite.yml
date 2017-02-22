@@ -27,7 +27,7 @@
   - dns
   - load_balancer
 - type: replace
-  path: /instance_groups/name=cc_clock/jobs/name=cloud_controller_clock/properties/cc/default_running_security_groups
+  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/default_running_security_groups
   value:
   - public_networks
   - dns
@@ -47,7 +47,7 @@
     - destination: 10.244.0.34
       protocol: all
 - type: replace
-  path: /instance_groups/name=cc_clock/jobs/name=cloud_controller_clock/properties/cc/security_group_definitions/-
+  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/security_group_definitions/-
   value:
     name: load_balancer
     rules:
@@ -126,7 +126,7 @@
   path: /instance_groups/name=api/instances
   value: 1
 - type: replace
-  path: /instance_groups/name=cc_bridge/instances
+  path: /instance_groups/name=cc-bridge/instances
   value: 1
 - type: replace
   path: /instance_groups/name=doppler/instances
@@ -161,8 +161,8 @@
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/nats/machines
   value: *nats_ips
 - type: replace
-  path: /instance_groups/name=cc_clock/jobs/name=cloud_controller_clock/properties/ccdb/address
+  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/ccdb/address
   value: *mysql_ip
 - type: replace
-  path: /instance_groups/name=cc_clock/jobs/name=cloud_controller_clock/properties/nats/machines
+  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/nats/machines
   value: *nats_ips

@@ -34,8 +34,8 @@
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/nats/machines
   value: *nats_ips
 - type: replace
-  path: /instance_groups/name=cc_clock/jobs/name=cloud_controller_clock/properties/ccdb/address
+  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/ccdb/address
   value: *mysql_ip
 - type: replace
-  path: /instance_groups/name=cc_clock/jobs/name=cloud_controller_clock/properties/nats/machines
+  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/nats/machines
   value: *nats_ips
