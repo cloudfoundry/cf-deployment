@@ -24,11 +24,8 @@ Find us on the #cf-deployment channel in the cloudfoundry Slack
 
 CI pipeline [here][cf-deployment-concourse-url]
 
-Please make pull requests against the `develop` branch.
-
 **NB:** `master` is now the default branch.
-Only commits that that have passed our [CI][cf-deployment-concourse-url]
-are merged to `master`.
+Please make pull requests against the `develop` branch.
 
 ## Purpose
 This repo contains a canonical manifest
