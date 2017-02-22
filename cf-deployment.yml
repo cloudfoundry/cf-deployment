@@ -1034,7 +1034,6 @@ instance_groups:
       cc:
         mutual_tls:
           ca_cert: "((loggregator_tls_syslogdrainbinder.ca))"
-        bulk_api_password: "((cc_bulk_api_password))"
         srv_api_uri: https://api.((system_domain))
       ssl: *ssl
   - name: metron_agent
