@@ -1,0 +1,102 @@
+---
+# --- Replace MySQL job with Postgres ---
+- type: replace
+  path: /releases/-
+  value:
+    name: postgres
+    url: https://bosh.io/d/github.com/cloudfoundry/postgres-release?v=13
+    sha1: db1b34e15edef77fac68d1b55fac6cd22841d2ff
+    version: "13"
+
+- type: remove
+  path: /instance_groups/name=mysql/jobs/name=mysql
+- type: replace
+  path: /instance_groups/name=mysql/jobs/-
+  value:
+    name: postgres
+    release: postgres
+    properties:
+      databases:
+        address: 10.0.31.193
+        databases:
+        - citext: true
+          name: cloud_controller
+          tag: cc
+        - citext: true
+          name: uaa
+          tag: uaa
+        - citext: true
+          name: diego
+          tag: diego
+        db_scheme: postgres
+        port: 5524
+        roles:
+        - name: cloud_controller
+          password: ((cc_database_password))
+          tag: admin
+        - name: uaa
+          password: ((uaa_database_password))
+          tag: admin
+        - name: diego
+          password: ((diego_database_password))
+          tag: admin
+- type: replace
+  path: /instance_groups/name=mysql/name
+  value: postgres
+
+# --- Replace usages of MySQL DB with Postgres ---
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ccdb
+  value: &ccdb
+    db_scheme: postgres
+    address: 10.0.31.193
+    roles:
+    - tag: admin
+      name: cloud_controller
+      password: ((cc_database_password))
+    databases:
+    - tag: cc
+      name: cloud_controller
+    port: 5524
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_worker/properties/ccdb
+  value: *ccdb
+- type: replace
+  path: /instance_groups/name=cc_clock/jobs/name=cloud_controller_clock/properties/ccdb
+  value: *ccdb
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb
+  value:
+    db_scheme: postgresql
+    address: 10.0.31.193
+    roles:
+    - tag: admin
+      name: uaa
+      password: ((uaa_database_password))
+    databases:
+    - tag: uaa
+      name: uaa
+    port: 5524
+- type: replace
+  path: /instance_groups/name=diego-bbs/jobs/name=bbs/properties/diego/bbs/sql
+  value:
+    db_host: 10.0.31.193
+    db_port: 5524
+    db_schema: diego
+    db_username: diego
+    db_password: "((diego_database_password))"
+    db_driver: postgres
+
+# --- Remove now unused cf-mysql release and variables ---
+- type: remove
+  path: /releases/name=cf-mysql?
+- type: remove
+  path: /variables/name=cf_mysql_mysql_admin_password?
+- type: remove
+  path: /variables/name=cf_mysql_mysql_cluster_health_password?
+- type: remove
+  path: /variables/name=cf_mysql_mysql_galera_healthcheck_endpoint_password?
+- type: remove
+  path: /variables/name=cf_mysql_mysql_galera_healthcheck_password?
+- type: remove
+  path: /variables/name=cf_mysql_mysql_roadmin_password?
