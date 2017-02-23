@@ -36,6 +36,7 @@
           enable: false
         diego:
           rep:
+            require_tls: false
             bbs:
               ca_cert: "((diego_bbs_client.ca))"
               client_cert: "((diego_bbs_client.certificate))"
