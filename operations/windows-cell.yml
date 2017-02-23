@@ -40,16 +40,8 @@
               ca_cert: "((diego_bbs_client.ca))"
               client_cert: "((diego_bbs_client.certificate))"
               client_key: "((diego_bbs_client.private_key))"
-            consul:
-              ca_cert: "((consul_agent.ca))"
-              client_cert: "((diego_consul_client.certificate))"
-              client_key: "((diego_consul_client.private_key))"
-              require_tls: true
-            require_tls: false
             preloaded_rootfses:
             - windows2012R2:/tmp/windows2012R2
-          ssl:
-            skip_cert_verify: true
     - name: metron_agent_windows
       release: loggregator
       properties:
