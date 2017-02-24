@@ -40,6 +40,8 @@
               client_key: "((diego_bbs_client.private_key))"
             preloaded_rootfses:
             - windows2012R2:/tmp/windows2012R2
+          ssl:
+            skip_cert_verify: true
     - name: metron_agent_windows
       release: loggregator
       properties:
