@@ -8,6 +8,10 @@
   value: ((routing_api_database_password))
 
 - type: replace
+  path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/port
+  value: 5524
+
+- type: replace
   path: /instance_groups/name=postgres/jobs/name=postgres/properties/databases/roles/name=routing-api?/name
   value: routing-api
 
