@@ -888,6 +888,7 @@ instance_groups:
         packages: *blobstore-properties
         droplets: *blobstore-properties
         buildpacks: *blobstore-properties
+        mutual_tls: *cc_mutual_tls
       ccdb: *ccdb
       system_domain: "((system_domain))"
       system_domain_organization: default_org
