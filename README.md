@@ -94,7 +94,7 @@ It also requires the new alpha `bosh` CLI,
 which it relies on to generate and fill-in needed variables.
 
 - If you are deploying to GCP,
-  please use `gcp-deployment-guide.md`, also located in this directory. (`bbl` support for GCP is coming soon.)
+  please use `gcp-deployment-guide.md`, also located in this directory.
 - If you are deploying to AWS,
   please use `bbl`, the bosh-bootloader, to prepare your environment.
 - If you are deploying to bosh-lite,
