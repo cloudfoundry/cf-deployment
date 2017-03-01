@@ -85,6 +85,10 @@ bosh -e my-env -d cf deploy cf-deployment/cf-deployment.yml \
   [ -o operations/CUSTOMIZATION1 ] [ -o operations/CUSTOMIZATION2 (etc.) ]
 ```
 
+The CF Admin credentials will be stored in the file passed to the `--vars-store` flag
+(`env-repo/deployment.yml` in the example).
+You can find them by searching for `uaa_scim_users_admin_password`.
+
 See the rest of this document for more on the new CLI, deployment vars, and configuring your BOSH director.
 
 ## Setup and Prerequisites
