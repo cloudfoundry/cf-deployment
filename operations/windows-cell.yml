@@ -88,3 +88,23 @@
       description: "Cloud Foundry Linux-based filesystem"
     - name: "windows2012R2"
       description: "Windows Server 2012 R2"
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
+  value:
+    name: hwc_buildpack
+    package: hwc-buildpack
+
+- type: replace
+  path: /instance_groups/name=api/jobs/-
+  value:
+    name: hwc-buildpack
+    release: hwc-buildpack
+
+- type: replace
+  path: /releases/-
+  value:
+    name: hwc-buildpack
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=2.1.2
+    version: 2.1.2
+    sha: 63b92915a629c4d809db451ba4b65cf06024c220
