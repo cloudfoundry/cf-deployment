@@ -17,7 +17,7 @@
     release: postgres
     properties:
       databases:
-        address: 10.0.31.193
+        address: sql-db.service.cf.internal
         databases:
         - citext: true
           name: cloud_controller
@@ -43,13 +43,17 @@
 - type: replace
   path: /instance_groups/name=mysql/name
   value: postgres
+- type: replace
+  path: /instance_groups/name=postgres/jobs/name=consul_agent/properties?/consul/agent/services?
+  value:
+    sql_db: {}
 
 # --- Replace usages of MySQL DB with Postgres ---
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ccdb
   value: &ccdb
     db_scheme: postgres
-    address: 10.0.31.193
+    address: sql-db.service.cf.internal
     roles:
     - tag: admin
       name: cloud_controller
@@ -68,7 +72,7 @@
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb
   value:
     db_scheme: postgresql
-    address: 10.0.31.193
+    address: sql-db.service.cf.internal
     roles:
     - tag: admin
       name: uaa
@@ -80,7 +84,7 @@
 - type: replace
   path: /instance_groups/name=diego-bbs/jobs/name=bbs/properties/diego/bbs/sql
   value:
-    db_host: 10.0.31.193
+    db_host: sql-db.service.cf.internal
     db_port: 5524
     db_schema: diego
     db_username: diego
