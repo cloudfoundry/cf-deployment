@@ -190,8 +190,6 @@ instance_groups:
     serial: true
   networks:
   - name: private
-    static_ips:
-    - 10.0.31.193
   jobs:
   - name: consul_agent
     release: consul
@@ -222,8 +220,6 @@ instance_groups:
             username: diego
             password: "((diego_database_password))"
           database_startup_timeout: 600
-          cluster_ips:
-          - 10.0.31.193
           port: 33306
   - name: proxy
     release: cf-mysql
@@ -302,7 +298,7 @@ instance_groups:
           - label: key-2016-06
             passphrase: "((diego_bbs_encryption_keys_passphrase))"
           sql:
-            db_host: 10.0.31.193
+            db_host: sql-db.service.cf.internal
             db_port: 3306
             db_schema: diego
             db_username: diego
@@ -425,7 +421,7 @@ instance_groups:
             authorized-grant-types: client_credentials,refresh_token
             secret: "((uaa_clients_tcp_router_secret))"
       uaadb:
-        address: 10.0.31.193
+        address: sql-db.service.cf.internal
         databases:
         - name: uaa
           tag: uaa
@@ -777,7 +773,7 @@ instance_groups:
         databases:
         - name: cloud_controller
           tag: cc
-        address: 10.0.31.193
+        address: sql-db.service.cf.internal
         db_scheme: mysql
         port: 3306
         roles:
