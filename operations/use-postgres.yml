@@ -10,6 +10,8 @@
 
 - type: remove
   path: /instance_groups/name=mysql/jobs/name=mysql
+- type: remove
+  path: /instance_groups/name=mysql/jobs/name=proxy
 - type: replace
   path: /instance_groups/name=mysql/jobs/-
   value:
