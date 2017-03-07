@@ -224,6 +224,14 @@ instance_groups:
           database_startup_timeout: 600
           cluster_ips:
           - 10.0.31.193
+          port: 33306
+  - name: proxy
+    release: cf-mysql
+    properties:
+      cf_mysql:
+        proxy:
+          consul_enabled: true
+          consul_service_name: "sql-db"
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
