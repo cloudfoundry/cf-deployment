@@ -225,9 +225,16 @@ instance_groups:
     release: cf-mysql
     properties:
       cf_mysql:
+        external_host: "((system_domain))"
         proxy:
+          api_password: "((cf_mysql_proxy_api_password))"
           consul_enabled: true
           consul_service_name: "sql-db"
+      nats:
+        machines: *nats_machines
+        password: "((nats_password))"
+        port: 4222
+        user: nats
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
@@ -1136,6 +1143,8 @@ variables:
 - name: cf_mysql_mysql_galera_healthcheck_password
   type: password
 - name: cf_mysql_mysql_roadmin_password
+  type: password
+- name: cf_mysql_proxy_api_password
   type: password
 - name: cc_database_password
   type: password
