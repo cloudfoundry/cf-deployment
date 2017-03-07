@@ -85,7 +85,7 @@ instance_groups:
           require_ssl: true
           ca_cert: "((etcd_server.ca))"
           machines:
-          - etcd.service.cf.internal
+          - cf-etcd.service.cf.internal
 - name: nats
   azs:
   - z1
@@ -145,12 +145,13 @@ instance_groups:
       consul:
         agent:
           services:
-            etcd: {}
+            etcd:
+              name: cf-etcd
   - name: etcd
     release: etcd
     properties:
       etcd:
-        advertise_urls_dns_suffix: etcd.service.cf.internal
+        advertise_urls_dns_suffix: cf-etcd.service.cf.internal
         cluster:
         - instances: 3
           name: etcd
@@ -169,7 +170,7 @@ instance_groups:
     properties:
       etcd_metrics_server:
         etcd:
-          dns_suffix: etcd.service.cf.internal
+          dns_suffix: cf-etcd.service.cf.internal
           require_ssl: true
           ca_cert: "((etcd_server.ca))"
           client_cert: "((etcd_client.certificate))"
@@ -1018,7 +1019,7 @@ instance_groups:
           require_ssl: true
           ca_cert: "((etcd_server.ca))"
           machines:
-          - etcd.service.cf.internal
+          - cf-etcd.service.cf.internal
       doppler_endpoint:
         shared_secret: "((dropsonde_shared_secret))"
   - name: syslog_drain_binder
@@ -1033,7 +1034,7 @@ instance_groups:
           require_ssl: true
           ca_cert: "((etcd_server.ca))"
           machines:
-          - etcd.service.cf.internal
+          - cf-etcd.service.cf.internal
       syslog_drain_binder:
         etcd:
           client_cert: "((etcd_client.certificate))"
@@ -1090,7 +1091,7 @@ instance_groups:
           require_ssl: true
           ca_cert: "((etcd_server.ca))"
           machines:
-          - etcd.service.cf.internal
+          - cf-etcd.service.cf.internal
         uaa:
           client_secret: "((uaa_clients_doppler_secret))"
       system_domain: "((system_domain))"
