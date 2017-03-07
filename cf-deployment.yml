@@ -377,8 +377,6 @@ instance_groups:
             - routing.router_groups.write
             - scim.read
             - scim.write
-        login:
-          client_secret: "((uaa_login_client_secret))"
         jwt:
           signing_key: "((uaa_jwt_signing_key.private_key))"
           verification_key: "((uaa_jwt_signing_key.public_key))"
@@ -1179,8 +1177,6 @@ variables:
 - name: uaa_clients_tcp_emitter_secret
   type: password
 - name: uaa_clients_tcp_router_secret
-  type: password
-- name: uaa_login_client_secret
   type: password
 - name: diego_bbs_encryption_keys_passphrase
   type: password
