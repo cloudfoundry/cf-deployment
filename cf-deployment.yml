@@ -243,6 +243,8 @@ instance_groups:
   - z1
   - z2
   instances: 2
+  update:
+    serial: true
   vm_type: m3.medium
   vm_extensions:
   - router-lb
@@ -1482,9 +1484,9 @@ releases:
   version: 1.0.21
   sha1: 50147223ed46f5823a5abcba068530578fb25601
 - name: uaa
-  url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=27
-  version: "27"
-  sha1: e935b37f1860a885046eab7dcb4a57a1de683ee1
+  url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=28
+  version: "28"
+  sha1: f31f4358664cb067587143848a85f0e6f7a45485
 stemcells:
 - alias: default
   os: ubuntu-trusty
