@@ -140,7 +140,7 @@ These flags read a single `.yml` file that details operations to be performed on
 before variables are generated and filled.
 We've supplied some common manifest modifications in the `operations` directory.
 
-Here's a brief summary:
+Here's an (alphabetical) summary:
 - `operations/change-logging-port-for-aws-elb.yml` -
   this file overrides the loggregator ports to 4443,
   since it is required under AWS to have a separate port from the standard HTTPS port (443) for loggregator traffic
@@ -154,17 +154,23 @@ Here's a brief summary:
   this file overrides the static IP addresses assigned to some instance groups,
   as GCP networking features allow them to all co-exist on the same subnet
   despite being spread across multiple AZs.
+- `operations/tcp-routing-gcp.yml` - this ops file adds TCP router and routing api for GCP.
+  Not directly compatible with the `use-postgres` ops file;
+  see that ops file's entry
+  for details.
 - `operations/use-postgres.yml` -
   replaces the MySQL instance group
   with a postgres instance group.
   **Warning**: this will lead to total data loss
   if applied to an existing deployment with MySQL
   or removed from an existing deployment with postgres.
-  Not currently compatible with
+  Requires an additional ops file to work with
   the `tcp-routing-gcp` ops file.
-- `operations/tcp-routing-gcp.yml` - this ops file adds TCP router and routing api for GCP.
-  Not currently compatible with
-  the `use-postgres` ops file.
+  See the next entry for details.
+- `use-postgres-tcp-routing` - builds on
+  `tcp-routing-gcp` and `use-postgres`
+  to use the postgres database for TCP routing.
+  Must come after the other two.
 
 ## Deploying to `bosh-lite`
 To deploy to bosh-lite:
