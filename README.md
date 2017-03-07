@@ -182,9 +182,11 @@ bosh -e 192.168.50.4 -d cf deploy cf-deployment.yml -o operations/bosh-lite.yml 
 ```
 
 ## Contributing
-Changes to `cf-deployment` should be made on the `develop` branch. Pull requests should be based on `develop`, as well.
+Changes to `cf-deployment` should be made on the `develop` branch.
+Pull requests should be based on `develop`, as well.
 
-We ask that pull requests and other changes be successfully deployed, and tested with the latest sha of CATs.
+We ask that pull requests and other changes be successfully deployed,
+and tested with the latest sha of CATs.
 
 ### CI
 The [ci](https://runtime.ci.cf-app.com/teams/main/pipelines/cf-deployment) for `cf-deployment`
