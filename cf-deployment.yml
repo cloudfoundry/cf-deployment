@@ -312,6 +312,11 @@ instance_groups:
             client_key: "((diego_auctioneer_client.private_key))"
           server_cert: "((diego_bbs_server.certificate))"
           server_key: "((diego_bbs_server.private_key))"
+          rep:
+            require_tls: true
+            ca_cert: "((diego_rep_client.ca))"
+            client_cert: "((diego_rep_client.certificate))"
+            client_key: "((diego_rep_client.private_key))"
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
@@ -501,6 +506,11 @@ instance_groups:
           ca_cert: "((diego_auctioneer_server.ca))"
           server_cert: "((diego_auctioneer_server.certificate))"
           server_key: "((diego_auctioneer_server.private_key))"
+          rep:
+            require_tls: true
+            ca_cert: "((diego_rep_client.ca))"
+            client_cert: "((diego_rep_client.certificate))"
+            client_key: "((diego_rep_client.private_key))"
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
@@ -543,6 +553,10 @@ instance_groups:
           bbs: *diego_bbs_client_properties
           preloaded_rootfses:
           - cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs
+          require_tls: true
+          ca_cert: "((diego_rep_server.ca))"
+          server_cert: "((diego_rep_server.certificate))"
+          server_key: "((diego_rep_server.private_key))"
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
@@ -1287,6 +1301,23 @@ variables:
     alternative_names:
     - "*.bbs.service.cf.internal"
     - bbs.service.cf.internal
+- name: diego_rep_client
+  type: certificate
+  options:
+    ca: service_cf_internal_ca
+    common_name: rep client
+    extended_key_usage:
+    - client_auth
+- name: diego_rep_server
+  type: certificate
+  options:
+    ca: service_cf_internal_ca
+    common_name: cell.service.cf.internal
+    extended_key_usage:
+    - server_auth
+    alternative_names:
+    - "*.cell.service.cf.internal"
+    - cell.service.cf.internal
 - name: diego_consul_client
   type: certificate
   options:
