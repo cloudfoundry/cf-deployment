@@ -246,7 +246,7 @@ instance_groups:
   instances: 2
   vm_type: m3.medium
   vm_extensions:
-  - router-lb
+  - cf-router-network-properties
   stemcell: default
   networks:
   - name: private
@@ -476,7 +476,7 @@ instance_groups:
   instances: 2
   vm_type: m3.medium
   vm_extensions:
-  - ssh-proxy-lb
+  - diego-ssh-proxy-network-properties
   stemcell: default
   networks:
   - name: private

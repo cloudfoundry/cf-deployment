@@ -141,8 +141,8 @@ before variables are generated and filled.
 We've supplied some common manifest modifications in the `operations` directory.
 
 Here's an (alphabetical) summary:
-- `operations/change-logging-port-for-aws-elb.yml` -
-  this file overrides the loggregator ports to 4443,
+- `operations/aws.yml` and `operations/change-logging-port-for-aws-elb.yml` -
+  this file overrides the vm_extensions for load balancers and overrides the loggregator ports to 4443,
   since it is required under AWS to have a separate port from the standard HTTPS port (443) for loggregator traffic
   in order to use the AWS load balancer.
 - `operations/disable-router-tls-termination.yml` -
@@ -151,7 +151,7 @@ Here's an (alphabetical) summary:
   for instance, on AWS, such termination is commonly done at the ELB.
   This also eliminates the need to specify `((router_ssl.certificate))` and `((router_ssl.private_key))` in the var files.
 - `operations/gcp.yml` -
-  this file overrides the static IP addresses assigned to some instance groups,
+  this file was intentionally left blank and left for backwards compatibility. It previously overrode the static IP addresses assigned to some instance groups,
   as GCP networking features allow them to all co-exist on the same subnet
   despite being spread across multiple AZs.
 - `operations/tcp-routing-gcp.yml` - this ops file adds TCP router and routing api for GCP.
