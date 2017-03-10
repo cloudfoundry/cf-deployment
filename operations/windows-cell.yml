@@ -35,7 +35,10 @@
           executor:
             ca_certs_for_downloads: "((blobstore_tls.ca))"
           rep:
-            require_tls: false
+            require_tls: true
+            ca_cert: "((diego_rep_server.ca))"
+            server_cert: "((diego_rep_server.certificate))"
+            server_key: "((diego_rep_server.private_key))"
             bbs:
               ca_cert: "((diego_bbs_client.ca))"
               client_cert: "((diego_bbs_client.certificate))"
