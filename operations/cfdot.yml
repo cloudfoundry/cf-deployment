@@ -9,9 +9,9 @@
         cfdot:
           bbs:
             use_ssl: true
-            ca_cert: "((diego_bbs_server.ca))"
-            client_cert: "((diego_bbs_server.certificate))"
-            client_key: "((diego_bbs_server.private_key))"
+            ca_cert: "((diego_bbs_client.ca))"
+            client_cert: "((diego_bbs_client.certificate))"
+            client_key: "((diego_bbs_client.private_key))"
 - type: replace
   path: /instance_groups/name=diego-brain/jobs/-
   value:
@@ -22,9 +22,9 @@
         cfdot:
           bbs:
             use_ssl: true
-            ca_cert: "((diego_bbs_server.ca))"
-            client_cert: "((diego_bbs_server.certificate))"
-            client_key: "((diego_bbs_server.private_key))"
+            ca_cert: "((diego_bbs_client.ca))"
+            client_cert: "((diego_bbs_client.certificate))"
+            client_key: "((diego_bbs_client.private_key))"
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/-
   value:
@@ -35,6 +35,6 @@
         cfdot:
           bbs:
             use_ssl: true
-            ca_cert: "((diego_bbs_server.ca))"
-            client_cert: "((diego_bbs_server.certificate))"
-            client_key: "((diego_bbs_server.private_key))"
+            ca_cert: "((diego_bbs_client.ca))"
+            client_cert: "((diego_bbs_client.certificate))"
+            client_key: "((diego_bbs_client.private_key))"
