@@ -9,9 +9,6 @@
   path: /instance_groups/name=nats/networks/name=private/static_ips
   value: &nats_ips
   - 10.244.0.6
-- type: replace
-  path: /instance_groups/name=route-emitter/jobs/name=route_emitter/properties/diego/route_emitter/nats/machines
-  value: *nats_ips
 
 # --- Replace MySQL job with Postgres ---
 - type: replace
