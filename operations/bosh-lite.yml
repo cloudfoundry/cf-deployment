@@ -1,14 +1,10 @@
 ---
-# --- Adjust Static IPs ---
+# --- Set Router Static IP ---
 - type: replace
   path: /instance_groups/name=router/networks
   value:
   - name: private
     static_ips: [10.244.0.34]
-- type: replace
-  path: /instance_groups/name=nats/networks/name=private/static_ips
-  value: &nats_ips
-  - 10.244.0.6
 
 # --- Replace MySQL job with Postgres ---
 - type: replace
