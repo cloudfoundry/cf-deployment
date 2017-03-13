@@ -461,11 +461,6 @@ instance_groups:
       app_ssh: &app_ssh
         host_key_fingerprint: "((diego_ssh_proxy_host_key.public_key_fingerprint))"
         oauth_client_id: ssh-proxy
-      nats:
-        machines: *nats_machines
-        password: "((nats_password))"
-        port: 4222
-        user: nats
       uaa:
         ca_cert: "((uaa_ssl.ca))"
         clients:
@@ -595,11 +590,6 @@ instance_groups:
       system_domain_organization: default_org
       app_domains: *app_domains
       app_ssh: *app_ssh
-      nats:
-        machines: *nats_machines
-        password: "((nats_password))"
-        port: 4222
-        user: nats
       uaa:
         ca_cert: "((uaa_ssl.ca))"
         clients:
@@ -916,11 +906,6 @@ instance_groups:
       system_domain_organization: default_org
       app_domains: *app_domains
       app_ssh: *app_ssh
-      nats:
-        machines: *nats_machines
-        password: "((nats_password))"
-        port: 4222
-        user: nats
       uaa:
         ca_cert: "((uaa_ssl.ca))"
         clients:
