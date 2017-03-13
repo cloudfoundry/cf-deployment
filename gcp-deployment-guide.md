@@ -131,7 +131,7 @@ The version number is specified on the last line of `cf-deployment.yml`.
   ```
 1. Check that you can generate a final manifest without errors (from inside the cf-deployment directory)
   ```
-  bosh -n interpolate --vars-store cf-deployment-vars.yml -o operations/gcp.yml --var-errs cf-deployment.yml
+  bosh -n interpolate --vars-store cf-deployment-vars.yml --var-errs cf-deployment.yml
   ```
 1. Deploy!
    ```
@@ -142,7 +142,6 @@ The version number is specified on the last line of `cf-deployment.yml`.
      deploy \
      --vars-store=cf-deployment-vars.yml \
      -v system_domain=YOUR_SYSTEM_DOMAIN \
-     -o operations/gcp.yml \
      cf-deployment.yml
    ```
 

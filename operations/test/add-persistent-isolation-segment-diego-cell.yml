@@ -45,6 +45,10 @@
             - cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs
             placement_tags:
             - persistent_isolation_segment
+            require_tls: true
+            ca_cert: "((diego_rep_server.ca))"
+            server_cert: "((diego_rep_server.certificate))"
+            server_key: "((diego_rep_server.private_key))"
           ssl:
             skip_cert_verify: true
     - name: metron_agent
@@ -69,4 +73,4 @@
             require_ssl: true
             ca_cert: "((etcd_server.ca))"
             machines:
-            - etcd.service.cf.internal
+            - cf-etcd.service.cf.internal

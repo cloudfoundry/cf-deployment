@@ -21,9 +21,6 @@
       properties:
         syslog_daemon_config:
           enable: false
-        consul:
-          agent:
-            require_ssl: true
     - name: garden-windows
       release: garden-windows
       properties:
@@ -35,7 +32,13 @@
         syslog_daemon_config:
           enable: false
         diego:
+          executor:
+            ca_certs_for_downloads: "((blobstore_tls.ca))"
           rep:
+            require_tls: true
+            ca_cert: "((diego_rep_server.ca))"
+            server_cert: "((diego_rep_server.certificate))"
+            server_key: "((diego_rep_server.private_key))"
             bbs:
               ca_cert: "((diego_bbs_client.ca))"
               client_cert: "((diego_bbs_client.certificate))"
@@ -64,15 +67,15 @@
             require_ssl: true
             ca_cert: "((etcd_server.ca))"
             machines:
-            - etcd.service.cf.internal
+            - cf-etcd.service.cf.internal
 
 - type: replace
   path: /releases/-
   value:
     name: garden-windows
-    version: 0.2.0
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/garden-windows-bosh-release?v=0.2.0
-    sha1: 971fa08613da97015f94da55a9520b389b0867d0
+    version: 0.3.0
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/garden-windows-bosh-release?v=0.3.0
+    sha1: d6aa7b91b13ef480c4630f11fc8fe044ebc4eebf
 
 - type: replace
   path: /stemcells/-
@@ -88,3 +91,23 @@
       description: "Cloud Foundry Linux-based filesystem"
     - name: "windows2012R2"
       description: "Windows Server 2012 R2"
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
+  value:
+    name: hwc_buildpack
+    package: hwc-buildpack
+
+- type: replace
+  path: /instance_groups/name=api/jobs/-
+  value:
+    name: hwc-buildpack
+    release: hwc-buildpack
+
+- type: replace
+  path: /releases/-
+  value:
+    name: hwc-buildpack
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=2.2.0
+    version: 2.2.0
+    sha: d4f5df07a76fba0324dc6d9e708e7989e3ff2f38

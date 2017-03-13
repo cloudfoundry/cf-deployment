@@ -50,7 +50,7 @@
             require_ssl: true
             ca_cert: "((etcd_server.ca))"
             machines:
-            - etcd.service.cf.internal
+            - cf-etcd.service.cf.internal
 
 - type: replace
   path: /instance_groups/-
@@ -103,7 +103,7 @@
           reservable_ports: 1024-1123
         sqldb:
           type: mysql
-          host: 10.0.31.193
+          host: sql-db.service.cf.internal
           port: 3306
           schema: routing-api
           username: routing-api
