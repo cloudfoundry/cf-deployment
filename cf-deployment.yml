@@ -455,7 +455,6 @@ instance_groups:
       hm9000:
         port: -1
       system_domain: "((system_domain))"
-      system_domain_organization: default_org
       app_domains: &app_domains
       - "((system_domain))"
       app_ssh: &app_ssh
@@ -587,7 +586,6 @@ instance_groups:
         mutual_tls: *cc_mutual_tls
       ccdb: *ccdb
       system_domain: "((system_domain))"
-      system_domain_organization: default_org
       app_domains: *app_domains
       app_ssh: *app_ssh
       uaa:
@@ -898,7 +896,6 @@ instance_groups:
         mutual_tls: *cc_mutual_tls
       ccdb: *ccdb
       system_domain: "((system_domain))"
-      system_domain_organization: default_org
       app_domains: *app_domains
       app_ssh: *app_ssh
       uaa:
