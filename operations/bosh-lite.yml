@@ -241,16 +241,3 @@
 - type: replace
   path: /instance_groups/name=log-api/instances
   value: 1
-# --------------------------------------------------------------------------------------------
-- type: replace
-  path: /instance_groups/name=route-emitter/jobs/name=route_emitter/properties/diego/route_emitter/nats/machines
-  value: *nats_ips
-- type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_worker/properties/nats/machines
-  value: *nats_ips
-- type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/nats/machines
-  value: *nats_ips
-- type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/nats/machines
-  value: *nats_ips
