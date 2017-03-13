@@ -224,10 +224,10 @@ instance_groups:
           consul_enabled: true
           consul_service_name: "sql-db"
       nats:
-        machines: *nats_machines
-        password: "((nats_password))"
-        port: 4222
-        user: nats
+        machines: nil
+        password: nil
+        port: nil
+        user: nil
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
