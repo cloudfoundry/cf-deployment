@@ -5,8 +5,7 @@ Please see
 https://github.com/anEXPer/texts/blob/master/the-art-of-markdown.md>
 
 # cf-deployment
-**
-This repo is under initial development.
+**This repo is under initial development.
 This document describes the intended purpose
 and use of
 resources in this repo.
@@ -19,8 +18,7 @@ and version tagging will be added.
 We'd love for members of the CF community
 to try cf-deployment and give us feedback.
 Github issues welcome.
-Find us on the #cf-deployment channel in the cloudfoundry Slack
-**
+Find us on the #cf-deployment channel in the cloudfoundry Slack**
 
 CI pipeline [here][cf-deployment-concourse-url]
 
