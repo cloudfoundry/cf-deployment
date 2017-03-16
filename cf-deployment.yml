@@ -821,6 +821,7 @@ instance_groups:
           ca_cert: "((diego_rep_server.ca))"
           server_cert: "((diego_rep_server.certificate))"
           server_key: "((diego_rep_server.private_key))"
+          enable_legacy_api_endpoints: false
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
