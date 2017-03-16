@@ -16,7 +16,17 @@ to try cf-deployment and give us feedback.
 Github issues welcome.
 Find us on the #cf-deployment channel in the cloudfoundry Slack.**
 
-## Purpose
+
+### Table of Contents
+* <a href='#purpose'>Purpose</a>
+* <a href='#usage'>Usage</a>
+* <a href='#contributing'>Contributing</a>
+* <a href='#setup'>Setup and Prerequisites</a>
+* <a href='#deploying'>Deploying `cf-deployment`</a>
+* <a href='#ops-files'>Ops Files</a>
+* <a href='#ci'>CI</a>
+
+## <a name='purpose'></a>Purpose
 This repo contains a canonical manifest
 for deploying Cloud Foundry without the use of `cf-release`,
 relying instead on individual component releases.
@@ -55,7 +65,7 @@ or an external deployment.
 - assumes GCP as the default deployment environment.
 For use with other IaaSs, see the **Ops Files** section below.
 
-## Usage
+## <a name='usage'></a>Usage
 To deploy to a configured BOSH director using the new `bosh` CLI:
 
 ```
@@ -72,7 +82,7 @@ You can find them by searching for `uaa_scim_users_admin_password`.
 
 See the rest of this document for more on the new CLI, deployment vars, and configuring your BOSH director.
 
-## Contributing
+## <a name='contributing'></a>Contributing
 Although the default branch for the repository is `master`,
 we ask that all pull requests be made against
 the `develop` branch.
@@ -83,18 +93,11 @@ to the deployment manifest.
 We ask that pull requests and other changes be successfully deployed,
 and tested with the latest sha of CATs.
 
-## Setup and Prerequisites
+## <a name='setup'></a>Setup and Prerequisites
 `cf-deployment` relies on newer BOSH features,
 and requires a bosh director with a valid cloud-config that has been configured with a certificate authority.
 It also requires the new alpha `bosh` CLI,
 which it relies on to generate and fill-in needed variables.
-
-- If you are deploying to GCP,
-  please use `gcp-deployment-guide.md`, also located in this directory.
-- If you are deploying to AWS,
-  please use `bbl`, the bosh-bootloader, to prepare your environment.
-- If you are deploying to bosh-lite,
-  please see the example below under **Deploying to `bosh-lite`**.
 
 ### BOSH CLI
 `cf-deployment` requires the new [BOSH CLI](https://github.com/cloudfoundry/bosh-cli).
@@ -124,7 +127,19 @@ but will also be stored there for future use.
 The `-v` flag is also the recommended mechanism for providing the system domain,
 which `bosh` is not equipped to generate.
 
-## Ops Files
+## <a name='deploying'></a>Deploying `cf-deployment`
+- To deploy to GCP,
+  please use `gcp-deployment-guide.md`, also located in this directory.
+- To deploy to AWS,
+  please use `bbl`, the bosh-bootloader, to prepare your environment.
+- To deploy to a local bosh-lite:
+  ```
+  export BOSH_CA_CERT=$PWD/bosh-lite/ca/certs/ca.crt
+  bosh -e 192.168.50.4 update-cloud-config bosh-lite/cloud-config.yml
+  bosh -e 192.168.50.4 -d cf deploy cf-deployment.yml -o operations/bosh-lite.yml --vars-store deployment-vars.yml -v system_domain=bosh-lite.com
+  ```
+
+## <a name='ops-files'></a>Ops Files
 The configuration of CF represented by `cf-deployment.yml` is intended to be a workable, secure, fully-featured default.
 When the need arises to make different configuration choices,
 we accomplish this with the `-o`/`--ops-file` flags.
@@ -164,16 +179,7 @@ Here's an (alphabetical) summary:
   to use the postgres database for TCP routing.
   Must come after the other two.
 
-## Deploying to `bosh-lite`
-To deploy to bosh-lite:
-
-```
-export BOSH_CA_CERT=$PWD/bosh-lite/ca/certs/ca.crt
-bosh -e 192.168.50.4 update-cloud-config bosh-lite/cloud-config.yml
-bosh -e 192.168.50.4 -d cf deploy cf-deployment.yml -o operations/bosh-lite.yml --vars-store deployment-vars.yml -v system_domain=bosh-lite.com
-```
-
-### CI
+## <a name='ci'></a>CI
 The [ci](https://runtime.ci.cf-app.com/teams/main/pipelines/cf-deployment) for `cf-deployment`
 automatically bumps to the latest versions of its component releases on the `develop` branch.
 These bumps, along with any other changes made to `develop`, are deployed to a single long-running environment
