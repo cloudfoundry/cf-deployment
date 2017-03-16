@@ -5,12 +5,8 @@ Please see
 https://github.com/anEXPer/texts/blob/master/the-art-of-markdown.md>
 
 # cf-deployment
+
 **This repo is under initial development.
-This document describes the intended purpose
-and use of
-resources in this repo.
-We don't yet gurantee
-that this repo lives up to those promises.
 When we're more confident
 that we've achieved initial stability,
 this warning will be removed,
@@ -18,7 +14,7 @@ and version tagging will be added.
 We'd love for members of the CF community
 to try cf-deployment and give us feedback.
 Github issues welcome.
-Find us on the #cf-deployment channel in the cloudfoundry Slack**
+Find us on the #cf-deployment channel in the cloudfoundry Slack.**
 
 ## Purpose
 This repo contains a canonical manifest
@@ -37,15 +33,7 @@ about Cloud Foundry deployment.
 It:
 
 - prioritizes readability and meaning to a human operator.
-  - All properties are set in the jobs which use them.
-  Global properties are not used.
-  - YAML Anchors with human-friendly names are used
-  where the need for duplication has not yet been obviated by BOSH links.
-  - Properties are ordered to maximize navigability
-  and present the most useful and important information first.
-  - Only necessary configuration is included.
-  Any release default that can be safely used, is.
-  Any properties which can be consumed via BOSH links, are.
+  For instance, only necessary configuration is included.
 - emphasizes security and production-readiness by default.
   - bosh's `--vars-store` feature is used
   to generate strong passwords, certs, and keys.
