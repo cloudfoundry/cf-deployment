@@ -286,8 +286,11 @@ instance_groups:
             - scim.read
             - scim.write
         jwt:
-          signing_key: "((uaa_jwt_signing_key.private_key))"
-          verification_key: "((uaa_jwt_signing_key.public_key))"
+          policy:
+            active_key_id: key-1
+            keys:
+              key-1:
+                signingKey: "((uaa_jwt_signing_key.private_key))"
         clients:
           cc-service-dashboards:
             authorities: clients.read,clients.write,clients.admin
