@@ -13,6 +13,7 @@ Find us on the #cf-deployment channel in the cloudfoundry Slack.**
 
 ### Table of Contents
 * <a href='#purpose'>Purpose</a>
+* <a href='#readiness'>Is `cf-deployment` ready to use?</a>
 * <a href='#usage'>Usage</a>
 * <a href='#contributing'>Contributing</a>
 * <a href='#setup'>Setup and Prerequisites</a>
@@ -35,7 +36,6 @@ in order to support `cf-deployment`.
 `cf-deployment` embodies several opinions
 about Cloud Foundry deployment.
 It:
-
 - prioritizes readability and meaning to a human operator.
   For instance, only necessary configuration is included.
 - emphasizes security and production-readiness by default.
@@ -58,6 +58,20 @@ and the CAPI release's WebDAV job for blob storage.
 or an external deployment.
 - assumes GCP as the default deployment environment.
 For use with other IaaSs, see the **Ops Files** section below.
+
+### <a name='readiness'></a> Is `cf-deployment` ready to use?
+We've been testing cf-deployment for some time,
+and many of the development teams in the Cloud Foundry organization
+are using it for development and testing.
+If that describes your use case,
+you can use cf-deployment as your manifest.
+
+**Migrating from cf-release:**
+The Release Integration team is still working on developing
+a migration path from cf-release.
+This use case is not sufficiently tested yet,
+and we don't advise anybody to attempt it
+until we develop the necessary tooling and guide.
 
 ## <a name='usage'></a>Usage
 To deploy to a configured BOSH director using the new `bosh` CLI:
