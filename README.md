@@ -20,11 +20,6 @@ to try cf-deployment and give us feedback.
 Github issues welcome.
 Find us on the #cf-deployment channel in the cloudfoundry Slack**
 
-CI pipeline [here][cf-deployment-concourse-url]
-
-**NB:** `master` is now the default branch.
-Please make pull requests against the `develop` branch.
-
 ## Purpose
 This repo contains a canonical manifest
 for deploying Cloud Foundry without the use of `cf-release`,
@@ -88,6 +83,17 @@ The CF Admin credentials will be stored in the file passed to the `--vars-store`
 You can find them by searching for `uaa_scim_users_admin_password`.
 
 See the rest of this document for more on the new CLI, deployment vars, and configuring your BOSH director.
+
+## Contributing
+Although the default branch for the repository is `master`,
+we ask that all pull requests be made against
+the `develop` branch.
+Please also take a look at the ["style guide"](texts/style-guide.md),
+which lays out some guidelines for adding properties or jobs
+to the deployment manifest.
+
+We ask that pull requests and other changes be successfully deployed,
+and tested with the latest sha of CATs.
 
 ## Setup and Prerequisites
 `cf-deployment` relies on newer BOSH features,
@@ -179,13 +185,6 @@ bosh -e 192.168.50.4 update-cloud-config bosh-lite/cloud-config.yml
 bosh -e 192.168.50.4 -d cf deploy cf-deployment.yml -o operations/bosh-lite.yml --vars-store deployment-vars.yml -v system_domain=bosh-lite.com
 ```
 
-## Contributing
-Changes to `cf-deployment` should be made on the `develop` branch.
-Pull requests should be based on `develop`, as well.
-
-We ask that pull requests and other changes be successfully deployed,
-and tested with the latest sha of CATs.
-
 ### CI
 The [ci](https://runtime.ci.cf-app.com/teams/main/pipelines/cf-deployment) for `cf-deployment`
 automatically bumps to the latest versions of its component releases on the `develop` branch.
@@ -196,44 +195,6 @@ or way to correlate which version of CATs is associated with which sha of cf-dep
 other than the history in CI.
 As `cf-deployment` matures, we'll address versioning.
 The configuration for our pipeline can be found [here](https://github.com/cloudfoundry/runtime-ci/pipelines/cf-deployment.yml).
-
-### Editorial Style Guide
-Please observe the following conventions when contributing to `cf-deployment`.
-We are likely to revert/reject commits and PRs which don't.
-In general, every line of `cf-deployment.yml` should be clear,
-necessary for a correctly functioning default deployment,
-and explicable.
-Maximizing the legibility and minimizing the size of `cf-deployment.yml` are high priorities.
-Features under development and optional extensions should be added/enabled via ops files.
-
-1. Don't use global properties.
-  1. To maximize the readability of properties that must be set on many jobs,
-  create a clearly named YAML anchor at the first occurrence of the duplicate properties,
-  then reference that anchor as necessary.
-  1. Duplication and the use of YAML anchors indicate properties which _should_ be provided/consumed by Releases using BOSH links, but aren't yet.
-1. Don't include any property in `cf-deployment.yml`
-which is not necessary for every user of the default configuration.
-  1. Don't include any property in `cf-deployment.yml`
-  for which a usable default exists in the spec of the job's release.
-  1. Don't include properties in `cf-deployment.yml`
-  as targets for ops files.
-  Ops files can be used to add needed properties.
-1. Any nominally variable property value
-which can be safely hardcoded in `cf-deployment.yml` should be.
-Usernames, for example.
-1. Any property value
-which isn't necessary for every user of the default configuration to specify
-should be exposed via ops-files, not vars.
-1. Properties which must be set to reflect IaaS-sensitive contextual conditions,
-such as the relationship between networks and AZs,
-should assume GCP and be set appropriately for other IaaSs in an ops file.
-1. Ops files included in the `cf-deployment` repo should not overlap.
-That is, they should be order-independent, and not address the same properties.
-If this is not possible, their order must be documented.
-1. All credentials should be bosh-generatable.
-When adding new passwords, secrets, certs, CAs, and keys, add them to the `variables` section of the manifest.
-Use the existing variables as a guide for the details necessary to allow bosh to perform credential generation.
-When testing new credential properties, test with bosh-generated values.
 
 [cf-deployment-concourse-url]: https://runtime.ci.cf-app.com/teams/main/pipelines/cf-deployment
 [cf-release-url]: https://github.com/cloudfoundry/cf-release/tree/master/templates
