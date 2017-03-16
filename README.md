@@ -60,11 +60,25 @@ or an external deployment.
 For use with other IaaSs, see the **Ops Files** section below.
 
 ### <a name='readiness'></a> Is `cf-deployment` ready to use?
+
+| Use Case | Is cf-deployment ready? | Blocked On |
+| -------- | ----------------------- | ---------- |
+| Test and development | Yes | |
+| New production deployments | No | Downtime testing |
+| Existing production deployments using cf-release | No | Migration tools |
+
 We've been testing cf-deployment for some time,
 and many of the development teams in the Cloud Foundry organization
 are using it for development and testing.
 If that describes your use case,
 you can use cf-deployment as your manifest.
+
+If you're hoping to use cf-deployment for a new _production_ deployment,
+we still wouldn't suggest using cf-deployment.
+We still need to be able to make some guarantees
+about app availability during rolling deploys.
+When we think cf-deployment is ready,
+we'll update this section and make announcements on the cf-dev mailing list.
 
 **Migrating from cf-release:**
 The Release Integration team is still working on developing
