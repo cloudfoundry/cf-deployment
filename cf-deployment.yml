@@ -964,6 +964,12 @@ instance_groups:
   - name: cc_uploader
     release: capi
     properties:
+      capi:
+        cc_uploader:
+          cc:
+            ca_cert: "((cc_bridge_cc_uploader.ca))"
+            client_cert: "((cc_bridge_cc_uploader.certificate))"
+            client_key: "((cc_bridge_cc_uploader.private_key))"
       diego:
         ssl: *ssl
   - name: metron_agent
@@ -1394,6 +1400,13 @@ variables:
   options:
     ca: service_cf_internal_ca
     common_name: tps_watcher
+    extended_key_usage:
+    - client_auth
+- name: cc_bridge_cc_uploader
+  type: certificate
+  options:
+    ca: service_cf_internal_ca
+    common_name: cc_uploader
     extended_key_usage:
     - client_auth
 
