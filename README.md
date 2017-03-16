@@ -1,9 +1,3 @@
-<The way this document looks in the raw
-is intentional.
-For a discussion of the intention,
-Please see
-https://github.com/anEXPer/texts/blob/master/the-art-of-markdown.md>
-
 # cf-deployment
 
 **This repo is under initial development.
