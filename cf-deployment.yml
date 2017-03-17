@@ -697,6 +697,16 @@ instance_groups:
     release: consul
     consumes:
       consul: {from: consul_server}
+  - name: cfdot
+    release: diego
+    properties:
+      diego:
+        cfdot:
+          bbs:
+            use_ssl: true
+            ca_cert: "((diego_bbs_client.ca))"
+            client_cert: "((diego_bbs_client.certificate))"
+            client_key: "((diego_bbs_client.private_key))"
   - name: bbs
     release: diego
     properties:
@@ -749,6 +759,16 @@ instance_groups:
     release: consul
     consumes:
       consul: {from: consul_server}
+  - name: cfdot
+    release: diego
+    properties:
+      diego:
+        cfdot:
+          bbs:
+            use_ssl: true
+            ca_cert: "((diego_bbs_client.ca))"
+            client_cert: "((diego_bbs_client.certificate))"
+            client_key: "((diego_bbs_client.private_key))"
   - name: ssh_proxy
     release: diego
     properties:
@@ -799,6 +819,16 @@ instance_groups:
     release: consul
     consumes:
       consul: {from: consul_server}
+  - name: cfdot
+    release: diego
+    properties:
+      diego:
+        cfdot:
+          bbs:
+            use_ssl: true
+            ca_cert: "((diego_bbs_client.ca))"
+            client_cert: "((diego_bbs_client.certificate))"
+            client_key: "((diego_bbs_client.private_key))"
   - name: cflinuxfs2-rootfs-setup
     release: cflinuxfs2-rootfs
   - name: garden
