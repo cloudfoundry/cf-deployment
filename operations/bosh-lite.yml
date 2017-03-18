@@ -77,7 +77,7 @@
       name: cloud_controller
     port: 5524
 - type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_worker/properties/ccdb
+  path: /instance_groups/name=cloud_controller_worker/jobs/name=cloud_controller_worker/properties/ccdb
   value: *ccdb
 - type: replace
   path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/ccdb
@@ -129,7 +129,7 @@
   - dns
   - load_balancer
 - type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_worker/properties/cc/default_running_security_groups
+  path: /instance_groups/name=cloud_controller_worker/jobs/name=cloud_controller_worker/properties/cc/default_running_security_groups
   value:
   - public_networks
   - dns
@@ -148,7 +148,7 @@
     - destination: 10.244.0.34
       protocol: all
 - type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_worker/properties/cc/security_group_definitions/-
+  path: /instance_groups/name=cloud_controller_worker/jobs/name=cloud_controller_worker/properties/cc/security_group_definitions/-
   value:
     name: load_balancer
     rules:

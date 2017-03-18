@@ -17,10 +17,10 @@
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/logger_endpoint?/port
   value: 4443
 - type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_worker/properties/doppler?/port
+  path: /instance_groups/name=cloud_controller_worker/jobs/name=cloud_controller_worker/properties/doppler?/port
   value: 4443
 - type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_worker/properties/logger_endpoint?/port
+  path: /instance_groups/name=cloud_controller_worker/jobs/name=cloud_controller_worker/properties/logger_endpoint?/port
   value: 4443
 - type: replace
   path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/doppler?/port
