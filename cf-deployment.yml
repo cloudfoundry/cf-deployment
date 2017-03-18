@@ -567,6 +567,54 @@ instance_groups:
         - name: cloud_controller
           password: "((cc_database_password))"
           tag: admin
+  - name: binary-buildpack
+    release: binary-buildpack
+  - name: dotnet-core-buildpack
+    release: dotnet-core-buildpack
+  - name: go-buildpack
+    release: go-buildpack
+  - name: java-buildpack
+    release: java-buildpack
+  - name: nodejs-buildpack
+    release: nodejs-buildpack
+  - name: php-buildpack
+    release: php-buildpack
+  - name: python-buildpack
+    release: python-buildpack
+  - name: ruby-buildpack
+    release: ruby-buildpack
+  - name: staticfile-buildpack
+    release: staticfile-buildpack
+  - name: route_registrar
+    release: routing
+    properties:
+      route_registrar:
+        routes:
+        - name: api
+          registration_interval: 20s
+          port: 9022
+          uris:
+          - api.((system_domain))
+  - name: metron_agent
+    release: loggregator
+    properties: *metron_agent_properties
+  - name: statsd_injector
+    release: statsd-injector
+    properties: *statsd_injector_properties
+- name: cloud_controller_worker
+  azs:
+  - z1
+  - z2
+  instances: 2
+  vm_type: m3.medium
+  stemcell: default
+  networks:
+  - name: private
+  jobs:
+  - name: consul_agent
+    release: consul
+    consumes:
+      consul: {from: consul_server}
   - name: cloud_controller_worker
     release: capi
     properties:
@@ -603,40 +651,6 @@ instance_groups:
           verification_key: "((uaa_jwt_signing_key.public_key))"
         ssl:
           port: 8443
-  - name: binary-buildpack
-    release: binary-buildpack
-  - name: dotnet-core-buildpack
-    release: dotnet-core-buildpack
-  - name: go-buildpack
-    release: go-buildpack
-  - name: java-buildpack
-    release: java-buildpack
-  - name: nodejs-buildpack
-    release: nodejs-buildpack
-  - name: php-buildpack
-    release: php-buildpack
-  - name: python-buildpack
-    release: python-buildpack
-  - name: ruby-buildpack
-    release: ruby-buildpack
-  - name: staticfile-buildpack
-    release: staticfile-buildpack
-  - name: route_registrar
-    release: routing
-    properties:
-      route_registrar:
-        routes:
-        - name: api
-          registration_interval: 20s
-          port: 9022
-          uris:
-          - api.((system_domain))
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
-  - name: statsd_injector
-    release: statsd-injector
-    properties: *statsd_injector_properties
 - name: router
   azs:
   - z1
