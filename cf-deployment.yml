@@ -607,6 +607,8 @@ instance_groups:
   - z2
   instances: 2
   vm_type: m3.medium
+  vm_extensions:
+  - 50GB_ephemeral_disk
   stemcell: default
   networks:
   - name: private
