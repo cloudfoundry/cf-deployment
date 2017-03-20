@@ -66,7 +66,7 @@
       name: cloud_controller
     port: 5524
 - type: replace
-  path: /instance_groups/name=cloud_controller_worker/jobs/name=cloud_controller_worker/properties/ccdb
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/ccdb
   value: *ccdb
 - type: replace
   path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/ccdb
