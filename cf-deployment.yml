@@ -615,6 +615,9 @@ instance_groups:
     release: consul
     consumes:
       consul: {from: consul_server}
+  - name: metron_agent
+    release: loggregator
+    properties: *metron_agent_properties
   - name: cloud_controller_worker
     release: capi
     properties:
