@@ -28,3 +28,50 @@
 - type: replace
   path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/logger_endpoint?/port
   value: 4443
+
+# --- replace deprecated instance types ---
+- type: replace
+  path: /instance_groups/name=smoke-tests/vm_type
+  value: m4.medium
+- type: replace
+  path: /instance_groups/name=consul/vm_type
+  value: m4.medium
+- type: replace
+  path: /instance_groups/name=nats/vm_type
+  value: c4.large
+- type: replace
+  path: /instance_groups/name=etcd/vm_type
+  value: m4.medium
+- type: replace
+  path: /instance_groups/name=mysql/vm_type
+  value: m4.large
+- type: replace
+  path: /instance_groups/name=uaa/vm_type
+  value: m4.medium
+- type: replace
+  path: /instance_groups/name=blobstore/vm_type
+  value: m4.large
+- type: replace
+  path: /instance_groups/name=api/vm_type
+  value: m4.large
+- type: replace
+  path: /instance_groups/name=router/vm_type
+  value: m4.medium
+- type: replace
+  path: /instance_groups/name=diego-bbs/vm_type
+  value: m4.large
+- type: replace
+  path: /instance_groups/name=diego-brain/vm_type
+  value: m4.medium
+- type: replace
+  path: /instance_groups/name=route-emitter/vm_type
+  value: m4.medium
+- type: replace
+  path: /instance_groups/name=cc-clock/vm_type
+  value: m4.large
+- type: replace
+  path: /instance_groups/name=cc-bridge/vm_type
+  value: m4.medium
+- type: replace
+  path: /instance_groups/name=doppler/vm_type
+  value: m4.medium
