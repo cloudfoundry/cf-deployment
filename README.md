@@ -202,7 +202,7 @@ Here's an (alphabetical) summary:
   Must come after the other two.
 
 ## <a name='ci'></a>CI
-The [ci](https://runtime.ci.cf-app.com/teams/main/pipelines/cf-deployment) for `cf-deployment`
+The [ci](https://release-integration.ci.cf-app.com/teams/main/pipelines/cf-deployment) for `cf-deployment`
 automatically bumps to the latest versions of its component releases on the `develop` branch.
 These bumps, along with any other changes made to `develop`, are deployed to a single long-running environment
 and tested with CATs before being merged to master if CATs goes green.
@@ -212,5 +212,5 @@ other than the history in CI.
 As `cf-deployment` matures, we'll address versioning.
 The configuration for our pipeline can be found [here](https://github.com/cloudfoundry/runtime-ci/pipelines/cf-deployment.yml).
 
-[cf-deployment-concourse-url]: https://runtime.ci.cf-app.com/teams/main/pipelines/cf-deployment
+[cf-deployment-concourse-url]: https://release-integration.ci.cf-app.com/teams/main/pipelines/cf-deployment
 [cf-release-url]: https://github.com/cloudfoundry/cf-release/tree/master/templates
