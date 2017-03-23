@@ -692,6 +692,8 @@ instance_groups:
           password: "((router_status_password))"
           user: router-status
         route_services_secret: "((router_route_services_secret))"
+        tracing:
+          enable_zipkin: true
       uaa:
         clients:
           gorouter:
