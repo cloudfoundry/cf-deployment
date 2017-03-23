@@ -5,10 +5,6 @@
 - type: replace
   path: /instance_groups/name=consul/instances
   value: 1
-- type: remove
-  path: /instance_groups/name=consul/networks/name=private/static_ips/2
-- type: remove
-  path: /instance_groups/name=consul/networks/name=private/static_ips/1
 - type: replace
   path: /instance_groups/name=nats/instances
   value: 1
@@ -45,11 +41,14 @@
   path: /instance_groups/name=api/instances
   value: 1
 - type: replace
-  path: /instance_groups/name=cc_bridge/instances
+  path: /instance_groups/name=cc-bridge/instances
+  value: 1
+- type: replace
+  path: /instance_groups/name=cc-worker/instances
   value: 1
 - type: replace
   path: /instance_groups/name=doppler/instances
   value: 1
 - type: replace
-  path: /instance_groups/name=log_controller/instances
+  path: /instance_groups/name=log-api/instances
   value: 1
