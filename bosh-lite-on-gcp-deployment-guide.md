@@ -73,8 +73,8 @@ With command line arguments, the `create-env` command will look like this:
 bosh create-env \
   --vars-store /path/to/env-repo/bosh-vars.yml \
   --state /path/to/env-repo/bosh-state.yml \
-  -o bosh-deployment/bosh-lite.yml \
   -o bosh-deployment/gcp/cpi.yml \
+  -o bosh-deployment/bosh-lite.yml \
   -o bosh-deployment/external-ip-not-recommended.yml \
   -o bosh-deployment/gcp/bosh-lite-vm-type.yml \
   -o bosh-deployment/jumpbox-user.yml \
@@ -115,8 +115,8 @@ you can run a simpler command to bootstrap a director:
 bosh create-env \
   --vars-store /path/to/env-repo/bosh-vars.yml \
   --state /path/to/env-repo/bosh-state.json \
-  -o bosh-deployment/bosh-lite.yml \
   -o bosh-deployment/gcp/cpi.yml \
+  -o bosh-deployment/bosh-lite.yml \
   -o bosh-deployment/external-ip-not-recommended.yml \
   -o bosh-deployment/gcp/bosh-lite-vm-type.yml \
   -o bosh-deployment/jumpbox-user.yml \
