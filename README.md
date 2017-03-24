@@ -183,6 +183,11 @@ Here's an (alphabetical) summary:
   this file was intentionally left blank and left for backwards compatibility. It previously overrode the static IP addresses assigned to some instance groups,
   as GCP networking features allow them to all co-exist on the same subnet
   despite being spread across multiple AZs.
+- `operations/scale-to-one-az.yml` -
+  Scales cf-deployment down to a single instance per instance group,
+  placing them all into a single AZ.
+  Effectively halves the deployment's footprint.
+  Should be applied before other ops files.
 - `operations/tcp-routing-gcp.yml` - this ops file adds TCP router and routing api for GCP.
   Not directly compatible with the `use-postgres` ops file;
   see that ops file's entry
