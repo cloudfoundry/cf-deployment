@@ -245,3 +245,8 @@
 - type: replace
   path: /instance_groups/name=log-api/instances
   value: 1
+
+# ----- Reduce default app memory to 256M ------
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/default_app_memory?
+  value: 256
