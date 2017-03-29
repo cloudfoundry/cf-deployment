@@ -841,6 +841,7 @@ instance_groups:
     release: garden-runc
     properties:
       garden:
+        debug_listen_address: 127.0.0.1:17019
         default_container_grace_time: 0
         destroy_containers_on_start: true
         graph_cleanup_threshold_in_mb: 0
