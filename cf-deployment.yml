@@ -18,7 +18,7 @@ instance_groups:
     max_in_flight: 1
     serial: true
   networks:
-  - name: private
+  - name: default
   jobs:
   - name: smoke_tests
     release: cf-smoke-tests
@@ -45,7 +45,7 @@ instance_groups:
     max_in_flight: 1
     serial: true
   networks:
-  - name: private
+  - name: default
   jobs:
   - name: consul_agent
     release: consul
@@ -91,7 +91,7 @@ instance_groups:
   - 10GB_ephemeral_disk
   stemcell: default
   networks:
-  - name: private
+  - name: default
     static_ips: &nats_machines
     - 10.0.31.191
     - 10.0.47.191
@@ -130,7 +130,7 @@ instance_groups:
     serial: true
     max_in_flight: 1
   networks:
-  - name: private
+  - name: default
   jobs:
   - name: consul_agent
     release: consul
@@ -185,7 +185,7 @@ instance_groups:
   update:
     serial: true
   networks:
-  - name: private
+  - name: default
   jobs:
   - name: consul_agent
     release: consul
@@ -194,7 +194,7 @@ instance_groups:
   - name: mysql
     release: cf-mysql
     properties:
-      network_name: private
+      network_name: default
       cf_mysql:
         mysql:
           galera_healthcheck:
@@ -244,7 +244,7 @@ instance_groups:
   - 10GB_ephemeral_disk
   stemcell: default
   networks:
-  - name: private
+  - name: default
   jobs:
   - name: consul_agent
     release: consul
@@ -389,7 +389,7 @@ instance_groups:
   persistent_disk_type: 100GB
   stemcell: default
   networks:
-  - name: private
+  - name: default
   jobs:
   - name: consul_agent
     release: consul
@@ -439,7 +439,7 @@ instance_groups:
   - 50GB_ephemeral_disk
   stemcell: default
   networks:
-  - name: private
+  - name: default
   jobs:
   - name: consul_agent
     release: consul
@@ -612,7 +612,7 @@ instance_groups:
   - 10GB_ephemeral_disk
   stemcell: default
   networks:
-  - name: private
+  - name: default
   jobs:
   - name: consul_agent
     release: consul
@@ -670,7 +670,7 @@ instance_groups:
     max_in_flight: 1
     serial: true
   networks:
-  - name: private
+  - name: default
   jobs:
   - name: consul_agent
     release: consul
@@ -713,7 +713,7 @@ instance_groups:
   vm_type: m3.large
   stemcell: default
   networks:
-  - name: private
+  - name: default
   jobs:
   - name: consul_agent
     release: consul
@@ -774,7 +774,7 @@ instance_groups:
   update:
     serial: true
   networks:
-  - name: private
+  - name: default
   jobs:
   - name: consul_agent
     release: consul
@@ -830,7 +830,7 @@ instance_groups:
   - 100GB_ephemeral_disk
   stemcell: default
   networks:
-  - name: private
+  - name: default
   jobs:
   - name: consul_agent
     release: consul
@@ -885,7 +885,7 @@ instance_groups:
   vm_type: m3.medium
   stemcell: default
   networks:
-  - name: private
+  - name: default
   jobs:
   - name: consul_agent
     release: consul
@@ -913,7 +913,7 @@ instance_groups:
   - 10GB_ephemeral_disk
   stemcell: default
   networks:
-  - name: private
+  - name: default
   jobs:
   - name: consul_agent
     release: consul
@@ -971,7 +971,7 @@ instance_groups:
   - 10GB_ephemeral_disk
   stemcell: default
   networks:
-  - name: private
+  - name: default
   jobs:
   - name: consul_agent
     release: consul
@@ -1035,7 +1035,7 @@ instance_groups:
   - 10GB_ephemeral_disk
   stemcell: default
   networks:
-  - name: private
+  - name: default
   jobs:
   - name: consul_agent
     release: consul
@@ -1106,7 +1106,7 @@ instance_groups:
     max_in_flight: 1
     serial: true
   networks:
-  - name: private
+  - name: default
   jobs:
   - name: consul_agent
     release: consul
