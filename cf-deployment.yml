@@ -859,10 +859,14 @@ instance_groups:
           preloaded_rootfses:
           - cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs
           require_tls: true
-          ca_cert: "((diego_rep_server.ca))"
-          server_cert: "((diego_rep_server.certificate))"
-          server_key: "((diego_rep_server.private_key))"
+          ca_cert: "((diego_rep_agent.ca))"
+          server_cert: "((diego_rep_agent.certificate))"
+          server_key: "((diego_rep_agent.private_key))"
           enable_legacy_api_endpoints: false
+      tls:
+        ca_cert: "((diego_rep_agent.ca))"
+        cert: "((diego_rep_agent.certificate))"
+        key: "((diego_rep_agent.private_key))"
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
@@ -1339,12 +1343,13 @@ variables:
     common_name: rep client
     extended_key_usage:
     - client_auth
-- name: diego_rep_server
+- name: diego_rep_agent
   type: certificate
   options:
     ca: service_cf_internal_ca
     common_name: cell.service.cf.internal
     extended_key_usage:
+    - client_auth
     - server_auth
     alternative_names:
     - "*.cell.service.cf.internal"
