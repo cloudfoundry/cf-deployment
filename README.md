@@ -8,7 +8,7 @@ to see if it's recommended that you use it.**
 ### Table of Contents
 * <a href='#purpose'>Purpose</a>
 * <a href='#readiness'>Is `cf-deployment` ready to use?</a>
-* <a href='#usage'>Usage</a>
+* <a href='#deploying-cf'>Deploying CF</a>
 * <a href='#contributing'>Contributing</a>
 * <a href='#setup'>Setup and Prerequisites</a>
 * <a href='#deploying'>Deploying `cf-deployment`</a>
@@ -81,7 +81,22 @@ This use case is not sufficiently tested yet,
 and we don't advise anybody to attempt it
 until we develop the necessary tooling and guide.
 
-## <a name='usage'></a>Usage
+## <a name='deploying-cf'></a>Deploying CF
+
+#### Step 1: Get a BOSH Director
+To deploy a BOSH Director to AWS or GCP,
+use [`bbl`](https://github.com/cloudfoundry/bosh-bootloader)
+(the **B**osh **B**oot**L**oader).
+For a full guide to getting set up on GCP, look at [this guide](gcp-deployment-guide.md).
+
+If you're deploying against a local bosh-lite,
+you'll need to take the following steps before deploying:
+```
+export BOSH_CA_CERT=$PWD/bosh-lite/ca/certs/ca.crt
+bosh -e 192.168.50.4 update-cloud-config bosh-lite/cloud-config.yml
+```
+
+#### Step 2: Deploy CF
 To deploy to a configured BOSH director using the new `bosh` CLI:
 
 ```
@@ -89,12 +104,24 @@ export SYSTEM_DOMAIN=some-domain.that.you.have
 bosh -e my-env -d cf deploy cf-deployment/cf-deployment.yml \
   --vars-store env-repo/deployment-vars.yml \
   -v system_domain=$SYSTEM_DOMAIN \
-  [ -o operations/CUSTOMIZATION1 ] [ -o operations/CUSTOMIZATION2 (etc.) ]
+  [ -o operations/CUSTOMIZATION1 ] \
+  [ -o operations/CUSTOMIZATION2 (etc.) ]
 ```
 
 The CF Admin credentials will be stored in the file passed to the `--vars-store` flag
 (`env-repo/deployment.yml` in the example).
 You can find them by searching for `uaa_scim_users_admin_password`.
+
+If you're using a local bosh-lite,
+remember to add the `operations/bosh-lite.yml` ops-file
+to your deploy command:
+  ```
+
+  bosh -e 192.168.50.4 -d cf deploy cf-deployment.yml \
+    -o operations/bosh-lite.yml \
+    --vars-store deployment-vars.yml \
+    -v system_domain=bosh-lite.com
+  ```
 
 See the rest of this document for more on the new CLI, deployment vars, and configuring your BOSH director.
 
@@ -142,18 +169,6 @@ Variables passed in with `-v` or `-l` will override those already in the var sto
 but will also be stored there for future use.
 The `-v` flag is also the recommended mechanism for providing the system domain,
 which `bosh` is not equipped to generate.
-
-## <a name='deploying'></a>Deploying `cf-deployment`
-- To deploy to GCP,
-  please use `gcp-deployment-guide.md`, also located in this directory.
-- To deploy to AWS,
-  please use `bbl`, the bosh-bootloader, to prepare your environment.
-- To deploy to a local bosh-lite:
-  ```
-  export BOSH_CA_CERT=$PWD/bosh-lite/ca/certs/ca.crt
-  bosh -e 192.168.50.4 update-cloud-config bosh-lite/cloud-config.yml
-  bosh -e 192.168.50.4 -d cf deploy cf-deployment.yml -o operations/bosh-lite.yml --vars-store deployment-vars.yml -v system_domain=bosh-lite.com
-  ```
 
 ## <a name='ops-files'></a>Ops Files
 The configuration of CF represented by `cf-deployment.yml` is intended to be a workable, secure, fully-featured default.
