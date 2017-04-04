@@ -1459,11 +1459,9 @@ variables:
   type: certificate
   options:
     ca: service_cf_internal_ca
-    common_name: cc_uploader
+    common_name: cc-uploader.service.cf.internal
     extended_key_usage:
     - server_auth
-    alternative_names:
-    - cc-uploader.service.cf.internal
 
 releases:
 - name: binary-buildpack
