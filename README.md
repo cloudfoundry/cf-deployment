@@ -1,14 +1,8 @@
 # cf-deployment
 
-**This repo is under initial development.
-When we're more confident
-that we've achieved initial stability,
-this warning will be removed,
-and version tagging will be added.
-We'd love for members of the CF community
-to try cf-deployment and give us feedback.
-Github issues welcome.
-Find us on the #cf-deployment channel in the cloudfoundry Slack.**
+**This repo is still a work in progress for certain use cases.
+Take a look at <a href='#readiness'>this table</a>
+to see if it's recommended that you use it.**
 
 
 ### Table of Contents
