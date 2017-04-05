@@ -5,6 +5,7 @@ uaa_scim_users_admin_password:  (( properties.uaa.scim.users.[0].password ))
 consul_encrypt_key: (( properties.consul.encrypt_keys.[0] ))
 blobstore_admin_users_username: (( properties.blobstore.admin_users.[0].username ))
 blobstore_admin_users_password: (( properties.blobstore.admin_users.[0].password ))
+blobstore_secure_link_secret: (( properties.blobstore.secure_link.secret ))
 
 properties:
   system_domain: (( merge ))
@@ -15,4 +16,6 @@ properties:
     encrypt_keys: (( merge ))
   blobstore:
     admin_users: (( merge ))
+    secure_link:
+      secret: (( merge ))
 
