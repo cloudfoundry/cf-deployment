@@ -86,7 +86,7 @@ until we develop the necessary tooling and guide.
 #### Step 1: Get a BOSH Director
 To deploy a BOSH Director to AWS or GCP,
 use [`bbl`](https://github.com/cloudfoundry/bosh-bootloader)
-(the **B**osh **B**oot**L**oader).
+(the Bosh BootLoader).
 For a full guide to getting set up on GCP, look at [this guide](gcp-deployment-guide.md).
 
 If you're deploying against a local bosh-lite,
