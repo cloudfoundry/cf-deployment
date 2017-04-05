@@ -14,7 +14,10 @@ cc_bridge_cc_uploader:
   ca: (( properties.capi.cc_uploader.cc.ca_cert ))
   certificate: (( properties.capi.cc_uploader.cc.client_cert ))
   private_key: (( properties.capi.cc_uploader.cc.client_key ))
-
+cc_bridge_tps:
+  ca: (( properties.capi.tps.cc.ca_cert ))
+  client_cert:  (( properties.capi.tps.cc.client_cert ))
+  client_key:  (( properties.capi.tps.cc.client_key ))
 
 
 properties:
@@ -38,4 +41,8 @@ properties:
         ca_cert: (( merge ))
         client_cert: (( merge ))
         client_key: (( merge ))
-
+    tps:
+      cc:
+        ca_cert: (( merge ))
+        client_cert: (( merge ))
+        client_key: (( merge ))
