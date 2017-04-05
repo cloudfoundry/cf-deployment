@@ -6,6 +6,10 @@ consul_encrypt_key: (( properties.consul.encrypt_keys.[0] ))
 blobstore_admin_users_username: (( properties.blobstore.admin_users.[0].username ))
 blobstore_admin_users_password: (( properties.blobstore.admin_users.[0].password ))
 blobstore_secure_link_secret: (( properties.blobstore.secure_link.secret ))
+blobstore_tls:
+  ca: (( properties.blobstore.tls.ca_cert ))
+  certificate: (( properties.blobstore.tls.cert ))
+  private_key: (( properties.blobstore.tls.key ))
 
 properties:
   system_domain: (( merge ))
@@ -18,4 +22,8 @@ properties:
     admin_users: (( merge ))
     secure_link:
       secret: (( merge ))
+    tls:
+      ca_cert: (( merge ))
+      cert: (( merge ))
+      key: (( merge ))
 
