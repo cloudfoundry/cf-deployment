@@ -149,12 +149,11 @@ It's in alpha, but has features necessary to use `cf-deployment`.
 ### BOSH `cloud-config`
 `cf-deployment` assumes that
 you've uploaded a compatible [cloud-config](http://bosh.io/docs/cloud-config.html) to the BOSH director.
-The cloud-config produced by `bbl` is compatible by default.
-For IaaSs not supported by `bbl`,
-please refer to our IaaS-specific advice in the **Setup and Prerequisites** section above.
-If your IaaS is not listed there,
-we have not yet tested cf-deployment with it,
-and you may need to do some engineering work to figure out the right cloud config (and possibly ops files)
+The cloud-config produced by `bbl` is compatible by default,
+which covers GCP and AWS.
+For bosh-lite, you can use the cloud-config in the `bosh-lite` directory of this repo.
+We have not yet tested cf-deployment against other IaaSes,
+so you may need to do some engineering work to figure out the right cloud config (and possibly ops files)
 to get it working for `cf-deployment`.
 
 ### Deployment variables and the var-store
