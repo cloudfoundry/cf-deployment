@@ -10,6 +10,12 @@ blobstore_tls:
   ca: (( properties.blobstore.tls.ca_cert ))
   certificate: (( properties.blobstore.tls.cert ))
   private_key: (( properties.blobstore.tls.key ))
+cc_bridge_cc_uploader:
+  ca: (( properties.capi.cc_uploader.cc.ca_cert ))
+  certificate: (( properties.capi.cc_uploader.cc.client_cert ))
+  private_key: (( properties.capi.cc_uploader.cc.client_key ))
+
+
 
 properties:
   system_domain: (( merge ))
@@ -26,4 +32,10 @@ properties:
       ca_cert: (( merge ))
       cert: (( merge ))
       key: (( merge ))
+  capi:
+    cc_uploader:
+      cc:
+        ca_cert: (( merge ))
+        client_cert: (( merge ))
+        client_key: (( merge ))
 
