@@ -1,5 +1,10 @@
 # The file formally known as seppuku.yml
 system_domain: (( properties.system_domain ))
+# Using an array index is dangerous.  Consider using an Ops file for this.
+uaa_scim_users_admin_password:  (( properties.uaa.scim.users.[0].password ))
 
 properties:
   system_domain: (( merge ))
+  uaa:
+    scim:
+      users: (( merge ))
