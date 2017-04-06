@@ -68,6 +68,8 @@ diego_rep_client:
 diego_ssh_proxy_host_key:
   private_key: (( properties.diego.ssh_proxy.host_key ))
   public_key_fingerprint: (( properties.app_ssh.host_key_fingerprint ))
+dropsonde_shared_secret: (( properties.doppler_endpoint.shared_secret ))
+
 
 
 properties:
@@ -117,3 +119,5 @@ properties:
     bbs: (( merge ))
     rep: (( merge ))
     ssh_proxy: (( merge ))
+  doppler_endpoint:
+    shared_secret: (( merge ))
