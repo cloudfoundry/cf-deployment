@@ -30,6 +30,17 @@ properties:
     db_encryption_key: some_encrypt_key
     internal_api_password: steve-is-great
     staging_upload_password: steve
+    mutual_tls:
+      ca_cert: |
+        cc
+        ca
+      public_cert: |
+        cc
+        certificate
+      private_key: |
+        cc
+        private
+        key
   ccdb:
     roles:
     - name: steve-staylor
