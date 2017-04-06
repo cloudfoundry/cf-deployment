@@ -1,6 +1,15 @@
 properties:
   app_ssh:
     host_key_fingerprint: a-b-c
+  etcd:
+    ca_cert: etcd-ca
+    client_cert: etcd-client-cert
+    client_key: etcd-client-key
+    peer_cert: etcd-peer-cert
+    peer_key: etcd-peer-key
+    peer_ca_cert: etcd-peer-ca
+    server_cert: etcd-server-cert
+    server_key: etcd-server-key
   system_domain: some-domain.cf-app.com
   uaa:
     scim:
