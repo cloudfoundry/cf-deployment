@@ -65,9 +65,13 @@ diego_rep_client:
   ca: (( properties.diego.rep.ca_cert ))
   certificate: (( properties.diego.rep.client_cert ))
   private_key: (( properties.diego.rep.client_key ))
+diego_ssh_proxy_host_key:
+  private_key: (( properties.diego.ssh_proxy.host_key ))
+  public_key_fingerprint: (( properties.app_ssh.host_key_fingerprint ))
 
 
 properties:
+  app_ssh: (( merge ))
   system_domain: (( merge ))
   uaa:
     scim:
@@ -112,3 +116,4 @@ properties:
   diego:
     bbs: (( merge ))
     rep: (( merge ))
+    ssh_proxy: (( merge ))
