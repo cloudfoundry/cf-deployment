@@ -96,6 +96,11 @@ export BOSH_CA_CERT=$PWD/bosh-lite/ca/certs/ca.crt
 bosh -e 192.168.50.4 update-cloud-config bosh-lite/cloud-config.yml
 ```
 
+##### Step 1.5: Get load balancers
+For IaaSes like AWS and GCP,
+you'll need to use `bbl` to create load balancers as well
+by running `bbl create-lbs`.
+
 #### Step 2: Deploy CF
 To deploy to a configured BOSH director using the new `bosh` CLI:
 
