@@ -71,3 +71,21 @@ properties:
     roles:
     - name: steve-staylor
       password: steve-is-awesome
+  loggregator:
+    tls:
+      ca_cert: loggregator-ca
+      doppler:
+        cert: doppler-cert
+        key: doppler-key
+      metron:
+        cert: metron-cert
+        key: metron-key
+      statsd_injector:
+        cert: statsdinjector-cert
+        key: statsdinjector-key
+      syslogdrainbinder:
+        cert: syslogdrainbinder-cert
+        key: syslogdrainbinder-key
+      trafficcontroller:
+        cert: tc-cert
+        key: tc-key

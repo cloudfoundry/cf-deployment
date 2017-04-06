@@ -85,6 +85,30 @@ etcd_server:
   ca: (( properties.etcd.ca_cert ))
   certificate: (( properties.etcd.server_cert ))
   private_key: (( properties.etcd.server_key ))
+loggregator_ca:
+  ca: (( properties.loggregator.tls.ca_cert ))
+  certificate: ''
+  private_key: ''
+loggregator_tls_doppler:
+  ca: (( properties.loggregator.tls.ca_cert ))
+  certificate: (( properties.loggregator.tls.doppler.cert ))
+  private_key: (( properties.loggregator.tls.doppler.key ))
+loggregator_tls_metron:
+  ca: (( properties.loggregator.tls.ca_cert ))
+  certificate: (( properties.loggregator.tls.metron.cert ))
+  private_key: (( properties.loggregator.tls.metron.key ))
+loggregator_tls_statsdinjector:
+  ca: (( properties.loggregator.tls.ca_cert ))
+  certificate: (( properties.loggregator.tls.statsd_injector.cert ))
+  private_key: (( properties.loggregator.tls.statsd_injector.key ))
+loggregator_tls_syslogdrainbinder:
+  ca: (( properties.loggregator.tls.ca_cert ))
+  certificate: (( properties.loggregator.tls.syslogdrainbinder.cert ))
+  private_key: (( properties.loggregator.tls.syslogdrainbinder.key ))
+loggregator_tls_tc:
+  ca: (( properties.loggregator.tls.ca_cert ))
+  certificate: (( properties.loggregator.tls.trafficcontroller.cert ))
+  private_key: (( properties.loggregator.tls.trafficcontroller.key ))
 
 properties:
   app_ssh: (( merge ))
@@ -136,3 +160,5 @@ properties:
     ssh_proxy: (( merge ))
   doppler_endpoint:
     shared_secret: (( merge ))
+  loggregator:
+    tls: (( merge ))

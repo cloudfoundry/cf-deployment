@@ -117,5 +117,29 @@ etcd_server:
   ca: etcd-ca
   certificate: etcd-server-cert
   private_key: etcd-server-key
+loggregator_ca:
+  ca: loggregator-ca
+  certificate: ""
+  private_key: ""
+loggregator_tls_doppler:
+  ca: loggregator-ca
+  certificate: doppler-cert
+  private_key: doppler-key
+loggregator_tls_metron:
+  ca: loggregator-ca
+  certificate: metron-cert
+  private_key: metron-key
+loggregator_tls_statsdinjector:
+  ca: loggregator-ca
+  certificate: statsdinjector-cert
+  private_key: statsdinjector-key
+loggregator_tls_syslogdrainbinder:
+  ca: loggregator-ca
+  certificate: syslogdrainbinder-cert
+  private_key: syslogdrainbinder-key
+loggregator_tls_tc:
+  ca: loggregator-ca
+  certificate: tc-cert
+  private_key: tc-key
 system_domain: some-domain.cf-app.com
 uaa_scim_users_admin_password: pa$$w0rd1
