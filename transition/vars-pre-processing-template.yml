@@ -18,6 +18,7 @@ cc_bridge_tps:
   ca: (( properties.capi.tps.cc.ca_cert ))
   client_cert:  (( properties.capi.tps.cc.client_cert ))
   client_key:  (( properties.capi.tps.cc.client_key ))
+cc_bulk_api_password: (( properties.cc.bulk_api_password ))
 
 
 properties:
@@ -46,3 +47,5 @@ properties:
         ca_cert: (( merge ))
         client_cert: (( merge ))
         client_key: (( merge ))
+  cc:
+    bulk_api_password: (( merge ))
