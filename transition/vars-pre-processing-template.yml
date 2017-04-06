@@ -22,6 +22,7 @@ cc_bulk_api_password: (( properties.cc.bulk_api_password ))
 cc_database_password: (( properties.ccdb.roles.[0].password ))
 cc_database_username: (( properties.ccdb.roles.[0].name ))
 cc_db_encryption_key: (( properties.cc.db_encryption_key ))
+cc_internal_api_password: (( properties.cc.internal_api_password ))
 
 
 properties:
@@ -53,6 +54,7 @@ properties:
   cc:
     bulk_api_password: (( merge ))
     db_encryption_key: (( merge ))
+    internal_api_password: (( merge ))
   ccdb:
     roles: (( merge ))
 
