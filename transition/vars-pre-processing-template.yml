@@ -47,7 +47,10 @@ diego_auctioneer_server:
   ca: (( properties.diego.bbs.auctioneer.ca_cert ))
   certificate: (( properties.diego.bbs.auctioneer.server_cert ))
   private_key: (( properties.diego.bbs.auctioneer.server_key ))
-
+diego_bbs_client:
+  ca: (( properties.diego.bbs.ca_cert ))
+  certificate: (( properties.diego.bbs.client_cert ))
+  private_key: (( properties.diego.bbs.client_key ))
 
 
 properties:
@@ -93,5 +96,4 @@ properties:
   ccdb:
     roles: (( merge ))
   diego:
-    bbs:
-      auctioneer: (( merge ))
+    bbs: (( merge ))
