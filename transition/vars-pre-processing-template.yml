@@ -35,6 +35,10 @@ consul_agent:
 consul_agent_ca:
   ca: (( properties.consul.ca_cert ))
   certificate: (( properties.consul.ca_cert ))
+consul_server:
+  ca: (( properties.consul.ca_cert ))
+  certificate: (( properties.consul.server_cert ))
+  private_key: (( properties.consul.server_key ))
 
 
 properties:
@@ -46,6 +50,8 @@ properties:
     ca_cert: (( merge ))
     agent_cert: (( merge ))
     agent_key: (( merge ))
+    server_cert: (( merge ))
+    server_key: (( merge ))
     encrypt_keys: (( merge ))
   blobstore:
     admin_users: (( merge ))
@@ -77,4 +83,3 @@ properties:
       private_key: (( merge ))
   ccdb:
     roles: (( merge ))
-

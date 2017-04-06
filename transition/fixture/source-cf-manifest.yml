@@ -7,7 +7,7 @@ properties:
         password: pa$$w0rd1
   consul:
     ca_cert: |
-      consul_agent
+      consul
       ca
     agent_cert: |
       consul_agent
@@ -16,6 +16,11 @@ properties:
       consul_agent
       private
       key
+    server_cert: |
+      consul
+      server
+      cert
+    server_key: consul-server-key
     encrypt_keys:
     - some_encrypt_key
   blobstore:
