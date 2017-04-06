@@ -57,6 +57,14 @@ diego_bbs_server:
   certificate: (( properties.diego.bbs.server_cert ))
   private_key: (( properties.diego.bbs.server_key ))
 diego_database_password: (( properties.diego.bbs.sql.db_password ))
+diego_rep_agent:
+  ca: (( properties.diego.rep.ca_cert ))
+  certificate: (( properties.diego.rep.server_cert ))
+  private_key: (( properties.diego.rep.server_key ))
+diego_rep_client:
+  ca: (( properties.diego.rep.ca_cert ))
+  certificate: (( properties.diego.rep.client_cert ))
+  private_key: (( properties.diego.rep.client_key ))
 
 
 properties:
@@ -103,3 +111,4 @@ properties:
     roles: (( merge ))
   diego:
     bbs: (( merge ))
+    rep: (( merge ))
