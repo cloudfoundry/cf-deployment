@@ -19,6 +19,8 @@ cc_bridge_tps:
   client_cert:  (( properties.capi.tps.cc.client_cert ))
   client_key:  (( properties.capi.tps.cc.client_key ))
 cc_bulk_api_password: (( properties.cc.bulk_api_password ))
+cc_database_password: (( properties.ccdb.roles.[0].password ))
+cc_database_username: (( properties.ccdb.roles.[0].name ))
 
 
 properties:
@@ -49,3 +51,6 @@ properties:
         client_key: (( merge ))
   cc:
     bulk_api_password: (( merge ))
+  ccdb:
+    roles: (( merge ))
+
