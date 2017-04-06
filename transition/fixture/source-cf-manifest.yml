@@ -6,6 +6,16 @@ properties:
       - name: admin
         password: pa$$w0rd1
   consul:
+    ca_cert: |
+      consul_agent
+      ca
+    agent_cert: |
+      consul_agent
+      certificate
+    agent_key: |
+      consul_agent
+      private
+      key
     encrypt_keys:
     - some_encrypt_key
   blobstore:

@@ -28,6 +28,10 @@ cc_tls:
   ca: (( properties.cc.mutual_tls.ca_cert ))
   certificate: (( properties.cc.mutual_tls.public_cert ))
   private_key: (( properties.cc.mutual_tls.private_key ))
+consul_agent:
+  ca: (( properties.consul.ca_cert ))
+  certificate: (( properties.consul.agent_cert ))
+  private_key: (( properties.consul.agent_key ))
 
 
 properties:
@@ -36,6 +40,9 @@ properties:
     scim:
       users: (( merge ))
   consul:
+    ca_cert: (( merge ))
+    agent_cert: (( merge ))
+    agent_key: (( merge ))
     encrypt_keys: (( merge ))
   blobstore:
     admin_users: (( merge ))

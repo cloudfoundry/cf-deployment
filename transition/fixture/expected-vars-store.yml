@@ -37,6 +37,17 @@ cc_tls:
     cc
     private
     key
+consul_agent:
+  ca: |+
+    consul_agent
+    ca
+  certificate: |+
+    consul_agent
+    certificate
+  private_key: |+
+    consul_agent
+    private
+    key
 consul_encrypt_key: some_encrypt_key
 system_domain: some-domain.cf-app.com
 uaa_scim_users_admin_password: pa$$w0rd1
