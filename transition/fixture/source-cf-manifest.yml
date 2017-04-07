@@ -21,6 +21,24 @@ properties:
         password: pa$$w0rd1
     admin:
       client_secret: uaa-admin-secret
+    clients:
+      cc_routing:
+        secret: uaa-cc-routing-secret
+      cc-service-dashboards:
+        secret: uaa-cc-service-secret
+      cloud_controller_username_lookup:
+        secret: uaa-cc-secret
+      doppler:
+        secret: uaa-doppler-secret
+      gorouter:
+        secret: uaa-router-secret
+      ssh-proxy:
+        secret: uaa-ssh-secret
+      tcp_emitter:
+        secret: uaa-emitter-secret
+      tcp_router:
+        secret: uaa-tcp-secret
+
   consul:
     ca_cert: |
       consul

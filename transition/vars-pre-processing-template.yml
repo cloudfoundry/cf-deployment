@@ -124,6 +124,14 @@ uaa_ca:
   ca: (( properties.uaa.ca_cert ))
   certificate: (( properties.uaa.sslCertificate ))
   private_key: (( properties.uaa.sslPrivateKey ))
+uaa_clients_cc-routing_secret: (( properties.uaa.clients.cc_routing.secret ))
+uaa_clients_cc-service-dashboards_secret: (( properties.uaa.clients.cc-service-dashboards.secret ))
+uaa_clients_cloud_controller_username_lookup_secret: (( properties.uaa.clients.cloud_controller_username_lookup.secret ))
+uaa_clients_doppler_secret: (( properties.uaa.clients.doppler.secret ))
+uaa_clients_gorouter_secret: (( properties.uaa.clients.gorouter.secret ))
+uaa_clients_ssh-proxy_secret: (( properties.uaa.clients.ssh-proxy.secret ))
+uaa_clients_tcp_emitter_secret: (( properties.uaa.clients.tcp_emitter.secret ))
+uaa_clients_tcp_router_secret: (( properties.uaa.clients.tcp_router.secret ))
 
 properties:
   app_ssh: (( merge ))
