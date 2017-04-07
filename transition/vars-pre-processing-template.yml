@@ -111,6 +111,10 @@ loggregator_tls_tc:
   private_key: (( properties.loggregator.tls.trafficcontroller.key ))
 nats_password: (( properties.nats.password ))
 router_route_services_secret: (( properties.router.route_services_secret ))
+router_ssl:
+  certificate: (( properties.router.ssl_cert ))
+  private_key: (( properties.router.ssl_key ))
+router_status_password: (( properties.router.status.password ))
 
 properties:
   app_ssh: (( merge ))
