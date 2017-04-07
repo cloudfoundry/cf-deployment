@@ -158,8 +158,8 @@ system_domain: some-domain.cf-app.com
 uaa_admin_client_secret: uaa-admin-secret
 uaa_ca:
   ca: uaa-ca
-  certificate: uaa-ca-cert
-  private_key: uaa-ca-key
+  certificate: uaa-ssl-cert
+  private_key: uaa-ssl-key
 uaa_clients_cc-routing_secret: uaa-cc-routing-secret
 uaa_clients_cc-service-dashboards_secret: uaa-cc-service-secret
 uaa_clients_cloud_controller_username_lookup_secret: uaa-cc-secret
@@ -168,4 +168,13 @@ uaa_clients_gorouter_secret: uaa-router-secret
 uaa_clients_ssh-proxy_secret: uaa-ssh-secret
 uaa_clients_tcp_emitter_secret: uaa-emitter-secret
 uaa_clients_tcp_router_secret: uaa-tcp-secret
+uaa_database_password: uaadb-password
+uaa_login_saml:
+  ca: uaa-ca
+  certificate: uaa-saml-cert
+  private_key: uaa-saml-key
 uaa_scim_users_admin_password: pa$$w0rd1
+uaa_ssl:
+  ca: uaa-ca
+  certificate: uaa-ssl-cert
+  private_key: uaa-ssl-key

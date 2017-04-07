@@ -132,12 +132,23 @@ uaa_clients_gorouter_secret: (( properties.uaa.clients.gorouter.secret ))
 uaa_clients_ssh-proxy_secret: (( properties.uaa.clients.ssh-proxy.secret ))
 uaa_clients_tcp_emitter_secret: (( properties.uaa.clients.tcp_emitter.secret ))
 uaa_clients_tcp_router_secret: (( properties.uaa.clients.tcp_router.secret ))
+uaa_database_password: (( properties.uaadb.roles.[0].password ))
+uaa_login_saml:
+  ca: (( properties.uaa.ca_cert ))
+  certificate: (( properties.uaa.login.saml.serviceProviderCertificate ))
+  private_key: (( properties.uaa.login.saml.serviceProviderKey ))
+uaa_ssl:
+  ca: (( properties.uaa.ca_cert ))
+  certificate: (( properties.uaa.sslCertificate ))
+  private_key: (( properties.uaa.sslPrivateKey ))
 
 properties:
   app_ssh: (( merge ))
   etcd: (( merge ))
   system_domain: (( merge ))
   uaa: (( merge ))
+  uaadb:
+    roles: (( merge ))
   consul:
     ca_cert: (( merge ))
     agent_cert: (( merge ))
