@@ -119,14 +119,17 @@ service_cf_internal_ca:
   ca: (( properties.blobstore.tls.ca_cert))
   certificate: (( properties.blobstore.tls.ca_cert))
   private_key: (( properties.blobstore.tls.ca_cert))
+uaa_admin_client_secret: (( properties.uaa.admin.client_secret ))
+uaa_ca:
+  ca: (( properties.uaa.ca_cert ))
+  certificate: (( properties.uaa.sslCertificate ))
+  private_key: (( properties.uaa.sslPrivateKey ))
 
 properties:
   app_ssh: (( merge ))
   etcd: (( merge ))
   system_domain: (( merge ))
-  uaa:
-    scim:
-      users: (( merge ))
+  uaa: (( merge ))
   consul:
     ca_cert: (( merge ))
     agent_cert: (( merge ))

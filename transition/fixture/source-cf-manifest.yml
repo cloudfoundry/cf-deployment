@@ -12,10 +12,15 @@ properties:
     server_key: etcd-server-key
   system_domain: some-domain.cf-app.com
   uaa:
+    ca_cert: uaa-ca
+    sslCertificate: uaa-ca-cert
+    sslPrivateKey: uaa-ca-key
     scim:
       users:
       - name: admin
         password: pa$$w0rd1
+    admin:
+      client_secret: uaa-admin-secret
   consul:
     ca_cert: |
       consul
