@@ -50,10 +50,6 @@ consul_agent_ca:
   ca: |+
     consul
     ca
-  certificate: |+
-    consul
-    ca
-  private_key: null
 consul_encrypt_key: some_encrypt_key
 consul_server:
   ca: |+
@@ -92,13 +88,10 @@ diego_rep_client:
   private_key: diego-rep-client-key
 diego_ssh_proxy_host_key:
   private_key: diego-ssh-key
-  public_key: null
   public_key_fingerprint: a-b-c
 dropsonde_shared_secret: dropsonde-shared-sekret
 etcd_ca:
   ca: etcd-ca
-  certificate: null
-  private_key: null
 etcd_client:
   ca: etcd-ca
   certificate: etcd-client-cert
@@ -109,16 +102,12 @@ etcd_peer:
   private_key: etcd-peer-key
 etcd_peer_ca:
   ca: etcd-peer-ca
-  certificate: null
-  private_key: null
 etcd_server:
   ca: etcd-ca
   certificate: etcd-server-cert
   private_key: etcd-server-key
 loggregator_ca:
   ca: loggregator-ca
-  certificate: null
-  private_key: null
 loggregator_tls_doppler:
   ca: loggregator-ca
   certificate: doppler-cert
@@ -140,13 +129,8 @@ loggregator_tls_tc:
   certificate: tc-cert
   private_key: tc-key
 nats_password: steve-nats
-router_ca:
-  ca: null
-  certificate: null
-  private_key:  null
 router_route_services_secret: router-secret
 router_ssl:
-  ca: null
   certificate: router-ssl-cert
   private_key: router-ssl-key
 router_status_password: router-status-password
