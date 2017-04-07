@@ -2,9 +2,7 @@ blobstore_admin_users_password: passymcpassface
 blobstore_admin_users_username: joeyjoejoe
 blobstore_secure_link_secret: secure-link-secret
 blobstore_tls:
-  ca: |+
-    blobstore
-    ca
+  ca: internal-ca
   certificate: |+
     blobstore
     certificate
@@ -152,5 +150,9 @@ router_ssl:
   certificate: router-ssl-cert
   private_key: router-ssl-key
 router_status_password: router-status-password
+service_cf_internal_ca:
+  ca: internal-ca
+  certificate: internal-ca
+  private_key: internal-ca
 system_domain: some-domain.cf-app.com
 uaa_scim_users_admin_password: pa$$w0rd1

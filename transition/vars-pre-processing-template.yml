@@ -115,6 +115,10 @@ router_ssl:
   certificate: (( properties.router.ssl_cert ))
   private_key: (( properties.router.ssl_key ))
 router_status_password: (( properties.router.status.password ))
+service_cf_internal_ca:
+  ca: (( properties.blobstore.tls.ca_cert))
+  certificate: (( properties.blobstore.tls.ca_cert))
+  private_key: (( properties.blobstore.tls.ca_cert))
 
 properties:
   app_ssh: (( merge ))
