@@ -475,6 +475,8 @@ instance_groups:
           cc-service-dashboards:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
         url: https://uaa.((system_domain))
+        jwt:
+          verification_key: "((uaa_jwt_signing_key.public_key))"
         ssl:
           port: 8443
       cc:
@@ -651,6 +653,8 @@ instance_groups:
           cc-service-dashboards:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
         url: https://uaa.((system_domain))
+        jwt:
+          verification_key: "((uaa_jwt_signing_key.public_key))"
         ssl:
           port: 8443
 - name: router
@@ -947,6 +951,8 @@ instance_groups:
           cc-service-dashboards:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
         url: https://uaa.((system_domain))
+        jwt:
+          verification_key: "((uaa_jwt_signing_key.public_key))"
         ssl:
           port: 8443
   - name: metron_agent
