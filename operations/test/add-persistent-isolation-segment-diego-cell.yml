@@ -52,6 +52,10 @@
             server_key: "((diego_rep_agent.private_key))"
           ssl:
             skip_cert_verify: true
+        tls:
+          ca_cert: "((diego_rep_agent.ca))"
+          cert: "((diego_rep_agent.certificate))"
+          key: "((diego_rep_agent.private_key))"
     - name: metron_agent
       release: loggregator
       properties:
