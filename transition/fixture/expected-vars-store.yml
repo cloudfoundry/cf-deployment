@@ -153,6 +153,12 @@ uaa_clients_ssh-proxy_secret: uaa-ssh-secret
 uaa_clients_tcp_emitter_secret: uaa-emitter-secret
 uaa_clients_tcp_router_secret: uaa-tcp-secret
 uaa_database_password: uaadb-password
+uaa_jwt_policy:
+  policy:
+    active_key_id: key-1
+    keys:
+      key-1:
+        signingKey: uaa-jwt-private-key
 uaa_login_saml:
   ca: uaa-ca
   certificate: uaa-saml-cert

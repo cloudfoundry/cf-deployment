@@ -1,4 +1,3 @@
-# The file formally known as seppuku.yml
 system_domain: (( properties.system_domain || nil ))
 # Using an array index is dangerous.  Consider using an Ops file for this.
 uaa_scim_users_admin_password:  (( properties.uaa.scim.users.[0].password || nil ))
@@ -131,6 +130,7 @@ uaa_clients_ssh-proxy_secret: (( properties.uaa.clients.ssh-proxy.secret || nil 
 uaa_clients_tcp_emitter_secret: (( properties.uaa.clients.tcp_emitter.secret || nil ))
 uaa_clients_tcp_router_secret: (( properties.uaa.clients.tcp_router.secret || nil ))
 uaa_database_password: (( properties.uaadb.roles.[0].password || nil ))
+uaa_jwt_policy: (( properties.uaa.jwt || nil ))
 uaa_login_saml:
   ca: (( properties.uaa.ca_cert || nil ))
   certificate: (( properties.uaa.login.saml.serviceProviderCertificate || nil ))

@@ -42,6 +42,12 @@ properties:
         saml:
           serviceProviderCertificate: uaa-saml-cert
           serviceProviderKey: uaa-saml-key
+    jwt:
+      policy:
+        active_key_id: key-1
+        keys:
+          key-1:
+            signingKey: uaa-jwt-private-key
   uaadb:
     roles:
     - name: uaa
