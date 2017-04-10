@@ -144,6 +144,8 @@ instance_groups:
               name: cf-etcd
   - name: etcd
     release: etcd
+    consumes:
+      etcd: nil
     properties:
       etcd:
         advertise_urls_dns_suffix: cf-etcd.service.cf.internal
