@@ -1,7 +1,7 @@
 #!/bin/bash
 
 pushd $(dirname $0) > /dev/null
-diff -wB fixture/expected-vars-store.yml <(spiff merge vars-store-template.yml vars-pre-processing-template.yml fixture/source-cf-manifest.yml fixture/source-diego-manifest.yml | grep -v null)
+diff -wB fixture/expected-vars-store.yml <(spiff merge vars-store-template.yml vars-pre-processing-template.yml fixture/source-cf-manifest.yml fixture/source-diego-manifest.yml | grep -v bosh-will-generate-me)
 
 status=$?
 if [ "$status" == "0" ]; then
