@@ -13,7 +13,7 @@
     - internet-required
     - cf-tcp-router-network-properties
     networks:
-    - name: private
+    - name: default
     jobs:
     - name: consul_agent
       release: consul
@@ -65,7 +65,7 @@
     - internet-required
     stemcell: default
     networks:
-    - name: private
+    - name: default
     jobs:
     - name: consul_agent
       release: consul
