@@ -8,7 +8,7 @@ blobstore_secure_link_secret: (( properties.blobstore.secure_link.secret || "bos
 blobstore_tls:
   ca: (( properties.blobstore.tls.ca_cert || "bosh-will-generate-me" ))
   certificate: (( properties.blobstore.tls.cert || "bosh-will-generate-me" ))
-  private_key: (( properties.blobstore.tls.key || "bosh-will-generate-me" ))
+  private_key: (( properties.blobstore.tls.private_key || "bosh-will-generate-me" ))
 cc_bridge_cc_uploader:
   ca: (( properties.capi.cc_uploader.cc.ca_cert || "bosh-will-generate-me" ))
   certificate: (( properties.capi.cc_uploader.cc.client_cert || "bosh-will-generate-me" ))
@@ -161,7 +161,7 @@ properties:
     tls:
       ca_cert: (( merge ))
       cert: (( merge ))
-      key: (( merge ))
+      private_key: (( merge ))
   capi:
     cc_uploader:
       cc:
