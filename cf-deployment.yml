@@ -52,7 +52,7 @@ instance_groups:
     consumes:
       consul: {from: consul_server}
     provides:
-      consul: {as: consul_server}
+      consul: {as: consul_server, shared: true}
     properties:
       consul:
         agent:
