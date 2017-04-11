@@ -139,6 +139,16 @@
     enabled: true
 
 - type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/routing_api?
+  value:
+    enabled: true
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/uaa/clients/cc_routing?
+  value:
+    secret: "((uaa_clients_cc-routing_secret))"
+
+- type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ssl?/skip_cert_verify
   value: true
 
