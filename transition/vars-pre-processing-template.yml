@@ -1,89 +1,89 @@
-system_domain: (( properties.system_domain || "bosh-will-generate-me" ))
+system_domain: (( properties.system_domain ))
 # Using an array index is dangerous.  Consider using an Ops file for this.
-uaa_scim_users_admin_password:  (( properties.uaa.scim.users.[0].password || "bosh-will-generate-me" ))
-consul_encrypt_key: (( properties.consul.encrypt_keys.[0] || "bosh-will-generate-me" ))
-blobstore_admin_users_username: (( properties.blobstore.admin_users.[0].username || "bosh-will-generate-me" ))
-blobstore_admin_users_password: (( properties.blobstore.admin_users.[0].password || "bosh-will-generate-me" ))
-blobstore_secure_link_secret: (( properties.blobstore.secure_link.secret || "bosh-will-generate-me" ))
+uaa_scim_users_admin_password:  (( properties.uaa.scim.users.[0].password ))
+consul_encrypt_key: (( properties.consul.encrypt_keys.[0] ))
+blobstore_admin_users_username: (( properties.blobstore.admin_users.[0].username ))
+blobstore_admin_users_password: (( properties.blobstore.admin_users.[0].password ))
+blobstore_secure_link_secret: (( properties.blobstore.secure_link.secret ))
 blobstore_tls:
-  ca: (( properties.blobstore.tls.ca_cert || "bosh-will-generate-me" ))
-  certificate: (( properties.blobstore.tls.cert || "bosh-will-generate-me" ))
-  private_key: (( properties.blobstore.tls.private_key || "bosh-will-generate-me" ))
+  ca: (( properties.blobstore.tls.ca_cert ))
+  certificate: (( properties.blobstore.tls.cert ))
+  private_key: (( properties.blobstore.tls.private_key ))
 cc_bridge_cc_uploader:
-  ca: (( properties.capi.cc_uploader.cc.ca_cert || "bosh-will-generate-me" ))
-  certificate: (( properties.capi.cc_uploader.cc.client_cert || "bosh-will-generate-me" ))
-  private_key: (( properties.capi.cc_uploader.cc.client_key || "bosh-will-generate-me" ))
+  ca: (( properties.capi.cc_uploader.cc.ca_cert ))
+  certificate: (( properties.capi.cc_uploader.cc.client_cert ))
+  private_key: (( properties.capi.cc_uploader.cc.client_key ))
 cc_bridge_tps:
-  ca: (( properties.capi.tps.cc.ca_cert || "bosh-will-generate-me" ))
-  client_cert:  (( properties.capi.tps.cc.client_cert || "bosh-will-generate-me" ))
-  client_key:  (( properties.capi.tps.cc.client_key || "bosh-will-generate-me" ))
-cc_bulk_api_password: (( properties.cc.bulk_api_password || "bosh-will-generate-me" ))
+  ca: (( properties.capi.tps.cc.ca_cert ))
+  client_cert:  (( properties.capi.tps.cc.client_cert ))
+  client_key:  (( properties.capi.tps.cc.client_key ))
+cc_bulk_api_password: (( properties.cc.bulk_api_password ))
 cc_database_password: (( properties.ccdb.roles.[0].password || "bosh-will-generate-me" ))
 cc_database_username: (( properties.ccdb.roles.[0].name || "bosh-will-generate-me" ))
-cc_db_encryption_key: (( properties.cc.db_encryption_key || "bosh-will-generate-me" ))
-cc_internal_api_password: (( properties.cc.internal_api_password || "bosh-will-generate-me" ))
-cc_staging_upload_password: (( properties.cc.staging_upload_password || "bosh-will-generate-me" ))
+cc_db_encryption_key: (( properties.cc.db_encryption_key))
+cc_internal_api_password: (( properties.cc.internal_api_password ))
+cc_staging_upload_password: (( properties.cc.staging_upload_password ))
 cc_tls:
-  ca: (( properties.cc.mutual_tls.ca_cert || "bosh-will-generate-me" ))
-  certificate: (( properties.cc.mutual_tls.public_cert || "bosh-will-generate-me" ))
-  private_key: (( properties.cc.mutual_tls.private_key || "bosh-will-generate-me" ))
+  ca: (( properties.cc.mutual_tls.ca_cert ))
+  certificate: (( properties.cc.mutual_tls.public_cert ))
+  private_key: (( properties.cc.mutual_tls.private_key ))
 consul_agent:
-  ca: (( properties.consul.ca_cert || "bosh-will-generate-me" ))
-  certificate: (( properties.consul.agent_cert || "bosh-will-generate-me" ))
-  private_key: (( properties.consul.agent_key || "bosh-will-generate-me" ))
+  ca: (( properties.consul.ca_cert ))
+  certificate: (( properties.consul.agent_cert ))
+  private_key: (( properties.consul.agent_key ))
 consul_agent_ca:
-  ca: (( properties.consul.ca_cert || "bosh-will-generate-me" ))
-  certificate: (( properties.consul.ca_cert || "bosh-will-generate-me" ))
+  ca: (( properties.consul.ca_cert ))
+  certificate: (( properties.consul.ca_cert ))
 consul_server:
-  ca: (( properties.consul.ca_cert || "bosh-will-generate-me" ))
-  certificate: (( properties.consul.server_cert || "bosh-will-generate-me" ))
-  private_key: (( properties.consul.server_key || "bosh-will-generate-me" ))
+  ca: (( properties.consul.ca_cert ))
+  certificate: (( properties.consul.server_cert ))
+  private_key: (( properties.consul.server_key ))
 diego_auctioneer_client:
-  ca: (( properties.diego.bbs.auctioneer.ca_cert || "bosh-will-generate-me" ))
-  certificate: (( properties.diego.bbs.auctioneer.client_cert || "bosh-will-generate-me" ))
-  private_key: (( properties.diego.bbs.auctioneer.client_key || "bosh-will-generate-me" ))
+  ca: (( properties.diego.bbs.auctioneer.ca_cert ))
+  certificate: (( properties.diego.bbs.auctioneer.client_cert ))
+  private_key: (( properties.diego.bbs.auctioneer.client_key ))
 diego_auctioneer_server:
-  ca: (( properties.diego.bbs.auctioneer.ca_cert || "bosh-will-generate-me" ))
-  certificate: (( properties.diego.bbs.auctioneer.server_cert || "bosh-will-generate-me" ))
-  private_key: (( properties.diego.bbs.auctioneer.server_key || "bosh-will-generate-me" ))
+  ca: (( properties.diego.bbs.auctioneer.ca_cert ))
+  certificate: (( properties.diego.bbs.auctioneer.server_cert ))
+  private_key: (( properties.diego.bbs.auctioneer.server_key ))
 diego_bbs_client:
-  ca: (( properties.diego.bbs.ca_cert || "bosh-will-generate-me" ))
-  certificate: (( properties.diego.bbs.client_cert || "bosh-will-generate-me" ))
-  private_key: (( properties.diego.bbs.client_key || "bosh-will-generate-me" ))
-diego_bbs_encryption_keys_passphrase: (( properties.diego.bbs.encryption_keys.[0].passphrase || "bosh-will-generate-me" ))
+  ca: (( properties.diego.bbs.ca_cert ))
+  certificate: (( properties.diego.bbs.client_cert ))
+  private_key: (( properties.diego.bbs.client_key ))
+diego_bbs_encryption_keys_passphrase: (( properties.diego.bbs.encryption_keys.[0].passphrase ))
 diego_bbs_server:
-  ca: (( properties.diego.bbs.ca_cert || "bosh-will-generate-me" ))
-  certificate: (( properties.diego.bbs.server_cert || "bosh-will-generate-me" ))
-  private_key: (( properties.diego.bbs.server_key || "bosh-will-generate-me" ))
-diego_database_password: (( properties.diego.bbs.sql.db_password || "bosh-will-generate-me" ))
+  ca: (( properties.diego.bbs.ca_cert ))
+  certificate: (( properties.diego.bbs.server_cert ))
+  private_key: (( properties.diego.bbs.server_key ))
+diego_database_password: (( properties.diego.bbs.sql.db_password ))
 diego_rep_agent:
-  ca: (( properties.diego.rep.ca_cert || "bosh-will-generate-me" ))
-  certificate: (( properties.diego.rep.server_cert || "bosh-will-generate-me" ))
-  private_key: (( properties.diego.rep.server_key || "bosh-will-generate-me" ))
+  ca: (( properties.diego.rep.ca_cert ))
+  certificate: (( properties.diego.rep.server_cert ))
+  private_key: (( properties.diego.rep.server_key ))
 diego_rep_client:
-  ca: (( properties.diego.rep.ca_cert || "bosh-will-generate-me" ))
-  certificate: (( properties.diego.rep.client_cert || "bosh-will-generate-me" ))
-  private_key: (( properties.diego.rep.client_key || "bosh-will-generate-me" ))
+  ca: (( properties.diego.rep.ca_cert ))
+  certificate: (( properties.diego.rep.client_cert ))
+  private_key: (( properties.diego.rep.client_key ))
 diego_ssh_proxy_host_key:
-  private_key: (( properties.diego.ssh_proxy.host_key || "bosh-will-generate-me" ))
-  public_key_fingerprint: (( properties.app_ssh.host_key_fingerprint || "bosh-will-generate-me" ))
+  private_key: (( properties.diego.ssh_proxy.host_key ))
+  public_key_fingerprint: (( properties.app_ssh.host_key_fingerprint ))
 dropsonde_shared_secret: (( properties.doppler_endpoint.shared_secret || "bosh-will-generate-me" ))
 etcd_ca:
-  ca: (( properties.etcd.ca_cert || "bosh-will-generate-me" ))
+  ca: (( properties.etcd.ca_cert ))
 etcd_client:
-  ca: (( properties.etcd.ca_cert || "bosh-will-generate-me" ))
-  certificate: (( properties.etcd.client_cert || "bosh-will-generate-me" ))
-  private_key: (( properties.etcd.client_key || "bosh-will-generate-me" ))
+  ca: (( properties.etcd.ca_cert ))
+  certificate: (( properties.etcd.client_cert ))
+  private_key: (( properties.etcd.client_key ))
 etcd_peer:
-  ca: (( properties.etcd.peer_ca_cert || "bosh-will-generate-me" ))
-  certificate: (( properties.etcd.peer_cert || "bosh-will-generate-me" ))
-  private_key: (( properties.etcd.peer_key || "bosh-will-generate-me" ))
+  ca: (( properties.etcd.peer_ca_cert ))
+  certificate: (( properties.etcd.peer_cert ))
+  private_key: (( properties.etcd.peer_key ))
 etcd_peer_ca:
-  ca: (( properties.etcd.peer_ca_cert || "bosh-will-generate-me" ))
+  ca: (( properties.etcd.peer_ca_cert ))
 etcd_server:
-  ca: (( properties.etcd.ca_cert || "bosh-will-generate-me" ))
-  certificate: (( properties.etcd.server_cert || "bosh-will-generate-me" ))
-  private_key: (( properties.etcd.server_key || "bosh-will-generate-me" ))
+  ca: (( properties.etcd.ca_cert ))
+  certificate: (( properties.etcd.server_cert ))
+  private_key: (( properties.etcd.server_key ))
 loggregator_ca:
   ca: (( properties.loggregator.tls.ca_cert || "bosh-will-generate-me" ))
 loggregator_tls_doppler:
@@ -116,48 +116,90 @@ service_cf_internal_ca:
   ca: (( properties.blobstore.tls.ca_cert))
   certificate: (( properties.blobstore.tls.ca_cert))
   private_key: (( properties.blobstore.tls.ca_cert))
-uaa_admin_client_secret: (( properties.uaa.admin.client_secret || "bosh-will-generate-me" ))
+uaa_admin_client_secret: (( properties.uaa.admin.client_secret ))
 uaa_ca:
-  ca: (( properties.uaa.ca_cert || "bosh-will-generate-me" ))
-  certificate: (( properties.uaa.sslCertificate || "bosh-will-generate-me" ))
-  private_key: (( properties.uaa.sslPrivateKey || "bosh-will-generate-me" ))
-uaa_clients_cc-routing_secret: (( properties.uaa.clients.cc_routing.secret || "bosh-will-generate-me" ))
-uaa_clients_cc-service-dashboards_secret: (( properties.uaa.clients.cc-service-dashboards.secret || "bosh-will-generate-me" ))
-uaa_clients_cloud_controller_username_lookup_secret: (( properties.uaa.clients.cloud_controller_username_lookup.secret || "bosh-will-generate-me" ))
-uaa_clients_doppler_secret: (( properties.uaa.clients.doppler.secret || "bosh-will-generate-me" ))
-uaa_clients_gorouter_secret: (( properties.uaa.clients.gorouter.secret || "bosh-will-generate-me" ))
-uaa_clients_ssh-proxy_secret: (( properties.uaa.clients.ssh-proxy.secret || "bosh-will-generate-me" ))
-uaa_clients_tcp_emitter_secret: (( properties.uaa.clients.tcp_emitter.secret || "bosh-will-generate-me" ))
-uaa_clients_tcp_router_secret: (( properties.uaa.clients.tcp_router.secret || "bosh-will-generate-me" ))
-uaa_database_password: (( properties.uaadb.roles.[0].password || "bosh-will-generate-me" ))
-uaa_jwt_policy: (( properties.uaa.jwt || "bosh-will-generate-me" ))
+  ca: (( properties.uaa.ca_cert ))
+  certificate: (( properties.uaa.sslCertificate ))
+  private_key: (( properties.uaa.sslPrivateKey ))
+uaa_clients_cc-routing_secret: (( properties.uaa.clients.cc_routing.secret ))
+uaa_clients_cc-service-dashboards_secret: (( properties.uaa.clients.cc-service-dashboards.secret ))
+uaa_clients_cloud_controller_username_lookup_secret: (( properties.uaa.clients.cloud_controller_username_lookup.secret ))
+uaa_clients_doppler_secret: (( properties.uaa.clients.doppler.secret ))
+uaa_clients_gorouter_secret: (( properties.uaa.clients.gorouter.secret ))
+uaa_clients_ssh-proxy_secret: (( properties.uaa.clients.ssh-proxy.secret ))
+uaa_clients_tcp_emitter_secret: (( properties.uaa.clients.tcp_emitter.secret ))
+uaa_clients_tcp_router_secret: (( properties.uaa.clients.tcp_router.secret ))
+uaa_database_password: (( properties.uaadb.roles.[0].password ))
+uaa_jwt_policy: (( properties.uaa.jwt ))
 uaa_login_saml:
-  ca: (( properties.uaa.ca_cert || "bosh-will-generate-me" ))
-  certificate: (( properties.uaa.login.saml.serviceProviderCertificate || "bosh-will-generate-me" ))
-  private_key: (( properties.uaa.login.saml.serviceProviderKey || "bosh-will-generate-me" ))
+  ca: (( properties.uaa.ca_cert ))
+  certificate: (( properties.uaa.login.saml.serviceProviderCertificate ))
+  private_key: (( properties.uaa.login.saml.serviceProviderKey ))
 uaa_ssl:
-  ca: (( properties.uaa.ca_cert || "bosh-will-generate-me" ))
-  certificate: (( properties.uaa.sslCertificate || "bosh-will-generate-me" ))
-  private_key: (( properties.uaa.sslPrivateKey || "bosh-will-generate-me" ))
+  ca: (( properties.uaa.ca_cert ))
+  certificate: (( properties.uaa.sslCertificate ))
+  private_key: (( properties.uaa.sslPrivateKey ))
 
 properties:
-  app_ssh: (( merge ))
-  etcd: (( merge ))
-  system_domain: (( merge ))
-  uaa: (( merge ))
+  app_ssh:
+    host_key_fingerprint: (( merge || nil ))
+  etcd:
+    ca_cert: (( merge || nil ))
+    client_cert: (( merge || nil ))
+    client_key: (( merge || nil ))
+    peer_ca_cert: (( merge || nil ))
+    peer_cert: (( merge || nil ))
+    peer_key: (( merge || nil ))
+    server_cert: (( merge || nil ))
+    server_key: (( merge || nil ))
+  system_domain: (( merge || nil ))
+  uaa:
+    admin:
+      client_secret: (( merge || nil ))
+    login:
+      saml:
+        serviceProviderCertificate: (( merge || nil ))
+        serviceProviderKey: (( merge || nil ))
+    jwt: (( merge || nil ))
+    scim:
+      users:
+      - password: (( merge || nil ))
+    ca_cert: (( merge || nil ))
+    sslCertificate: (( merge || nil ))
+    sslPrivateKey: (( merge || nil ))
+    clients:
+      cc_routing:
+        secret: (( merge || nil ))
+      cc-service-dashboards:
+        secret: (( merge || nil ))
+      cloud_controller_username_lookup:
+        secret: (( merge || nil ))
+      doppler:
+        secret: (( merge || nil ))
+      gorouter:
+        secret: (( merge || nil ))
+      ssh-proxy:
+        secret: (( merge || nil ))
+      tcp_emitter:
+        secret: (( merge || nil ))
+      tcp_router:
+        secret: (( merge || nil ))
   uaadb:
-    roles: (( merge ))
+    roles:
+    - password: (( merge || nil ))
   consul:
-    ca_cert: (( merge ))
-    agent_cert: (( merge ))
-    agent_key: (( merge ))
-    server_cert: (( merge ))
-    server_key: (( merge ))
-    encrypt_keys: (( merge ))
+    ca_cert: (( merge || nil ))
+    agent_cert: (( merge || nil ))
+    agent_key: (( merge || nil ))
+    server_cert: (( merge || nil ))
+    server_key: (( merge || nil ))
+    encrypt_keys: (( merge | nil ))
   blobstore:
-    admin_users: (( merge ))
+    admin_users:
+    - username: (( merge || nil ))
+      password: (( merge || nil ))
     secure_link:
-      secret: (( merge ))
+      secret: (( merge || nil ))
     tls:
       ca_cert: (( merge ))
       cert: (( merge ))
@@ -165,29 +207,50 @@ properties:
   capi:
     cc_uploader:
       cc:
-        ca_cert: (( merge ))
-        client_cert: (( merge ))
-        client_key: (( merge ))
+        ca_cert: (( merge || nil ))
+        client_cert: (( merge || nil ))
+        client_key: (( merge || nil ))
     tps:
       cc:
-        ca_cert: (( merge ))
-        client_cert: (( merge ))
-        client_key: (( merge ))
+        ca_cert: (( merge || nil ))
+        client_cert: (( merge || nil ))
+        client_key: (( merge || nil ))
   cc:
-    bulk_api_password: (( merge ))
-    db_encryption_key: (( merge ))
-    internal_api_password: (( merge ))
-    staging_upload_password: (( merge ))
+    bulk_api_password: (( merge || nil ))
+    db_encryption_key: (( merge || nil ))
+    internal_api_password: (( merge || nil ))
+    staging_upload_password: (( merge || nil ))
     mutual_tls:
-      ca_cert: (( merge ))
-      public_cert: (( merge ))
-      private_key: (( merge ))
+      ca_cert: (( merge || nil ))
+      public_cert: (( merge || nil ))
+      private_key: (( merge  || nil))
   ccdb:
     roles: (( merge ))
   diego:
-    bbs: (( merge ))
-    rep: (( merge ))
-    ssh_proxy: (( merge ))
+    bbs:
+      sql:
+        db_password: (( merge || nil ))
+      encryption_keys:
+      - passphrase: (( merge || nil ))
+      ca_cert: (( merge || nil ))
+      client_cert: (( merge || nil ))
+      client_key: (( merge || nil ))
+      server_cert: (( merge || nil ))
+      server_key: (( merge || nil ))
+      auctioneer:
+        ca_cert: (( merge || nil ))
+        client_cert: (( merge || nil ))
+        client_key: (( merge || nil ))
+        server_cert: (( merge || nil ))
+        server_key: (( merge || nil ))
+    rep:
+        ca_cert: (( merge || nil ))
+        client_cert: (( merge || nil ))
+        client_key: (( merge || nil ))
+        server_cert: (( merge || nil ))
+        server_key: (( merge || nil ))
+    ssh_proxy:
+      host_key: (( merge || nil ))
   doppler_endpoint:
     shared_secret: (( merge ))
   loggregator:
