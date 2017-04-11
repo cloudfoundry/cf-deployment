@@ -4,7 +4,7 @@
 # in a single Availability Zone.
 ## Note: This also reduces the static IPs used by nats.
 - type: remove
-  path: /instance_groups/name=nats/networks/name=private/static_ips?/1
+  path: /instance_groups/name=nats/networks/name=default/static_ips?/1
 
 - type: replace
   path: /instance_groups/name=consul/instances

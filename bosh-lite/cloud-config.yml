@@ -4,7 +4,7 @@ azs:
 - name: z3
 compilation:
   az: z1
-  network: private
+  network: default
   reuse_compilation_vms: true
   vm_type: m3.medium
   workers: 6
@@ -18,13 +18,13 @@ disk_types:
 - disk_size: 100240
   name: 100GB
 networks:
-- name: private
+- name: default
   subnets:
   - azs: [z1, z2, z3]
     cloud_properties:
       name: random
     gateway: 10.244.0.1
-    range: 10.244.0.0/22
+    range: 10.244.0.0/19
     reserved:
     - 10.244.0.1
     static:
@@ -50,6 +50,7 @@ vm_extensions:
     ports:
     - host: 1024-1123
 vm_types:
+- name: default
 - name: m3.medium
 - name: m3.large
 - name: m3.xlarge
