@@ -15,11 +15,11 @@ cc_bridge_cc_uploader:
   private_key: (( properties.capi.cc_uploader.cc.client_key ))
 cc_bridge_tps:
   ca: (( properties.capi.tps.cc.ca_cert ))
-  client_cert:  (( properties.capi.tps.cc.client_cert ))
-  client_key:  (( properties.capi.tps.cc.client_key ))
+  client_cert: (( properties.capi.tps.cc.client_cert ))
+  client_key: (( properties.capi.tps.cc.client_key ))
 cc_bulk_api_password: (( properties.cc.bulk_api_password ))
-cc_database_password: (( properties.ccdb.roles.[0].password || "bosh-will-generate-me" ))
-cc_database_username: (( properties.ccdb.roles.[0].name || "bosh-will-generate-me" ))
+cc_database_password: (( properties.ccdb.roles.[0].password ))
+cc_database_username: (( properties.ccdb.roles.[0].name ))
 cc_db_encryption_key: (( properties.cc.db_encryption_key))
 cc_internal_api_password: (( properties.cc.internal_api_password ))
 cc_staging_upload_password: (( properties.cc.staging_upload_password ))
@@ -67,7 +67,7 @@ diego_rep_client:
 diego_ssh_proxy_host_key:
   private_key: (( properties.diego.ssh_proxy.host_key ))
   public_key_fingerprint: (( properties.app_ssh.host_key_fingerprint ))
-dropsonde_shared_secret: (( properties.doppler_endpoint.shared_secret || "bosh-will-generate-me" ))
+dropsonde_shared_secret: (( properties.doppler_endpoint.shared_secret ))
 etcd_ca:
   ca: (( properties.etcd.ca_cert ))
 etcd_client:
@@ -85,33 +85,33 @@ etcd_server:
   certificate: (( properties.etcd.server_cert ))
   private_key: (( properties.etcd.server_key ))
 loggregator_ca:
-  ca: (( properties.loggregator.tls.ca_cert || "bosh-will-generate-me" ))
+  ca: (( properties.loggregator.tls.ca_cert ))
 loggregator_tls_doppler:
-  ca: (( properties.loggregator.tls.ca_cert || "bosh-will-generate-me" ))
-  certificate: (( properties.loggregator.tls.doppler.cert || "bosh-will-generate-me" ))
-  private_key: (( properties.loggregator.tls.doppler.key || "bosh-will-generate-me" ))
+  ca: (( properties.loggregator.tls.ca_cert ))
+  certificate: (( properties.loggregator.tls.doppler.cert ))
+  private_key: (( properties.loggregator.tls.doppler.key ))
 loggregator_tls_metron:
-  ca: (( properties.loggregator.tls.ca_cert || "bosh-will-generate-me" ))
-  certificate: (( properties.loggregator.tls.metron.cert || "bosh-will-generate-me" ))
-  private_key: (( properties.loggregator.tls.metron.key || "bosh-will-generate-me" ))
+  ca: (( properties.loggregator.tls.ca_cert ))
+  certificate: (( properties.loggregator.tls.metron.cert ))
+  private_key: (( properties.loggregator.tls.metron.key ))
 loggregator_tls_statsdinjector:
-  ca: (( properties.loggregator.tls.ca_cert || "bosh-will-generate-me" ))
-  certificate: (( properties.loggregator.tls.statsd_injector.cert || "bosh-will-generate-me" ))
-  private_key: (( properties.loggregator.tls.statsd_injector.key || "bosh-will-generate-me" ))
+  ca: (( properties.loggregator.tls.ca_cert ))
+  certificate: (( properties.loggregator.tls.statsd_injector.cert ))
+  private_key: (( properties.loggregator.tls.statsd_injector.key ))
 loggregator_tls_syslogdrainbinder:
-  ca: (( properties.loggregator.tls.ca_cert || "bosh-will-generate-me" ))
-  certificate: (( properties.loggregator.tls.syslogdrainbinder.cert || "bosh-will-generate-me" ))
-  private_key: (( properties.loggregator.tls.syslogdrainbinder.key || "bosh-will-generate-me" ))
+  ca: (( properties.loggregator.tls.ca_cert ))
+  certificate: (( properties.loggregator.tls.syslogdrainbinder.cert ))
+  private_key: (( properties.loggregator.tls.syslogdrainbinder.key ))
 loggregator_tls_tc:
-  ca: (( properties.loggregator.tls.ca_cert || "bosh-will-generate-me" ))
-  certificate: (( properties.loggregator.tls.trafficcontroller.cert || "bosh-will-generate-me" ))
-  private_key: (( properties.loggregator.tls.trafficcontroller.key || "bosh-will-generate-me" ))
-nats_password: (( properties.nats.password || "bosh-will-generate-me" ))
-router_route_services_secret: (( properties.router.route_services_secret || "bosh-will-generate-me" ))
+  ca: (( properties.loggregator.tls.ca_cert ))
+  certificate: (( properties.loggregator.tls.trafficcontroller.cert ))
+  private_key: (( properties.loggregator.tls.trafficcontroller.key ))
+nats_password: (( properties.nats.password ))
+router_route_services_secret: (( properties.router.route_services_secret ))
 router_ssl:
-  certificate: (( properties.router.ssl_cert || "bosh-will-generate-me" ))
-  private_key: (( properties.router.ssl_key || "bosh-will-generate-me" ))
-router_status_password: (( properties.router.status.password || "bosh-will-generate-me" ))
+  certificate: (( properties.router.ssl_cert ))
+  private_key: (( properties.router.ssl_key ))
+router_status_password: (( properties.router.status.password ))
 service_cf_internal_ca:
   ca: (( properties.blobstore.tls.ca_cert))
   certificate: (( properties.blobstore.tls.ca_cert))
@@ -201,9 +201,9 @@ properties:
     secure_link:
       secret: (( merge || nil ))
     tls:
-      ca_cert: (( merge ))
-      cert: (( merge ))
-      private_key: (( merge ))
+      ca_cert: (( merge || nil ))
+      cert: (( merge || nil ))
+      private_key: (( merge || nil ))
   capi:
     cc_uploader:
       cc:
@@ -252,9 +252,30 @@ properties:
     ssh_proxy:
       host_key: (( merge || nil ))
   doppler_endpoint:
-    shared_secret: (( merge ))
+    shared_secret: (( merge || nil ))
   loggregator:
-    tls: (( merge ))
+    tls:
+      ca_cert: (( merge || nil ))
+      doppler:
+        cert: (( merge || nil ))
+        key: (( merge || nil ))
+      metron:
+        cert: (( merge || nil ))
+        key: (( merge || nil ))
+      statsd_injector:
+        cert: (( merge || nil ))
+        key: (( merge || nil ))
+      syslogdrainbinder:
+        cert: (( merge || nil ))
+        key: (( merge || nil ))
+      trafficcontroller:
+        cert: (( merge || nil ))
+        key: (( merge || nil ))
   nats:
-    password: (( merge ))
-  router: (( merge ))
+    password: (( merge || nil ))
+  router:
+    route_services_secret: (( merge || nil ))
+    ssl_cert: (( merge || nil ))
+    ssl_key: (( merge || nil ))
+    status:
+      password: (( merge || nil ))
