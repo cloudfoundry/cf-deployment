@@ -11,6 +11,10 @@ properties:
     server_cert: etcd-server-cert
     server_key: etcd-server-key
   system_domain: some-domain.cf-app.com
+  login:
+      saml:
+        serviceProviderCertificate: uaa-saml-cert
+        serviceProviderKey: uaa-saml-key
   uaa:
     ca_cert: uaa-ca
     sslCertificate: uaa-ssl-cert
@@ -38,10 +42,6 @@ properties:
         secret: uaa-emitter-secret
       tcp_router:
         secret: uaa-tcp-secret
-    login:
-        saml:
-          serviceProviderCertificate: uaa-saml-cert
-          serviceProviderKey: uaa-saml-key
     jwt:
       policy:
         active_key_id: key-1

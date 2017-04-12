@@ -112,10 +112,6 @@ router_ssl:
   certificate: (( properties.router.ssl_cert ))
   private_key: (( properties.router.ssl_key ))
 router_status_password: (( properties.router.status.password ))
-service_cf_internal_ca:
-  ca: (( properties.blobstore.tls.ca_cert))
-  certificate: (( properties.blobstore.tls.ca_cert))
-  private_key: (( properties.blobstore.tls.ca_cert))
 uaa_admin_client_secret: (( properties.uaa.admin.client_secret ))
 uaa_ca:
   ca: (( properties.uaa.ca_cert ))
@@ -133,8 +129,8 @@ uaa_database_password: (( properties.uaadb.roles.[0].password ))
 uaa_jwt_policy: (( properties.uaa.jwt ))
 uaa_login_saml:
   ca: (( properties.uaa.ca_cert ))
-  certificate: (( properties.uaa.login.saml.serviceProviderCertificate ))
-  private_key: (( properties.uaa.login.saml.serviceProviderKey ))
+  certificate: (( properties.login.saml.serviceProviderCertificate ))
+  private_key: (( properties.login.saml.serviceProviderKey ))
 uaa_ssl:
   ca: (( properties.uaa.ca_cert ))
   certificate: (( properties.uaa.sslCertificate ))
@@ -153,13 +149,13 @@ properties:
     server_cert: (( merge || nil ))
     server_key: (( merge || nil ))
   system_domain: (( merge || nil ))
+  login:
+    saml:
+      serviceProviderCertificate: (( merge || nil ))
+      serviceProviderKey: (( merge || nil ))
   uaa:
     admin:
       client_secret: (( merge || nil ))
-    login:
-      saml:
-        serviceProviderCertificate: (( merge || nil ))
-        serviceProviderKey: (( merge || nil ))
     jwt: (( merge || nil ))
     scim:
       users:
