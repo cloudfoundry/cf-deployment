@@ -13,7 +13,7 @@ spiff merge \
 vars-store-template.yml \
 vars-pre-processing-template.ym \
 <your-cf-manifest.yml> \
-<your-diego-manifest.yml> | grep -v bosh-will-generate-me \
+<your-diego-manifest.yml> \
 > deployment-vars.yml
 ```
 
