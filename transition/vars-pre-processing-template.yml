@@ -15,8 +15,8 @@ cc_bridge_cc_uploader:
   private_key: (( properties.capi.cc_uploader.cc.client_key ))
 cc_bridge_tps:
   ca: (( properties.capi.tps.cc.ca_cert ))
-  client_cert: (( properties.capi.tps.cc.client_cert ))
-  client_key: (( properties.capi.tps.cc.client_key ))
+  certificate: (( properties.capi.tps.cc.client_cert ))
+  private_key: (( properties.capi.tps.cc.client_key ))
 cc_bulk_api_password: (( properties.cc.bulk_api_password ))
 cc_database_password: (( properties.ccdb.roles.[0].password || nil ))
 cc_database_username: (( properties.ccdb.roles.[0].name || nil ))
