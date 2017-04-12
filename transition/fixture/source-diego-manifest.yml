@@ -13,15 +13,13 @@ properties:
         client_key: cc-bridge-tps-key
   diego:
     bbs:
+      ca_cert: diego-bbs-ca
       auctioneer:
         ca_cert: auctioneer-ca
         client_cert: auctioneer-cert
         client_key: auctioneer-key
         server_cert: diego-auctioneer-server-cert
         server_key: diego-auctioneer-server-key
-      ca_cert: diego-bbs-ca
-      client_cert: diego-bbs-client-cert
-      client_key: diego-bbs-client-key
       encryption_keys:
       - passphrase: steve-passcode
       server_cert: diego-bbs-server-cert
@@ -36,5 +34,9 @@ properties:
       server_key: diego-rep-agent-key
     ssh_proxy:
       host_key: diego-ssh-key
+      bbs:
+        ca_cert: diego-ssh-proxy-bbs-ca
+        client_cert: diego-ssh-proxy-bbs-client-cert
+        client_key: diego-ssh-proxy-bbs-client-key
   doppler_endpoint:
     shared_secret: dropsonde-shared-sekret

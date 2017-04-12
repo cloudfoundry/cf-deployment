@@ -18,8 +18,8 @@ cc_bridge_tps:
   client_cert: (( properties.capi.tps.cc.client_cert ))
   client_key: (( properties.capi.tps.cc.client_key ))
 cc_bulk_api_password: (( properties.cc.bulk_api_password ))
-cc_database_password: (( properties.ccdb.roles.[0].password ))
-cc_database_username: (( properties.ccdb.roles.[0].name ))
+cc_database_password: (( properties.ccdb.roles.[0].password || nil ))
+cc_database_username: (( properties.ccdb.roles.[0].name || nil ))
 cc_db_encryption_key: (( properties.cc.db_encryption_key))
 cc_internal_api_password: (( properties.cc.internal_api_password ))
 cc_staging_upload_password: (( properties.cc.staging_upload_password ))
@@ -47,9 +47,9 @@ diego_auctioneer_server:
   certificate: (( properties.diego.bbs.auctioneer.server_cert ))
   private_key: (( properties.diego.bbs.auctioneer.server_key ))
 diego_bbs_client:
-  ca: (( properties.diego.bbs.ca_cert ))
-  certificate: (( properties.diego.bbs.client_cert ))
-  private_key: (( properties.diego.bbs.client_key ))
+  ca: (( properties.diego.ssh_proxy.bbs.ca_cert ))
+  certificate: (( properties.diego.ssh_proxy.bbs.client_cert ))
+  private_key: (( properties.diego.ssh_proxy.bbs.client_key ))
 diego_bbs_encryption_keys_passphrase: (( properties.diego.bbs.encryption_keys.[0].passphrase ))
 diego_bbs_server:
   ca: (( properties.diego.bbs.ca_cert ))
@@ -189,7 +189,8 @@ properties:
     agent_key: (( merge || nil ))
     server_cert: (( merge || nil ))
     server_key: (( merge || nil ))
-    encrypt_keys: (( merge | nil ))
+    encrypt_keys:
+    - (( merge || nil ))
   blobstore:
     admin_users:
     - username: (( merge || nil ))
@@ -221,7 +222,8 @@ properties:
       public_cert: (( merge || nil ))
       private_key: (( merge  || nil))
   ccdb:
-    roles: (( merge ))
+    roles:
+    - (( merge || nil ))
   diego:
     bbs:
       sql:
@@ -229,8 +231,6 @@ properties:
       encryption_keys:
       - passphrase: (( merge || nil ))
       ca_cert: (( merge || nil ))
-      client_cert: (( merge || nil ))
-      client_key: (( merge || nil ))
       server_cert: (( merge || nil ))
       server_key: (( merge || nil ))
       auctioneer:
@@ -247,6 +247,10 @@ properties:
         server_key: (( merge || nil ))
     ssh_proxy:
       host_key: (( merge || nil ))
+      bbs:
+        ca_cert: (( merge || nil ))
+        client_cert: (( merge || nil ))
+        client_key: (( merge || nil ))
   doppler_endpoint:
     shared_secret: (( merge || nil ))
   loggregator:
