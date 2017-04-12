@@ -11,7 +11,7 @@ the ways in which they may fail.
 ```
 spiff merge \
 vars-store-template.yml \
-vars-pre-processing-template.ym \
+vars-pre-processing-template.yml \
 <your-cf-manifest.yml> \
 <your-diego-manifest.yml> \
 > deployment-vars.yml
