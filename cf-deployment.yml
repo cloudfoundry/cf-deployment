@@ -415,7 +415,6 @@ instance_groups:
         tls:
           cert: "((blobstore_tls.certificate))"
           private_key: "((blobstore_tls.private_key))"
-          ca_cert: "((blobstore_tls.ca))"
   - name: route_registrar
     release: routing
     properties:
@@ -851,8 +850,6 @@ instance_groups:
     release: diego
     properties:
       diego:
-        executor:
-          ca_certs_for_downloads: "((blobstore_tls.ca))"
         rep:
           bbs: *diego_bbs_client_properties
           preloaded_rootfses:
