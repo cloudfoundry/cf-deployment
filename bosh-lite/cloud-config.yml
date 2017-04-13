@@ -6,7 +6,7 @@ compilation:
   az: z1
   network: default
   reuse_compilation_vms: true
-  vm_type: m3.medium
+  vm_type: default
   workers: 6
 disk_types:
 - disk_size: 1024
@@ -51,6 +51,13 @@ vm_extensions:
     - host: 1024-1123
 vm_types:
 - name: default
+- name: sharedcpu
+- name: small
+- name: medium
+- name: large
+- name: extra-large
+- name: small-highcpu
+- name: small-highmem
 - name: m3.medium
 - name: m3.large
 - name: m3.xlarge
