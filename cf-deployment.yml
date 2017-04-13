@@ -12,7 +12,7 @@ instance_groups:
   azs:
   - z1
   instances: 1
-  vm_type: m3.medium
+  vm_type: default
   stemcell: default
   update:
     max_in_flight: 1
@@ -39,7 +39,7 @@ instance_groups:
   - z3
   instances: 3
   persistent_disk_type: 5GB
-  vm_type: m3.medium
+  vm_type: default
   stemcell: default
   update:
     max_in_flight: 1
@@ -86,7 +86,7 @@ instance_groups:
   - z1
   - z2
   instances: 2
-  vm_type: c3.large
+  vm_type: small-highcpu
   vm_extensions:
   - 10GB_ephemeral_disk
   stemcell: default
@@ -122,7 +122,7 @@ instance_groups:
   - z3
   instances: 3
   persistent_disk_type: 5GB
-  vm_type: m3.medium
+  vm_type: default
   vm_extensions:
   - 10GB_ephemeral_disk
   stemcell: default
@@ -180,7 +180,7 @@ instance_groups:
   - z1
   persistent_disk_type: 10GB
   instances: 1
-  vm_type: m3.large
+  vm_type: small
   vm_extensions:
   - 10GB_ephemeral_disk
   stemcell: default
@@ -241,7 +241,7 @@ instance_groups:
   - z1
   - z2
   instances: 2
-  vm_type: m3.medium
+  vm_type: default
   vm_extensions:
   - 10GB_ephemeral_disk
   stemcell: default
@@ -385,7 +385,7 @@ instance_groups:
   azs:
   - z1
   instances: 1
-  vm_type: m3.large
+  vm_type: small
   vm_extensions:
   - 10GB_ephemeral_disk
   persistent_disk_type: 100GB
@@ -435,7 +435,7 @@ instance_groups:
   - z1
   - z2
   instances: 2
-  vm_type: m3.large
+  vm_type: small
   vm_extensions:
   - 50GB_ephemeral_disk
   stemcell: default
@@ -606,7 +606,7 @@ instance_groups:
   - z1
   - z2
   instances: 2
-  vm_type: m3.medium
+  vm_type: default
   vm_extensions:
   - 10GB_ephemeral_disk
   stemcell: default
@@ -659,7 +659,7 @@ instance_groups:
   - z1
   - z2
   instances: 2
-  vm_type: m3.medium
+  vm_type: default
   vm_extensions:
   - cf-router-network-properties
   stemcell: default
@@ -707,7 +707,7 @@ instance_groups:
   - z1
   - z2
   instances: 2
-  vm_type: m3.large
+  vm_type: small
   stemcell: default
   networks:
   - name: default
@@ -763,7 +763,7 @@ instance_groups:
   - z1
   - z2
   instances: 2
-  vm_type: m3.medium
+  vm_type: default
   vm_extensions:
   - diego-ssh-proxy-network-properties
   - 10GB_ephemeral_disk
@@ -822,7 +822,7 @@ instance_groups:
   - z1
   - z2
   instances: 2
-  vm_type: r3.xlarge
+  vm_type: small-highmem
   vm_extensions:
   - 100GB_ephemeral_disk
   stemcell: default
@@ -877,7 +877,7 @@ instance_groups:
   - z1
   - z2
   instances: 2
-  vm_type: m3.medium
+  vm_type: default
   stemcell: default
   networks:
   - name: default
@@ -903,7 +903,7 @@ instance_groups:
   azs:
   - z1
   instances: 1
-  vm_type: m3.large
+  vm_type: small
   vm_extensions:
   - 10GB_ephemeral_disk
   stemcell: default
@@ -959,7 +959,7 @@ instance_groups:
   - z1
   - z2
   instances: 2
-  vm_type: m3.medium
+  vm_type: default
   vm_extensions:
   - 10GB_ephemeral_disk
   stemcell: default
@@ -1024,7 +1024,7 @@ instance_groups:
   - z1
   - z2
   instances: 2
-  vm_type: m3.medium
+  vm_type: default
   vm_extensions:
   - 10GB_ephemeral_disk
   stemcell: default
@@ -1092,7 +1092,7 @@ instance_groups:
   - z1
   - z2
   instances: 2
-  vm_type: t2.small
+  vm_type: sharedcpu
   vm_extensions:
   - 10GB_ephemeral_disk
   stemcell: default
