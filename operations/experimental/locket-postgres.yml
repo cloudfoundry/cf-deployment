@@ -1,0 +1,10 @@
+---
+- type: replace
+  path: /instance_groups/name=diego-bbs/jobs/name=locket/properties/diego/locket/sql
+  value:
+    db_host: sql-db.service.cf.internal
+    db_port: 5524
+    db_schema: diego
+    db_username: diego
+    db_password: "((diego_database_password))"
+    db_driver: postgres

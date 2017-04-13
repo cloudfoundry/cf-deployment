@@ -236,6 +236,64 @@ instance_groups:
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
+- name: diego-bbs
+  azs:
+  - z1
+  - z2
+  instances: 2
+  vm_type: m3.large
+  stemcell: default
+  update:
+    serial: true
+  networks:
+  - name: default
+  jobs:
+  - name: consul_agent
+    release: consul
+    consumes:
+      consul: {from: consul_server}
+  - name: cfdot
+    release: diego
+    properties:
+      diego:
+        cfdot:
+          bbs: *diego_bbs_client_properties
+  - name: bbs
+    release: diego
+    properties:
+      diego:
+        bbs:
+          active_key_label: key-2016-06
+          encryption_keys:
+          - label: key-2016-06
+            passphrase: "((diego_bbs_encryption_keys_passphrase))"
+          sql:
+            db_host: sql-db.service.cf.internal
+            db_port: 3306
+            db_schema: diego
+            db_username: diego
+            db_password: "((diego_database_password))"
+            db_driver: mysql
+          etcd:
+            machines: []
+            ca_cert: nil
+            client_cert: nil
+            client_key: nil
+          ca_cert: "((diego_bbs_server.ca))"
+          auctioneer: &diego_auctioneer_client_properties
+            ca_cert: "((diego_auctioneer_client.ca))"
+            client_cert: "((diego_auctioneer_client.certificate))"
+            client_key: "((diego_auctioneer_client.private_key))"
+          server_cert: "((diego_bbs_server.certificate))"
+          server_key: "((diego_bbs_server.private_key))"
+          rep:
+            require_tls: true
+            ca_cert: "((diego_rep_client.ca))"
+            client_cert: "((diego_rep_client.certificate))"
+            client_key: "((diego_rep_client.private_key))"
+  - name: metron_agent
+    release: loggregator
+    properties: *metron_agent_properties
 - name: uaa
   azs:
   - z1
@@ -699,62 +757,6 @@ instance_groups:
         ca_cert: "((uaa_ssl.ca))"
         ssl:
           port: 8443
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
-- name: diego-bbs
-  azs:
-  - z1
-  - z2
-  instances: 2
-  vm_type: m3.large
-  stemcell: default
-  networks:
-  - name: default
-  jobs:
-  - name: consul_agent
-    release: consul
-    consumes:
-      consul: {from: consul_server}
-  - name: cfdot
-    release: diego
-    properties:
-      diego:
-        cfdot:
-          bbs: *diego_bbs_client_properties
-  - name: bbs
-    release: diego
-    properties:
-      diego:
-        bbs:
-          active_key_label: key-2016-06
-          encryption_keys:
-          - label: key-2016-06
-            passphrase: "((diego_bbs_encryption_keys_passphrase))"
-          sql:
-            db_host: sql-db.service.cf.internal
-            db_port: 3306
-            db_schema: diego
-            db_username: diego
-            db_password: "((diego_database_password))"
-            db_driver: mysql
-          etcd:
-            machines: []
-            ca_cert: nil
-            client_cert: nil
-            client_key: nil
-          ca_cert: "((diego_bbs_server.ca))"
-          auctioneer: &diego_auctioneer_client_properties
-            ca_cert: "((diego_auctioneer_client.ca))"
-            client_cert: "((diego_auctioneer_client.certificate))"
-            client_key: "((diego_auctioneer_client.private_key))"
-          server_cert: "((diego_bbs_server.certificate))"
-          server_key: "((diego_bbs_server.private_key))"
-          rep:
-            require_tls: true
-            ca_cert: "((diego_rep_client.ca))"
-            client_cert: "((diego_rep_client.certificate))"
-            client_key: "((diego_rep_client.private_key))"
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
