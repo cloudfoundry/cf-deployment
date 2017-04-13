@@ -135,6 +135,10 @@ uaa_ssl:
   ca: (( properties.uaa.ca_cert ))
   certificate: (( properties.uaa.sslCertificate ))
   private_key: (( properties.uaa.sslPrivateKey ))
+cc_bridge_cc_uploader_server:
+  ca: (( properties.capi.cc_uploader.mutual_tls.ca_cert ))
+  certificate: (( properties.capi.cc_uploader.mutual_tls.server_cert ))
+  private_key: (( properties.capi.cc_uploader.mutual_tls.server_key ))
 
 properties:
   app_ssh:
@@ -207,6 +211,10 @@ properties:
         ca_cert: (( merge || nil ))
         client_cert: (( merge || nil ))
         client_key: (( merge || nil ))
+      mutual_tls:
+        ca_cert: (( merge || nil ))
+        server_cert: (( merge || nil ))
+        server_key: (( merge || nil ))
     tps:
       cc:
         ca_cert: (( merge || nil ))

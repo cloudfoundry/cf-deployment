@@ -6,6 +6,10 @@ properties:
         ca_cert: cc-uploader-ca
         client_cert: cc-uploader-cert
         client_key: cc-uploader-key
+      mutual_tls:
+        ca_cert: cc-uploader-ca
+        server_cert: cc-uploader-server-cert
+        server_key: cc-uploader-server-key
     tps:
       cc:
         ca_cert: cc-bridge-tps-ca
