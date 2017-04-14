@@ -1,75 +1,37 @@
 # On Bosh Job Specs
-We expect some things about the job specs 
-in the bosh releases `cf-deployment` specifies.
-Our expectations are not always met.
-When this happens,
-after the grief,
-and whatever work it causes,
-we often realize the release authors
-had no way of knowing what we expected.
 
-We would like to change that.
 
-The Cloud Foundry project's method
-for achieving alignment around standards
-is rooted in a blend of opinionated tools
-shared ideals and heuristics,
-and explicit coordinative communication.
-It is not terribly surprising
-that as our tools and their opinions change
-alignment destabilizes.
-Neither is it a surprise
-that the implications of shared ideals and heuristics
-tend to differ along with the tools and priorities
-shaping the worldview of their executors.
+The goal of this document is to articulate expectations
+-- as well as the ideas and heuristics from which we derive them --
+for job specifications
+in the BOSH releases
+included in cf-deployment.
 
-This, then, is an effort to express
-our heuristics and our tools influences on them,
-not just our resulting expectations.
+Opinions about BOSH releases have been influenced by tools like BOSH and spiff,
+as well as by our ideals about deployment and software development.
+We often enforce these ideas by using opinionated tools,
+but we also enforce these goals by explicitly coordinating between CF teams.
+When new tooling -- with different opinions -- comes along,
+and teams grow to the point where coordination becomes difficult,
+teams lose alignment on what constitutes a best practice.
+We hope that a document like this
+will help to realign release authors.
 
-The way job specs have been handled
-up until now
-is the way it is
-because it got that way
-There's a long and reasonable history
-rooted in a single team
-managing a single repo
-with jobs that often drew
-from a single set of global properties,
-and lived alongside manifest generation code
-setting those properties.
+A lot of our existing standards were derived in a time
+when a single team maintained a single release
+that also contained tools for manifest generation.
+Now that we have many teams contributing to several BOSH releases,
+and manifest generation has been separated into this repo,
+it's time to update our standards,
+keeping in mind updates to tooling like the new BOSH CLI.
 
-This is a legacy of `cf-release`
-and its manifest generation process.
-Some of the expectations coming from the
-experiences from this work
-have been previously explicitly communicated,
-like **Defaults Should Live in the Spec**.
-We still hold this to be true,
-but it is differently true
-for jobs that see themselves as
-inherently part of Cloud Foundry
-than for those that see themselves
-as able to exist apart
-from an integrated deployment.
-As teams have undergone
-the glorious mitosis inherent in
-an organization that takes both
-Conway's Law
-and a services architecture
-seriously,
-more components have come to see themselves
-as able to exist apart.
-
-This is an example of the changing norms
-behind some of our expectations.
-We now expect release authors in CF
-to specify defaults in the spec for the
-_generic_
-operation of their jobs.
-Settings that would be sensible defaults
-for Cloud Foundry
-are not always the right choice for a job spec.
+- For example, the standard that **Defaults should live in the Spec** has existed for some time.
+We continue to maintain this expectation, with a caveat:
+releases that may be deployed independently of CF
+should have defaults in their spec
+that make sense for their standalone deployment.
+In these cases, cf-deployment should override those defaults
+in favor of CF-friendly values.
 
 ## Expectations
 This is an initial list of headings,
@@ -88,4 +50,3 @@ or become necessary.
 #### New TLS Propeties Match The Credhub Data Structure For Certs
 ### About the Relationship of Specs to Other Things
 #### Job Specs Constitute Some or All of the API of a BOSH Release for Versioning Purposes
-
