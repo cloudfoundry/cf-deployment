@@ -1,7 +1,7 @@
 #!/bin/bash
 
 pushd $(dirname $0) > /dev/null
-diff -wB fixture/default-values-cf-manifest.yml <(spiff merge vars-store-template.yml vars-pre-processing-template.yml)
+diff -wB -C5 fixture/default-values-cf-manifest.yml <(spiff merge vars-store-template.yml vars-pre-processing-template.yml)
 
 status=$?
 if [ "$status" == "0" ]; then
