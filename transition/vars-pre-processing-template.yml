@@ -70,6 +70,7 @@ diego_ssh_proxy_host_key:
 dropsonde_shared_secret: (( properties.doppler_endpoint.shared_secret ))
 etcd_ca:
   ca: (( properties.etcd.ca_cert ))
+  certificate: (( properties.etcd.ca_cert ))
 etcd_client:
   ca: (( properties.etcd.ca_cert ))
   certificate: (( properties.etcd.client_cert ))
@@ -80,12 +81,14 @@ etcd_peer:
   private_key: (( properties.etcd.peer_key ))
 etcd_peer_ca:
   ca: (( properties.etcd.peer_ca_cert ))
+  certificate: (( properties.etcd.peer_ca_cert ))
 etcd_server:
   ca: (( properties.etcd.ca_cert ))
   certificate: (( properties.etcd.server_cert ))
   private_key: (( properties.etcd.server_key ))
 loggregator_ca:
   ca: (( properties.loggregator.tls.ca_cert ))
+  certificate: (( properties.loggregator.tls.ca_cert ))
 loggregator_tls_doppler:
   ca: (( properties.loggregator.tls.ca_cert ))
   certificate: (( properties.loggregator.tls.doppler.cert ))
@@ -115,8 +118,7 @@ router_status_password: (( properties.router.status.password ))
 uaa_admin_client_secret: (( properties.uaa.admin.client_secret ))
 uaa_ca:
   ca: (( properties.uaa.ca_cert ))
-  certificate: (( properties.uaa.sslCertificate ))
-  private_key: (( properties.uaa.sslPrivateKey ))
+  certificate: (( properties.uaa.ca_cert ))
 uaa_clients_cc-routing_secret: (( properties.uaa.clients.cc_routing.secret ))
 uaa_clients_cc-service-dashboards_secret: (( properties.uaa.clients.cc-service-dashboards.secret ))
 uaa_clients_cloud_controller_username_lookup_secret: (( properties.uaa.clients.cloud_controller_username_lookup.secret ))

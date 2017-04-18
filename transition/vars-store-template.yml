@@ -33,6 +33,7 @@ consul_agent:
   private_key: (( merge ))
 consul_agent_ca:
   ca: (( merge ))
+  certificate: (( merge ))
 consul_server:
   ca: (( merge ))
   certificate: (( merge ))
@@ -69,6 +70,7 @@ diego_ssh_proxy_host_key:
 dropsonde_shared_secret: (( merge ))
 etcd_ca:
   ca: (( merge ))
+  certificate: (( merge ))
 etcd_client:
   ca: (( merge ))
   certificate: (( merge ))
@@ -79,12 +81,14 @@ etcd_peer:
   private_key: (( merge ))
 etcd_peer_ca:
   ca: (( merge ))
+  certificate: (( merge ))
 etcd_server:
   ca: (( merge ))
   certificate: (( merge ))
   private_key: (( merge ))
 loggregator_ca:
   ca: (( merge ))
+  certificate: (( merge ))
 loggregator_tls_doppler:
   ca: (( merge ))
   certificate: (( merge ))
@@ -119,7 +123,6 @@ uaa_admin_client_secret: (( merge ))
 uaa_ca:
   ca: (( merge ))
   certificate: (( merge ))
-  private_key: (( merge ))
 uaa_clients_cc-routing_secret: (( merge ))
 uaa_clients_cc-service-dashboards_secret: (( merge ))
 uaa_clients_cloud_controller_username_lookup_secret: (( merge ))
