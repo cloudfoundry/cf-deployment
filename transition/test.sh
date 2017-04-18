@@ -1,7 +1,7 @@
 #!/bin/bash
 
 pushd $(dirname $0) > /dev/null
-diff -wB fixture/expected-vars-store.yml <(spiff merge \
+diff -wB -C5 fixture/expected-vars-store.yml <(spiff merge \
   vars-store-template.yml \
   vars-pre-processing-template.yml \
   fixture/source-cf-manifest.yml \
