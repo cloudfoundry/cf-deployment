@@ -9,9 +9,9 @@ diff -wB -C5 fixture/expected-vars-store.yml <(spiff merge \
 
 status=$?
 if [ "$status" == "0" ]; then
-  echo PASS
+  echo PASS - expected-vars-store
 else
-  echo FAIL
+  echo FAIL - expected-vars-store
 fi
 
 popd > /dev/null

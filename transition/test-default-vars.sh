@@ -5,9 +5,9 @@ diff -wB -C5 fixture/default-values-cf-manifest.yml <(spiff merge vars-store-tem
 
 status=$?
 if [ "$status" == "0" ]; then
-  echo PASS
+  echo PASS - default vars
 else
-  echo FAIL
+  echo FAIL - default vars
 fi
 
 popd > /dev/null
