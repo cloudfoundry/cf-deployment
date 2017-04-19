@@ -1,0 +1,91 @@
+# Install Minio
+- type: replace
+  path: /releases/-
+  value:
+    name: minio
+    version: 1
+    url: git+https://github.com/minio/minio-boshrelease
+- type: replace
+  path: /instance_groups/name=blobstore
+  value:
+    name: minio
+    azs: [z1, z2]
+    instances: 4
+    stemcell: default
+    vm_type: m3.medium
+    persistent_disk_type: 100GB
+    networks: [ name: default ]     
+    jobs:
+      - name: minio-server
+        release: minio
+        properties:
+          credential:
+            accesskey: "((minio_accesskey))"
+            secretkey: "((minio_secretkey))"
+      - name: route_registrar
+        release: routing
+        properties:
+          route_registrar:
+            routes:
+              - name: blobstore
+                port: 9000
+                registration_interval: 20s
+                tags:
+                  component: blobstore
+                uris:
+                  - blobstore.((system_domain))
+- type: replace
+  path: /variables/-
+  value:
+    name: minio_accesskey
+    type: password
+    options:
+      length: 20
+- type: replace
+  path: /variables/-
+  value:
+    name: minio_secretkey
+    type: password
+    options:
+      length: 40
+# Remove blobstore secrets
+- type: remove
+  path: /variables/name=blobstore_tls
+  
+- type: remove
+  path: /variables/name=blobstore_secure_link_secret
+- type: remove
+  path: /variables/name=blobstore_admin_users_password
+# Configure CC to use minio 
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks
+  value:
+    blobstore_type: fog
+    buildpack_directory_key: buildpacks
+    fog_connection: &fog_connection
+      endpoint: https://blobstore.((system_domain))
+      aws_access_key_id: "((minio_accesskey))"
+      aws_secret_access_key: "((minio_secretkey))"
+      aws_signature_version: 2
+      path_style: true
+      provider: AWS
+      connection_options:
+        ssl_verify_peer: false
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/droplets
+  value:
+    blobstore_type: fog
+    buildpack_directory_key: droplets
+    fog_connection: *fog_connection
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/packages
+  value:
+    blobstore_type: fog
+    buildpack_directory_key: packages
+    fog_connection: *fog_connection
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/resource_pool
+  value:
+    blobstore_type: fog
+    buildpack_directory_key: resource_pool
+    fog_connection: *fog_connection
