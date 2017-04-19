@@ -257,7 +257,10 @@ instance_groups:
     properties:
       diego:
         cfdot:
-          bbs: *diego_bbs_client_properties
+          bbs: &diego_bbs_client_properties
+            ca_cert: "((diego_bbs_client.ca))"
+            client_cert: "((diego_bbs_client.certificate))"
+            client_key: "((diego_bbs_client.private_key))"
   - name: bbs
     release: diego
     properties:
@@ -785,10 +788,7 @@ instance_groups:
     properties:
       diego:
         cfdot:
-          bbs: &diego_bbs_client_properties
-            ca_cert: "((diego_bbs_client.ca))"
-            client_cert: "((diego_bbs_client.certificate))"
-            client_key: "((diego_bbs_client.private_key))"
+          bbs: *diego_bbs_client_properties
   - name: ssh_proxy
     release: diego
     properties:
