@@ -149,10 +149,10 @@ properties:
   app_ssh:
     host_key_fingerprint: (( merge || nil ))
   etcd:
-    ca_cert: (( merge || nil ))
+    ca_cert: (( merge ))
     client_cert: (( merge || nil ))
     client_key: (( merge || nil ))
-    peer_ca_cert: (( merge || nil ))
+    peer_ca_cert: (( merge ))
     peer_cert: (( merge || nil ))
     peer_key: (( merge || nil ))
     server_cert: (( merge || nil ))
@@ -169,7 +169,7 @@ properties:
     scim:
       users:
       - password: (( merge || nil ))
-    ca_cert: (( merge || nil ))
+    ca_cert: (( merge ))
     sslCertificate: (( merge || nil ))
     sslPrivateKey: (( merge || nil ))
     clients:
@@ -193,7 +193,7 @@ properties:
     roles:
     - password: (( merge || nil ))
   consul:
-    ca_cert: (( merge || nil ))
+    ca_cert: (( merge ))
     agent_cert: (( merge || nil ))
     agent_key: (( merge || nil ))
     server_cert: (( merge || nil ))
@@ -207,22 +207,22 @@ properties:
     secure_link:
       secret: (( merge || nil ))
     tls:
-      ca_cert: (( merge || nil ))
+      ca_cert: (( merge ))
       cert: (( merge || nil ))
       private_key: (( merge || nil ))
   capi:
     cc_uploader:
       cc:
-        ca_cert: (( merge || nil ))
+        ca_cert: (( merge ))
         client_cert: (( merge || nil ))
         client_key: (( merge || nil ))
       mutual_tls:
-        ca_cert: (( merge || nil ))
+        ca_cert: (( merge ))
         server_cert: (( merge || nil ))
         server_key: (( merge || nil ))
     tps:
       cc:
-        ca_cert: (( merge || nil ))
+        ca_cert: (( merge ))
         client_cert: (( merge || nil ))
         client_key: (( merge || nil ))
   cc:
@@ -231,7 +231,7 @@ properties:
     internal_api_password: (( merge || nil ))
     staging_upload_password: (( merge || nil ))
     mutual_tls:
-      ca_cert: (( merge || nil ))
+      ca_cert: (( merge ))
       public_cert: (( merge || nil ))
       private_key: (( merge  || nil))
   ccdb:
@@ -243,32 +243,32 @@ properties:
         db_password: (( merge || nil ))
       encryption_keys:
       - passphrase: (( merge || nil ))
-      ca_cert: (( merge || nil ))
+      ca_cert: (( merge ))
       server_cert: (( merge || nil ))
       server_key: (( merge || nil ))
       auctioneer:
-        ca_cert: (( merge || nil ))
+        ca_cert: (( merge ))
         client_cert: (( merge || nil ))
         client_key: (( merge || nil ))
         server_cert: (( merge || nil ))
         server_key: (( merge || nil ))
     rep:
-        ca_cert: (( merge || nil ))
-        client_cert: (( merge || nil ))
-        client_key: (( merge || nil ))
-        server_cert: (( merge || nil ))
-        server_key: (( merge || nil ))
+      ca_cert: (( merge ))
+      client_cert: (( merge || nil ))
+      client_key: (( merge || nil ))
+      server_cert: (( merge || nil ))
+      server_key: (( merge || nil ))
     ssh_proxy:
       host_key: (( merge || nil ))
       bbs:
-        ca_cert: (( merge || nil ))
+        ca_cert: (( merge ))
         client_cert: (( merge || nil ))
         client_key: (( merge || nil ))
   doppler_endpoint:
     shared_secret: (( merge || nil ))
   loggregator:
     tls:
-      ca_cert: (( merge || nil ))
+      ca_cert: (( merge ))
       doppler:
         cert: (( merge || nil ))
         key: (( merge || nil ))
