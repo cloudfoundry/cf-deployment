@@ -34,6 +34,7 @@ consul_agent:
 consul_agent_ca:
   ca: (( merge ))
   certificate: (( merge ))
+  private_key: (( merge ))
 consul_server:
   ca: (( merge ))
   certificate: (( merge ))
@@ -71,6 +72,7 @@ dropsonde_shared_secret: (( merge ))
 etcd_ca:
   ca: (( merge ))
   certificate: (( merge ))
+  private_key: (( merge ))
 etcd_client:
   ca: (( merge ))
   certificate: (( merge ))
@@ -82,6 +84,7 @@ etcd_peer:
 etcd_peer_ca:
   ca: (( merge ))
   certificate: (( merge ))
+  private_key: (( merge ))
 etcd_server:
   ca: (( merge ))
   certificate: (( merge ))
@@ -89,6 +92,7 @@ etcd_server:
 loggregator_ca:
   ca: (( merge ))
   certificate: (( merge ))
+  private_key: (( merge ))
 loggregator_tls_doppler:
   ca: (( merge ))
   certificate: (( merge ))
@@ -116,19 +120,20 @@ router_ssl:
   private_key: (( merge ))
 router_status_password: (( merge ))
 service_cf_internal_ca:
-  ca: nil
-  certificate: nil
-  private_key: nil
+  ca: (( merge ))
+  certificate: (( merge ))
+  private_key: (( merge ))
 uaa_admin_client_secret: (( merge ))
 uaa_ca:
   ca: (( merge ))
   certificate: (( merge ))
+  private_key: (( merge ))
 uaa_clients_cc-routing_secret: (( merge ))
 uaa_clients_cc-service-dashboards_secret: (( merge ))
 uaa_clients_cloud_controller_username_lookup_secret: (( merge ))
 uaa_clients_doppler_secret: (( merge ))
 uaa_clients_gorouter_secret: (( merge ))
-uaa_clients_ssh-proxy_secret:  (( merge ))
+uaa_clients_ssh-proxy_secret: (( merge ))
 uaa_clients_tcp_emitter_secret: (( merge ))
 uaa_clients_tcp_router_secret: (( merge ))
 uaa_database_password: (( merge ))

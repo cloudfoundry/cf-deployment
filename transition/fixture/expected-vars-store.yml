@@ -57,6 +57,7 @@ consul_agent_ca:
   certificate: |+
     consul
     ca
+  private_key: consul-agent-ca-private-key
 consul_encrypt_key: some_encrypt_key
 consul_server:
   ca: |+
@@ -81,7 +82,7 @@ diego_bbs_client:
   private_key: diego-ssh-proxy-bbs-client-key
 diego_bbs_encryption_keys_passphrase: steve-passcode
 diego_bbs_server:
-  ca: diego-bbs-ca
+  ca: service-cf-internal-ca-cert
   certificate: diego-bbs-server-cert
   private_key: diego-bbs-server-key
 diego_database_password: steve-hat
@@ -100,6 +101,7 @@ dropsonde_shared_secret: dropsonde-shared-sekret
 etcd_ca:
   ca: etcd-ca
   certificate: etcd-ca
+  private_key: etcd-ca-private-key
 etcd_client:
   ca: etcd-ca
   certificate: etcd-client-cert
@@ -111,6 +113,7 @@ etcd_peer:
 etcd_peer_ca:
   ca: etcd-peer-ca
   certificate: etcd-peer-ca
+  private_key: etcd-peer-ca-private-key
 etcd_server:
   ca: etcd-ca
   certificate: etcd-server-cert
@@ -118,6 +121,7 @@ etcd_server:
 loggregator_ca:
   ca: loggregator-ca
   certificate: loggregator-ca
+  private_key: loggregator-ca-private-key
 loggregator_tls_doppler:
   ca: loggregator-ca
   certificate: doppler-cert
@@ -145,14 +149,15 @@ router_ssl:
   private_key: router-ssl-key
 router_status_password: router-status-password
 service_cf_internal_ca:
-  ca: nil
-  certificate: nil
-  private_key: nil
+  ca: service-cf-internal-ca-cert
+  certificate: service-cf-internal-ca-cert
+  private_key: service-cf-internal-ca-key
 system_domain: some-domain.cf-app.com
 uaa_admin_client_secret: uaa-admin-secret
 uaa_ca:
   ca: uaa-ca
   certificate: uaa-ca
+  private_key: uaa-ca-private-key
 uaa_clients_cc-routing_secret: uaa-cc-routing-secret
 uaa_clients_cc-service-dashboards_secret: uaa-cc-service-secret
 uaa_clients_cloud_controller_username_lookup_secret: uaa-cc-secret
