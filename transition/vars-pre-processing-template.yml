@@ -5,10 +5,6 @@ consul_encrypt_key: (( properties.consul.encrypt_keys.[0] ))
 blobstore_admin_users_username: (( properties.blobstore.admin_users.[0].username ))
 blobstore_admin_users_password: (( properties.blobstore.admin_users.[0].password ))
 blobstore_secure_link_secret: (( properties.blobstore.secure_link.secret ))
-blobstore_tls:
-  ca: (( properties.blobstore.tls.ca_cert ))
-  certificate: (( properties.blobstore.tls.cert ))
-  private_key: (( properties.blobstore.tls.private_key ))
 cc_bridge_cc_uploader:
   ca: (( properties.capi.cc_uploader.cc.ca_cert ))
   certificate: (( properties.capi.cc_uploader.cc.client_cert ))
@@ -114,9 +110,6 @@ loggregator_tls_tc:
   private_key: (( properties.loggregator.tls.trafficcontroller.key ))
 nats_password: (( properties.nats.password ))
 router_route_services_secret: (( properties.router.route_services_secret ))
-router_ssl:
-  certificate: (( properties.router.ssl_cert ))
-  private_key: (( properties.router.ssl_key ))
 router_status_password: (( properties.router.status.password ))
 uaa_admin_client_secret: (( properties.uaa.admin.client_secret ))
 uaa_ca:
@@ -206,10 +199,6 @@ properties:
       password: (( merge || nil ))
     secure_link:
       secret: (( merge || nil ))
-    tls:
-      ca_cert: (( merge ))
-      cert: (( merge || nil ))
-      private_key: (( merge || nil ))
   capi:
     cc_uploader:
       cc:
@@ -288,7 +277,5 @@ properties:
     password: (( merge || nil ))
   router:
     route_services_secret: (( merge || nil ))
-    ssl_cert: (( merge || nil ))
-    ssl_key: (( merge || nil ))
     status:
       password: (( merge || nil ))
