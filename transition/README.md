@@ -14,6 +14,7 @@ vars-store-template.yml \
 vars-pre-processing-template.yml \
 <your-cf-manifest.yml> \
 <your-diego-manifest.yml> \
+<your-ca-private-keys-stubs.yml> \
 > deployment-vars.yml
 ```
 
@@ -28,7 +29,7 @@ you will also need to use
 the ops-file in this directory,
 `transition-ops.yml`.
 
-## Yes, Spiff
+### Yes, Spiff
 These tools use spiff templates
 to extract values from a deployment manifest
 based on `cf-release`,
@@ -41,12 +42,60 @@ download the latest binary [here][spiff-releases],
 extract it from its tarball,
 and put it on your path.
 
-## Tests and Contributions
+### Why Create a CA Private Key Stubs File
+While we can automatically obtain 
+your CA certificates
+from your existing CF manifest,
+we're unable to do the same for 
+their private keys.
+
+`CF Release` relied on
+the Bosh 1.x CLI,
+which did not have a role
+in managing your deployments' certificates.
+The Bosh 2.x CLI 
+that `CF Deployment` relies on now, does.
+
+In order to transition your CF deployment 
+to the new world,
+we'll need your help.
+Providing the CA keys to us now allows 
+Bosh to use the correct CA cert and key to 
+sign new certificates as they become necessary
+in the future.
+
+The CA private key stub file is required.
+
+### Example CA Private Keys Stubs File
+```
+---
+from_user:
+  diego_ca:
+    private_key: |+
+      multi
+      line
+      example
+      key
+  etcd_ca:
+    private_key: |+
+  etcd_peer_ca:
+    private_key: |+
+  consul_agent_ca:
+    private_key: |+
+  loggregator_ca:
+    private_key: |+
+  router_ca:
+    private_key: |+
+  uaa_ca:
+    private_key: |+
+```
+
+### Tests and Contributions
 We're happy to accept feedback
 in the form of issues and pull-requests.
 If you make a change,
 please run our tests
-with `test-transition-ops.sh`,
+with `transition/test-suite.sh`,
 and update the fixtures appropriately.
 
 [spiff-releases]: https://github.com/cloudfoundry-incubator/spiff/releases
