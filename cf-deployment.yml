@@ -217,6 +217,9 @@ instance_groups:
           - name: diego
             username: diego
             password: "((diego_database_password))"
+          - name: routing-api
+            username: routing-api
+            password: "((routing_api_database_password))"
           database_startup_timeout: 600
           port: 33306
   - name: proxy
@@ -400,6 +403,10 @@ instance_groups:
             authorities: routing.routes.read,routing.router_groups.read
             authorized-grant-types: client_credentials
             secret: "((uaa_clients_tcp_router_secret))"
+          routing_api_client:
+            authorities: routing.routes.write,routing.routes.read,routing.router_groups.read
+            authorized_grant_type: client_credentials
+            secret: "((uaa_clients_routing_api_client_secret))"
       uaadb:
         address: sql-db.service.cf.internal
         databases:
@@ -513,6 +520,7 @@ instance_groups:
         agent:
           services:
             cloud_controller_ng: {}
+            routing-api: {}
   - name: cloud_controller_ng
     release: capi
     provides:
@@ -528,6 +536,8 @@ instance_groups:
       app_ssh: &app_ssh
         host_key_fingerprint: "((diego_ssh_proxy_host_key.public_key_fingerprint))"
         oauth_client_id: ssh-proxy
+      routing_api:
+        enabled: true
       uaa:
         ca_cert: "((uaa_ssl.ca))"
         clients:
@@ -663,6 +673,25 @@ instance_groups:
   - name: statsd_injector
     release: statsd-injector
     properties: *statsd_injector_properties
+  - name: routing-api
+    release: routing
+    properties:
+      routing_api:
+        system_domain: "((system_domain))"
+        router_groups:
+        - name: default-tcp
+          type: tcp
+          reservable_ports: 1024-1123
+        sqldb:
+          type: mysql
+          host: sql-db.service.cf.internal
+          port: 3306
+          schema: routing-api
+          username: routing-api
+          password: "((routing_api_database_password))"
+      uaa:
+        ca_cert: "((uaa_ca.certificate))"
+        tls_port: 8443
 - name: cc-worker
   azs:
   - z1
@@ -708,11 +737,16 @@ instance_groups:
       system_domain: "((system_domain))"
       app_domains: *app_domains
       app_ssh: *app_ssh
+      routing_api:
+        enabled: true
       uaa:
         ca_cert: "((uaa_ssl.ca))"
         clients:
           cc-service-dashboards:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
+          cc_routing:
+            secret: "((uaa_clients_cc-routing_secret))"
+
         url: https://uaa.((system_domain))
         ssl:
           port: 8443
@@ -754,6 +788,8 @@ instance_groups:
         route_services_secret: "((router_route_services_secret))"
         tracing:
           enable_zipkin: true
+      routing_api:
+        enabled: true
       uaa:
         clients:
           gorouter:
@@ -1191,6 +1227,10 @@ variables:
 - name: diego_database_password
   type: password
 - name: uaa_database_password
+  type: password
+- name: routing_api_database_password
+  type: password
+- name: uaa_clients_routing_api_client_secret
   type: password
 - name: nats_password
   type: password
