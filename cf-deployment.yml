@@ -383,7 +383,7 @@ instance_groups:
             secret: "((uaa_clients_doppler_secret))"
           gorouter:
             authorities: routing.routes.read,routing.router_groups.read
-            authorized-grant-types: client_credentials,refresh_token
+            authorized-grant-types: client_credentials
             secret: "((uaa_clients_gorouter_secret))"
           ssh-proxy:
             authorized-grant-types: authorization_code
