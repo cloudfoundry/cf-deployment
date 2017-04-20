@@ -9,15 +9,12 @@ the ways in which they may fail.
 
 ## Usage
 ```
-spiff merge \
-vars-store-template.yml \
-vars-pre-processing-template.yml \
-<your-cf-manifest.yml> \
-<your-diego-manifest.yml> \
-<your-ca-private-keys-stubs.yml> \
-> deployment-vars.yml
+usage: transition.sh [required arguments]
+  required arguments:
+    -ca, --ca-keys         Path to your created CA Keys file
+    -cf, --cf-manifest     Path to your existing Cloud Foundry Manifest
+    -d,  --diego-manifest  Path to your existiong Diego Manifest
 ```
-
 This is intended to result
 in a vars-store file you can use
 with the `--vars-store` option

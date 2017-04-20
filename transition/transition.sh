@@ -111,10 +111,23 @@ function parse_args() {
 
 function check_ca_private_keys() {
   spiff_temp_output=$(mktemp)
-  echo $spiff_temp_output
+
+  # There is likely a more elegant way to do this.  Our first pass is to just
+  # cat std_err from Spiff out to a temp file so we can grep over it.
 cat > $spiff_temp_output <<EOF
 $(spiff merge vars-ca-template.yml $CA_KEYS 2>&1 >/dev/null)
 EOF
+
+  # If there is no error output to look at, then Spiff is saying we're good to
+  # go.  Return 0 and carry on.
+  # For some reason, the above heredoc does not result in an empty file, so
+  # testing with -s fails.  Instead, we'll just return on a file with single line.
+  if [[ $(cat $spiff_temp_output | wc -l) -eq 1 ]]; then
+    rm -f $spiff_temp_output
+    return 0
+  fi
+
+  # There must be error output.  Use it to find which key(s) we're missing.
   local all_the_cas="diego_ca etcd_ca etcd_peer_ca uaa_ca router_ca consul_agent_ca loggregator_ca"
   for ca in $all_the_cas
   do
@@ -133,9 +146,23 @@ function check_ca_private_key() {
   fi
 }
 
+function spiff_it() {
+  spiff merge \
+  vars-store-template.yml \
+  vars-pre-processing-template.yml \
+  vars-ca-template.yml \
+  $CF_MANIFEST \
+  $DIEGO_MANIFEST \
+  $CA_KEYS \
+  > deployment-vars.yml
+}
+
 function main() {
   check_params
   check_ca_private_keys
+  spiff_it
+  echo -e "${GREEN}Merge successful!${NC}"
+  echo "Please find your new vars store file in $PWD/deployment-vars.yml"
 }
 
 parse_args "$@"
