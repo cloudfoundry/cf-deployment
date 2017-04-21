@@ -201,8 +201,9 @@ Here's an (alphabetical) summary:
   placing them all into a single AZ.
   Effectively halves the deployment's footprint.
   Should be applied before other ops files.
-- `operations/test/add-datadog-firehose-nozzle.yml` -
+- `operations/test/add-datadog-firehose-nozzle-aws.yml` -
   Deploys a datadog-firehose-nozzle that collects system metric and posts to datadog.
+  For AWS only.
 - `operations/tcp-routing-gcp.yml` - this ops file adds TCP router and routing api for GCP.
   Not directly compatible with the `use-postgres` ops file;
   see that ops file's entry
