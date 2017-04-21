@@ -1,0 +1,50 @@
+---
+- type: replace
+  path: /properties/uaa/clients/-
+  value:
+    datadog-firehose-nozzle:
+      access-token-validity: 1209600
+      authorized-grant-types: authorization_code,client_credentials,refresh_token
+      override: true
+      secret: "((uaa_clients_datadog-firehose-nozzle_secret))"
+      scope: openid,oauth.approvals,doppler.firehose
+      authorities: oauth.login,doppler.firehose<Paste>
+
+
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: nozzle
+    azs:
+    - z1
+    instances: 1
+    persistent_disk_type: 5GB
+    vm_type: default
+    stemcell: default
+    networks:
+    - name: private
+    jobs:
+    - name: datadog-firehose-nozzle
+      release: datadog-firehose-nozzle
+      properties:
+        loggregator:
+          traffic_controller_url: "loggregator_trafficcontroller.((system_domain))"
+        datadog:
+          api_url: ""
+          api_key: ""
+          flush_duration_seconds: 15
+          metric_prefix: datadog.nozzle.
+        uaa:
+          url: "https://uaa.((system_domain))"
+          client: "datadog-firehose-nozzle"
+          client_secret: "((uaa_clients_datadog-firehose-nozzle_secret))"
+        nozzle:
+          insecure_ssl_skip_verify: false
+          subscription_id: datadog-nozzle
+          deployment: datadog
+
+- type: replace
+  path: /variables/-
+  value:
+    name: uaa_clients_datadog-firehose-nozzle_secret
+    type: password
