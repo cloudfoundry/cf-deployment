@@ -29,7 +29,6 @@
         loggregator:
           traffic_controller_url: loggregator_trafficcontroller.service.cf.internal
         datadog:
-          api_url: "https://app.datadoghq.com/api/"
           api_key: "((datadog_api_key))"
           flush_duration_seconds: 15
           metric_prefix: datadog.nozzle.
@@ -40,7 +39,7 @@
         nozzle:
           insecure_ssl_skip_verify: true
           subscription_id: datadog-nozzle
-          deployment: datadog
+          deployment: cf
 
 - type: replace
   path: /variables/-
