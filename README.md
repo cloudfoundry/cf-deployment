@@ -92,7 +92,7 @@ For a full guide to getting set up on GCP, look at [this guide](gcp-deployment-g
 If you're deploying against a local bosh-lite,
 you'll need to take the following steps before deploying:
 ```
-export BOSH_CA_CERT=$PWD/bosh-lite/ca/certs/ca.crt
+export BOSH_CA_CERT=<PATH-TO-BOSH-LITE-REPO>/ca/certs/ca.crt
 bosh -e 192.168.50.4 update-cloud-config bosh-lite/cloud-config.yml
 ```
 
