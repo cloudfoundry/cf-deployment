@@ -5,6 +5,8 @@
 ## Note: This also reduces the static IPs used by nats.
 - type: remove
   path: /instance_groups/name=nats/networks/name=default/static_ips?/1
+- type: remove
+  path: /instance_groups/name=mysql/jobs/name=proxy/properties/nats/machines?/1
 
 - type: replace
   path: /instance_groups/name=consul/instances
