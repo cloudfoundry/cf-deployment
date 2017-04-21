@@ -27,7 +27,7 @@
       release: datadog-firehose-nozzle
       properties:
         loggregator:
-          traffic_controller_url: loggregator_trafficcontroller.service.cf.internal
+          traffic_controller_url: "wss://doppler.((system_domain)):8081"
         datadog:
           api_key: "((datadog_api_key))"
           flush_duration_seconds: 15
@@ -37,7 +37,7 @@
           client: "datadog-firehose-nozzle"
           client_secret: "((uaa_clients_datadog-firehose-nozzle_secret))"
         nozzle:
-          insecure_ssl_skip_verify: true
+          insecure_ssl_skip_verify: false
           subscription_id: datadog-nozzle
           deployment: cf
 
