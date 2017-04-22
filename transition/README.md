@@ -68,23 +68,21 @@ The CA private key stub file is required.
 ---
 from_user:
   diego_ca:
-    private_key: |+
+    private_key: |
       multi
       line
       example
       key
   etcd_ca:
-    private_key: |+
+    private_key: |
   etcd_peer_ca:
-    private_key: |+
+    private_key: |
   consul_agent_ca:
-    private_key: |+
+    private_key: |
   loggregator_ca:
-    private_key: |+
-  router_ca:
-    private_key: |+
+    private_key: |
   uaa_ca:
-    private_key: |+
+    private_key: |
 ```
 
 ### Tests and Contributions

@@ -23,23 +23,23 @@ The file must be valid yaml with the following schema:
   ---
   from_user:
     diego_ca:
-      private_key: |+
+      private_key: |
         multi
         line
         example
         key
     etcd_ca:
-      private_key: |+
+      private_key: |
     etcd_peer_ca:
-      private_key: |+
+      private_key: |
     consul_agent_ca:
-      private_key: |+
+      private_key: |
     loggregator_ca:
-      private_key: |+
+      private_key: |
     router_ca:
-      private_key: |+
+      private_key: |
     uaa_ca:
-      private_key: |+
+      private_key: |
 
 $(echo -e "${GREEN}More details can be found in our README.md${NC}")
 EOF
