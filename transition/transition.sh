@@ -36,8 +36,6 @@ The file must be valid yaml with the following schema:
       private_key: |
     loggregator_ca:
       private_key: |
-    router_ca:
-      private_key: |
     uaa_ca:
       private_key: |
 

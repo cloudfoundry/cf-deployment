@@ -14,9 +14,6 @@ consul_agent_ca:
 loggregator_ca:
   private_key: (( from_user.loggregator_ca.private_key ))
 
-router_ca:
-  private_key: (( from_user.router_ca.private_key ))
-
 uaa_ca:
   private_key: (( from_user.uaa_ca.private_key ))
 
@@ -30,8 +27,6 @@ from_user:
   consul_agent_ca:
     private_key: (( merge ))
   loggregator_ca:
-    private_key: (( merge ))
-  router_ca:
     private_key: (( merge ))
   uaa_ca:
     private_key: (( merge ))
