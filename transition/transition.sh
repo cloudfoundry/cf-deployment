@@ -5,6 +5,8 @@ GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
+SCRIPT_DIR=$(dirname $0)
+
 function help() {
   echo -e "${GREEN}usage${NC}: $0 [required arguments]"
   echo "  required arguments:"
@@ -115,7 +117,7 @@ function check_ca_private_keys() {
   # There is likely a more elegant way to do this.  Our first pass is to just
   # cat std_err from Spiff out to a temp file so we can grep over it.
 cat > $spiff_temp_output <<EOF
-$(spiff merge vars-ca-template.yml $CA_KEYS 2>&1 >/dev/null)
+$(spiff merge $SCRIPT_DIR/vars-ca-template.yml $CA_KEYS 2>&1 >/dev/null)
 EOF
 
   # If there is no error output to look at, then Spiff is saying we're good to
@@ -128,7 +130,7 @@ EOF
   fi
 
   # There must be error output.  Use it to find which key(s) we're missing.
-  local all_the_cas="diego_ca etcd_ca etcd_peer_ca uaa_ca router_ca consul_agent_ca loggregator_ca"
+  local all_the_cas="diego_ca etcd_ca etcd_peer_ca uaa_ca consul_agent_ca loggregator_ca"
   for ca in $all_the_cas
   do
     check_ca_private_key $ca
@@ -140,7 +142,7 @@ function check_ca_private_key() {
   local ca_key_name=$1
   local ca_key_error=""
 
-  ca_key_error=$(cat $spiff_temp_output | grep merge | grep $ca_key_name)
+  ca_key_error=$(cat $spiff_temp_output | grep merge | grep $ca_key_name) || true
   if [[ $ca_key_error != "" ]]; then
     echo "CA Key [ $ca_key_name ] not found in [ $CA_KEYS ]!"
   fi
@@ -148,9 +150,9 @@ function check_ca_private_key() {
 
 function spiff_it() {
   spiff merge \
-  vars-store-template.yml \
-  vars-pre-processing-template.yml \
-  vars-ca-template.yml \
+  $SCRIPT_DIR/vars-store-template.yml \
+  $SCRIPT_DIR/vars-pre-processing-template.yml \
+  $SCRIPT_DIR/vars-ca-template.yml \
   $CF_MANIFEST \
   $DIEGO_MANIFEST \
   $CA_KEYS \
