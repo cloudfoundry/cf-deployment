@@ -57,9 +57,9 @@ diego_rep_agent:
   certificate: (( properties.diego.rep.server_cert ))
   private_key: (( properties.diego.rep.server_key ))
 diego_rep_client:
-  ca: (( properties.diego.rep.ca_cert ))
-  certificate: (( properties.diego.rep.client_cert ))
-  private_key: (( properties.diego.rep.client_key ))
+  ca: (( properties.diego.bbs.rep.ca_cert ))
+  certificate: (( properties.diego.bbs.rep.client_cert ))
+  private_key: (( properties.diego.bbs.rep.client_key ))
 diego_ssh_proxy_host_key:
   private_key: (( properties.diego.ssh_proxy.host_key ))
   public_key_fingerprint: (( properties.app_ssh.host_key_fingerprint ))
@@ -241,10 +241,12 @@ properties:
         client_key: (( merge || nil ))
         server_cert: (( merge || nil ))
         server_key: (( merge || nil ))
+      rep:
+        ca_cert: (( merge ))
+        client_cert: (( merge || nil ))
+        client_key: (( merge || nil ))
     rep:
       ca_cert: (( merge ))
-      client_cert: (( merge || nil ))
-      client_key: (( merge || nil ))
       server_cert: (( merge || nil ))
       server_key: (( merge || nil ))
     ssh_proxy:

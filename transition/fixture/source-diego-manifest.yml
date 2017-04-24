@@ -18,6 +18,10 @@ properties:
   diego:
     bbs:
       ca_cert: service-cf-internal-ca-cert
+      rep:
+        ca_cert: diego-rep-ca
+        client_cert: diego-rep-client-cert
+        client_key: diego-rep-client-key
       auctioneer:
         ca_cert: auctioneer-ca
         client_cert: auctioneer-cert
@@ -32,8 +36,6 @@ properties:
         db_password: steve-hat
     rep:
       ca_cert: diego-rep-ca
-      client_cert: diego-rep-client-cert
-      client_key: diego-rep-client-key
       server_cert: diego-rep-agent-cert
       server_key: diego-rep-agent-key
     ssh_proxy:
