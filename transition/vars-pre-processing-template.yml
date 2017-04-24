@@ -101,7 +101,7 @@ loggregator_tls_statsdinjector:
   certificate: (( properties.loggregator.tls.statsd_injector.cert ))
   private_key: (( properties.loggregator.tls.statsd_injector.key ))
 loggregator_tls_syslogdrainbinder:
-  ca: (( properties.loggregator.tls.ca_cert ))
+  ca: (( properties.diego.bbs.ca_cert ))
   certificate: (( properties.loggregator.tls.syslogdrainbinder.cert ))
   private_key: (( properties.loggregator.tls.syslogdrainbinder.key ))
 loggregator_tls_tc:
