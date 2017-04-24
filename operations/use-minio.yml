@@ -16,9 +16,20 @@
     persistent_disk_type: 100GB
     networks: [ name: default ]     
     jobs:
+      - name: consul_agent
+        release: consul
+        consumes:
+          consul: {from: consul_server}
+        properties:
+          consul:
+            agent:
+              services:
+                blobstore:
+                  check: {}
       - name: minio-server
         release: minio
         properties:
+          port: 80
           credential:
             accesskey: "((minio_accesskey))"
             secretkey: "((minio_secretkey))"
@@ -28,7 +39,7 @@
           route_registrar:
             routes:
               - name: blobstore
-                port: 9000
+                port: 80
                 registration_interval: 20s
                 tags:
                   component: blobstore
@@ -56,14 +67,15 @@
   path: /variables/name=blobstore_secure_link_secret
 - type: remove
   path: /variables/name=blobstore_admin_users_password
-# Configure CC to use minio 
+# Configure CC to use minio
+# api
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks
   value:
     blobstore_type: fog
     buildpack_directory_key: buildpacks
     fog_connection: &fog_connection
-      endpoint: https://blobstore.((system_domain))
+      endpoint: http://blobstore.service.cf.internal
       aws_access_key_id: "((minio_accesskey))"
       aws_secret_access_key: "((minio_secretkey))"
       aws_signature_version: 2
@@ -85,6 +97,56 @@
     fog_connection: *fog_connection
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/resource_pool
+  value:
+    blobstore_type: fog
+    buildpack_directory_key: resource_pool
+    fog_connection: *fog_connection
+#cc-worker
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/buildpacks
+  value:
+    blobstore_type: fog
+    buildpack_directory_key: buildpacks
+    fog_connection: *fog_connection
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/droplets
+  value:
+    blobstore_type: fog
+    buildpack_directory_key: droplets
+    fog_connection: *fog_connection
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/packages
+  value:
+    blobstore_type: fog
+    buildpack_directory_key: packages
+    fog_connection: *fog_connection
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/resource_pool
+  value:
+    blobstore_type: fog
+    buildpack_directory_key: resource_pool
+    fog_connection: *fog_connection
+#cc-clock
+- type: replace
+  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/buildpacks
+  value:
+    blobstore_type: fog
+    buildpack_directory_key: buildpacks
+    fog_connection: *fog_connection
+- type: replace
+  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/droplets
+  value:
+    blobstore_type: fog
+    buildpack_directory_key: droplets
+    fog_connection: *fog_connection
+- type: replace
+  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/packages
+  value:
+    blobstore_type: fog
+    buildpack_directory_key: packages
+    fog_connection: *fog_connection
+- type: replace
+  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/resource_pool
   value:
     blobstore_type: fog
     buildpack_directory_key: resource_pool
