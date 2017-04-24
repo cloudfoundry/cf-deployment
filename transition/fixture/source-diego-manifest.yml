@@ -16,6 +16,10 @@ properties:
         client_cert: cc-bridge-tps-cert
         client_key: cc-bridge-tps-key
   diego:
+    auctioneer:
+      ca_cert: service-cf-internal-ca-cert
+      server_cert: diego-auctioneer-server-cert
+      server_key: diego-auctioneer-server-key
     bbs:
       ca_cert: service-cf-internal-ca-cert
       rep:
@@ -23,11 +27,9 @@ properties:
         client_cert: diego-rep-client-cert
         client_key: diego-rep-client-key
       auctioneer:
-        ca_cert: auctioneer-ca
+        ca_cert: service-cf-internal-ca-cert
         client_cert: auctioneer-cert
         client_key: auctioneer-key
-        server_cert: diego-auctioneer-server-cert
-        server_key: diego-auctioneer-server-key
       encryption_keys:
       - passphrase: steve-passcode
       server_cert: diego-bbs-server-cert
