@@ -77,6 +77,12 @@
       name: cloud_controller
     port: 5524
 - type: replace
+  path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/type
+  value: postgres
+- type: replace
+  path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/port
+  value: 5524
+- type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/ccdb
   value: *ccdb
 - type: replace
