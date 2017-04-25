@@ -41,6 +41,9 @@
         - citext: true
           name: diego
           tag: diego
+        - citext: true
+          name: routing-api
+          tag: routing-api
         db_scheme: postgres
         port: 5524
         roles:
@@ -52,6 +55,9 @@
           tag: admin
         - name: diego
           password: ((diego_database_password))
+          tag: admin
+        - name: routing-api
+          password: ((routing_api_database_password))
           tag: admin
 - type: replace
   path: /instance_groups/name=mysql/name
