@@ -535,6 +535,8 @@ instance_groups:
         oauth_client_id: ssh-proxy
       routing_api:
         enabled: true
+      ssl:
+        skip_cert_verify: true
       uaa:
         ca_cert: "((uaa_ssl.ca))"
         clients:
@@ -547,7 +549,6 @@ instance_groups:
         url: https://uaa.((system_domain))
         ssl:
           port: 8443
-          skip_cert_verify: true
       cc:
         default_running_security_groups: &cc_default_running_security_groups
         - public_networks
