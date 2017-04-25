@@ -1,0 +1,43 @@
+# Install HA Proxy
+- type: replace
+  path: /releases/-
+  value:
+    name: haproxy
+    version: 8.0.12
+    url: git+https://github.com/cloudfoundry-incubator/haproxy-boshrelease
+    
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: haproxy
+    azs: [z1, z2]
+    instances: 2
+    stemcell: default
+    vm_type: m3.medium
+    networks: [ name: default ]
+    jobs:
+      - name: consul_agent
+        release: consul
+        consumes:
+          consul: {from: consul_server}
+      - name: keepalived
+        release: haproxy
+        properties:
+          keepalived:
+            vip: ((haproxy_static_vip))
+      - name: haproxy
+        release: haproxy
+        properties:
+          ha_proxy:
+            backend_servers: [ gorouter.service.cf.internal ]
+            ssl_pem: "((router_ssl.certificate))((router_ssl.private_key))"
+            tcp:
+              - name: ssh_proxy
+                port: 2222
+                backend_servers:
+                  - ssh-proxy.service.cf.internal
+# Register ssh_proxy with consul
+- type: replace
+  path: /instance_groups/name=diego-brain/jobs/name=consul_agent/properties?
+  value:
+    consul: { agent: { services: { ssh_proxy: { check: {} } } } }
