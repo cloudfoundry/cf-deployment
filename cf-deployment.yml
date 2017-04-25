@@ -402,7 +402,7 @@ instance_groups:
             secret: "((uaa_clients_tcp_router_secret))"
           routing_api_client:
             authorities: routing.routes.write,routing.routes.read,routing.router_groups.read
-            authorized_grant_type: client_credentials
+            authorized-grant-types: client_credentials
             secret: "((uaa_clients_routing_api_client_secret))"
       uaadb:
         address: sql-db.service.cf.internal
