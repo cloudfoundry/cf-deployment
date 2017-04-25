@@ -94,6 +94,28 @@
     db_password: "((diego_database_password))"
     db_driver: postgres
 
+- type: replace
+  path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/type
+  value: postgres
+- type: replace
+  path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/port
+  value: 5524
+- type: replace
+  path: /instance_groups/name=postgres/jobs/name=postgres/properties/databases/databases/name=routing-api?/name
+  value: routing-api
+- type: replace
+  path: /instance_groups/name=postgres/jobs/name=postgres/properties/databases/databases/name=routing-api?/tag
+  value: routing-api
+- type: replace
+  path: /instance_groups/name=postgres/jobs/name=postgres/properties/databases/databases/name=routing-api?/citext
+  value: true
+- type: replace
+  path: /instance_groups/name=postgres/jobs/name=postgres/properties/databases/roles/name=routing-api?/name
+  value: routing-api
+- type: replace
+  path: /instance_groups/name=postgres/jobs/name=postgres/properties/databases/roles/name=routing-api?/tag
+  value: admin
+
 # --- Remove now unused cf-mysql release and variables ---
 - type: remove
   path: /releases/name=cf-mysql?
