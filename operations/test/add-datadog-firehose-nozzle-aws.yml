@@ -1,0 +1,55 @@
+---
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/datadog-firehose-nozzle?
+  value:
+    access-token-validity: 1209600
+    authorized-grant-types: authorization_code,client_credentials,refresh_token
+    override: true
+    secret: "((uaa_clients_datadog-firehose-nozzle_secret))"
+    scope: openid,oauth.approvals,doppler.firehose
+    authorities: oauth.login,doppler.firehose
+
+
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: nozzle
+    azs:
+    - z1
+    instances: 1
+    persistent_disk_type: 5GB
+    vm_type: default
+    stemcell: default
+    networks:
+    - name: private
+    jobs:
+    - name: datadog-firehose-nozzle
+      release: datadog-firehose-nozzle
+      properties:
+        loggregator:
+          traffic_controller_url: "wss://doppler.((system_domain)):4443"
+        datadog:
+          api_key: "((datadog_api_key))"
+          flush_duration_seconds: 15
+          metric_prefix: "((datadog_metric_prefix))"
+        uaa:
+          url: "https://uaa.((system_domain))"
+          client: "datadog-firehose-nozzle"
+          client_secret: "((uaa_clients_datadog-firehose-nozzle_secret))"
+        nozzle:
+          insecure_ssl_skip_verify: true
+          subscription_id: datadog-nozzle
+          deployment: cf
+
+- type: replace
+  path: /variables/-
+  value:
+    name: uaa_clients_datadog-firehose-nozzle_secret
+    type: password
+- type: replace
+  path: /releases/-
+  value:
+    name: datadog-firehose-nozzle
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/datadog-firehose-nozzle-release?v=59
+    version: 59
+    sha1: 6ebe59075bde3be44c6a788fdd02a07b7d950aee

@@ -9,15 +9,12 @@ the ways in which they may fail.
 
 ## Usage
 ```
-spiff merge \
-vars-store-template.yml \
-vars-pre-processing-template.yml \
-<your-cf-manifest.yml> \
-<your-diego-manifest.yml> \
-<your-ca-private-keys-stubs.yml> \
-> deployment-vars.yml
+usage: transition.sh [required arguments]
+  required arguments:
+    -ca, --ca-keys         Path to your created CA Keys file
+    -cf, --cf-manifest     Path to your existing Cloud Foundry Manifest
+    -d,  --diego-manifest  Path to your existiong Diego Manifest
 ```
-
 This is intended to result
 in a vars-store file you can use
 with the `--vars-store` option
@@ -71,23 +68,21 @@ The CA private key stub file is required.
 ---
 from_user:
   diego_ca:
-    private_key: |+
+    private_key: |
       multi
       line
       example
       key
   etcd_ca:
-    private_key: |+
+    private_key: |
   etcd_peer_ca:
-    private_key: |+
+    private_key: |
   consul_agent_ca:
-    private_key: |+
+    private_key: |
   loggregator_ca:
-    private_key: |+
-  router_ca:
-    private_key: |+
+    private_key: |
   uaa_ca:
-    private_key: |+
+    private_key: |
 ```
 
 ### Tests and Contributions

@@ -1,0 +1,179 @@
+---
+# Add migrated_from for instance_groups
+- type: replace
+  path: /instance_groups/name=consul/migrated_from?
+  value:
+    - {name: consul_z1, az: z1}
+    - {name: consul_z2, az: z2}
+
+- type: replace
+  path: /instance_groups/name=nats/migrated_from?
+  value:
+    - {name: nats_z1, az: z1}
+    - {name: nats_z2, az: z2}
+
+- type: replace
+  path: /instance_groups/name=etcd/migrated_from?
+  value:
+    - {name: etcd_z1, az: z1}
+
+- type: replace
+  path: /instance_groups/name=blobstore/migrated_from?
+  value:
+    - {name: blobstore_z1, az: z1}
+
+- type: replace
+  path: /instance_groups/name=postgres/migrated_from?
+  value:
+    - {name: postgres_z1, az: z1}
+
+- type: replace
+  path: /instance_groups/name=uaa/migrated_from?
+  value:
+    - {name: uaa_z1, az: z1}
+    - {name: uaa_z2, az: z2}
+
+- type: replace
+  path: /instance_groups/name=api/migrated_from?
+  value:
+    - {name: api_z1, az: z1}
+    - {name: api_z2, az: z2}
+
+- type: replace
+  path: /instance_groups/name=cc-clock/migrated_from?
+  value:
+    - {name: clock_z1, az: z1}
+
+- type: replace
+  path: /instance_groups/name=cc-worker/migrated_from?
+  value:
+    - {name: api_worker_z1, az: z1}
+    - {name: api_worker_z2, az: z2}
+
+- type: replace
+  path: /instance_groups/name=doppler/migrated_from?
+  value:
+    - {name: doppler_z1, az: z1}
+    - {name: doppler_z2, az: z2}
+
+- type: replace
+  path: /instance_groups/name=log-api/migrated_from?
+  value:
+    - {name: loggregator_trafficcontroller_z1, az: z1}
+    - {name: loggregator_trafficcontroller_z2, az: z2}
+
+- type: replace
+  path: /instance_groups/name=router/migrated_from?
+  value:
+    - {name: router_z1, az: z1}
+    - {name: router_z2, az: z2}
+
+# Update releases section to have the same releases as cf-release that we deployed
+- type: replace
+  path: /releases/name=capi/version
+  value: 1.24.0
+- type: replace
+  path: /releases/name=capi/url
+  value: https://bosh.io/d/github.com/cloudfoundry/capi-release?v=1.24.0
+- type: replace
+  path: /releases/name=capi/sha1
+  value: fc8a15bf4553a93e87f71c68537d9dbd7fc15bc6
+
+- type: replace
+  path: /releases/name=uaa/version
+  value: "29"
+- type: replace
+  path: /releases/name=uaa/url
+  value: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=29
+- type: replace
+  path: /releases/name=uaa/sha1
+  value: 6d97f83aaf5d2ec26c7592aafc111625b4bb37ed
+
+# cflinuxfs2-rootfs release name has changed. Therefore it requires some extra work to lock their release version
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=cflinuxfs2-rootfs-setup/release
+  value: cflinuxfs2-rootfs
+- type: remove
+  path: /releases/name=cflinuxfs2
+- type: replace
+  path: /releases/name=cflinuxfs2-rootfs?
+  value:
+    version: 1.60.0
+    url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-rootfs-release?v=1.60.0
+    sha1: 12b7e2473d0f4e9edc90bc3da873f51e70ede942
+    name: cflinuxfs2-rootfs
+
+- type: replace
+  path: /releases/name=consul/version
+  value: "161"
+- type: replace
+  path: /releases/name=consul/url
+  value: https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=161
+- type: replace
+  path: /releases/name=consul/sha1
+  value: 17bd85f74a9473164766286890295b6e5a233211
+
+- type: replace
+  path: /releases/name=diego/version
+  value: 1.11.0
+- type: replace
+  path: /releases/name=diego/url
+  value: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=1.11.0
+- type: replace
+  path: /releases/name=diego/sha1
+  value: 38f4b727956a1888776322156b1fd0532462b16d
+
+- type: replace
+  path: /releases/name=etcd/version
+  value: 93
+- type: replace
+  path: /releases/name=etcd/url
+  value: https://bosh.io/d/github.com/cloudfoundry-incubator/etcd-release?v=93
+- type: replace
+  path: /releases/name=etcd/sha1
+  value: c58be90a5b987d8b98a866d959546d0862828058
+
+- type: replace
+  path: /releases/name=garden-runc/version
+  value: 1.3.0
+- type: replace
+  path: /releases/name=garden-runc/url
+  value: https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.3.0
+- type: replace
+  path: /releases/name=garden-runc/sha1
+  value: 816044289381e3b7b66dd73fbcb20005594026a3
+
+- type: replace
+  path: /releases/name=loggregator/version
+  value: "81"
+- type: replace
+  path: /releases/name=loggregator/url
+  value: https://bosh.io/d/github.com/cloudfoundry/loggregator?v=81
+- type: replace
+  path: /releases/name=loggregator/sha1
+  value: 603118517d9123f18b5c5c1e1d9be5bfef3d142e
+
+- type: replace
+  path: /releases/name=routing/version
+  value: 0.147.0
+- type: replace
+  path: /releases/name=routing/url
+  value: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.147.0
+- type: replace
+  path: /releases/name=routing/sha1
+  value: 526af8e02a170b424f80148eed95f373bf831a6a
+
+- type: replace
+  path: /releases/name=statsd-injector/version
+  value: 1.0.22
+- type: replace
+  path: /releases/name=statsd-injector/url
+  value: https://bosh.io/d/github.com/cloudfoundry/statsd-injector-release?v=1.0.22
+- type: replace
+  path: /releases/name=statsd-injector/sha1
+  value: fa54cf071b9b9f27fb19cbca5da3683a7872b26a
+
+# This is the stemcell version that is currently deployed with cf-release in minerva.
+- type: replace
+  path: /stemcells/0/version
+  value: "3363.15"

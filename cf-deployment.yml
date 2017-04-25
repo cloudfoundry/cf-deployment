@@ -70,9 +70,6 @@ instance_groups:
     properties: &metron_agent_properties
       metron_agent:
         deployment: "((system_domain))"
-        etcd:
-          client_cert: "((etcd_client.certificate))"
-          client_key: "((etcd_client.private_key))"
       metron_endpoint:
         shared_secret: "((dropsonde_shared_secret))"
       loggregator:
@@ -217,6 +214,9 @@ instance_groups:
           - name: diego
             username: diego
             password: "((diego_database_password))"
+          - name: routing-api
+            username: routing-api
+            password: "((routing_api_database_password))"
           database_startup_timeout: 600
           port: 33306
   - name: proxy
@@ -400,6 +400,10 @@ instance_groups:
             authorities: routing.routes.read,routing.router_groups.read
             authorized-grant-types: client_credentials
             secret: "((uaa_clients_tcp_router_secret))"
+          routing_api_client:
+            authorities: routing.routes.write,routing.routes.read,routing.router_groups.read
+            authorized_grant_type: client_credentials
+            secret: "((uaa_clients_routing_api_client_secret))"
       uaadb:
         address: sql-db.service.cf.internal
         databases:
@@ -513,6 +517,7 @@ instance_groups:
         agent:
           services:
             cloud_controller_ng: {}
+            routing-api: {}
   - name: cloud_controller_ng
     release: capi
     provides:
@@ -528,6 +533,8 @@ instance_groups:
       app_ssh: &app_ssh
         host_key_fingerprint: "((diego_ssh_proxy_host_key.public_key_fingerprint))"
         oauth_client_id: ssh-proxy
+      routing_api:
+        enabled: true
       uaa:
         ca_cert: "((uaa_ssl.ca))"
         clients:
@@ -540,6 +547,7 @@ instance_groups:
         url: https://uaa.((system_domain))
         ssl:
           port: 8443
+          skip_cert_verify: true
       cc:
         default_running_security_groups: &cc_default_running_security_groups
         - public_networks
@@ -663,6 +671,25 @@ instance_groups:
   - name: statsd_injector
     release: statsd-injector
     properties: *statsd_injector_properties
+  - name: routing-api
+    release: routing
+    properties:
+      routing_api:
+        system_domain: "((system_domain))"
+        router_groups:
+        - name: default-tcp
+          type: tcp
+          reservable_ports: 1024-1123
+        sqldb:
+          type: mysql
+          host: sql-db.service.cf.internal
+          port: 3306
+          schema: routing-api
+          username: routing-api
+          password: "((routing_api_database_password))"
+      uaa:
+        ca_cert: "((uaa_ca.certificate))"
+        tls_port: 8443
 - name: cc-worker
   azs:
   - z1
@@ -708,11 +735,16 @@ instance_groups:
       system_domain: "((system_domain))"
       app_domains: *app_domains
       app_ssh: *app_ssh
+      routing_api:
+        enabled: true
       uaa:
         ca_cert: "((uaa_ssl.ca))"
         clients:
           cc-service-dashboards:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
+          cc_routing:
+            secret: "((uaa_clients_cc-routing_secret))"
+
         url: https://uaa.((system_domain))
         ssl:
           port: 8443
@@ -754,6 +786,8 @@ instance_groups:
         route_services_secret: "((router_route_services_secret))"
         tracing:
           enable_zipkin: true
+      routing_api:
+        enabled: true
       uaa:
         clients:
           gorouter:
@@ -1018,8 +1052,6 @@ instance_groups:
             ca_cert: "((cc_bridge_cc_uploader_server.ca))"
             server_cert: "((cc_bridge_cc_uploader_server.certificate))"
             server_key: "((cc_bridge_cc_uploader_server.private_key))"
-      diego:
-        ssl: *ssl
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
@@ -1191,6 +1223,10 @@ variables:
 - name: diego_database_password
   type: password
 - name: uaa_database_password
+  type: password
+- name: routing_api_database_password
+  type: password
+- name: uaa_clients_routing_api_client_secret
   type: password
 - name: nats_password
   type: password
@@ -1477,17 +1513,17 @@ releases:
   version: "20"
   sha1: 2060777c660b40dbc1936a66e900c803e0981a6a
 - name: cflinuxfs2
-  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.113.0
-  version: 1.113.0
-  sha1: 8de6e28c721eb9404aaad66ca033258b4657a463
+  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.115.0
+  version: 1.115.0
+  sha1: 679bf3eaebdd172564c751337b91888c2590d107
 - name: consul
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=162
-  version: "162"
-  sha1: 0e5904beffb22b6ca1c53ca26dcc5079b828003a
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=163
+  version: "163"
+  sha1: 24f56de4b9c7d0fcd8aabef867984a398fc47238
 - name: diego
-  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=1.13.0
-  version: 1.13.0
-  sha1: e067f76ea02e2c88a16d56d7cce5a7a44f254762
+  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=1.14.1
+  version: 1.14.1
+  sha1: f77696a10a7098ead836a53ed7ee81cfa0233856
 - name: dotnet-core-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/dotnet-core-buildpack-release?v=1.0.15
   version: 1.0.15
@@ -1501,17 +1537,17 @@ releases:
   version: 1.5.0
   sha1: c86150d54162e80597cfa2959137014c41512bbf
 - name: go-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/go-buildpack-release?v=1.8.0
-  version: 1.8.0
-  sha1: c08ecea30c913af2d5b3ce3f83240b16bf4e21e5
+  url: https://bosh.io/d/github.com/cloudfoundry/go-buildpack-release?v=1.8.1
+  version: 1.8.1
+  sha1: be570b155fb8d0c9d04e9d9877b6da8ca1ffe6fd
 - name: java-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/java-buildpack-release?v=3.15
-  version: "3.15"
-  sha1: 4d4d02703eb478310d87a65849495f3ee444370b
+  url: https://bosh.io/d/github.com/cloudfoundry/java-buildpack-release?v=3.16
+  version: "3.16"
+  sha1: 84e974747e4b2bd0a33fa579a63fe2c71526106a
 - name: loggregator
-  url: https://bosh.io/d/github.com/cloudfoundry/loggregator?v=84
-  version: "84"
-  sha1: 9c22cb6656e221875ec54d2354eb3d5014bc2b26
+  url: https://bosh.io/d/github.com/cloudfoundry/loggregator?v=85
+  version: "85"
+  sha1: 4e0cbc489613c0cbe6950da1ce8b1364cae9e90f
 - name: nats
   url: https://bosh.io/d/github.com/cloudfoundry/nats-release?v=16
   version: "16"
@@ -1521,33 +1557,33 @@ releases:
   version: 1.5.32
   sha1: 8ee2510ddd806b254709ccfcf17a3ac108776d1f
 - name: php-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/php-buildpack-release?v=4.3.30
-  version: 4.3.30
-  sha1: 28b11df45180bef7e1b49dc595b0fb215901dfed
+  url: https://bosh.io/d/github.com/cloudfoundry/php-buildpack-release?v=4.3.31
+  version: 4.3.31
+  sha1: a76ebbe67f358f28f3a9076617e5073b5193645a
 - name: python-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/python-buildpack-release?v=1.5.17
-  version: 1.5.17
-  sha1: 8460983b3c4664f89114483e342e18ba1b37f421
+  url: https://bosh.io/d/github.com/cloudfoundry/python-buildpack-release?v=1.5.18
+  version: 1.5.18
+  sha1: 31b931ebe29233ef7667f5f7bdcd903ede067a09
 - name: routing
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.150.0
-  version: 0.150.0
-  sha1: 01c40e1d718a726c9e726fe91e8566d2de4df45f
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.151.0
+  version: 0.151.0
+  sha1: 2520b923ea447ec1de3034e97111cf6c72de2ac2
 - name: ruby-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/ruby-buildpack-release?v=1.6.37
   version: 1.6.37
   sha1: 2e18596659be8adc9648578dac7ddcfeadbc8d8b
 - name: staticfile-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/staticfile-buildpack-release?v=1.4.4
-  version: 1.4.4
-  sha1: 1dc76abaffb01d7b6b7610c731f5926a3d2485e3
+  url: https://bosh.io/d/github.com/cloudfoundry/staticfile-buildpack-release?v=1.4.5
+  version: 1.4.5
+  sha1: 9256d01e09511bbc89bdb83eaa820cacec6eda38
 - name: statsd-injector
-  url: https://bosh.io/d/github.com/cloudfoundry/statsd-injector-release?v=1.0.22
-  version: 1.0.22
-  sha1: fa54cf071b9b9f27fb19cbca5da3683a7872b26a
+  url: https://bosh.io/d/github.com/cloudfoundry/statsd-injector-release?v=1.0.23
+  version: 1.0.23
+  sha1: 90eb8fc6550b9f6d557027de9f54f32f21b3ca95
 - name: uaa
-  url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=30
-  version: "30"
-  sha1: 90b034c0d9a8282a47d0409e561ffb1b9abf626b
+  url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=34
+  version: "34"
+  sha1: dcb2a2911c1592b2c582237e801fb5d0c7639674
 stemcells:
 - alias: default
   os: ubuntu-trusty

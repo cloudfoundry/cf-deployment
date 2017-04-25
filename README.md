@@ -92,7 +92,7 @@ For a full guide to getting set up on GCP, look at [this guide](gcp-deployment-g
 If you're deploying against a local bosh-lite,
 you'll need to take the following steps before deploying:
 ```
-export BOSH_CA_CERT=$PWD/bosh-lite/ca/certs/ca.crt
+export BOSH_CA_CERT=<PATH-TO-BOSH-LITE-REPO>/ca/certs/ca.crt
 bosh -e 192.168.50.4 update-cloud-config bosh-lite/cloud-config.yml
 ```
 
@@ -201,6 +201,9 @@ Here's an (alphabetical) summary:
   placing them all into a single AZ.
   Effectively halves the deployment's footprint.
   Should be applied before other ops files.
+- `operations/test/add-datadog-firehose-nozzle-aws.yml` -
+  Deploys a datadog-firehose-nozzle that collects system metric and posts to datadog.
+  For AWS only.
 - `operations/tcp-routing-gcp.yml` - this ops file adds TCP router and routing api for GCP.
   Not directly compatible with the `use-postgres` ops file;
   see that ops file's entry

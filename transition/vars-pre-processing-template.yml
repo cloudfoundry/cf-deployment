@@ -35,13 +35,13 @@ consul_server:
   certificate: (( properties.consul.server_cert ))
   private_key: (( properties.consul.server_key ))
 diego_auctioneer_client:
-  ca: (( properties.diego.bbs.auctioneer.ca_cert ))
+  ca: (( properties.diego.auctioneer.ca_cert ))
   certificate: (( properties.diego.bbs.auctioneer.client_cert ))
   private_key: (( properties.diego.bbs.auctioneer.client_key ))
 diego_auctioneer_server:
-  ca: (( properties.diego.bbs.auctioneer.ca_cert ))
-  certificate: (( properties.diego.bbs.auctioneer.server_cert ))
-  private_key: (( properties.diego.bbs.auctioneer.server_key ))
+  ca: (( properties.diego.auctioneer.ca_cert ))
+  certificate: (( properties.diego.auctioneer.server_cert ))
+  private_key: (( properties.diego.auctioneer.server_key ))
 diego_bbs_client:
   ca: (( properties.diego.ssh_proxy.bbs.ca_cert ))
   certificate: (( properties.diego.ssh_proxy.bbs.client_cert ))
@@ -57,9 +57,9 @@ diego_rep_agent:
   certificate: (( properties.diego.rep.server_cert ))
   private_key: (( properties.diego.rep.server_key ))
 diego_rep_client:
-  ca: (( properties.diego.rep.ca_cert ))
-  certificate: (( properties.diego.rep.client_cert ))
-  private_key: (( properties.diego.rep.client_key ))
+  ca: (( properties.diego.bbs.rep.ca_cert ))
+  certificate: (( properties.diego.bbs.rep.client_cert ))
+  private_key: (( properties.diego.bbs.rep.client_key ))
 diego_ssh_proxy_host_key:
   private_key: (( properties.diego.ssh_proxy.host_key ))
   public_key_fingerprint: (( properties.app_ssh.host_key_fingerprint ))
@@ -101,7 +101,7 @@ loggregator_tls_statsdinjector:
   certificate: (( properties.loggregator.tls.statsd_injector.cert ))
   private_key: (( properties.loggregator.tls.statsd_injector.key ))
 loggregator_tls_syslogdrainbinder:
-  ca: (( properties.loggregator.tls.ca_cert ))
+  ca: (( properties.diego.bbs.ca_cert ))
   certificate: (( properties.loggregator.tls.syslogdrainbinder.cert ))
   private_key: (( properties.loggregator.tls.syslogdrainbinder.key ))
 loggregator_tls_tc:
@@ -227,6 +227,10 @@ properties:
     roles:
     - (( merge || nil ))
   diego:
+    auctioneer:
+      ca_cert: (( merge || nil ))
+      server_key: (( merge || nil ))
+      server_cert: (( merge || nil ))
     bbs:
       sql:
         db_password: (( merge || nil ))
@@ -239,12 +243,12 @@ properties:
         ca_cert: (( merge ))
         client_cert: (( merge || nil ))
         client_key: (( merge || nil ))
-        server_cert: (( merge || nil ))
-        server_key: (( merge || nil ))
+      rep:
+        ca_cert: (( merge ))
+        client_cert: (( merge || nil ))
+        client_key: (( merge || nil ))
     rep:
       ca_cert: (( merge ))
-      client_cert: (( merge || nil ))
-      client_key: (( merge || nil ))
       server_cert: (( merge || nil ))
       server_key: (( merge || nil ))
     ssh_proxy:
