@@ -1052,8 +1052,6 @@ instance_groups:
             ca_cert: "((cc_bridge_cc_uploader_server.ca))"
             server_cert: "((cc_bridge_cc_uploader_server.certificate))"
             server_key: "((cc_bridge_cc_uploader_server.private_key))"
-      diego:
-        ssl: *ssl
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
