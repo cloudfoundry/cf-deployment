@@ -89,7 +89,3 @@
     - name: metron_agent
       release: loggregator
       properties: *metron_agent_properties
-
-- type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ssl?/skip_cert_verify
-  value: true

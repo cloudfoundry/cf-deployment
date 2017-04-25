@@ -550,6 +550,7 @@ instance_groups:
         url: https://uaa.((system_domain))
         ssl:
           port: 8443
+          skip_cert_verify: true
       cc:
         default_running_security_groups: &cc_default_running_security_groups
         - public_networks
