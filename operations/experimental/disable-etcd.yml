@@ -1,0 +1,40 @@
+
+- type: remove
+  path: /instance_groups/name=etcd
+
+- type: remove
+  path: /instance_groups/name=doppler/jobs/name=doppler/properties/doppler/etcd
+- type: remove
+  path: /instance_groups/name=doppler/jobs/name=doppler/properties/loggregator/etcd
+- type: replace
+  path: /instance_groups/name=doppler/jobs/name=doppler/properties/doppler/disable_announce?
+  value: true
+- type: replace
+  path: /instance_groups/name=doppler/jobs/name=doppler/properties/loggregator/disable_syslog_drains?
+  value: true
+- type: remove
+  path: /instance_groups/name=doppler/jobs/name=syslog_drain_binder
+
+- type: replace
+  path: /instance_groups/name=log-api/jobs/name=loggregator_trafficcontroller/consumes?/doppler?
+  value:
+    from: doppler
+- type: remove
+  path: /instance_groups/name=log-api/jobs/name=loggregator_trafficcontroller/properties/traffic_controller/etcd
+- type: remove
+  path: /instance_groups/name=log-api/jobs/name=loggregator_trafficcontroller/properties/loggregator/etcd
+
+- type: remove
+  path: /variables/name=etcd_ca
+- type: remove
+  path: /variables/name=etcd_server
+- type: remove
+  path: /variables/name=etcd_client
+- type: remove
+  path: /variables/name=etcd_peer_ca
+- type: remove
+  path: /variables/name=etcd_peer
+
+# this can happen once routing-api no longer uses etcd
+- type: remove
+  path: /releases/name=etcd
