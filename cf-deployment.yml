@@ -175,6 +175,54 @@ instance_groups:
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
+- name: router
+  azs:
+  - z1
+  - z2
+  instances: 2
+  vm_type: m3.medium
+  vm_extensions:
+  - cf-router-network-properties
+  stemcell: default
+  update:
+    max_in_flight: 1
+    serial: true
+  networks:
+  - name: default
+  jobs:
+  - name: consul_agent
+    release: consul
+    consumes:
+      consul: {from: consul_server}
+    properties:
+      consul:
+        agent:
+          services:
+            gorouter: {}
+  - name: gorouter
+    release: routing
+    properties:
+      router:
+        ssl_skip_validation: true
+        enable_ssl: true
+        ssl_cert: "((router_ssl.certificate))"
+        ssl_key: "((router_ssl.private_key))"
+        status:
+          password: "((router_status_password))"
+          user: router-status
+        route_services_secret: "((router_route_services_secret))"
+        tracing:
+          enable_zipkin: true
+      uaa:
+        clients:
+          gorouter:
+            secret: "((uaa_clients_gorouter_secret))"
+        ca_cert: "((uaa_ssl.ca))"
+        ssl:
+          port: 8443
+  - name: metron_agent
+    release: loggregator
+    properties: *metron_agent_properties    
 - name: mysql
   azs:
   - z1
@@ -716,54 +764,6 @@ instance_groups:
         url: https://uaa.((system_domain))
         ssl:
           port: 8443
-- name: router
-  azs:
-  - z1
-  - z2
-  instances: 2
-  vm_type: m3.medium
-  vm_extensions:
-  - cf-router-network-properties
-  stemcell: default
-  update:
-    max_in_flight: 1
-    serial: true
-  networks:
-  - name: default
-  jobs:
-  - name: consul_agent
-    release: consul
-    consumes:
-      consul: {from: consul_server}
-    properties:
-      consul:
-        agent:
-          services:
-            gorouter: {}
-  - name: gorouter
-    release: routing
-    properties:
-      router:
-        ssl_skip_validation: true
-        enable_ssl: true
-        ssl_cert: "((router_ssl.certificate))"
-        ssl_key: "((router_ssl.private_key))"
-        status:
-          password: "((router_status_password))"
-          user: router-status
-        route_services_secret: "((router_route_services_secret))"
-        tracing:
-          enable_zipkin: true
-      uaa:
-        clients:
-          gorouter:
-            secret: "((uaa_clients_gorouter_secret))"
-        ca_cert: "((uaa_ssl.ca))"
-        ssl:
-          port: 8443
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
 - name: diego-brain
   azs:
   - z1
