@@ -5,6 +5,7 @@
     name: minio
     version: 1
     url: git+https://github.com/minio/minio-boshrelease
+
 - type: replace
   path: /instance_groups/name=blobstore
   value:
@@ -16,16 +17,6 @@
     persistent_disk_type: 100GB
     networks: [ name: default ]     
     jobs:
-      - name: consul_agent
-        release: consul
-        consumes:
-          consul: {from: consul_server}
-        properties:
-          consul:
-            agent:
-              services:
-                blobstore:
-                  check: {}
       - name: minio-server
         release: minio
         properties:
@@ -45,6 +36,7 @@
                   component: blobstore
                 uris:
                   - blobstore.((system_domain))
+
 - type: replace
   path: /variables/-
   value:
@@ -52,6 +44,7 @@
     type: password
     options:
       length: 20
+
 - type: replace
   path: /variables/-
   value:
@@ -59,14 +52,22 @@
     type: password
     options:
       length: 40
+
 # Remove blobstore secrets
 - type: remove
   path: /variables/name=blobstore_tls
   
 - type: remove
   path: /variables/name=blobstore_secure_link_secret
+
 - type: remove
   path: /variables/name=blobstore_admin_users_password
+
+# Configure diego with download cert
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=rep/properties/diego/executor?/ca_certs_for_downloads
+  value: ((router_ssl.ca))
+
 # Configure CC to use minio
 # api
 - type: replace
@@ -75,7 +76,7 @@
     blobstore_type: fog
     buildpack_directory_key: buildpacks
     fog_connection: &fog_connection
-      endpoint: http://blobstore.service.cf.internal
+      endpoint: https://blobstore.((system_domain))
       aws_access_key_id: "((minio_accesskey))"
       aws_secret_access_key: "((minio_secretkey))"
       aws_signature_version: 2
@@ -83,24 +84,28 @@
       provider: AWS
       connection_options:
         ssl_verify_peer: false
+
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/droplets
   value:
     blobstore_type: fog
     buildpack_directory_key: droplets
     fog_connection: *fog_connection
+
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/packages
   value:
     blobstore_type: fog
     buildpack_directory_key: packages
     fog_connection: *fog_connection
+
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/resource_pool
   value:
     blobstore_type: fog
     buildpack_directory_key: resource_pool
     fog_connection: *fog_connection
+
 #cc-worker
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/buildpacks
@@ -108,24 +113,28 @@
     blobstore_type: fog
     buildpack_directory_key: buildpacks
     fog_connection: *fog_connection
+
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/droplets
   value:
     blobstore_type: fog
     buildpack_directory_key: droplets
     fog_connection: *fog_connection
+
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/packages
   value:
     blobstore_type: fog
     buildpack_directory_key: packages
     fog_connection: *fog_connection
+
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/resource_pool
   value:
     blobstore_type: fog
     buildpack_directory_key: resource_pool
     fog_connection: *fog_connection
+
 #cc-clock
 - type: replace
   path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/buildpacks
@@ -133,18 +142,21 @@
     blobstore_type: fog
     buildpack_directory_key: buildpacks
     fog_connection: *fog_connection
+
 - type: replace
   path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/droplets
   value:
     blobstore_type: fog
     buildpack_directory_key: droplets
     fog_connection: *fog_connection
+
 - type: replace
   path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/packages
   value:
     blobstore_type: fog
     buildpack_directory_key: packages
     fog_connection: *fog_connection
+
 - type: replace
   path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/resource_pool
   value:
