@@ -1,118 +1,112 @@
----
 - type: replace
   path: /instance_groups/-
   value:
-    name: windows-cell
     azs:
     - z1
     - z2
     instances: 1
-    vm_type: r3.xlarge
-    vm_extensions:
-    - 100GB_ephemeral_disk
-    stemcell: windows
-    networks:
-    - name: default
     jobs:
-    - name: consul_agent_windows
+    - consumes:
+        consul:
+          from: consul_server
+      name: consul_agent_windows
+      properties:
+        syslog_daemon_config:
+          enable: false
       release: consul
-      consumes:
-        consul: {from: consul_server}
-      properties:
-        syslog_daemon_config:
-          enable: false
     - name: garden-windows
+      properties:
+        syslog_daemon_config:
+          enable: false
       release: garden-windows
-      properties:
-        syslog_daemon_config:
-          enable: false
     - name: rep_windows
-      release: diego
       properties:
-        syslog_daemon_config:
-          enable: false
         diego:
           executor:
-            ca_certs_for_downloads: "((blobstore_tls.ca))"
+            ca_certs_for_downloads: ((blobstore_tls.ca))
           rep:
-            require_tls: true
-            ca_cert: "((diego_rep_agent.ca))"
-            server_cert: "((diego_rep_agent.certificate))"
-            server_key: "((diego_rep_agent.private_key))"
-            enable_legacy_api_endpoints: false
             bbs:
-              ca_cert: "((diego_bbs_client.ca))"
-              client_cert: "((diego_bbs_client.certificate))"
-              client_key: "((diego_bbs_client.private_key))"
+              ca_cert: ((diego_bbs_client.ca))
+              client_cert: ((diego_bbs_client.certificate))
+              client_key: ((diego_bbs_client.private_key))
+            ca_cert: ((diego_rep_agent.ca))
+            enable_legacy_api_endpoints: false
             preloaded_rootfses:
             - windows2012R2:/tmp/windows2012R2
-        tls:
-          ca_cert: "((diego_rep_agent.ca))"
-          cert: "((diego_rep_agent.certificate))"
-          key: "((diego_rep_agent.private_key))"
-    - name: metron_agent_windows
-      release: loggregator
-      properties:
+            require_tls: true
+            server_cert: ((diego_rep_agent.certificate))
+            server_key: ((diego_rep_agent.private_key))
         syslog_daemon_config:
           enable: false
-        metron_agent:
-          deployment: "((system_domain))"
-          etcd:
-            client_cert: "((etcd_client.certificate))"
-            client_key: "((etcd_client.private_key))"
-        metron_endpoint:
-          shared_secret: "((dropsonde_shared_secret))"
+        tls:
+          ca_cert: ((diego_rep_agent.ca))
+          cert: ((diego_rep_agent.certificate))
+          key: ((diego_rep_agent.private_key))
+      release: diego
+    - name: metron_agent_windows
+      properties:
         loggregator:
-          tls:
-            ca_cert: "((loggregator_tls_metron.ca))"
-            metron:
-              cert: "((loggregator_tls_metron.certificate))"
-              key: "((loggregator_tls_metron.private_key))"
           etcd:
-            require_ssl: true
-            ca_cert: "((etcd_server.ca))"
+            ca_cert: ((etcd_server.ca))
             machines:
             - cf-etcd.service.cf.internal
-
+            require_ssl: true
+          tls:
+            ca_cert: ((loggregator_tls_metron.ca))
+            metron:
+              cert: ((loggregator_tls_metron.certificate))
+              key: ((loggregator_tls_metron.private_key))
+        metron_agent:
+          deployment: ((system_domain))
+          etcd:
+            client_cert: ((etcd_client.certificate))
+            client_key: ((etcd_client.private_key))
+        metron_endpoint:
+          shared_secret: ((dropsonde_shared_secret))
+        syslog_daemon_config:
+          enable: false
+      release: loggregator
+    name: windows-cell
+    networks:
+    - name: default
+    stemcell: windows
+    vm_extensions:
+    - 100GB_ephemeral_disk
+    vm_type: r3.xlarge
 - type: replace
   path: /releases/-
   value:
     name: garden-windows
-    version: 0.4.0
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/garden-windows-bosh-release?v=0.4.0
     sha1: 0533246ca26c438218e3847602eab2583142cc5a
-
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/garden-windows-bosh-release?v=0.4.0
+    version: 0.4.0
 - type: replace
   path: /stemcells/-
   value:
     alias: windows
     os: windows2012R2
     version: latest
-
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks?
   value:
-    - name: "cflinuxfs2"
-      description: "Cloud Foundry Linux-based filesystem"
-    - name: "windows2012R2"
-      description: "Windows Server 2012 R2"
-
+  - description: Cloud Foundry Linux-based filesystem
+    name: cflinuxfs2
+  - description: Windows Server 2012 R2
+    name: windows2012R2
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
   value:
     name: hwc_buildpack
     package: hwc-buildpack
-
 - type: replace
   path: /instance_groups/name=api/jobs/-
   value:
     name: hwc-buildpack
     release: hwc-buildpack
-
 - type: replace
   path: /releases/-
   value:
     name: hwc-buildpack
+    sha1: 088b979c229462a11a7a56181d81e623214d8084
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=2.3.4
     version: 2.3.4
-    sha1: 088b979c229462a11a7a56181d81e623214d8084
