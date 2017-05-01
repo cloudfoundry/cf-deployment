@@ -23,6 +23,7 @@
       release: garden-runc
       properties:
         garden:
+          cleanup_process_dirs_on_wait: true
           default_container_grace_time: 0
           destroy_containers_on_start: true
           graph_cleanup_threshold_in_mb: 0
