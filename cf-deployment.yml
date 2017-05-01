@@ -382,7 +382,7 @@ instance_groups:
             authorized-grant-types: client_credentials
             secret: "((uaa_clients_doppler_secret))"
           gorouter:
-            authorities: routing.routes.read,routing.router_groups.read
+            authorities: routing.routes.read
             authorized-grant-types: client_credentials
             secret: "((uaa_clients_gorouter_secret))"
           ssh-proxy:
@@ -397,7 +397,7 @@ instance_groups:
             authorized-grant-types: client_credentials
             secret: "((uaa_clients_tcp_emitter_secret))"
           tcp_router:
-            authorities: routing.routes.read,routing.router_groups.read
+            authorities: routing.routes.read
             authorized-grant-types: client_credentials
             secret: "((uaa_clients_tcp_router_secret))"
           routing_api_client:
