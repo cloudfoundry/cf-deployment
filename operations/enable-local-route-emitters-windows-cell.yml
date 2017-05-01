@@ -1,14 +1,2 @@
 ---
-- type: replace
-  path: /instance_groups/name=windows-cell/jobs/-
-  value:
-    name: route_emitter_windows
-    release: diego
-    properties:
-      diego:
-        route_emitter:
-          local_mode: true
-          bbs:
-            ca_cert: "((diego_bbs_client.ca))"
-            client_cert: "((diego_bbs_client.certificate))"
-            client_key: "((diego_bbs_client.private_key))"
+[]

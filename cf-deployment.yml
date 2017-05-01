@@ -911,33 +911,16 @@ instance_groups:
       diego:
         cfdot:
           bbs: *diego_bbs_client_properties
-- name: route-emitter
-  azs:
-  - z1
-  - z2
-  instances: 2
-  vm_type: m3.medium
-  stemcell: default
-  networks:
-  - name: default
-  jobs:
-  - name: consul_agent
-    release: consul
-    consumes:
-      consul: {from: consul_server}
   - name: route_emitter
     release: diego
     properties:
       diego:
         route_emitter:
+          local_mode: true
           bbs:
             ca_cert: "((diego_bbs_client.ca))"
             client_cert: "((diego_bbs_client.certificate))"
             client_key: "((diego_bbs_client.private_key))"
-            require_ssl: true
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
 - name: cc-clock
   azs:
   - z1
