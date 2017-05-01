@@ -1,0 +1,13 @@
+---
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=route_emitter/properties/tcp?/enabled?
+  value: true
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=route_emitter/properties/uaa?
+  value:
+    client_secret: "((uaa_clients_tcp_emitter_secret))"
+    ca_cert: "((uaa_ca.certificate))"
+
+- type: remove
+  path: /instance_groups/name=tcp-emitter
