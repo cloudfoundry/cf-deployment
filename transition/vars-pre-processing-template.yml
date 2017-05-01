@@ -16,7 +16,7 @@ cc_bridge_tps:
 cc_bulk_api_password: (( properties.cc.bulk_api_password ))
 cc_database_password: (( properties.ccdb.roles.[0].password || nil ))
 cc_database_username: (( properties.ccdb.roles.[0].name || nil ))
-cc_db_encryption_key: "(( properties.cc.db_encryption_key))"
+cc_db_encryption_key: (( properties.cc.db_encryption_key))
 cc_internal_api_password: (( properties.cc.internal_api_password ))
 cc_staging_upload_password: (( properties.cc.staging_upload_password ))
 cc_tls:
