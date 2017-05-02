@@ -1,0 +1,10 @@
+#!/bin/bash
+
+pushd $(dirname $0)/.. > /dev/null
+  version=$(bosh interpolate cf-deployment.yml -o operations/use-latest-stemcell.yml --path=/stemcells/alias=default/version)
+  if [ "${version}" == "latest" ]; then
+    echo "PASS - operations/use-latest-stemcell.yml"
+  else
+    echo "FAIL - operations/use-latest-stemcell.yml, expected 'latest' but got '${version}'"
+  fi
+popd > /dev/null
