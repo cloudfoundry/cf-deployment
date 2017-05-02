@@ -44,15 +44,15 @@
           key: ((diego_rep_agent.private_key))
       release: diego
     - name: route_emitter_windows
-      release: diego
       properties:
         diego:
           route_emitter:
-            local_mode: true
             bbs:
-              ca_cert: "((diego_bbs_client.ca))"
-              client_cert: "((diego_bbs_client.certificate))"
-              client_key: "((diego_bbs_client.private_key))"
+              ca_cert: ((diego_bbs_client.ca))
+              client_cert: ((diego_bbs_client.certificate))
+              client_key: ((diego_bbs_client.private_key))
+            local_mode: true
+      release: diego
     - name: metron_agent_windows
       properties:
         loggregator:
