@@ -146,7 +146,24 @@ function check_ca_private_key() {
   fi
 }
 
+function extract_uaa_jwt_value() {
+  local uaa_jwt_spiff_template
+  uaa_jwt_spiff_template="${1}"
+
+  uaa_jwt_active_key=$(bosh int $CF_MANIFEST --path=/properties/uaa/jwt/policy/active_key_id)
+  uaa_jwt_value=$(bosh int $CF_MANIFEST --path=/properties/uaa/jwt/policy/keys/${uaa_jwt_active_key}/signingKey)
+
+  cat > $uaa_jwt_spiff_template << EOF
+uaa_jwt_signing_key:
+  private_key: ${uaa_jwt_value}
+EOF
+}
+
 function spiff_it() {
+  uaa_jwt_spiff_template=$(mktemp)
+
+  extract_uaa_jwt_value "${uaa_jwt_spiff_template}"
+
   spiff merge \
   $SCRIPT_DIR/vars-store-template.yml \
   $SCRIPT_DIR/vars-pre-processing-template.yml \
@@ -154,6 +171,7 @@ function spiff_it() {
   $CF_MANIFEST \
   $DIEGO_MANIFEST \
   $CA_KEYS \
+  $uaa_jwt_spiff_template \
   > deployment-vars.yml
 }
 

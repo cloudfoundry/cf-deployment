@@ -1,21 +1,24 @@
 #!/bin/bash
 
 pushd $(dirname $0) > /dev/null
-diff -wB -C5 fixture/expected-vars-store.yml <(spiff merge \
-  vars-store-template.yml \
-  vars-pre-processing-template.yml \
-  vars-ca-template.yml \
-  fixture/source-cf-manifest.yml \
-  fixture/source-diego-manifest.yml \
-  fixture/ca-private-keys.yml )
+root_dir=$PWD
+  pushd $(mktemp -d) > /dev/null
 
-status=$?
-if [ "$status" == "0" ]; then
-  echo PASS - expected-vars-store
-else
-  echo FAIL - expected-vars-store
-fi
+    ${root_dir}/transition.sh \
+      -cf ${root_dir}/fixture/source-cf-manifest.yml \
+      -d ${root_dir}/fixture/source-diego-manifest.yml \
+      -ca ${root_dir}/fixture/ca-private-keys.yml > /dev/null
 
+    diff -wB -C5 ${root_dir}/fixture/expected-vars-store.yml deployment-vars.yml
+
+    status=$?
+    if [ "$status" == "0" ]; then
+      echo PASS - expected-vars-store
+    else
+      echo FAIL - expected-vars-store
+    fi
+
+  popd > /dev/null
 popd > /dev/null
 
 exit $status

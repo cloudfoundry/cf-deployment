@@ -124,7 +124,8 @@ uaa_clients_ssh-proxy_secret: (( properties.uaa.clients.ssh-proxy.secret ))
 uaa_clients_tcp_emitter_secret: (( properties.uaa.clients.tcp_emitter.secret ))
 uaa_clients_tcp_router_secret: (( properties.uaa.clients.tcp_router.secret ))
 uaa_database_password: (( properties.uaadb.roles.[0].password ))
-uaa_jwt_policy: (( properties.uaa.jwt ))
+uaa_jwt_signing_key:
+  private_key: (( merge ))
 uaa_login_saml:
   ca: (( properties.uaa.ca_cert ))
   certificate: (( properties.login.saml.serviceProviderCertificate ))
