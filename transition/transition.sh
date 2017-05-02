@@ -150,8 +150,8 @@ function extract_uaa_jwt_value() {
   local uaa_jwt_spiff_template
   uaa_jwt_spiff_template="${1}"
 
-  uaa_jwt_active_key=$(bosh int $CF_MANIFEST --path=/properties/uaa/jwt/policy/active_key_id)
-  uaa_jwt_value=$(bosh int $CF_MANIFEST --path=/properties/uaa/jwt/policy/keys/${uaa_jwt_active_key}/signingKey)
+  uaa_jwt_active_key=$(bosh interpolate $CF_MANIFEST --path=/properties/uaa/jwt/policy/active_key_id)
+  uaa_jwt_value=$(bosh interpolate $CF_MANIFEST --path=/properties/uaa/jwt/policy/keys/${uaa_jwt_active_key}/signingKey)
 
   cat > $uaa_jwt_spiff_template << EOF
 uaa_jwt_signing_key:
