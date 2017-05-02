@@ -17,6 +17,13 @@
   path: /instance_groups/name=diego-cell/jobs/name=rep/properties/diego/rep/locket?/api_location?
   value: "locket.service.cf.internal:8891"
 - type: replace
+  path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/locket?
+  value:
+    api_location: "locket.service.cf.internal:8891"
+    ca_cert: "((diego_locket_client.ca))"
+    client_cert: "((diego_locket_client.certificate))"
+    client_key: "((diego_locket_client.private_key))"
+- type: replace
   path: /instance_groups/name=diego-bbs/jobs/name=locket/properties?
   value:
     tls:
@@ -45,3 +52,13 @@
       alternative_names:
       - "*.locket.service.cf.internal"
       - locket.service.cf.internal
+- type: replace
+  path: /variables/-
+  value:
+    name: diego_locket_client
+    type: certificate
+    options:
+      ca: service_cf_internal_ca
+      common_name: locket client
+      extended_key_usage:
+      - client_auth
