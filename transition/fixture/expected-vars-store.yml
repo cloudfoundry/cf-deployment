@@ -156,7 +156,9 @@ uaa_clients_tcp_emitter_secret: uaa-emitter-secret
 uaa_clients_tcp_router_secret: uaa-tcp-secret
 uaa_database_password: uaadb-password
 uaa_jwt_signing_key:
-  private_key: uaa-jwt-private-key
+  private_key: |+
+    uaa-jwt-private-key
+    jwt-key-line-2
 uaa_login_saml:
   ca: uaa-ca
   certificate: uaa-saml-cert

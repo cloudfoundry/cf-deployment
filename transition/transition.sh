@@ -151,11 +151,12 @@ function extract_uaa_jwt_value() {
   uaa_jwt_spiff_template="${1}"
 
   uaa_jwt_active_key=$(bosh interpolate $CF_MANIFEST --path=/properties/uaa/jwt/policy/active_key_id)
-  uaa_jwt_value=$(bosh interpolate $CF_MANIFEST --path=/properties/uaa/jwt/policy/keys/${uaa_jwt_active_key}/signingKey)
+  uaa_jwt_value=$(bosh interpolate $CF_MANIFEST --path=/properties/uaa/jwt/policy/keys/${uaa_jwt_active_key}/signingKey | sed -e 's/^/    /')
 
   cat > $uaa_jwt_spiff_template << EOF
 uaa_jwt_signing_key:
-  private_key: ${uaa_jwt_value}
+  private_key: |+
+${uaa_jwt_value}
 EOF
 }
 

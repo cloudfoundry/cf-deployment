@@ -49,7 +49,9 @@ properties:
           key-old:
             signingKey: not-a-thing
           key-1:
-            signingKey: uaa-jwt-private-key
+            signingKey: |
+              uaa-jwt-private-key
+              jwt-key-line-2
   uaadb:
     roles:
     - name: uaa
