@@ -1,0 +1,6 @@
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc?/diego/use_privileged_containers_for_staging
+  value: true
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc?/diego/use_privileged_containers_for_running
+  value: true
