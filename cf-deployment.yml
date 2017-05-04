@@ -51,6 +51,9 @@ instance_groups:
     release: consul
     consumes:
       consul: {from: consul_server}
+      consul_common: nil
+      consul_server: nil
+      consul_client: nil
     provides:
       consul: {as: consul_server, shared: true}
     properties:
@@ -97,6 +100,9 @@ instance_groups:
     release: consul
     consumes:
       consul: {from: consul_server}
+      consul_common: nil
+      consul_server: nil
+      consul_client: nil
   - name: nats
     release: nats
     provides:
@@ -131,6 +137,9 @@ instance_groups:
     release: consul
     consumes:
       consul: {from: consul_server}
+      consul_common: nil
+      consul_server: nil
+      consul_client: nil
     properties:
       consul:
         agent:
@@ -188,6 +197,9 @@ instance_groups:
     release: consul
     consumes:
       consul: {from: consul_server}
+      consul_common: nil
+      consul_server: nil
+      consul_client: nil
   - name: mysql
     release: cf-mysql
     properties:
@@ -250,6 +262,9 @@ instance_groups:
     release: consul
     consumes:
       consul: {from: consul_server}
+      consul_common: nil
+      consul_server: nil
+      consul_client: nil
   - name: cfdot
     release: diego
     properties:
@@ -311,6 +326,9 @@ instance_groups:
     release: consul
     consumes:
       consul: {from: consul_server}
+      consul_common: nil
+      consul_server: nil
+      consul_client: nil
     properties:
       consul:
         agent:
@@ -461,6 +479,9 @@ instance_groups:
     release: consul
     consumes:
       consul: {from: consul_server}
+      consul_common: nil
+      consul_server: nil
+      consul_client: nil
     properties:
       consul:
         agent:
@@ -510,6 +531,9 @@ instance_groups:
     release: consul
     consumes:
       consul: {from: consul_server}
+      consul_common: nil
+      consul_server: nil
+      consul_client: nil
     properties:
       consul:
         agent:
@@ -705,6 +729,9 @@ instance_groups:
     release: consul
     consumes:
       consul: {from: consul_server}
+      consul_common: nil
+      consul_server: nil
+      consul_client: nil
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
@@ -766,6 +793,9 @@ instance_groups:
     release: consul
     consumes:
       consul: {from: consul_server}
+      consul_common: nil
+      consul_server: nil
+      consul_client: nil
     properties:
       consul:
         agent:
@@ -816,6 +846,9 @@ instance_groups:
     release: consul
     consumes:
       consul: {from: consul_server}
+      consul_common: nil
+      consul_server: nil
+      consul_client: nil
   - name: cfdot
     release: diego
     properties:
@@ -869,6 +902,9 @@ instance_groups:
     release: consul
     consumes:
       consul: {from: consul_server}
+      consul_common: nil
+      consul_server: nil
+      consul_client: nil
   - name: cflinuxfs2-rootfs-setup
     release: cflinuxfs2
   - name: garden
@@ -935,6 +971,9 @@ instance_groups:
     release: consul
     consumes:
       consul: {from: consul_server}
+      consul_common: nil
+      consul_server: nil
+      consul_client: nil
   - name: cloud_controller_clock
     release: capi
     properties:
@@ -991,6 +1030,9 @@ instance_groups:
     release: consul
     consumes:
       consul: {from: consul_server}
+      consul_common: nil
+      consul_server: nil
+      consul_client: nil
   - name: stager
     release: capi
     properties:
@@ -1054,6 +1096,9 @@ instance_groups:
     release: consul
     consumes:
       consul: {from: consul_server}
+      consul_common: nil
+      consul_server: nil
+      consul_client: nil
     properties:
       consul:
         agent:
@@ -1125,6 +1170,9 @@ instance_groups:
     release: consul
     consumes:
       consul: {from: consul_server}
+      consul_common: nil
+      consul_server: nil
+      consul_client: nil
     properties:
       consul:
         agent:
