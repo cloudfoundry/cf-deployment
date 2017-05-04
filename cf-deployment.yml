@@ -220,7 +220,7 @@ instance_groups:
   - name: proxy
     release: cf-mysql
     provides:
-      database: { as: proxy-database }
+      mysql-database: { as: proxy-database }
     properties:
       cf_mysql:
         external_host: "((system_domain))"
