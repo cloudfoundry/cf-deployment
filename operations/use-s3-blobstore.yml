@@ -72,3 +72,40 @@
 - type: replace
   path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/resource_pool?/fog_connection?
   value: *blobstore-properties
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/droplets/webdav_config?
+  value: &webdav_config
+    public_endpoint: blobstore.((system_domain))
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/packages/webdav_config?
+  value: *webdav_config
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/resource_pool/webdav_config?
+  value: *webdav_config
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/droplets/webdav_config?
+  value: *webdav_config
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/packages/webdav_config?
+  value: *webdav_config
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/resource_pool/webdav_config?
+  value: *webdav_config
+
+- type: replace
+  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/droplets/webdav_config?
+  value: *webdav_config
+
+- type: replace
+  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/packages/webdav_config?
+  value: *webdav_config
+
+- type: replace
+  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/resource_pool/webdav_config?
+  value: *webdav_config
