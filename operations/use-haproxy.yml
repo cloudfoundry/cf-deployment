@@ -1,13 +1,12 @@
-# Install HA Proxy
 - type: replace
   path: /releases/-
   value:
     name: haproxy
-    version: 8.0.12
-    url: git+https://github.com/cloudfoundry-incubator/haproxy-boshrelease
-    
+    version: 8.1.1
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/haproxy-boshrelease?v=8.1.1
+    sha1: 98ec4d0571b5fccb975eab3ed5e40842e35b8daa
 - type: replace
-  path: /instance_groups/-
+  path: /instance_groups/name=smoke-tests
   value:
     name: haproxy
     azs: [z1, z2]
@@ -16,28 +15,42 @@
     vm_type: m3.medium
     networks: [ name: default ]
     jobs:
-      - name: consul_agent
-        release: consul
-        consumes:
-          consul: {from: consul_server}
-      - name: keepalived
-        release: haproxy
-        properties:
-          keepalived:
-            vip: ((haproxy_static_vip))
-      - name: haproxy
-        release: haproxy
-        properties:
-          ha_proxy:
-            backend_servers: [ gorouter.service.cf.internal ]
-            ssl_pem: "((router_ssl.certificate))((router_ssl.private_key))"
-            tcp:
-              - name: ssh_proxy
-                port: 2222
-                backend_servers:
-                  - ssh-proxy.service.cf.internal
-# Register ssh_proxy with consul
+    - name: keepalived
+      release: haproxy
+      properties:
+        keepalived:
+          vip: ((haproxy_static_vip))
+    - name: haproxy
+      release: haproxy
+      properties:
+        ha_proxy:
+          ssl_pem: "((router_ssl.certificate))((router_ssl.private_key))"
+          tcp_link_port: 2222
 - type: replace
-  path: /instance_groups/name=diego-brain/jobs/name=consul_agent/properties?
+  path: /instance_groups/-
   value:
-    consul: { agent: { services: { ssh_proxy: { check: {} } } } }
+    name: smoke-tests
+    lifecycle: errand
+    azs:
+    - z1
+    instances: 1
+    vm_type: m3.medium
+    stemcell: default
+    update:
+      max_in_flight: 1
+      serial: true
+    networks:
+    - name: default
+    jobs:
+    - name: smoke_tests
+      release: cf-smoke-tests
+      properties:
+        smoke_tests:
+          api: "https://api.((system_domain))"
+          apps_domain: "((system_domain))"
+          user: admin
+          password: "((uaa_scim_users_admin_password))"
+          org: cf_smoke_tests_org
+          space: cf_smoke_tests_space
+          cf_dial_timeout_in_seconds: 300
+          skip_ssl_validation: true
