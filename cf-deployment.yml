@@ -202,6 +202,8 @@ instance_groups:
       consul_client: nil
   - name: mysql
     release: cf-mysql
+    provides:
+      mysql-database: { as: mysql-database }
     properties:
       network_name: default
       cf_mysql:
@@ -231,8 +233,6 @@ instance_groups:
           port: 33306
   - name: proxy
     release: cf-mysql
-    provides:
-      mysql-database: { as: proxy-database }
     properties:
       cf_mysql:
         external_host: "((system_domain))"
@@ -338,8 +338,6 @@ instance_groups:
             uaa: {}
   - name: uaa
     release: uaa
-    consumes:
-      database: { from: proxy-database }
     properties:
       login:
         saml:
@@ -546,8 +544,6 @@ instance_groups:
             routing-api: {}
   - name: cloud_controller_ng
     release: capi
-    consumes:
-      database: { from: proxy-database }
     provides:
       cloud_controller: {as: cloud_controller, shared: true}
     properties:
@@ -743,8 +739,6 @@ instance_groups:
     properties: *metron_agent_properties
   - name: cloud_controller_worker
     release: capi
-    consumes:
-      database: { from: proxy-database }
     properties:
       hm9000:
         port: -1
@@ -984,8 +978,6 @@ instance_groups:
       consul_client: nil
   - name: cloud_controller_clock
     release: capi
-    consumes:
-      database: { from: proxy-database }
     properties:
       hm9000:
         port: -1
