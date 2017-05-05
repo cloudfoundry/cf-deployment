@@ -67,3 +67,35 @@
   value:
     - {name: router_z1, az: z1}
     - {name: router_z2, az: z2}
+
+# Remove routing API, as it's not present in the source deployment
+# and this causes problems
+- type: remove
+  path: /instance_groups/name=postgres/jobs/name=postgres/properties/databases/databases/name=routing-api
+
+- type: remove
+  path: /instance_groups/name=postgres/jobs/name=postgres/properties/databases/roles/name=routing-api
+
+- type: remove
+  path: /instance_groups/name=api/jobs/name=routing-api
+
+- type: remove
+  path: /instance_groups/name=api/jobs/name=consul_agent/properties/consul/agent/services/routing-api
+
+- type: remove
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/routing_api_client
+
+- type: remove
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/routing_api
+
+- type: remove
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/routing_api
+
+- type: remove
+  path: /instance_groups/name=router/jobs/name=gorouter/properties/routing_api
+
+- type: remove
+  path: /variables/name=routing_api_database_password
+
+- type: remove
+  path: /variables/name=uaa_clients_routing_api_client_secret
