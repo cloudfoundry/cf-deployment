@@ -4,7 +4,6 @@
 Take a look at <a href='#readiness'>this table</a>
 to see if it's recommended that you use it.**
 
-
 ### Table of Contents
 * <a href='#purpose'>Purpose</a>
 * <a href='#readiness'>Is `cf-deployment` ready to use?</a>
@@ -165,14 +164,42 @@ to get it working for `cf-deployment`.
 `cf-deployment.yml` requires additional information
 to provide environment-specific or sensitive configuration
 such as the system domain and various credentials.
-To do this we use the `--vars-store` flag in the new BOSH CLI.
+To do this in the default configuration,
+we use the `--vars-store` flag in the new BOSH CLI.
 This flag takes the name of a `yml` file that it will read and write to.
 Where necessary credential values are not present,
-it will generate new values based on the type information stored in `cf-deployment.yml`.
-Variables passed in with `-v` or `-l` will override those already in the var store,
-but will also be stored there for future use.
-The `-v` flag is also the recommended mechanism for providing the system domain,
-which `bosh` is not equipped to generate.
+it will generate new values
+based on the type information stored in `cf-deployment.yml`.
+
+Necessary variables that BOSH can't generate
+need to be supplied as well.
+Though in the default case
+this is just the system domain,
+some ops files introduce additional variables.
+See the summary for the particular ops files you're using
+for any additional necessary variables.
+
+There are three ways to supply
+such additional variables.
+
+1. They can be provided by passing individual `-v` arguments.
+   The syntax for `-v` arguments is
+   `-v <variable-name>=<variable-value>`.
+   This is the recommended method for supplying
+   the system domain.
+2. They can be provided in a yaml file
+   accessed from the command line with the
+   `-l` or `--vars-file` flag.
+   This is the recommended method for configuring
+   external persistence services.
+3. They can be inserted directly in `--vars-store` file
+   alongside BOSH-managed variables.
+   This can confuse things,
+   but you may find the simplicity worth it.
+
+Variables passed with `-v` or `-l`
+will override those already in the var store,
+but will not be stored there.
 
 ## <a name='ops-files'></a>Ops Files
 The configuration of CF represented by `cf-deployment.yml` is intended to be a workable, secure, fully-featured default.
@@ -221,6 +248,22 @@ Here's an (alphabetical) summary:
   `tcp-routing-gcp` and `use-postgres`
   to use the postgres database for TCP routing.
   Must come after the other two.
+- `use-s3-blobstore.yml` -
+  replaces local WebDAV blobstore with external
+  s3 blobstore. Introduces new variables for
+  AWS credentials and bucket names,
+  which will need to be provided at deploy time.
+  The new variables are all strings.
+  Their names are:
+  ```
+aws_region
+blobstore_access_key_id
+blobstore_secret_access_key
+app_package_directory_key
+buildpack_directory_key
+droplet_directory_key
+resource_directory_key
+  ```
 
 ## <a name='ci'></a>CI
 The [ci](https://release-integration.ci.cf-app.com/teams/main/pipelines/cf-deployment) for `cf-deployment`
