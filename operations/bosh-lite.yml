@@ -28,6 +28,7 @@
   value:
     name: postgres
     release: postgres
+    provides: {postgres: {as: db}}
     properties:
       databases:
         address: sql-db.service.internal
