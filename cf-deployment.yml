@@ -50,12 +50,12 @@ instance_groups:
   - name: consul_agent
     release: consul
     consumes:
-      consul: {from: consul_server}
+      consul: {from: consul_link}
       consul_common: nil
       consul_server: nil
       consul_client: nil
     provides:
-      consul: {as: consul_server, shared: true}
+      consul: {as: consul_link, shared: true}
     properties:
       consul:
         agent:
@@ -99,7 +99,7 @@ instance_groups:
   - name: consul_agent
     release: consul
     consumes:
-      consul: {from: consul_server}
+      consul: {from: consul_link}
       consul_common: nil
       consul_server: nil
       consul_client: nil
@@ -136,7 +136,7 @@ instance_groups:
   - name: consul_agent
     release: consul
     consumes:
-      consul: {from: consul_server}
+      consul: {from: consul_link}
       consul_common: nil
       consul_server: nil
       consul_client: nil
@@ -196,7 +196,7 @@ instance_groups:
   - name: consul_agent
     release: consul
     consumes:
-      consul: {from: consul_server}
+      consul: {from: consul_link}
       consul_common: nil
       consul_server: nil
       consul_client: nil
@@ -262,7 +262,7 @@ instance_groups:
   - name: consul_agent
     release: consul
     consumes:
-      consul: {from: consul_server}
+      consul: {from: consul_link}
       consul_common: nil
       consul_server: nil
       consul_client: nil
@@ -326,7 +326,7 @@ instance_groups:
   - name: consul_agent
     release: consul
     consumes:
-      consul: {from: consul_server}
+      consul: {from: consul_link}
       consul_common: nil
       consul_server: nil
       consul_client: nil
@@ -480,7 +480,7 @@ instance_groups:
   - name: consul_agent
     release: consul
     consumes:
-      consul: {from: consul_server}
+      consul: {from: consul_link}
       consul_common: nil
       consul_server: nil
       consul_client: nil
@@ -532,7 +532,7 @@ instance_groups:
   - name: consul_agent
     release: consul
     consumes:
-      consul: {from: consul_server}
+      consul: {from: consul_link}
       consul_common: nil
       consul_server: nil
       consul_client: nil
@@ -731,7 +731,7 @@ instance_groups:
   - name: consul_agent
     release: consul
     consumes:
-      consul: {from: consul_server}
+      consul: {from: consul_link}
       consul_common: nil
       consul_server: nil
       consul_client: nil
@@ -796,7 +796,7 @@ instance_groups:
   - name: consul_agent
     release: consul
     consumes:
-      consul: {from: consul_server}
+      consul: {from: consul_link}
       consul_common: nil
       consul_server: nil
       consul_client: nil
@@ -849,7 +849,7 @@ instance_groups:
   - name: consul_agent
     release: consul
     consumes:
-      consul: {from: consul_server}
+      consul: {from: consul_link}
       consul_common: nil
       consul_server: nil
       consul_client: nil
@@ -905,7 +905,7 @@ instance_groups:
   - name: consul_agent
     release: consul
     consumes:
-      consul: {from: consul_server}
+      consul: {from: consul_link}
       consul_common: nil
       consul_server: nil
       consul_client: nil
@@ -974,7 +974,7 @@ instance_groups:
   - name: consul_agent
     release: consul
     consumes:
-      consul: {from: consul_server}
+      consul: {from: consul_link}
       consul_common: nil
       consul_server: nil
       consul_client: nil
@@ -1034,7 +1034,7 @@ instance_groups:
   - name: consul_agent
     release: consul
     consumes:
-      consul: {from: consul_server}
+      consul: {from: consul_link}
       consul_common: nil
       consul_server: nil
       consul_client: nil
@@ -1100,7 +1100,7 @@ instance_groups:
   - name: consul_agent
     release: consul
     consumes:
-      consul: {from: consul_server}
+      consul: {from: consul_link}
       consul_common: nil
       consul_server: nil
       consul_client: nil
@@ -1174,7 +1174,7 @@ instance_groups:
   - name: consul_agent
     release: consul
     consumes:
-      consul: {from: consul_server}
+      consul: {from: consul_link}
       consul_common: nil
       consul_server: nil
       consul_client: nil
