@@ -7,8 +7,10 @@
     instances: 1
     jobs:
     - consumes:
-        consul:
-          from: consul_link
+        consul: {from: consul_link}
+        consul_common: nil
+        consul_server: nil
+        consul_client: nil
       name: consul_agent_windows
       properties:
         syslog_daemon_config:

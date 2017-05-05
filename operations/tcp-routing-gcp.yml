@@ -19,6 +19,9 @@
       release: consul
       consumes:
         consul: {from: consul_link}
+        consul_common: nil
+        consul_server: nil
+        consul_client: nil
     - name: tcp_router
       release: routing
       properties:
@@ -72,6 +75,9 @@
       release: consul
       consumes:
         consul: {from: consul_link}
+        consul_common: nil
+        consul_server: nil
+        consul_client: nil
     - name: tcp_emitter
       release: routing
       properties:

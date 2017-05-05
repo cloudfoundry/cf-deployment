@@ -17,6 +17,9 @@
       release: consul
       consumes:
         consul: {from: consul_link}
+        consul_common: nil
+        consul_server: nil
+        consul_client: nil
     - name: cflinuxfs2-rootfs-setup
       release: cflinuxfs2
     - name: garden
