@@ -8,7 +8,7 @@
     jobs:
     - consumes:
         consul:
-          from: consul_server
+          from: consul_link
       name: consul_agent_windows
       properties:
         syslog_daemon_config:

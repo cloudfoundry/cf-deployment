@@ -18,7 +18,7 @@
     - name: consul_agent
       release: consul
       consumes:
-        consul: {from: consul_server}
+        consul: {from: consul_link}
     - name: tcp_router
       release: routing
       properties:
@@ -71,7 +71,7 @@
     - name: consul_agent
       release: consul
       consumes:
-        consul: {from: consul_server}
+        consul: {from: consul_link}
     - name: tcp_emitter
       release: routing
       properties:
