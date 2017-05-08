@@ -264,6 +264,42 @@ Here's an (alphabetical) summary:
   resource_directory_key
   ```
 
+### A note on `experimental` and `test` ops-files
+The `operations` directory includes two subdirectories
+for "experimental" and "test" ops-files.
+
+#### Experimental
+"Experimental" ops-files represent configurations
+that we expect to promote to blessed configuration eventually,
+meaning that,
+once the configurations have been sufficiently validated,
+they will become part of cf-deployment.yml
+and the ops-files will be removed.
+
+#### Test
+"Test" ops-files are configurations
+that we run in our testing pipeline
+to enable certain features.
+We include them in the public repository
+(rather than in our private CI repositories)
+for a few reasons,
+depending on the particular ops-file.
+
+Some files are included
+because we suspect that the configurations will be commonly needed
+but not easily generalized.
+For example,
+`add-persistent-isolation-segment.yml` shows how a deployer can add an isolated Diego cell,
+but the ops-file is hard to apply repeatably.
+In this case, the ops-file is an example.
+
+Others,
+like `cfr-to-cfd-transition.yml`,
+will eventually be promoted to the `operations` directory,
+but are still being modified regularly.
+In this case, the ops-file is included for public visibility.
+
+
 ## <a name='ci'></a>CI
 The [ci](https://release-integration.ci.cf-app.com/teams/main/pipelines/cf-deployment) for `cf-deployment`
 automatically bumps to the latest versions of its component releases on the `develop` branch.
