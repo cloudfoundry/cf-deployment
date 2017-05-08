@@ -255,13 +255,13 @@ Here's an (alphabetical) summary:
   The new variables are all strings.
   Their names are:
   ```
-aws_region
-blobstore_access_key_id
-blobstore_secret_access_key
-app_package_directory_key
-buildpack_directory_key
-droplet_directory_key
-resource_directory_key
+  aws_region
+  blobstore_access_key_id
+  blobstore_secret_access_key
+  app_package_directory_key
+  buildpack_directory_key
+  droplet_directory_key
+  resource_directory_key
   ```
 
 ## <a name='ci'></a>CI
