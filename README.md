@@ -143,12 +143,11 @@ and tested with the latest sha of CATs.
 ## <a name='setup'></a>Setup and Prerequisites
 `cf-deployment` relies on newer BOSH features,
 and requires a bosh director with a valid cloud-config that has been configured with a certificate authority.
-It also requires the new alpha `bosh` CLI,
+It also requires the new `bosh` CLI,
 which it relies on to generate and fill-in needed variables.
 
 ### BOSH CLI
 `cf-deployment` requires the new [BOSH CLI](https://github.com/cloudfoundry/bosh-cli).
-It's in alpha, but has features necessary to use `cf-deployment`.
 
 ### BOSH `cloud-config`
 `cf-deployment` assumes that
