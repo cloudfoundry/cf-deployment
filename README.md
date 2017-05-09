@@ -230,11 +230,9 @@ Here's an (alphabetical) summary:
 - `operations/test/add-datadog-firehose-nozzle-aws.yml` -
   Deploys a datadog-firehose-nozzle that collects system metric and posts to datadog.
   For AWS only.
-- `operations/tcp-routing-gcp.yml` - this ops file adds TCP router and routing api for GCP.
-  Not directly compatible with the `use-postgres` ops file;
-  see that ops file's entry
-  for details.
-- `operation/use-external-dbs.yml` -
+- `operations/tcp-routing-gcp.yml` -
+  this ops file adds TCP routers for GCP.
+- `operations/use-external-dbs.yml` -
   removes the MySQL instance group,
   cf-mysql release, and all cf-mysql variables.
   This requires an external data store.
@@ -265,13 +263,6 @@ Here's an (alphabetical) summary:
   **Warning**: this will lead to total data loss
   if applied to an existing deployment with MySQL
   or removed from an existing deployment with postgres.
-  Requires an additional ops file to work with
-  the `tcp-routing-gcp` ops file.
-  See the next entry for details.
-- `use-postgres-tcp-routing` - builds on
-  `tcp-routing-gcp` and `use-postgres`
-  to use the postgres database for TCP routing.
-  Must come after the other two.
 - `use-s3-blobstore.yml` -
   replaces local WebDAV blobstore with external
   s3 blobstore. Introduces new variables for
