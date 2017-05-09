@@ -238,25 +238,34 @@ Here's an (alphabetical) summary:
   This requires an external data store.
   Introduces new variables for DB connection
   details which will need to be provided at deploy time.
-  The new variables are all strings (except db_port).
+  The new variables are all strings
+  (except db_port, which is an integer).
   Their names are:
   ```
   db_scheme
   db_port
+  cc_db_name
   cc_db_address
   cc_db_username
   cc_db_password
+  uaa_db_name
   uaa_db_address
   uaa_db_username
   uaa_db_password
+  bbs_db_name
   bbs_db_address
   bbs_db_username
   bbs_db_password
+  routing_api_db_name
   routing_api_db_address
   routing_api_db_username
   routing_api_db_password
   ```
-  **Warning**: this does not migrate data.
+  This must be applied _before_
+  any ops files that removes jobs that use a database,
+  such as the ops file to remove the routing API.
+  **Warning**: this does not migrate data,
+  and will delete existing database instance groups.
 - `operations/use-postgres.yml` -
   replaces the MySQL instance group
   with a postgres instance group.
