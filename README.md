@@ -234,6 +234,31 @@ Here's an (alphabetical) summary:
   Not directly compatible with the `use-postgres` ops file;
   see that ops file's entry
   for details.
+- `operation/use-external-dbs.yml` -
+  removes the MySQL instance group,
+  cf-mysql release, and all cf-mysql variables.
+  This requires an external data store.
+  Introduces new variables for DB connection
+  details which will need to be provided at deploy time.
+  The new variables are all strings (except db_port).
+  Their names are:
+  ```
+  db_scheme
+  db_port
+  cc_db_address
+  cc_db_username
+  cc_db_password
+  uaa_db_address
+  uaa_db_username
+  uaa_db_password
+  bbs_db_address
+  bbs_db_username
+  bbs_db_password
+  routing_api_db_address
+  routing_api_db_username
+  routing_api_db_password
+  ```
+  **Warning**: this does not migrate data.
 - `operations/use-postgres.yml` -
   replaces the MySQL instance group
   with a postgres instance group.

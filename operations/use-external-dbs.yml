@@ -4,6 +4,20 @@
 - type: remove
   path: /releases/name=cf-mysql
 
+# Remove MySQL variables
+- type: remove
+  path: /variables/name=cf_mysql_mysql_admin_password
+- type: remove
+  path: /variables/name=cf_mysql_mysql_cluster_health_password
+- type: remove
+  path: /variables/name=cf_mysql_mysql_galera_healthcheck_endpoint_password
+- type: remove
+  path: /variables/name=cf_mysql_mysql_galera_healthcheck_password
+- type: remove
+  path: /variables/name=cf_mysql_mysql_roadmin_password
+- type: remove
+  path: /variables/name=cf_mysql_proxy_api_password
+
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/db_scheme
   value: ((db_scheme))
