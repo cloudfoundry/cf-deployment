@@ -25,6 +25,9 @@
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/port
   value: ((db_port))
 - type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/databases/tag=uaa/name
+  value: ((uaa_db_name))
+- type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/address
   value: ((uaa_db_address))
 - type: replace
@@ -40,6 +43,9 @@
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ccdb/port
   value: &cc_db_port "((db_port))"
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ccdb/databases/tag=cc/name
+  value: &cc_db_name "((cc_db_name))"
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ccdb/address
   value: &cc_db_address "((cc_db_address))"
@@ -57,6 +63,9 @@
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/ccdb/port
   value: *cc_db_port
 - type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/ccdb/databases/tag=cc/name
+  value: *cc_db_name
+- type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/ccdb/address
   value: *cc_db_address
 - type: replace
@@ -72,6 +81,9 @@
 - type: replace
   path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/ccdb/port
   value: *cc_db_port
+- type: replace
+  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/ccdb/databases/tag=cc/name
+  value: *cc_db_name
 - type: replace
   path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/ccdb/address
   value: *cc_db_address
@@ -89,6 +101,9 @@
   path: /instance_groups/name=diego-bbs/jobs/name=bbs/properties/diego/bbs/sql/db_port
   value: ((db_port))
 - type: replace
+  path: /instance_groups/name=diego-bbs/jobs/name=bbs/properties/diego/bbs/sql/db_schema
+  value: ((bbs_db_name))
+- type: replace
   path: /instance_groups/name=diego-bbs/jobs/name=bbs/properties/diego/bbs/sql/db_host
   value: ((bbs_db_address))
 - type: replace
@@ -104,6 +119,9 @@
 - type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/port
   value: ((db_port))
+- type: replace
+  path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/schema
+  value: ((routing_api_db_name))
 - type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/host
   value: ((routing_api_db_address))
