@@ -113,3 +113,17 @@
 - type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/username
   value: ((routing_api_db_username))
+
+# nil out database links
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/consumes
+  value: {database: nil}
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/consumes
+  value: {database: nil}
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/consumes
+  value: {databse: nil}
+- type: replace
+  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/consumes
+  value: {database: nil}
