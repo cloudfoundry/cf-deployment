@@ -288,6 +288,9 @@ Here's an (alphabetical) summary:
   droplet_directory_key
   resource_directory_key
   ```
+- `operations/windows-cell.yml` -
+  deploys a windows diego cell,
+  adds releases necessary for windows.
 
 ### A note on `experimental` and `test` ops-files
 The `operations` directory includes two subdirectories
@@ -323,7 +326,6 @@ like `cfr-to-cfd-transition.yml`,
 will eventually be promoted to the `operations` directory,
 but are still being modified regularly.
 In this case, the ops-file is included for public visibility.
-
 
 ## <a name='ci'></a>CI
 The [ci](https://release-integration.ci.cf-app.com/teams/main/pipelines/cf-deployment) for `cf-deployment`
