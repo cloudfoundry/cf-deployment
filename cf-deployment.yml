@@ -555,9 +555,8 @@ instance_groups:
       system_domain: "((system_domain))"
       app_domains: &app_domains
       - "((system_domain))"
-      app_ssh: &app_ssh
+      app_ssh:
         host_key_fingerprint: "((diego_ssh_proxy_host_key.public_key_fingerprint))"
-        oauth_client_id: ssh-proxy
       routing_api:
         enabled: true
       ssl:
@@ -764,7 +763,6 @@ instance_groups:
       ccdb: *ccdb
       system_domain: "((system_domain))"
       app_domains: *app_domains
-      app_ssh: *app_ssh
       routing_api:
         enabled: true
       uaa:
@@ -1004,7 +1002,6 @@ instance_groups:
       ccdb: *ccdb
       system_domain: "((system_domain))"
       app_domains: *app_domains
-      app_ssh: *app_ssh
       uaa:
         ca_cert: "((uaa_ssl.ca))"
         clients:
