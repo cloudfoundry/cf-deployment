@@ -23,8 +23,8 @@ and the new `bosh` CLI.
 
 When you deploy with this vars-store,
 you will also need to use
-the ops-file in this directory,
-`transition-ops.yml`.
+the ops-file located in
+`cf-deployment/operations/test/cfr-to-cfd-transition.yml`.
 
 ### Yes, Spiff
 These tools use spiff templates
