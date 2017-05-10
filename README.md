@@ -218,6 +218,10 @@ Here's an (alphabetical) summary:
   It's useful for deployments where tls termination is performed prior to the gorouter -
   for instance, on AWS, such termination is commonly done at the ELB.
   This also eliminates the need to specify `((router_ssl.certificate))` and `((router_ssl.private_key))` in the var files.
+- `operations/enable-privileged-container-support.yml` -
+  enables diego privileged container support on cc-bridge.
+  This opsfile might not be compatible with opsfiles
+  that inline bridge functionality to cloud-controller.
 - `operations/gcp.yml` -
   this file was intentionally left blank and left for backwards compatibility. It previously overrode the static IP addresses assigned to some instance groups,
   as GCP networking features allow them to all co-exist on the same subnet
