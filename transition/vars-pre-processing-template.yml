@@ -46,6 +46,7 @@ diego_bbs_client:
   ca: (( properties.diego.ssh_proxy.bbs.ca_cert ))
   certificate: (( properties.diego.ssh_proxy.bbs.client_cert ))
   private_key: (( properties.diego.ssh_proxy.bbs.client_key ))
+diego_bbs_active_key_label: (( properties.diego.bbs.active_key_label ))
 diego_bbs_encryption_keys_passphrase: (( properties.diego.bbs.encryption_keys.[0].passphrase ))
 diego_bbs_server:
   ca: (( properties.diego.bbs.ca_cert ))
@@ -235,6 +236,7 @@ properties:
     bbs:
       sql:
         db_password: (( merge || nil ))
+      active_key_label: (( merge || nil ))
       encryption_keys:
       - passphrase: (( merge || nil ))
       ca_cert: (( merge ))

@@ -68,6 +68,15 @@
     - {name: router_z1, az: z1}
     - {name: router_z2, az: z2}
 
+# Parameterize the diego bbs encryption key label
+# and set the label of the key we've extracted to the active label
+- type: replace
+  path: /instance_groups/name=bbs/jobs/name=bbs/properties/bbs/active_key_label
+  value: "(( diego_bbs_active_key_label ))"
+- type: replace
+  path: /instance_groups/name=bbs/jobs/name=bbs/properties/bbs/encryption_keys/0/label
+  value: "(( diego_bbs_active_key_label ))"
+
 # Remove routing API, as it's not present in the source deployment
 # and this causes problems
 - type: remove
