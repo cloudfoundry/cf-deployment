@@ -18,10 +18,10 @@
     - name: consul_agent
       release: consul
       consumes:
-        consul: {from: consul_link}
-        consul_common: nil
+        consul: nil
+        consul_common: {from: consul_common_link}
         consul_server: nil
-        consul_client: nil
+        consul_client: {from: consul_client_link}
     - name: tcp_router
       release: routing
       properties:
@@ -73,10 +73,10 @@
     - name: consul_agent
       release: consul
       consumes:
-        consul: {from: consul_link}
-        consul_common: nil
+        consul: nil
+        consul_common: {from: consul_common_link}
         consul_server: nil
-        consul_client: nil
+        consul_client: {from: consul_client_link}
     - name: tcp_emitter
       release: routing
       properties:
