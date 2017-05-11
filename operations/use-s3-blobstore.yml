@@ -178,3 +178,14 @@
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/resource_pool/resource_directory_key?
   value: ((resource_directory_key))
+
+# remove unnecessary variables for internal blobstore
+
+- type: remove
+  path: /variables/name=blobstore_admin_users_password
+
+- type: remove
+  path: /variables/name=blobstore_secure_link_secret
+
+- type: remove
+  path: /variables/name=blobstore_tls
