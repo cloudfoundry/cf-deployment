@@ -92,6 +92,7 @@
 - type: replace
   path: /instance_groups/name=diego-bbs/jobs/name=bbs/properties/diego/bbs/sql
   value:
+    db_host: sql-db.service.cf.internal
     db_port: 5524
     db_schema: diego
     db_username: diego

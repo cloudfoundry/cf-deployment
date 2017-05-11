@@ -287,6 +287,7 @@ instance_groups:
           - label: key-2016-06
             passphrase: "((diego_bbs_encryption_keys_passphrase))"
           sql:
+            db_host: sql-db.service.cf.internal
             db_port: 3306
             db_schema: diego
             db_username: diego
@@ -705,6 +706,7 @@ instance_groups:
           type: tcp
           reservable_ports: 1024-1123
         sqldb:
+          host: sql-db.service.cf.internal
           type: mysql
           port: 3306
           schema: routing-api
