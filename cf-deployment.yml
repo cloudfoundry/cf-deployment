@@ -204,7 +204,6 @@ instance_groups:
       consul_client: {from: consul_client_link}
   - name: mysql
     release: cf-mysql
-    provides: {mysql-database: {as: db}}
     properties:
       network_name: default
       cf_mysql:
@@ -234,6 +233,7 @@ instance_groups:
           port: 33306
   - name: proxy
     release: cf-mysql
+    provides: {mysql-database: {as: db}}
     properties:
       cf_mysql:
         external_host: "((system_domain))"
@@ -287,7 +287,6 @@ instance_groups:
           - label: key-2016-06
             passphrase: "((diego_bbs_encryption_keys_passphrase))"
           sql:
-            db_host: sql-db.service.cf.internal
             db_port: 3306
             db_schema: diego
             db_username: diego
@@ -425,7 +424,6 @@ instance_groups:
             authorized-grant-types: client_credentials
             secret: "((uaa_clients_routing_api_client_secret))"
       uaadb:
-        address: sql-db.service.cf.internal
         databases:
         - name: uaa
           tag: uaa
@@ -657,7 +655,6 @@ instance_groups:
         databases:
         - name: cloud_controller
           tag: cc
-        address: sql-db.service.cf.internal
         db_scheme: mysql
         port: 3306
         roles:
@@ -709,7 +706,6 @@ instance_groups:
           reservable_ports: 1024-1123
         sqldb:
           type: mysql
-          host: sql-db.service.cf.internal
           port: 3306
           schema: routing-api
           username: routing-api
