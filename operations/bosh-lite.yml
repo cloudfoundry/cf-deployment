@@ -19,6 +19,10 @@
     sha1: b114fa78c017c7b6752e83c4d1e5d92309164e61
     version: "16"
 
+- type: replace
+  path: /instance_groups/name=cc-bridge/jobs/name=nsync/properties/capi/nsync/diego_privileged_containers?
+  value: true
+
 - type: remove
   path: /instance_groups/name=mysql/jobs/name=mysql
 - type: remove
