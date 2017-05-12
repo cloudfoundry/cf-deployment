@@ -3,7 +3,7 @@
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/datadog-firehose-nozzle?
   value:
     access-token-validity: 1209600
-    authorized-grant-types: authorization_code,client_credentials,refresh_token
+    authorized-grant-types: client_credentials,refresh_token
     override: true
     secret: "((uaa_clients_datadog-firehose-nozzle_secret))"
     scope: openid,oauth.approvals,doppler.firehose
