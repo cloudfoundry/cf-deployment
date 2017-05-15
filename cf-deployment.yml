@@ -409,7 +409,7 @@ instance_groups:
             authorized-grant-types: authorization_code
             autoapprove: true
             override: true
-            redirect-uri: "/login"
+            redirect-uri: "https://uaa.((system_domain))/login"
             scope: openid,cloud_controller.read,cloud_controller.write
             secret: "((uaa_clients_ssh-proxy_secret))"
           tcp_emitter:
