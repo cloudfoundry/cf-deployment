@@ -912,6 +912,8 @@ instance_groups:
           bbs: *diego_bbs_client_properties
   - name: route_emitter
     release: diego
+    consumes:
+      nats: {from: nats}
     properties:
       diego:
         route_emitter:
