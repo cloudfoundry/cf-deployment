@@ -18,16 +18,6 @@
     - {name: etcd_z1, az: z1}
 
 - type: replace
-  path: /instance_groups/name=blobstore/migrated_from?
-  value:
-    - {name: blobstore_z1, az: z1}
-
-- type: replace
-  path: /instance_groups/name=postgres/migrated_from?
-  value:
-    - {name: postgres_z1, az: z1}
-
-- type: replace
   path: /instance_groups/name=uaa/migrated_from?
   value:
     - {name: uaa_z1, az: z1}
@@ -79,12 +69,6 @@
 
 # Remove routing API, as it's not present in the source deployment
 # and this causes problems
-- type: remove
-  path: /instance_groups/name=postgres/jobs/name=postgres/properties/databases/databases/name=routing-api
-
-- type: remove
-  path: /instance_groups/name=postgres/jobs/name=postgres/properties/databases/roles/name=routing-api
-
 - type: remove
   path: /instance_groups/name=api/jobs/name=routing-api
 
