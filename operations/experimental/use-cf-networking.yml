@@ -99,6 +99,7 @@
     instances: 2
     vm_type: t2.small
     stemcell: default
+    consumes: {database: {from: db}}
     networks:
     - name: default
     jobs:
