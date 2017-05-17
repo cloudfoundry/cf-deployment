@@ -1,23 +1,20 @@
----
-# --- Replace MySQL job with Postgres ---
 - type: replace
   path: /releases/-
   value:
     name: postgres
-    url: https://bosh.io/d/github.com/cloudfoundry/postgres-release?v=16
-    sha1: b114fa78c017c7b6752e83c4d1e5d92309164e61
-    version: "16"
-
+    sha1: b062e32a5409ccd4e4161337c48705c793a58412
+    url: https://bosh.io/d/github.com/cloudfoundry/postgres-release?v=17
+    version: "17"
 - type: remove
   path: /instance_groups/name=mysql/jobs/name=mysql
+  value: null
 - type: remove
   path: /instance_groups/name=mysql/jobs/name=proxy
+  value: null
 - type: replace
   path: /instance_groups/name=mysql/jobs/-
   value:
     name: postgres
-    release: postgres
-    provides: {postgres: {as: db}}
     properties:
       databases:
         address: sql-db.service.cf.internal
@@ -49,6 +46,10 @@
         - name: routing-api
           password: ((routing_api_database_password))
           tag: admin
+    provides:
+      postgres:
+        as: db
+    release: postgres
 - type: replace
   path: /instance_groups/name=mysql/name
   value: postgres
@@ -57,48 +58,63 @@
   value:
     sql_db:
       check: {}
-
-# --- Replace usages of MySQL DB with Postgres ---
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ccdb
-  value: &ccdb
-    db_scheme: postgres
-    roles:
-    - tag: admin
-      name: cloud_controller
-      password: ((cc_database_password))
+  value:
     databases:
-    - tag: cc
-      name: cloud_controller
+    - name: cloud_controller
+      tag: cc
+    db_scheme: postgres
     port: 5524
+    roles:
+    - name: cloud_controller
+      password: ((cc_database_password))
+      tag: admin
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/ccdb
-  value: *ccdb
+  value:
+    databases:
+    - name: cloud_controller
+      tag: cc
+    db_scheme: postgres
+    port: 5524
+    roles:
+    - name: cloud_controller
+      password: ((cc_database_password))
+      tag: admin
 - type: replace
   path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/ccdb
-  value: *ccdb
+  value:
+    databases:
+    - name: cloud_controller
+      tag: cc
+    db_scheme: postgres
+    port: 5524
+    roles:
+    - name: cloud_controller
+      password: ((cc_database_password))
+      tag: admin
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb
   value:
-    db_scheme: postgresql
-    roles:
-    - tag: admin
-      name: uaa
-      password: ((uaa_database_password))
     databases:
-    - tag: uaa
-      name: uaa
+    - name: uaa
+      tag: uaa
+    db_scheme: postgresql
     port: 5524
+    roles:
+    - name: uaa
+      password: ((uaa_database_password))
+      tag: admin
 - type: replace
   path: /instance_groups/name=diego-bbs/jobs/name=bbs/properties/diego/bbs/sql
   value:
+    db_driver: postgres
     db_host: sql-db.service.cf.internal
+    db_password: ((diego_database_password))
     db_port: 5524
     db_schema: diego
     db_username: diego
-    db_password: "((diego_database_password))"
-    db_driver: postgres
-
 - type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/type
   value: postgres
@@ -120,17 +136,21 @@
 - type: replace
   path: /instance_groups/name=postgres/jobs/name=postgres/properties/databases/roles/name=routing-api?/tag
   value: admin
-
-# --- Remove now unused cf-mysql release and variables ---
 - type: remove
   path: /releases/name=cf-mysql?
+  value: null
 - type: remove
   path: /variables/name=cf_mysql_mysql_admin_password?
+  value: null
 - type: remove
   path: /variables/name=cf_mysql_mysql_cluster_health_password?
+  value: null
 - type: remove
   path: /variables/name=cf_mysql_mysql_galera_healthcheck_endpoint_password?
+  value: null
 - type: remove
   path: /variables/name=cf_mysql_mysql_galera_healthcheck_password?
+  value: null
 - type: remove
   path: /variables/name=cf_mysql_mysql_roadmin_password?
+  value: null
