@@ -7,10 +7,8 @@
     version: "17"
 - type: remove
   path: /instance_groups/name=mysql/jobs/name=mysql
-  value: null
 - type: remove
   path: /instance_groups/name=mysql/jobs/name=proxy
-  value: null
 - type: replace
   path: /instance_groups/name=mysql/jobs/-
   value:
@@ -138,19 +136,13 @@
   value: admin
 - type: remove
   path: /releases/name=cf-mysql?
-  value: null
 - type: remove
   path: /variables/name=cf_mysql_mysql_admin_password?
-  value: null
 - type: remove
   path: /variables/name=cf_mysql_mysql_cluster_health_password?
-  value: null
 - type: remove
   path: /variables/name=cf_mysql_mysql_galera_healthcheck_endpoint_password?
-  value: null
 - type: remove
   path: /variables/name=cf_mysql_mysql_galera_healthcheck_password?
-  value: null
 - type: remove
   path: /variables/name=cf_mysql_mysql_roadmin_password?
-  value: null
