@@ -1,6 +1,6 @@
 system_domain: (( properties.system_domain ))
 # Using an array index is dangerous.  Consider using an Ops file for this.
-uaa_scim_users_admin_password: (( properties.uaa.scim.users.[0].password ))
+cf_admin_password: (( properties.uaa.scim.users.[0].password ))
 consul_encrypt_key: (( properties.consul.encrypt_keys.[0] ))
 blobstore_admin_users_username: (( properties.blobstore.admin_users.[0].username ))
 blobstore_admin_users_password: (( properties.blobstore.admin_users.[0].password ))
