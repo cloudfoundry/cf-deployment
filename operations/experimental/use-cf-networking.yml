@@ -32,17 +32,6 @@
     secret: "((uaa_clients_network_policy_secret))"
     scope: ""
 
-- type: replace
-  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/datadog-firehose-nozzle?
-  value:
-    access-token-validity: 1209600
-    authorized-grant-types: authorization_code,client_credentials,refresh_token
-    override: true
-    secret: "((uaa_clients_datadog_firehose_nozzle_secret))"
-    scope: openid,oauth.approvals,doppler.firehose
-    authorities: oauth.login,doppler.firehose
-    redirect-uri: "https://uaa.((system_domain))/login"
-
 # point garden to external networker
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=garden/properties/garden/network_plugin?
@@ -180,12 +169,6 @@
   path: /variables/-
   value:
     name: uaa_clients_network_policy_secret
-    type: password
-
-- type: replace
-  path: /variables/-
-  value:
-    name: uaa_clients_datadog_firehose_nozzle_secret
     type: password
 
 - type: replace
