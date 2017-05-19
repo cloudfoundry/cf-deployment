@@ -124,7 +124,6 @@
     - name: consul_agent
       release: consul
       consumes:
-        consul: nil
         consul_client: {from: consul_client_link}
         consul_common: {from: consul_common_link}
         consul_server: nil
