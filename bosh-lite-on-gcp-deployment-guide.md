@@ -4,7 +4,7 @@ setting up bosh-lite on GCP
 and deploying cf-deployment to it.
 
 ## Resources
-- [Terraform template](https://github.com/cloudfoundry/runtime-ci/tasks/bosh-create-env/terraform/bosh-lite/terraform.tf)
+- [Terraform template](https://github.com/cloudfoundry/runtime-ci/blob/master/tasks/bosh-create-env/terraform/bosh-lite/terraform.tf)
 - [bosh-deployment](https://github.com/cloudfoundry/bosh-deployment)
 - [BOSH CLI](https://github.com/cloudfoundry/bosh-cli)
 
