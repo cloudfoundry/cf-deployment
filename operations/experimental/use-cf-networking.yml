@@ -1,4 +1,3 @@
-# add cf-networking release
 - type: replace
   path: /releases/-
   value:
@@ -6,113 +5,94 @@
     sha1: 8b6b564e7c4642da074f65bb28180b4e13601cc1
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-networking-release?v=0.24.0
     version: 0.24.0
-
-# add network policy db to mysql
 - type: replace
   path: /instance_groups/name=mysql/jobs/name=mysql/properties/cf_mysql/mysql/seeded_databases/-
   value:
     name: network_policy
+    password: ((cf_mysql_mysql_seeded_databases_network_policy_password))
     username: network_policy
-    password: "((cf_mysql_mysql_seeded_databases_network_policy_password))"
-
-# add users and client scopes
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/scim/users/name=admin/groups/-
   value: network.admin
-
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/cf/scope?
   value: network.admin,network.write,cloud_controller.read,cloud_controller.write,openid,password.write,cloud_controller.admin,scim.read,scim.write,doppler.firehose,uaa.user,routing.router_groups.read,routing.router_groups.write
-
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/network-policy?
   value:
     authorities: uaa.resource,cloud_controller.admin_read_only
     authorized-grant-types: client_credentials,refresh_token
-    secret: "((uaa_clients_network_policy_secret))"
     scope: ""
-
-# point garden to external networker
+    secret: ((uaa_clients_network_policy_secret))
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=garden/properties/garden/network_plugin?
   value: /var/vcap/packages/runc-cni/bin/garden-external-networker
-
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=garden/properties/garden/network_plugin_extra_args?/-
   value: --configFile=/var/vcap/jobs/garden-cni/config/adapter.json
-
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/-
   value:
     name: garden-cni
     release: cf-networking
-
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/-
   value:
     name: cni-flannel
-    release: cf-networking
     properties:
       cf_networking:
         plugin:
+          etcd_ca_cert: ((etcd_client.ca))
+          etcd_client_cert: ((etcd_client.certificate))
+          etcd_client_key: ((etcd_client.private_key))
           etcd_endpoints:
-            - cf-etcd.service.cf.internal
-          etcd_client_cert: "((etcd_client.certificate))"
-          etcd_client_key: "((etcd_client.private_key))"
-          etcd_ca_cert: "((etcd_client.ca))"
-
+          - cf-etcd.service.cf.internal
+    release: cf-networking
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/-
   value:
     name: netmon
     release: cf-networking
-
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/-
   value:
     name: vxlan-policy-agent
-    release: cf-networking
     properties:
       cf_networking:
         vxlan_policy_agent:
-          ca_cert: "((network_policy_client.ca))"
-          client_cert: "((network_policy_client.certificate))"
-          client_key: "((network_policy_client.private_key))"
-
-# policy server vm
+          ca_cert: ((network_policy_client.ca))
+          client_cert: ((network_policy_client.certificate))
+          client_key: ((network_policy_client.private_key))
+    release: cf-networking
 - type: replace
   path: /instance_groups/-
   value:
-    name: policy-server
     azs:
     - z1
     - z2
     instances: 2
-    vm_type: t2.small
-    stemcell: default
-    networks:
-    - name: default
     jobs:
-    - name: policy-server
-      release: cf-networking
-      consumes: {database: {from: db}}
+    - consumes:
+        database:
+          from: db
+      name: policy-server
       properties:
         cf_networking:
           policy_server:
-            uaa_client_secret: "((uaa_clients_network_policy_secret))"
-            uaa_ca: "((uaa_ssl.ca))"
-            ca_cert: "((network_policy_server.ca))"
-            server_cert: "((network_policy_server.certificate))"
-            server_key: "((network_policy_server.private_key))"
+            ca_cert: ((network_policy_server.ca))
             database:
+              host: sql-db.service.cf.internal
+              name: network_policy
+              password: ((cf_mysql_mysql_seeded_databases_network_policy_password))
+              port: 3306
               type: mysql
               username: network_policy
-              password: "((cf_mysql_mysql_seeded_databases_network_policy_password))"
-              host: sql-db.service.cf.internal
-              port: 3306
-              name: network_policy
+            server_cert: ((network_policy_server.certificate))
+            server_key: ((network_policy_server.private_key))
+            uaa_ca: ((uaa_ssl.ca))
+            uaa_client_secret: ((uaa_clients_network_policy_secret))
+      release: cf-networking
     - name: route_registrar
-      release: routing
       properties:
         route_registrar:
           routes:
@@ -120,83 +100,85 @@
             port: 4002
             registration_interval: 20s
             uris:
-            - "api.((system_domain))/networking"
-    - name: consul_agent
-      release: consul
-      consumes:
-        consul_client: {from: consul_client_link}
-        consul_common: {from: consul_common_link}
+            - api.((system_domain))/networking
+      release: routing
+    - consumes:
+        consul_client:
+          from: consul_client_link
+        consul_common:
+          from: consul_common_link
         consul_server: nil
+      name: consul_agent
       properties:
         consul:
           agent:
             services:
               policy-server:
                 name: policy-server
+      release: consul
     - name: metron_agent
-      release: loggregator
       properties:
-        syslog_daemon_config:
-          enable: false
-        metron_agent:
-          deployment: "((system_domain))"
-          etcd:
-            client_cert: "((etcd_client.certificate))"
-            client_key: "((etcd_client.private_key))"
-        metron_endpoint:
-          shared_secret: "((dropsonde_shared_secret))"
         loggregator:
-          tls:
-            ca_cert: "((loggregator_ca.certificate))"
-            metron:
-              cert: "((loggregator_tls_metron.certificate))"
-              key: "((loggregator_tls_metron.private_key))"
           etcd:
-            require_ssl: true
-            ca_cert: "((etcd_server.ca))"
+            ca_cert: ((etcd_server.ca))
             machines:
             - cf-etcd.service.cf.internal
-
-# add vars
+            require_ssl: true
+          tls:
+            ca_cert: ((loggregator_ca.certificate))
+            metron:
+              cert: ((loggregator_tls_metron.certificate))
+              key: ((loggregator_tls_metron.private_key))
+        metron_agent:
+          deployment: ((system_domain))
+          etcd:
+            client_cert: ((etcd_client.certificate))
+            client_key: ((etcd_client.private_key))
+        metron_endpoint:
+          shared_secret: ((dropsonde_shared_secret))
+        syslog_daemon_config:
+          enable: false
+      release: loggregator
+    name: policy-server
+    networks:
+    - name: default
+    stemcell: default
+    vm_type: t2.small
 - type: replace
   path: /variables/-
   value:
     name: cf_mysql_mysql_seeded_databases_network_policy_password
     type: password
-
 - type: replace
   path: /variables/-
   value:
     name: uaa_clients_network_policy_secret
     type: password
-
 - type: replace
   path: /variables/-
   value:
     name: network_policy_ca
-    type: certificate
     options:
-      is_ca: true
       common_name: networkPolicyCA
-
+      is_ca: true
+    type: certificate
 - type: replace
   path: /variables/-
   value:
     name: network_policy_server
-    type: certificate
     options:
       ca: network_policy_ca
       common_name: policy-server.service.cf.internal
       extended_key_usage:
       - server_auth
-
+    type: certificate
 - type: replace
   path: /variables/-
   value:
     name: network_policy_client
-    type: certificate
     options:
       ca: network_policy_ca
       common_name: clientName
       extended_key_usage:
       - client_auth
+    type: certificate
