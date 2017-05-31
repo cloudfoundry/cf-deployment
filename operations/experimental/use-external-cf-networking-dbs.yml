@@ -48,3 +48,11 @@
 - type: replace
   path: /instance_groups/name=diego-bbs/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/name
   value: ((silk_controller_db_name))
+
+# Nil out DB links
+- type: replace
+  path: /instance_groups/name=diego-bbs/jobs/name=silk-controller/consumes
+  value: {database: nil}
+- type: replace
+  path: /instance_groups/name=api/jobs/name=policy-server/consumes
+  value: {database: nil}
