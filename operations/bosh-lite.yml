@@ -6,10 +6,6 @@
   - name: default
     static_ips: [10.244.0.34]
 
-# --- Remove unnecessary static ips for nats_machines ---
-- type: remove
-  path: /instance_groups/name=nats/networks/name=default/static_ips
-
 # --- Replace MySQL job with Postgres ---
 - type: replace
   path: /releases/-
