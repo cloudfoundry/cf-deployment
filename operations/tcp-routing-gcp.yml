@@ -10,7 +10,6 @@
     vm_type: m3.medium
     stemcell: default
     vm_extensions:
-    - internet-required
     - cf-tcp-router-network-properties
     networks:
     - name: default
@@ -63,8 +62,6 @@
     - z2
     instances: 2
     vm_type: m3.medium
-    vm_extensions:
-    - internet-required
     stemcell: default
     networks:
     - name: default
