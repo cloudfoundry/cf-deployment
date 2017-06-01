@@ -73,12 +73,16 @@ about app availability during rolling deploys.
 When we think cf-deployment is ready,
 we'll update this section and make announcements on the cf-dev mailing list.
 
-**Migrating from cf-release:**
-The Release Integration team is still working on developing
-a migration path from cf-release.
-This use case is not sufficiently tested yet,
-and we don't advise anybody to attempt it
-until we develop the necessary tooling and guide.
+### Can I Transition from `cf-release`?
+A migration will be possible.
+It will be easier for some configurations
+than others.
+
+The Release Integration team
+is working on a transition path from `cf-release`.
+We don't advise anybody attempt the migration yet.
+Our in-progress tooling and documentation can be found at
+https://github.com/cloudfoundry/cf-deployment-transition
 
 ## <a name='deploying-cf'></a>Deploying CF
 
