@@ -5,6 +5,12 @@
     name: locket
     release: diego
 - type: replace
+  path: /instance_groups/name=mysql/jobs/name=mysql/properties/cf_mysql/mysql/seeded_databases/-
+  value:
+    name: locket
+    username: locket
+    password: "((locket_database_password))"
+- type: replace
   path: /instance_groups/name=diego-bbs/jobs/name=bbs/properties/diego/bbs/locket?/api_location?
   value: "locket.service.cf.internal:8891"
 - type: replace
@@ -35,9 +41,9 @@
         sql:
           db_host: sql-db.service.cf.internal
           db_port: 3306
-          db_schema: diego
-          db_username: diego
-          db_password: "((diego_database_password))"
+          db_schema: locket
+          db_username: locket
+          db_password: "((locket_database_password))"
           db_driver: mysql
 - type: replace
   path: /variables/-
@@ -62,3 +68,10 @@
       common_name: locket client
       extended_key_usage:
       - client_auth
+
+# variables
+- type: replace
+  path: /variables/-
+  value:
+    name: locket_database_password
+    type: password
