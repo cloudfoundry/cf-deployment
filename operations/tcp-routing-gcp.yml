@@ -54,38 +54,11 @@
             - cf-etcd.service.cf.internal
 
 - type: replace
-  path: /instance_groups/-
+  path: /instance_groups/name=diego-cell/jobs/name=route_emitter/properties/tcp?/enabled?
+  value: true
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=route_emitter/properties/uaa?
   value:
-    name: tcp-emitter
-    azs:
-    - z1
-    - z2
-    instances: 2
-    vm_type: m3.medium
-    stemcell: default
-    networks:
-    - name: default
-    jobs:
-    - name: consul_agent
-      release: consul
-      consumes:
-        consul_common: {from: consul_common_link}
-        consul_server: nil
-        consul_client: {from: consul_client_link}
-    - name: tcp_emitter
-      release: routing
-      properties:
-        tcp_emitter:
-          oauth_secret: "((uaa_clients_tcp_emitter_secret))"
-          bbs:
-            client_cert: "((diego_bbs_client.certificate))"
-            client_key: "((diego_bbs_client.private_key))"
-        bbs:
-          api_location: bbs.service.cf.internal:8889
-          ca_cert: "((diego_bbs_client.ca))"
-        uaa:
-          ca_cert: "((uaa_ca.certificate))"
-          tls_port: 8443
-    - name: metron_agent
-      release: loggregator
-      properties: *metron_agent_properties
+    client_secret: "((uaa_clients_tcp_emitter_secret))"
+    ca_cert: "((uaa_ca.certificate))"
