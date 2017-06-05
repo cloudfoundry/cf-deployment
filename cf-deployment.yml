@@ -398,14 +398,6 @@ instance_groups:
             redirect-uri: "https://uaa.((system_domain))/login"
             scope: openid,cloud_controller.read,cloud_controller.write
             secret: "((uaa_clients_ssh-proxy_secret))"
-          tcp_emitter:
-            authorities: routing.routes.write,routing.routes.read,routing.router_groups.read
-            authorized-grant-types: client_credentials
-            secret: "((uaa_clients_tcp_emitter_secret))"
-          tcp_router:
-            authorities: routing.routes.read
-            authorized-grant-types: client_credentials
-            secret: "((uaa_clients_tcp_router_secret))"
           routing_api_client:
             authorities: routing.routes.write,routing.routes.read,routing.router_groups.read
             authorized-grant-types: client_credentials
@@ -1261,10 +1253,6 @@ variables:
 - name: uaa_clients_gorouter_secret
   type: password
 - name: uaa_clients_ssh-proxy_secret
-  type: password
-- name: uaa_clients_tcp_emitter_secret
-  type: password
-- name: uaa_clients_tcp_router_secret
   type: password
 - name: diego_bbs_encryption_keys_passphrase
   type: password

@@ -62,3 +62,29 @@
   value:
     client_secret: "((uaa_clients_tcp_emitter_secret))"
     ca_cert: "((uaa_ca.certificate))"
+
+# --- add tcp-router and tcp-emitter clients to uaa ---
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/tcp_emitter?
+  value:
+    authorities: routing.routes.write,routing.routes.read,routing.router_groups.read
+    authorized-grant-types: client_credentials
+    secret: "((uaa_clients_tcp_emitter_secret))"
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/tcp_router?
+  value:
+    authorities: routing.routes.read
+    authorized-grant-types: client_credentials
+    secret: "((uaa_clients_tcp_router_secret))"
+
+# --- define secrets for tcp-router and tcp-emitter uaa clients ---
+- type: replace
+  path: /variables/-
+  value:
+    name: uaa_clients_tcp_emitter_secret
+    type: password
+- type: replace
+  path: /variables/-
+  value:
+    name: uaa_clients_tcp_router_secret
+    type: password
