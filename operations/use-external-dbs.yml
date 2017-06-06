@@ -20,7 +20,7 @@
 
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/db_scheme
-  value: ((db_scheme))
+  value: ((db_type))
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/port
   value: ((db_port))
@@ -39,7 +39,7 @@
 
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ccdb/db_scheme
-  value: &cc_db_scheme "((db_scheme))"
+  value: &cc_db_scheme "((db_type))"
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ccdb/port
   value: &cc_db_port "((db_port))"
@@ -96,7 +96,7 @@
 
 - type: replace
   path: /instance_groups/name=diego-bbs/jobs/name=bbs/properties/diego/bbs/sql/db_driver
-  value: ((db_scheme))
+  value: ((db_type))
 - type: replace
   path: /instance_groups/name=diego-bbs/jobs/name=bbs/properties/diego/bbs/sql/db_port
   value: ((db_port))
@@ -115,7 +115,7 @@
 
 - type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/type
-  value: ((db_scheme))
+  value: ((db_type))
 - type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/port
   value: ((db_port))

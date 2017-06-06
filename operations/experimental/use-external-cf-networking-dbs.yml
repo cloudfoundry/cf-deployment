@@ -22,7 +22,7 @@
   value: ((policy_server_db_password))
 - type: replace
   path: /instance_groups/name=api/jobs/name=policy-server/properties/cf_networking/policy_server/database/host
-  value: ((policy_server_db_host))
+  value: ((policy_server_db_address))
 - type: replace
   path: /instance_groups/name=api/jobs/name=policy-server/properties/cf_networking/policy_server/database/port
   value: ((policy_server_db_port))
@@ -41,7 +41,7 @@
   value: ((silk_controller_db_password))
 - type: replace
   path: /instance_groups/name=diego-bbs/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/host
-  value: ((silk_controller_db_host))
+  value: ((silk_controller_db_address))
 - type: replace
   path: /instance_groups/name=diego-bbs/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/port
   value: ((silk_controller_db_port))
