@@ -222,6 +222,9 @@ Here's an (alphabetical) summary:
   It's useful for deployments where tls termination is performed prior to the gorouter -
   for instance, on AWS, such termination is commonly done at the ELB.
   This also eliminates the need to specify `((router_ssl.certificate))` and `((router_ssl.private_key))` in the var files.
+- `operations/configure-default-router-group.yml` -
+  this file allows deployer to configure reservable ports for default tcp
+  router group by passing variable `default_router_group_reservable_ports`.
 - `operations/enable-privileged-container-support.yml` -
   enables diego privileged container support on cc-bridge.
   This opsfile might not be compatible with opsfiles
