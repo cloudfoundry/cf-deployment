@@ -1,0 +1,30 @@
+- type: replace
+  path: /instance_groups/name=log-api/jobs/name=reverse_log_proxy?
+  value:
+    name: reverse_log_proxy
+    release: loggregator
+    provides:
+      reverse_log_proxy: {as: reverse_log_proxy, shared: true}
+    properties:
+      loggregator:
+        tls:
+          ca_cert: "((loggregator_tls_rlp.ca))"
+          reverse_log_proxy:
+            cert: "((loggregator_tls_rlp.certificate))"
+            key: "((loggregator_tls_rlp.private_key))"
+
+- type: replace
+  path: /instance_groups/name=log-api/jobs/name=consul_agent/properties/consul/agent/services/reverse_log_proxy?
+  value: {}
+
+- type: replace
+  path: /variables/name=loggregator_tls_rlp?
+  value:
+    name: loggregator_tls_rlp
+    type: certificate
+    options:
+      ca: loggregator_ca
+      common_name: reverselogproxy
+      extended_key_usage:
+      - client_auth
+      - server_auth
