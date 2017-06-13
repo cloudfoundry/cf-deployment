@@ -534,7 +534,7 @@ instance_groups:
       - "((system_domain))"
       app_ssh:
         host_key_fingerprint: "((diego_ssh_proxy_host_key.public_key_fingerprint))"
-      routing_api:
+      routing_api: &routing_api
         enabled: true
       ssl:
         skip_cert_verify: true
@@ -738,8 +738,7 @@ instance_groups:
       ccdb: *ccdb
       system_domain: "((system_domain))"
       app_domains: *app_domains
-      routing_api:
-        enabled: true
+      routing_api: *routing_api
       ssl:
         skip_cert_verify: true
       uaa:
@@ -975,11 +974,14 @@ instance_groups:
       ccdb: *ccdb
       system_domain: "((system_domain))"
       app_domains: *app_domains
+      routing_api: *routing_api
       uaa:
         ca_cert: "((uaa_ssl.ca))"
         clients:
           cc-service-dashboards:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
+          cc_routing:
+            secret: "((uaa_clients_cc-routing_secret))"
         url: https://uaa.((system_domain))
         ssl:
           port: 8443
