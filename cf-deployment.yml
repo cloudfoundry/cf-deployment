@@ -975,6 +975,8 @@ instance_groups:
       system_domain: "((system_domain))"
       app_domains: *app_domains
       routing_api: *routing_api
+      ssl:
+        skip_cert_verify: true
       uaa:
         ca_cert: "((uaa_ssl.ca))"
         clients:
