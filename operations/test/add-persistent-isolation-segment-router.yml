@@ -65,3 +65,15 @@
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/consumes?/router/from
   value: router_primary
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/app_domains/-
+  value: "iso-seg.((system_domain))"
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/app_domains/-
+  value: "iso-seg.((system_domain))"
+
+- type: replace
+  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/app_domains/-
+  value: "iso-seg.((system_domain))"
