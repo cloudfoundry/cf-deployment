@@ -105,7 +105,7 @@
       password: ((uaa_database_password))
       tag: admin
 - type: replace
-  path: /instance_groups/name=diego-bbs/jobs/name=bbs/properties/diego/bbs/sql
+  path: /instance_groups/name=diego-api/jobs/name=bbs/properties/diego/bbs/sql
   value:
     db_driver: postgres
     db_host: sql-db.service.cf.internal

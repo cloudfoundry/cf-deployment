@@ -237,7 +237,9 @@ instance_groups:
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
-- name: diego-bbs
+- name: diego-api
+  migrated_from:
+  - name: diego-bbs
   azs:
   - z1
   - z2

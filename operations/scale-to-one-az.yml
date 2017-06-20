@@ -15,7 +15,7 @@
   path: /instance_groups/name=etcd/jobs/name=etcd/properties/etcd/cluster/name=etcd/instances
   value: 1
 - type: replace
-  path: /instance_groups/name=diego-bbs/instances
+  path: /instance_groups/name=diego-api/instances
   value: 1
 - type: replace
   path: /instance_groups/name=uaa/instances
@@ -58,7 +58,7 @@
   path: /instance_groups/name=etcd/azs
   value: [ z1 ]
 - type: replace
-  path: /instance_groups/name=diego-bbs/azs
+  path: /instance_groups/name=diego-api/azs
   value: [ z1 ]
 - type: replace
   path: /instance_groups/name=uaa/azs

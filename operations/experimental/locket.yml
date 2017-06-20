@@ -1,6 +1,6 @@
 ---
 - type: replace
-  path: /instance_groups/name=diego-bbs/jobs/-
+  path: /instance_groups/name=diego-api/jobs/-
   value:
     name: locket
     release: diego
@@ -11,7 +11,7 @@
     username: locket
     password: "((locket_database_password))"
 - type: replace
-  path: /instance_groups/name=diego-bbs/jobs/name=bbs/properties/diego/bbs/locket?/api_location?
+  path: /instance_groups/name=diego-api/jobs/name=bbs/properties/diego/bbs/locket?/api_location?
   value: "locket.service.cf.internal:8891"
 - type: replace
   path: /instance_groups/name=diego-brain/jobs/name=auctioneer/properties/diego/auctioneer/locket?/api_location?
@@ -30,7 +30,7 @@
     client_cert: "((diego_locket_client.certificate))"
     client_key: "((diego_locket_client.private_key))"
 - type: replace
-  path: /instance_groups/name=diego-bbs/jobs/name=locket/properties?
+  path: /instance_groups/name=diego-api/jobs/name=locket/properties?
   value:
     tls:
       ca_cert: "((diego_locket_server.ca))"

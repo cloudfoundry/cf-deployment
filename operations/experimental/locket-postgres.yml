@@ -12,7 +12,7 @@
     tag: locket
     password: "((locket_database_password))"
 - type: replace
-  path: /instance_groups/name=diego-bbs/jobs/name=locket/properties/diego/locket/sql
+  path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql
   value:
     db_host: sql-db.service.cf.internal
     db_port: 5524

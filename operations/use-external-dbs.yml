@@ -95,22 +95,22 @@
   value: *cc_db_username
 
 - type: replace
-  path: /instance_groups/name=diego-bbs/jobs/name=bbs/properties/diego/bbs/sql/db_driver
+  path: /instance_groups/name=diego-api/jobs/name=bbs/properties/diego/bbs/sql/db_driver
   value: ((db_type))
 - type: replace
-  path: /instance_groups/name=diego-bbs/jobs/name=bbs/properties/diego/bbs/sql/db_port
+  path: /instance_groups/name=diego-api/jobs/name=bbs/properties/diego/bbs/sql/db_port
   value: ((db_port))
 - type: replace
-  path: /instance_groups/name=diego-bbs/jobs/name=bbs/properties/diego/bbs/sql/db_schema
+  path: /instance_groups/name=diego-api/jobs/name=bbs/properties/diego/bbs/sql/db_schema
   value: ((bbs_db_name))
 - type: replace
-  path: /instance_groups/name=diego-bbs/jobs/name=bbs/properties/diego/bbs/sql/db_host?
+  path: /instance_groups/name=diego-api/jobs/name=bbs/properties/diego/bbs/sql/db_host?
   value: ((bbs_db_address))
 - type: replace
-  path: /instance_groups/name=diego-bbs/jobs/name=bbs/properties/diego/bbs/sql/db_password
+  path: /instance_groups/name=diego-api/jobs/name=bbs/properties/diego/bbs/sql/db_password
   value: ((bbs_db_password))
 - type: replace
-  path: /instance_groups/name=diego-bbs/jobs/name=bbs/properties/diego/bbs/sql/db_username
+  path: /instance_groups/name=diego-api/jobs/name=bbs/properties/diego/bbs/sql/db_username
   value: ((bbs_db_username))
 
 - type: replace

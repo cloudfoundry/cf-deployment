@@ -73,7 +73,7 @@
     name: silk-cni
     release: cf-networking
 - type: replace
-  path: /instance_groups/name=diego-bbs/jobs/-
+  path: /instance_groups/name=diego-api/jobs/-
   value:
     consumes:
       database:
@@ -98,7 +98,7 @@
           client_key: ((silk_daemon.private_key))
     release: cf-networking
 - type: replace
-  path: /instance_groups/name=diego-bbs/jobs/name=consul_agent/properties?/consul/agent/services/silk-controller
+  path: /instance_groups/name=diego-api/jobs/name=consul_agent/properties?/consul/agent/services/silk-controller
   value:
     name: silk-controller
 - type: replace

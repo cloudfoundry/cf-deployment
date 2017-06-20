@@ -107,7 +107,7 @@
       name: uaa
     port: 5524
 - type: replace
-  path: /instance_groups/name=diego-bbs/jobs/name=bbs/properties/diego/bbs/sql
+  path: /instance_groups/name=diego-api/jobs/name=bbs/properties/diego/bbs/sql
   value:
     db_host: sql-db.service.cf.internal
     db_port: 5524
@@ -217,7 +217,7 @@
   - instances: 1
     name: etcd
 - type: replace
-  path: /instance_groups/name=diego-bbs/instances
+  path: /instance_groups/name=diego-api/instances
   value: 1
 - type: replace
   path: /instance_groups/name=uaa/instances
