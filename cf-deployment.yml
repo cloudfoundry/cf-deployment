@@ -175,6 +175,77 @@ instance_groups:
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
+- name: doppler
+  azs:
+  - z1
+  - z2
+  instances: 2
+  vm_type: m3.medium
+  vm_extensions:
+  - 10GB_ephemeral_disk
+  stemcell: default
+  networks:
+  - name: default
+  jobs:
+  - name: consul_agent
+    release: consul
+    consumes:
+      consul_common: {from: consul_common_link}
+      consul_server: nil
+      consul_client: {from: consul_client_link}
+    properties:
+      consul:
+        agent:
+          services:
+            doppler:
+              name: doppler
+  - name: doppler
+    release: loggregator
+    properties:
+      doppler:
+        etcd:
+          client_cert: "((etcd_client.certificate))"
+          client_key: "((etcd_client.private_key))"
+      loggregator:
+        tls:
+          ca_cert: "((loggregator_tls_doppler.ca))"
+          doppler:
+            cert: "((loggregator_tls_doppler.certificate))"
+            key: "((loggregator_tls_doppler.private_key))"
+        etcd:
+          require_ssl: true
+          ca_cert: "((etcd_server.ca))"
+          machines:
+          - cf-etcd.service.cf.internal
+      doppler_endpoint:
+        shared_secret: "((dropsonde_shared_secret))"
+  - name: syslog_drain_binder
+    release: loggregator
+    properties:
+      loggregator:
+        tls:
+          syslogdrainbinder:
+            cert: "((loggregator_tls_syslogdrainbinder.certificate))"
+            key: "((loggregator_tls_syslogdrainbinder.private_key))"
+        etcd:
+          require_ssl: true
+          ca_cert: "((etcd_server.ca))"
+          machines:
+          - cf-etcd.service.cf.internal
+      syslog_drain_binder:
+        etcd:
+          client_cert: "((etcd_client.certificate))"
+          client_key: "((etcd_client.private_key))"
+      system_domain: "((system_domain))"
+      cc:
+        mutual_tls:
+          ca_cert: "((loggregator_tls_syslogdrainbinder.ca))"
+        srv_api_uri: https://api.((system_domain))
+      ssl: &ssl
+        skip_cert_verify: true
+  - name: metron_agent
+    release: loggregator
+    properties: *metron_agent_properties
 - name: mysql
   azs:
   - z1
@@ -1023,8 +1094,7 @@ instance_groups:
     release: capi
     properties:
       diego:
-        ssl: &ssl
-          skip_cert_verify: true
+        ssl: *ssl
       capi:
         nsync:
           bbs: *diego_bbs_client_properties
@@ -1054,76 +1124,6 @@ instance_groups:
             ca_cert: "((cc_bridge_cc_uploader_server.ca))"
             server_cert: "((cc_bridge_cc_uploader_server.certificate))"
             server_key: "((cc_bridge_cc_uploader_server.private_key))"
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
-- name: doppler
-  azs:
-  - z1
-  - z2
-  instances: 2
-  vm_type: m3.medium
-  vm_extensions:
-  - 10GB_ephemeral_disk
-  stemcell: default
-  networks:
-  - name: default
-  jobs:
-  - name: consul_agent
-    release: consul
-    consumes:
-      consul_common: {from: consul_common_link}
-      consul_server: nil
-      consul_client: {from: consul_client_link}
-    properties:
-      consul:
-        agent:
-          services:
-            doppler:
-              name: doppler
-  - name: doppler
-    release: loggregator
-    properties:
-      doppler:
-        etcd:
-          client_cert: "((etcd_client.certificate))"
-          client_key: "((etcd_client.private_key))"
-      loggregator:
-        tls:
-          ca_cert: "((loggregator_tls_doppler.ca))"
-          doppler:
-            cert: "((loggregator_tls_doppler.certificate))"
-            key: "((loggregator_tls_doppler.private_key))"
-        etcd:
-          require_ssl: true
-          ca_cert: "((etcd_server.ca))"
-          machines:
-          - cf-etcd.service.cf.internal
-      doppler_endpoint:
-        shared_secret: "((dropsonde_shared_secret))"
-  - name: syslog_drain_binder
-    release: loggregator
-    properties:
-      loggregator:
-        tls:
-          syslogdrainbinder:
-            cert: "((loggregator_tls_syslogdrainbinder.certificate))"
-            key: "((loggregator_tls_syslogdrainbinder.private_key))"
-        etcd:
-          require_ssl: true
-          ca_cert: "((etcd_server.ca))"
-          machines:
-          - cf-etcd.service.cf.internal
-      syslog_drain_binder:
-        etcd:
-          client_cert: "((etcd_client.certificate))"
-          client_key: "((etcd_client.private_key))"
-      system_domain: "((system_domain))"
-      cc:
-        mutual_tls:
-          ca_cert: "((loggregator_tls_syslogdrainbinder.ca))"
-        srv_api_uri: https://api.((system_domain))
-      ssl: *ssl
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
