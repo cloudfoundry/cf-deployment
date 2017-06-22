@@ -160,22 +160,22 @@
   value: ((policy_server_db_name))
 
 - type: replace
-  path: /instance_groups/name=diego-bbs/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/type
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/type
   value: ((silk_controller_db_type))
 - type: replace
-  path: /instance_groups/name=diego-bbs/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/username
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/username
   value: ((silk_controller_db_username))
 - type: replace
-  path: /instance_groups/name=diego-bbs/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/password
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/password
   value: ((silk_controller_db_password))
 - type: replace
-  path: /instance_groups/name=diego-bbs/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/host
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/host
   value: ((silk_controller_db_address))
 - type: replace
-  path: /instance_groups/name=diego-bbs/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/port
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/port
   value: ((silk_controller_db_port))
 - type: replace
-  path: /instance_groups/name=diego-bbs/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/name
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/name
   value: ((silk_controller_db_name))
 
 # nil out database links
@@ -192,7 +192,7 @@
   path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/consumes
   value: {database: nil}
 - type: replace
-  path: /instance_groups/name=diego-bbs/jobs/name=silk-controller/consumes
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/consumes
   value: {database: nil}
 - type: replace
   path: /instance_groups/name=api/jobs/name=policy-server/consumes
