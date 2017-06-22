@@ -41,6 +41,11 @@
     port: 5524
     name: network_policy
 
+# Delete this when loggregator v91 joins CF-D
+- type: replace
+  path: /instance_groups/name=api/jobs/name=metron_agent/properties?/metron_agent/health_port
+  value: 14824
+
 # silk controller
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database

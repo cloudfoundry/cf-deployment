@@ -124,6 +124,12 @@
           uaa_ca: ((uaa_ssl.ca))
           uaa_client_secret: ((uaa_clients_network_policy_secret))
     release: cf-networking
+
+# Delete this when loggregator v91 joins CF-D
+- type: replace
+  path: /instance_groups/name=api/jobs/name=metron_agent/properties?/metron_agent/health_port
+  value: 14824
+
 - type: replace
   path: /instance_groups/name=api/jobs/name=route_registrar/properties/route_registrar/routes/-
   value:
