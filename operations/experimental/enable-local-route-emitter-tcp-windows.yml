@@ -1,10 +1,2 @@
 ---
-- type: replace
-  path: /instance_groups/name=windows-cell/jobs/name=route_emitter_windows/properties/tcp?/enabled?
-  value: true
-
-- type: replace
-  path: /instance_groups/name=windows-cell/jobs/name=route_emitter_windows/properties/uaa?
-  value:
-    client_secret: "((uaa_clients_tcp_emitter_secret))"
-    ca_cert: "((uaa_ca.certificate))"
+[]
