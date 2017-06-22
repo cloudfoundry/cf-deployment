@@ -17,6 +17,14 @@
   path: /variables/name=cf_mysql_mysql_roadmin_password
 - type: remove
   path: /variables/name=cf_mysql_proxy_api_password
+- type: remove
+  path: /variables/name=cf_mysql_mysql_seeded_databases_network_policy_password
+- type: remove
+  path: /variables/name=cf_mysql_mysql_seeded_databases_network_connectivity_password
+- type: remove
+  path: /instance_groups/name=mysql/jobs/name=mysql/properties/cf_mysql/mysql/seeded_databases/name=network_policy?
+- type: remove
+  path: /instance_groups/name=mysql/jobs/name=mysql/properties/cf_mysql/mysql/seeded_databases/name=network_connectivity?
 
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/db_scheme
@@ -132,6 +140,44 @@
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/username
   value: ((routing_api_db_username))
 
+- type: replace
+  path: /instance_groups/name=api/jobs/name=policy-server/properties/cf_networking/policy_server/database/type
+  value: ((policy_server_db_type))
+- type: replace
+  path: /instance_groups/name=api/jobs/name=policy-server/properties/cf_networking/policy_server/database/username
+  value: ((policy_server_db_username))
+- type: replace
+  path: /instance_groups/name=api/jobs/name=policy-server/properties/cf_networking/policy_server/database/password
+  value: ((policy_server_db_password))
+- type: replace
+  path: /instance_groups/name=api/jobs/name=policy-server/properties/cf_networking/policy_server/database/host
+  value: ((policy_server_db_address))
+- type: replace
+  path: /instance_groups/name=api/jobs/name=policy-server/properties/cf_networking/policy_server/database/port
+  value: ((policy_server_db_port))
+- type: replace
+  path: /instance_groups/name=api/jobs/name=policy-server/properties/cf_networking/policy_server/database/name
+  value: ((policy_server_db_name))
+
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/type
+  value: ((silk_controller_db_type))
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/username
+  value: ((silk_controller_db_username))
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/password
+  value: ((silk_controller_db_password))
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/host
+  value: ((silk_controller_db_address))
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/port
+  value: ((silk_controller_db_port))
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/name
+  value: ((silk_controller_db_name))
+
 # nil out database links
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/consumes
@@ -144,4 +190,10 @@
   value: {database: nil}
 - type: replace
   path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/consumes
+  value: {database: nil}
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/consumes
+  value: {database: nil}
+- type: replace
+  path: /instance_groups/name=api/jobs/name=policy-server/consumes
   value: {database: nil}
