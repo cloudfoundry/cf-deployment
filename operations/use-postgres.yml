@@ -29,6 +29,12 @@
         - citext: true
           name: routing-api
           tag: routing-api
+        - citext: false
+          name: network_policy
+          tag: networkpolicy
+        - citext: false
+          name: network_connectivity
+          tag: networkconnectivity
         db_scheme: postgres
         port: 5524
         roles:
@@ -43,6 +49,12 @@
           tag: admin
         - name: routing-api
           password: ((routing_api_database_password))
+          tag: admin
+        - name: network_policy
+          password: ((network_policy_database_password))
+          tag: admin
+        - name: network_connectivity
+          password: ((network_connectivity_database_password))
           tag: admin
     provides:
       postgres:
@@ -114,6 +126,24 @@
     db_schema: diego
     db_username: diego
 - type: replace
+  path: /instance_groups/name=api/jobs/name=policy-server/properties/cf_networking/policy_server/database
+  value:
+    type: postgres
+    username: network_policy
+    password: ((network_policy_database_password))
+    host: sql-db.service.cf.internal
+    port: 5524
+    name: network_policy
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database
+  value:
+    type: postgres
+    username: network_connectivity
+    password: ((network_connectivity_database_password))
+    host: sql-db.service.cf.internal
+    port: 5524
+    name: network_connectivity
+- type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/type
   value: postgres
 - type: replace
@@ -134,6 +164,16 @@
 - type: replace
   path: /instance_groups/name=postgres/jobs/name=postgres/properties/databases/roles/name=routing-api?/tag
   value: admin
+- type: replace
+  path: /variables/-
+  value:
+    name: network_policy_database_password
+    type: password
+- type: replace
+  path: /variables/-
+  value:
+    name: network_connectivity_database_password
+    type: password
 - type: remove
   path: /releases/name=cf-mysql?
 - type: remove
