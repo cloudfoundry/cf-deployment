@@ -138,7 +138,7 @@
 
 - type: replace
   path: /instance_groups/name=api/jobs/name=policy-server/properties/cf_networking/policy_server/database/type
-  value: ((policy_server_db_type))
+  value: ((db_type))
 - type: replace
   path: /instance_groups/name=api/jobs/name=policy-server/properties/cf_networking/policy_server/database/username
   value: ((policy_server_db_username))
@@ -150,14 +150,14 @@
   value: ((policy_server_db_address))
 - type: replace
   path: /instance_groups/name=api/jobs/name=policy-server/properties/cf_networking/policy_server/database/port
-  value: ((policy_server_db_port))
+  value: ((db_port))
 - type: replace
   path: /instance_groups/name=api/jobs/name=policy-server/properties/cf_networking/policy_server/database/name
   value: ((policy_server_db_name))
 
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/type
-  value: ((silk_controller_db_type))
+  value: ((db_type))
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/username
   value: ((silk_controller_db_username))
@@ -169,7 +169,7 @@
   value: ((silk_controller_db_address))
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/port
-  value: ((silk_controller_db_port))
+  value: ((db_port))
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/name
   value: ((silk_controller_db_name))
