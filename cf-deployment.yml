@@ -224,10 +224,10 @@ instance_groups:
             password: "((routing_api_database_password))"
           - name: network_policy
             username: network_policy
-            password: ((cf_mysql_mysql_seeded_databases_network_policy_password))
+            password: "((network_policy_database_password))"
           - name: network_connectivity
             username: network_connectivity
-            password: ((cf_mysql_mysql_seeded_databases_network_connectivity_password))
+            password: "((network_connectivity_database_password))"
           database_startup_timeout: 600
           port: 33306
   - name: proxy
@@ -1323,9 +1323,9 @@ variables:
   type: password
 - name: routing_api_database_password
   type: password
-- name: cf_mysql_mysql_seeded_databases_network_policy_password
+- name: network_policy_database_password
   type: password
-- name: cf_mysql_mysql_seeded_databases_network_connectivity_password
+- name: network_connectivity_database_password
   type: password
 - name: uaa_clients_network_policy_secret
   type: password
