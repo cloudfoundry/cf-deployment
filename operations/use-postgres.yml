@@ -164,16 +164,6 @@
 - type: replace
   path: /instance_groups/name=postgres/jobs/name=postgres/properties/databases/roles/name=routing-api?/tag
   value: admin
-- type: replace
-  path: /variables/-
-  value:
-    name: network_policy_database_password
-    type: password
-- type: replace
-  path: /variables/-
-  value:
-    name: network_connectivity_database_password
-    type: password
 - type: remove
   path: /releases/name=cf-mysql?
 - type: remove
