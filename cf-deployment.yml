@@ -328,7 +328,7 @@ instance_groups:
           database:
             type: mysql
             username: network_connectivity
-            password: ((cf_mysql_mysql_seeded_databases_network_connectivity_password))
+            password: ((network_connectivity_database_password))
             host: sql-db.service.cf.internal
             port: 3306
             name: network_connectivity
@@ -755,7 +755,7 @@ instance_groups:
           database:
             type: mysql
             username: network_policy
-            password: ((cf_mysql_mysql_seeded_databases_network_policy_password))
+            password: ((network_policy_database_password))
             host: sql-db.service.cf.internal
             port: 3306
             name: network_policy
