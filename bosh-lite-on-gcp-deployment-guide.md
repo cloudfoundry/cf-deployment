@@ -131,5 +131,5 @@ bosh -e $EXTERNAL_IP update-cloud-config cf-deployment/bosh-lite/cloud-config.ym
 
 ### 4. Deploy CF
 ```
-bosh -e $EXTERNAL_IP deploy cf-deployment/cf-deployment.yml -o cf-deployment/operations/bosh-lite.yml --vars-store env-repo/vars-store.yml -v system_domain=$SYSTEM_DOMAIN
+bosh -e $EXTERNAL_IP -d cf deploy cf-deployment/cf-deployment.yml -o cf-deployment/operations/bosh-lite.yml --vars-store env-repo/vars-store.yml -v system_domain=$SYSTEM_DOMAIN
 ```
