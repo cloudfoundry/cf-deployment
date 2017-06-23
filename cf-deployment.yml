@@ -443,6 +443,10 @@ instance_groups:
             authorities: uaa.resource,cloud_controller.admin_read_only
             authorized-grant-types: client_credentials
             secret: ((uaa_clients_network_policy_secret))
+          tcp_emitter:
+            authorities: routing.routes.write,routing.routes.read,routing.router_groups.read
+            authorized-grant-types: client_credentials
+            secret: "((uaa_clients_tcp_emitter_secret))"
       uaadb:
         databases:
         - name: uaa
@@ -1002,6 +1006,11 @@ instance_groups:
             ca_cert: "((diego_bbs_client.ca))"
             client_cert: "((diego_bbs_client.certificate))"
             client_key: "((diego_bbs_client.private_key))"
+      tcp:
+        enabled: true
+      uaa:
+        ca_cert: "((uaa_ca.certificate))"
+        client_secret: "((uaa_clients_tcp_emitter_secret))"
   - name: garden-cni
     release: cf-networking
   - name: netmon
@@ -1368,6 +1377,8 @@ variables:
     extended_key_usage:
     - client_auth
 - name: uaa_clients_routing_api_client_secret
+  type: password
+- name: uaa_clients_tcp_emitter_secret
   type: password
 - name: nats_password
   type: password
