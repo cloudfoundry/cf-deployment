@@ -55,6 +55,11 @@
               client_cert: ((diego_bbs_client.certificate))
               client_key: ((diego_bbs_client.private_key))
             local_mode: true
+        tcp:
+          enabled: true
+        uaa:
+          ca_cert: "((uaa_ca.certificate))"
+          client_secret: "((uaa_clients_tcp_emitter_secret))"
       release: diego
     - name: metron_agent_windows
       properties:

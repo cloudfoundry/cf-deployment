@@ -45,6 +45,12 @@
         - citext: true
           name: routing-api
           tag: routing-api
+        - citext: false
+          name: network_policy
+          tag: networkpolicy
+        - citext: false
+          name: network_connectivity
+          tag: networkconnectivity
         db_scheme: postgres
         port: 5524
         roles:
@@ -59,6 +65,12 @@
           tag: admin
         - name: routing-api
           password: ((routing_api_database_password))
+          tag: admin
+        - name: network_policy
+          password: ((network_policy_database_password))
+          tag: admin
+        - name: network_connectivity
+          password: ((network_connectivity_database_password))
           tag: admin
 - type: replace
   path: /instance_groups/name=mysql/name
@@ -115,6 +127,24 @@
     db_username: diego
     db_password: "((diego_database_password))"
     db_driver: postgres
+- type: replace
+  path: /instance_groups/name=api/jobs/name=policy-server/properties/cf_networking/policy_server/database
+  value:
+    type: postgres
+    username: network_policy
+    password: ((network_policy_database_password))
+    host: sql-db.service.cf.internal
+    port: 5524
+    name: network_policy
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database
+  value:
+    type: postgres
+    username: network_connectivity
+    password: ((network_connectivity_database_password))
+    host: sql-db.service.cf.internal
+    port: 5524
+    name: network_connectivity
 
 # --- Remove now unused cf-mysql release and variables ---
 - type: remove
