@@ -86,7 +86,10 @@ https://github.com/cloudfoundry/cf-deployment-transition
 
 ## <a name='deploying-cf'></a>Deploying CF
 
-#### Step 1: Get a BOSH Director
+### Step 1: Get a BOSH Director
+
+Bosh can be deployed as a standalone VM that manages complex workloads (i.e. CF) or a lite version for development purposes that uses containers to emulate VMs
+#### Bosh
 To deploy a BOSH Director to AWS or GCP,
 use [`bbl`](https://github.com/cloudfoundry/bosh-bootloader)
 (the Bosh BootLoader).
@@ -98,13 +101,18 @@ you'll need to take the following steps before deploying:
 export BOSH_CA_CERT=<PATH-TO-BOSH-LITE-REPO>/ca/certs/ca.crt
 bosh -e 192.168.50.4 update-cloud-config bosh-lite/cloud-config.yml
 ```
-
 ##### Step 1.5: Get load balancers
 For IaaSes like AWS and GCP,
 you'll need to use `bbl` to create load balancers as well
 by running `bbl create-lbs`.
 
-#### Step 2: Deploy CF
+
+#### Bosh-lite:
+If you're using bosh-lite on an IaaS, look at [this guide](bosh-lite.md)
+
+
+
+### Step 2: Deploy CF
 To deploy to a configured BOSH director using the new `bosh` CLI:
 
 ```
