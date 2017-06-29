@@ -174,20 +174,20 @@
 
 # nil out database links
 - type: replace
-  path: /instance_groups/name=uaa/jobs/name=uaa/consumes
+  path: /instance_groups/name=uaa/jobs/name=uaa/consumes?
   value: {database: nil}
 - type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/consumes
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/consumes?
   value: {database: nil}
 - type: replace
-  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/consumes
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/consumes?
   value: {database: nil}
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/consumes
+  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/consumes?
   value: {database: nil}
 - type: replace
-  path: /instance_groups/name=diego-api/jobs/name=silk-controller/consumes
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/consumes?
   value: {database: nil}
 - type: replace
-  path: /instance_groups/name=api/jobs/name=policy-server/consumes
+  path: /instance_groups/name=api/jobs/name=policy-server/consumes?
   value: {database: nil}
