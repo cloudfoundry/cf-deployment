@@ -1,3 +1,16 @@
+# --- enable iso-seg smoke tests ---
+- type: replace
+  path: /instance_groups/name=smoke-tests/jobs/name=smoke_tests/properties/smoke_tests/enable_isolation_segment_tests?
+  value: true
+
+- type: replace
+  path: /instance_groups/name=smoke-tests/jobs/name=smoke_tests/properties/smoke_tests/isolation_segment_name?
+  value: persistent_isolation_segment
+
+- type: replace
+  path: /instance_groups/name=smoke-tests/jobs/name=smoke_tests/properties/smoke_tests/isolation_segment_domain?
+  value: "iso-seg.((system_domain))"
+
 - type: replace
   path: /instance_groups/-
   value:
