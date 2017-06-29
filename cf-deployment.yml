@@ -274,6 +274,7 @@ instance_groups:
         mysql:
           admin_password: "((cf_mysql_mysql_admin_password))"
           port: 33306
+          binlog_enabled: false
           cluster_health:
             password: "((cf_mysql_mysql_cluster_health_password))"
           galera_healthcheck:
