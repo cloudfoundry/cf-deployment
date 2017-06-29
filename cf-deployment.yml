@@ -272,35 +272,33 @@ instance_groups:
       network_name: default
       cf_mysql:
         mysql:
+          admin_password: "((cf_mysql_mysql_admin_password))"
+          port: 33306
+          cluster_health:
+            password: "((cf_mysql_mysql_cluster_health_password))"
           galera_healthcheck:
             db_password: "((cf_mysql_mysql_galera_healthcheck_password))"
             endpoint_username: galera_healthcheck
             endpoint_password: "((cf_mysql_mysql_galera_healthcheck_endpoint_password))"
-          admin_password: "((cf_mysql_mysql_admin_password))"
-          roadmin_password: "((cf_mysql_mysql_roadmin_password))"
-          cluster_health:
-            password: "((cf_mysql_mysql_cluster_health_password))"
           seeded_databases:
           - name: cloud_controller
             username: cloud_controller
             password: "((cc_database_password))"
-          - name: uaa
-            username: uaa
-            password: "((uaa_database_password))"
           - name: diego
             username: diego
             password: "((diego_database_password))"
-          - name: routing-api
-            username: routing-api
-            password: "((routing_api_database_password))"
-          - name: network_policy
-            username: network_policy
-            password: "((network_policy_database_password))"
           - name: network_connectivity
             username: network_connectivity
             password: "((network_connectivity_database_password))"
-          database_startup_timeout: 600
-          port: 33306
+          - name: network_policy
+            username: network_policy
+            password: "((network_policy_database_password))"
+          - name: routing-api
+            username: routing-api
+            password: "((routing_api_database_password))"
+          - name: uaa
+            username: uaa
+            password: "((uaa_database_password))"
   - name: proxy
     release: cf-mysql
     provides: {mysql-database: {as: db}}
@@ -1319,8 +1317,6 @@ variables:
 - name: cf_mysql_mysql_galera_healthcheck_endpoint_password
   type: password
 - name: cf_mysql_mysql_galera_healthcheck_password
-  type: password
-- name: cf_mysql_mysql_roadmin_password
   type: password
 - name: cf_mysql_proxy_api_password
   type: password
