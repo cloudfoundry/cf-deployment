@@ -302,7 +302,6 @@ instance_groups:
             password: "((uaa_database_password))"
   - name: proxy
     release: cf-mysql
-    provides: {mysql-database: {as: db}}
     properties:
       cf_mysql:
         external_host: "((system_domain))"
@@ -386,9 +385,6 @@ instance_groups:
     properties: *metron_agent_properties
   - name: silk-controller
     release: cf-networking
-    consumes:
-      database:
-        from: db
     properties:
       cf_networking:
         silk_controller:
@@ -430,7 +426,6 @@ instance_groups:
           services:
             uaa: {}
   - name: uaa
-    consumes: {database: {from: db}}
     release: uaa
     properties:
       login:
@@ -638,7 +633,6 @@ instance_groups:
               name: policy-server
   - name: cloud_controller_ng
     release: capi
-    consumes: {database: {from: db}}
     provides:
       cloud_controller: {as: cloud_controller, shared: true}
     properties:
@@ -815,9 +809,6 @@ instance_groups:
         tls_port: 8443
   - name: policy-server
     release: cf-networking
-    consumes:
-      database:
-        from: db
     properties:
       cf_networking:
         policy_server:
@@ -855,7 +846,6 @@ instance_groups:
     release: loggregator
     properties: *metron_agent_properties
   - name: cloud_controller_worker
-    consumes: {database: {from: db}}
     release: capi
     properties:
       hm9000:
@@ -1121,7 +1111,6 @@ instance_groups:
       consul_server: nil
       consul_client: {from: consul_client_link}
   - name: cloud_controller_clock
-    consumes: {database: {from: db}}
     release: capi
     properties:
       hm9000:

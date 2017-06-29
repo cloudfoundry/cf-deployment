@@ -56,9 +56,6 @@
         - name: network_connectivity
           password: ((network_connectivity_database_password))
           tag: admin
-    provides:
-      postgres:
-        as: db
     release: postgres
 - type: replace
   path: /instance_groups/name=mysql/name
