@@ -128,21 +128,21 @@
 - type: replace
   path: /instance_groups/name=api/jobs/name=policy-server/properties/cf_networking/policy_server/database
   value:
+    host: sql-db.service.cf.internal
+    name: network_policy
+    password: ((network_policy_database_password))
+    port: 5524
     type: postgres
     username: network_policy
-    password: ((network_policy_database_password))
-    host: sql-db.service.cf.internal
-    port: 5524
-    name: network_policy
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database
   value:
+    host: sql-db.service.cf.internal
+    name: network_connectivity
+    password: ((network_connectivity_database_password))
+    port: 5524
     type: postgres
     username: network_connectivity
-    password: ((network_connectivity_database_password))
-    host: sql-db.service.cf.internal
-    port: 5524
-    name: network_connectivity
 - type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/type
   value: postgres
