@@ -113,6 +113,23 @@ If you're using bosh-lite on an IaaS, look at [this guide](bosh-lite.md)
 
 
 ### Step 2: Deploy CF
+There are several ways to target your new BOSH director.
+One of the simplest ways is to create an environment alias:
+```
+bosh -e $(bbl director-address) alias-env my-env --ca-cert <(bbl director-ca-cert)
+
+# You can run `bbl director-password` to fetch the password and log in
+bosh -e my-env login
+```
+
+Alternatively, you can set environment variables:
+```
+export BOSH_ENVIRONMENT=$(bbl director-address)
+export BOSH_CLIENT=$(bbl director-username)
+export BOSH_CLIENT_SECRET=$(bbl director-password)
+export BOSH_CA_CERT="$(bbl director-ca-cert)"
+```
+
 To deploy to a configured BOSH director using the new `bosh` CLI:
 
 ```
