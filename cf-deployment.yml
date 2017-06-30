@@ -927,8 +927,8 @@ instance_groups:
       router:
         ssl_skip_validation: true
         enable_ssl: true
-        ssl_cert: "((router_ssl.certificate))"
-        ssl_key: "((router_ssl.private_key))"
+        tls_pem:
+        - "((router_ssl.certificate))((router_ssl.private_key))"
         status:
           password: "((router_status_password))"
           user: router-status
