@@ -58,8 +58,8 @@
         tcp:
           enabled: true
         uaa:
-          ca_cert: "((uaa_ca.certificate))"
-          client_secret: "((uaa_clients_tcp_emitter_secret))"
+          ca_cert: ((uaa_ca.certificate))
+          client_secret: ((uaa_clients_tcp_emitter_secret))
       release: diego
     - name: metron_agent_windows
       properties:
@@ -103,7 +103,7 @@
   value:
     alias: windows
     os: windows2012R2
-    version: '1089.0'
+    version: "1089.0"
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks?
   value:
