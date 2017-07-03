@@ -268,6 +268,16 @@ Here's an (alphabetical) summary:
   For AWS only.
 - `operations/tcp-routing-gcp.yml` -
   this ops file adds TCP routers for GCP.
+- `operations/use-blobstore-cdn.yml` -
+  adds support for accessing the `droplets` and `resource_pool` blobstore
+  resources via signed urls over a cdn.  Note that this ops file assumes that you
+  are using the same keypair for both buckets.  Introduces new variables:
+  ```
+  cdn_key_pair_id
+  cdn_private_key
+  resource_pool_cdn_uri
+  droplets_cdn_uri
+  ```
 - `operations/use-external-dbs.yml` -
   removes the MySQL instance group,
   cf-mysql release, and all cf-mysql variables.
