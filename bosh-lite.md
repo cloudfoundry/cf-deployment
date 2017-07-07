@@ -26,7 +26,7 @@ The command you'll need to run will look something like:
 ```
 bbl \
 up \
-<ENV_NAME> \
+--name <ENV_NAME> \
 --ops-file <CONCATENATED_OPS_FILE>
 ```
 
