@@ -10,7 +10,6 @@ to see if it's recommended that you use it.**
 * <a href='#deploying-cf'>Deploying CF</a>
 * <a href='#contributing'>Contributing</a>
 * <a href='#setup'>Setup and Prerequisites</a>
-* <a href='#deploying'>Deploying `cf-deployment`</a>
 * <a href='#ops-files'>Ops Files</a>
 * <a href='#ci'>CI</a>
 
