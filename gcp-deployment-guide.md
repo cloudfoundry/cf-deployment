@@ -14,7 +14,7 @@ deploying cf-deployemnt.
 to `1.*`.
 If we make any breaking changes,
 we'll bump the major version.**
-- Example pipeline: [nats.yml](https://github.com/cloudfoundry/runtime-ci/blob/master/pipelines/nats.yml).
+- Example pipeline: [nats](https://github.com/cloudfoundry/runtime-ci/blob/97dc43bf0839b736d771b3a09a23bc28f1c03530/pipelines/nats.yml#L112-L130).
 This is a pipeline that we built
 to test the nats-release.
 You should be able to use it
