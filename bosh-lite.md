@@ -30,63 +30,24 @@ up \
 --ops-file <CONCATENATED_OPS_FILE>
 ```
 
-## 3. Create load balancers
+## 3. Ensure required firewall ports open
 
-First, you'll need a SSL certificate and private key written to the file system to pass to `bbl`.  We'll assume they are located at <CERT_PATH> and <KEY_PATH>
+Until `bbl` offers a `--lite` option, you'll also need to ensure the ports `80,443,2222` are opened on the firewall to the vm created by `bbl`.
 
-To create load balancers (`AWS`):
-```
-bbl \
-create-lbs \
---type=cf \
---cert=<CERT_PATH> \
---key=<KEY_PATH> \
---skip-if-exists
-```
-
-For `GCP`, you'll also need to provide the <LOAD_BALANCER_DOMAIN>:
-```
-bbl \
-create-lbs \
---type=cf \
---cert=<CERT_PATH> \
---key=<KEY_PATH> \
---skip-if-exists \
---domain=<LOAD_BALANCER_DOMAIN>
-```
-
-## 4. Update load balancers
-
-`AWS`:
-```
-bbl \
-update-lbs \
---cert=<OTHER_CERT_PATH> \
---key=<OTHER_KEY_PATH>
-```
-
-`GCP`:
-```
-bbl \
-update-lbs \
---cert=<OTHER_CERT_PATH> \
---key=<OTHER_KEY_PATH> \
---domain=<LOAD_BALANCER_DOMAIN>
-```
-
-
-## 5. Upload the cloud config
+## 4. Upload the cloud config
 
 ```
-bosh -e $(bbl director-address) \
+bosh \
+-e $(bbl director-address) \
 update-cloud-config \
 cf-deployment/bosh-lite/cloud-config.yml
 ```
 
-## 6. Deploy CF
+## 5. Deploy CF
 
 ```
-bosh -e $(bbl director-address) \
+bosh \
+-e $(bbl director-address) \
 -d cf \
 deploy \
 cf-deployment/cf-deployment.yml \
