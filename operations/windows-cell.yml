@@ -104,8 +104,8 @@
     alias: windows
     os: windows2012R2
     version: "1089.0"
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks?
   value:
   - description: Cloud Foundry Linux-based filesystem
     name: cflinuxfs2
