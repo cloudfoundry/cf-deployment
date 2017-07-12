@@ -1,5 +1,5 @@
-- type: replace
-  path: /instance_groups/-
+- path: /instance_groups/-
+  type: replace
   value:
     azs:
     - z1
@@ -91,38 +91,38 @@
     vm_extensions:
     - 100GB_ephemeral_disk
     vm_type: r3.xlarge
-- type: replace
-  path: /releases/-
+- path: /releases/-
+  type: replace
   value:
     name: garden-windows
     sha1: c47e3039ad573e14c7eb441c573eddaa62fff80f
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/garden-windows-bosh-release?v=0.5.0
     version: 0.5.0
-- type: replace
-  path: /stemcells/-
+- path: /stemcells/-
+  type: replace
   value:
     alias: windows
     os: windows2012R2
     version: "1089.0"
-- type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks?
+- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks?
+  type: replace
   value:
   - description: Cloud Foundry Linux-based filesystem
     name: cflinuxfs2
   - description: Windows Server 2012 R2
     name: windows2012R2
-- type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
+- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
+  type: replace
   value:
     name: hwc_buildpack
     package: hwc-buildpack
-- type: replace
-  path: /instance_groups/name=api/jobs/-
+- path: /instance_groups/name=api/jobs/-
+  type: replace
   value:
     name: hwc-buildpack
     release: hwc-buildpack
-- type: replace
-  path: /releases/-
+- path: /releases/-
+  type: replace
   value:
     name: hwc-buildpack
     sha1: 088b979c229462a11a7a56181d81e623214d8084
