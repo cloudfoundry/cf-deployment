@@ -28,26 +28,55 @@ bbl \
 up \
 --name <ENV_NAME> \
 --ops-file <CONCATENATED_OPS_FILE>
+
+# ...
+# IaaS-specific flags
+# ...
 ```
 
 ## 3. Ensure required firewall ports open
 
 Until `bbl` offers a `--lite` option, you'll also need to ensure the ports `80,443,2222` are opened on the firewall to the vm created by `bbl`.
 
-## 4. Upload the cloud config
+## 4. Targeting and Logging in
+
+There a several ways to target a bosh director.
+This doc will use `alias-env` and `-e`,
+but you can set environment variables if you prefer.
+
+First, create an alias for your director:
+```
+bosh -e $(bbl director-address) --ca-cert <(bbl director-ca-cert) alias-env MY_ENV
+```
+
+Then, log in:
+```
+bosh -e MY_ENV login
+# Enter the output of `bbl director-username` and `bbl director-password`
+```
+
+## 5. Upload the cloud config
 
 ```
 bosh \
--e $(bbl director-address) \
+-e MY_ENV
 update-cloud-config \
 cf-deployment/bosh-lite/cloud-config.yml
 ```
 
-## 5. Deploy CF
+## 6. Upload a stemcell
+```
+bosh \
+-e MY_ENV \
+upload-stemcell \
+https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent
+```
+
+## 7. Deploy CF
 
 ```
 bosh \
--e $(bbl director-address) \
+-e MY_ENV
 -d cf \
 deploy \
 cf-deployment/cf-deployment.yml \
