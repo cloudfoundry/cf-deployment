@@ -14,7 +14,6 @@
 For `AWS`, you will need:
 - bosh-lite.yml
 - bosh-lite-runc.yml
-- jumpbox-user.yml
 
 For `GCP`, you will need the above and also:
 -  gcp/bosh-lite-vm-type.yml
