@@ -40,10 +40,9 @@ or add optional features:
 - Total SSD disk reserved: 2048
 
 To deploy a BOSH director on GCP with `bbl`,
-you'll need to provide certain information,
-either as an environment variable
-or
-as a flag argument to `bbl up`:
+you'll need to provide certain information.
+as an environment variable or
+as a flagged argument to `bbl up`:
 - `BBL_IAAS` or `--iaas=gcp`:
 set this to `gcp`
 - `BBL_GCP_PROJECT_ID` or `--gcp-project-id`:
@@ -95,18 +94,21 @@ necessary for Cloud Foundry.
 Refer to the discussion of quotas above for details.
 
 You can run `bbl create-lbs`,
-which takes the following parameters,
-but only as command line flags:
+which takes the following parameters
+as command line flags:
 - `--type`:
-Tells `bbl` which set of load balancers to create.
-Possible values are `concourse` and `cf` (use `cf`).
+  Tells `bbl` which set of load balancers to create.
+  Possible values are `concourse` and `cf` (use `cf`).
 - `--domain`:
-The domain that will resolve to your load balancer. In CF parlance, it typically matches your `system_domain`.
+  The domain that will resolve to your load balancer.
+  In CF parlance, it typically matches your `system_domain`.
 - `--cert`:
-A path to a file with a PEM-encoded SSL certificate.
-Remember that the cert should be valid for whichever domain you specify in the `--domain` flag.
+  A path to a file with a PEM-encoded SSL certificate.
+  Remember that the cert should be valid
+  for whichever domain you specify in the `--domain` flag.
 - `--key`:
-A path to a file with a PEM-encoded SSL key that corresponds to the cert provided in `--cert`.
+  A path to a file with a PEM-encoded SSL key
+  that corresponds to the cert provided in `--cert`.
 
 ##### Update your DNS records to point to your GCP load balancer
 The `create-lbs` command will create an NS record in Google's CloudDNS
