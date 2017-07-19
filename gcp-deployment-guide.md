@@ -26,6 +26,19 @@ that use your release and cf-deployment.
 ### 1. Get yourself a working director with `bbl`
 
 #### a. IaaS and Director setup
+You'll need a GCP Project.
+If this is a new Project,
+or if you've never used it for CF before,
+you'll need to request some quota increases.
+The following should cover a standard cf-deployment,
+plus some room to scale up
+or add optional features:
+- CPUs: 240
+- Static IP addresses: 8
+- In-use IP addresses: 64
+- In-use IP addresses global: 24
+- Total SSD disk reserved: 2048
+
 To deploy a BOSH director on GCP with `bbl`,
 you'll need to provide certain information,
 either as an environment variable
@@ -75,6 +88,12 @@ you can skip this cert generation step
 and provide that certificate directly to the `bbl` command below.
 
 ##### Create load balancers
+**Note:** if you have not yet received
+an IP quota increases,
+bbl will be unable to create all the load balancers
+necessary for Cloud Foundry.
+Refer to the discussion of quotas above for details.
+
 You can run `bbl create-lbs`,
 which takes the following parameters,
 but only as command line flags:
