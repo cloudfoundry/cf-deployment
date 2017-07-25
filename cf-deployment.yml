@@ -88,8 +88,6 @@ instance_groups:
   - z2
   instances: 2
   vm_type: c3.large
-  vm_extensions:
-  - 10GB_ephemeral_disk
   stemcell: default
   networks:
   - name: default
@@ -121,8 +119,6 @@ instance_groups:
   instances: 3
   persistent_disk_type: 5GB
   vm_type: m3.medium
-  vm_extensions:
-  - 10GB_ephemeral_disk
   stemcell: default
   update:
     serial: true
@@ -181,8 +177,6 @@ instance_groups:
   - z2
   instances: 2
   vm_type: m3.medium
-  vm_extensions:
-  - 10GB_ephemeral_disk
   stemcell: default
   networks:
   - name: default
@@ -252,8 +246,6 @@ instance_groups:
   persistent_disk_type: 10GB
   instances: 1
   vm_type: m3.large
-  vm_extensions:
-  - 10GB_ephemeral_disk
   stemcell: default
   update:
     serial: true
@@ -408,8 +400,6 @@ instance_groups:
   - z2
   instances: 2
   vm_type: m3.medium
-  vm_extensions:
-  - 10GB_ephemeral_disk
   stemcell: default
   networks:
   - name: default
@@ -559,8 +549,6 @@ instance_groups:
   - z1
   instances: 1
   vm_type: m3.large
-  vm_extensions:
-  - 10GB_ephemeral_disk
   persistent_disk_type: 100GB
   stemcell: default
   networks:
@@ -830,8 +818,6 @@ instance_groups:
   - z2
   instances: 2
   vm_type: m3.medium
-  vm_extensions:
-  - 10GB_ephemeral_disk
   stemcell: default
   networks:
   - name: default
@@ -944,7 +930,6 @@ instance_groups:
   vm_type: m3.medium
   vm_extensions:
   - diego-ssh-proxy-network-properties
-  - 10GB_ephemeral_disk
   stemcell: default
   update:
     serial: true
@@ -1098,8 +1083,6 @@ instance_groups:
   - z1
   instances: 1
   vm_type: m3.large
-  vm_extensions:
-  - 10GB_ephemeral_disk
   stemcell: default
   networks:
   - name: default
@@ -1158,8 +1141,6 @@ instance_groups:
   - z2
   instances: 2
   vm_type: m3.medium
-  vm_extensions:
-  - 10GB_ephemeral_disk
   stemcell: default
   networks:
   - name: default
@@ -1221,8 +1202,6 @@ instance_groups:
   - z2
   instances: 2
   vm_type: t2.small
-  vm_extensions:
-  - 10GB_ephemeral_disk
   stemcell: default
   update:
     max_in_flight: 1
