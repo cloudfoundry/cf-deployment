@@ -287,7 +287,7 @@ Here's an (alphabetical) summary:
   (except db_port, which is an integer).
   Their names are:
   ```
-  db_scheme
+  db_type
   db_port
   cc_db_name
   cc_db_address
@@ -305,6 +305,14 @@ Here's an (alphabetical) summary:
   routing_api_db_address
   routing_api_db_username
   routing_api_db_password
+  policy_server_db_name
+  policy_server_db_address
+  policy_server_db_username
+  policy_server_db_password
+  silk_controller_db_name
+  silk_controller_db_address
+  silk_controller_db_username
+  silk_controller_db_password
   ```
   This must be applied _before_
   any ops files that removes jobs that use a database,
