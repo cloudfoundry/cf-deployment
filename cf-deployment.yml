@@ -1231,6 +1231,9 @@ instance_groups:
         url: https://uaa.((system_domain))
       loggregator:
         tls:
+          cc_trafficcontroller:
+            cert: "((loggregator_tls_cc_tc.certificate))"
+            key: "((loggregator_tls_cc_tc.private_key))"
           ca_cert: "((loggregator_tls_tc.ca))"
           trafficcontroller:
             cert: "((loggregator_tls_tc.certificate))"
@@ -1246,6 +1249,10 @@ instance_groups:
       ssl: *ssl
       cc:
         srv_api_uri: "http://cloud-controller-ng.service.cf.internal:9022"
+        internal_service_hostname: "cloud-controller-ng.service.cf.internal"
+        tls_port: 9023
+        mutual_tls:
+          ca_cert: "((loggregator_tls_cc_tc.ca))"
   - name: route_registrar
     release: routing
     properties:
@@ -1541,6 +1548,13 @@ variables:
     extended_key_usage:
     - client_auth
     - server_auth
+- name: loggregator_tls_cc_tc
+  type: certificate
+  options:
+    ca: service_cf_internal_ca
+    common_name: trafficcontroller
+    extended_key_usage:
+    - client_auth
 - name: loggregator_tls_syslogdrainbinder
   type: certificate
   options:
