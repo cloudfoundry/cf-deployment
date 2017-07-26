@@ -333,6 +333,22 @@ Here's an (alphabetical) summary:
   droplet_directory_key
   resource_directory_key
   ```
+- `use-azure-storage-blobstore.yml` -
+  replaces local WebDAV blobstore with external
+  Azure Storage blobstore. Introduces new variables for
+  Azure credentials and container names,
+  which will need to be provided at deploy time.
+  The new variables are all strings.
+  Their names are:
+  ```
+  environment
+  blobstore_storage_account_name
+  blobstore_storage_access_key
+  app_package_directory_key
+  buildpack_directory_key
+  droplet_directory_key
+  resource_directory_key
+  ```
 - `operations/windows-cell.yml` -
   deploys a windows diego cell,
   adds releases necessary for windows.
