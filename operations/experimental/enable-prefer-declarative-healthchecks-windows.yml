@@ -2,3 +2,6 @@
 - type: replace
   path: /instance_groups/name=windows-cell/jobs/name=rep_windows/properties/enable_declarative_healthcheck?
   value: true
+- type: replace
+  path: /instance_groups/name=windows-cell/jobs/name=garden-windows/properties/garden?/max_container_procs
+  value: 20
