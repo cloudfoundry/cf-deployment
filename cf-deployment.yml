@@ -1228,6 +1228,8 @@ instance_groups:
           client_key: "((etcd_client.private_key))"
       uaa:
         url: https://uaa.((system_domain))
+        internal_url: https://uaa.service.cf.internal:8443
+        ca_cert: "((uaa_ca.certificate))"
       loggregator:
         tls:
           cc_trafficcontroller:
