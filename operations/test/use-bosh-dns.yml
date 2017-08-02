@@ -51,9 +51,6 @@
   path: /instance_groups/name=nats/jobs/-
   value: *bosh_dns_job
 - type: replace
-  path: /instance_groups/name=etcd/jobs/-
-  value: *bosh_dns_job
-- type: replace
   path: /instance_groups/name=doppler/jobs/-
   value: *bosh_dns_job
 - type: replace
