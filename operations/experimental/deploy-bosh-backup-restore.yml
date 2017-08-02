@@ -1,0 +1,24 @@
+---
+  - type: replace
+    path: /releases/-
+    value:
+      name: backup-and-restore-sdk
+      url: https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/releases/download/v1.0.0/backup-and-restore-sdk-1.0.0.tgz
+      version: 1.0.0
+      sha1: 71d32592f34f75531936c0f6517a8be196ec6611
+
+  - type: replace
+    path: /instance_groups/-
+    value:
+      name: backup-restore
+      azs:
+      - z1
+      persistent_disk_type: 10GB
+      instances: 1
+      vm_type: m3.large
+      stemcell: default
+      networks:
+        - name: default
+      jobs:
+      - name: database-backup-restorer
+        release: backup-and-restore-sdk
