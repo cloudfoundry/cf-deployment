@@ -75,9 +75,6 @@
   path: /instance_groups/name=cc-worker/jobs/-
   value: *bosh_dns_job
 - type: replace
-  path: /instance_groups/name=router/jobs/-
-  value: *bosh_dns_job
-- type: replace
   path: /instance_groups/name=diego-brain/jobs/-
   value: *bosh_dns_job
 - type: replace
