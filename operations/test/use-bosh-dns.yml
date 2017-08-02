@@ -1,7 +1,7 @@
 ---
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/-
-  value:
+  value: &bosh_dns_job
     name: dns
     release: dns
     properties:
@@ -44,6 +44,61 @@
         - "*.cc-bridge.default.cf.bosh"
         uaa.service.cf.internal:
         - "*.uaa.default.cf.bosh"
+- type: replace
+  path: /instance_groups/name=consul/jobs/-
+  value: *bosh_dns_job
+- type: replace
+  path: /instance_groups/name=nats/jobs/-
+  value: *bosh_dns_job
+- type: replace
+  path: /instance_groups/name=etcd/jobs/-
+  value: *bosh_dns_job
+- type: replace
+  path: /instance_groups/name=doppler/jobs/-
+  value: *bosh_dns_job
+- type: replace
+  path: /instance_groups/name=mysql/jobs/-
+  value: *bosh_dns_job
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/-
+  value: *bosh_dns_job
+- type: replace
+  path: /instance_groups/name=uaa/jobs/-
+  value: *bosh_dns_job
+- type: replace
+  path: /instance_groups/name=blobstore/jobs/-
+  value: *bosh_dns_job
+- type: replace
+  path: /instance_groups/name=api/jobs/-
+  value: *bosh_dns_job
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/-
+  value: *bosh_dns_job
+- type: replace
+  path: /instance_groups/name=router/jobs/-
+  value: *bosh_dns_job
+- type: replace
+  path: /instance_groups/name=diego-brain/jobs/-
+  value: *bosh_dns_job
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/-
+  value: *bosh_dns_job
+- type: replace
+  path: /instance_groups/name=cc-clock/jobs/-
+  value: *bosh_dns_job
+- type: replace
+  path: /instance_groups/name=cc-bridge/jobs/-
+  value: *bosh_dns_job
+- type: replace
+  path: /instance_groups/name=log-api/jobs/-
+  value: *bosh_dns_job
+- type: replace
+  path: /instance_groups/name=router/jobs/-
+  value: *bosh_dns_job
+- type: replace
+  path: /instance_groups/name=diego-brain/jobs/-
+  value: *bosh_dns_job
+
 - type: replace
   path: /releases/-
   value:
