@@ -234,7 +234,6 @@ instance_groups:
       cc:
         mutual_tls:
           ca_cert: "((loggregator_tls_syslogdrainbinder.ca))"
-        srv_api_uri: https://api.((system_domain))
       ssl: &ssl
         skip_cert_verify: true
   - name: metron_agent
