@@ -1057,6 +1057,8 @@ instance_groups:
         client_secret: "((uaa_clients_tcp_emitter_secret))"
   - name: garden-cni
     release: cf-networking
+  - name: iptables-logger
+    release: cf-networking
   - name: netmon
     release: cf-networking
   - name: vxlan-policy-agent
