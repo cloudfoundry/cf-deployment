@@ -1,0 +1,17 @@
+---
+- type: remove
+  path: /variables/name=locket_database_password
+
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql
+  value:
+    db_host: "((locket_db_address))"
+    db_port: "((db_port))"
+    db_schema: "((locket_db_name))"
+    db_username: "((locket_db_username))"
+    db_password: "((locket_database_password))"
+    db_driver: "((db_type))"
+
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=locket/consumes?
+  value: {database: nil}
