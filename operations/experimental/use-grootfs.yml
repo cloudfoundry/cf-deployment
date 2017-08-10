@@ -5,8 +5,12 @@
     properties:
       grootfs:
         driver: overlay-xfs
+        graph_cleanup_threshold_in_mb: 0
         log_level: debug
+        persistent_image_list: &persistent-images
+        - /var/vcap/packages/cflinuxfs2/rootfs.tar
     release: grootfs
+
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=garden/properties/garden/image_plugin?
   value: /var/vcap/packages/grootfs/bin/grootfs
@@ -25,8 +29,7 @@
   - /var/vcap/jobs/grootfs/config/privileged_grootfs_config.yml
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=garden/properties/garden/persistent_image_list
-  value:
-  - /var/vcap/packages/cflinuxfs2/rootfs.tar
+  value: *persistent-images
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=rep/properties/diego/rep/preloaded_rootfses
   value:
