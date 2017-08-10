@@ -98,7 +98,7 @@ If you're deploying against a local bosh-lite,
 you'll need to take the following steps before deploying:
 ```
 export BOSH_CA_CERT=<PATH-TO-BOSH-LITE-REPO>/ca/certs/ca.crt
-bosh -e 192.168.50.4 update-cloud-config bosh-lite/cloud-config.yml
+bosh -e 192.168.50.6 update-cloud-config bosh-lite/cloud-config.yml
 ```
 ##### Step 1.5: Get load balancers
 For IaaSes like AWS and GCP,
@@ -149,7 +149,7 @@ remember to add the `operations/bosh-lite.yml` ops-file
 to your deploy command:
   ```
 
-  bosh -e 192.168.50.4 -d cf deploy cf-deployment.yml \
+  bosh -e 192.168.50.6 -d cf deploy cf-deployment.yml \
     -o operations/bosh-lite.yml \
     --vars-store deployment-vars.yml \
     -v system_domain=bosh-lite.com
