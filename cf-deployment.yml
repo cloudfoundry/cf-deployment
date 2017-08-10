@@ -106,8 +106,6 @@ instance_groups:
       nats:
         password: "((nats_password))"
         user: nats
-        monitor_port: 9222
-        prof_port: 6060
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
