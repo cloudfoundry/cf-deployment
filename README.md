@@ -237,7 +237,7 @@ before variables are generated and filled.
 We've supplied some common manifest modifications in the `operations` directory.
 
 Here's an (alphabetical) summary:
-- `operations/aquarium-of-sadness/add-java-buildpack-detect-script-security-issue-mitigation.yml` -
+- `operations/legacy/old-droplet-mitigation.yml
   this file mitigates against old droplets
   that may still have a legacy security vulnerability.
   See comment in the ops file for more details.
