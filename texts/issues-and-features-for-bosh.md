@@ -48,6 +48,13 @@ Could we "import" other ops-files?
 Define a list of ops-files that are applied in-order?
 Others have suggested [allowing the use of globs](https://cloudfoundry.slack.com/archives/C0FAEKGUQ/p1502153559284207).
 
+Another example of this complication is the network name.
+After working on an ops-file to variable-ize the network name so that operators could override it,
+we realized that many other ops-files assume the use of a particular network name (specifically, `default`).
+Do we need to create a different version of all those ops-files that variable-izes the network name?
+It also seems like this could be solved with a variable that has a default value (as described above),
+or maybe simply allowing aliases for network names.
+
 #### Wildcard paths in operations
 [This Github issue](https://github.com/cloudfoundry/cf-deployment/issues/190#issuecomment-320203780)
 captures the idea pretty well.
