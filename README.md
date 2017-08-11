@@ -264,6 +264,10 @@ before variables are generated and filled.
 We've supplied some common manifest modifications in the `operations` directory.
 
 Here's an (alphabetical) summary:
+- `operations/aquarium-of-sadness/add-java-buildpack-detect-script-security-issue-mitigation.yml` -
+  this file mitigates against old droplets
+  that may still have a legacy security vulnerability.
+  See comment in the ops file for more details.
 - `operations/aws.yml` and `operations/change-logging-port-for-aws-elb.yml` -
   this file overrides the vm_extensions for load balancers and overrides the loggregator ports to 4443,
   since it is required under AWS to have a separate port from the standard HTTPS port (443) for loggregator traffic
