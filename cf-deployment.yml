@@ -614,7 +614,7 @@ instance_groups:
           services:
             cloud_controller_ng: {}
             routing-api: {}
-            policy-server:
+            policy-server-internal:
               name: policy-server
   - name: cloud_controller_ng
     release: capi
@@ -797,9 +797,6 @@ instance_groups:
         policy_server:
           uaa_client_secret: ((uaa_clients_network_policy_secret))
           uaa_ca: ((uaa_ssl.ca))
-          ca_cert: ((network_policy_server.ca))
-          server_cert: ((network_policy_server.certificate))
-          server_key: ((network_policy_server.private_key))
           database:
             type: mysql
             username: network_policy
@@ -807,6 +804,14 @@ instance_groups:
             host: sql-db.service.cf.internal
             port: 3306
             name: network_policy
+  - name: policy-server-internal
+    release: cf-networking
+    properties:
+      cf_networking:
+        policy_server_internal:
+          ca_cert: ((network_policy_server.ca))
+          server_cert: ((network_policy_server.certificate))
+          server_key: ((network_policy_server.private_key))
 - name: cc-worker
   azs:
   - z1
