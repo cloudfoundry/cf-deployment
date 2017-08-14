@@ -106,8 +106,6 @@ instance_groups:
       nats:
         password: "((nats_password))"
         user: nats
-        monitor_port: 9222
-        prof_port: 6060
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
@@ -616,7 +614,7 @@ instance_groups:
           services:
             cloud_controller_ng: {}
             routing-api: {}
-            policy-server:
+            policy-server-internal:
               name: policy-server
   - name: cloud_controller_ng
     release: capi
@@ -689,8 +687,6 @@ instance_groups:
           package: nodejs-buildpack
         - name: php_buildpack
           package: php-buildpack
-        - name: python_buildpack
-          package: python-buildpack
         - name: python_buildpack
           package: python-buildpack
         - name: ruby_buildpack
@@ -801,9 +797,6 @@ instance_groups:
         policy_server:
           uaa_client_secret: ((uaa_clients_network_policy_secret))
           uaa_ca: ((uaa_ssl.ca))
-          ca_cert: ((network_policy_server.ca))
-          server_cert: ((network_policy_server.certificate))
-          server_key: ((network_policy_server.private_key))
           database:
             type: mysql
             username: network_policy
@@ -811,6 +804,14 @@ instance_groups:
             host: sql-db.service.cf.internal
             port: 3306
             name: network_policy
+  - name: policy-server-internal
+    release: cf-networking
+    properties:
+      cf_networking:
+        policy_server_internal:
+          ca_cert: ((network_policy_server.ca))
+          server_cert: ((network_policy_server.certificate))
+          server_key: ((network_policy_server.private_key))
 - name: cc-worker
   azs:
   - z1
@@ -901,8 +902,8 @@ instance_groups:
       router:
         ssl_skip_validation: true
         enable_ssl: true
-        ssl_cert: "((router_ssl.certificate))"
-        ssl_key: "((router_ssl.private_key))"
+        tls_pem:
+        - "((router_ssl.certificate))((router_ssl.private_key))"
         status:
           password: "((router_status_password))"
           user: router-status
@@ -1080,7 +1081,8 @@ instance_groups:
 - name: cc-clock
   azs:
   - z1
-  instances: 1
+  - z2
+  instances: 2
   vm_type: m3.large
   stemcell: default
   networks:
@@ -1629,21 +1631,21 @@ releases:
   version: 1.0.14
   sha1: c5ba6b6d99b972ec34dece478302351d8b4f6bbc
 - name: capi
-  url: https://bosh.io/d/github.com/cloudfoundry/capi-release?v=1.38.0
-  version: 1.38.0
-  sha1: 24811687a9690c3de21ec2920237be9a662cfd3b
+  url: https://bosh.io/d/github.com/cloudfoundry/capi-release?v=1.39.0
+  version: 1.39.0
+  sha1: cc22551e757c111c1e59b5d460c5233fc1199df7
 - name: cf-mysql
   url: https://bosh.io/d/github.com/cloudfoundry/cf-mysql-release?v=36
   version: "36"
   sha1: 746240c005465ffa105ee89e53e401e311b4fbf8
 - name: cf-networking
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-networking-release?v=1.3.4
-  version: 1.3.4
-  sha1: d156f7104f66000c433634c04ec4a89f6122e187
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-networking-release?v=1.4.0
+  version: 1.4.0
+  sha1: 3df279a62fe0216284c9e1b47df4bf98b924f0be
 - name: cf-smoke-tests
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=36
-  version: "36"
-  sha1: d943166254576036735a43a5ea57728276f83510
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=37
+  version: "37"
+  sha1: ea655c77fd22fb01f112b6b2ae798eaab9b42e5d
 - name: cflinuxfs2
   url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.146.0
   version: 1.146.0
@@ -1653,9 +1655,9 @@ releases:
   version: "171"
   sha1: e781dd1050c5f90339f3405f07af094a6c46052d
 - name: diego
-  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=1.24.0
-  version: 1.24.0
-  sha1: 356b51fc02e1ea77f3335770a20559139e9c5b83
+  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=1.25.0
+  version: 1.25.0
+  sha1: 892247d109f1d57880da7140a1db5f8f8ce0920a
 - name: dotnet-core-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/dotnet-core-buildpack-release?v=1.0.23
   version: 1.0.23
@@ -1697,9 +1699,9 @@ releases:
   version: 1.5.22
   sha1: 7b81cbc5694228c7015ee3d39a45a19bd84b336c
 - name: routing
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.159.0
-  version: 0.159.0
-  sha1: 739f663f976fea826595880cfd58470bc8d49172
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.160.0
+  version: 0.160.0
+  sha1: 4c93f169ee22fe772270d7e72d617a896263e174
 - name: ruby-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/ruby-buildpack-release?v=1.6.46
   version: 1.6.46
@@ -1709,9 +1711,9 @@ releases:
   version: 1.4.12
   sha1: 40e3b8a5a9d540fc53c41f5e164ed636420e9e3e
 - name: statsd-injector
-  url: https://bosh.io/d/github.com/cloudfoundry/statsd-injector-release?v=1.0.29
-  version: 1.0.29
-  sha1: 6e8f626d107c8e2b525b50571393a6eaaf664ad3
+  url: https://bosh.io/d/github.com/cloudfoundry/statsd-injector-release?v=1.0.30
+  version: 1.0.30
+  sha1: b0f201e0341af9736848514c76149070ea902e41
 - name: uaa
   url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=45
   version: "45"
