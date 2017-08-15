@@ -3,308 +3,298 @@
 exit_code=0
 
 function fail() {
-  echo "$1"
+  echo "FAIL - $1"
   exit_code=1
 }
 
+function interpolate() {
+  bosh interpolate cf-deployment.yml $1 -v system_domain=cf-app.com --vars-store $(mktemp) --var-errs --var-errs-unused > /dev/null
+  return $?
+}
+
 pushd $(dirname $0)/.. > /dev/null
+  if interpolate ""; then
+    echo "PASS - cf-deployment.yml"
+  else
+    fail "cf-deployment.yml"
+  fi
   version=$(bosh interpolate cf-deployment.yml -o operations/use-latest-stemcell.yml --path=/stemcells/alias=default/version)
   if [ "${version}" == "latest" ]; then
     echo "PASS - operations/use-latest-stemcell.yml"
   else
     fail "operations/use-latest-stemcell.yml, expected 'latest' but got '${version}'"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/aws.yml > /dev/null; then
+  if interpolate "-o operations/aws.yml"; then
     echo "PASS - operations/aws.yml"
   else
     fail "operations/aws.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/bosh-lite.yml > /dev/null; then
+  if interpolate "-o operations/bosh-lite.yml"; then
     echo "PASS - operations/bosh-lite.yml"
   else
     fail "operations/bosh-lite.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/bypass-cc-bridge-privileged-containers.yml > /dev/null; then
+  if interpolate "-o operations/bypass-cc-bridge-privileged-containers.yml"; then
     echo "PASS - operations/bypass-cc-bridge-privileged-containers.yml"
   else
     fail "operations/bypass-cc-bridge-privileged-containers.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/bypass-cc-bridge.yml > /dev/null; then
+  if interpolate "-o operations/bypass-cc-bridge.yml"; then
     echo "PASS - operations/bypass-cc-bridge.yml"
   else
     fail "operations/bypass-cc-bridge.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/change-logging-port-for-aws-elb.yml > /dev/null; then
+  if interpolate "-o operations/change-logging-port-for-aws-elb.yml"; then
     echo "PASS - operations/change-logging-port-for-aws-elb.yml"
   else
     fail "operations/change-logging-port-for-aws-elb.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/community/change-metron-agent-deployment.yml > /dev/null; then
-    echo "PASS - operations/community/change-metron-agent-deployment.yml"
-  else
-    fail "operations/community/change-metron-agent-deployment.yml"
-  fi
-  if bosh interpolate cf-deployment.yml -o operations/community/enable-volume-service-nfs.yml > /dev/null; then
-    echo "PASS - operations/community/enable-volume-service-nfs.yml"
-  else
-    fail "operations/community/enable-volume-service-nfs.yml"
-  fi
-  if bosh interpolate cf-deployment.yml -o operations/community/use-haproxy.yml > /dev/null; then
-    echo "PASS - operations/community/use-haproxy.yml"
-  else
-    fail "operations/community/use-haproxy.yml"
-  fi
-  if bosh interpolate cf-deployment.yml -o operations/configure-default-router-group.yml > /dev/null; then
+  if interpolate "-o operations/configure-default-router-group.yml -v default_router_group_reservable_ports=1234-2024"; then
     echo "PASS - operations/configure-default-router-group.yml"
   else
     fail "operations/configure-default-router-group.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/disable-router-tls-termination.yml > /dev/null; then
+  if interpolate "-o operations/disable-router-tls-termination.yml"; then
     echo "PASS - operations/disable-router-tls-termination.yml"
   else
     fail "operations/disable-router-tls-termination.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/enable-cc-rate-limiting.yml > /dev/null; then
+  if interpolate "-o operations/enable-cc-rate-limiting.yml -v cc_rate_limiter_general_limit=blah -v cc_rate_limiter_unauthenticated_limit=something"; then
     echo "PASS - operations/enable-cc-rate-limiting.yml"
   else
     fail "operations/enable-cc-rate-limiting.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/enable-local-route-emitters-windows-cell.yml > /dev/null; then
+  if interpolate "-o operations/enable-local-route-emitters-windows-cell.yml"; then
     echo "PASS - operations/enable-local-route-emitters-windows-cell.yml"
   else
     fail "operations/enable-local-route-emitters-windows-cell.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/enable-local-route-emitters.yml > /dev/null; then
+  if interpolate "-o operations/enable-local-route-emitters.yml"; then
     echo "PASS - operations/enable-local-route-emitters.yml"
   else
     fail "operations/enable-local-route-emitters.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/enable-privileged-container-support.yml > /dev/null; then
+  if interpolate "-o operations/enable-privileged-container-support.yml"; then
     echo "PASS - operations/enable-privileged-container-support.yml"
   else
     fail "operations/enable-privileged-container-support.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/experimental/deploy-bosh-backup-restore.yml > /dev/null; then
+  if interpolate "-o operations/experimental/deploy-bosh-backup-restore.yml"; then
     echo "PASS - operations/experimental/deploy-bosh-backup-restore.yml"
   else
     fail "operations/experimental/deploy-bosh-backup-restore.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/experimental/disable-etcd.yml > /dev/null; then
+  if interpolate "-o operations/experimental/disable-etcd.yml"; then
     echo "PASS - operations/experimental/disable-etcd.yml"
   else
     fail "operations/experimental/disable-etcd.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/experimental/enable-iptables-logger.yml > /dev/null; then
+  if interpolate "-o operations/experimental/enable-iptables-logger.yml"; then
     echo "PASS - operations/experimental/enable-iptables-logger.yml"
   else
     fail "operations/experimental/enable-iptables-logger.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/experimental/enable-local-route-emitter-tcp-windows.yml > /dev/null; then
+  if interpolate "-o operations/experimental/enable-local-route-emitter-tcp-windows.yml"; then
     echo "PASS - operations/experimental/enable-local-route-emitter-tcp-windows.yml"
   else
     fail "operations/experimental/enable-local-route-emitter-tcp-windows.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/experimental/enable-local-route-emitter-tcp.yml > /dev/null; then
+  if interpolate "-o operations/experimental/enable-local-route-emitter-tcp.yml"; then
     echo "PASS - operations/experimental/enable-local-route-emitter-tcp.yml"
   else
     fail "operations/experimental/enable-local-route-emitter-tcp.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/experimental/locket.yml -o operations/use-postgres.yml -o operations/experimental/enable-locket-postgres.yml > /dev/null; then
+  if interpolate "-o operations/experimental/locket.yml -o operations/use-postgres.yml -o operations/experimental/enable-locket-postgres.yml"; then
     echo "PASS - operations/experimental/enable-locket-postgres.yml"
   else
     fail "operations/experimental/enable-locket-postgres.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/windows-cell.yml -o operations/experimental/enable-locket-windows.yml > /dev/null; then
+  if interpolate "-o operations/windows-cell.yml -o operations/experimental/enable-locket-windows.yml"; then
     echo "PASS - operations/experimental/enable-locket-windows.yml"
   else
     fail "operations/experimental/enable-locket-windows.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/experimental/enable-locket.yml > /dev/null; then
+  if interpolate "-o operations/experimental/enable-locket.yml"; then
     echo "PASS - operations/experimental/enable-locket.yml"
   else
     fail "operations/experimental/enable-locket.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/experimental/enable-loggregator-v2-diego.yml > /dev/null; then
+  if interpolate "-o operations/experimental/enable-loggregator-v2-diego.yml"; then
     echo "PASS - operations/experimental/enable-loggregator-v2-diego.yml"
   else
     fail "operations/experimental/enable-loggregator-v2-diego.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/windows-cell.yml -o operations/experimental/enable-loggregator-v2-windows-cell.yml > /dev/null; then
+  if interpolate "-o operations/windows-cell.yml -o operations/experimental/enable-loggregator-v2-windows-cell.yml"; then
     echo "PASS - operations/experimental/enable-loggregator-v2-windows-cell.yml"
   else
     fail "operations/experimental/enable-loggregator-v2-windows-cell.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/windows-cell.yml -o operations/experimental/enable-prefer-declarative-healthchecks-windows.yml > /dev/null; then
+  if interpolate "-o operations/windows-cell.yml -o operations/experimental/enable-prefer-declarative-healthchecks-windows.yml"; then
     echo "PASS - operations/experimental/enable-prefer-declarative-healthchecks-windows.yml"
   else
     fail "operations/experimental/enable-prefer-declarative-healthchecks-windows.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/experimental/enable-prefer-declarative-healthchecks.yml > /dev/null; then
+  if interpolate "-o operations/experimental/enable-prefer-declarative-healthchecks.yml"; then
     echo "PASS - operations/experimental/enable-prefer-declarative-healthchecks.yml"
   else
     fail "operations/experimental/enable-prefer-declarative-healthchecks.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/experimental/enable-rlp.yml > /dev/null; then
+  if interpolate "-o operations/experimental/enable-rlp.yml"; then
     echo "PASS - operations/experimental/enable-rlp.yml"
   else
     fail "operations/experimental/enable-rlp.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/experimental/secure-service-credentials.yml > /dev/null; then
+  if interpolate "-o operations/experimental/secure-service-credentials.yml"; then
     echo "PASS - operations/experimental/secure-service-credentials.yml"
   else
     fail "operations/experimental/secure-service-credentials.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/experimental/skip-consul-cell-registrations.yml > /dev/null; then
+  if interpolate "-o operations/experimental/skip-consul-cell-registrations.yml"; then
     echo "PASS - operations/experimental/skip-consul-cell-registrations.yml"
   else
     fail "operations/experimental/skip-consul-cell-registrations.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/experimental/skip-consul-locks.yml > /dev/null; then
+  if interpolate "-o operations/experimental/skip-consul-locks.yml"; then
     echo "PASS - operations/experimental/skip-consul-locks.yml"
   else
     fail "operations/experimental/skip-consul-locks.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/experimental/use-cf-networking-postgres.yml > /dev/null; then
+  if interpolate "-o operations/experimental/use-cf-networking-postgres.yml"; then
     echo "PASS - operations/experimental/use-cf-networking-postgres.yml"
   else
     fail "operations/experimental/use-cf-networking-postgres.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/experimental/use-cf-networking.yml > /dev/null; then
+  if interpolate "-o operations/experimental/use-cf-networking.yml"; then
     echo "PASS - operations/experimental/use-cf-networking.yml"
   else
     fail "operations/experimental/use-cf-networking.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/use-external-dbs.yml -o operations/experimental/use-external-cf-networking-dbs.yml > /dev/null; then
-    echo "PASS - operations/experimental/use-external-cf-networking-dbs.yml"
-  else
-    fail "operations/experimental/use-external-cf-networking-dbs.yml"
-  fi
-  if bosh interpolate cf-deployment.yml -o operations/experimental/locket.yml -o operations/experimental/use-external-locket-db.yml > /dev/null; then
+  if interpolate "-o operations/experimental/locket.yml -o operations/experimental/use-external-locket-db.yml -l operations/example-vars-files/vars-use-external-locket-db.yml"; then
     echo "PASS - operations/experimental/use-external-locket-db.yml"
   else
     fail "operations/experimental/use-external-locket-db.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/experimental/use-grootfs.yml > /dev/null; then
+  if interpolate "-o operations/experimental/use-grootfs.yml"; then
     echo "PASS - operations/experimental/use-grootfs.yml"
   else
     fail "operations/experimental/use-grootfs.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/gcp.yml > /dev/null; then
+  if interpolate "-o operations/gcp.yml"; then
     echo "PASS - operations/gcp.yml"
   else
     fail "operations/gcp.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/rename-deployment.yml > /dev/null; then
+  if interpolate "-o operations/rename-deployment.yml -v deployment_name=renamed_deployment"; then
     echo "PASS - operations/rename-deployment.yml"
   else
     fail "operations/rename-deployment.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/rename-network.yml > /dev/null; then
+  if interpolate "-o operations/rename-network.yml -v network_name=renamed_network"; then
     echo "PASS - operations/rename-network.yml"
   else
     fail "operations/rename-network.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/scale-down-etcd-for-cluster-changes.yml > /dev/null; then
+  if interpolate "-o operations/scale-down-etcd-for-cluster-changes.yml"; then
     echo "PASS - operations/scale-down-etcd-for-cluster-changes.yml"
   else
     fail "operations/scale-down-etcd-for-cluster-changes.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/scale-to-one-az.yml > /dev/null; then
+  if interpolate "-o operations/scale-to-one-az.yml"; then
     echo "PASS - operations/scale-to-one-az.yml"
   else
     fail "operations/scale-to-one-az.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/tcp-routing-gcp.yml > /dev/null; then
+  if interpolate "-o operations/tcp-routing-gcp.yml"; then
     echo "PASS - operations/tcp-routing-gcp.yml"
   else
     fail "operations/tcp-routing-gcp.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/test/add-bosh-dns-to-cells.yml > /dev/null; then
+  if interpolate "-o operations/test/add-bosh-dns-to-cells.yml"; then
     echo "PASS - operations/test/add-bosh-dns-to-cells.yml"
   else
     fail "operations/test/add-bosh-dns-to-cells.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/test/add-datadog-firehose-nozzle.yml > /dev/null; then
+  if interpolate "-o operations/test/add-datadog-firehose-nozzle.yml -v datadog_api_key=XYZ -v datadog_metric_prefix=foo.bar -v traffic_controller_external_port=8443"; then
     echo "PASS - operations/test/add-datadog-firehose-nozzle.yml"
   else
     fail "operations/test/add-datadog-firehose-nozzle.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/test/add-persistent-isolation-segment-diego-cell.yml > /dev/null; then
+  if interpolate "-o operations/test/add-persistent-isolation-segment-diego-cell.yml"; then
     echo "PASS - operations/test/add-persistent-isolation-segment-diego-cell.yml"
   else
     fail "operations/test/add-persistent-isolation-segment-diego-cell.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/test/add-persistent-isolation-segment-router.yml > /dev/null; then
+  if interpolate "-o operations/test/add-persistent-isolation-segment-router.yml"; then
     echo "PASS - operations/test/add-persistent-isolation-segment-router.yml"
   else
     fail "operations/test/add-persistent-isolation-segment-router.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/test/alter-ssh-proxy-redirect-uri.yml > /dev/null; then
+  if interpolate "-o operations/test/alter-ssh-proxy-redirect-uri.yml"; then
     echo "PASS - operations/test/alter-ssh-proxy-redirect-uri.yml"
   else
     fail "operations/test/alter-ssh-proxy-redirect-uri.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/test/use-bosh-dns-for-containers.yml > /dev/null; then
+  if interpolate "-o operations/test/use-bosh-dns-for-containers.yml"; then
     echo "PASS - operations/test/use-bosh-dns-for-containers.yml"
   else
     fail "operations/test/use-bosh-dns-for-containers.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/test/use-bosh-dns.yml > /dev/null; then
+  if interpolate "-o operations/test/use-bosh-dns.yml"; then
     echo "PASS - operations/test/use-bosh-dns.yml"
   else
     fail "operations/test/use-bosh-dns.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/use-blobstore-cdn.yml > /dev/null; then
+  if interpolate "-o operations/use-blobstore-cdn.yml -l operations/example-vars-files/vars-use-blobstore-cdn.yml"; then
     echo "PASS - operations/use-blobstore-cdn.yml"
   else
     fail "operations/use-blobstore-cdn.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/use-compiled-releases.yml > /dev/null; then
+  if interpolate "-o operations/use-compiled-releases.yml"; then
     echo "PASS - operations/use-compiled-releases.yml"
   else
     fail "operations/use-compiled-releases.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/use-external-dbs.yml > /dev/null; then
+  if interpolate "-o operations/use-external-dbs.yml -l operations/example-vars-files/vars-use-external-dbs.yml"; then
     echo "PASS - operations/use-external-dbs.yml"
   else
     fail "operations/use-external-dbs.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/use-latest-stemcell.yml > /dev/null; then
+  if interpolate "-o operations/use-latest-stemcell.yml"; then
     echo "PASS - operations/use-latest-stemcell.yml"
   else
     fail "operations/use-latest-stemcell.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/use-only-local-route-emitters-windows-cell.yml > /dev/null; then
+  if interpolate "-o operations/use-only-local-route-emitters-windows-cell.yml"; then
     echo "PASS - operations/use-only-local-route-emitters-windows-cell.yml"
   else
     fail "operations/use-only-local-route-emitters-windows-cell.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/use-only-local-route-emitters.yml > /dev/null; then
+  if interpolate "-o operations/use-only-local-route-emitters.yml"; then
     echo "PASS - operations/use-only-local-route-emitters.yml"
   else
     fail "operations/use-only-local-route-emitters.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/use-postgres.yml > /dev/null; then
+  if interpolate "-o operations/use-postgres.yml"; then
     echo "PASS - operations/use-postgres.yml"
   else
     fail "operations/use-postgres.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/use-s3-blobstore.yml > /dev/null; then
+  if interpolate "-o operations/use-s3-blobstore.yml -l operations/example-vars-files/vars-use-s3-blobstore.yml"; then
     echo "PASS - operations/use-s3-blobstore.yml"
   else
     fail "operations/use-s3-blobstore.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/windows-cell.yml > /dev/null; then
+  if interpolate "-o operations/windows-cell.yml"; then
     echo "PASS - operations/windows-cell.yml"
   else
     fail "operations/windows-cell.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/workarounds/use-3-azs-for-router.yml > /dev/null; then
+  if interpolate "-o operations/workarounds/use-3-azs-for-router.yml"; then
     echo "PASS - operations/workarounds/use-3-azs-for-router.yml"
   else
     fail "operations/workarounds/use-3-azs-for-router.yml"
   fi
-  if bosh interpolate cf-deployment.yml -o operations/workarounds/use-4-azs-for-router.yml > /dev/null; then
+  if interpolate "-o operations/workarounds/use-4-azs-for-router.yml"; then
     echo "PASS - operations/workarounds/use-4-azs-for-router.yml"
   else
     fail "operations/workarounds/use-4-azs-for-router.yml"

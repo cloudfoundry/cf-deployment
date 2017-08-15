@@ -257,6 +257,12 @@ Here's an (alphabetical) summary:
   this file was intentionally left blank and left for backwards compatibility. It previously overrode the static IP addresses assigned to some instance groups,
   as GCP networking features allow them to all co-exist on the same subnet
   despite being spread across multiple AZs.
+- `operations/rename-deployment.yml` -
+  This file allows a deployer to rename the deployment
+  by passing a variable `deployment_name`
+- `operations/rename-network.yml` -
+  This file allows a deployer to rename the network
+  by passing a variable `network_name`
 - `operations/scale-to-one-az.yml` -
   Scales cf-deployment down to a single instance per instance group,
   placing them all into a single AZ.
