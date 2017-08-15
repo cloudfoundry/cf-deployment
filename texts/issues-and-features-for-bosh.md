@@ -8,6 +8,31 @@ We want to use this doc as a place to track those issues and discuss solutions t
 
 ## Open discussion
 
+### Link standardization
+One of the most common issues we're finding is
+that we can't use links as effectively as we'd like to.
+The big obstacle is that releases provides links in different formats.
+For example, postgres-release and cf-mysql-release both provide a link of type `database`,
+but they represent their properties differently: 
+cf-mysql-release has `cf_mysql.mysql.port`
+and postgres-release has `databases.port`,
+so we can't consume the port via link.
+The same applied for other configuration, including credentials.
+
+We can we build a standard for a `database` link?
+Only by convention?
+Or can BOSH enforce certain properties in a link,
+like a Golang interface?
+It would probably help if BOSH could provide a way to rename properties for the purpose of link.
+For example:
+```
+- name: mysql-database
+  type: database
+  properties:
+  - name: port
+    source: cf_mysql.mysql.port
+```
+
 ### Values that could be configurable, but also have easy defaults
 There are values in deployment manifests
 that could have pretty standard defaults,
