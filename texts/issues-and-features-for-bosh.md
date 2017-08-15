@@ -33,6 +33,10 @@ For example:
     source: cf_mysql.mysql.port
 ```
 
+Also, how do links account for external connections?
+For example, database links allow connections to databases that are also bosh-deployed,
+but how can use links to configure components to connect to an RDS instance?
+
 ### Values that could be configurable, but also have easy defaults
 There are values in deployment manifests
 that could have pretty standard defaults,
