@@ -64,16 +64,6 @@ pushd $(dirname $0)/.. > /dev/null
   else
     fail "operations/enable-cc-rate-limiting.yml"
   fi
-  if interpolate "-o operations/enable-local-route-emitters-windows-cell.yml"; then
-    echo "PASS - operations/enable-local-route-emitters-windows-cell.yml"
-  else
-    fail "operations/enable-local-route-emitters-windows-cell.yml"
-  fi
-  if interpolate "-o operations/enable-local-route-emitters.yml"; then
-    echo "PASS - operations/enable-local-route-emitters.yml"
-  else
-    fail "operations/enable-local-route-emitters.yml"
-  fi
   if interpolate "-o operations/enable-privileged-container-support.yml"; then
     echo "PASS - operations/enable-privileged-container-support.yml"
   else
@@ -93,16 +83,6 @@ pushd $(dirname $0)/.. > /dev/null
     echo "PASS - operations/experimental/enable-iptables-logger.yml"
   else
     fail "operations/experimental/enable-iptables-logger.yml"
-  fi
-  if interpolate "-o operations/experimental/enable-local-route-emitter-tcp-windows.yml"; then
-    echo "PASS - operations/experimental/enable-local-route-emitter-tcp-windows.yml"
-  else
-    fail "operations/experimental/enable-local-route-emitter-tcp-windows.yml"
-  fi
-  if interpolate "-o operations/experimental/enable-local-route-emitter-tcp.yml"; then
-    echo "PASS - operations/experimental/enable-local-route-emitter-tcp.yml"
-  else
-    fail "operations/experimental/enable-local-route-emitter-tcp.yml"
   fi
   if interpolate "-o operations/experimental/locket.yml -o operations/use-postgres.yml -o operations/experimental/enable-locket-postgres.yml"; then
     echo "PASS - operations/experimental/enable-locket-postgres.yml"
@@ -263,16 +243,6 @@ pushd $(dirname $0)/.. > /dev/null
     echo "PASS - operations/use-latest-stemcell.yml"
   else
     fail "operations/use-latest-stemcell.yml"
-  fi
-  if interpolate "-o operations/use-only-local-route-emitters-windows-cell.yml"; then
-    echo "PASS - operations/use-only-local-route-emitters-windows-cell.yml"
-  else
-    fail "operations/use-only-local-route-emitters-windows-cell.yml"
-  fi
-  if interpolate "-o operations/use-only-local-route-emitters.yml"; then
-    echo "PASS - operations/use-only-local-route-emitters.yml"
-  else
-    fail "operations/use-only-local-route-emitters.yml"
   fi
   if interpolate "-o operations/use-postgres.yml"; then
     echo "PASS - operations/use-postgres.yml"
