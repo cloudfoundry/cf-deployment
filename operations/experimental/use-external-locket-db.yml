@@ -1,6 +1,7 @@
 ---
 - type: remove
   path: /variables/name=locket_database_password
+  error: "It seems you haven't applied `enable-locket.yml` yet. Make sure to apply that ops-file first."
 
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql
