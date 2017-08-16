@@ -1,0 +1,4 @@
+---
+- type: replace
+  path: /instance_groups/name=consul/networks/name=default/static_ips?
+  value: ((consul_static_ips))

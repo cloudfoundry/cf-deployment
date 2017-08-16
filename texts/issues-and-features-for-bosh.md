@@ -88,6 +88,11 @@ or maybe simply allowing aliases for network names.
 [This Github issue](https://github.com/cloudfoundry/cf-deployment/issues/190#issuecomment-320203780)
 captures the idea pretty well.
 
+#### Injecting into an array
+If someone wants to write an ops-file that adds a new instance group,
+their only option is to append to the list of instance groups.
+Because BOSH deploys instance groups in order,
+we need a way to inject a new instance group at a certain index in the array.
 
 ### Updating job topology
 [This issue](https://github.com/cloudfoundry/cf-deployment/issues/179)

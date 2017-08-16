@@ -1,0 +1,73 @@
+diff --git a/cf-deployment.yml b/cf-deployment.yml
+index fb30ab8..229664a 100644
+--- a/cf-deployment.yml
++++ b/cf-deployment.yml
+@@ -116,68 +116,6 @@ instance_groups:
+   - name: metron_agent
+     release: loggregator
+     properties: *metron_agent_properties
+-- name: etcd
+-  azs:
+-  - z1
+-  - z2
+-  - z3
+-  instances: 3
+-  persistent_disk_type: 5GB
+-  vm_type: m3.medium
+-  vm_extensions:
+-  - 10GB_ephemeral_disk
+-  stemcell: default
+-  update:
+-    serial: true
+-    max_in_flight: 1
+-  networks:
+-  - name: default
+-  jobs:
+-  - name: consul_agent
+-    release: consul
+-    consumes:
+-      consul_common: {from: consul_common_link}
+-      consul_server: nil
+-      consul_client: {from: consul_client_link}
+-    properties:
+-      consul:
+-        agent:
+-          services:
+-            etcd:
+-              name: cf-etcd
+-  - name: etcd
+-    release: etcd
+-    consumes:
+-      etcd: nil
+-    properties:
+-      etcd:
+-        advertise_urls_dns_suffix: cf-etcd.service.cf.internal
+-        cluster:
+-        - instances: 3
+-          name: etcd
+-        peer_require_ssl: true
+-        require_ssl: true
+-        ca_cert: "((etcd_client.ca))"
+-        client_cert: "((etcd_client.certificate))"
+-        client_key: "((etcd_client.private_key))"
+-        server_cert: "((etcd_server.certificate))"
+-        server_key: "((etcd_server.private_key))"
+-        peer_ca_cert: "((etcd_peer.ca))"
+-        peer_cert: "((etcd_peer.certificate))"
+-        peer_key: "((etcd_peer.private_key))"
+-  - name: etcd_metrics_server
+-    release: etcd
+-    properties:
+-      etcd_metrics_server:
+-        etcd:
+-          dns_suffix: cf-etcd.service.cf.internal
+-          require_ssl: true
+-          ca_cert: "((etcd_server.ca))"
+-          client_cert: "((etcd_client.certificate))"
+-          client_key: "((etcd_client.private_key))"
+-  - name: metron_agent
+-    release: loggregator
+-    properties: *metron_agent_properties
+ - name: mysql
+   azs:
+   - z1
