@@ -165,6 +165,11 @@ Please also take a look at the ["style guide"](texts/style-guide.md),
 which lays out some guidelines for adding properties or jobs
 to the deployment manifest.
 
+Before submitting a pull request,
+please run `scripts/test`
+which interpolates all of our ops files
+with the `bosh` cli.
+
 We ask that pull requests and other changes be successfully deployed,
 and tested with the latest sha of CATs.
 
