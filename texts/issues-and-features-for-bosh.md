@@ -76,6 +76,8 @@ the [single-AZ ops-file](https://github.com/cloudfoundry/cf-deployment/blob/mast
 Could we "import" other ops-files?
 Define a list of ops-files that are applied in-order?
 Others have suggested [allowing the use of globs](https://cloudfoundry.slack.com/archives/C0FAEKGUQ/p1502153559284207).
+As a data point, when people apply multiple ops-files, it's always easy to figure out after the fact which ops-files were applied:
+> Another thing that came up was that it'd be awesome if there was a tool that could tell me what ops files I used to deploy and what order they were in.
 
 Another example of this complication is the network name.
 After working on an ops-file to variable-ize the network name so that operators could override it,
@@ -83,6 +85,10 @@ we realized that many other ops-files assume the use of a particular network nam
 Do we need to create a different version of all those ops-files that variable-izes the network name?
 It also seems like this could be solved with a variable that has a default value (as described above),
 or maybe simply allowing aliases for network names.
+
+From CAPI:
+> We've had some issues with ops files where we have an ops file out of order, and it has taken a long time to trace through all of the ops files in order to see what was overriding what.
+> It'd be great if order could somehow not matter and/or there was a way for us to see which ops files overwrite which attributes.
 
 #### Wildcard paths in operations
 [This Github issue](https://github.com/cloudfoundry/cf-deployment/issues/190#issuecomment-320203780)
