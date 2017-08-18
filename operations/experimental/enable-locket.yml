@@ -6,6 +6,7 @@
     release: diego
 - type: replace
   path: /instance_groups/name=mysql/jobs/name=mysql/properties/cf_mysql/mysql/seeded_databases/-
+  error: "It looks like you've removed the mysql job. If you're using postgres or external databases, make sure to apply `use-postgres.yml` or `use-external-dbs.yml` (respectively) after applying this ops-file."
   value:
     name: locket
     username: locket
