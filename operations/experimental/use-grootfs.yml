@@ -7,10 +7,9 @@
         driver: overlay-xfs
         graph_cleanup_threshold_in_mb: 0
         log_level: debug
-        persistent_image_list: &persistent-images
+        persistent_image_list:
         - /var/vcap/packages/cflinuxfs2/rootfs.tar
     release: grootfs
-
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=garden/properties/garden/image_plugin?
   value: /var/vcap/packages/grootfs/bin/grootfs
@@ -29,7 +28,8 @@
   - /var/vcap/jobs/grootfs/config/privileged_grootfs_config.yml
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=garden/properties/garden/persistent_image_list
-  value: *persistent-images
+  value:
+  - /var/vcap/packages/cflinuxfs2/rootfs.tar
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=rep/properties/diego/rep/preloaded_rootfses
   value:
@@ -38,6 +38,6 @@
   path: /releases/-
   value:
     name: grootfs
-    sha1: b342db5da3a7bd7bb2e81c2f6456d75cf38e9e0c
-    url: https://bosh.io/d/github.com/cloudfoundry/grootfs-release?v=0.24.0
-    version: 0.24.0
+    sha1: 9e517f58669c5a4e6d368d607843749b1e10654d
+    url: https://bosh.io/d/github.com/cloudfoundry/grootfs-release?v=0.25.0
+    version: 0.25.0
