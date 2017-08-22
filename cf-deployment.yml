@@ -1232,7 +1232,6 @@ instance_groups:
           client_cert: "((etcd_client.certificate))"
           client_key: "((etcd_client.private_key))"
       uaa:
-        url: https://uaa.((system_domain))
         internal_url: https://uaa.service.cf.internal:8443
         ca_cert: "((uaa_ca.certificate))"
       loggregator:
@@ -1254,7 +1253,6 @@ instance_groups:
       system_domain: "((system_domain))"
       ssl: *ssl
       cc:
-        srv_api_uri: "http://cloud-controller-ng.service.cf.internal:9022"
         internal_service_hostname: "cloud-controller-ng.service.cf.internal"
         tls_port: 9023
         mutual_tls:
