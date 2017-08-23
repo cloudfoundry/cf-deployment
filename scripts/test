@@ -299,6 +299,11 @@ pushd $(dirname $0)/.. > /dev/null
   else
     fail "operations/workarounds/use-4-azs-for-router.yml"
   fi
+  if interpolate "-o operations/legacy/old-droplet-mitigation.yml"; then
+    echo "PASS - operations/legacy/old-droplet-mitigation.yml"
+  else
+    fail "operations/legacy/old-droplet-mitigation.yml"
+  fi
 popd > /dev/null
 
 exit $exit_code
