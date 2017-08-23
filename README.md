@@ -85,14 +85,25 @@ https://github.com/cloudfoundry/cf-deployment-transition
 
 ## <a name='deploying-cf'></a>Deploying CF
 
-### Step 1: Get a BOSH Director
+### Step 1: Pave your IaaS and get a BOSH Director
 
-Bosh can be deployed as a standalone VM that manages complex workloads (i.e. CF) or a lite version for development purposes that uses containers to emulate VMs
-#### Bosh
-To deploy a BOSH Director to AWS or GCP,
-use [`bbl`](https://github.com/cloudfoundry/bosh-bootloader)
-(the Bosh BootLoader).
-For a full guide to getting set up on GCP, look at [this guide](gcp-deployment-guide.md).
+Before you can start deploying,
+you'll need to make sure you've configured your infrastructure appropriately
+and deployed a BOSH Director.
+If you're using AWS or GCP,
+we'd suggest using [bbl](https://github.com/cloudfoundry/bosh-bootloader)
+to set up your IaaS resources and bootstrap a BOSH director.
+(For a full guide to getting set up on GCP, look at [this guide](gcp-deployment-guide.md).)
+Otherwise, take a look at [the BOSH documentation](https://bosh.io/docs/init.html)
+for information about prerequisites for a given IaaS
+and installing a BOSH Director there.
+
+Lastly, if you're planning to use a local bosh-lite for your BOSH director,
+follow [these instructions](https://bosh.io/docs/bosh-lite.html).
+
+##### bosh-lite
+If you're deploying bosh-lite to a VM on AWS or GCP,
+look at [this guide](bosh-lite.md).
 
 If you're deploying against a local bosh-lite,
 you'll need to take the following steps before deploying:
@@ -100,28 +111,38 @@ you'll need to take the following steps before deploying:
 export BOSH_CA_CERT=<PATH-TO-BOSH-LITE-REPO>/ca/certs/ca.crt
 bosh -e 192.168.50.6 update-cloud-config bosh-lite/cloud-config.yml
 ```
-##### Step 1.5: Get load balancers
-For IaaSes like AWS and GCP,
-you'll need to use `bbl` to create load balancers as well
+
+#### Get load balancers
+The CF Routers need a way to receive traffic.
+The most common way to accomplish this is to configure load balancers
+to route traffic to them.
+While we cannot offer help for each IaaS specifically,
+for IaaSes like AWS and GCP,
+you can use `bbl` to create load balancers
 by running `bbl create-lbs`.
 
 
-#### Bosh-lite:
-If you're using bosh-lite on an IaaS, look at [this guide](bosh-lite.md)
-
-
-
-### Step 2: Deploy CF
+### Step 2: Target your BOSH Director
 There are several ways to target your new BOSH director.
 One of the simplest ways is to create an environment alias:
 ```
-bosh -e $(bbl director-address) alias-env my-env --ca-cert <(bbl director-ca-cert)
+bosh -e <DIRECTOR_IP> alias-env my-env --ca-cert DIRECTOR_CA_CERT_FILE
 
-# You can run `bbl director-password` to fetch the password and log in
 bosh -e my-env login
+# Provide username and password for your BOSH Director
 ```
 
 Alternatively, you can set environment variables:
+```
+export BOSH_ENVIRONMENT=<DIRECTOR_IP>
+export BOSH_CLIENT=<DIRECTOR_USERNAME>
+export BOSH_CLIENT_SECRET=<DIRECTOR_PASSWORD>
+export BOSH_CA_CERT=<DIRECTOR_CA_CERT_TEXT>
+```
+
+If you've used `bbl` to set up your director,
+you can fetch the director location and credentials with the following commands:
+
 ```
 export BOSH_ENVIRONMENT=$(bbl director-address)
 export BOSH_CLIENT=$(bbl director-username)
@@ -129,6 +150,7 @@ export BOSH_CLIENT_SECRET=$(bbl director-password)
 export BOSH_CA_CERT="$(bbl director-ca-cert)"
 ```
 
+### Step 3: Deploy CF
 To deploy to a configured BOSH director using the new `bosh` CLI:
 
 ```
