@@ -55,7 +55,7 @@
           enable_ssl: true
           tls_pem:
           - cert_chain: "((router_ssl.certificate))"
-            key_chain: "((router_ssl.private_key))"
+            private_key: "((router_ssl.private_key))"
           status:
             password: "((router_status_password))"
             user: router-status
