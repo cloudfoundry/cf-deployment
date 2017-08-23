@@ -369,6 +369,11 @@ instance_groups:
             ca_cert: "((diego_rep_client.ca))"
             client_cert: "((diego_rep_client.certificate))"
             client_key: "((diego_rep_client.private_key))"
+      loggregator: &diego_loggregator_client_properties
+        use_v2_api: true
+        ca_cert: "((loggregator_tls_metron.ca))"
+        cert: "((loggregator_tls_metron.certificate))"
+        key: "((loggregator_tls_metron.private_key))"
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
@@ -980,6 +985,7 @@ instance_groups:
             ca_cert: "((diego_rep_client.ca))"
             client_cert: "((diego_rep_client.certificate))"
             client_key: "((diego_rep_client.private_key))"
+      loggregator: *diego_loggregator_client_properties
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
@@ -1032,6 +1038,7 @@ instance_groups:
           server_cert: "((diego_rep_agent.certificate))"
           server_key: "((diego_rep_agent.private_key))"
           enable_legacy_api_endpoints: false
+      loggregator: *diego_loggregator_client_properties
       tls:
         ca_cert: "((diego_rep_agent.ca))"
         cert: "((diego_rep_agent.certificate))"
