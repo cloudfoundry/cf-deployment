@@ -22,3 +22,11 @@
       jobs:
       - name: database-backup-restorer
         release: backup-and-restore-sdk
+      - name: bbr-cfnetworkingdb
+        release: cf-networking
+      - name: consul_agent
+        release: consul
+        consumes:
+          consul_common: {from: consul_common_link}
+          consul_server: nil
+          consul_client: {from: consul_client_link}
