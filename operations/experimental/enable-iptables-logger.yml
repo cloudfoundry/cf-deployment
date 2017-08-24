@@ -1,6 +1,6 @@
 # Enable iptables logging for ASGs
 - type: replace
-  path: /instance_groups/name=diego-cell/jobs/name=silk-cni/properties?/cf_networking/iptables_logging
+  path: /instance_groups/name=diego-cell/jobs/name=cni/properties?/cf_networking/iptables_logging
   value: true
 
 # Enable iptables logging for c2c
