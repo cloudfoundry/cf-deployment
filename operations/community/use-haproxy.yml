@@ -1,3 +1,4 @@
+---
 - type: replace
   path: /releases/-
   value:
@@ -12,8 +13,8 @@
     azs: [z1, z2]
     instances: 2
     stemcell: default
-    vm_type: m3.medium
-    networks: [ name: default ]
+    vm_type: minimal
+    networks: [name: default]
     jobs:
     - name: keepalived
       release: haproxy
@@ -34,7 +35,7 @@
     azs:
     - z1
     instances: 1
-    vm_type: m3.medium
+    vm_type: minimal
     stemcell: default
     update:
       max_in_flight: 1

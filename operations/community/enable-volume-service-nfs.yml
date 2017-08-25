@@ -1,3 +1,4 @@
+---
 - type: replace
   path: /releases/-
   value:
@@ -52,7 +53,7 @@
     azs: [z1, z2]
     instances: 2
     stemcell: default
-    vm_type: m3.medium
+    vm_type: minimal
     networks: [ name: default ]
     jobs:
     - name: consul_agent
@@ -92,7 +93,7 @@
     instances: 1
     azs: [z1]
     lifecycle: errand
-    vm_type: default
+    vm_type: minimal
     stemcell: default
     networks: [{name: default}]
     jobs:

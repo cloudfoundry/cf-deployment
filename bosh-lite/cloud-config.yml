@@ -6,7 +6,7 @@ compilation:
   az: z1
   network: default
   reuse_compilation_vms: true
-  vm_type: m3.medium
+  vm_type: minimal
   workers: 6
 disk_types:
 - disk_size: 1024
@@ -50,33 +50,7 @@ vm_extensions:
     ports:
     - host: 1024-1123
 vm_types:
-- name: default
-- name: m3.medium
-- name: m3.large
-- name: m3.xlarge
-- name: m3.2xlarge
-- name: m4.large
-- name: m4.xlarge
-- name: m4.2xlarge
-- name: m4.4xlarge
-- name: m4.10xlarge
-- name: c3.large
-- name: c3.xlarge
-- name: c3.2xlarge
-- name: c3.4xlarge
-- name: c3.8xlarge
-- name: c4.large
-- name: c4.xlarge
-- name: c4.2xlarge
-- name: c4.4xlarge
-- name: c4.8xlarge
-- name: r3.large
-- name: r3.xlarge
-- name: r3.2xlarge
-- name: r3.4xlarge
-- name: r3.8xlarge
-- name: t2.nano
-- name: t2.micro
-- name: t2.small
-- name: t2.medium
-- name: t2.large
+- name: minimal
+- name: small
+- name: small-hihgmem
+- name: sharedcpu
