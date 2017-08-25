@@ -8,7 +8,11 @@ function fail() {
 }
 
 function interpolate() {
-  bosh interpolate cf-deployment.yml $1 -v system_domain=cf-app.com --vars-store $(mktemp) --var-errs --var-errs-unused > /dev/null
+  local tmp_vars_store
+  tmp_vars_store=$(mktemp)
+  cp scripts/fixtures/test-base-vars-store.yml ${tmp_vars_store}
+
+  bosh interpolate cf-deployment.yml $1  --vars-store ${tmp_vars_store} --var-errs --var-errs-unused > /dev/null
   return $?
 }
 
