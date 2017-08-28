@@ -1,0 +1,23 @@
+---
+- type: replace
+  path: /instance_groups/name=bits-service/jobs/name=bits-service/properties/bits-service/app_stash
+  value:
+    directory_key: app_stash
+    fog_connection: &fog-connection
+      provider: "local"
+      local_root: "/var/vcap/store/bits-service/"
+- type: replace
+  path: /instance_groups/name=bits-service/jobs/name=bits-service/properties/bits-service/buildpacks
+  value:
+    directory_key: buildpacks
+    fog_connection: *fog-connection
+- type: replace
+  path: /instance_groups/name=bits-service/jobs/name=bits-service/properties/bits-service/droplets
+  value:
+    directory_key: droplets
+    fog_connection: *fog-connection
+- type: replace
+  path: /instance_groups/name=bits-service/jobs/name=bits-service/properties/bits-service/packages
+  value:
+    directory_key: packages
+    fog_connection: *fog-connection

@@ -1,0 +1,98 @@
+---
+# Summary
+# --------
+# TODO
+#
+# Optional properties:
+#
+# - TODO
+
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: bits-service
+    instances: 1
+    azs: [z1]
+    vm_type: m3.medium
+    persistent_disk: 6064
+    stemcell: default
+    networks:
+      - name: default
+    jobs:
+      - name: bits-service
+        release: bits-service
+        properties:
+          bits-service:
+            private_endpoint: http://bits-service.service.cf.internal
+            public_endpoint: http://bits-service.((system_domain))
+            secret: "((bits_service_secret))"
+            signing_users:
+              - username: admin
+                password: "((bits_service_signing_password))"
+            app_stash:
+            buildpacks:
+            droplets:
+            packages:
+            cc_updates:
+              ca_cert: "((cc_tls.ca))"
+              client_cert: "((cc_tls.certificate))"
+              client_key: "((cc_tls.private_key))"
+      - name: consul_agent
+        release: consul
+        consumes:
+          consul_common: {from: consul_common_link}
+          consul_server: nil
+          consul_client: {from: consul_client_link}
+        properties:
+          consul:
+            agent:
+              services:
+                bits-service: {}
+      - name: route_registrar
+        release: routing
+        properties:
+          route_registrar:
+            routes:
+              - name: bits-service
+                port: 80
+                registration_interval: 20s
+                uris:
+                  - bits-service.((system_domain))
+                tags:
+                  component: bits-service
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/bits_service?
+  value: &bits-service-config
+    enabled: true
+    public_endpoint: http://bits-service.((system_domain))
+    private_endpoint: http://bits-service.service.cf.internal
+    username: admin
+    password: "((bits_service_signing_password))"
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/bits_service?
+  value: *bits-service-config
+
+- type: replace
+  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/bits_service?
+  value: *bits-service-config
+
+- type: replace
+  path: /variables/-
+  value:
+    name: bits_service_secret
+    type: password
+
+- type: replace
+  path: /variables/-
+  value:
+    name: bits_service_signing_password
+    type: password
+
+- type: replace
+  path: /releases/-
+  value:
+    name: bits-service
+    version: latest
+    # TODO: get a URL
