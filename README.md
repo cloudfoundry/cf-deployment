@@ -373,10 +373,6 @@ Here's an (alphabetical) summary:
 - `operations/windows-cell.yml` -
   deploys a windows diego cell,
   adds releases necessary for windows.
-- `operations/experimental/bits-service.yml` - adds the [bits-service](https://github.com/cloudfoundry-incubator/bits-service)
-  job and enables it in the cloud-controller. It also requires one of
-  `bits-service-{local,webdav,s3}.yml` from the same directory. For S3,
-  `use-s3-blobstore.yml` is also required.
 
 ### A note on `experimental` and `test` ops-files
 The `operations` directory includes two subdirectories
