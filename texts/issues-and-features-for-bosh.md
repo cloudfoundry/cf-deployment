@@ -160,3 +160,7 @@ How else can we solve this issue?
 
 **Sources**:
 https://github.com/cloudfoundry/cf-deployment/issues/58
+
+### BOSH Director and CLI comaptibility
+It would be great if we didn't have to maintain a compatibility matrix for director and CLI versions.
+Could we encode this in the manifest somehow?
