@@ -1,3 +1,4 @@
+---
 - path: /instance_groups/-
   type: replace
   value:
@@ -95,7 +96,7 @@
     stemcell: windows
     vm_extensions:
     - 100GB_ephemeral_disk
-    vm_type: r3.xlarge
+    vm_type: small-highmem
 - path: /releases/-
   type: replace
   value:
