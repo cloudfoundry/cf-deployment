@@ -28,12 +28,18 @@ please feel free to join the Cloud Foundry Slack,
 and ask us in the `#cf-deployment` channel.
 
 ## VM Types
-`cf-deployment` uses four VM types:
+`cf-deployment` uses four VM types.
+Here are their names
+and approximate resources:
 
 - minimal: this is sufficient for most things.
-- small: our API instances can benefit from some additional resources
+  1 vCPU and ~4 GB RAM
+- small: our API instances can benefit from some additional resources.
+  2 vCPUs and ~8 GB RAM.
 - small-highmem: diego cells need the memory to run apps.
+  4 vCPUs and ~32 GB RAM.
 - sharedcpu: some instances need only small, occasional resources.
+  1 vCPU and 2GB memory, restricted CPU access.
 
 It is important to note that all of these
 have a 10 GB Ephemeral disk associated by default.
