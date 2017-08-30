@@ -99,6 +99,7 @@ If someone wants to write an ops-file that adds a new instance group,
 their only option is to append to the list of instance groups.
 Because BOSH deploys instance groups in order,
 we need a way to inject a new instance group at a certain index in the array.
+- https://github.com/cloudfoundry/cf-deployment/issues/223
 
 ### Updating job topology
 [This issue](https://github.com/cloudfoundry/cf-deployment/issues/179)
