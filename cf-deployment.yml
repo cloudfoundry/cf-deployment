@@ -679,24 +679,25 @@ instance_groups:
             ports: '53'
             protocol: udp
         install_buildpacks: &cc_install_buildpacks
-        - name: binary_buildpack
-          package: binary-buildpack
-        - name: dotnet_core_buildpack
-          package: dotnet-core-buildpack
-        - name: go_buildpack
-          package: go-buildpack
-        - name: java_buildpack
-          package: java-buildpack
-        - name: nodejs_buildpack
-          package: nodejs-buildpack
-        - name: php_buildpack
-          package: php-buildpack
-        - name: python_buildpack
-          package: python-buildpack
-        - name: ruby_buildpack
-          package: ruby-buildpack
+        ## Order is important here
         - name: staticfile_buildpack
           package: staticfile-buildpack
+        - name: java_buildpack
+          package: java-buildpack
+        - name: ruby_buildpack
+          package: ruby-buildpack
+        - name: dotnet_core_buildpack
+          package: dotnet-core-buildpack
+        - name: nodejs_buildpack
+          package: nodejs-buildpack
+        - name: go_buildpack
+          package: go-buildpack
+        - name: python_buildpack
+          package: python-buildpack
+        - name: php_buildpack
+          package: php-buildpack
+        - name: binary_buildpack
+          package: binary-buildpack
         default_to_diego_backend: true
         db_encryption_key: "((cc_db_encryption_key))"
         bulk_api_password: "((cc_bulk_api_password))"
