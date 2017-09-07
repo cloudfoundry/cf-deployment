@@ -65,6 +65,26 @@ that varies most between IaaSs,
 so this may be one of the trickier parts
 of writing your own Cloud Config.
 
+On vSphere, which lacks load balancing,
+you can include the LB vm extension names
+without any cloud properties.
+You'll still have to solve load balancing,
+but this satisfies the manifest's need
+for these VM extensions.
+
+## Disk Types
+`cf-deployment` requires the following disk types:
+
+```
+disk_types:
+- disk_size: 5120
+  name: 5GB
+- disk_size: 10240
+  name: 10GB
+- disk_size: 100240
+  name: 100GB
+```
+
 ## Networks
 The network name `default`
 is used throughout `cf-deployment`.
