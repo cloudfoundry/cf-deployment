@@ -144,6 +144,10 @@ If you've used `bbl` to set up your director,
 you can fetch the director location and credentials with the following commands:
 
 ```
+eval "$(bbl print-env)"
+```
+or
+```
 export BOSH_ENVIRONMENT=$(bbl director-address)
 export BOSH_CLIENT=$(bbl director-username)
 export BOSH_CLIENT_SECRET=$(bbl director-password)
