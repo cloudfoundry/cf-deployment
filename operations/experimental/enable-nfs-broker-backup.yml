@@ -1,0 +1,14 @@
+---
+  - type: replace
+    path: /instance_groups/name=backup-restore/jobs/-
+    value:
+      name: nfsbroker-bbr
+      release: nfs-volume
+      properties:
+        nfsbroker:
+          db_driver: ((nfsbroker-db-driver))
+          db_username: ((nfsbroker-db-username))
+          db_password: ((nfsbroker-db-password))
+          db_hostname: ((nfsbroker-db-hostname))
+          db_port: ((nfsbroker-db-port))
+          db_name: ((nfsbroker-db-name))
