@@ -627,8 +627,6 @@ instance_groups:
     properties:
       router:
         route_services_secret: "((router_route_services_secret))"
-      hm9000:
-        port: -1
       system_domain: "((system_domain))"
       app_domains: &app_domains
       - "((system_domain))"
@@ -843,18 +841,11 @@ instance_groups:
   - name: cloud_controller_worker
     release: capi
     properties:
-      hm9000:
-        port: -1
       cc:
         db_encryption_key: "((cc_db_encryption_key))"
         default_to_diego_backend: true
         install_buildpacks: *cc_install_buildpacks
-        default_running_security_groups: *cc_default_running_security_groups
-        default_staging_security_groups: *cc_default_staging_security_groups
-        security_group_definitions: *cc_security_group_definitions
         internal_api_password: "((cc_internal_api_password))"
-        bulk_api_password: "((cc_bulk_api_password))"
-        quota_definitions: *quota_definitions
         staging_upload_user: staging_user
         staging_upload_password: "((cc_staging_upload_password))"
         resource_pool: *blobstore-properties
@@ -864,7 +855,6 @@ instance_groups:
         mutual_tls: *cc_mutual_tls
       ccdb: *ccdb
       system_domain: "((system_domain))"
-      app_domains: *app_domains
       routing_api: *routing_api
       ssl:
         skip_cert_verify: true
@@ -875,8 +865,6 @@ instance_groups:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
           cc_routing:
             secret: "((uaa_clients_cc-routing_secret))"
-
-        url: https://uaa.((system_domain))
         ssl:
           port: 8443
 - name: router
@@ -1113,18 +1101,12 @@ instance_groups:
   - name: cloud_controller_clock
     release: capi
     properties:
-      hm9000:
-        port: -1
       cc:
         db_encryption_key: "((cc_db_encryption_key))"
         default_to_diego_backend: true
         install_buildpacks: *cc_install_buildpacks
-        default_running_security_groups: *cc_default_running_security_groups
-        default_staging_security_groups: *cc_default_staging_security_groups
         security_group_definitions: *cc_security_group_definitions
         internal_api_password: "((cc_internal_api_password))"
-        bulk_api_password: "((cc_bulk_api_password))"
-        quota_definitions: *quota_definitions
         staging_upload_user: staging_user
         staging_upload_password: "((cc_staging_upload_password))"
         resource_pool: *blobstore-properties
@@ -1134,7 +1116,6 @@ instance_groups:
         mutual_tls: *cc_mutual_tls
       ccdb: *ccdb
       system_domain: "((system_domain))"
-      app_domains: *app_domains
       routing_api: *routing_api
       uaa:
         ca_cert: "((uaa_ssl.ca))"
@@ -1143,7 +1124,6 @@ instance_groups:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
           cc_routing:
             secret: "((uaa_clients_cc-routing_secret))"
-        url: https://uaa.((system_domain))
         ssl:
           port: 8443
   - name: metron_agent

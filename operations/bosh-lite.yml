@@ -166,34 +166,9 @@
   - public_networks
   - dns
   - load_balancer
-- type: replace
-  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/default_running_security_groups
-  value:
-  - public_networks
-  - dns
-  - load_balancer
-- type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/default_running_security_groups
-  value:
-  - public_networks
-  - dns
-  - load_balancer
+
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/security_group_definitions/-
-  value:
-    name: load_balancer
-    rules:
-    - destination: 10.244.0.34
-      protocol: all
-- type: replace
-  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/security_group_definitions/-
-  value:
-    name: load_balancer
-    rules:
-    - destination: 10.244.0.34
-      protocol: all
-- type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/security_group_definitions/-
   value:
     name: load_balancer
     rules:
