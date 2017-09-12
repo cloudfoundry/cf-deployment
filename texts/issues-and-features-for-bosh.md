@@ -9,11 +9,14 @@ We want to use this doc as a place to track those issues and discuss solutions t
 ## Open discussion
 
 ### Link standardization
+
+**BOSH story**: https://www.pivotaltracker.com/story/show/150867154
+
 One of the most common issues we're finding is
 that we can't use links as effectively as we'd like to.
 The big obstacle is that releases provides links in different formats.
 For example, postgres-release and cf-mysql-release both provide a link of type `database`,
-but they represent their properties differently: 
+but they represent their properties differently:
 cf-mysql-release has `cf_mysql.mysql.port`
 and postgres-release has `databases.port`,
 so we can't consume the port via link.
@@ -76,7 +79,7 @@ the [single-AZ ops-file](https://github.com/cloudfoundry/cf-deployment/blob/mast
 Could we "import" other ops-files?
 Define a list of ops-files that are applied in-order?
 Others have suggested [allowing the use of globs](https://cloudfoundry.slack.com/archives/C0FAEKGUQ/p1502153559284207).
-As a data point, when people apply multiple ops-files, it's always easy to figure out after the fact which ops-files were applied:
+As a data point, when people apply multiple ops-files, it's not always easy to figure out after the fact which ops-files were applied:
 > Another thing that came up was that it'd be awesome if there was a tool that could tell me what ops files I used to deploy and what order they were in.
 
 Another example of this complication is the network name.
@@ -100,6 +103,7 @@ their only option is to append to the list of instance groups.
 Because BOSH deploys instance groups in order,
 we need a way to inject a new instance group at a certain index in the array.
 - https://github.com/cloudfoundry/cf-deployment/issues/223
+**Update**: This issue is on the BOSH team's radar: https://github.com/cppforlife/go-patch/issues/11
 
 ### Updating job topology
 [This issue](https://github.com/cloudfoundry/cf-deployment/issues/179)
@@ -120,18 +124,26 @@ but there are also edge cases.
 In the example above,
 the amount of shared configuration is enormous.
 Does it still make sense to share configuration via link?
+**Update**: We think the best way forward for this is to
+have a job like CC provide all of its configuration via a link,
+and have the worker and clock consume that link to avoid duplication.
 
 Also, some configuration there is user-provided
 (specifically `app_domains`).
 Should that be shared via link?
+**Update**: See above.
 
 What about configuration such as the metron agent,
 which doesn't have an obvious candidate for an "owner" of the configuration?
 How can tighten that configuration?
 Does a runtime-config make the most sense?
 A notion of a global link?
+**Update**: We could use a deployment-level link: https://www.pivotaltracker.com/epic/show/3733664
 
 ### Seed values for BOSH jobs that allow that as configuration
+
+**BOSH epic**: https://www.pivotaltracker.com/epic/show/3733649
+
 Some jobs allow operators to provide seed values in the manifest.
 Different jobs have different behavior about how those seed value can change.
 For example, the Cloud Controller job allows deployers to specify "app domains,"
@@ -165,3 +177,5 @@ https://github.com/cloudfoundry/cf-deployment/issues/58
 ### BOSH Director and CLI comaptibility
 It would be great if we didn't have to maintain a compatibility matrix for director and CLI versions.
 Could we encode this in the manifest somehow?
+When we update the manifest with changes that depend on new versions of the CLI,
+users get unintelligible errors and we have to broadcast communication to the entire community.
