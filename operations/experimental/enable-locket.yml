@@ -46,6 +46,11 @@
           db_username: locket
           db_password: "((locket_database_password))"
           db_driver: mysql
+    loggregator:
+      use_v2_api: true
+      ca_cert: "((loggregator_tls_metron.ca))"
+      cert: "((loggregator_tls_metron.certificate))"
+      key: "((loggregator_tls_metron.private_key))"
 - type: replace
   path: /variables/-
   value:
