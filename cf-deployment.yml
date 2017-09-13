@@ -965,27 +965,7 @@ instance_groups:
         tls_port: 8443
   - name: metron_agent
     release: loggregator
-    properties: &metron_agent_properties
-      syslog_daemon_config:
-        enable: false
-      metron_agent:
-        deployment: "((system_domain))"
-        etcd:
-          client_cert: "((etcd_client.certificate))"
-          client_key: "((etcd_client.private_key))"
-      metron_endpoint:
-        shared_secret: "((dropsonde_shared_secret))"
-      loggregator:
-        tls:
-          ca_cert: "((loggregator_tls_metron.ca))"
-          metron:
-            cert: "((loggregator_tls_metron.certificate))"
-            key: "((loggregator_tls_metron.private_key))"
-        etcd:
-          require_ssl: true
-          ca_cert: "((etcd_server.ca))"
-          machines:
-          - cf-etcd.service.cf.internal
+    properties: *metron_agent_properties
 - name: diego-brain
   azs:
   - z1
@@ -1447,11 +1427,11 @@ variables:
   type: password
 - name: uaa_clients_ssh-proxy_secret
   type: password
+- name: uaa_clients_tcp_router_secret
+  type: password
 - name: diego_bbs_encryption_keys_passphrase
   type: password
 - name: consul_encrypt_key
-  type: password
-- name: uaa_clients_tcp_router_secret
   type: password
 - name: diego_ssh_proxy_host_key
   type: ssh
