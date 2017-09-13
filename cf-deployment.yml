@@ -503,6 +503,10 @@ instance_groups:
             authorities: routing.routes.write,routing.routes.read,routing.router_groups.read
             authorized-grant-types: client_credentials
             secret: "((uaa_clients_tcp_emitter_secret))"
+          tcp_router:
+            authorities: routing.routes.read
+            authorized-grant-types: client_credentials
+            secret: "((uaa_clients_tcp_router_secret))"
       uaadb:
         databases:
         - name: uaa
@@ -932,6 +936,56 @@ instance_groups:
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
+- name: tcp-router
+  azs:
+  - z1
+  - z2
+  instances: 2
+  vm_type: minimal
+  stemcell: default
+  vm_extensions:
+  - cf-tcp-router-network-properties
+  networks:
+  - name: default
+  jobs:
+  - name: consul_agent
+    release: consul
+    consumes:
+      consul_common: {from: consul_common_link}
+      consul_server: nil
+      consul_client: {from: consul_client_link}
+  - name: tcp_router
+    release: routing
+    properties:
+      tcp_router:
+        oauth_secret: "((uaa_clients_tcp_router_secret))"
+        router_group: default-tcp
+      uaa:
+        ca_cert: "((uaa_ca.certificate))"
+        tls_port: 8443
+  - name: metron_agent
+    release: loggregator
+    properties: &metron_agent_properties
+      syslog_daemon_config:
+        enable: false
+      metron_agent:
+        deployment: "((system_domain))"
+        etcd:
+          client_cert: "((etcd_client.certificate))"
+          client_key: "((etcd_client.private_key))"
+      metron_endpoint:
+        shared_secret: "((dropsonde_shared_secret))"
+      loggregator:
+        tls:
+          ca_cert: "((loggregator_tls_metron.ca))"
+          metron:
+            cert: "((loggregator_tls_metron.certificate))"
+            key: "((loggregator_tls_metron.private_key))"
+        etcd:
+          require_ssl: true
+          ca_cert: "((etcd_server.ca))"
+          machines:
+          - cf-etcd.service.cf.internal
 - name: diego-brain
   azs:
   - z1
@@ -1396,6 +1450,8 @@ variables:
 - name: diego_bbs_encryption_keys_passphrase
   type: password
 - name: consul_encrypt_key
+  type: password
+- name: uaa_clients_tcp_router_secret
   type: password
 - name: diego_ssh_proxy_host_key
   type: ssh
