@@ -1,5 +1,6 @@
-- type: replace
-  path: /instance_groups/-
+---
+- path: /instance_groups/-
+  type: replace
   value:
     azs:
     - z1
@@ -14,17 +15,27 @@
         consul_server: nil
       name: consul_agent_windows
       properties:
-        consul:
-          agent:
-            node_name_includes_id: true
         syslog_daemon_config:
           enable: false
       release: consul
+    - name: winc
+      release: winc
+    - name: winc-image
+      release: winc
+    - name: winc-network
+      release: winc
     - name: garden-windows
       properties:
-        syslog_daemon_config:
-          enable: false
-      release: garden-windows
+        garden:
+          listen_address: "127.0.0.1:9241"
+          image_plugin: "/var/vcap/packages/winc-image/winc-image.exe"
+          network_plugin: "/var/vcap/packages/winc-network/winc-network.exe"
+          network_plugin_extra_args:
+          - "--configFile=/var/vcap/jobs/winc-network/config/interface.json"
+          runtime_plugin: "/var/vcap/packages/winc/winc.exe"
+          nstar_bin: "/var/vcap/packages/nstar/nstar.exe"
+          destroy_containers_on_start: true
+      release: garden-runc
     - name: rep_windows
       properties:
         diego:
@@ -38,15 +49,10 @@
             ca_cert: ((diego_rep_agent.ca))
             enable_legacy_api_endpoints: false
             preloaded_rootfses:
-            - windows2012R2:/tmp/windows2012R2
+            - windows2016:/var/vcap/packages/windows2016fs/rootfs
             require_tls: true
             server_cert: ((diego_rep_agent.certificate))
             server_key: ((diego_rep_agent.private_key))
-        loggregator:
-          ca_cert: ((loggregator_tls_metron.ca))
-          cert: ((loggregator_tls_metron.certificate))
-          key: ((loggregator_tls_metron.private_key))
-          use_v2_api: true
         syslog_daemon_config:
           enable: false
         tls:
@@ -63,11 +69,6 @@
               client_cert: ((diego_bbs_client.certificate))
               client_key: ((diego_bbs_client.private_key))
             local_mode: true
-        tcp:
-          enabled: true
-        uaa:
-          ca_cert: ((uaa_ca.certificate))
-          client_secret: ((uaa_clients_tcp_emitter_secret))
       release: diego
     - name: metron_agent_windows
       properties:
@@ -92,51 +93,39 @@
         syslog_daemon_config:
           enable: false
       release: loggregator
-    name: windows-cell
+    name: windows2016-cell
     networks:
     - name: default
-    stemcell: windows2012R2
+    stemcell: windows2016
     vm_extensions:
     - 100GB_ephemeral_disk
     vm_type: small-highmem
-- type: replace
-  path: /releases/-
-  value:
-    name: garden-windows
-    sha1: 395fae118c5f9b404eb6c497d1f9a8607ccf5504
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/garden-windows-bosh-release?v=0.8.0
-    version: 0.8.0
-- type: replace
-  path: /stemcells/-
-  value:
-    alias: windows2012R2
-    os: windows2012R2
-    version: "1200.3"
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2012R2?
+
+- path: /stemcells/-
   type: replace
   value:
-    name: windows2012R2
-    description: Windows Server 2012 R2
-- type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
+    alias: windows2016
+    os: windows2016
+    version: latest
+
+- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2016?
+  type: replace
   value:
-    name: hwc_buildpack
-    package: hwc-buildpack
-- type: replace
-  path: /instance_groups/name=api/jobs/-
-  value:
-    name: hwc-buildpack
-    release: hwc-buildpack
+    name: windows2016
+    description: Windows Server 2016
+
 - path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/name=hwc_buildpack?
   type: replace
   value:
     name: hwc_buildpack
     package: hwc-buildpack
+
 - path: /instance_groups/name=api/jobs/name=hwc-buildpack?
   type: replace
   value:
     name: hwc-buildpack
     release: hwc-buildpack
+
 - path: /releases/name=hwc-buildpack?
   type: replace
   value:
@@ -144,3 +133,12 @@
     sha1: 9315c6cc800bcb69398beab38715760766838df7
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=2.3.9
     version: 2.3.9
+
+- path: /releases/name=winc?
+  type: replace
+  value:
+    name: winc
+    version: latest
+    sha1: 2e91aaa8cb6d0b678e07fd4d8718c46f9b2bb0f1
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/winc-release?v=0.4.0
+    version: 0.4.0

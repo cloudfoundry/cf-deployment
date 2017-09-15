@@ -98,6 +98,11 @@ pushd $(dirname $0)/.. > /dev/null
   else
     fail "operations/experimental/enable-locket-windows.yml"
   fi
+  if interpolate "-o operations/experimental/windows2016-cell.yml -o operations/experimental/enable-locket-windows2016.yml"; then
+    echo "PASS - operations/experimental/enable-locket-windows2016.yml"
+  else
+    fail "operations/experimental/enable-locket-windows2016.yml"
+  fi
   if interpolate "-o operations/experimental/enable-locket.yml"; then
     echo "PASS - operations/experimental/enable-locket.yml"
   else
@@ -113,10 +118,20 @@ pushd $(dirname $0)/.. > /dev/null
   else
     fail "operations/experimental/enable-loggregator-v2-windows-cell.yml"
   fi
+  if interpolate "-o operations/experimental/windows2016-cell.yml -o operations/experimental/enable-loggregator-v2-windows2016-cell.yml"; then
+    echo "PASS - operations/experimental/enable-loggregator-v2-windows2016-cell.yml"
+  else
+    fail "operations/experimental/enable-loggregator-v2-windows2016-cell.yml"
+  fi
   if interpolate "-o operations/windows-cell.yml -o operations/experimental/enable-prefer-declarative-healthchecks-windows.yml"; then
     echo "PASS - operations/experimental/enable-prefer-declarative-healthchecks-windows.yml"
   else
     fail "operations/experimental/enable-prefer-declarative-healthchecks-windows.yml"
+  fi
+  if interpolate "-o operations/experimental/windows2016-cell.yml -o operations/experimental/enable-prefer-declarative-healthchecks-windows2016.yml"; then
+    echo "PASS - operations/experimental/enable-prefer-declarative-healthchecks-windows2016.yml"
+  else
+    fail "operations/experimental/enable-prefer-declarative-healthchecks-windows2016.yml"
   fi
   if interpolate "-o operations/experimental/enable-prefer-declarative-healthchecks.yml"; then
     echo "PASS - operations/experimental/enable-prefer-declarative-healthchecks.yml"
@@ -277,6 +292,16 @@ pushd $(dirname $0)/.. > /dev/null
     echo "PASS - operations/windows-cell.yml"
   else
     fail "operations/windows-cell.yml"
+  fi
+  if interpolate "-o operations/experimental/windows2016-cell.yml"; then
+    echo "PASS - operations/experimental/windows2016-cell.yml"
+  else
+    fail "operations/experimental/windows2016-cell.yml"
+  fi
+  if interpolate "-o operations/windows-cell.yml -o operations/experimental/windows2016-cell.yml"; then
+    echo "PASS - operations/windows-cell.yml operations/experimental/windows2016-cell.yml"
+  else
+    fail "operations/windows-cell.yml operations/experimental/windows2016-cell.yml"
   fi
   if interpolate "-o operations/workarounds/use-3-azs-for-router.yml"; then
     echo "PASS - operations/workarounds/use-3-azs-for-router.yml"
