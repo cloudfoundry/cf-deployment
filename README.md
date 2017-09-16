@@ -48,8 +48,6 @@ using the cf-mysql release for databases
 and the CAPI release's WebDAV job for blob storage.
 - assumes load-balancing will be handled by the IaaS
 or an external deployment.
-- assumes GCP as the default deployment environment.
-For use with other IaaSs, see the **Ops Files** section below.
 
 ### <a name='readiness'></a> Is `cf-deployment` ready to use?
 
@@ -90,10 +88,9 @@ https://github.com/cloudfoundry/cf-deployment-transition
 Before you can start deploying,
 you'll need to make sure you've configured your infrastructure appropriately
 and deployed a BOSH Director.
-If you're using AWS or GCP,
+If you're using AWS, GCP, or Azure,
 we'd suggest using [bbl](https://github.com/cloudfoundry/bosh-bootloader)
 to set up your IaaS resources and bootstrap a BOSH director.
-(For a full guide to getting set up on GCP, look at [this guide](gcp-deployment-guide.md).)
 Otherwise, take a look at [the BOSH documentation](https://bosh.io/docs/init.html)
 for information about prerequisites for a given IaaS
 and installing a BOSH Director there.
@@ -102,7 +99,7 @@ Lastly, if you're planning to use a local bosh-lite for your BOSH director,
 follow [these instructions](https://bosh.io/docs/bosh-lite.html).
 
 ##### bosh-lite
-If you're deploying bosh-lite to a VM on AWS or GCP,
+If you're deploying bosh-lite to a VM on AWS, GCP, or Azure,
 look at [this guide](bosh-lite.md).
 
 If you're deploying against a local bosh-lite,
@@ -120,6 +117,7 @@ While we cannot offer help for each IaaS specifically,
 for IaaSes like AWS and GCP,
 you can use `bbl` to create load balancers
 by running `bbl create-lbs`.
+(`bbl` support for creating load balancer on Azure is coming soon.)
 
 
 ### Step 2: Target your BOSH Director
