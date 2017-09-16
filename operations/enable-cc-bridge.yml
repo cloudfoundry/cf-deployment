@@ -1,15 +1,17 @@
 ---
-# To enable privileged container support (for running and staging) you should also apply the bypass-cc-bridge-privileged-containers.yml ops file from this folder when deploying.
-
 # cloud_controller_ng
 - type: replace
-  temporary_local_staging: &temporary_local_staging true
-  temporary_local_apps: &temporary_local_apps true
-  temporary_local_tasks: &temporary_local_tasks true
-  temporary_local_sync: &temporary_local_sync true
-  temporary_local_tps: &temporary_local_tps true
-  temporary_cc_uploader_mtls: &temporary_cc_uploader_mtls true
-  temporary_droplet_download_mtls: &temporary_droplet_download_mtls true
+  temporary_local_staging: &temporary_local_staging false
+  temporary_local_apps: &temporary_local_apps false
+  temporary_local_tasks: &temporary_local_tasks false
+  temporary_local_sync: &temporary_local_sync false
+  temporary_local_tps: &temporary_local_tps false
+  temporary_cc_uploader_mtls: &temporary_cc_uploader_mtls false
+  temporary_droplet_download_mtls: &temporary_droplet_download_mtls false
+  diego_bbs_client_properties: &diego_bbs_client_properties
+    ca_cert: "((diego_bbs_client.ca))"
+    client_cert: "((diego_bbs_client.certificate))"
+    client_key: "((diego_bbs_client.private_key))"
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc?/diego?/temporary_local_staging?
   value: *temporary_local_staging
 - type: replace
@@ -77,11 +79,35 @@
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc?/diego?/temporary_droplet_download_mtls?
   value: *temporary_droplet_download_mtls
 
-# cc-bridge
-- type: remove
-  path: /instance_groups/name=api/jobs/name=stager
-- type: remove
-  path: /instance_groups/name=scheduler/jobs/name=nsync
+# scheduler
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=tps/properties/capi/tps/listener_enabled?
-  value: false
+  value: true
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=stager?
+  value:
+    name: stager
+    release: capi
+    properties:
+      capi:
+        stager:
+          bbs: *diego_bbs_client_properties
+          cc:
+            basic_auth_password: "((cc_internal_api_password))"
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=nsync?
+  value:
+    name: nsync
+    release: capi
+    properties:
+      diego:
+        ssl:
+          skip_cert_verify: true
+      capi:
+        nsync:
+          bbs: *diego_bbs_client_properties
+          cc:
+            basic_auth_password: "((cc_internal_api_password))"
+            base_url: https://api.((system_domain))
