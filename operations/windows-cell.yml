@@ -14,6 +14,9 @@
         consul_server: nil
       name: consul_agent_windows
       properties:
+        consul:
+          agent:
+            node_name_includes_id: true
         syslog_daemon_config:
           enable: false
       release: consul
@@ -39,6 +42,11 @@
             require_tls: true
             server_cert: ((diego_rep_agent.certificate))
             server_key: ((diego_rep_agent.private_key))
+        loggregator:
+          ca_cert: ((loggregator_tls_metron.ca))
+          cert: ((loggregator_tls_metron.certificate))
+          key: ((loggregator_tls_metron.private_key))
+          use_v2_api: true
         syslog_daemon_config:
           enable: false
         tls:
@@ -90,20 +98,20 @@
     stemcell: windows
     vm_extensions:
     - 100GB_ephemeral_disk
-    vm_type: r3.xlarge
+    vm_type: small-highmem
 - type: replace
   path: /releases/-
   value:
     name: garden-windows
-    sha1: 386365807e811a5d7ad315776dfe5472b8d1eb87
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/garden-windows-bosh-release?v=0.7.0
-    version: 0.7.0
+    sha1: 395fae118c5f9b404eb6c497d1f9a8607ccf5504
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/garden-windows-bosh-release?v=0.8.0
+    version: 0.8.0
 - type: replace
   path: /stemcells/-
   value:
     alias: windows
     os: windows2012R2
-    version: "1089.0"
+    version: "1200.3"
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks?
   value:
@@ -125,6 +133,6 @@
   path: /releases/-
   value:
     name: hwc-buildpack
-    sha1: 8f80e4bcf3c40baeee59fb5f28b4ae75f182cd62
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=2.3.5
-    version: 2.3.5
+    sha1: 9315c6cc800bcb69398beab38715760766838df7
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=2.3.9
+    version: 2.3.9

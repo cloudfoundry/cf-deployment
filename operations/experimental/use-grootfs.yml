@@ -5,7 +5,10 @@
     properties:
       grootfs:
         driver: overlay-xfs
+        graph_cleanup_threshold_in_mb: 0
         log_level: debug
+        persistent_image_list:
+        - /var/vcap/packages/cflinuxfs2/rootfs.tar
     release: grootfs
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=garden/properties/garden/image_plugin?
@@ -35,6 +38,6 @@
   path: /releases/-
   value:
     name: grootfs
-    sha1: 57940fd9ae3c6b10239517641473858e550ac05a
-    url: https://bosh.io/d/github.com/cloudfoundry/grootfs-release?v=0.21.0
-    version: 0.21.0
+    sha1: 9e517f58669c5a4e6d368d607843749b1e10654d
+    url: https://bosh.io/d/github.com/cloudfoundry/grootfs-release?v=0.25.0
+    version: 0.25.0

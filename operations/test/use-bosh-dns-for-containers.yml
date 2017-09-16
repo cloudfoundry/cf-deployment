@@ -1,0 +1,5 @@
+---
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=cni/properties?/cf_networking/dns_servers
+  value:
+  - 169.254.0.2

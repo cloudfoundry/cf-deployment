@@ -11,9 +11,9 @@
   path: /releases/-
   value:
     name: postgres
-    url: https://bosh.io/d/github.com/cloudfoundry/postgres-release?v=16
-    sha1: b114fa78c017c7b6752e83c4d1e5d92309164e61
-    version: "16"
+    url: https://bosh.io/d/github.com/cloudfoundry/postgres-release?v=20
+    sha1: 3f378bcab294e20316171d4e656636df88763664
+    version: "20"
 
 - type: replace
   path: /instance_groups/name=cc-bridge/jobs/name=nsync/properties/capi/nsync/diego_privileged_containers?
@@ -262,10 +262,16 @@
   path: /instance_groups/name=router/instances
   value: 1
 - type: replace
+  path: /instance_groups/name=tcp-router/instances
+  value: 1
+- type: replace
   path: /instance_groups/name=api/instances
   value: 1
 - type: replace
   path: /instance_groups/name=cc-worker/instances
+  value: 1
+- type: replace
+  path: /instance_groups/name=cc-clock/instances
   value: 1
 - type: replace
   path: /instance_groups/name=cc-bridge/instances

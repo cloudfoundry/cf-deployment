@@ -22,7 +22,7 @@
     azs:
     - z1
     instances: 1
-    vm_type: m3.medium
+    vm_type: minimal
     vm_extensions:
     - iso-seg-cf-router-network-properties
     stemcell: default
@@ -53,8 +53,9 @@
           routing_table_sharding_mode: segments
           ssl_skip_validation: true
           enable_ssl: true
-          ssl_cert: "((router_ssl.certificate))"
-          ssl_key: "((router_ssl.private_key))"
+          tls_pem:
+          - cert_chain: "((router_ssl.certificate))"
+            private_key: "((router_ssl.private_key))"
           status:
             password: "((router_status_password))"
             user: router-status

@@ -1,0 +1,32 @@
+---
+  - type: replace
+    path: /releases/-
+    value:
+      name: backup-and-restore-sdk
+      url: https://bosh.io/d/github.com/cloudfoundry-incubator/backup-and-restore-sdk-release?v=1.0.0
+      version: 1.0.0
+      sha1: 3b07fa61f65164927b642ddaa41408c19ec9d457
+
+  - type: replace
+    path: /instance_groups/-
+    value:
+      name: backup-restore
+      azs:
+      - z1
+      persistent_disk_type: 10GB
+      instances: 1
+      vm_type: minimal
+      stemcell: default
+      networks:
+        - name: default
+      jobs:
+      - name: database-backup-restorer
+        release: backup-and-restore-sdk
+      - name: bbr-cfnetworkingdb
+        release: cf-networking
+      - name: consul_agent
+        release: consul
+        consumes:
+          consul_common: {from: consul_common_link}
+          consul_server: nil
+          consul_client: {from: consul_client_link}

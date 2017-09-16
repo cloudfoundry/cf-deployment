@@ -12,7 +12,7 @@ instance_groups:
   azs:
   - z1
   instances: 1
-  vm_type: m3.medium
+  vm_type: minimal
   stemcell: default
   update:
     max_in_flight: 1
@@ -39,7 +39,7 @@ instance_groups:
   - z3
   instances: 3
   persistent_disk_type: 5GB
-  vm_type: m3.medium
+  vm_type: minimal
   stemcell: default
   update:
     max_in_flight: 1
@@ -87,9 +87,7 @@ instance_groups:
   - z1
   - z2
   instances: 2
-  vm_type: c3.large
-  vm_extensions:
-  - 10GB_ephemeral_disk
+  vm_type: minimal
   stemcell: default
   networks:
   - name: default
@@ -108,8 +106,6 @@ instance_groups:
       nats:
         password: "((nats_password))"
         user: nats
-        monitor_port: 9222
-        prof_port: 6060
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
@@ -120,9 +116,7 @@ instance_groups:
   - z3
   instances: 3
   persistent_disk_type: 5GB
-  vm_type: m3.medium
-  vm_extensions:
-  - 10GB_ephemeral_disk
+  vm_type: minimal
   stemcell: default
   update:
     serial: true
@@ -180,9 +174,7 @@ instance_groups:
   - z1
   - z2
   instances: 2
-  vm_type: m3.medium
-  vm_extensions:
-  - 10GB_ephemeral_disk
+  vm_type: minimal
   stemcell: default
   networks:
   - name: default
@@ -240,7 +232,6 @@ instance_groups:
       cc:
         mutual_tls:
           ca_cert: "((loggregator_tls_syslogdrainbinder.ca))"
-        srv_api_uri: https://api.((system_domain))
       ssl: &ssl
         skip_cert_verify: true
   - name: metron_agent
@@ -251,9 +242,7 @@ instance_groups:
   - z1
   persistent_disk_type: 10GB
   instances: 1
-  vm_type: m3.large
-  vm_extensions:
-  - 10GB_ephemeral_disk
+  vm_type: small
   stemcell: default
   update:
     serial: true
@@ -319,7 +308,7 @@ instance_groups:
   - z1
   - z2
   instances: 2
-  vm_type: m3.large
+  vm_type: small
   stemcell: default
   update:
     serial: true
@@ -380,6 +369,11 @@ instance_groups:
             ca_cert: "((diego_rep_client.ca))"
             client_cert: "((diego_rep_client.certificate))"
             client_key: "((diego_rep_client.private_key))"
+      loggregator: &diego_loggregator_client_properties
+        use_v2_api: true
+        ca_cert: "((loggregator_tls_metron.ca))"
+        cert: "((loggregator_tls_metron.certificate))"
+        key: "((loggregator_tls_metron.private_key))"
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
@@ -407,9 +401,7 @@ instance_groups:
   - z1
   - z2
   instances: 2
-  vm_type: m3.medium
-  vm_extensions:
-  - 10GB_ephemeral_disk
+  vm_type: minimal
   stemcell: default
   networks:
   - name: default
@@ -431,7 +423,6 @@ instance_groups:
       login:
         saml:
           serviceProviderKey: "((uaa_login_saml.private_key))"
-          serviceProviderKeyPassword: ''
           serviceProviderCertificate: "((uaa_login_saml.certificate))"
       uaa:
         sslCertificate: "((uaa_ssl.certificate))"
@@ -478,7 +469,7 @@ instance_groups:
             authorized-grant-types: password,refresh_token
             override: true
             refresh-token-validity: 2592000
-            scope: network.admin,network.write,cloud_controller.read,cloud_controller.write,openid,password.write,cloud_controller.admin,scim.read,scim.write,doppler.firehose,uaa.user,routing.router_groups.read,routing.router_groups.write
+            scope: network.admin,network.write,cloud_controller.read,cloud_controller.write,openid,password.write,cloud_controller.admin,scim.read,scim.write,doppler.firehose,uaa.user,routing.router_groups.read,routing.router_groups.write,cloud_controller.admin_read_only,cloud_controller.global_auditor
             secret: ''
           cloud_controller_username_lookup:
             authorities: scim.userids
@@ -512,6 +503,10 @@ instance_groups:
             authorities: routing.routes.write,routing.routes.read,routing.router_groups.read
             authorized-grant-types: client_credentials
             secret: "((uaa_clients_tcp_emitter_secret))"
+          tcp_router:
+            authorities: routing.routes.read
+            authorized-grant-types: client_credentials
+            secret: "((uaa_clients_tcp_router_secret))"
       uaadb:
         databases:
         - name: uaa
@@ -558,9 +553,7 @@ instance_groups:
   azs:
   - z1
   instances: 1
-  vm_type: m3.large
-  vm_extensions:
-  - 10GB_ephemeral_disk
+  vm_type: small
   persistent_disk_type: 100GB
   stemcell: default
   networks:
@@ -610,7 +603,7 @@ instance_groups:
   - z1
   - z2
   instances: 2
-  vm_type: m3.large
+  vm_type: small
   vm_extensions:
   - 50GB_ephemeral_disk
   stemcell: default
@@ -629,7 +622,7 @@ instance_groups:
           services:
             cloud_controller_ng: {}
             routing-api: {}
-            policy-server:
+            policy-server-internal:
               name: policy-server
   - name: cloud_controller_ng
     release: capi
@@ -690,26 +683,25 @@ instance_groups:
             ports: '53'
             protocol: udp
         install_buildpacks: &cc_install_buildpacks
-        - name: binary_buildpack
-          package: binary-buildpack
-        - name: dotnet_core_buildpack
-          package: dotnet-core-buildpack
-        - name: go_buildpack
-          package: go-buildpack
-        - name: java_buildpack
-          package: java-buildpack
-        - name: nodejs_buildpack
-          package: nodejs-buildpack
-        - name: php_buildpack
-          package: php-buildpack
-        - name: python_buildpack
-          package: python-buildpack
-        - name: python_buildpack
-          package: python-buildpack
-        - name: ruby_buildpack
-          package: ruby-buildpack
+        ## Order is important here
         - name: staticfile_buildpack
           package: staticfile-buildpack
+        - name: java_buildpack
+          package: java-buildpack
+        - name: ruby_buildpack
+          package: ruby-buildpack
+        - name: dotnet_core_buildpack
+          package: dotnet-core-buildpack
+        - name: nodejs_buildpack
+          package: nodejs-buildpack
+        - name: go_buildpack
+          package: go-buildpack
+        - name: python_buildpack
+          package: python-buildpack
+        - name: php_buildpack
+          package: php-buildpack
+        - name: binary_buildpack
+          package: binary-buildpack
         default_to_diego_backend: true
         db_encryption_key: "((cc_db_encryption_key))"
         bulk_api_password: "((cc_bulk_api_password))"
@@ -777,6 +769,10 @@ instance_groups:
           port: 9022
           uris:
           - api.((system_domain))
+          health_check:
+            name: api-health-check
+            script_path: "/var/vcap/jobs/cloud_controller_ng/bin/cloud_controller_ng_health_check"
+            timeout: 3s
         - name: policy-server
           port: 4002
           registration_interval: 20s
@@ -814,9 +810,6 @@ instance_groups:
         policy_server:
           uaa_client_secret: ((uaa_clients_network_policy_secret))
           uaa_ca: ((uaa_ssl.ca))
-          ca_cert: ((network_policy_server.ca))
-          server_cert: ((network_policy_server.certificate))
-          server_key: ((network_policy_server.private_key))
           database:
             type: mysql
             username: network_policy
@@ -824,14 +817,20 @@ instance_groups:
             host: sql-db.service.cf.internal
             port: 3306
             name: network_policy
+  - name: policy-server-internal
+    release: cf-networking
+    properties:
+      cf_networking:
+        policy_server_internal:
+          ca_cert: ((network_policy_server.ca))
+          server_cert: ((network_policy_server.certificate))
+          server_key: ((network_policy_server.private_key))
 - name: cc-worker
   azs:
   - z1
   - z2
   instances: 2
-  vm_type: m3.medium
-  vm_extensions:
-  - 10GB_ephemeral_disk
+  vm_type: minimal
   stemcell: default
   networks:
   - name: default
@@ -889,7 +888,7 @@ instance_groups:
   - z1
   - z2
   instances: 2
-  vm_type: m3.medium
+  vm_type: minimal
   vm_extensions:
   - cf-router-network-properties
   stemcell: default
@@ -916,8 +915,9 @@ instance_groups:
       router:
         ssl_skip_validation: true
         enable_ssl: true
-        ssl_cert: "((router_ssl.certificate))"
-        ssl_key: "((router_ssl.private_key))"
+        tls_pem:
+        - cert_chain: "((router_ssl.certificate))"
+          private_key: "((router_ssl.private_key))"
         status:
           password: "((router_status_password))"
           user: router-status
@@ -936,15 +936,44 @@ instance_groups:
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
+- name: tcp-router
+  azs:
+  - z1
+  - z2
+  instances: 2
+  vm_type: minimal
+  stemcell: default
+  vm_extensions:
+  - cf-tcp-router-network-properties
+  networks:
+  - name: default
+  jobs:
+  - name: consul_agent
+    release: consul
+    consumes:
+      consul_common: {from: consul_common_link}
+      consul_server: nil
+      consul_client: {from: consul_client_link}
+  - name: tcp_router
+    release: routing
+    properties:
+      tcp_router:
+        oauth_secret: "((uaa_clients_tcp_router_secret))"
+        router_group: default-tcp
+      uaa:
+        ca_cert: "((uaa_ca.certificate))"
+        tls_port: 8443
+  - name: metron_agent
+    release: loggregator
+    properties: *metron_agent_properties
 - name: diego-brain
   azs:
   - z1
   - z2
   instances: 2
-  vm_type: m3.medium
+  vm_type: minimal
   vm_extensions:
   - diego-ssh-proxy-network-properties
-  - 10GB_ephemeral_disk
   stemcell: default
   update:
     serial: true
@@ -991,6 +1020,7 @@ instance_groups:
             ca_cert: "((diego_rep_client.ca))"
             client_cert: "((diego_rep_client.certificate))"
             client_key: "((diego_rep_client.private_key))"
+      loggregator: *diego_loggregator_client_properties
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
@@ -999,7 +1029,7 @@ instance_groups:
   - z1
   - z2
   instances: 2
-  vm_type: r3.xlarge
+  vm_type: small-highmem
   vm_extensions:
   - 100GB_ephemeral_disk
   stemcell: default
@@ -1012,6 +1042,10 @@ instance_groups:
       consul_common: {from: consul_common_link}
       consul_server: nil
       consul_client: {from: consul_client_link}
+    properties:
+      consul:
+        agent:
+          node_name_includes_id: true
   - name: cflinuxfs2-rootfs-setup
     release: cflinuxfs2
   - name: garden
@@ -1043,6 +1077,7 @@ instance_groups:
           server_cert: "((diego_rep_agent.certificate))"
           server_key: "((diego_rep_agent.private_key))"
           enable_legacy_api_endpoints: false
+      loggregator: *diego_loggregator_client_properties
       tls:
         ca_cert: "((diego_rep_agent.ca))"
         cert: "((diego_rep_agent.certificate))"
@@ -1091,15 +1126,14 @@ instance_groups:
           ca_cert: ((silk_daemon.ca))
           client_cert: ((silk_daemon.certificate))
           client_key: ((silk_daemon.private_key))
-  - name: silk-cni
+  - name: cni
     release: cf-networking
 - name: cc-clock
   azs:
   - z1
-  instances: 1
-  vm_type: m3.large
-  vm_extensions:
-  - 10GB_ephemeral_disk
+  - z2
+  instances: 2
+  vm_type: small
   stemcell: default
   networks:
   - name: default
@@ -1157,9 +1191,7 @@ instance_groups:
   - z1
   - z2
   instances: 2
-  vm_type: m3.medium
-  vm_extensions:
-  - 10GB_ephemeral_disk
+  vm_type: minimal
   stemcell: default
   networks:
   - name: default
@@ -1220,9 +1252,7 @@ instance_groups:
   - z1
   - z2
   instances: 2
-  vm_type: t2.small
-  vm_extensions:
-  - 10GB_ephemeral_disk
+  vm_type: sharedcpu
   stemcell: default
   update:
     max_in_flight: 1
@@ -1249,9 +1279,13 @@ instance_groups:
           client_cert: "((etcd_client.certificate))"
           client_key: "((etcd_client.private_key))"
       uaa:
-        url: https://uaa.((system_domain))
+        internal_url: https://uaa.service.cf.internal:8443
+        ca_cert: "((uaa_ca.certificate))"
       loggregator:
         tls:
+          cc_trafficcontroller:
+            cert: "((loggregator_tls_cc_tc.certificate))"
+            key: "((loggregator_tls_cc_tc.private_key))"
           ca_cert: "((loggregator_tls_tc.ca))"
           trafficcontroller:
             cert: "((loggregator_tls_tc.certificate))"
@@ -1266,7 +1300,10 @@ instance_groups:
       system_domain: "((system_domain))"
       ssl: *ssl
       cc:
-        srv_api_uri: "http://cloud-controller-ng.service.cf.internal:9022"
+        internal_service_hostname: "cloud-controller-ng.service.cf.internal"
+        tls_port: 9023
+        mutual_tls:
+          ca_cert: "((loggregator_tls_cc_tc.ca))"
   - name: route_registrar
     release: routing
     properties:
@@ -1389,6 +1426,8 @@ variables:
 - name: uaa_clients_gorouter_secret
   type: password
 - name: uaa_clients_ssh-proxy_secret
+  type: password
+- name: uaa_clients_tcp_router_secret
   type: password
 - name: diego_bbs_encryption_keys_passphrase
   type: password
@@ -1562,6 +1601,13 @@ variables:
     extended_key_usage:
     - client_auth
     - server_auth
+- name: loggregator_tls_cc_tc
+  type: certificate
+  options:
+    ca: service_cf_internal_ca
+    common_name: trafficcontroller
+    extended_key_usage:
+    - client_auth
 - name: loggregator_tls_syslogdrainbinder
   type: certificate
   options:
@@ -1631,98 +1677,98 @@ variables:
 
 releases:
 - name: binary-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/binary-buildpack-release?v=1.0.13
-  version: 1.0.13
-  sha1: f894e46d279cd965885f255439ea14188c48306d
+  url: https://bosh.io/d/github.com/cloudfoundry/binary-buildpack-release?v=1.0.14
+  version: 1.0.14
+  sha1: c5ba6b6d99b972ec34dece478302351d8b4f6bbc
 - name: capi
-  url: https://bosh.io/d/github.com/cloudfoundry/capi-release?v=1.35.0
-  version: 1.35.0
-  sha1: 253d0da57fcc20d4ef3b0b172656f1107e0099dc
+  url: https://bosh.io/d/github.com/cloudfoundry/capi-release?v=1.42.0
+  version: 1.42.0
+  sha1: 477864767aa0764f27111235ea2f0e4e222a1d83
 - name: cf-mysql
   url: https://bosh.io/d/github.com/cloudfoundry/cf-mysql-release?v=36
   version: "36"
   sha1: 746240c005465ffa105ee89e53e401e311b4fbf8
 - name: cf-networking
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-networking-release?v=1.2.0
-  version: 1.2.0
-  sha1: c5a61b8be54e62b6d0eacfe2e0a45880345a3a21
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-networking-release?v=1.6.0
+  version: 1.6.0
+  sha1: d919974f26a9892cac87ab221e045014f4bf460b
 - name: cf-smoke-tests
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=36
-  version: "36"
-  sha1: d943166254576036735a43a5ea57728276f83510
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=39
+  version: "39"
+  sha1: a2d557302a1026f685514b34792b81c0432a48c8
 - name: cflinuxfs2
-  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.139.0
-  version: 1.139.0
-  sha1: 4b8b8cc96588ef6aab57a26197c390a6c1c3b631
+  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.155.0
+  version: 1.155.0
+  sha1: c72a3be2ec706a052fc7915889773b5af8be2418
 - name: consul
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=171
-  version: "171"
-  sha1: e781dd1050c5f90339f3405f07af094a6c46052d
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=178
+  version: "178"
+  sha1: 82b31944e0ca78ca05853922600f4059c866a61c
 - name: diego
-  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=1.23.1
-  version: 1.23.1
-  sha1: d67f39c8104cafb0b4a7f8db913d4a6638fc4c82
+  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=1.25.3
+  version: 1.25.3
+  sha1: a4b880bb1d6a064655ff9bd13daaafd5c09373a0
 - name: dotnet-core-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/dotnet-core-buildpack-release?v=1.0.22
-  version: 1.0.22
-  sha1: 61d53bf4b88478f18ca7720d96c25c9973b243d4
+  url: https://bosh.io/d/github.com/cloudfoundry/dotnet-core-buildpack-release?v=1.0.24
+  version: 1.0.24
+  sha1: 6574f5ae4e090ab2fcaa95bc595b95d4c1cff07d
 - name: etcd
   url: https://bosh.io/d/github.com/cloudfoundry-incubator/etcd-release?v=117
   version: "117"
   sha1: 670bf17cea0e6e56bdac33956545b3e302062521
 - name: garden-runc
-  url: https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.9.0
-  version: 1.9.0
-  sha1: 77bfe8bdb2c3daec5b40f5116a6216badabd196c
+  url: https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.9.3
+  version: 1.9.3
+  sha1: a153fd2b9d85d01772e9c6907b8c9e5005059c9e
 - name: go-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/go-buildpack-release?v=1.8.5
-  version: 1.8.5
-  sha1: e38c66d8bc1e9af917e083724f1bb1f9f0f3210f
+  url: https://bosh.io/d/github.com/cloudfoundry/go-buildpack-release?v=1.8.6
+  version: 1.8.6
+  sha1: d9d0f9feb07ca9dd5f58c95d458e5935e69ee892
 - name: java-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/java-buildpack-release?v=3.19
-  version: "3.19"
-  sha1: 4248c595e596536cdb2ffeeefee153c5d76fbe7d
+  url: https://bosh.io/d/github.com/cloudfoundry/java-buildpack-release?v=4.5
+  version: "4.5"
+  sha1: f27add2c45ed29cff15be7286ac095186c8ea1c7
 - name: loggregator
-  url: https://bosh.io/d/github.com/cloudfoundry/loggregator?v=91
-  version: "91"
-  sha1: 5acc47a70f5fa24eda85e72e72390eac968882f0
+  url: https://bosh.io/d/github.com/cloudfoundry/loggregator?v=97
+  version: "97"
+  sha1: 286235fb7eabde5073b9fe1b4668237be32696fd
 - name: nats
   url: https://bosh.io/d/github.com/cloudfoundry/nats-release?v=22
   version: "22"
   sha1: 1300071c7cf43f5d299a6eaec6f6bb6cca7eac3b
 - name: nodejs-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/nodejs-buildpack-release?v=1.6.3
-  version: 1.6.3
-  sha1: ab1c323a3938cf2d4931cfec6ab4510461c2796a
+  url: https://bosh.io/d/github.com/cloudfoundry/nodejs-buildpack-release?v=1.6.6
+  version: 1.6.6
+  sha1: bed155869f07f0ed21468a21a8a9e3d8d89aade4
 - name: php-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/php-buildpack-release?v=4.3.38
-  version: 4.3.38
-  sha1: f46a03e111c2256e124bcbd8170ba98f52bb530d
+  url: https://bosh.io/d/github.com/cloudfoundry/php-buildpack-release?v=4.3.40
+  version: 4.3.40
+  sha1: 32aae2ee29fea3ed0ef9810be4be037a225c9986
 - name: python-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/python-buildpack-release?v=1.5.20
-  version: 1.5.20
-  sha1: 919216d7ba67ace630b58a7726d3974d3a4c4a57
+  url: https://bosh.io/d/github.com/cloudfoundry/python-buildpack-release?v=1.5.24
+  version: 1.5.24
+  sha1: fa1082ec5bb2c938733152c6ac73e3dff4a9b3f4
 - name: routing
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.159.0
-  version: 0.159.0
-  sha1: 739f663f976fea826595880cfd58470bc8d49172
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.162.0
+  version: 0.162.0
+  sha1: f17cf09d2414f5f486d18bbd57b17fd48fb69773
 - name: ruby-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/ruby-buildpack-release?v=1.6.44
-  version: 1.6.44
-  sha1: cd848651202559886d19f4699b940f16922768f0
+  url: https://bosh.io/d/github.com/cloudfoundry/ruby-buildpack-release?v=1.6.47
+  version: 1.6.47
+  sha1: 779a32d402a656542565f3659851e903ca990400
 - name: staticfile-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/staticfile-buildpack-release?v=1.4.11
-  version: 1.4.11
-  sha1: ab00cc3469da1ab8f1fe6c75e64ba6d551f3e9b3
+  url: https://bosh.io/d/github.com/cloudfoundry/staticfile-buildpack-release?v=1.4.14
+  version: 1.4.14
+  sha1: c60d5f0c9b8d914637162e4c0c39098225524b72
 - name: statsd-injector
-  url: https://bosh.io/d/github.com/cloudfoundry/statsd-injector-release?v=1.0.29
-  version: 1.0.29
-  sha1: 6e8f626d107c8e2b525b50571393a6eaaf664ad3
+  url: https://bosh.io/d/github.com/cloudfoundry/statsd-injector-release?v=1.0.30
+  version: 1.0.30
+  sha1: b0f201e0341af9736848514c76149070ea902e41
 - name: uaa
-  url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=41
-  version: "41"
-  sha1: a1b1818fb4f5e722a6c3073d364ce4c400e5fb31
+  url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=50
+  version: "50"
+  sha1: f0fdb16065e41044718ab6c972baff8728ae913b
 stemcells:
 - alias: default
   os: ubuntu-trusty
-  version: "3421.11"
+  version: "3445.7"
