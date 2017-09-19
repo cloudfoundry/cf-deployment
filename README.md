@@ -102,11 +102,21 @@ follow [these instructions](https://bosh.io/docs/bosh-lite.html).
 If you're deploying bosh-lite to a VM on AWS, GCP, or Azure,
 look at [this guide](bosh-lite.md).
 
-If you're deploying against a local bosh-lite,
+If you're deploying against a **local** bosh-lite,
 you'll need to take the following steps before deploying:
 ```
 export BOSH_CA_CERT=<PATH-TO-BOSH-LITE-REPO>/ca/certs/ca.crt
-bosh -e 192.168.50.6 update-cloud-config bosh-lite/cloud-config.yml
+```
+
+#### Upload a `cloud-config`
+cf-deployment depends on use of a [cloud-config](https://bosh.io/docs/cloud-config).
+You can find details about the requirements for a cloud-config [here](texts/on-cloud-configs.md),
+but if you used `bbl` to set up your BOSH director,
+`bbl` already uploaded a valid cloud-config for you.
+
+For bosh-lite,
+```
+bosh -e MY_ENV update-cloud-config bosh-lite/cloud-config.yml
 ```
 
 #### Get load balancers
@@ -116,9 +126,52 @@ to route traffic to them.
 While we cannot offer help for each IaaS specifically,
 for IaaSes like AWS and GCP,
 you can use `bbl` to create load balancers
-by running `bbl create-lbs`.
+by running `bbl create-lbs --type cf --domain <SYSTEM_DOMAIN>`.
 (`bbl` support for creating load balancer on Azure is coming soon.)
 
+##### On certificates
+Before you can create your load balancers,
+you'll need to be able to provide an SSL certificate
+for the domain that your load balancers will use.
+You might already have one,
+especially if you've already used this domain for a previous environment.
+
+If you're deploying a fresh environment with a new domain,
+you can generate a self-signed cert.
+**Don't forget that the common name should match your intended system domain (and app domains, if it's different)**:
+```
+openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -nodes
+```
+
+Alternatively, if you want to get a certificate from a trusted Certificate Authority,
+you can skip this cert generation step
+and provide that certificate directly to the `bbl` command below.
+
+#### Update your DNS records to point to your load balancer
+Once you have a load balancer set up,
+you'll want to make sure that your system and app domains resolve to the appropriate load balancer.
+
+You can set up DNS with your preferred provider,
+but if you've used `bbl` to create your load balancers on GCP or AWS
+(support for Azure is on the way),
+`bbl` will create NS records for your system domain.
+If you manage your DNS with some other provider
+-- for example, with Route53 --
+you can copy the NS record data that `bbl` created,
+and paste it into the `value` section of the Route53 NS record for your domain.
+ 
+After a few minutes,
+the your system domain should resolve to your load balancer.
+
+#### (For `bbl` users) Save `bbl-state.json`
+However you run `bbl` (command line or with Concourse),
+the side-effect of a successful bbl command is the creation/update of `bbl-state.json`.
+As a deployer, **you must persist this file somehow.**
+
+Currently, our Concourse tasks assume
+that you want to check this file into a private git repo.
+We'll likely prioritize work soon
+to persist that file to a more secure location such as Lastpass.
 
 ### Step 2: Target your BOSH Director
 There are several ways to target your new BOSH director.
