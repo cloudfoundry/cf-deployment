@@ -1,14 +1,4 @@
 ---
-# --- add vm extensions ---
-- type: replace
-  path: /instance_groups/name=diego-brain/vm_extensions
-  value:
-  - ssh-proxy-lb
-- type: replace
-  path: /instance_groups/name=router/vm_extensions
-  value:
-  - router-lb
-
 # --- changing default ports ---
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/doppler?/port
