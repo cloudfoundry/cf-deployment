@@ -1,14 +1,11 @@
 ---
 # --- add vm extensions ---
 - type: replace
-  path: /instance_groups/name=diego-brain/vm_extensions
-  value:
-  - ssh-proxy-lb
-  - 10GB_ephemeral_disk
-- type: replace
   path: /instance_groups/name=router/vm_extensions
   value:
   - router-lb
+  - ssh-proxy-lb
+  - 10GB_ephemeral_disk
 
 # --- changing default ports ---
 - type: replace
@@ -24,8 +21,8 @@
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/logger_endpoint?/port
   value: 4443
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/doppler?/port
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/doppler?/port
   value: 4443
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/logger_endpoint?/port
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/logger_endpoint?/port
   value: 4443

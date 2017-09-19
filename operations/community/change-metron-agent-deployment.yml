@@ -20,7 +20,7 @@
   path: /instance_groups/name=consul/jobs/name=metron_agent/properties/metron_agent/deployment
   value: ((metron_agent_deployment))
 - type: replace
-  path: /instance_groups/name=diego-brain/jobs/name=metron_agent/properties/metron_agent/deployment
+  path: /instance_groups/name=scheduler/jobs/name=metron_agent/properties/metron_agent/deployment
   value: ((metron_agent_deployment))
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=metron_agent/properties/metron_agent/deployment
@@ -32,13 +32,7 @@
   path: /instance_groups/name=api/jobs/name=metron_agent/properties/metron_agent/deployment
   value: ((metron_agent_deployment))
 - type: replace
-  path: /instance_groups/name=cc-bridge/jobs/name=metron_agent/properties/metron_agent/deployment
-  value: ((metron_agent_deployment))
-- type: replace
   path: /instance_groups/name=cc-worker/jobs/name=metron_agent/properties/metron_agent/deployment
-  value: ((metron_agent_deployment))
-- type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=metron_agent/properties/metron_agent/deployment
   value: ((metron_agent_deployment))
 - type: replace
   path: /instance_groups/name=doppler/jobs/name=metron_agent/properties/metron_agent/deployment

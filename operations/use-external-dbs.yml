@@ -78,22 +78,22 @@
   value: *cc_db_username
 
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/ccdb/db_scheme
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb/db_scheme
   value: *cc_db_scheme
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/ccdb/port
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb/port
   value: *cc_db_port
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/ccdb/databases/tag=cc/name
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb/databases/tag=cc/name
   value: *cc_db_name
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/ccdb/address?
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb/address?
   value: *cc_db_address
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/ccdb/roles/name=cloud_controller/password
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb/roles/name=cloud_controller/password
   value: *cc_db_password
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/ccdb/roles/name=cloud_controller/name
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb/roles/name=cloud_controller/name
   value: *cc_db_username
 
 - type: replace
@@ -183,7 +183,7 @@
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/consumes?
   value: {database: nil}
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/consumes?
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/consumes?
   value: {database: nil}
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=silk-controller/consumes?

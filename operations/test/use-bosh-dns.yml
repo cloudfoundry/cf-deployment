@@ -7,11 +7,11 @@
     properties:
       aliases:
         auctioneer.service.cf.internal:
-        - "*.diego-brain.default.cf.bosh"
+        - "*.scheduler.default.cf.bosh"
         bbs.service.cf.internal:
         - "*.diego-api.default.cf.bosh"
         cc-uploader.service.cf.internal:
-        - "*.cc-bridge.default.cf.bosh"
+        - "*.api.default.cf.bosh"
         cell.service.cf.internal:
         - "*.cell.default.cf.bosh"
         cf-etcd.service.cf.internal:
@@ -23,13 +23,13 @@
         doppler.service.cf.internal:
         - "*.doppler.default.cf.bosh"
         file-server.service.cf.internal:
-        - "*.diego-brain.default.cf.bosh"
+        - "*.api.default.cf.bosh"
         gorouter.service.cf.internal:
         - "*.router.default.cf.bosh"
         loggregator-trafficcontroller.service.cf.internal:
         - "*.log-api.default.cf.bosh"
         nsync.service.cf.internal:
-        - "*.cc-bridge.default.cf.bosh"
+        - "*.scheduler.default.cf.bosh"
         policy-server.service.cf.internal:
         - "*.api.default.cf.bosh"
         routing-api.service.cf.internal:
@@ -37,11 +37,11 @@
         silk-controller.service.cf.internal:
         - "*.diego-api.default.cf.bosh"
         ssh-proxy.service.cf.internal:
-        - "*.diego-brain.default.cf.bosh"
+        - "*.router.default.cf.bosh"
         stager.service.cf.internal:
-        - "*.cc-bridge.default.cf.bosh"
+        - "*.api.default.cf.bosh"
         tps.service.cf.internal:
-        - "*.cc-bridge.default.cf.bosh"
+        - "*.scheduler.default.cf.bosh"
         uaa.service.cf.internal:
         - "*.uaa.default.cf.bosh"
 - type: replace
@@ -72,13 +72,7 @@
   path: /instance_groups/name=cc-worker/jobs/-
   value: *bosh_dns_job
 - type: replace
-  path: /instance_groups/name=diego-brain/jobs/-
-  value: *bosh_dns_job
-- type: replace
-  path: /instance_groups/name=cc-clock/jobs/-
-  value: *bosh_dns_job
-- type: replace
-  path: /instance_groups/name=cc-bridge/jobs/-
+  path: /instance_groups/name=scheduler/jobs/-
   value: *bosh_dns_job
 - type: replace
   path: /instance_groups/name=log-api/jobs/-

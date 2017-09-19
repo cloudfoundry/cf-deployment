@@ -2,12 +2,15 @@
 - type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/skip_consul_lock?
   value: true
+
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=bbs/properties/diego/bbs/skip_consul_lock?
   value: true
+
 - type: replace
-  path: /instance_groups/name=diego-brain/jobs/name=auctioneer/properties/diego/auctioneer/skip_consul_lock?
+  path: /instance_groups/name=scheduler/jobs/name=auctioneer/properties/diego/auctioneer/skip_consul_lock?
   value: true
+
 - type: replace
-  path: /instance_groups/name=cc-bridge/jobs/name=tps/properties/capi/tps/watcher?/skip_consul_lock
+  path: /instance_groups/name=scheduler/jobs/name=tps/properties/capi/tps/watcher?/skip_consul_lock
   value: true

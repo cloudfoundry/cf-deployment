@@ -24,7 +24,7 @@
   path: /instance_groups/name=consul/instances
   value: 1
 - type: replace
-  path: /instance_groups/name=diego-brain/instances
+  path: /instance_groups/name=scheduler/instances
   value: 1
 - type: replace
   path: /instance_groups/name=diego-cell/instances
@@ -34,12 +34,6 @@
   value: 1
 - type: replace
   path: /instance_groups/name=api/instances
-  value: 1
-- type: replace
-  path: /instance_groups/name=cc-bridge/instances
-  value: 1
-- type: replace
-  path: /instance_groups/name=cc-clock/instances
   value: 1
 - type: replace
   path: /instance_groups/name=cc-worker/instances
@@ -70,7 +64,7 @@
   path: /instance_groups/name=consul/azs
   value: [ z1 ]
 - type: replace
-  path: /instance_groups/name=diego-brain/azs
+  path: /instance_groups/name=scheduler/azs
   value: [ z1 ]
 - type: replace
   path: /instance_groups/name=diego-cell/azs
@@ -80,12 +74,6 @@
   value: [ z1 ]
 - type: replace
   path: /instance_groups/name=api/azs
-  value: [ z1 ]
-- type: replace
-  path: /instance_groups/name=cc-bridge/azs
-  value: [ z1 ]
-- type: replace
-  path: /instance_groups/name=cc-clock/azs
   value: [ z1 ]
 - type: replace
   path: /instance_groups/name=cc-worker/azs
