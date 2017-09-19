@@ -15,8 +15,10 @@ For `AWS`, you will need:
 - bosh-lite.yml
 - bosh-lite-runc.yml
 
-For `GCP`, you will need the above and also:
--  gcp/bosh-lite-vm-type.yml
+For `GCP`, you will need:
+- bosh-lite.yml
+- bosh-lite-runc.yml
+- gcp/bosh-lite-vm-type.yml
 
 ## 2. `bbl up` the environment
 
