@@ -206,9 +206,9 @@
 - type: remove
   path: /instance_groups/name=diego-brain/jobs/name=ssh_proxy
 - type: replace
-  path: /instance_groups/name=router/vm_extensions
+  path: /instance_groups/name=router/vm_extensions/-
   value:
-  - ssh-proxy-and-router-lb
+  - diego-ssh-proxy-network-properties
 - type: replace
   path: /instance_groups/name=router/jobs/-
   value:
