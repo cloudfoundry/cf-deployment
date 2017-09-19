@@ -50,8 +50,7 @@ bosh -e $(bbl director-address) --ca-cert <(bbl director-ca-cert) alias-env MY_E
 
 Then, log in:
 ```
-bosh -e MY_ENV login
-# Enter the output of `bbl director-username` and `bbl director-password`
+bosh -e MY_ENV login --client $(bbl director-username) --client-secret $(bbl director-password)
 ```
 
 ## 5. Upload the cloud config
