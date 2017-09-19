@@ -148,7 +148,7 @@ to persist that file to a more secure location such as Lastpass.
 by running the command below with the appropriate version number.
 The version number is specified on the last line of `cf-deployment.yml`.
   ```
-  bosh upload stemcell https://bosh.io/d/stemcells/bosh-google-kvm-ubuntu-trusty-go_agent?v=VERSION
+  bosh upload-stemcell https://bosh.io/d/stemcells/bosh-google-kvm-ubuntu-trusty-go_agent?v=VERSION
   ```
 1. Check that you can generate a final manifest without errors (from inside the cf-deployment directory)
   ```
