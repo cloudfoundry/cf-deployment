@@ -682,7 +682,7 @@ instance_groups:
           - destination: 0.0.0.0/0
             ports: '53'
             protocol: udp
-        install_buildpacks: &cc_install_buildpacks
+        install_buildpacks:
         ## Order is important here
         - name: staticfile_buildpack
           package: staticfile-buildpack
@@ -852,7 +852,6 @@ instance_groups:
       cc:
         db_encryption_key: "((cc_db_encryption_key))"
         default_to_diego_backend: true
-        install_buildpacks: *cc_install_buildpacks
         default_running_security_groups: *cc_default_running_security_groups
         default_staging_security_groups: *cc_default_staging_security_groups
         security_group_definitions: *cc_security_group_definitions
@@ -1152,7 +1151,6 @@ instance_groups:
       cc:
         db_encryption_key: "((cc_db_encryption_key))"
         default_to_diego_backend: true
-        install_buildpacks: *cc_install_buildpacks
         default_running_security_groups: *cc_default_running_security_groups
         default_staging_security_groups: *cc_default_staging_security_groups
         security_group_definitions: *cc_security_group_definitions
