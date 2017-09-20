@@ -57,3 +57,11 @@
 - type: replace
   path: /instance_groups/name=log-api/networks/name=default/name
   value: ((network_name))
+
+- type: replace
+  path: /instance_groups/name=adapter/networks/name=default/name
+  value: ((network_name))
+
+- type: replace
+  path: /instance_groups/name=scheduler/networks/name=default/name
+  value: ((network_name))
