@@ -1191,6 +1191,85 @@ instance_groups:
     release: loggregator
     properties: *metron_agent_properties
 
+- name: adapter
+  azs:
+  - z1
+  - z2
+  instances: 3
+  persistent_disk_type: 1GB
+  vm_type: minimal
+  stemcell: default
+  networks:
+  - name: default
+  jobs:
+  - name: consul_agent
+    release: consul
+    consumes:
+      consul: nil
+      consul_common: {from: consul_common_link}
+      consul_server: {from: consul_server_link}
+      consul_client: {from: consul_client_link}
+  - name: adapter
+    release: cf-syslog-drain
+    properties:
+      scalablesyslog:
+        adapter:
+          tls:
+            ca: "((adapter_tls.ca))"
+            cert: "((adapter_tls.certificate))"
+            key: "((adapter_tls.private_key))"
+            cn: ss-adapter
+          logs:
+            addr: reverse-log-proxy.service.cf.internal:8082
+        adapter_rlp:
+          tls:
+            ca: "((adapter_rlp_tls.ca))"
+            cert: "((adapter_rlp_tls.certificate))"
+            key: "((adapter_rlp_tls.private_key))"
+            cn: reverselogproxy
+  - name: metron_agent
+    release: loggregator
+    properties: *metron_agent_properties
+
+- name: scheduler
+  azs:
+  - z1
+  instances: 1
+  persistent_disk_type: 1GB
+  vm_type: minimal
+  stemcell: default
+  networks:
+  - name: default
+  jobs:
+  - name: consul_agent
+    release: consul
+    consumes:
+      consul: nil
+      consul_common: {from: consul_common_link}
+      consul_server: {from: consul_server_link}
+      consul_client: {from: consul_client_link}
+  - name: scheduler
+    release: cf-syslog-drain
+    properties:
+      scalablesyslog:
+        scheduler:
+          api:
+            url: https://cloud-controller-ng.service.cf.internal:9023
+          tls:
+            client:
+              ca: "((scheduler_client_tls.ca))"
+              cert: "((scheduler_client_tls.certificate))"
+              key: "((scheduler_client_tls.private_key))"
+              adapter_cn: "ss-adapter"
+            api:
+              ca: "((scheduler_api_tls.ca))"
+              cert: "((scheduler_api_tls.certificate))"
+              key: "((scheduler_api_tls.private_key))"
+              cn: "cloud-controller-ng.service.cf.internal"
+  - name: metron_agent
+    release: loggregator
+    properties: *metron_agent_properties
+
 variables:
 - name: blobstore_admin_users_password
   type: password
@@ -1441,11 +1520,35 @@ variables:
     extended_key_usage:
     - client_auth
     - server_auth
-- name: loggregator_tls_syslogdrainbinder
+- name: adapter_rlp_tls
+  type: certificate
+  options:
+    ca: loggregator_ca
+    common_name: ss-adapter-rlp
+    extended_key_usage:
+    - client_auth
+    - server_auth
+- name: scheduler_api_tls
   type: certificate
   options:
     ca: service_cf_internal_ca
-    common_name: syslogdrainbinder
+    common_name: ss-scheduler
+    extended_key_usage:
+    - client_auth
+    - server_auth
+- name: adapter_tls
+  type: certificate
+  options:
+    ca: loggregator_ca
+    common_name: ss-adapter
+    extended_key_usage:
+    - server_auth
+    - client_auth
+- name: scheduler_client_tls
+  type: certificate
+  options:
+    ca: loggregator_ca
+    common_name: ss-scheduler
     extended_key_usage:
     - client_auth
 - name: router_ca
@@ -1529,6 +1632,10 @@ releases:
   url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=39
   version: "39"
   sha1: a2d557302a1026f685514b34792b81c0432a48c8
+- name: cf-syslog-drain
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-syslog-drain-release?v=2
+  version: "2"
+  sha1: c9954676033164f550ae645bd1216cf56d159905
 - name: cflinuxfs2
   url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.156.0
   version: 1.156.0
