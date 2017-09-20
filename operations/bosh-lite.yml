@@ -189,8 +189,9 @@
 
 # ----- Combine router VM extensions ----
 - type: replace
-  path: /instance_groups/name=router/vm_extensions/-
-  value: diego-ssh-proxy-network-properties
+  path: /instance_groups/name=router/vm_extensions
+  value:
+  - ssh-proxy-and-router-lb
 - type: replace
   path: /instance_groups/name=router/jobs/-
   value:

@@ -39,14 +39,11 @@ vm_extensions:
 - name: 100GB_ephemeral_disk
 - name: 500GB_ephemeral_disk
 - name: 1TB_ephemeral_disk
-- name: cf-router-network-properties
+- name: ssh-proxy-and-router-lb
   cloud_properties:
     ports:
     - host: 80
     - host: 443
-- name: diego-ssh-proxy-network-properties
-  cloud_properties:
-    ports:
     - host: 2222
 - name: cf-tcp-router-network-properties
   cloud_properties:
