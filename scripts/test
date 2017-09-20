@@ -48,6 +48,11 @@ pushd $(dirname $0)/.. > /dev/null
   else
     fail "operations/bypass-cc-bridge.yml"
   fi
+  if interpolate "-o operations/cf-syslog-skip-cert-verify.yml"; then
+    echo "PASS - operations/cf-syslog-skip-cert-verify.yml"
+  else
+    fail "operations/cf-syslog-skip-cert-verify.yml"
+  fi
   if interpolate "-o operations/change-logging-port-for-aws-elb.yml"; then
     echo "PASS - operations/change-logging-port-for-aws-elb.yml"
   else
@@ -117,11 +122,6 @@ pushd $(dirname $0)/.. > /dev/null
     echo "PASS - operations/experimental/enable-prefer-declarative-healthchecks.yml"
   else
     fail "operations/experimental/enable-prefer-declarative-healthchecks.yml"
-  fi
-  if interpolate "-o operations/experimental/enable-rlp.yml"; then
-    echo "PASS - operations/experimental/enable-rlp.yml"
-  else
-    fail "operations/experimental/enable-rlp.yml"
   fi
   if interpolate "-o operations/experimental/secure-service-credentials.yml"; then
     echo "PASS - operations/experimental/secure-service-credentials.yml"
