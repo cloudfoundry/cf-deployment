@@ -11,10 +11,6 @@
   value: ((network_name))
 
 - type: replace
-  path: /instance_groups/name=etcd/networks/name=default/name
-  value: ((network_name))
-
-- type: replace
   path: /instance_groups/name=doppler/networks/name=default/name
   value: ((network_name))
 
