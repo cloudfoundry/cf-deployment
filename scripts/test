@@ -48,6 +48,11 @@ pushd $(dirname $0)/.. > /dev/null
   else
     fail "operations/bypass-cc-bridge.yml"
   fi
+  if interpolate "-o operations/cf-syslog-skip-cert-verify.yml"; then
+    echo "PASS - operations/cf-syslog-skip-cert-verify.yml"
+  else
+    fail "operations/cf-syslog-skip-cert-verify.yml"
+  fi
   if interpolate "-o operations/change-logging-port-for-aws-elb.yml"; then
     echo "PASS - operations/change-logging-port-for-aws-elb.yml"
   else
@@ -77,11 +82,6 @@ pushd $(dirname $0)/.. > /dev/null
     echo "PASS - operations/experimental/deploy-bosh-backup-restore.yml"
   else
     fail "operations/experimental/deploy-bosh-backup-restore.yml"
-  fi
-  if interpolate "-o operations/experimental/disable-etcd.yml"; then
-    echo "PASS - operations/experimental/disable-etcd.yml"
-  else
-    fail "operations/experimental/disable-etcd.yml"
   fi
   if interpolate "-o operations/experimental/enable-iptables-logger.yml"; then
     echo "PASS - operations/experimental/enable-iptables-logger.yml"
@@ -122,11 +122,6 @@ pushd $(dirname $0)/.. > /dev/null
     echo "PASS - operations/experimental/enable-prefer-declarative-healthchecks.yml"
   else
     fail "operations/experimental/enable-prefer-declarative-healthchecks.yml"
-  fi
-  if interpolate "-o operations/experimental/enable-rlp.yml"; then
-    echo "PASS - operations/experimental/enable-rlp.yml"
-  else
-    fail "operations/experimental/enable-rlp.yml"
   fi
   if interpolate "-o operations/experimental/secure-service-credentials.yml"; then
     echo "PASS - operations/experimental/secure-service-credentials.yml"
@@ -192,11 +187,6 @@ pushd $(dirname $0)/.. > /dev/null
     echo "PASS - operations/rename-network.yml"
   else
     fail "operations/rename-network.yml"
-  fi
-  if interpolate "-o operations/scale-down-etcd-for-cluster-changes.yml"; then
-    echo "PASS - operations/scale-down-etcd-for-cluster-changes.yml"
-  else
-    fail "operations/scale-down-etcd-for-cluster-changes.yml"
   fi
   if interpolate "-o operations/scale-to-one-az.yml"; then
     echo "PASS - operations/scale-to-one-az.yml"

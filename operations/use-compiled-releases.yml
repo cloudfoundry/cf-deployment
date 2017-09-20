@@ -52,15 +52,6 @@
 - path: /releases/name=nats/sha1
   type: replace
   value: 00edd1bc09d344561b10da922208d69bc612e90b
-- path: /releases/name=etcd/url
-  type: replace
-  value: https://storage.googleapis.com/cf-deployment-compiled-releases/etcd-117-ubuntu-trusty-3445.11-20170920-010516-18558241.tgz
-- path: /releases/name=etcd/version
-  type: replace
-  value: "117"
-- path: /releases/name=etcd/sha1
-  type: replace
-  value: 159e5c1968304d7f3ef4f53c4aaf6cdba5517e65
 - path: /releases/name=diego/url
   type: replace
   value: https://storage.googleapis.com/cf-deployment-compiled-releases/diego-1.26.0-ubuntu-trusty-3445.11-20170920-010607-536611573.tgz
@@ -246,11 +237,6 @@
     os: ubuntu-trusty
     version: "3445.11"
 - path: /releases/name=dotnet-core-buildpack/stemcell?
-  type: replace
-  value:
-    os: ubuntu-trusty
-    version: "3445.11"
-- path: /releases/name=etcd/stemcell?
   type: replace
   value:
     os: ubuntu-trusty
