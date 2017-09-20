@@ -47,19 +47,11 @@
   value: ((network_name))
 
 - type: replace
-  path: /instance_groups/name=diego-brain/networks/name=default/name
+  path: /instance_groups/name=scheduler/networks/name=default/name
   value: ((network_name))
 
 - type: replace
   path: /instance_groups/name=diego-cell/networks/name=default/name
-  value: ((network_name))
-
-- type: replace
-  path: /instance_groups/name=cc-clock/networks/name=default/name
-  value: ((network_name))
-
-- type: replace
-  path: /instance_groups/name=cc-bridge/networks/name=default/name
   value: ((network_name))
 
 - type: replace

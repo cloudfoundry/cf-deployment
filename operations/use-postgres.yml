@@ -90,7 +90,7 @@
       password: ((cc_database_password))
       tag: admin
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/ccdb
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb
   value:
     databases:
     - name: cloud_controller

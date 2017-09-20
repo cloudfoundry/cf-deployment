@@ -54,34 +54,34 @@
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc?/diego?/temporary_droplet_download_mtls?
   value: *temporary_droplet_download_mtls
 
-# cc-clock
+# scheduler
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc?/diego?/temporary_local_staging?
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc?/diego?/temporary_local_staging?
   value: *temporary_local_staging
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc?/diego?/temporary_local_apps?
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc?/diego?/temporary_local_apps?
   value: *temporary_local_apps
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc?/diego?/temporary_local_tasks?
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc?/diego?/temporary_local_tasks?
   value: *temporary_local_tasks
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc?/diego?/temporary_local_sync?
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc?/diego?/temporary_local_sync?
   value: *temporary_local_sync
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc?/diego?/temporary_local_tps?
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc?/diego?/temporary_local_tps?
   value: *temporary_local_tps
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc?/diego?/temporary_cc_uploader_mtls?
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc?/diego?/temporary_cc_uploader_mtls?
   value: *temporary_cc_uploader_mtls
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc?/diego?/temporary_droplet_download_mtls?
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc?/diego?/temporary_droplet_download_mtls?
   value: *temporary_droplet_download_mtls
 
 # cc-bridge
 - type: remove
-  path: /instance_groups/name=cc-bridge/jobs/name=stager
+  path: /instance_groups/name=api/jobs/name=stager
 - type: remove
-  path: /instance_groups/name=cc-bridge/jobs/name=nsync
+  path: /instance_groups/name=scheduler/jobs/name=nsync
 - type: replace
-  path: /instance_groups/name=cc-bridge/jobs/name=tps/properties/capi/tps/listener_enabled?
+  path: /instance_groups/name=scheduler/jobs/name=tps/properties/capi/tps/listener_enabled?
   value: false
