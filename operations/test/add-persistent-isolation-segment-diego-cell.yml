@@ -80,9 +80,6 @@
           enable: false
         metron_agent:
           deployment: "((system_domain))"
-          etcd:
-            client_cert: "((etcd_client.certificate))"
-            client_key: "((etcd_client.private_key))"
         metron_endpoint:
           shared_secret: "((dropsonde_shared_secret))"
         loggregator:
@@ -91,8 +88,3 @@
             metron:
               cert: "((loggregator_tls_metron.certificate))"
               key: "((loggregator_tls_metron.private_key))"
-          etcd:
-            require_ssl: true
-            ca_cert: "((etcd_server.ca))"
-            machines:
-            - cf-etcd.service.cf.internal

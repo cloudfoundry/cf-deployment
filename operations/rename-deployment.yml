@@ -20,9 +20,6 @@
   path: /instance_groups/name=nats/jobs/name=metron_agent/properties/metron_agent/deployment
   value: ((deployment_name))
 - type: replace
-  path: /instance_groups/name=etcd/jobs/name=metron_agent/properties/metron_agent/deployment
-  value: ((deployment_name))
-- type: replace
   path: /instance_groups/name=diego-api/jobs/name=metron_agent/properties/metron_agent/deployment
   value: ((deployment_name))
 - type: replace
@@ -51,6 +48,12 @@
   value: ((deployment_name))
 - type: replace
   path: /instance_groups/name=log-api/jobs/name=metron_agent/properties/metron_agent/deployment
+  value: ((deployment_name))
+- type: replace
+  path: /instance_groups/name=adapter/jobs/name=metron_agent/properties/metron_agent/deployment
+  value: ((deployment_name))
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=metron_agent/properties/metron_agent/deployment
   value: ((deployment_name))
 - type: replace
   path: /instance_groups/name=mysql/jobs/name=metron_agent/properties/metron_agent/deployment

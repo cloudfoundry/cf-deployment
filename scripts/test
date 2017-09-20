@@ -78,11 +78,6 @@ pushd $(dirname $0)/.. > /dev/null
   else
     fail "operations/experimental/deploy-bosh-backup-restore.yml"
   fi
-  if interpolate "-o operations/experimental/disable-etcd.yml"; then
-    echo "PASS - operations/experimental/disable-etcd.yml"
-  else
-    fail "operations/experimental/disable-etcd.yml"
-  fi
   if interpolate "-o operations/experimental/enable-iptables-logger.yml"; then
     echo "PASS - operations/experimental/enable-iptables-logger.yml"
   else
@@ -192,11 +187,6 @@ pushd $(dirname $0)/.. > /dev/null
     echo "PASS - operations/rename-network.yml"
   else
     fail "operations/rename-network.yml"
-  fi
-  if interpolate "-o operations/scale-down-etcd-for-cluster-changes.yml"; then
-    echo "PASS - operations/scale-down-etcd-for-cluster-changes.yml"
-  else
-    fail "operations/scale-down-etcd-for-cluster-changes.yml"
   fi
   if interpolate "-o operations/scale-to-one-az.yml"; then
     echo "PASS - operations/scale-to-one-az.yml"
