@@ -109,66 +109,6 @@ instance_groups:
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
-- name: etcd
-  azs:
-  - z1
-  - z2
-  - z3
-  instances: 3
-  persistent_disk_type: 5GB
-  vm_type: minimal
-  stemcell: default
-  update:
-    serial: true
-    max_in_flight: 1
-  networks:
-  - name: default
-  jobs:
-  - name: consul_agent
-    release: consul
-    consumes:
-      consul_common: {from: consul_common_link}
-      consul_server: nil
-      consul_client: {from: consul_client_link}
-    properties:
-      consul:
-        agent:
-          services:
-            etcd:
-              name: cf-etcd
-  - name: etcd
-    release: etcd
-    consumes:
-      etcd: nil
-    properties:
-      etcd:
-        advertise_urls_dns_suffix: cf-etcd.service.cf.internal
-        cluster:
-        - instances: 3
-          name: etcd
-        peer_require_ssl: true
-        require_ssl: true
-        ca_cert: "((etcd_client.ca))"
-        client_cert: "((etcd_client.certificate))"
-        client_key: "((etcd_client.private_key))"
-        server_cert: "((etcd_server.certificate))"
-        server_key: "((etcd_server.private_key))"
-        peer_ca_cert: "((etcd_peer.ca))"
-        peer_cert: "((etcd_peer.certificate))"
-        peer_key: "((etcd_peer.private_key))"
-  - name: etcd_metrics_server
-    release: etcd
-    properties:
-      etcd_metrics_server:
-        etcd:
-          dns_suffix: cf-etcd.service.cf.internal
-          require_ssl: true
-          ca_cert: "((etcd_server.ca))"
-          client_cert: "((etcd_client.certificate))"
-          client_key: "((etcd_client.private_key))"
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
 - name: doppler
   azs:
   - z1
@@ -195,45 +135,16 @@ instance_groups:
     release: loggregator
     properties:
       doppler:
-        etcd:
-          client_cert: "((etcd_client.certificate))"
-          client_key: "((etcd_client.private_key))"
+        disable_announce: true
       loggregator:
+        disable_syslog_drains: true
         tls:
           ca_cert: "((loggregator_tls_doppler.ca))"
           doppler:
             cert: "((loggregator_tls_doppler.certificate))"
             key: "((loggregator_tls_doppler.private_key))"
-        etcd:
-          require_ssl: true
-          ca_cert: "((etcd_server.ca))"
-          machines:
-          - cf-etcd.service.cf.internal
       doppler_endpoint:
         shared_secret: "((dropsonde_shared_secret))"
-  - name: syslog_drain_binder
-    release: loggregator
-    properties:
-      loggregator:
-        tls:
-          syslogdrainbinder:
-            cert: "((loggregator_tls_syslogdrainbinder.certificate))"
-            key: "((loggregator_tls_syslogdrainbinder.private_key))"
-        etcd:
-          require_ssl: true
-          ca_cert: "((etcd_server.ca))"
-          machines:
-          - cf-etcd.service.cf.internal
-      syslog_drain_binder:
-        etcd:
-          client_cert: "((etcd_client.certificate))"
-          client_key: "((etcd_client.private_key))"
-      system_domain: "((system_domain))"
-      cc:
-        mutual_tls:
-          ca_cert: "((loggregator_tls_syslogdrainbinder.ca))"
-      ssl: &ssl
-        skip_cert_verify: true
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
@@ -1222,13 +1133,12 @@ instance_groups:
         agent:
           services:
             loggregator_trafficcontroller: {}
+            reverse_log_proxy: {}
   - name: loggregator_trafficcontroller
     release: loggregator
+    consumes:
+      doppler: {from: doppler}
     properties:
-      traffic_controller:
-        etcd:
-          client_cert: "((etcd_client.certificate))"
-          client_key: "((etcd_client.private_key))"
       uaa:
         internal_url: https://uaa.service.cf.internal:8443
         ca_cert: "((uaa_ca.certificate))"
@@ -1241,11 +1151,6 @@ instance_groups:
           trafficcontroller:
             cert: "((loggregator_tls_tc.certificate))"
             key: "((loggregator_tls_tc.private_key))"
-        etcd:
-          require_ssl: true
-          ca_cert: "((etcd_server.ca))"
-          machines:
-          - cf-etcd.service.cf.internal
         uaa:
           client_secret: "((uaa_clients_doppler_secret))"
       system_domain: "((system_domain))"
@@ -1255,6 +1160,17 @@ instance_groups:
         tls_port: 9023
         mutual_tls:
           ca_cert: "((loggregator_tls_cc_tc.ca))"
+  - name: reverse_log_proxy
+    release: loggregator
+    provides:
+      reverse_log_proxy: {as: reverse_log_proxy}
+    properties:
+      loggregator:
+        tls:
+          ca_cert: "((loggregator_tls_rlp.ca))"
+          reverse_log_proxy:
+            cert: "((loggregator_tls_rlp.certificate))"
+            key: "((loggregator_tls_rlp.private_key))"
   - name: route_registrar
     release: routing
     properties:
@@ -1393,48 +1309,6 @@ variables:
   options:
     is_ca: true
     common_name: internalCA
-- name: etcd_ca
-  type: certificate
-  options:
-    is_ca: true
-    common_name: etcdCA
-- name: etcd_server
-  type: certificate
-  options:
-    ca: etcd_ca
-    common_name: etcd.service.cf.internal
-    alternative_names:
-    - "*.etcd.service.cf.internal"
-    - etcd.service.cf.internal
-    - "*.cf-etcd.service.cf.internal"
-    - cf-etcd.service.cf.internal
-    extended_key_usage:
-    - server_auth
-- name: etcd_client
-  type: certificate
-  options:
-    ca: etcd_ca
-    common_name: clientName
-    extended_key_usage:
-    - client_auth
-- name: etcd_peer_ca
-  type: certificate
-  options:
-    is_ca: true
-    common_name: peerCA
-- name: etcd_peer
-  type: certificate
-  options:
-    ca: etcd_peer_ca
-    common_name: etcd.service.cf.internal
-    alternative_names:
-    - "*.etcd.service.cf.internal"
-    - etcd.service.cf.internal
-    - "*.cf-etcd.service.cf.internal"
-    - cf-etcd.service.cf.internal
-    extended_key_usage:
-    - client_auth
-    - server_auth
 - name: blobstore_tls
   type: certificate
   options:
@@ -1559,6 +1433,14 @@ variables:
     common_name: trafficcontroller
     extended_key_usage:
     - client_auth
+- name: loggregator_tls_rlp
+  type: certificate
+  options:
+    ca: loggregator_ca
+    common_name: reverselogproxy
+    extended_key_usage:
+    - client_auth
+    - server_auth
 - name: loggregator_tls_syslogdrainbinder
   type: certificate
   options:
@@ -1663,10 +1545,6 @@ releases:
   url: https://bosh.io/d/github.com/cloudfoundry/dotnet-core-buildpack-release?v=1.0.26
   version: 1.0.26
   sha1: 03777d3011148f7b2d7873bfe268aa32d07b7a7c
-- name: etcd
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/etcd-release?v=117
-  version: "117"
-  sha1: 670bf17cea0e6e56bdac33956545b3e302062521
 - name: garden-runc
   url: https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.9.3
   version: 1.9.3
