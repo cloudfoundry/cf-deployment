@@ -89,9 +89,5 @@
   value: "iso-seg.((system_domain))"
 
 - type: replace
-  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/app_domains/-
-  value: "iso-seg.((system_domain))"
-
-- type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/app_domains/-
   value: "iso-seg.((system_domain))"
