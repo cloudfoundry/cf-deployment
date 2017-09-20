@@ -187,28 +187,10 @@
     - destination: 10.244.0.34
       protocol: all
 
-# ----- Combine router VM extensions ----
+# ----- Skip cert verify for bosh-lite ----
 - type: replace
-  path: /instance_groups/name=router/vm_extensions/-
-  value: diego-ssh-proxy-network-properties
-- type: replace
-  path: /instance_groups/name=router/jobs/-
-  value:
-    name: ssh_proxy
-    release: diego
-    properties:
-      diego:
-        ssl:
-          skip_cert_verify: true
-        ssh_proxy:
-          enable_cf_auth: true
-          host_key: "((diego_ssh_proxy_host_key.private_key))"
-          uaa_secret: "((uaa_clients_ssh-proxy_secret))"
-          uaa_token_url: "https://uaa.((system_domain))/oauth/token"
-          bbs: &5
-            ca_cert: "((diego_bbs_client.ca))"
-            client_cert: "((diego_bbs_client.certificate))"
-            client_key: "((diego_bbs_client.private_key))"
+  path: /instance_groups/name=router/jobs/name=ssh_proxy/properties/diego/ssl?/skip_cert_verify
+  value: true
 
 # ----- Scale Down ------
 - type: replace
