@@ -198,6 +198,7 @@ instance_groups:
         etcd:
           client_cert: "((etcd_client.certificate))"
           client_key: "((etcd_client.private_key))"
+        disable_announce: true
       loggregator:
         disable_syslog_drains: true
         tls:
