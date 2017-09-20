@@ -188,6 +188,8 @@
       protocol: all
 
 # ----- Combine router VM extensions ----
+- type: remove
+  path: /instance_groups/name=scheduler/vm_extensions
 - type: replace
   path: /instance_groups/name=router/vm_extensions
   value:
