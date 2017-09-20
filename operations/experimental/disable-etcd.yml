@@ -9,11 +9,6 @@
 - type: replace
   path: /instance_groups/name=doppler/jobs/name=doppler/properties/doppler/disable_announce?
   value: true
-- type: replace
-  path: /instance_groups/name=doppler/jobs/name=doppler/properties/loggregator/disable_syslog_drains?
-  value: true
-- type: remove
-  path: /instance_groups/name=doppler/jobs/name=syslog_drain_binder
 
 - type: replace
   path: /instance_groups/name=log-api/jobs/name=loggregator_trafficcontroller/consumes?/doppler?

@@ -198,7 +198,6 @@ instance_groups:
         etcd:
           client_cert: "((etcd_client.certificate))"
           client_key: "((etcd_client.private_key))"
-        disable_announce: true
       loggregator:
         disable_syslog_drains: true
         tls:
@@ -213,6 +212,24 @@ instance_groups:
           - cf-etcd.service.cf.internal
       doppler_endpoint:
         shared_secret: "((dropsonde_shared_secret))"
+  - name: adapter
+    release: cf-syslog-drain
+    properties:
+      scalablesyslog:
+        adapter:
+          tls:
+            ca: "((adapter_tls.ca))"
+            cert: "((adapter_tls.certificate))"
+            key: "((adapter_tls.private_key))"
+            cn: ss-adapter
+          logs:
+            addr: reverse-log-proxy.service.cf.internal:8082
+        adapter_rlp:
+          tls:
+            ca: "((adapter_rlp_tls.ca))"
+            cert: "((adapter_rlp_tls.certificate))"
+            key: "((adapter_rlp_tls.private_key))"
+            cn: reverselogproxy
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
@@ -1267,47 +1284,7 @@ instance_groups:
     release: loggregator
     properties: *metron_agent_properties
 
-- name: adapter
-  azs:
-  - z1
-  - z2
-  instances: 3
-  persistent_disk_type: 1GB
-  vm_type: minimal
-  stemcell: default
-  networks:
-  - name: default
-  jobs:
-  - name: consul_agent
-    release: consul
-    consumes:
-      consul: nil
-      consul_common: {from: consul_common_link}
-      consul_server: {from: consul_server_link}
-      consul_client: {from: consul_client_link}
-  - name: adapter
-    release: cf-syslog-drain
-    properties:
-      scalablesyslog:
-        adapter:
-          tls:
-            ca: "((adapter_tls.ca))"
-            cert: "((adapter_tls.certificate))"
-            key: "((adapter_tls.private_key))"
-            cn: ss-adapter
-          logs:
-            addr: reverse-log-proxy.service.cf.internal:8082
-        adapter_rlp:
-          tls:
-            ca: "((adapter_rlp_tls.ca))"
-            cert: "((adapter_rlp_tls.certificate))"
-            key: "((adapter_rlp_tls.private_key))"
-            cn: reverselogproxy
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
-
-- name: scheduler
+- name: syslog-scheduler
   azs:
   - z1
   instances: 1
@@ -1322,7 +1299,7 @@ instance_groups:
     consumes:
       consul: nil
       consul_common: {from: consul_common_link}
-      consul_server: {from: consul_server_link}
+      consul_server: nil
       consul_client: {from: consul_client_link}
   - name: scheduler
     release: cf-syslog-drain
