@@ -454,15 +454,19 @@ instance_groups:
               key-1:
                 signingKey: "((uaa_jwt_signing_key.private_key))"
         clients:
+          cc_routing:
+            authorities: routing.router_groups.read
+            authorized-grant-types: client_credentials
+            secret: "((uaa_clients_cc-routing_secret))"
           cc-service-dashboards:
             authorities: clients.read,clients.write,clients.admin
             authorized-grant-types: client_credentials
             scope: openid,cloud_controller_service_permissions.read
             secret: "((uaa_clients_cc-service-dashboards_secret))"
-          cc_routing:
-            authorities: routing.router_groups.read
+          cc_service_key_client:
+            authorities: credhub.read,credhub.write
             authorized-grant-types: client_credentials
-            secret: "((uaa_clients_cc-routing_secret))"
+            secret: "((uaa_clients_cc_service_key_client_secret))"
           cf:
             access-token-validity: 600
             authorities: uaa.none
@@ -649,6 +653,8 @@ instance_groups:
             secret: "((uaa_clients_cloud_controller_username_lookup_secret))"
           cc-service-dashboards:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
+          cc_service_key_client:
+            secret: "((uaa_clients_cc_service_key_client_secret))"
         url: https://uaa.((system_domain))
         ssl:
           port: 8443
@@ -1370,6 +1376,8 @@ variables:
 - name: uaa_clients_cc-routing_secret
   type: password
 - name: uaa_clients_cc-service-dashboards_secret
+  type: password
+- name: uaa_clients_cc_service_key_client_secret
   type: password
 - name: uaa_clients_cloud_controller_username_lookup_secret
   type: password
