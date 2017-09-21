@@ -1,25 +1,25 @@
 ---
 - type: replace
-  path: /instance_groups/name=bits-service/jobs/name=bits-service/properties/bits-service/app_stash
+  path: /instance_groups/name=api/jobs/name=bits-service/properties/bits-service/app_stash
   value:
-    directory_key: "((resource_directory_key))"
+    directory_key: "((s3-blobstore-bucket-name))"
     fog_connection: &aws-config
       provider: "AWS"
-      aws_access_key_id: "((blobstore_access_key_id))"
-      aws_secret_access_key: "((blobstore_secret_access_key))"
-      region: "((aws_region))"
+      aws_access_key_id: "((s3-blobstore-access-key-id))"
+      aws_secret_access_key: "((s3-blobstore-secret-access-key))"
+      region: "((s3-blobstore-region))"
 - type: replace
-  path: /instance_groups/name=bits-service/jobs/name=bits-service/properties/bits-service/buildpacks
+  path: /instance_groups/name=api/jobs/name=bits-service/properties/bits-service/buildpacks
   value:
-    directory_key: "((buildpack_directory_key))"
+    directory_key: "((s3-blobstore-bucket-name))"
     fog_connection: *aws-config
 - type: replace
-  path: /instance_groups/name=bits-service/jobs/name=bits-service/properties/bits-service/droplets
+  path: /instance_groups/name=api/jobs/name=bits-service/properties/bits-service/droplets
   value:
-    directory_key: "((droplet_directory_key))"
+    directory_key: "((s3-blobstore-bucket-name))"
     fog_connection: *aws-config
 - type: replace
-  path: /instance_groups/name=bits-service/jobs/name=bits-service/properties/bits-service/packages
+  path: /instance_groups/name=api/jobs/name=bits-service/properties/bits-service/packages
   value:
-    directory_key: "((app_package_directory_key))"
+    directory_key: "((s3-blobstore-bucket-name))"
     fog_connection: *aws-config
