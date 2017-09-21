@@ -19,6 +19,13 @@ This allows the use of the `-v` flag
 to provide values,
 or the `-l` flag to load values from a file.
 
+See the runtime configs themselves
+to determine which values you need to provide.
+
+You will need to `bosh deploy`
+in order for changes to affect VMs
+whenever the runtime config is updated.
+
 ## Managing Runtime Configuration
 At the moment,
 a BOSH Director has only one runtime config.
@@ -29,9 +36,12 @@ extend it manually,
 and then use `bosh update-runtime-config`
 to set your extended config on the director.
 
-As with the initial setup,
-you will need to `bosh deploy`
-in order for changes to affect VMs.
+If you just set the runtime config directly,
+please be aware that it will overwrite any existing runtime config.
+
+Similarly, to remove a runtime config,
+you must "update" the director
+with an empty runtime config.
 
 [runtime-config-docs]: https://bosh.io/docs/runtime-config.html
 [syslog-release-repo]: https://github.com/cloudfoundry/syslog-release
