@@ -2,7 +2,7 @@
 - type: replace
   path: /instance_groups/name=api/jobs/name=bits-service/properties/bits-service/app_stash
   value:
-    directory_key: "((app_package_directory_key))"
+    directory_key: "((resource_directory_key))"
     fog_connection: &aws-config
       provider: "AWS"
       aws_access_key_id: "((blobstore_access_key_id))"
@@ -21,5 +21,5 @@
 - type: replace
   path: /instance_groups/name=api/jobs/name=bits-service/properties/bits-service/packages
   value:
-    directory_key: "((resource_directory_key))"
+    directory_key: "((app_package_directory_key))"
     fog_connection: *aws-config
