@@ -1,9 +1,26 @@
 # Deploying Cloud Foundry on OpenStack with BOSH
 
+## Prerequisites
+
+You'll need to following to proceed:
+ * An OpenStack project
+ * A user able to create/delete resource in this project
+ * Flavors with the following names and configuration:
+
+| Name | CPUs | RAM (MiB) | Root Disk (GiB) | Ephemeral Disk (GiB) |
+-------|------|-----------|-----------------|----------------------|
+| t2.small | 1 | 2048 | 3 | 10 |
+| m3.medium | 1 | 3840 | 3 | 10 |
+| m3.large | 2 | 7680 | 3 | 10 |
+| m3.large-50GB-ephemeral-disk | 2 | 7680 | 3 | 50 |
+| c3.large | 2 | 3840 | 3 | 10 |
+| r3.xlarge | 4 | 31232 | 3 | 10 |
+| r3.xlarge-100GB-ephemeral-disk | 4 | 31232 | 3 | 100 |
+
 ## Validate OpenStack is ready to run BOSH and deploy Cloud Foundry
 
 Before deploying Cloud Foundry, make sure to successfully run the [CF-OpenStack-Validator](https://github.com/cloudfoundry-incubator/cf-openstack-validator) against your project.
-  - Make sure you have the required flavors on OpenStack by enabling the [flavors extension](https://github.com/cloudfoundry-incubator/cf-openstack-validator/tree/master/extensions/flavors). You can use the flavors extension enabled and the [`flavors.yml`](./flavors.yml) file in this directory. Flavor names need to match those specified in the cloud config.
+  - Make sure you have the required flavors on OpenStack by enabling the [flavors extension](https://github.com/cloudfoundry-incubator/cf-openstack-validator/tree/master/extensions/flavors) with the [`flavors.yml`](./flavors.yml) file in this directory. Flavor names need to match those specified in the cloud config.
   - If you plan using the [Swift ops file](use-swift-blobstore.yml) to enable Swift as blobstore for the Cloud Controller, you should also run the [Swift extension](https://github.com/cloudfoundry-incubator/cf-openstack-validator/tree/master/extensions/object_storage).
 
 ## Prepare OpenStack resources for BOSH and Cloud Foundry via Terraform
@@ -15,8 +32,6 @@ To setup an OpenStack project to install BOSH please use the following [Terrafor
 ### Cloud Foundry
 
 To setup the project to install Cloud Foundry please use the following [Terraform module](https://github.com/cloudfoundry-incubator/bosh-openstack-environment-templates/tree/master/cf-deployment-tf). Adapt `terraform.tfvars.template` to your needs. Variable `bosh_router_id` is output of the previous BOSH terraform module.
-
-# `use_local_blobstore` and `use_tcp_router` (together with `num_tcp_ports`) should match what is specified for the cloud config and the deployment described below.
 
 ## Install BOSH
 
