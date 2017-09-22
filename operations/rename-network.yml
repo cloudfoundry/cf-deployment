@@ -57,3 +57,7 @@
 - type: replace
   path: /instance_groups/name=log-api/networks/name=default/name
   value: ((network_name))
+
+- type: replace
+  path: /instance_groups/name=syslog-scheduler/networks/name=default/name
+  value: ((network_name))
