@@ -54,11 +54,6 @@ function test_opsfile_interpolation() {
     else
       fail "operations/cf-syslog-skip-cert-verify.yml"
     fi
-    if interpolate "-o operations/change-logging-port-for-aws-elb.yml"; then
-      echo "PASS - operations/change-logging-port-for-aws-elb.yml"
-    else
-      fail "operations/change-logging-port-for-aws-elb.yml"
-    fi
     if interpolate "-o operations/configure-default-router-group.yml -v default_router_group_reservable_ports=1234-2024"; then
       echo "PASS - operations/configure-default-router-group.yml"
     else
