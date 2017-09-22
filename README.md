@@ -171,140 +171,33 @@ These flags read a single `.yml` file that details operations to be performed on
 before variables are generated and filled.
 We've supplied some common manifest modifications in the `operations` directory.
 
-Here's an (alphabetical) summary:
-- `operations/legacy/old-droplet-mitigation.yml
-  this file mitigates against old droplets
-  that may still have a legacy security vulnerability.
-  See comment in the ops file for more details.
-- `operations/aws.yml` and `operations/change-logging-port-for-aws-elb.yml` -
-  this file overrides the vm_extensions for load balancers and overrides the loggregator ports to 4443,
-  since it is required under AWS to have a separate port from the standard HTTPS port (443) for loggregator traffic
-  in order to use the AWS load balancer.
-- `operations/disable-router-tls-termination.yml` -
-  this file eliminates keys related to performing tls/ssl termination within the gorouter job.
-  It's useful for deployments where tls termination is performed prior to the gorouter -
-  for instance, on AWS, such termination is commonly done at the ELB.
-  This also eliminates the need to specify `((router_ssl.certificate))` and `((router_ssl.private_key))` in the var files.
-- `operations/configure-default-router-group.yml` -
-  this file allows deployer to configure reservable ports for default tcp
-  router group by passing variable `default_router_group_reservable_ports`.
-- `operations/enable-privileged-container-support.yml` -
-  enables diego privileged container support on cc-bridge.
-  This opsfile might not be compatible with opsfiles
-  that inline bridge functionality to cloud-controller.
-- `operations/gcp.yml` -
-  this file was intentionally left blank and left for backwards compatibility. It previously overrode the static IP addresses assigned to some instance groups,
-  as GCP networking features allow them to all co-exist on the same subnet
-  despite being spread across multiple AZs.
-- `operations/rename-deployment.yml` -
-  This file allows a deployer to rename the deployment
-  by passing a variable `deployment_name`
-- `operations/rename-network.yml` -
-  This file allows a deployer to rename the network
-  by passing a variable `network_name`
-- `operations/scale-to-one-az.yml` -
-  Scales cf-deployment down to a single instance per instance group,
-  placing them all into a single AZ.
-  Effectively halves the deployment's footprint.
-  Should be applied before other ops files.
-- `operations/test/add-datadog-firehose-nozzle-aws.yml` -
-  Deploys a datadog-firehose-nozzle that collects system metric and posts to datadog.
-  For AWS only.
-- `operations/tcp-routing-gcp.yml` -
-  this ops file adds TCP routers for GCP.
-- `operations/use-blobstore-cdn.yml` -
-  adds support for accessing the `droplets` and `resource_pool` blobstore
-  resources via signed urls over a cdn.  Note that this ops file assumes that you
-  are using the same keypair for both buckets.  Introduces new variables:
-  ```
-  cdn_key_pair_id
-  cdn_private_key
-  resource_pool_cdn_uri
-  droplets_cdn_uri
-  ```
-- `operations/use-external-dbs.yml` -
-  removes the MySQL instance group,
-  cf-mysql release, and all cf-mysql variables.
-  This requires an external data store.
-  Introduces new variables for DB connection
-  details which will need to be provided at deploy time.
-  The new variables are all strings
-  (except db_port, which is an integer).
-  Their names are:
-  ```
-  db_type
-  db_port
-  cc_db_name
-  cc_db_address
-  cc_db_username
-  cc_db_password
-  uaa_db_name
-  uaa_db_address
-  uaa_db_username
-  uaa_db_password
-  bbs_db_name
-  bbs_db_address
-  bbs_db_username
-  bbs_db_password
-  routing_api_db_name
-  routing_api_db_address
-  routing_api_db_username
-  routing_api_db_password
-  policy_server_db_name
-  policy_server_db_address
-  policy_server_db_username
-  policy_server_db_password
-  silk_controller_db_name
-  silk_controller_db_address
-  silk_controller_db_username
-  silk_controller_db_password
-  ```
-  This must be applied _before_
-  any ops files that removes jobs that use a database,
-  such as the ops file to remove the routing API.
-  **Warning**: this does not migrate data,
-  and will delete existing database instance groups.
-- `operations/use-postgres.yml` -
-  replaces the MySQL instance group
-  with a postgres instance group.
-  **Warning**: this will lead to total data loss
-  if applied to an existing deployment with MySQL
-  or removed from an existing deployment with postgres.
-- `use-s3-blobstore.yml` -
-  replaces local WebDAV blobstore with external
-  s3 blobstore. Introduces new variables for
-  AWS credentials and bucket names,
-  which will need to be provided at deploy time.
-  The new variables are all strings.
-  Their names are:
-  ```
-  aws_region
-  blobstore_access_key_id
-  blobstore_secret_access_key
-  app_package_directory_key
-  buildpack_directory_key
-  droplet_directory_key
-  resource_directory_key
-  ```
-- `use-azure-storage-blobstore.yml` -
-  replaces local WebDAV blobstore with external
-  Azure Storage blobstore. Introduces new variables for
-  Azure credentials and container names,
-  which will need to be provided at deploy time.
-  The new variables are all strings.
-  Their names are:
-  ```
-  environment
-  blobstore_storage_account_name
-  blobstore_storage_access_key
-  app_package_directory_key
-  buildpack_directory_key
-  droplet_directory_key
-  resource_directory_key
-  ```
-- `operations/windows-cell.yml` -
-  deploys a windows diego cell,
-  adds releases necessary for windows.
+| Name | Purpose | Notes |
+|:---  |:---     |:---   |
+| [old-droplet-mitigation.yml](operations/legacy/old-droplet-mitigation.yml) | Mitigates against old droplets that may still have a legacy security vulnerability. | See comment in the ops file for more details. |
+| [aws.yml](operations/aws.yml) | Overrides the loggregator ports to 4443. | It is required to have a separate port from the standard HTTPS port (443) for loggregator traffic in order to use the AWS load balancer. |
+| [disable-router-tls-termination.yml](operations/disable-router-tls-termination.yml) | Eliminates keys related to performing tls/ssl termination within the gorouter job. | Useful for deployments where tls termination is performed prior to the gorouter - for instance, on AWS, such termination is commonly done at the ELB. This also eliminates the need to specify `((router_ssl.certificate))` and `((router_ssl.private_key))` in the var files. |
+| [configure-default-router-group.yml](operations/configure-default-router-group.yml) | Allows deployer to configure reservable ports for default tcp router group by passing variable `default_router_group_reservable_ports`. |  |
+| [enable-privileged-container-support.yml](operations/enable-privileged-container-support.yml) | Enables diego privileged container support on cc-bridge. | This opsfile might not be compatible with opsfiles that inline bridge functionality to cloud-controller. |
+| [gcp.yml](operations/gcp.yml) |  | Intentionally left blank for backwards compatibility. It previously overrode the static IP addresses assigned to some instance groups, as GCP networking features allow them to all co-exist on the same subnet despite being spread across multiple AZs. |
+| [rename-deployment.yml](operations/rename-deployment.yml) | Allows a deployer to rename the deployment by passing a variable `deployment_name` |  |
+| [rename-network.yml](operations/rename-network.yml) | Allows a deployer to rename the network by passing a variable `network_name` |  |
+| [scale-to-one-az.yml](operations/scale-to-one-az.yml) | Scales cf-deployment down to a single instance per instance group, placing them all into a single AZ. | Effectively halves the deployment's footprint. Should be applied before other ops files. |
+| [tcp-routing-gcp.yml](operations/tcp-routing-gcp.yml) |  | Intentionally left blank for backwards compatibility. Previously added TCP routers for GCP.|
+| [use-blobstore-cdn.yml](operations/use-blobstore-cdn.yml) | Adds support for accessing the `droplets` and `resource_pool` blobstore resources via signed urls over a cdn. | This assumes that you are using the same keypair for both buckets. Introduces [new variables](operations/example-vars-files/vars-use-blobstore-cdn.yml) |
+| [use-external-dbs.yml](operations/use-external-dbs.yml) | Removes the MySQL instance group, cf-mysql release, and all cf-mysql variables. **Warning**: this does not migrate data, and will delete existing database instance groups. | This requires an external data store.   Introduces [new variables](operations/example-vars-files/vars-use-external-dbs.yml) for DB connection details which will need to be provided at deploy time. This must be applied _before_ any ops files that removes jobs that use a database, such as the ops file to remove the routing API. |
+| [use-postgres.yml](operations/use-postgres.yml) | Replaces the MySQL instance group with a postgres instance group. **Warning**: this will lead to total data loss if applied to an existing deployment with MySQL or removed from an existing deployment with postgres. |  |
+| [use-s3-blobstore.yml](operations/use-s3-blobstore.yml) | Replaces local WebDAV blobstore with external s3 blobstore. | Introduces [new variables](operations/example-vars-files/vars-use-s3-blobstore.yml) for s3 credentials and bucket names. |
+| [use-azure-storage-blobstore.yml](operations/use-azure-storage-blobstore.yml) | Replaces local WebDAV blobstore with external Azure Storage blobstore. | Introduces [new variables](operations/example-vars-files/vars-use-azure-storeage-blobstore.yml) for Azure credentials and container names. |
+| [windows-cell.yml](operations/windows-cell.yml) | Deploys a windows diego cell, adds releases necessary for windows. |  |
+| [bosh-lite.yml](operations/bosh-lite.yml) | Enables `cf-deployment` to be deployed on `bosh-lite`. | See [bosh-lite](bosh-lite.md) documentation. |
+| [bypass-cc-bridge-privileged-containers.yml](operations/bypass-cc-bridge-privileged-containers.yml) | Use privileged containers for staging and running buildpack apps and tasks. | |
+| [bypass-cc-bridge.yml](operations/bypass-cc-bridge.yml) | Bypass CC bridge | To enable privileged container support, also apply the bypass-cc-bridge-privileged-containers.yml ops file. |
+| [cf-syslog-skip-cert-verify.yml](operations/cf-syslog-skip-cert-verify.yml) | This disables TLS verification when connecting to a HTTPS syslog drain. | |
+| [enable-cc-rate-limiting.yml](operations/enable-cc-rate-limiting.yml) | Enable rate limiting for UAA-authenticated endpoints. | Introduces variables `cc_rate_limiter_general_limit` and `cc_rate_limiter_unauthenticated_limit` |
+| [enable-uniq-consul-node-name.yml](operations/enable-uniq-consul-node-name.yml) | Configure Diego cell `consul_agent` jobs to have a unique id per instance. |  |
+| [scale-down-etcd-for-cluster-changes.yml](operations/scale-down-etcd-for-cluster-changes.yml) | Scales `etcd` cluster to one node. |  |
+| [use-compiled-releases.yml](operations/use-compiled-releases.yml) | Instead of having your BOSH Director compile each release, use this opsfile to use pre-compiled releases for a deployment speed improvement. |  |
+| [use-latest-stemcell.yml](operations/use-latest-stemcell.yml) | Use the latest stemcell available on your BOSH director instead of the one in `cf-deployment.yml` |  |
 
 ### A note on `experimental` and `test` ops-files
 The `operations` directory includes two subdirectories
@@ -317,6 +210,7 @@ meaning that,
 once the configurations have been sufficiently validated,
 they will become part of cf-deployment.yml
 and the ops-files will be removed.
+For details, see [experimental README](operations/experimental/README.md).
 
 #### Test
 "Test" ops-files are configurations
