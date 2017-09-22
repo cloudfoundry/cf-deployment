@@ -64,18 +64,10 @@ To deploy Cloud Foundry run the following command filling in the necessary varia
 
 ```
 bosh -d cf deploy ../cf-deployment.yml \
-  -o ../operations/openstack/use-compiled-releases.yml \
-  -o ../operations/openstack/ephemeral-disk-vm-extensions.yml \
+  -o ../operations/use-compiled-releases.yml \
+  -o ../operations/openstack.yml \
   --vars-store ~/deployments/cf/cf-vars-store.yml \
   -v system_domain="<system-domain>"
-```
-
-### With TCP Routing
-
-If you want to enable TCP Routing, the Terraform module should have run with `use_tcp_routing=true`. Add the following line to the deploy cmd:
-
-```
-  -o ../operations/tcp-routing-gcp.yml \
 ```
 
 ### With Swift as Blobstore
@@ -89,7 +81,7 @@ Missing: preparations for Swift to be done?
 Add the following lines to the deploy cmd:
 
 ```
-  -o ../operations/openstack/use-swift-blobstore.yml \
+  -o ../operations/use-swift-blobstore.yml \
   -v auth_url="<auth-url>" \
   -v openstack_project="<project-name>" \
   -v openstack_domain="<domain>" \
