@@ -276,16 +276,6 @@ function test_opsfile_interpolation() {
     else
       fail "operations/windows-cell.yml"
     fi
-    if interpolate "-o operations/workarounds/use-3-azs-for-router.yml"; then
-      echo "PASS - operations/workarounds/use-3-azs-for-router.yml"
-    else
-      fail "operations/workarounds/use-3-azs-for-router.yml"
-    fi
-    if interpolate "-o operations/workarounds/use-4-azs-for-router.yml"; then
-      echo "PASS - operations/workarounds/use-4-azs-for-router.yml"
-    else
-      fail "operations/workarounds/use-4-azs-for-router.yml"
-    fi
     if interpolate "-o operations/legacy/old-droplet-mitigation.yml"; then
       echo "PASS - operations/legacy/old-droplet-mitigation.yml"
     else
