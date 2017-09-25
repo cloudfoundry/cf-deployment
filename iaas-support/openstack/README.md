@@ -9,19 +9,18 @@ You'll need to following to proceed:
 
 | Name | CPUs | RAM (MiB) | Root Disk (GiB) | Ephemeral Disk (GiB) |
 -------|------|-----------|-----------------|----------------------|
-| t2.small | 1 | 2048 | 3 | 10 |
-| m3.medium | 1 | 3840 | 3 | 10 |
-| m3.large | 2 | 7680 | 3 | 10 |
-| m3.large-50GB-ephemeral-disk | 2 | 7680 | 3 | 50 |
-| c3.large | 2 | 3840 | 3 | 10 |
-| r3.xlarge | 4 | 31232 | 3 | 10 |
-| r3.xlarge-100GB-ephemeral-disk | 4 | 31232 | 3 | 100 |
+| sharedcpu | 1 | 2048 | 3 | 10 |
+| minimal | 1 | 3840 | 3 | 10 |
+| small | 2 | 7680 | 3 | 10 |
+| small-50GB-ephemeral-disk | 2 | 7680 | 3 | 50 |
+| small-highmem | 4 | 31232 | 3 | 10 |
+| small-highmem-100GB-ephemeral-disk | 4 | 31232 | 3 | 100 |
 
 ## Validate OpenStack is ready to run BOSH and deploy Cloud Foundry
 
 Before deploying Cloud Foundry, make sure to successfully run the [CF-OpenStack-Validator](https://github.com/cloudfoundry-incubator/cf-openstack-validator) against your project.
   - Make sure you have the required flavors on OpenStack by enabling the [flavors extension](https://github.com/cloudfoundry-incubator/cf-openstack-validator/tree/master/extensions/flavors) with the [`flavors.yml`](./flavors.yml) file in this directory. Flavor names need to match those specified in the cloud config.
-  - If you plan using the [Swift ops file](use-swift-blobstore.yml) to enable Swift as blobstore for the Cloud Controller, you should also run the [Swift extension](https://github.com/cloudfoundry-incubator/cf-openstack-validator/tree/master/extensions/object_storage).
+  - If you plan using the [Swift ops file](../../operations/use-swift-blobstore.yml) to enable Swift as blobstore for the Cloud Controller, you should also run the [Swift extension](https://github.com/cloudfoundry-incubator/cf-openstack-validator/tree/master/extensions/object_storage).
 
 ## Prepare OpenStack resources for BOSH and Cloud Foundry via Terraform
 
@@ -42,20 +41,20 @@ this documentation.
 
 ## Cloud Config
 
-After the BOSH director has been installed, you can prepare and upload a cloud config based on the [cloud-config.yml](../cloud-configs/openstack/cloud-config.yml) file.
+After the BOSH director has been installed, you can prepare and upload a cloud config based on the [cloud-config.yml](cloud-config.yml) file.
 
 Take the variables and outputs from the Terraform run of `cf-deployment-tf` to finalize the cloud config.
 
 Use the following command to upload the cloud config.
 ```
 bosh update-cloud-config \
-  -v availability_zone1="<az-1>" \
-  -v availability_zone2="<az-2>" \
-  -v availability_zone3="<az-3>" \
-  -v network_id1="<cf-network-id-1>" \
-  -v network_id2="<cf-network-id-2>" \
-  -v network_id3="<cf-network-id-3>" \
-  ../cloud-configs/openstack/cloud-config.yml
+     -v availability_zone1="<az-1>" \
+     -v availability_zone2="<az-2>" \
+     -v availability_zone3="<az-3>" \
+     -v network_id1="<cf-network-id-1>" \
+     -v network_id2="<cf-network-id-2>" \
+     -v network_id3="<cf-network-id-3>" \
+     cf-deployment/iaas-support/openstack/cloud-config.yml
 ```
 
 ## Deploy Cloud Foundry
@@ -63,11 +62,11 @@ bosh update-cloud-config \
 To deploy Cloud Foundry run the following command filling in the necessary variables. `system_domain` is the user facing domain name of your Cloud Foundry installation.
 
 ```
-bosh -d cf deploy ../cf-deployment.yml \
-  -o ../operations/use-compiled-releases.yml \
-  -o ../operations/openstack.yml \
-  --vars-store ~/deployments/cf/cf-vars-store.yml \
-  -v system_domain="<system-domain>"
+bosh -d cf deploy cf-deployment/cf-deployment.yml \
+     -o cf-deployment/operations/use-compiled-releases.yml \
+     -o cf-deployment/operations/openstack.yml \
+     --vars-store <vars-store> \
+     -v system_domain="<system-domain>"
 ```
 
 ### With Swift as Blobstore
@@ -81,7 +80,7 @@ Missing: preparations for Swift to be done?
 Add the following lines to the deploy cmd:
 
 ```
-  -o ../operations/use-swift-blobstore.yml \
+  -o cf-deployment/operations/use-swift-blobstore.yml \
   -v auth_url="<auth-url>" \
   -v openstack_project="<project-name>" \
   -v openstack_domain="<domain>" \
