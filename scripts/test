@@ -312,7 +312,7 @@ function ensure_opsfiles_in_readme() {
   pushd $(dirname $0)/.. > /dev/null
     for x in $@; do
       local basename=$(basename $x)
-      if [ $(grep $basename $readme -c) != "0" ]; then
+      if [ $(grep \($basename\) $readme -c) != "0" ]; then
         echo "PASS - $x is in $readme"
       else
         fail "$x does not appear in $readme"
@@ -323,10 +323,10 @@ function ensure_opsfiles_in_readme() {
 
 function main(){
   echo "*****README TESTS*****"
-  ensure_opsfiles_in_readme "README.md" $(ls operations/*.yml)
-  ensure_opsfiles_in_readme "README.md" $(ls operations/legacy/*.yml)
-  ensure_opsfiles_in_readme "operations/community/README.md" $(ls operations/community/*.yml)
-  # ensure_opsfiles_in_readme "operations/experimental/README.md" $(ls operations/experimental/*.yml)
+  # ensure_opsfiles_in_readme "README.md" $(ls ../operations/*.yml)
+  # ensure_opsfiles_in_readme "README.md" $(ls ../operations/legacy/*.yml)
+  ensure_opsfiles_in_readme "operations/community/README.md" $(ls ../operations/community/*.yml)
+  ensure_opsfiles_in_readme "operations/experimental/README.md" $(ls ../operations/experimental/*.yml)
   
   ensure_test_opsfiles_not_in_readme
   
