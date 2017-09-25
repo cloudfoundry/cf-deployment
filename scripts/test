@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -ue
+
 exit_code=0
 
 function fail() {
@@ -323,13 +325,13 @@ function ensure_opsfiles_in_readme() {
 
 function main(){
   echo "*****README TESTS*****"
-  # ensure_opsfiles_in_readme "README.md" $(ls ../operations/*.yml)
-  # ensure_opsfiles_in_readme "README.md" $(ls ../operations/legacy/*.yml)
-  ensure_opsfiles_in_readme "operations/community/README.md" $(ls ../operations/community/*.yml)
-  ensure_opsfiles_in_readme "operations/experimental/README.md" $(ls ../operations/experimental/*.yml)
-  
+  # ensure_opsfiles_in_readme "README.md" $(ls operations/*.yml)
+  # ensure_opsfiles_in_readme "README.md" $(ls operations/legacy/*.yml)
+  ensure_opsfiles_in_readme "operations/community/README.md" $(ls operations/community/*.yml)
+  ensure_opsfiles_in_readme "operations/experimental/README.md" $(ls operations/experimental/*.yml)
+
   ensure_test_opsfiles_not_in_readme
-  
+
   echo "*****OPSFILE INTERPOLATION TESTS*****"
   test_opsfile_interpolation
 
