@@ -189,7 +189,7 @@ We've supplied some common manifest modifications in the `operations` directory.
 | [use-s3-blobstore.yml](operations/use-s3-blobstore.yml) | Replaces local WebDAV blobstore with external s3 blobstore. | Introduces [new variables](operations/example-vars-files/vars-use-s3-blobstore.yml) for s3 credentials and bucket names. |
 | [use-azure-storage-blobstore.yml](operations/use-azure-storage-blobstore.yml) | Replaces local WebDAV blobstore with external Azure Storage blobstore. | Introduces [new variables](operations/example-vars-files/vars-use-azure-storeage-blobstore.yml) for Azure credentials and container names. |
 | [windows-cell.yml](operations/windows-cell.yml) | Deploys a windows diego cell, adds releases necessary for windows. |  |
-| [bosh-lite.yml](operations/bosh-lite.yml) | Enables `cf-deployment` to be deployed on `bosh-lite`. | See [bosh-lite](bosh-lite.md) documentation. |
+| [bosh-lite.yml](operations/bosh-lite.yml) | Enables `cf-deployment` to be deployed on `bosh-lite`. | See [bosh-lite](iaas-support/bosh-lite/README.md) documentation. |
 | [bypass-cc-bridge-privileged-containers.yml](operations/bypass-cc-bridge-privileged-containers.yml) | Use privileged containers for staging and running buildpack apps and tasks. | |
 | [bypass-cc-bridge.yml](operations/bypass-cc-bridge.yml) | Bypass CC bridge | To enable privileged container support, also apply the bypass-cc-bridge-privileged-containers.yml ops file. |
 | [cf-syslog-skip-cert-verify.yml](operations/cf-syslog-skip-cert-verify.yml) | This disables TLS verification when connecting to a HTTPS syslog drain. | |
