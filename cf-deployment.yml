@@ -199,6 +199,7 @@ instance_groups:
           client_cert: "((etcd_client.certificate))"
           client_key: "((etcd_client.private_key))"
       loggregator:
+        disable_syslog_drains: true
         tls:
           ca_cert: "((loggregator_tls_doppler.ca))"
           doppler:
@@ -211,29 +212,24 @@ instance_groups:
           - cf-etcd.service.cf.internal
       doppler_endpoint:
         shared_secret: "((dropsonde_shared_secret))"
-  - name: syslog_drain_binder
-    release: loggregator
+  - name: adapter
+    release: cf-syslog-drain
     properties:
-      loggregator:
-        tls:
-          syslogdrainbinder:
-            cert: "((loggregator_tls_syslogdrainbinder.certificate))"
-            key: "((loggregator_tls_syslogdrainbinder.private_key))"
-        etcd:
-          require_ssl: true
-          ca_cert: "((etcd_server.ca))"
-          machines:
-          - cf-etcd.service.cf.internal
-      syslog_drain_binder:
-        etcd:
-          client_cert: "((etcd_client.certificate))"
-          client_key: "((etcd_client.private_key))"
-      system_domain: "((system_domain))"
-      cc:
-        mutual_tls:
-          ca_cert: "((loggregator_tls_syslogdrainbinder.ca))"
-      ssl: &ssl
-        skip_cert_verify: true
+      scalablesyslog:
+        adapter:
+          tls:
+            ca: "((adapter_tls.ca))"
+            cert: "((adapter_tls.certificate))"
+            key: "((adapter_tls.private_key))"
+            cn: ss-adapter
+          logs:
+            addr: reverse-log-proxy.service.cf.internal:8082
+        adapter_rlp:
+          tls:
+            ca: "((adapter_rlp_tls.ca))"
+            cert: "((adapter_rlp_tls.certificate))"
+            key: "((adapter_rlp_tls.private_key))"
+            cn: reverselogproxy
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
@@ -1082,7 +1078,8 @@ instance_groups:
     release: capi
     properties:
       diego:
-        ssl: *ssl
+        ssl: &ssl
+          skip_cert_verify: true
       capi:
         nsync:
           bbs: *diego_bbs_client_properties
@@ -1239,6 +1236,7 @@ instance_groups:
         agent:
           services:
             loggregator_trafficcontroller: {}
+            reverse_log_proxy: {}
   - name: loggregator_trafficcontroller
     release: loggregator
     properties:
@@ -1272,6 +1270,17 @@ instance_groups:
         tls_port: 9023
         mutual_tls:
           ca_cert: "((loggregator_tls_cc_tc.ca))"
+  - name: reverse_log_proxy
+    release: loggregator
+    provides:
+      reverse_log_proxy: {as: reverse_log_proxy}
+    properties:
+      loggregator:
+        tls:
+          ca_cert: "((loggregator_tls_rlp.ca))"
+          reverse_log_proxy:
+            cert: "((loggregator_tls_rlp.certificate))"
+            key: "((loggregator_tls_rlp.private_key))"
   - name: route_registrar
     release: routing
     properties:
@@ -1288,6 +1297,45 @@ instance_groups:
           uris:
           - doppler.((system_domain))
           - "*.doppler.((system_domain))"
+  - name: metron_agent
+    release: loggregator
+    properties: *metron_agent_properties
+
+- name: syslog-scheduler
+  azs:
+  - z1
+  instances: 1
+  persistent_disk_type: 1GB
+  vm_type: minimal
+  stemcell: default
+  networks:
+  - name: default
+  jobs:
+  - name: consul_agent
+    release: consul
+    consumes:
+      consul: nil
+      consul_common: {from: consul_common_link}
+      consul_server: nil
+      consul_client: {from: consul_client_link}
+  - name: scheduler
+    release: cf-syslog-drain
+    properties:
+      scalablesyslog:
+        scheduler:
+          api:
+            url: https://cloud-controller-ng.service.cf.internal:9023
+          tls:
+            client:
+              ca: "((scheduler_client_tls.ca))"
+              cert: "((scheduler_client_tls.certificate))"
+              key: "((scheduler_client_tls.private_key))"
+              adapter_cn: "ss-adapter"
+            api:
+              ca: "((scheduler_api_tls.ca))"
+              cert: "((scheduler_api_tls.certificate))"
+              key: "((scheduler_api_tls.private_key))"
+              cn: "cloud-controller-ng.service.cf.internal"
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties
@@ -1578,11 +1626,43 @@ variables:
     common_name: trafficcontroller
     extended_key_usage:
     - client_auth
-- name: loggregator_tls_syslogdrainbinder
+- name: loggregator_tls_rlp
+  type: certificate
+  options:
+    ca: loggregator_ca
+    common_name: reverselogproxy
+    extended_key_usage:
+    - client_auth
+    - server_auth
+- name: adapter_rlp_tls
+  type: certificate
+  options:
+    ca: loggregator_ca
+    common_name: ss-adapter-rlp
+    extended_key_usage:
+    - client_auth
+    - server_auth
+- name: scheduler_api_tls
   type: certificate
   options:
     ca: service_cf_internal_ca
-    common_name: syslogdrainbinder
+    common_name: ss-scheduler
+    extended_key_usage:
+    - client_auth
+    - server_auth
+- name: adapter_tls
+  type: certificate
+  options:
+    ca: loggregator_ca
+    common_name: ss-adapter
+    extended_key_usage:
+    - server_auth
+    - client_auth
+- name: scheduler_client_tls
+  type: certificate
+  options:
+    ca: loggregator_ca
+    common_name: ss-scheduler
     extended_key_usage:
     - client_auth
 - name: router_ca
@@ -1659,13 +1739,17 @@ releases:
   version: "36"
   sha1: 746240c005465ffa105ee89e53e401e311b4fbf8
 - name: cf-networking
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-networking-release?v=1.6.0
-  version: 1.6.0
-  sha1: d919974f26a9892cac87ab221e045014f4bf460b
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-networking-release?v=1.7.0
+  version: 1.7.0
+  sha1: debedd56ac0363f15c2bf710265de949fa467c18
 - name: cf-smoke-tests
   url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=39
   version: "39"
   sha1: a2d557302a1026f685514b34792b81c0432a48c8
+- name: cf-syslog-drain
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-syslog-drain-release?v=2
+  version: "2"
+  sha1: c9954676033164f550ae645bd1216cf56d159905
 - name: cflinuxfs2
   url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.156.0
   version: 1.156.0
@@ -1699,9 +1783,9 @@ releases:
   version: "4.5"
   sha1: f27add2c45ed29cff15be7286ac095186c8ea1c7
 - name: loggregator
-  url: https://bosh.io/d/github.com/cloudfoundry/loggregator?v=97
-  version: "97"
-  sha1: 286235fb7eabde5073b9fe1b4668237be32696fd
+  url: https://bosh.io/d/github.com/cloudfoundry/loggregator?v=98
+  version: "98"
+  sha1: 6b9371e4290e75cf2592ca86ce454fef8780ae82
 - name: nats
   url: https://bosh.io/d/github.com/cloudfoundry/nats-release?v=22
   version: "22"

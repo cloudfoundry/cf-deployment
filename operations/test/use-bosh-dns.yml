@@ -32,6 +32,8 @@
         - "*.scheduler.default.cf.bosh"
         policy-server.service.cf.internal:
         - "*.api.default.cf.bosh"
+        reverse-log-proxy.service.cf.internal:
+        - "*.log-api.default.cf.bosh"
         routing-api.service.cf.internal:
         - "*.api.default.cf.bosh"
         silk-controller.service.cf.internal:
@@ -79,6 +81,9 @@
   value: *bosh_dns_job
 - type: replace
   path: /instance_groups/name=router/jobs/-
+  value: *bosh_dns_job
+- type: replace
+  path: /instance_groups/name=syslog-scheduler/jobs/-
   value: *bosh_dns_job
 
 - type: replace
