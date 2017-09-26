@@ -38,7 +38,7 @@ and the ops-files will be removed.
 | [`locket-windows.yml`](locket-windows.yml) | Symlink to `enable-locket-windows.yml` for backwards compatibility. | |
 | [`locket.yml`](locket.yml) | Symlink to `enable-locket.yml` for backwards compatibility. | |
 | [`secure-service-credentials.yml`](secure-service-credentials.yml) | Use CredHub for service credentials. | |
-| [`skip-consul-cell-registrations.yml`](skip-consul-cell-registrations.yml) | | |
+| [`skip-consul-cell-registrations.yml`](skip-consul-cell-registrations.yml) | Configure the BBS to only use locket to find cells in the deployment | Requires `enable-locket.yml` |
 | [`skip-consul-locks.yml`](skip-consul-locks.yml) | Don't use consul locks in several jobs. | Requires `use-locket.yml`. |
 | [`use-cf-networking-postgres.yml`](use-cf-networking-postgres.yml) | Intentionally left blank for backwards compatibility. |Previously: "Allows use of `use-cf-networking.yml` with the postgres database." `cf-deployment.yml` plus `use-postges.yml` now does this by default.
 | [`use-cf-networking.yml`](use-cf-networking.yml) | Enable container-to-container networking features with cf-networking-release. | Assumes MySQL. To use with postgres, see `use-cf-networking-postgres.yml`. |
