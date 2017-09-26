@@ -45,4 +45,4 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 | [`use-postgres.yml`](use-postgres.yml) | Replaces the MySQL instance group with a postgres instance group. **Warning**: this will lead to total data loss if applied to an existing deployment with MySQL or removed from an existing deployment with postgres. |  |
 | [`use-compiled-releases.yml`](use-compiled-releases.yml) | Instead of having your BOSH Director compile each release, use this ops-file to use pre-compiled releases for a deployment speed improvement. |  |
 | [`use-latest-stemcell.yml`](use-latest-stemcell.yml) | Use the latest stemcell available on your BOSH director instead of the one in `cf-deployment.yml` |  |
-| [`windows-cell.yml`](windows-cell.yml) | Deploys a windows diego cell, adds releases necessary for windows. |  |
+| [`windows-cell.yml`](windows-cell.yml) | Deploys a windows 2012 diego cell, adds releases necessary for windows. |  |

@@ -5,10 +5,11 @@ set -ue
 exit_code=0
 GREEN='\033[0;32m'
 RED='\033[0;31m'
+YELLOW='\033[0;93m'
 NOCOLOR='\033[0m'
 
 function fail() {
-  echo "${RED}FAIL${NOCOLOR} - $1"
+  echo -e "${RED}FAIL${NOCOLOR} - $1"
   exit_code=1
 }
 
@@ -105,7 +106,7 @@ function test_opsfile_interpolation() {
       fail "operations/experimental/enable-locket-windows.yml"
     fi
     if interpolate "-o operations/experimental/windows2016-cell.yml -o operations/experimental/enable-locket-windows2016.yml"; then
-      echo "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-locket-windows2016.yml"
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-locket-windows2016.yml"
     else
       fail "operations/experimental/enable-locket-windows2016.yml"
     fi
@@ -125,7 +126,7 @@ function test_opsfile_interpolation() {
       fail "operations/experimental/enable-loggregator-v2-windows-cell.yml"
     fi
     if interpolate "-o operations/experimental/windows2016-cell.yml -o operations/experimental/enable-loggregator-v2-windows2016-cell.yml"; then
-      echo "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-loggregator-v2-windows2016-cell.yml"
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-loggregator-v2-windows2016-cell.yml"
     else
      fail "operations/experimental/enable-loggregator-v2-windows2016-cell.yml"
     fi
@@ -135,7 +136,7 @@ function test_opsfile_interpolation() {
       fail "operations/experimental/enable-prefer-declarative-healthchecks-windows.yml"
     fi
     if interpolate "-o operations/experimental/windows2016-cell.yml -o operations/experimental/enable-prefer-declarative-healthchecks-windows2016.yml"; then
-      echo "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-prefer-declarative-healthchecks-windows2016.yml"
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-prefer-declarative-healthchecks-windows2016.yml"
     else
       fail "operations/experimental/enable-prefer-declarative-healthchecks-windows2016.yml"
     fi
@@ -295,12 +296,12 @@ function test_opsfile_interpolation() {
       fail "operations/windows-cell.yml"
     fi
     if interpolate "-o operations/experimental/windows2016-cell.yml"; then
-      echo "${GREEN}PASS${NOCOLOR} - operations/experimental/windows2016-cell.yml"
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/windows2016-cell.yml"
     else
       fail "operations/experimental/windows2016-cell.yml"
     fi
     if interpolate "-o operations/windows-cell.yml -o operations/experimental/windows2016-cell.yml"; then
-      echo "${GREEN}PASS${NOCOLOR} - operations/windows-cell.yml operations/experimental/windows2016-cell.yml"
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/windows-cell.yml operations/experimental/windows2016-cell.yml"
     else
       fail "operations/windows-cell.yml operations/experimental/windows2016-cell.yml"
     fi
@@ -333,7 +334,7 @@ function ensure_opsfiles_in_readme() {
     for x in $@; do
       local basename=$(basename $x)
       if [ $(grep \($basename\) $readme -c) != "0" ]; then
-        echo -e "${GREEN}PASS${NOCOLOR}  - $x is in $readme"
+        echo -e "${GREEN}PASS${NOCOLOR} - $x is in $readme"
       else
         fail "$x does not appear in $readme"
       fi
@@ -341,8 +342,9 @@ function ensure_opsfiles_in_readme() {
   popd > /dev/null
 }
 
-function main(){
-  echo "*****README TESTS*****"
+function main() {
+  echo
+  echo -e "${YELLOW}***** README TESTS *****${NOCOLOR}"
   ensure_opsfiles_in_readme "operations/README.md" $(ls operations/*.yml)
   ensure_opsfiles_in_readme "operations/legacy/README.md" $(ls operations/legacy/*.yml)
   ensure_opsfiles_in_readme "operations/community/README.md" $(ls operations/community/*.yml)
@@ -350,7 +352,8 @@ function main(){
 
   ensure_test_opsfiles_not_in_readme
 
-  echo "*****OPSFILE INTERPOLATION TESTS*****"
+  echo
+  echo -e "${YELLOW}***** OPSFILE INTERPOLATION TESTS *****${NOCOLOR}"
   test_opsfile_interpolation
 
   exit $exit_code
