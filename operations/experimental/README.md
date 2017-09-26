@@ -32,8 +32,8 @@ and the ops-files will be removed.
 | [`enable-locket.yml`](enable-locket.yml) | Enables locket. | Assumes MySQL. To use with postgres, see `enable-locket-postgres.yml` |
 | [`enable-loggregator-v2-diego.yml`](enable-loggregator-v2-diego.yml) | Intentionally left blank for backwards compatibility.  | Previously: "Use `v2` loggregator api for doppler communication." `cf-deployment.yml` now does this by default. |
 | [`enable-loggregator-v2-windows-cell.yml`](enable-loggregator-v2-windows-cell.yml) |  Intentionally left blank for backwards compatibility. | Previously: "Use `v2` loggregator api for doppler communication from windows cells." `cf-deployment.yml` now does this by default. |
-| [`enable-prefer-declarative-healthchecks-windows.yml`](enable-prefer-declarative-healthchecks-windows.yml) | | |
-| [`enable-prefer-declarative-healthchecks.yml`](enable-prefer-declarative-healthchecks.yml) | | |
+| [`enable-prefer-declarative-healthchecks-windows.yml`](enable-prefer-declarative-healthchecks-windows.yml) | Configure the Rep on the windows cells to prefer LRP CheckDefinition (a.k.a declarative healthchecks) over the old Monitor action | |
+| [`enable-prefer-declarative-healthchecks.yml`](enable-prefer-declarative-healthchecks.yml) | Configure the Rep on the diego cells to prefer LRP CheckDefinition (a.k.a declarative healthchecks) over the old Monitor action | |
 | [`locket-postgres.yml`](locket-postgres.yml) | Symlink to `enable-locket-postgres.yml` for backwards compatibility. | |
 | [`locket-windows.yml`](locket-windows.yml) | Symlink to `enable-locket-windows.yml` for backwards compatibility. | |
 | [`locket.yml`](locket.yml) | Symlink to `enable-locket.yml` for backwards compatibility. | |
