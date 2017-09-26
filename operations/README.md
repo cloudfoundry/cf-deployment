@@ -1,11 +1,24 @@
-# OpsFiles
+# Ops-files
+
+This is the README for Ops-files. To learn more about `cf-deployment`, go to the main [README](../README.md). 
+
+- For experimental Ops-files, check out the [Experimental Ops-file README](experimental/README.md).
+- For Community Ops-files, checkout the [Community Ops-file README](community/README.md).
+- For Legacy Ops-files, check out the [Legacy Ops-file README](legacy/README.md).
+
+## IaaS-required Ops-files
+
+| Name | Purpose | Notes |
+|:---  |:---     |:---   |
+
+## Feature-based Ops-files
 
 | Name | Purpose | Notes |
 |:---  |:---     |:---   |
 | [`aws.yml`](aws.yml) | Overrides the loggregator ports to 4443. | It is required to have a separate port from the standard HTTPS port (443) for loggregator traffic in order to use the AWS load balancer. |
 | [`disable-router-tls-termination.yml`](disable-router-tls-termination.yml) | Eliminates keys related to performing tls/ssl termination within the gorouter job. | Useful for deployments where tls termination is performed prior to the gorouter - for instance, on AWS, such termination is commonly done at the ELB. This also eliminates the need to specify `((router_ssl.certificate))` and `((router_ssl.private_key))` in the var files. |
 | [`configure-default-router-group.yml`](configure-default-router-group.yml) | Allows deployer to configure reservable ports for default tcp router group by passing variable `default_router_group_reservable_ports`. |  |
-| [`enable-privileged-container-support.yml`](enable-privileged-container-support.yml) | Enables diego privileged container support on cc-bridge. | This opsfile might not be compatible with opsfiles that inline bridge functionality to cloud-controller. |
+| [`enable-privileged-container-support.yml`](enable-privileged-container-support.yml) | Enables diego privileged container support on cc-bridge. | This ops-file might not be compatible with Ops-files that inline bridge functionality to cloud-controller. |
 | [`gcp.yml`](gcp.yml) | Intentionally left blank for backwards compatibility. | It previously overrode the static IP addresses assigned to some instance groups, as GCP networking features allow them to all co-exist on the same subnet despite being spread across multiple AZs. |
 | [`rename-deployment.yml`](rename-deployment.yml) | Allows a deployer to rename the deployment by passing a variable `deployment_name` |  |
 | [`rename-network.yml`](rename-network.yml) | Allows a deployer to rename the network by passing a variable `network_name` |  |
@@ -24,7 +37,7 @@
 | [`enable-cc-rate-limiting.yml`](enable-cc-rate-limiting.yml) | Enable rate limiting for UAA-authenticated endpoints. | Introduces variables `cc_rate_limiter_general_limit` and `cc_rate_limiter_unauthenticated_limit` |
 | [`enable-uniq-consul-node-name.yml`](enable-uniq-consul-node-name.yml) | Configure Diego cell `consul_agent` jobs to have a unique id per instance. |  |
 | [`scale-down-etcd-for-cluster-changes.yml`](scale-down-etcd-for-cluster-changes.yml) | Scales `etcd` cluster to one node. |  |
-| [`use-compiled-releases.yml`](use-compiled-releases.yml) | Instead of having your BOSH Director compile each release, use this opsfile to use pre-compiled releases for a deployment speed improvement. |  |
+| [`use-compiled-releases.yml`](use-compiled-releases.yml) | Instead of having your BOSH Director compile each release, use this ops-file to use pre-compiled releases for a deployment speed improvement. |  |
 | [`use-latest-stemcell.yml`](use-latest-stemcell.yml) | Use the latest stemcell available on your BOSH director instead of the one in `cf-deployment.yml` |  |
 | [`openstack.yml`](openstack.yml) | Used for deploying Cloud Foundry on OpenStack with BOSH | |
 | [`use-swift-blobstore.yml`](use-swift-blobstore.yml) | Used for deploying Cloud Foundry on OpenStack with BOSH | If you plan using the [Swift ops file](../../operations/use-swift-blobstore.yml) to enable Swift as blobstore for the Cloud Controller, you should also run the [Swift extension](https://github.com/cloudfoundry-incubator/cf-openstack-validator/tree/master/extensions/object_storage). |

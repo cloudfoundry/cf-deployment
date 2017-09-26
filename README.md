@@ -100,6 +100,8 @@ please run `scripts/test`
 which interpolates all of our ops files
 with the `bosh` cli.
 
+If you add an Ops-file, you will need to document it in its corresponding README.
+
 We ask that pull requests and other changes be successfully deployed,
 and tested with the latest sha of CATs.
 
@@ -170,11 +172,14 @@ we accomplish this with the `-o`/`--ops-file` flags.
 These flags read a single `.yml` file that details operations to be performed on the manifest
 before variables are generated and filled.
 We've supplied some common manifest modifications in the `operations` directory.
-More details can be found in the [Opsfile README](operations/README.md).
+More details can be found in the [Ops-file README](operations/README.md).
 
-### A note on `experimental` and `test` ops-files
-The `operations` directory includes two subdirectories
-for "experimental" and "test" ops-files.
+### A note on `community`, `experimental`, and `test` ops-files
+The `operations` directory includes subdirectories
+for "community", "experimental", and "test" ops-files.
+
+#### Community
+"Community" ops-files are contributed by the Cloud Foundry community. They are not maintained or supported by the Release Integration team. For details, see the [Community Ops-file README](operations/community/README.md)
 
 #### Experimental
 "Experimental" ops-files represent configurations
@@ -183,7 +188,7 @@ meaning that,
 once the configurations have been sufficiently validated,
 they will become part of cf-deployment.yml
 and the ops-files will be removed.
-For details, see [experimental README](operations/experimental/README.md).
+For details, see the [Experimental Ops-file README](operations/experimental/README.md).
 
 #### Test
 "Test" ops-files are configurations
