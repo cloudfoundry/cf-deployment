@@ -104,6 +104,11 @@ function test_opsfile_interpolation() {
     else
       fail "operations/experimental/enable-locket-windows.yml"
     fi
+    if interpolate "-o operations/experimental/windows2016-cell.yml -o operations/experimental/enable-locket-windows2016.yml"; then
+      echo "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-locket-windows2016.yml"
+    else
+      fail "operations/experimental/enable-locket-windows2016.yml"
+    fi
     if interpolate "-o operations/experimental/enable-locket.yml"; then
       echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-locket.yml"
     else
@@ -119,10 +124,20 @@ function test_opsfile_interpolation() {
     else
       fail "operations/experimental/enable-loggregator-v2-windows-cell.yml"
     fi
+    if interpolate "-o operations/experimental/windows2016-cell.yml -o operations/experimental/enable-loggregator-v2-windows2016-cell.yml"; then
+      echo "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-loggregator-v2-windows2016-cell.yml"
+    else
+     fail "operations/experimental/enable-loggregator-v2-windows2016-cell.yml"
+    fi
     if interpolate "-o operations/windows-cell.yml -o operations/experimental/enable-prefer-declarative-healthchecks-windows.yml"; then
       echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-prefer-declarative-healthchecks-windows.yml"
     else
       fail "operations/experimental/enable-prefer-declarative-healthchecks-windows.yml"
+    fi
+    if interpolate "-o operations/experimental/windows2016-cell.yml -o operations/experimental/enable-prefer-declarative-healthchecks-windows2016.yml"; then
+      echo "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-prefer-declarative-healthchecks-windows2016.yml"
+    else
+      fail "operations/experimental/enable-prefer-declarative-healthchecks-windows2016.yml"
     fi
     if interpolate "-o operations/experimental/enable-prefer-declarative-healthchecks.yml"; then
       echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-prefer-declarative-healthchecks.yml"
@@ -278,6 +293,16 @@ function test_opsfile_interpolation() {
       echo -e "${GREEN}PASS${NOCOLOR} - operations/windows-cell.yml"
     else
       fail "operations/windows-cell.yml"
+    fi
+    if interpolate "-o operations/experimental/windows2016-cell.yml"; then
+      echo "${GREEN}PASS${NOCOLOR} - operations/experimental/windows2016-cell.yml"
+    else
+      fail "operations/experimental/windows2016-cell.yml"
+    fi
+    if interpolate "-o operations/windows-cell.yml -o operations/experimental/windows2016-cell.yml"; then
+      echo "${GREEN}PASS${NOCOLOR} - operations/windows-cell.yml operations/experimental/windows2016-cell.yml"
+    else
+      fail "operations/windows-cell.yml operations/experimental/windows2016-cell.yml"
     fi
     if interpolate "-o operations/legacy/old-droplet-mitigation.yml"; then
       echo -e "${GREEN}PASS${NOCOLOR} - operations/legacy/old-droplet-mitigation.yml"

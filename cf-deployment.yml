@@ -655,6 +655,9 @@ instance_groups:
         ssl:
           port: 8443
       cc:
+        stacks:
+        - name: cflinuxfs2
+          description: Cloud Foundry Linux-based filesystem
         default_running_security_groups: &cc_default_running_security_groups
         - public_networks
         - dns
