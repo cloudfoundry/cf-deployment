@@ -835,14 +835,6 @@ instance_groups:
           ca_cert: ((network_policy_server.ca))
           server_cert: ((network_policy_server.certificate))
           server_key: ((network_policy_server.private_key))
-  - name: stager
-    release: capi
-    properties:
-      capi:
-        stager:
-          bbs: *diego_bbs_client_properties
-          cc:
-            basic_auth_password: "((cc_internal_api_password))"
   - name: cc_uploader
     release: capi
     properties:
@@ -1074,18 +1066,6 @@ instance_groups:
   - name: statsd_injector
     release: statsd-injector
     properties: *statsd_injector_properties
-  - name: nsync
-    release: capi
-    properties:
-      diego:
-        ssl: &ssl
-          skip_cert_verify: true
-      capi:
-        nsync:
-          bbs: *diego_bbs_client_properties
-          cc:
-            basic_auth_password: "((cc_internal_api_password))"
-            base_url: https://api.((system_domain))
   - name: tps
     release: capi
     properties:
@@ -1096,6 +1076,7 @@ instance_groups:
             ca_cert: "((cc_bridge_tps.ca))"
             client_cert: "((cc_bridge_tps.certificate))"
             client_key: "((cc_bridge_tps.private_key))"
+          listener_enabled: false
   - name: ssh_proxy
     release: diego
     properties:
@@ -1264,7 +1245,8 @@ instance_groups:
         uaa:
           client_secret: "((uaa_clients_doppler_secret))"
       system_domain: "((system_domain))"
-      ssl: *ssl
+      ssl:
+        skip_cert_verify: true
       cc:
         internal_service_hostname: "cloud-controller-ng.service.cf.internal"
         tls_port: 9023
