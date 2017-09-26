@@ -28,8 +28,8 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 | Name | Purpose | Notes |
 |:---  |:---     |:---   |
 | [`bosh-lite.yml`](bosh-lite.yml) | Enables `cf-deployment` to be deployed on `bosh-lite`. | See [bosh-lite](iaas-support/bosh-lite/README.md) documentation. |
-| [`bypass-cc-bridge-privileged-containers.yml`](bypass-cc-bridge-privileged-containers.yml) | Use privileged containers for staging and running buildpack apps and tasks. | |
-| [`bypass-cc-bridge.yml`](bypass-cc-bridge.yml) | Bypass CC bridge | To enable privileged container support, also apply the bypass-cc-bridge-privileged-containers.yml ops file. |
+| [`bypass-cc-bridge-privileged-containers.yml`](bypass-cc-bridge-privileged-containers.yml) | Symlink to `enable-privileged-container-support.yml` for backwards compatibility. | Bypassing `cc-bridge` consumption is now the default. |
+| [`bypass-cc-bridge.yml`](bypass-cc-bridge.yml) |  Intentionally left blank for backwards compatibility.  | Bypassing `cc-bridge` consumption is now the default. |
 | [`cf-syslog-skip-cert-verify.yml`](cf-syslog-skip-cert-verify.yml) | This disables TLS verification when connecting to a HTTPS syslog drain. | |
 | [`configure-default-router-group.yml`](configure-default-router-group.yml) | Allows deployer to configure reservable ports for default tcp router group by passing variable `default_router_group_reservable_ports`. |  |
 | [`disable-router-tls-termination.yml`](disable-router-tls-termination.yml) | Eliminates keys related to performing tls/ssl termination within the gorouter job. | Useful for deployments where tls termination is performed prior to the gorouter - for instance, on AWS, such termination is commonly done at the ELB. This also eliminates the need to specify `((router_ssl.certificate))` and `((router_ssl.private_key))` in the var files. |

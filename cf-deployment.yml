@@ -703,6 +703,14 @@ instance_groups:
         - name: binary_buildpack
           package: binary-buildpack
         default_to_diego_backend: true
+        diego: &bypass_bridge
+          temporary_cc_uploader_mtls: true
+          temporary_droplet_download_mtls: true
+          temporary_local_apps: true
+          temporary_local_staging: true
+          temporary_local_sync: true
+          temporary_local_tasks: true
+          temporary_local_tps: true
         db_encryption_key: "((cc_db_encryption_key))"
         bulk_api_password: "((cc_bulk_api_password))"
         internal_api_password: "((cc_internal_api_password))"
@@ -827,14 +835,6 @@ instance_groups:
           ca_cert: ((network_policy_server.ca))
           server_cert: ((network_policy_server.certificate))
           server_key: ((network_policy_server.private_key))
-  - name: stager
-    release: capi
-    properties:
-      capi:
-        stager:
-          bbs: *diego_bbs_client_properties
-          cc:
-            basic_auth_password: "((cc_internal_api_password))"
   - name: cc_uploader
     release: capi
     properties:
@@ -873,6 +873,7 @@ instance_groups:
       cc:
         db_encryption_key: "((cc_db_encryption_key))"
         default_to_diego_backend: true
+        diego: *bypass_bridge
         internal_api_password: "((cc_internal_api_password))"
         staging_upload_user: staging_user
         staging_upload_password: "((cc_staging_upload_password))"
@@ -1044,6 +1045,7 @@ instance_groups:
         droplets: *blobstore-properties
         buildpacks: *blobstore-properties
         mutual_tls: *cc_mutual_tls
+        diego: *bypass_bridge
       ccdb: *ccdb
       system_domain: "((system_domain))"
       app_domains: *app_domains
@@ -1064,18 +1066,6 @@ instance_groups:
   - name: statsd_injector
     release: statsd-injector
     properties: *statsd_injector_properties
-  - name: nsync
-    release: capi
-    properties:
-      diego:
-        ssl: &ssl
-          skip_cert_verify: true
-      capi:
-        nsync:
-          bbs: *diego_bbs_client_properties
-          cc:
-            basic_auth_password: "((cc_internal_api_password))"
-            base_url: https://api.((system_domain))
   - name: tps
     release: capi
     properties:
@@ -1086,6 +1076,7 @@ instance_groups:
             ca_cert: "((cc_bridge_tps.ca))"
             client_cert: "((cc_bridge_tps.certificate))"
             client_key: "((cc_bridge_tps.private_key))"
+          listener_enabled: false
   - name: ssh_proxy
     release: diego
     properties:
@@ -1254,7 +1245,8 @@ instance_groups:
         uaa:
           client_secret: "((uaa_clients_doppler_secret))"
       system_domain: "((system_domain))"
-      ssl: *ssl
+      ssl:
+        skip_cert_verify: true
       cc:
         internal_service_hostname: "cloud-controller-ng.service.cf.internal"
         tls_port: 9023
