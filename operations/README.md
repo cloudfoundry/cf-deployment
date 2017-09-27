@@ -20,14 +20,14 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 | [`tcp-routing-gcp.yml`](tcp-routing-gcp.yml) | Intentionally left blank for backwards compatibility. | Previously added TCP routers for GCP. `cf-deployment.yml` now does this by default. |
 | **Openstack** | | |
 | [`openstack.yml`](openstack.yml) | Used for deploying Cloud Foundry on OpenStack with BOSH | |
-| [`use-swift-blobstore.yml`](use-swift-blobstore.yml) | Used for deploying Cloud Foundry on OpenStack with BOSH | If you plan using the [Swift ops file](../../operations/use-swift-blobstore.yml) to enable Swift as blobstore for the Cloud Controller, you should also run the [Swift extension](https://github.com/cloudfoundry-incubator/cf-openstack-validator/tree/master/extensions/object_storage). |
+| [`use-swift-blobstore.yml`](use-swift-blobstore.yml) | Used for deploying Cloud Foundry on OpenStack with BOSH | If you plan using the [Swift ops file](use-swift-blobstore.yml) to enable Swift as blobstore for the Cloud Controller, you should also run the [Swift extension](https://github.com/cloudfoundry-incubator/cf-openstack-validator/tree/master/extensions/object_storage). |
 
 
 ## Feature-based Ops-files
 
 | Name | Purpose | Notes |
 |:---  |:---     |:---   |
-| [`bosh-lite.yml`](bosh-lite.yml) | Enables `cf-deployment` to be deployed on `bosh-lite`. | See [bosh-lite](iaas-support/bosh-lite/README.md) documentation. |
+| [`bosh-lite.yml`](bosh-lite.yml) | Enables `cf-deployment` to be deployed on `bosh-lite`. | See [bosh-lite](../iaas-support/bosh-lite/README.md) documentation. |
 | [`bypass-cc-bridge-privileged-containers.yml`](bypass-cc-bridge-privileged-containers.yml) | Symlink to `enable-privileged-container-support.yml` for backwards compatibility. | Bypassing `cc-bridge` consumption is now the default. |
 | [`bypass-cc-bridge.yml`](bypass-cc-bridge.yml) |  Intentionally left blank for backwards compatibility.  | Bypassing `cc-bridge` consumption is now the default. |
 | [`cf-syslog-skip-cert-verify.yml`](cf-syslog-skip-cert-verify.yml) | This disables TLS verification when connecting to a HTTPS syslog drain. | |
