@@ -145,7 +145,7 @@ function test_opsfile_interpolation() {
     else
       fail "operations/experimental/enable-prefer-declarative-healthchecks.yml"
     fi
-    if interpolate "-o operations/experimental/secure-service-credentials.yml"; then
+    if interpolate "-o operations/experimental/enable-instance-identity-credentials.yml -o operations/experimental/secure-service-credentials.yml"; then
       echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/secure-service-credentials.yml"
     else
       fail "operations/experimental/secure-service-credentials.yml"
