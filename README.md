@@ -95,12 +95,18 @@ Please also take a look at the ["style guide"](texts/style-guide.md),
 which lays out some guidelines for adding properties or jobs
 to the deployment manifest.
 
-Before submitting a pull request,
-please run `scripts/test`
+Before submitting a pull request
+or pushing to develop,
+please run `./scripts/test`
 which interpolates all of our ops files
 with the `bosh` cli.
 
-If you add an Ops-file, you will need to document it in its corresponding README.
+**Note:** it is necessary to run the tests
+from the root of the repo.
+
+If you add an Ops-file,
+you will need to document it in its corresponding README
+and add it to the ops file tests in `scripts/test`.
 
 We ask that pull requests and other changes be successfully deployed,
 and tested with the latest sha of CATs.
