@@ -207,12 +207,6 @@ For example,
 but the ops-file is hard to apply repeatably.
 In this case, the ops-file is an example.
 
-Others,
-like `cfr-to-cfd-transition.yml`,
-will eventually be promoted to the `operations` directory,
-but are still being modified regularly.
-In this case, the ops-file is included for public visibility.
-
 ## <a name='ci'></a>CI
 The [ci](https://release-integration.ci.cf-app.com/teams/main/pipelines/cf-deployment) for `cf-deployment`
 automatically bumps to the latest versions of its component releases on the `develop` branch.
