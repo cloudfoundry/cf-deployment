@@ -24,7 +24,7 @@ and the ops-files will be removed.
 | [`disable-consul-service-registrations-windows.yml`](disable-consul-service-registrations-windows.yml) | Prevents the Windows Cell `rep` from registering itself as a service with Consul | Requires `enable-locket.yml` and `windows-cell.yml` |
 | [`disable-consul-service-registrations.yml`](disable-consul-service-registrations.yml) | Prevents the `auctioneer`, `ssh_proxy`, `file_server`, `rep`, and `bbs` jobs from registering as a service with Consul | Requires `enable-locket.yml` |
 | [`disable-etcd.yml`](disable-etcd.yml) | Removes the `etcd` instance group and disables `loggregator` components from using it. | |
-| [`enable-container-proxy.yml`](enable-container-proxy.yml) | Enables container proxy on the Diego Cell `rep`. | |
+| [`enable-container-proxy.yml`](enable-container-proxy.yml) | Enables container proxy on the Diego Cell `rep`. | Generates a templating error during deployment if [instance identity credentials](enable-instance-identity-credentials.yml) are not set. |
 | [`enable-instance-identity-credentials.yml`](enable-instance-identity-credentials.yml) | Enables identity credentials on Diego Cell `rep`. | |
 | [`enable-iptables-logger.yml`](enable-iptables-logger.yml) | Enables iptables logger. | |
 | [`enable-locket-postgres.yml`](enable-locket-postgres.yml) | Enables locket for diego-api when using the postgres database. | Requires `enable-locket.yml` and `enable-postgres.yml`, in that order. |
