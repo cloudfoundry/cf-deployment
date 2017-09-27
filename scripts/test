@@ -170,7 +170,7 @@ function test_opsfile_interpolation() {
     else
       fail "operations/experimental/use-cf-networking.yml"
     fi
-    if interpolate "-o operations/experimental/locket.yml -o operations/experimental/use-external-locket-db.yml -l operations/example-vars-files/vars-use-external-locket-db.yml"; then
+    if interpolate "-o operations/experimental/locket.yml -o operations/use-external-dbs.yml -o operations/experimental/use-external-locket-db.yml -l operations/example-vars-files/vars-use-external-dbs.yml -l operations/example-vars-files/vars-use-external-locket-db.yml"; then
       echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/use-external-locket-db.yml"
     else
       fail "operations/experimental/use-external-locket-db.yml"
