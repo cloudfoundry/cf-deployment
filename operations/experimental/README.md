@@ -23,7 +23,6 @@ and the ops-files will be removed.
 | [`disable-consul-service-registrations-locket.yml`](disable-consul-service-registrations-locket.yml) | Prevents the `locket` server from registering itself as a service with Consul | Requires `enable-locket.yml` |
 | [`disable-consul-service-registrations-windows.yml`](disable-consul-service-registrations-windows.yml) | Prevents the Windows Cell `rep` from registering itself as a service with Consul | Requires `enable-locket.yml` and `windows-cell.yml` |
 | [`disable-consul-service-registrations.yml`](disable-consul-service-registrations.yml) | Prevents the `auctioneer`, `ssh_proxy`, `file_server`, `rep`, and `bbs` jobs from registering as a service with Consul | Requires `enable-locket.yml` |
-| [`disable-etcd.yml`](disable-etcd.yml) | Removes the `etcd` instance group and disables `loggregator` components from using it. | |
 | [`enable-container-proxy.yml`](enable-container-proxy.yml) | Enables container proxy on the Diego Cell `rep`. | Generates a templating error during deployment if [instance identity credentials](enable-instance-identity-credentials.yml) are not set. |
 | [`enable-instance-identity-credentials.yml`](enable-instance-identity-credentials.yml) | Enables identity credentials on Diego Cell `rep`. | |
 | [`enable-iptables-logger.yml`](enable-iptables-logger.yml) | Enables iptables logger. | |

@@ -38,7 +38,7 @@ It:
 - uses three AZs, of which two are used to provide redundancy for most instance groups.
 The third is used only for instance groups
 that should not have even instance counts,
-such as etcd and consul.
+such as consul.
 - uses Diego natively,
 does not support DEAs,
 and enables diego-specific features
