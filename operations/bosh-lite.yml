@@ -6,158 +6,17 @@
   - name: default
     static_ips: [10.244.0.34]
 
-# --- Replace MySQL job with Postgres ---
 - type: replace
-  path: /releases/-
-  value:
-    name: postgres
-    url: https://bosh.io/d/github.com/cloudfoundry/postgres-release?v=20
-    sha1: 3f378bcab294e20316171d4e656636df88763664
-    version: "20"
-
-- type: replace
-  path: /instance_groups/name=scheduler/jobs/name=nsync/properties/capi/nsync/diego_privileged_containers?
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/diego?/use_privileged_containers_for_running
   value: true
 
-- type: remove
-  path: /instance_groups/name=mysql/jobs/name=mysql
-- type: remove
-  path: /instance_groups/name=mysql/jobs/name=proxy
 - type: replace
-  path: /instance_groups/name=mysql/jobs/-
-  value:
-    name: postgres
-    release: postgres
-    properties:
-      databases:
-        address: sql-db.service.cf.internal
-        databases:
-        - citext: true
-          name: cloud_controller
-          tag: cc
-        - citext: true
-          name: uaa
-          tag: uaa
-        - citext: true
-          name: diego
-          tag: diego
-        - citext: true
-          name: routing-api
-          tag: routing-api
-        - citext: false
-          name: network_policy
-          tag: networkpolicy
-        - citext: false
-          name: network_connectivity
-          tag: networkconnectivity
-        db_scheme: postgres
-        port: 5524
-        roles:
-        - name: cloud_controller
-          password: ((cc_database_password))
-          tag: admin
-        - name: uaa
-          password: ((uaa_database_password))
-          tag: admin
-        - name: diego
-          password: ((diego_database_password))
-          tag: admin
-        - name: routing-api
-          password: ((routing_api_database_password))
-          tag: admin
-        - name: network_policy
-          password: ((network_policy_database_password))
-          tag: admin
-        - name: network_connectivity
-          password: ((network_connectivity_database_password))
-          tag: admin
-- type: replace
-  path: /instance_groups/name=mysql/name
-  value: postgres
-- type: replace
-  path: /instance_groups/name=postgres/jobs/name=consul_agent/properties?/consul/agent/services?
-  value:
-    sql_db:
-      check: {}
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/diego?/use_privileged_containers_for_running
+  value: true
 
-# --- Replace usages of MySQL DB with Postgres ---
 - type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ccdb
-  value: &ccdb
-    db_scheme: postgres
-    roles:
-    - tag: admin
-      name: cloud_controller
-      password: ((cc_database_password))
-    databases:
-    - tag: cc
-      name: cloud_controller
-    port: 5524
-- type: replace
-  path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/type
-  value: postgres
-- type: replace
-  path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/port
-  value: 5524
-- type: replace
-  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/ccdb
-  value: *ccdb
-- type: replace
-  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb
-  value: *ccdb
-- type: replace
-  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb
-  value:
-    db_scheme: postgresql
-    roles:
-    - tag: admin
-      name: uaa
-      password: ((uaa_database_password))
-    databases:
-    - tag: uaa
-      name: uaa
-    port: 5524
-- type: replace
-  path: /instance_groups/name=diego-api/jobs/name=bbs/properties/diego/bbs/sql
-  value:
-    db_host: sql-db.service.cf.internal
-    db_port: 5524
-    db_schema: diego
-    db_username: diego
-    db_password: "((diego_database_password))"
-    db_driver: postgres
-- type: replace
-  path: /instance_groups/name=api/jobs/name=policy-server/properties/cf_networking/policy_server/database
-  value:
-    type: postgres
-    username: network_policy
-    password: ((network_policy_database_password))
-    host: sql-db.service.cf.internal
-    port: 5524
-    name: network_policy
-- type: replace
-  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database
-  value:
-    type: postgres
-    username: network_connectivity
-    password: ((network_connectivity_database_password))
-    host: sql-db.service.cf.internal
-    port: 5524
-    name: network_connectivity
-
-# --- Remove now unused cf-mysql release and variables ---
-- type: remove
-  path: /releases/name=cf-mysql?
-- type: remove
-  path: /variables/name=cf_mysql_mysql_admin_password?
-- type: remove
-  path: /variables/name=cf_mysql_mysql_cluster_health_password?
-- type: remove
-  path: /variables/name=cf_mysql_mysql_galera_healthcheck_endpoint_password?
-- type: remove
-  path: /variables/name=cf_mysql_mysql_galera_healthcheck_password?
-- type: remove
-  path: /variables/name=cf_mysql_proxy_api_password?
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/diego?/use_privileged_containers_for_running
+  value: true
 
 # --- Add Bosh Lite Security Groups ---
 - type: replace
@@ -187,10 +46,31 @@
     - destination: 10.244.0.34
       protocol: all
 
-# ----- Skip cert verify for bosh-lite ----
+# ----- Combine router VM extensions ----
+- type: remove
+  path: /instance_groups/name=scheduler/vm_extensions
 - type: replace
-  path: /instance_groups/name=router/jobs/name=ssh_proxy/properties/diego/ssl?/skip_cert_verify
-  value: true
+  path: /instance_groups/name=router/vm_extensions
+  value:
+  - ssh-proxy-and-router-lb
+- type: replace
+  path: /instance_groups/name=router/jobs/-
+  value:
+    name: ssh_proxy
+    release: diego
+    properties:
+      diego:
+        ssl:
+          skip_cert_verify: true
+        ssh_proxy:
+          enable_cf_auth: true
+          host_key: "((diego_ssh_proxy_host_key.private_key))"
+          uaa_secret: "((uaa_clients_ssh-proxy_secret))"
+          uaa_token_url: "https://uaa.((system_domain))/oauth/token"
+          bbs: &5
+            ca_cert: "((diego_bbs_client.ca))"
+            client_cert: "((diego_bbs_client.certificate))"
+            client_key: "((diego_bbs_client.private_key))"
 
 # ----- Scale Down ------
 - type: replace

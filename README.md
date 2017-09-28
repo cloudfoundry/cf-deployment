@@ -95,10 +95,18 @@ Please also take a look at the ["style guide"](texts/style-guide.md),
 which lays out some guidelines for adding properties or jobs
 to the deployment manifest.
 
-Before submitting a pull request,
-please run `scripts/test`
+Before submitting a pull request
+or pushing to develop,
+please run `./scripts/test`
 which interpolates all of our ops files
 with the `bosh` cli.
+
+**Note:** it is necessary to run the tests
+from the root of the repo.
+
+If you add an Ops-file,
+you will need to document it in its corresponding README
+and add it to the ops file tests in `scripts/test`.
 
 We ask that pull requests and other changes be successfully deployed,
 and tested with the latest sha of CATs.
@@ -170,145 +178,14 @@ we accomplish this with the `-o`/`--ops-file` flags.
 These flags read a single `.yml` file that details operations to be performed on the manifest
 before variables are generated and filled.
 We've supplied some common manifest modifications in the `operations` directory.
+More details can be found in the [Ops-file README](operations/README.md).
 
-Here's an (alphabetical) summary:
-- `operations/legacy/old-droplet-mitigation.yml
-  this file mitigates against old droplets
-  that may still have a legacy security vulnerability.
-  See comment in the ops file for more details.
-- `operations/aws.yml` and `operations/change-logging-port-for-aws-elb.yml` -
-  this file overrides the vm_extensions for load balancers and overrides the loggregator ports to 4443,
-  since it is required under AWS to have a separate port from the standard HTTPS port (443) for loggregator traffic
-  in order to use the AWS load balancer.
-- `operations/disable-router-tls-termination.yml` -
-  this file eliminates keys related to performing tls/ssl termination within the gorouter job.
-  It's useful for deployments where tls termination is performed prior to the gorouter -
-  for instance, on AWS, such termination is commonly done at the ELB.
-  This also eliminates the need to specify `((router_ssl.certificate))` and `((router_ssl.private_key))` in the var files.
-- `operations/configure-default-router-group.yml` -
-  this file allows deployer to configure reservable ports for default tcp
-  router group by passing variable `default_router_group_reservable_ports`.
-- `operations/enable-privileged-container-support.yml` -
-  enables diego privileged container support on cc-bridge.
-  This opsfile might not be compatible with opsfiles
-  that inline bridge functionality to cloud-controller.
-- `operations/gcp.yml` -
-  this file was intentionally left blank and left for backwards compatibility. It previously overrode the static IP addresses assigned to some instance groups,
-  as GCP networking features allow them to all co-exist on the same subnet
-  despite being spread across multiple AZs.
-- `operations/rename-deployment.yml` -
-  This file allows a deployer to rename the deployment
-  by passing a variable `deployment_name`
-- `operations/rename-network.yml` -
-  This file allows a deployer to rename the network
-  by passing a variable `network_name`
-- `operations/scale-to-one-az.yml` -
-  Scales cf-deployment down to a single instance per instance group,
-  placing them all into a single AZ.
-  Effectively halves the deployment's footprint.
-  Should be applied before other ops files.
-- `operations/test/add-datadog-firehose-nozzle-aws.yml` -
-  Deploys a datadog-firehose-nozzle that collects system metric and posts to datadog.
-  For AWS only.
-- `operations/tcp-routing-gcp.yml` -
-  this ops file adds TCP routers for GCP.
-- `operations/use-blobstore-cdn.yml` -
-  adds support for accessing the `droplets` and `resource_pool` blobstore
-  resources via signed urls over a cdn.  Note that this ops file assumes that you
-  are using the same keypair for both buckets.  Introduces new variables:
-  ```
-  cdn_key_pair_id
-  cdn_private_key
-  resource_pool_cdn_uri
-  droplets_cdn_uri
-  ```
-- `operations/use-external-dbs.yml` -
-  removes the MySQL instance group,
-  cf-mysql release, and all cf-mysql variables.
-  This requires an external data store.
-  Introduces new variables for DB connection
-  details which will need to be provided at deploy time.
-  The new variables are all strings
-  (except db_port, which is an integer).
-  Their names are:
-  ```
-  db_type
-  db_port
-  cc_db_name
-  cc_db_address
-  cc_db_username
-  cc_db_password
-  uaa_db_name
-  uaa_db_address
-  uaa_db_username
-  uaa_db_password
-  bbs_db_name
-  bbs_db_address
-  bbs_db_username
-  bbs_db_password
-  routing_api_db_name
-  routing_api_db_address
-  routing_api_db_username
-  routing_api_db_password
-  policy_server_db_name
-  policy_server_db_address
-  policy_server_db_username
-  policy_server_db_password
-  silk_controller_db_name
-  silk_controller_db_address
-  silk_controller_db_username
-  silk_controller_db_password
-  ```
-  This must be applied _before_
-  any ops files that removes jobs that use a database,
-  such as the ops file to remove the routing API.
-  **Warning**: this does not migrate data,
-  and will delete existing database instance groups.
-- `operations/use-postgres.yml` -
-  replaces the MySQL instance group
-  with a postgres instance group.
-  **Warning**: this will lead to total data loss
-  if applied to an existing deployment with MySQL
-  or removed from an existing deployment with postgres.
-- `use-s3-blobstore.yml` -
-  replaces local WebDAV blobstore with external
-  s3 blobstore. Introduces new variables for
-  AWS credentials and bucket names,
-  which will need to be provided at deploy time.
-  The new variables are all strings.
-  Their names are:
-  ```
-  aws_region
-  blobstore_access_key_id
-  blobstore_secret_access_key
-  app_package_directory_key
-  buildpack_directory_key
-  droplet_directory_key
-  resource_directory_key
-  ```
-- `use-azure-storage-blobstore.yml` -
-  replaces local WebDAV blobstore with external
-  Azure Storage blobstore. Introduces new variables for
-  Azure credentials and container names,
-  which will need to be provided at deploy time.
-  The new variables are all strings.
-  Their names are:
-  ```
-  environment
-  blobstore_storage_account_name
-  blobstore_storage_access_key
-  app_package_directory_key
-  buildpack_directory_key
-  droplet_directory_key
-  resource_directory_key
-  ```
-- `operations/windows-cell.yml` -
-  deploys a windows diego cell,
-  adds releases necessary for windows.
+### A note on `community`, `experimental`, and `test` ops-files
+The `operations` directory includes subdirectories
+for "community", "experimental", and "test" ops-files.
 
-### A note on `experimental` and `test` ops-files
-The `operations` directory includes two subdirectories
-for "experimental" and "test" ops-files.
+#### Community
+"Community" ops-files are contributed by the Cloud Foundry community. They are not maintained or supported by the Release Integration team. For details, see the [Community Ops-file README](operations/community/README.md)
 
 #### Experimental
 "Experimental" ops-files represent configurations
@@ -317,6 +194,7 @@ meaning that,
 once the configurations have been sufficiently validated,
 they will become part of cf-deployment.yml
 and the ops-files will be removed.
+For details, see the [Experimental Ops-file README](operations/experimental/README.md).
 
 #### Test
 "Test" ops-files are configurations
@@ -334,12 +212,6 @@ For example,
 `add-persistent-isolation-segment.yml` shows how a deployer can add an isolated Diego cell,
 but the ops-file is hard to apply repeatably.
 In this case, the ops-file is an example.
-
-Others,
-like `cfr-to-cfd-transition.yml`,
-will eventually be promoted to the `operations` directory,
-but are still being modified regularly.
-In this case, the ops-file is included for public visibility.
 
 ## <a name='ci'></a>CI
 The [ci](https://release-integration.ci.cf-app.com/teams/main/pipelines/cf-deployment) for `cf-deployment`

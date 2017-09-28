@@ -61,7 +61,7 @@ bosh -e MY_ENV login --client $(bbl director-username) --client-secret $(bbl dir
 bosh \
 -e MY_ENV
 update-cloud-config \
-cf-deployment/bosh-lite/cloud-config.yml
+cf-deployment/iaas-support/bosh-lite/cloud-config.yml
 ```
 
 ## 6. Upload a stemcell

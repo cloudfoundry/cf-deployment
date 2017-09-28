@@ -14,7 +14,7 @@ and installing a BOSH Director there.
 
 #### bosh-lite
 If you're deploying bosh-lite to a VM on AWS, GCP, or Azure,
-look at [this guide](bosh-lite.md).
+look at [this guide](iaas-support/bosh-lite/README.md).
 
 If you're planning to deploy against a **local** bosh-lite,
 follow [these instructions](https://bosh.io/docs/bosh-lite.html).
@@ -22,6 +22,9 @@ You'll also need to take the following step before continuing:
 ```
 export BOSH_CA_CERT=<PATH-TO-BOSH-LITE-REPO>/ca/certs/ca.crt
 ```
+
+#### IaaSes not supported by `bbl`
+See [IaaS Support](iaas-support/README.md)
 
 ### Get load balancers
 The CF Routers need a way to receive traffic.

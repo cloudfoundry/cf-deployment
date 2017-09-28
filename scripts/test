@@ -1,9 +1,15 @@
 #!/bin/bash
 
+set -ue
+
 exit_code=0
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[0;93m'
+NOCOLOR='\033[0m'
 
 function fail() {
-  echo "FAIL - $1"
+  echo -e "${RED}FAIL${NOCOLOR} - $1"
   exit_code=1
 }
 
@@ -16,273 +22,331 @@ function interpolate() {
   return $?
 }
 
-pushd $(dirname $0)/.. > /dev/null
-  if interpolate ""; then
-    echo "PASS - cf-deployment.yml"
-  else
-    fail "cf-deployment.yml"
-  fi
-  version=$(bosh interpolate cf-deployment.yml -o operations/use-latest-stemcell.yml --path=/stemcells/alias=default/version)
-  if [ "${version}" == "latest" ]; then
-    echo "PASS - operations/use-latest-stemcell.yml"
-  else
-    fail "operations/use-latest-stemcell.yml, expected 'latest' but got '${version}'"
-  fi
-  if interpolate "-o operations/aws.yml"; then
-    echo "PASS - operations/aws.yml"
-  else
-    fail "operations/aws.yml"
-  fi
-  if interpolate "-o operations/bosh-lite.yml"; then
-    echo "PASS - operations/bosh-lite.yml"
-  else
-    fail "operations/bosh-lite.yml"
-  fi
-  if interpolate "-o operations/bypass-cc-bridge-privileged-containers.yml"; then
-    echo "PASS - operations/bypass-cc-bridge-privileged-containers.yml"
-  else
-    fail "operations/bypass-cc-bridge-privileged-containers.yml"
-  fi
-  if interpolate "-o operations/bypass-cc-bridge.yml"; then
-    echo "PASS - operations/bypass-cc-bridge.yml"
-  else
-    fail "operations/bypass-cc-bridge.yml"
-  fi
-  if interpolate "-o operations/cf-syslog-skip-cert-verify.yml"; then
-    echo "PASS - operations/cf-syslog-skip-cert-verify.yml"
-  else
-    fail "operations/cf-syslog-skip-cert-verify.yml"
-  fi
-  if interpolate "-o operations/change-logging-port-for-aws-elb.yml"; then
-    echo "PASS - operations/change-logging-port-for-aws-elb.yml"
-  else
-    fail "operations/change-logging-port-for-aws-elb.yml"
-  fi
-  if interpolate "-o operations/configure-default-router-group.yml -v default_router_group_reservable_ports=1234-2024"; then
-    echo "PASS - operations/configure-default-router-group.yml"
-  else
-    fail "operations/configure-default-router-group.yml"
-  fi
-  if interpolate "-o operations/disable-router-tls-termination.yml"; then
-    echo "PASS - operations/disable-router-tls-termination.yml"
-  else
-    fail "operations/disable-router-tls-termination.yml"
-  fi
-  if interpolate "-o operations/enable-cc-rate-limiting.yml -v cc_rate_limiter_general_limit=blah -v cc_rate_limiter_unauthenticated_limit=something"; then
-    echo "PASS - operations/enable-cc-rate-limiting.yml"
-  else
-    fail "operations/enable-cc-rate-limiting.yml"
-  fi
-  if interpolate "-o operations/enable-privileged-container-support.yml"; then
-    echo "PASS - operations/enable-privileged-container-support.yml"
-  else
-    fail "operations/enable-privileged-container-support.yml"
-  fi
-  if interpolate "-o operations/experimental/deploy-bosh-backup-restore.yml"; then
-    echo "PASS - operations/experimental/deploy-bosh-backup-restore.yml"
-  else
-    fail "operations/experimental/deploy-bosh-backup-restore.yml"
-  fi
-  if interpolate "-o operations/experimental/enable-iptables-logger.yml"; then
-    echo "PASS - operations/experimental/enable-iptables-logger.yml"
-  else
-    fail "operations/experimental/enable-iptables-logger.yml"
-  fi
-  if interpolate "-o operations/experimental/locket.yml -o operations/use-postgres.yml -o operations/experimental/enable-locket-postgres.yml"; then
-    echo "PASS - operations/experimental/enable-locket-postgres.yml"
-  else
-    fail "operations/experimental/enable-locket-postgres.yml"
-  fi
-  if interpolate "-o operations/windows-cell.yml -o operations/experimental/enable-locket-windows.yml"; then
-    echo "PASS - operations/experimental/enable-locket-windows.yml"
-  else
-    fail "operations/experimental/enable-locket-windows.yml"
-  fi
-  if interpolate "-o operations/experimental/enable-locket.yml"; then
-    echo "PASS - operations/experimental/enable-locket.yml"
-  else
-    fail "operations/experimental/enable-locket.yml"
-  fi
-  if interpolate "-o operations/experimental/enable-loggregator-v2-diego.yml"; then
-    echo "PASS - operations/experimental/enable-loggregator-v2-diego.yml"
-  else
-    fail "operations/experimental/enable-loggregator-v2-diego.yml"
-  fi
-  if interpolate "-o operations/windows-cell.yml -o operations/experimental/enable-loggregator-v2-windows-cell.yml"; then
-    echo "PASS - operations/experimental/enable-loggregator-v2-windows-cell.yml"
-  else
-    fail "operations/experimental/enable-loggregator-v2-windows-cell.yml"
-  fi
-  if interpolate "-o operations/windows-cell.yml -o operations/experimental/enable-prefer-declarative-healthchecks-windows.yml"; then
-    echo "PASS - operations/experimental/enable-prefer-declarative-healthchecks-windows.yml"
-  else
-    fail "operations/experimental/enable-prefer-declarative-healthchecks-windows.yml"
-  fi
-  if interpolate "-o operations/experimental/enable-prefer-declarative-healthchecks.yml"; then
-    echo "PASS - operations/experimental/enable-prefer-declarative-healthchecks.yml"
-  else
-    fail "operations/experimental/enable-prefer-declarative-healthchecks.yml"
-  fi
-  if interpolate "-o operations/experimental/secure-service-credentials.yml"; then
-    echo "PASS - operations/experimental/secure-service-credentials.yml"
-  else
-    fail "operations/experimental/secure-service-credentials.yml"
-  fi
-  if interpolate "-o operations/experimental/skip-consul-cell-registrations.yml"; then
-    echo "PASS - operations/experimental/skip-consul-cell-registrations.yml"
-  else
-    fail "operations/experimental/skip-consul-cell-registrations.yml"
-  fi
-  if interpolate "-o operations/experimental/skip-consul-locks.yml"; then
-    echo "PASS - operations/experimental/skip-consul-locks.yml"
-  else
-    fail "operations/experimental/skip-consul-locks.yml"
-  fi
-  if interpolate "-o operations/experimental/use-cf-networking-postgres.yml"; then
-    echo "PASS - operations/experimental/use-cf-networking-postgres.yml"
-  else
-    fail "operations/experimental/use-cf-networking-postgres.yml"
-  fi
-  if interpolate "-o operations/experimental/use-cf-networking.yml"; then
-    echo "PASS - operations/experimental/use-cf-networking.yml"
-  else
-    fail "operations/experimental/use-cf-networking.yml"
-  fi
-  if interpolate "-o operations/experimental/locket.yml -o operations/experimental/use-external-locket-db.yml -l operations/example-vars-files/vars-use-external-locket-db.yml"; then
-    echo "PASS - operations/experimental/use-external-locket-db.yml"
-  else
-    fail "operations/experimental/use-external-locket-db.yml"
-  fi
-  if interpolate "-o operations/experimental/use-grootfs.yml"; then
-    echo "PASS - operations/experimental/use-grootfs.yml"
-  else
-    fail "operations/experimental/use-grootfs.yml"
-  fi
-  if interpolate "-o operations/experimental/bits-service.yml -o operations/experimental/bits-service-local.yml"; then
-    echo "PASS - operations/experimental/bits-service-local.yml"
-  else
-    fail "operations/experimental/bits-service-local.yml"
-  fi
-  if interpolate "-o operations/experimental/bits-service.yml -o operations/experimental/bits-service-webdav.yml"; then
-    echo "PASS - operations/experimental/bits-service-webdav.yml"
-  else
-    fail "operations/experimental/bits-service-webdav.yml"
-  fi
-  if interpolate "-o operations/use-s3-blobstore.yml -o operations/experimental/bits-service.yml -o operations/experimental/bits-service-s3.yml -l operations/example-vars-files/vars-use-s3-blobstore.yml"; then
-    echo "PASS - operations/experimental/bits-service-s3.yml"
-  else
-    fail "operations/experimental/bits-service-s3.yml"
-  fi
-  if interpolate "-o operations/gcp.yml"; then
-    echo "PASS - operations/gcp.yml"
-  else
-    fail "operations/gcp.yml"
-  fi
-  if interpolate "-o operations/rename-deployment.yml -v deployment_name=renamed_deployment"; then
-    echo "PASS - operations/rename-deployment.yml"
-  else
-    fail "operations/rename-deployment.yml"
-  fi
-  if interpolate "-o operations/rename-network.yml -v network_name=renamed_network"; then
-    echo "PASS - operations/rename-network.yml"
-  else
-    fail "operations/rename-network.yml"
-  fi
-  if interpolate "-o operations/scale-to-one-az.yml"; then
-    echo "PASS - operations/scale-to-one-az.yml"
-  else
-    fail "operations/scale-to-one-az.yml"
-  fi
-  if interpolate "-o operations/tcp-routing-gcp.yml"; then
-    echo "PASS - operations/tcp-routing-gcp.yml"
-  else
-    fail "operations/tcp-routing-gcp.yml"
-  fi
-  if interpolate "-o operations/test/add-bosh-dns-to-cells.yml"; then
-    echo "PASS - operations/test/add-bosh-dns-to-cells.yml"
-  else
-    fail "operations/test/add-bosh-dns-to-cells.yml"
-  fi
-  if interpolate "-o operations/test/add-datadog-firehose-nozzle.yml -v datadog_api_key=XYZ -v datadog_metric_prefix=foo.bar -v traffic_controller_external_port=8443"; then
-    echo "PASS - operations/test/add-datadog-firehose-nozzle.yml"
-  else
-    fail "operations/test/add-datadog-firehose-nozzle.yml"
-  fi
-  if interpolate "-o operations/test/add-persistent-isolation-segment-diego-cell.yml"; then
-    echo "PASS - operations/test/add-persistent-isolation-segment-diego-cell.yml"
-  else
-    fail "operations/test/add-persistent-isolation-segment-diego-cell.yml"
-  fi
-  if interpolate "-o operations/test/add-persistent-isolation-segment-router.yml"; then
-    echo "PASS - operations/test/add-persistent-isolation-segment-router.yml"
-  else
-    fail "operations/test/add-persistent-isolation-segment-router.yml"
-  fi
-  if interpolate "-o operations/test/alter-ssh-proxy-redirect-uri.yml"; then
-    echo "PASS - operations/test/alter-ssh-proxy-redirect-uri.yml"
-  else
-    fail "operations/test/alter-ssh-proxy-redirect-uri.yml"
-  fi
-  if interpolate "-o operations/test/use-bosh-dns-for-containers.yml"; then
-    echo "PASS - operations/test/use-bosh-dns-for-containers.yml"
-  else
-    fail "operations/test/use-bosh-dns-for-containers.yml"
-  fi
-  if interpolate "-o operations/test/use-bosh-dns.yml"; then
-    echo "PASS - operations/test/use-bosh-dns.yml"
-  else
-    fail "operations/test/use-bosh-dns.yml"
-  fi
-  if interpolate "-o operations/use-blobstore-cdn.yml -l operations/example-vars-files/vars-use-blobstore-cdn.yml"; then
-    echo "PASS - operations/use-blobstore-cdn.yml"
-  else
-    fail "operations/use-blobstore-cdn.yml"
-  fi
-  if interpolate "-o operations/use-compiled-releases.yml"; then
-    echo "PASS - operations/use-compiled-releases.yml"
-  else
-    fail "operations/use-compiled-releases.yml"
-  fi
-  if interpolate "-o operations/use-external-dbs.yml -l operations/example-vars-files/vars-use-external-dbs.yml"; then
-    echo "PASS - operations/use-external-dbs.yml"
-  else
-    fail "operations/use-external-dbs.yml"
-  fi
-  if interpolate "-o operations/use-latest-stemcell.yml"; then
-    echo "PASS - operations/use-latest-stemcell.yml"
-  else
-    fail "operations/use-latest-stemcell.yml"
-  fi
-  if interpolate "-o operations/use-postgres.yml"; then
-    echo "PASS - operations/use-postgres.yml"
-  else
-    fail "operations/use-postgres.yml"
-  fi
-  if interpolate "-o operations/use-s3-blobstore.yml -l operations/example-vars-files/vars-use-s3-blobstore.yml"; then
-    echo "PASS - operations/use-s3-blobstore.yml"
-  else
-    fail "operations/use-s3-blobstore.yml"
-  fi
-  if interpolate "-o operations/windows-cell.yml"; then
-    echo "PASS - operations/windows-cell.yml"
-  else
-    fail "operations/windows-cell.yml"
-  fi
-  if interpolate "-o operations/workarounds/use-3-azs-for-router.yml"; then
-    echo "PASS - operations/workarounds/use-3-azs-for-router.yml"
-  else
-    fail "operations/workarounds/use-3-azs-for-router.yml"
-  fi
-  if interpolate "-o operations/workarounds/use-4-azs-for-router.yml"; then
-    echo "PASS - operations/workarounds/use-4-azs-for-router.yml"
-  else
-    fail "operations/workarounds/use-4-azs-for-router.yml"
-  fi
-  if interpolate "-o operations/legacy/old-droplet-mitigation.yml"; then
-    echo "PASS - operations/legacy/old-droplet-mitigation.yml"
-  else
-    fail "operations/legacy/old-droplet-mitigation.yml"
-  fi
-popd > /dev/null
+function test_opsfile_interpolation() {
+  pushd $(dirname $0)/.. > /dev/null
+    if interpolate ""; then
+      echo -e "${GREEN}PASS${NOCOLOR} - cf-deployment.yml"
+    else
+      fail "cf-deployment.yml"
+    fi
+    version=$(bosh interpolate cf-deployment.yml -o operations/use-latest-stemcell.yml --path=/stemcells/alias=default/version)
+    if [ "${version}" == "latest" ]; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/use-latest-stemcell.yml"
+    else
+      fail "operations/use-latest-stemcell.yml, expected 'latest' but got '${version}'"
+    fi
+    if interpolate "-o operations/aws.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/aws.yml"
+    else
+      fail "operations/aws.yml"
+    fi
+    if interpolate "-o operations/bosh-lite.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/bosh-lite.yml"
+    else
+      fail "operations/bosh-lite.yml"
+    fi
+    if interpolate "-o operations/bypass-cc-bridge-privileged-containers.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/bypass-cc-bridge-privileged-containers.yml"
+    else
+      fail "operations/bypass-cc-bridge-privileged-containers.yml"
+    fi
+    if interpolate "-o operations/bypass-cc-bridge.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/bypass-cc-bridge.yml"
+    else
+      fail "operations/bypass-cc-bridge.yml"
+    fi
+    if interpolate "-o operations/cf-syslog-skip-cert-verify.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/cf-syslog-skip-cert-verify.yml"
+    else
+      fail "operations/cf-syslog-skip-cert-verify.yml"
+    fi
+    if interpolate "-o operations/configure-default-router-group.yml -v default_router_group_reservable_ports=1234-2024"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/configure-default-router-group.yml"
+    else
+      fail "operations/configure-default-router-group.yml"
+    fi
+    if interpolate "-o operations/disable-router-tls-termination.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/disable-router-tls-termination.yml"
+    else
+      fail "operations/disable-router-tls-termination.yml"
+    fi
+    if interpolate "-o operations/enable-cc-rate-limiting.yml -v cc_rate_limiter_general_limit=blah -v cc_rate_limiter_unauthenticated_limit=something"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/enable-cc-rate-limiting.yml"
+    else
+      fail "operations/enable-cc-rate-limiting.yml"
+    fi
+    if interpolate "-o operations/enable-privileged-container-support.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/enable-privileged-container-support.yml"
+    else
+      fail "operations/enable-privileged-container-support.yml"
+    fi
+    if interpolate "-o operations/experimental/deploy-bosh-backup-restore.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/deploy-bosh-backup-restore.yml"
+    else
+      fail "operations/experimental/deploy-bosh-backup-restore.yml"
+    fi
+    if interpolate "-o operations/experimental/enable-iptables-logger.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-iptables-logger.yml"
+    else
+      fail "operations/experimental/enable-iptables-logger.yml"
+    fi
+    if interpolate "-o operations/experimental/locket.yml -o operations/use-postgres.yml -o operations/experimental/enable-locket-postgres.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-locket-postgres.yml"
+    else
+      fail "operations/experimental/enable-locket-postgres.yml"
+    fi
+    if interpolate "-o operations/windows-cell.yml -o operations/experimental/enable-locket-windows.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-locket-windows.yml"
+    else
+      fail "operations/experimental/enable-locket-windows.yml"
+    fi
+    if interpolate "-o operations/experimental/windows2016-cell.yml -o operations/experimental/enable-locket-windows2016.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-locket-windows2016.yml"
+    else
+      fail "operations/experimental/enable-locket-windows2016.yml"
+    fi
+    if interpolate "-o operations/experimental/enable-locket.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-locket.yml"
+    else
+      fail "operations/experimental/enable-locket.yml"
+    fi
+    if interpolate "-o operations/experimental/enable-loggregator-v2-diego.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-loggregator-v2-diego.yml"
+    else
+      fail "operations/experimental/enable-loggregator-v2-diego.yml"
+    fi
+    if interpolate "-o operations/windows-cell.yml -o operations/experimental/enable-loggregator-v2-windows-cell.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-loggregator-v2-windows-cell.yml"
+    else
+      fail "operations/experimental/enable-loggregator-v2-windows-cell.yml"
+    fi
+    if interpolate "-o operations/experimental/windows2016-cell.yml -o operations/experimental/enable-loggregator-v2-windows2016-cell.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-loggregator-v2-windows2016-cell.yml"
+    else
+     fail "operations/experimental/enable-loggregator-v2-windows2016-cell.yml"
+    fi
+    if interpolate "-o operations/windows-cell.yml -o operations/experimental/enable-prefer-declarative-healthchecks-windows.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-prefer-declarative-healthchecks-windows.yml"
+    else
+      fail "operations/experimental/enable-prefer-declarative-healthchecks-windows.yml"
+    fi
+    if interpolate "-o operations/experimental/windows2016-cell.yml -o operations/experimental/enable-prefer-declarative-healthchecks-windows2016.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-prefer-declarative-healthchecks-windows2016.yml"
+    else
+      fail "operations/experimental/enable-prefer-declarative-healthchecks-windows2016.yml"
+    fi
+    if interpolate "-o operations/experimental/enable-prefer-declarative-healthchecks.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-prefer-declarative-healthchecks.yml"
+    else
+      fail "operations/experimental/enable-prefer-declarative-healthchecks.yml"
+    fi
+    if interpolate "-o operations/experimental/enable-instance-identity-credentials.yml -o operations/experimental/secure-service-credentials.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/secure-service-credentials.yml"
+    else
+      fail "operations/experimental/secure-service-credentials.yml"
+    fi
+    if interpolate "-o operations/experimental/skip-consul-cell-registrations.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/skip-consul-cell-registrations.yml"
+    else
+      fail "operations/experimental/skip-consul-cell-registrations.yml"
+    fi
+    if interpolate "-o operations/experimental/skip-consul-locks.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/skip-consul-locks.yml"
+    else
+      fail "operations/experimental/skip-consul-locks.yml"
+    fi
+    if interpolate "-o operations/experimental/use-cf-networking-postgres.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/use-cf-networking-postgres.yml"
+    else
+      fail "operations/experimental/use-cf-networking-postgres.yml"
+    fi
+    if interpolate "-o operations/experimental/use-cf-networking.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/use-cf-networking.yml"
+    else
+      fail "operations/experimental/use-cf-networking.yml"
+    fi
+    if interpolate "-o operations/experimental/locket.yml -o operations/use-external-dbs.yml -o operations/experimental/use-external-locket-db.yml -l operations/example-vars-files/vars-use-external-dbs.yml -l operations/example-vars-files/vars-use-external-locket-db.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/use-external-locket-db.yml"
+    else
+      fail "operations/experimental/use-external-locket-db.yml"
+    fi
+    if interpolate "-o operations/experimental/use-grootfs.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/use-grootfs.yml"
+    else
+      fail "operations/experimental/use-grootfs.yml"
+    fi
+    if interpolate "-o operations/experimental/bits-service.yml -o operations/experimental/bits-service-local.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/bits-service-local.yml"
+    else
+      fail "operations/experimental/bits-service-local.yml"
+    fi
+    if interpolate "-o operations/experimental/bits-service.yml -o operations/experimental/bits-service-webdav.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/bits-service-webdav.yml"
+    else
+      fail "operations/experimental/bits-service-webdav.yml"
+    fi
+    if interpolate "-o operations/use-s3-blobstore.yml -o operations/experimental/bits-service.yml -o operations/experimental/bits-service-s3.yml -l operations/example-vars-files/vars-use-s3-blobstore.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/bits-service-s3.yml"
+    else
+      fail "operations/experimental/bits-service-s3.yml"
+    fi
+    if interpolate "-o operations/gcp.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/gcp.yml"
+    else
+      fail "operations/gcp.yml"
+    fi
+    if interpolate "-o operations/rename-deployment.yml -v deployment_name=renamed_deployment"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/rename-deployment.yml"
+    else
+      fail "operations/rename-deployment.yml"
+    fi
+    if interpolate "-o operations/rename-network.yml -v network_name=renamed_network"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/rename-network.yml"
+    else
+      fail "operations/rename-network.yml"
+    fi
+    if interpolate "-o operations/scale-to-one-az.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/scale-to-one-az.yml"
+    else
+      fail "operations/scale-to-one-az.yml"
+    fi
+    if interpolate "-o operations/tcp-routing-gcp.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/tcp-routing-gcp.yml"
+    else
+      fail "operations/tcp-routing-gcp.yml"
+    fi
+    if interpolate "-o operations/test/add-bosh-dns-to-cells.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/test/add-bosh-dns-to-cells.yml"
+    else
+      fail "operations/test/add-bosh-dns-to-cells.yml"
+    fi
+    if interpolate "-o operations/test/add-datadog-firehose-nozzle.yml -v datadog_api_key=XYZ -v datadog_metric_prefix=foo.bar -v traffic_controller_external_port=8443"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/test/add-datadog-firehose-nozzle.yml"
+    else
+      fail "operations/test/add-datadog-firehose-nozzle.yml"
+    fi
+    if interpolate "-o operations/test/add-persistent-isolation-segment-diego-cell.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/test/add-persistent-isolation-segment-diego-cell.yml"
+    else
+      fail "operations/test/add-persistent-isolation-segment-diego-cell.yml"
+    fi
+    if interpolate "-o operations/test/add-persistent-isolation-segment-router.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/test/add-persistent-isolation-segment-router.yml"
+    else
+      fail "operations/test/add-persistent-isolation-segment-router.yml"
+    fi
+    if interpolate "-o operations/test/alter-ssh-proxy-redirect-uri.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/test/alter-ssh-proxy-redirect-uri.yml"
+    else
+      fail "operations/test/alter-ssh-proxy-redirect-uri.yml"
+    fi
+    if interpolate "-o operations/test/use-bosh-dns-for-containers.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/test/use-bosh-dns-for-containers.yml"
+    else
+      fail "operations/test/use-bosh-dns-for-containers.yml"
+    fi
+    if interpolate "-o operations/test/use-bosh-dns.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/test/use-bosh-dns.yml"
+    else
+      fail "operations/test/use-bosh-dns.yml"
+    fi
+    if interpolate "-o operations/use-blobstore-cdn.yml -l operations/example-vars-files/vars-use-blobstore-cdn.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/use-blobstore-cdn.yml"
+    else
+      fail "operations/use-blobstore-cdn.yml"
+    fi
+    if interpolate "-o operations/use-compiled-releases.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/use-compiled-releases.yml"
+    else
+      fail "operations/use-compiled-releases.yml"
+    fi
+    if interpolate "-o operations/use-external-dbs.yml -l operations/example-vars-files/vars-use-external-dbs.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/use-external-dbs.yml"
+    else
+      fail "operations/use-external-dbs.yml"
+    fi
+    if interpolate "-o operations/use-latest-stemcell.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/use-latest-stemcell.yml"
+    else
+      fail "operations/use-latest-stemcell.yml"
+    fi
+    if interpolate "-o operations/use-postgres.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/use-postgres.yml"
+    else
+      fail "operations/use-postgres.yml"
+    fi
+    if interpolate "-o operations/use-s3-blobstore.yml -l operations/example-vars-files/vars-use-s3-blobstore.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/use-s3-blobstore.yml"
+    else
+      fail "operations/use-s3-blobstore.yml"
+    fi
+    if interpolate "-o operations/windows-cell.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/windows-cell.yml"
+    else
+      fail "operations/windows-cell.yml"
+    fi
+    if interpolate "-o operations/experimental/windows2016-cell.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/windows2016-cell.yml"
+    else
+      fail "operations/experimental/windows2016-cell.yml"
+    fi
+    if interpolate "-o operations/windows-cell.yml -o operations/experimental/windows2016-cell.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/windows-cell.yml operations/experimental/windows2016-cell.yml"
+    else
+      fail "operations/windows-cell.yml operations/experimental/windows2016-cell.yml"
+    fi
+    if interpolate "-o operations/legacy/old-droplet-mitigation.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/legacy/old-droplet-mitigation.yml"
+    else
+      fail "operations/legacy/old-droplet-mitigation.yml"
+    fi
+  popd > /dev/null
+}
 
-exit $exit_code
+function ensure_test_opsfiles_not_in_readme() {
+  pushd $(dirname $0)/.. > /dev/null
+    local opsfiles=$(ls operations/test/*.yml)
+    local output=$(grep $(for x in $opsfiles; do echo -n " -e $x"; done;) README.md -c)
+
+    if [ $output == "0" ]; then
+      echo -e "${GREEN}PASS${NOCOLOR} - Test opsfiles do not appear in README"
+    else
+      fail "Test opsfiles appear in README"
+    fi
+  popd > /dev/null
+}
+
+function ensure_opsfiles_in_readme() {
+  local readme=$1
+  shift
+
+  pushd $(dirname $0)/.. > /dev/null
+    for x in $@; do
+      local basename=$(basename $x)
+      if [ $(grep \($basename\) $readme -c) != "0" ]; then
+        echo -e "${GREEN}PASS${NOCOLOR} - $x is in $readme"
+      else
+        fail "$x does not appear in $readme"
+      fi
+    done;
+  popd > /dev/null
+}
+
+function main() {
+  echo
+  echo -e "${YELLOW}***** README TESTS *****${NOCOLOR}"
+  ensure_opsfiles_in_readme "operations/README.md" $(ls operations/*.yml)
+  ensure_opsfiles_in_readme "operations/legacy/README.md" $(ls operations/legacy/*.yml)
+  ensure_opsfiles_in_readme "operations/community/README.md" $(ls operations/community/*.yml)
+  ensure_opsfiles_in_readme "operations/experimental/README.md" $(ls operations/experimental/*.yml)
+
+  ensure_test_opsfiles_not_in_readme
+
+  echo
+  echo -e "${YELLOW}***** OPSFILE INTERPOLATION TESTS *****${NOCOLOR}"
+  test_opsfile_interpolation
+
+  exit $exit_code
+}
+
+main
