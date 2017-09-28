@@ -80,14 +80,6 @@
   path: /instance_groups/name=nats/instances
   value: 1
 - type: replace
-  path: /instance_groups/name=etcd/instances
-  value: 1
-- type: replace
-  path: /instance_groups/name=etcd/jobs/name=etcd/properties/etcd/cluster
-  value:
-  - instances: 1
-    name: etcd
-- type: replace
   path: /instance_groups/name=diego-api/instances
   value: 1
 - type: replace

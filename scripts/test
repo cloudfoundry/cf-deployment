@@ -85,11 +85,6 @@ function test_opsfile_interpolation() {
     else
       fail "operations/experimental/deploy-bosh-backup-restore.yml"
     fi
-    if interpolate "-o operations/experimental/disable-etcd.yml"; then
-      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/disable-etcd.yml"
-    else
-      fail "operations/experimental/disable-etcd.yml"
-    fi
     if interpolate "-o operations/experimental/enable-iptables-logger.yml"; then
       echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-iptables-logger.yml"
     else
@@ -209,11 +204,6 @@ function test_opsfile_interpolation() {
       echo -e "${GREEN}PASS${NOCOLOR} - operations/rename-network.yml"
     else
       fail "operations/rename-network.yml"
-    fi
-    if interpolate "-o operations/scale-down-etcd-for-cluster-changes.yml"; then
-      echo -e "${GREEN}PASS${NOCOLOR} - operations/scale-down-etcd-for-cluster-changes.yml"
-    else
-      fail "operations/scale-down-etcd-for-cluster-changes.yml"
     fi
     if interpolate "-o operations/scale-to-one-az.yml"; then
       echo -e "${GREEN}PASS${NOCOLOR} - operations/scale-to-one-az.yml"
