@@ -71,11 +71,8 @@ bosh -d cf deploy cf-deployment/cf-deployment.yml \
 
 ### With Swift as Blobstore
 
-Missing: preparations for Swift to be done?
-
-* create directories in Swift
-* Set temp url key
-  * See https://docs.openstack.org/swift/latest/api/temporary_url_middleware.html for `openstack_temp_url_key` configuration.
+* Create four containers in Swift, which are used to store the artifacts for buildpacks, app-packages, droplets, and additional resources, respectively. The container names need to be passed in as variables in the below command snippet
+* Set a [Temporary URL Key](https://docs.openstack.org/swift/latest/api/temporary_url_middleware.html#secret-keys) for your Swift account
 
 Add the following lines to the deploy cmd:
 
