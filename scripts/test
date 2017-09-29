@@ -50,16 +50,6 @@ function test_opsfile_interpolation() {
     else
       fail "operations/bosh-lite.yml"
     fi
-    if interpolate "-o operations/bypass-cc-bridge-privileged-containers.yml"; then
-      echo -e "${GREEN}PASS${NOCOLOR} - operations/bypass-cc-bridge-privileged-containers.yml"
-    else
-      fail "operations/bypass-cc-bridge-privileged-containers.yml"
-    fi
-    if interpolate "-o operations/bypass-cc-bridge.yml"; then
-      echo -e "${GREEN}PASS${NOCOLOR} - operations/bypass-cc-bridge.yml"
-    else
-      fail "operations/bypass-cc-bridge.yml"
-    fi
     if interpolate "-o operations/cf-syslog-skip-cert-verify.yml"; then
       echo -e "${GREEN}PASS${NOCOLOR} - operations/cf-syslog-skip-cert-verify.yml"
     else
@@ -115,21 +105,6 @@ function test_opsfile_interpolation() {
     else
       fail "operations/experimental/enable-locket.yml"
     fi
-    if interpolate "-o operations/experimental/enable-loggregator-v2-diego.yml"; then
-      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-loggregator-v2-diego.yml"
-    else
-      fail "operations/experimental/enable-loggregator-v2-diego.yml"
-    fi
-    if interpolate "-o operations/windows-cell.yml -o operations/experimental/enable-loggregator-v2-windows-cell.yml"; then
-      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-loggregator-v2-windows-cell.yml"
-    else
-      fail "operations/experimental/enable-loggregator-v2-windows-cell.yml"
-    fi
-    if interpolate "-o operations/experimental/windows2016-cell.yml -o operations/experimental/enable-loggregator-v2-windows2016-cell.yml"; then
-      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-loggregator-v2-windows2016-cell.yml"
-    else
-     fail "operations/experimental/enable-loggregator-v2-windows2016-cell.yml"
-    fi
     if interpolate "-o operations/windows-cell.yml -o operations/experimental/enable-prefer-declarative-healthchecks-windows.yml"; then
       echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/enable-prefer-declarative-healthchecks-windows.yml"
     else
@@ -160,16 +135,6 @@ function test_opsfile_interpolation() {
     else
       fail "operations/experimental/skip-consul-locks.yml"
     fi
-    if interpolate "-o operations/experimental/use-cf-networking-postgres.yml"; then
-      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/use-cf-networking-postgres.yml"
-    else
-      fail "operations/experimental/use-cf-networking-postgres.yml"
-    fi
-    if interpolate "-o operations/experimental/use-cf-networking.yml"; then
-      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/use-cf-networking.yml"
-    else
-      fail "operations/experimental/use-cf-networking.yml"
-    fi
     if interpolate "-o operations/experimental/locket.yml -o operations/use-external-dbs.yml -o operations/experimental/use-external-locket-db.yml -l operations/example-vars-files/vars-use-external-dbs.yml -l operations/example-vars-files/vars-use-external-locket-db.yml"; then
       echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/use-external-locket-db.yml"
     else
@@ -195,11 +160,6 @@ function test_opsfile_interpolation() {
     else
       fail "operations/experimental/bits-service-s3.yml"
     fi
-    if interpolate "-o operations/gcp.yml"; then
-      echo -e "${GREEN}PASS${NOCOLOR} - operations/gcp.yml"
-    else
-      fail "operations/gcp.yml"
-    fi
     if interpolate "-o operations/rename-deployment.yml -v deployment_name=renamed_deployment"; then
       echo -e "${GREEN}PASS${NOCOLOR} - operations/rename-deployment.yml"
     else
@@ -214,11 +174,6 @@ function test_opsfile_interpolation() {
       echo -e "${GREEN}PASS${NOCOLOR} - operations/scale-to-one-az.yml"
     else
       fail "operations/scale-to-one-az.yml"
-    fi
-    if interpolate "-o operations/tcp-routing-gcp.yml"; then
-      echo -e "${GREEN}PASS${NOCOLOR} - operations/tcp-routing-gcp.yml"
-    else
-      fail "operations/tcp-routing-gcp.yml"
     fi
     if interpolate "-o operations/test/add-bosh-dns-to-cells.yml"; then
       echo -e "${GREEN}PASS${NOCOLOR} - operations/test/add-bosh-dns-to-cells.yml"

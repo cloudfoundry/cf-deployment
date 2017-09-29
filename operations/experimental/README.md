@@ -30,21 +30,15 @@ and the ops-files will be removed.
 | [`enable-locket-windows.yml`](enable-locket-windows.yml) | Enable locket for the windows 2012 cell. | |
 | [`enable-locket-windows2016.yml`](enable-locket-windows2016.yml) | Enable locket for the windows 2016 cell. | |
 | [`enable-locket.yml`](enable-locket.yml) | Enables locket. | Assumes MySQL. To use with postgres, see `enable-locket-postgres.yml` |
-| [`enable-loggregator-v2-diego.yml`](enable-loggregator-v2-diego.yml) | Intentionally left blank for backwards compatibility.  | Previously: "Use `v2` loggregator api for doppler communication." `cf-deployment.yml` now does this by default. |
-| [`enable-loggregator-v2-windows-cell.yml`](enable-loggregator-v2-windows-cell.yml) |  Intentionally left blank for backwards compatibility. | Previously: "Use `v2` loggregator api for doppler communication from windows 2012 cells." `cf-deployment.yml` now does this by default. |
-| [`enable-loggregator-v2-windows2016-cell.yml`](enable-loggregator-v2-windows2016-cell.yml) |  Intentionally left blank for backwards compatibility. | Previously: "Use `v2` loggregator api for doppler communication from windows 2016 cells." `cf-deployment.yml` now does this by default. |
 | [`enable-prefer-declarative-healthchecks.yml`](enable-prefer-declarative-healthchecks.yml) | Configure the Rep on the diego cells to prefer LRP CheckDefinition (a.k.a declarative healthchecks) over the old Monitor action | |
 | [`enable-prefer-declarative-healthchecks-windows.yml`](enable-prefer-declarative-healthchecks-windows.yml) | Configure the Rep on the windows 2012 cells to prefer LRP CheckDefinition (a.k.a declarative healthchecks) over the old Monitor action | |
 | [`enable-prefer-declarative-healthchecks-windows2016.yml`](enable-prefer-declarative-healthchecks-windows2016.yml) | Configure the Rep on the windows 2016 cells to prefer LRP CheckDefinition (a.k.a declarative healthchecks) over the old Monitor action | |
 | [`locket-postgres.yml`](locket-postgres.yml) | Symlink to `enable-locket-postgres.yml` for backwards compatibility. | |
 | [`locket-windows.yml`](locket-windows.yml) | Symlink to `enable-locket-windows.yml` for backwards compatibility. | |
 | [`locket.yml`](locket.yml) | Symlink to `enable-locket.yml` for backwards compatibility. | |
-| [`secure-service-credentials.yml`](secure-service-credentials.yml) | Use CredHub for service credentials. | Requires `operations/bypass-cc-bridge.yml` and `operations/experimental/enable-instance-identity-credentials.yml`, in that order.|
+| [`secure-service-credentials.yml`](secure-service-credentials.yml) | Use CredHub for service credentials. | Requires `operations/experimental/enable-instance-identity-credentials.yml`. |
 | [`skip-consul-cell-registrations.yml`](skip-consul-cell-registrations.yml) | Configure the BBS to only use locket to find cells in the deployment | Requires `enable-locket.yml` |
 | [`skip-consul-locks.yml`](skip-consul-locks.yml) | Don't use consul locks in several jobs. | Requires `enable-locket.yml`. |
-| [`use-cf-networking-postgres.yml`](use-cf-networking-postgres.yml) | Intentionally left blank for backwards compatibility. |Previously: "Allows use of `use-cf-networking.yml` with the postgres database." `cf-deployment.yml` plus `use-postges.yml` now does this by default.
-| [`use-cf-networking.yml`](use-cf-networking.yml) | Enable container-to-container networking features with cf-networking-release. | Assumes MySQL. To use with postgres, see `use-cf-networking-postgres.yml`. |
-| [`use-external-cf-networking-dbs.yml`](use-external-cf-networking-dbs.yml) | Intentionally left blank for backwards compatibility. | Previously: "Allowed `user-cf-networking.yml` to work with external database." `cf-deployment.yml` plus `use-external-dbs.yml` now does this by default.
 | [`use-external-locket-db.yml`](use-external-locket-db.yml) | Allows `enable-locket.yml` to work with external database. | Requires `enable-locket.yml` |
 | [`use-grootfs.yml`](use-grootfs.yml) | Enable grootfs on diego cells. | |
 | [`windows2016-cell.yml`](windows2016-cell.yml) | Deploys a windows 2016 diego cell, adds releases necessary for windows. |  |
