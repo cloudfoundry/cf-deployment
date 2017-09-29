@@ -14,6 +14,7 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 | [`aws.yml`](aws.yml) | Overrides the loggregator ports to 4443. | It is required to have a separate port from the standard HTTPS port (443) for loggregator traffic in order to use the AWS load balancer. |
 | [`use-s3-blobstore.yml`](use-s3-blobstore.yml) | Replaces local WebDAV blobstore with external s3 blobstore. | Introduces [new variables](example-vars-files/vars-use-s3-blobstore.yml) for s3 credentials and bucket names. |
 | **Azure** | | |
+| [`azure.yml`](azure.yml) | Sets gorouter's `frontend_idle_timeout` to value appropriate for Azure load balancers. | Any value below 240 should work. |
 | [`use-azure-storage-blobstore.yml`](use-azure-storage-blobstore.yml) | Replaces local WebDAV blobstore with external Azure Storage blobstore. | Introduces [new variables](example-vars-files/vars-use-azure-storage-blobstore.yml) for Azure credentials and container names. |
 | **GCP** | | |
 | [`gcp.yml`](gcp.yml) | Intentionally left blank for backwards compatibility. | It previously overrode the static IP addresses assigned to some instance groups, as GCP networking features allow them to all co-exist on the same subnet despite being spread across multiple AZs. |

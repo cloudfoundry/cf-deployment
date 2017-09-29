@@ -40,6 +40,11 @@ function test_opsfile_interpolation() {
     else
       fail "operations/aws.yml"
     fi
+    if interpolate "-o operations/azure.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/azure.yml"
+    else
+      fail "operations/azure.yml"
+    fi
     if interpolate "-o operations/bosh-lite.yml"; then
       echo -e "${GREEN}PASS${NOCOLOR} - operations/bosh-lite.yml"
     else
