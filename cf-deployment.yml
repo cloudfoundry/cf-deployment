@@ -72,8 +72,6 @@ instance_groups:
   - name: metron_agent
     release: loggregator
     properties: &metron_agent_properties
-      metron_agent:
-        deployment: "((system_domain))"
       metron_endpoint:
         shared_secret: "((dropsonde_shared_secret))"
       loggregator:
@@ -474,8 +472,6 @@ instance_groups:
   - name: statsd_injector
     release: statsd-injector
     properties: &statsd_injector_properties
-      statsd_injector:
-        deployment: "((system_domain))"
       loggregator:
         tls:
           ca_cert: "((loggregator_tls_statsdinjector.ca))"
