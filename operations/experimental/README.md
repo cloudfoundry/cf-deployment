@@ -47,4 +47,5 @@ and the ops-files will be removed.
 | [`use-external-cf-networking-dbs.yml`](use-external-cf-networking-dbs.yml) | Intentionally left blank for backwards compatibility. | Previously: "Allowed `user-cf-networking.yml` to work with external database." `cf-deployment.yml` plus `use-external-dbs.yml` now does this by default.
 | [`use-external-locket-db.yml`](use-external-locket-db.yml) | Allows `enable-locket.yml` to work with external database. | Requires `enable-locket.yml` |
 | [`use-grootfs.yml`](use-grootfs.yml) | Enable grootfs on diego cells. | |
+| [`use-latest-windows2016-stemcell.yml`](use-latest-windows2016-stemcell.yml) | Use the latest `windows2016` stemcell available on your BOSH director instead of the one in `windows2016-cell.yml` | Requires `windows2016-cell.yml` |
 | [`windows2016-cell.yml`](windows2016-cell.yml) | Deploys a windows 2016 diego cell, adds releases necessary for windows. |  |

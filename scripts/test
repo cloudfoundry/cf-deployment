@@ -290,10 +290,22 @@ function test_opsfile_interpolation() {
     else
       fail "operations/windows-cell.yml"
     fi
+    version=$(bosh interpolate cf-deployment.yml -o operations/windows-cell.yml -o operations/use-latest-windows-stemcell.yml --path=/stemcells/alias=windows2012R2/version)
+    if [ "${version}" == "latest" ]; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/use-latest-windows-stemcell.yml"
+    else
+      fail "operations/use-latest-windows-stemcell.yml, expected 'latest' but got '${version}'"
+    fi
     if interpolate "-o operations/experimental/windows2016-cell.yml"; then
       echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/windows2016-cell.yml"
     else
       fail "operations/experimental/windows2016-cell.yml"
+    fi
+    version=$(bosh interpolate cf-deployment.yml -o operations/experimental/windows2016-cell.yml -o operations/experimental/use-latest-windows2016-stemcell.yml --path=/stemcells/alias=windows2016/version)
+    if [ "${version}" == "latest" ]; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/experimental/use-latest-windows2016-stemcell.yml"
+    else
+      fail "operations/experimental/use-latest-windows2016-stemcell.yml, expected 'latest' but got '${version}'"
     fi
     if interpolate "-o operations/windows-cell.yml -o operations/experimental/windows2016-cell.yml"; then
       echo -e "${GREEN}PASS${NOCOLOR} - operations/windows-cell.yml operations/experimental/windows2016-cell.yml"
