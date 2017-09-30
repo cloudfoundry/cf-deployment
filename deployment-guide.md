@@ -161,3 +161,65 @@ to your deploy command:
     --vars-store deployment-vars.yml \
     -v system_domain=bosh-lite.com
   ```
+
+## Notes for operators
+`cf-deployment` includes tooling
+(mostly in the form of ops-files)
+that allow operators to make choices about their deployment configuration.
+However, some decisions are necessarily left to the operator
+because tooling can be hard to make generic.
+In this section,
+we want to outline some of the decisions operators,
+especially production operators,
+will need to make about their deployments without tooling from cf-deployment,
+as well give some advice about how to approach those decisions.
+Our hope is that, over time,
+we can replace some of this discussion with better tooling,
+so please leave any feedback in GitHub issues.
+We'd love to hear from you.
+
+### The `update` section of instance groups
+The [`update` section of a deployment manifest](http://bosh.io/docs/manifest-v2.html#update)
+controls the way BOSH rolls out updates to instance groups.
+cf-deployment configures these very conservatively,
+and assumes the default scale as defined in the base manifest
+(typically two instances of each instance group).
+Operators with larger scale
+(so, the vast majority of them)
+will almost certainly need to reconfigure the `update` section to suit their needs.
+
+The most straightfoward way
+to reconfigure those sections
+would be with a custom ops-file, such as:
+```yml
+- type: replace
+  path: /instance_groups/name=<JOB_NAME>/update?/canaries
+  value: 2
+- type: replace
+  path: /instance_groups/name=<JOB_NAME>/update?/canary_watch_time
+  value: 60000-150000
+- type: replace
+  path: /instance_groups/name=<JOB_NAME>/update?/max_in_flight
+  value: 10
+- type: replace
+  path: /instance_groups/name=<JOB_NAME>/update?/serial
+  value: true
+- type: replace
+  path: /instance_groups/name=<JOB_NAME>/update?/update_watch_time
+  value: 60000-150000
+```
+
+### Scaling instance groups
+`cf-deployment` deploys with a "default HA" scale --
+two instances, distributed across two AZs
+(with the exception of some jobs that require three instances).
+While it's easy for us to prove an ops-file
+[to scale instance groups _down_](operations/scale-to-one-az.yml),
+production operators will need to provide their own ops-file
+to scale instances _up_.
+Here's an example:
+```yml
+- type: replace
+  path: /instance_groups/name=<JOB_NAME>/instances
+  value: 10
+```
