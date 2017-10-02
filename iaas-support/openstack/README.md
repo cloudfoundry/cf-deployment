@@ -11,7 +11,7 @@ You'll need to following to proceed:
 -------|------|-----------|-----------------|----------------------|
 | sharedcpu | 1 | 2048 | 3 | 10 |
 | minimal | 1 | 3840 | 3 | 10 |
-| small | 2 | 7680 | 3 | 10 |
+| small | 2 | 7680 | 3 | 14 |
 | small-50GB-ephemeral-disk | 2 | 7680 | 3 | 50 |
 | small-highmem | 4 | 31232 | 3 | 10 |
 | small-highmem-100GB-ephemeral-disk | 4 | 31232 | 3 | 100 |
