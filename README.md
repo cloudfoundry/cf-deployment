@@ -226,7 +226,7 @@ There is not presently any versioning scheme,
 or way to correlate which version of CATs is associated with which sha of cf-deployment,
 other than the history in CI.
 As `cf-deployment` matures, we'll address versioning.
-The configuration for our pipeline can be found [here](https://github.com/cloudfoundry/runtime-ci/pipelines/cf-deployment.yml).
+The configuration for our pipeline can be found [here](https://github.com/cloudfoundry/runtime-ci/blob/master/pipelines/cf-deployment.yml).
 
 [cf-deployment-concourse-url]: https://release-integration.ci.cf-app.com/teams/main/pipelines/cf-deployment
 [cf-release-url]: https://github.com/cloudfoundry/cf-release/tree/master/templates
