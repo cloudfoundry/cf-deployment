@@ -44,7 +44,7 @@
             server_key: ((diego_rep_agent.private_key))
             locket:
               api_location: "locket.service.cf.internal:8891"
-        loggregator:
+        loggregator: &diego_loggregator_client_properties
           ca_cert: ((loggregator_tls_metron.ca))
           cert: ((loggregator_tls_metron.certificate))
           key: ((loggregator_tls_metron.private_key))
@@ -58,6 +58,7 @@
       release: diego
     - name: route_emitter_windows
       properties:
+        loggregator: *diego_loggregator_client_properties
         diego:
           route_emitter:
             bbs:
