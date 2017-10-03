@@ -1,0 +1,33 @@
+#!/bin/bash
+
+set -ue
+
+exit_code=0
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[0;93m'
+NOCOLOR='\033[0m'
+
+fail() {
+  echo -e "${RED}FAIL${NOCOLOR} - $1"
+  exit_code=1
+}
+
+pass() {
+  echo -e "${GREEN}PASS${NOCOLOR} - $1"
+}
+
+main() {
+  releases=$(bosh int cf-deployment.yml --path=/releases | grep name | cut -d ' ' -f3 | sort)
+  for release in $releases; do
+    grep "update-$release" ../runtime-ci/pipelines/update-releases.yml > /dev/null
+    if [ $? != 0 ]; then
+      fail "update-$release not found in update-releases pipeline."
+    else
+      pass "update-$release is being updated by the update-releases pipeline."
+    fi
+  done
+  exit $exit_code
+}
+
+main
