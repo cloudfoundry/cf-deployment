@@ -8,12 +8,12 @@ RED='\033[0;31m'
 YELLOW='\033[0;93m'
 NOCOLOR='\033[0m'
 
-function fail() {
+fail() {
   echo -e "${RED}FAIL${NOCOLOR} - $1"
   exit_code=1
 }
 
-function interpolate() {
+interpolate() {
   local tmp_vars_store
   tmp_vars_store=$(mktemp)
   cp scripts/fixtures/test-base-vars-store.yml ${tmp_vars_store}
@@ -22,7 +22,7 @@ function interpolate() {
   return $?
 }
 
-function test_opsfile_interpolation() {
+test_opsfile_interpolation() {
   pushd $(dirname $0)/.. > /dev/null
     if interpolate ""; then
       echo -e "${GREEN}PASS${NOCOLOR} - cf-deployment.yml"
@@ -263,7 +263,7 @@ function test_opsfile_interpolation() {
   popd > /dev/null
 }
 
-function ensure_test_opsfiles_not_in_readme() {
+ensure_test_opsfiles_not_in_readme() {
   pushd $(dirname $0)/.. > /dev/null
     local opsfiles=$(ls operations/test/*.yml)
     local output=$(grep $(for x in $opsfiles; do echo -n " -e $x"; done;) README.md -c)
@@ -276,7 +276,7 @@ function ensure_test_opsfiles_not_in_readme() {
   popd > /dev/null
 }
 
-function ensure_opsfiles_in_readme() {
+ensure_opsfiles_in_readme() {
   local readme=$1
   shift
 
@@ -292,7 +292,7 @@ function ensure_opsfiles_in_readme() {
   popd > /dev/null
 }
 
-function main() {
+main() {
   echo
   echo -e "${YELLOW}***** README TESTS *****${NOCOLOR}"
   ensure_opsfiles_in_readme "operations/README.md" $(ls operations/*.yml)
