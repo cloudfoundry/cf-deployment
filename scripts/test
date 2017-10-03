@@ -260,6 +260,12 @@ test_opsfile_interpolation() {
     else
       fail "operations/legacy/old-droplet-mitigation.yml"
     fi
+    if interpolate "-o operations/stop-skipping-tls-validation.yml"; then
+      echo -e "${GREEN}PASS${NOCOLOR} - operations/stop-skipping-tls-validation.yml"
+    else
+      fail "operations/stop-skipping-tls-validation.yml"
+    fi
+
   popd > /dev/null
 }
 

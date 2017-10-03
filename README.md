@@ -7,6 +7,7 @@ to see if it's recommended that you use it.**
 ### Table of Contents
 * <a href='#purpose'>Purpose</a>
 * <a href='#readiness'>Is `cf-deployment` ready to use?</a>
+* <a href='#tls'>TLS validation</a>
 * <a href='#deploying-cf'>Deploying CF</a>
 * <a href='#contributing'>Contributing</a>
 * <a href='#setup'>Setup and Prerequisites</a>
@@ -80,6 +81,28 @@ is working on a transition path from `cf-release`.
 We don't advise anybody attempt the migration yet.
 Our in-progress tooling and documentation can be found at
 https://github.com/cloudfoundry/cf-deployment-transition
+
+## <a name='tls'></a> TLS validation
+
+Many test, development, and "getting started" environments
+do not have valid `TLS` certificates
+installed in their load balancers.
+`cf-deployment` skips `TLS` validation
+on some components
+that access each other via the "front door"
+of the Cloud Foundry load balancer
+for ease of use
+in such environments.
+This is a temporary solution
+that will be addressed soon
+by the [BOSH Trusted Certificates](https://bosh.io/docs/trusted-certs.html) workflow.
+
+Production deployers who have valid
+or otherwise trusted
+load balancer certificates should use the
+[stop-skipping-tls-validation.yml](operations/stop-skipping-tls-validation.yml) opsfile
+to force the validation of `TLS` certificates
+for all components.
 
 ## <a name='deploying-cf'></a>Deploying CF
 Deployment instructions have become verbose,
