@@ -36,7 +36,7 @@ and the ops-files will be removed.
 | [`locket-postgres.yml`](locket-postgres.yml) | Symlink to `enable-locket-postgres.yml` for backwards compatibility. | |
 | [`locket-windows.yml`](locket-windows.yml) | Symlink to `enable-locket-windows.yml` for backwards compatibility. | |
 | [`locket.yml`](locket.yml) | Symlink to `enable-locket.yml` for backwards compatibility. | |
-| [`secure-service-credentials.yml`](secure-service-credentials.yml) | Use CredHub for service credentials. | Requires `operations/experimental/enable-instance-identity-credentials.yml`. |
+| [`secure-service-credentials.yml`](secure-service-credentials.yml) | Use CredHub for service credentials. | Requires `enable-instance-identity-credentials.yml`. |
 | [`skip-consul-cell-registrations.yml`](skip-consul-cell-registrations.yml) | Configure the BBS to only use locket to find cells in the deployment | Requires `enable-locket.yml` |
 | [`skip-consul-locks.yml`](skip-consul-locks.yml) | Don't use consul locks in several jobs. | Requires `enable-locket.yml`. |
 | [`use-external-locket-db.yml`](use-external-locket-db.yml) | Allows `enable-locket.yml` to work with external database. | Requires `enable-locket.yml` |
