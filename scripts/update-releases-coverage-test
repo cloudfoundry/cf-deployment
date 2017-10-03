@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ue
+set -u
 
 exit_code=0
 GREEN='\033[0;32m'
@@ -20,11 +20,11 @@ pass() {
 main() {
   releases=$(bosh int cf-deployment.yml --path=/releases | grep name | cut -d ' ' -f3 | sort)
   for release in $releases; do
-    grep "update-$release" ../runtime-ci/pipelines/update-releases.yml > /dev/null
-    if [ $? != 0 ]; then
-      fail "update-$release not found in update-releases pipeline."
-    else
+    grep "update-$release" ../runtime-ci/pipelines/update-releases.yml &> /dev/null
+    if [ $? == 0 ]; then
       pass "update-$release is being updated by the update-releases pipeline."
+    else
+      fail "update-$release not found in update-releases pipeline."
     fi
   done
   exit $exit_code
