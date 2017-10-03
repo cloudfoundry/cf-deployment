@@ -1,7 +1,7 @@
 ---
 - type: replace
   path: /instance_groups/name=postgres/jobs/name=postgres/properties/databases/databases/-
-  error: "You must apply the `use-postgres.yml` ops-file first."
+  error: "You must apply the `use-postgres.yml` ops-file before applying `enable-locket-postgres.yml`."
   value:
     citext: true
     name: locket
@@ -14,7 +14,7 @@
     password: "((locket_database_password))"
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql
-  error: "You must apply the `enable-locket.yml` ops-file first."
+  error: "You must apply the `enable-locket.yml` ops-file before applying `enable-locket-postgres.yml`."
   value:
     db_host: sql-db.service.cf.internal
     db_port: 5524
