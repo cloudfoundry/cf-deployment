@@ -1021,6 +1021,24 @@ instance_groups:
             ca_cert: "((uaa_ssl.ca))"
             port: 8443
           bbs: *diego_bbs_client_properties
+  - name: scheduler
+    release: cf-syslog-drain
+    properties:
+      scalablesyslog:
+        scheduler:
+          api:
+            url: https://cloud-controller-ng.service.cf.internal:9023
+          tls:
+            client:
+              ca: "((scheduler_client_tls.ca))"
+              cert: "((scheduler_client_tls.certificate))"
+              key: "((scheduler_client_tls.private_key))"
+              adapter_cn: "ss-adapter"
+            api:
+              ca: "((scheduler_api_tls.ca))"
+              cert: "((scheduler_api_tls.certificate))"
+              key: "((scheduler_api_tls.private_key))"
+              cn: "cloud-controller-ng.service.cf.internal"
 - name: diego-cell
   azs:
   - z1
@@ -1204,45 +1222,6 @@ instance_groups:
           uris:
           - doppler.((system_domain))
           - "*.doppler.((system_domain))"
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
-
-- name: syslog-scheduler
-  azs:
-  - z1
-  instances: 1
-  persistent_disk_type: 1GB
-  vm_type: minimal
-  stemcell: default
-  networks:
-  - name: default
-  jobs:
-  - name: consul_agent
-    release: consul
-    consumes:
-      consul: nil
-      consul_common: {from: consul_common_link}
-      consul_server: nil
-      consul_client: {from: consul_client_link}
-  - name: scheduler
-    release: cf-syslog-drain
-    properties:
-      scalablesyslog:
-        scheduler:
-          api:
-            url: https://cloud-controller-ng.service.cf.internal:9023
-          tls:
-            client:
-              ca: "((scheduler_client_tls.ca))"
-              cert: "((scheduler_client_tls.certificate))"
-              key: "((scheduler_client_tls.private_key))"
-              adapter_cn: "ss-adapter"
-            api:
-              ca: "((scheduler_api_tls.ca))"
-              cert: "((scheduler_api_tls.certificate))"
-              key: "((scheduler_api_tls.private_key))"
-              cn: "cloud-controller-ng.service.cf.internal"
   - name: metron_agent
     release: loggregator
     properties: *metron_agent_properties

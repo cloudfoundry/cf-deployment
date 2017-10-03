@@ -80,9 +80,6 @@
 - type: replace
   path: /instance_groups/name=router/jobs/-
   value: *bosh_dns_job
-- type: replace
-  path: /instance_groups/name=syslog-scheduler/jobs/-
-  value: *bosh_dns_job
 
 - type: replace
   path: /releases/-

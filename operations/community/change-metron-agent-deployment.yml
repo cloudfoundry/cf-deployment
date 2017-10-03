@@ -38,9 +38,6 @@
   path: /instance_groups/name=log-api/jobs/name=metron_agent/properties/metron_agent/deployment
   value: ((metron_agent_deployment))
 - type: replace
-  path: /instance_groups/name=syslog-scheduler/jobs/name=metron_agent/properties/metron_agent/deployment
-  value: ((metron_agent_deployment))
-- type: replace
   path: /instance_groups/name=mysql/jobs/name=metron_agent/properties/metron_agent/deployment
   value: ((metron_agent_deployment))
 - type: replace
