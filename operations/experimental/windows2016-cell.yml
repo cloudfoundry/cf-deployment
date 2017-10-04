@@ -53,6 +53,8 @@
             require_tls: true
             server_cert: ((diego_rep_agent.certificate))
             server_key: ((diego_rep_agent.private_key))
+            locket:
+              api_location: "locket.service.cf.internal:8891"
         syslog_daemon_config:
           enable: false
         tls:
