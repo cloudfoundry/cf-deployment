@@ -89,26 +89,6 @@ test_opsfile_interpolation() {
     else
       fail "operations/experimental/enable-iptables-logger.yml"
     fi
-    if interpolate "-o operations/experimental/locket.yml -o operations/use-postgres.yml -o operations/experimental/enable-locket-postgres.yml"; then
-      pass "operations/experimental/enable-locket-postgres.yml"
-    else
-      fail "operations/experimental/enable-locket-postgres.yml"
-    fi
-    if interpolate "-o operations/windows-cell.yml -o operations/experimental/enable-locket-windows.yml"; then
-      pass "operations/experimental/enable-locket-windows.yml"
-    else
-      fail "operations/experimental/enable-locket-windows.yml"
-    fi
-    if interpolate "-o operations/experimental/windows2016-cell.yml -o operations/experimental/enable-locket-windows2016.yml"; then
-      pass "operations/experimental/enable-locket-windows2016.yml"
-    else
-      fail "operations/experimental/enable-locket-windows2016.yml"
-    fi
-    if interpolate "-o operations/experimental/enable-locket.yml"; then
-      pass "operations/experimental/enable-locket.yml"
-    else
-      fail "operations/experimental/enable-locket.yml"
-    fi
     if interpolate "-o operations/windows-cell.yml -o operations/experimental/enable-prefer-declarative-healthchecks-windows.yml"; then
       pass "operations/experimental/enable-prefer-declarative-healthchecks-windows.yml"
     else
