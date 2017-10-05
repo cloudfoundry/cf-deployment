@@ -139,11 +139,6 @@ test_opsfile_interpolation() {
     else
       fail "operations/experimental/skip-consul-locks.yml"
     fi
-    if interpolate "-o operations/experimental/locket.yml -o operations/use-external-dbs.yml -o operations/experimental/use-external-locket-db.yml -l operations/example-vars-files/vars-use-external-dbs.yml -l operations/example-vars-files/vars-use-external-locket-db.yml"; then
-      pass "operations/experimental/use-external-locket-db.yml"
-    else
-      fail "operations/experimental/use-external-locket-db.yml"
-    fi
     if interpolate "-o operations/experimental/use-grootfs.yml"; then
       pass "operations/experimental/use-grootfs.yml"
     else
