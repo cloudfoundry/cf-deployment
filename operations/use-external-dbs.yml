@@ -21,6 +21,8 @@
   path: /variables/name=network_connectivity_database_password
 - type: remove
   path: /variables/name=routing_api_database_password
+- type: remove
+  path: /variables/name=locket_database_password
 
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/db_scheme
@@ -174,6 +176,25 @@
   path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/name
   value: ((external_silk_controller_database_name))
 
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql/db_driver
+  value: ((external_database_type))
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql/db_port
+  value: ((external_database_port))
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql/db_schema
+  value: ((external_locket_database_name))
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql/db_host?
+  value: ((external_locket_database_address))
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql/db_password
+  value: ((external_locket_database_password))
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql/db_username
+  value: ((external_locket_database_username))
+
 # nil out database links
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/consumes?
@@ -192,4 +213,7 @@
   value: {database: nil}
 - type: replace
   path: /instance_groups/name=api/jobs/name=policy-server/consumes?
+  value: {database: nil}
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=locket/consumes?
   value: {database: nil}

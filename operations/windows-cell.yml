@@ -1,5 +1,5 @@
-- type: replace
-  path: /instance_groups/-
+- path: /instance_groups/-
+  type: replace
   value:
     azs:
     - z1
@@ -42,7 +42,9 @@
             require_tls: true
             server_cert: ((diego_rep_agent.certificate))
             server_key: ((diego_rep_agent.private_key))
-        loggregator:
+            locket:
+              api_location: "locket.service.cf.internal:8891"
+        loggregator: &diego_loggregator_client_properties
           ca_cert: ((loggregator_tls_metron.ca))
           cert: ((loggregator_tls_metron.certificate))
           key: ((loggregator_tls_metron.private_key))
@@ -56,6 +58,7 @@
       release: diego
     - name: route_emitter_windows
       properties:
+        loggregator: *diego_loggregator_client_properties
         diego:
           route_emitter:
             bbs:
@@ -91,31 +94,31 @@
     vm_extensions:
     - 100GB_ephemeral_disk
     vm_type: small-highmem
-- type: replace
-  path: /releases/-
+- path: /releases/-
+  type: replace
   value:
     name: garden-windows
     sha1: 395fae118c5f9b404eb6c497d1f9a8607ccf5504
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/garden-windows-bosh-release?v=0.8.0
     version: 0.8.0
-- type: replace
-  path: /stemcells/-
+- path: /stemcells/-
+  type: replace
   value:
     alias: windows2012R2
     os: windows2012R2
-    version: "1200.3"
+    version: "1200.4"
 - path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2012R2?
   type: replace
   value:
-    name: windows2012R2
     description: Windows Server 2012 R2
-- type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
+    name: windows2012R2
+- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
+  type: replace
   value:
     name: hwc_buildpack
     package: hwc-buildpack
-- type: replace
-  path: /instance_groups/name=api/jobs/-
+- path: /instance_groups/name=api/jobs/-
+  type: replace
   value:
     name: hwc-buildpack
     release: hwc-buildpack
