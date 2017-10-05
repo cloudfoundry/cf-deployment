@@ -20,6 +20,7 @@ and the ops-files will be removed.
 | [`bits-service-s3.yml`](bits-service-s3.yml) | Use s3 storage for the [bits-service](https://github.com/cloudfoundry-incubator/bits-service). | `use-s3-blobstore.yml` from the root `operations` directory is also required. |
 | [`bits-service-webdav.yml`](bits-service-webdav.yml) | Use the `blobstore`'s webdav storage for the [bits-service](https://github.com/cloudfoundry-incubator/bits-service). | Requires the `blobstore` job. |
 | [`deploy-bosh-backup-restore.yml`](deploy-bosh-backup-restore.yml) | Deploy BOSH backup and restore instance. | |
+| [`enable-bpm.yml`](enable-bpm.yml) | Enables the [BOSH Process Manager](https://github.com/cloudfoundry-incubator/bpm-release) as a BOSH addon. | |
 | [`disable-consul.yml`](disable-consul.yml) | Removes `consul` jobs and instance_group | |
 | [`disable-consul-windows.yml`](disable-consul-windows.yml) | Removes `consul` job from `windows-cell` instance_group | |
 | [`disable-consul-service-registrations-locket.yml`](disable-consul-service-registrations-locket.yml) | Prevents the `locket` server from registering itself as a service with Consul | |
