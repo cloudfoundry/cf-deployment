@@ -164,11 +164,6 @@ test_opsfile_interpolation() {
     else
       fail "operations/scale-to-one-az.yml"
     fi
-    if interpolate "-o operations/test/add-bosh-dns-to-cells.yml"; then
-      pass "operations/test/add-bosh-dns-to-cells.yml"
-    else
-      fail "operations/test/add-bosh-dns-to-cells.yml"
-    fi
     if interpolate "-o operations/test/add-datadog-firehose-nozzle.yml -v datadog_api_key=XYZ -v datadog_metric_prefix=foo.bar -v traffic_controller_external_port=8443"; then
       pass "operations/test/add-datadog-firehose-nozzle.yml"
     else
