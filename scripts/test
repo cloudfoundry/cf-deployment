@@ -79,10 +79,10 @@ test_opsfile_interpolation() {
     else
       fail "operations/enable-privileged-container-support.yml"
     fi
-    if interpolate "-o operations/experimental/deploy-bosh-backup-restore.yml"; then
-      pass "operations/experimental/deploy-bosh-backup-restore.yml"
+    if interpolate "-o operations/experimental/enable-backup-restore.yml"; then
+      pass "operations/experimental/enable-backup-restore.yml"
     else
-      fail "operations/experimental/deploy-bosh-backup-restore.yml"
+      fail "operations/experimental/enable-backup-restore.yml"
     fi
     if interpolate "-o operations/experimental/enable-iptables-logger.yml"; then
       pass "operations/experimental/enable-iptables-logger.yml"
