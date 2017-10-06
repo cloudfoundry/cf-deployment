@@ -114,6 +114,11 @@ test_opsfile_interpolation() {
     else
       fail "operations/experimental/secure-service-credentials-external-db.yml"
     fi
+    if interpolate "-o operations/experimental/enable-instance-identity-credentials.yml -o operations/experimental/secure-service-credentials.yml -o operations/use-postgres.yml -o operations/experimental/secure-service-credentials-postgres.yml"; then
+      pass "operations/experimental/secure-service-credentials-postgres.yml"
+    else
+      fail "operations/experimental/secure-service-credentials-postgres.yml"
+    fi
     if interpolate "-o operations/experimental/skip-consul-cell-registrations.yml"; then
       pass "operations/experimental/skip-consul-cell-registrations.yml"
     else
