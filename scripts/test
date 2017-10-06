@@ -114,6 +114,11 @@ test_opsfile_interpolation() {
     else
       fail "operations/experimental/secure-service-credentials-external-db.yml"
     fi
+    if interpolate "-o operations/experimental/enable-instance-identity-credentials.yml -o operations/experimental/secure-service-credentials.yml -o operations/use-postgres.yml -o operations/experimental/secure-service-credentials-postgres.yml"; then
+      pass "operations/experimental/secure-service-credentials-postgres.yml"
+    else
+      fail "operations/experimental/secure-service-credentials-postgres.yml"
+    fi
     if interpolate "-o operations/experimental/skip-consul-cell-registrations.yml"; then
       pass "operations/experimental/skip-consul-cell-registrations.yml"
     else
@@ -229,10 +234,22 @@ test_opsfile_interpolation() {
     else
       fail "operations/windows-cell.yml"
     fi
+    version=$(bosh interpolate cf-deployment.yml -o operations/windows-cell.yml -o operations/use-latest-windows-stemcell.yml --path=/stemcells/alias=windows2012R2/version)
+    if [ "${version}" == "latest" ]; then
+      pass "operations/use-latest-windows-stemcell.yml"
+    else
+      fail "operations/use-latest-windows-stemcell.yml, expected 'latest' but got '${version}'"
+    fi
     if interpolate "-o operations/experimental/windows2016-cell.yml"; then
       pass "operations/experimental/windows2016-cell.yml"
     else
       fail "operations/experimental/windows2016-cell.yml"
+    fi
+    version=$(bosh interpolate cf-deployment.yml -o operations/experimental/windows2016-cell.yml -o operations/experimental/use-latest-windows2016-stemcell.yml --path=/stemcells/alias=windows2016/version)
+    if [ "${version}" == "latest" ]; then
+      pass "operations/experimental/use-latest-windows2016-stemcell.yml"
+    else
+      fail "operations/experimental/use-latest-windows2016-stemcell.yml, expected 'latest' but got '${version}'"
     fi
     if interpolate "-o operations/windows-cell.yml -o operations/experimental/windows2016-cell.yml"; then
       pass "operations/windows-cell.yml operations/experimental/windows2016-cell.yml"
