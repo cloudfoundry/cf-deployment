@@ -37,6 +37,7 @@ and the ops-files will be removed.
 | [`secure-service-credentials-postgres.yml`](secure-service-credentials-postgres.yml) | Use local postgres database for CredHub data store. | Requires `secure-service-credentials.yml` and `use-postgres.yml`. |
 | [`skip-consul-cell-registrations.yml`](skip-consul-cell-registrations.yml) | Configure the BBS to only use locket to find cells in the deployment | |
 | [`skip-consul-locks.yml`](skip-consul-locks.yml) | Don't use consul locks in several jobs. | |
+| [`use-bosh-dns.yml`](use-bosh-dns.yml) | Adds `bosh-dns` job to all instance groups. | Aliases `service.cf.internal` urls to their `bosh-dns` equivalents. |
 | [`use-grootfs.yml`](use-grootfs.yml) | Enable grootfs on diego cells. | |
 | [`use-latest-windows2016-stemcell.yml`](use-latest-windows2016-stemcell.yml) | Use the latest `windows2016` stemcell available on your BOSH director instead of the one in `windows2016-cell.yml` | Requires `windows2016-cell.yml` |
 | [`windows2016-cell.yml`](windows2016-cell.yml) | Deploys a windows 2016 diego cell, adds releases necessary for windows. |  |
