@@ -42,8 +42,6 @@ and approximate resources:
   2 vCPUs and ~8 GB RAM.
 - small-highmem: diego cells need the memory to run apps.
   4 vCPUs and ~32 GB RAM.
-- sharedcpu: some instances need only small, occasional resources.
-  1 vCPU and 2GB memory, restricted CPU access.
 
 It is important to note that all of these
 have a 10 GB Ephemeral disk associated by default.

@@ -9,7 +9,6 @@ You'll need to following to proceed:
 
 | Name | CPUs | RAM (MiB) | Root Disk (GiB) | Ephemeral Disk (GiB) |
 -------|------|-----------|-----------------|----------------------|
-| sharedcpu | 1 | 2048 | 3 | 10 |
 | minimal | 1 | 3840 | 3 | 10 |
 | small | 2 | 7680 | 3 | 14 |
 | small-50GB-ephemeral-disk | 2 | 7680 | 3 | 50 |
