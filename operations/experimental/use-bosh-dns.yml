@@ -2,8 +2,8 @@
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/-
   value: &bosh_dns_job
-    name: dns
-    release: dns
+    name: bosh-dns
+    release: bosh-dns
     properties:
       aliases:
         _.cell.service.cf.internal: ["_.diego-cell.default.cf.bosh", "_.windows-cell.default.cf.bosh"]
@@ -68,7 +68,7 @@
 - type: replace
   path: /releases/-
   value:
-    name: dns
-    sha1: 56c8a91dcb9fab1b9a93a08a226d5f63855499c6
-    url: https://bosh.io/d/github.com/cloudfoundry/dns-release?v=0.0.3
-    version: 0.0.3
+    name: bosh-dns
+    sha1: 032fd263e940ec12589c920a348a004bd993b3c5
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-release?v=0.0.7
+    version: 0.0.7
