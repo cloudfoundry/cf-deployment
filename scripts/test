@@ -189,10 +189,10 @@ test_opsfile_interpolation() {
     else
       fail "operations/test/alter-ssh-proxy-redirect-uri.yml"
     fi
-    if interpolate "-o operations/test/use-bosh-dns-for-containers.yml"; then
-      pass "operations/test/use-bosh-dns-for-containers.yml"
+    if interpolate "-o operations/experimental/use-bosh-dns-for-containers.yml"; then
+      pass "operations/experimental/use-bosh-dns-for-containers.yml"
     else
-      fail "operations/test/use-bosh-dns-for-containers.yml"
+      fail "operations/experimental/use-bosh-dns-for-containers.yml"
     fi
     if interpolate "-o operations/experimental/use-bosh-dns.yml"; then
       pass "operations/experimental/use-bosh-dns.yml"

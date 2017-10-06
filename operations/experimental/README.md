@@ -38,6 +38,7 @@ and the ops-files will be removed.
 | [`skip-consul-cell-registrations.yml`](skip-consul-cell-registrations.yml) | Configure the BBS to only use locket to find cells in the deployment | |
 | [`skip-consul-locks.yml`](skip-consul-locks.yml) | Don't use consul locks in several jobs. | |
 | [`use-bosh-dns.yml`](use-bosh-dns.yml) | Adds `bosh-dns` job to all instance groups. | Aliases `service.cf.internal` urls to their `bosh-dns` equivalents. |
+| [`use-bosh-dns-for-containers.yml`](use-bosh-dns-for-containers.yml) | Sets the DNS server of application containers to the address of the local `bosh-dns` job. | Requires `use-bosh-dns.yml` |
 | [`use-grootfs.yml`](use-grootfs.yml) | Enable grootfs on diego cells. | |
 | [`use-latest-windows2016-stemcell.yml`](use-latest-windows2016-stemcell.yml) | Use the latest `windows2016` stemcell available on your BOSH director instead of the one in `windows2016-cell.yml` | Requires `windows2016-cell.yml` |
 | [`windows2016-cell.yml`](windows2016-cell.yml) | Deploys a windows 2016 diego cell, adds releases necessary for windows. |  |
