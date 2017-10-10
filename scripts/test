@@ -261,6 +261,11 @@ test_opsfile_interpolation() {
     else
       fail "operations/stop-skipping-tls-validation.yml"
     fi
+    if interpolate "-o operations/legacy/keep-original-internal-usernames.yml -l operations/legacy/example-vars-files/vars-keep-original-internal-usernames.yml"; then
+      pass "operations/legacy/keep-original-internal-usernames.yml"
+    else
+      fail "operations/legacy/keep-original-internal-usernames.yml"
+    fi
 
   popd > /dev/null
 }
