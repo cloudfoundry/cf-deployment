@@ -53,12 +53,19 @@
   path: /instance_groups/name=router/vm_extensions
   value:
   - ssh-proxy-and-router-lb
+- type: remove
+  path: /instance_groups/name=scheduler/jobs/name=ssh_proxy
 - type: replace
   path: /instance_groups/name=router/jobs/-
   value:
     name: ssh_proxy
     release: diego
     properties:
+      loggregator: &diego_loggregator_client_properties
+        use_v2_api: true
+        ca_cert: "((loggregator_tls_metron.ca))"
+        cert: "((loggregator_tls_metron.certificate))"
+        key: "((loggregator_tls_metron.private_key))"
       diego:
         ssl:
           skip_cert_verify: true
