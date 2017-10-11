@@ -9,7 +9,7 @@
     jobs:
     - name: bosh-dns
       properties:
-        aliases: &bosh-dns-aliases
+        aliases:
           _.cell.service.cf.internal:
           - _.diego-cell.default.cf.bosh
           - _.windows-cell.default.cf.bosh
