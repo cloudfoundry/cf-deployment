@@ -1,3 +1,4 @@
+---
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/-
   value:
@@ -19,6 +20,8 @@
         - '*.api.default.cf.bosh'
         consul.service.cf.internal:
         - '*.consul.default.cf.bosh'
+        credhub.service.cf.internal:
+        - '*.credhub.default.cf.bosh'
         doppler.service.cf.internal:
         - '*.doppler.default.cf.bosh'
         file-server.service.cf.internal:
