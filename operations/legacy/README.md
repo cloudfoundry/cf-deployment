@@ -17,4 +17,5 @@ This is the README for Legacy Ops-files. To learn more about `cf-deployment`, go
 | Name | Purpose | Notes |
 |:---  |:---     |:---   |
 | [`keep-original-internal-usernames.yml`](keep-original-internal-usernames.yml) | Maintains operator-provided usernames | Provides ability to set values for `properties.nats.user`, `properties.cc.staging_upload_user`, `properties.router.status.user` |
+| [`keep-static-ips.yml`](keep-static-ips.yml) | Holds `consul` and `nats` instances at a static IP address for transition between `cf-release` and `cf-deployment`. | Deployers must provide the IP addresses |
 | [`old-droplet-mitigation.yml`](old-droplet-mitigation.yml) | Mitigates against old droplets that may still have a legacy security vulnerability. | See comment in the ops file for more details. |
