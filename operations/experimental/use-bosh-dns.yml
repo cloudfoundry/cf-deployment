@@ -8,8 +8,9 @@
       - os: ubuntu-trusty
     jobs:
     - name: bosh-dns
+      release: bosh-dns
       properties:
-        aliases:
+        aliases: &bosh-dns-aliases
           _.cell.service.cf.internal:
           - _.diego-cell.default.cf.bosh
           - _.windows-cell.default.cf.bosh
@@ -61,7 +62,19 @@
           - '*.scheduler.default.cf.bosh'
           uaa.service.cf.internal:
           - '*.uaa.default.cf.bosh'
+
+- type: replace
+  path: /addons/-
+  value:
+    name: bosh-dns
+    include:
+      stemcell:
+      - os: windows2012R2
+    jobs:
+    - name: bosh-dns-windows
       release: bosh-dns
+      properties:
+        aliases: *bosh-dns-aliases
 
 - type: replace
   path: /releases/-
