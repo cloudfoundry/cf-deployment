@@ -51,7 +51,8 @@
           silk-controller.service.cf.internal:
           - '*.diego-api.default.cf.bosh'
           sql-db.service.cf.internal:
-          - '*.sal-db.default.cf.bosh'
+          - '*.mysql.default.cf.bosh'
+          - '*.postgres.default.cf.bosh'
           ssh-proxy.service.cf.internal:
           - '*.scheduler.default.cf.bosh'
           stager.service.cf.internal:
