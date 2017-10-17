@@ -1,0 +1,21 @@
+---
+
+- type: replace
+  path: /instance_groups/name=nats/jobs/name=nats/properties/nats/user
+  value: ((nats_user))
+
+- type: replace
+  path: /instance_groups/name=router/jobs/name=gorouter/properties/router/status/user
+  value: ((router_status_user))
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/staging_upload_user
+  value: ((cc_staging_upload_user))
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/staging_upload_user
+  value: ((cc_staging_upload_user))
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/staging_upload_user
+  value: ((cc_staging_upload_user))

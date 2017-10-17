@@ -1,5 +1,5 @@
-- path: /instance_groups/-
-  type: replace
+- type: replace
+  path: /instance_groups/-
   value:
     azs:
     - z1
@@ -37,14 +37,14 @@
               client_key: ((diego_bbs_client.private_key))
             ca_cert: ((diego_rep_agent.ca))
             enable_legacy_api_endpoints: false
+            locket:
+              api_location: locket.service.cf.internal:8891
             preloaded_rootfses:
             - windows2012R2:/tmp/windows2012R2
             require_tls: true
             server_cert: ((diego_rep_agent.certificate))
             server_key: ((diego_rep_agent.private_key))
-            locket:
-              api_location: "locket.service.cf.internal:8891"
-        loggregator: &diego_loggregator_client_properties
+        loggregator:
           ca_cert: ((loggregator_tls_metron.ca))
           cert: ((loggregator_tls_metron.certificate))
           key: ((loggregator_tls_metron.private_key))
@@ -58,7 +58,6 @@
       release: diego
     - name: route_emitter_windows
       properties:
-        loggregator: *diego_loggregator_client_properties
         diego:
           route_emitter:
             bbs:
@@ -66,6 +65,11 @@
               client_cert: ((diego_bbs_client.certificate))
               client_key: ((diego_bbs_client.private_key))
             local_mode: true
+        loggregator:
+          ca_cert: ((loggregator_tls_metron.ca))
+          cert: ((loggregator_tls_metron.certificate))
+          key: ((loggregator_tls_metron.private_key))
+          use_v2_api: true
         tcp:
           enabled: true
         uaa:
@@ -94,46 +98,46 @@
     vm_extensions:
     - 100GB_ephemeral_disk
     vm_type: small-highmem
-- path: /releases/-
-  type: replace
+- type: replace
+  path: /releases/-
   value:
     name: garden-windows
-    sha1: 395fae118c5f9b404eb6c497d1f9a8607ccf5504
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/garden-windows-bosh-release?v=0.8.0
-    version: 0.8.0
-- path: /stemcells/-
-  type: replace
+    sha1: 4aa381c1f3203915e773e25a71b50ce27f7e32cc
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/garden-windows-bosh-release?v=0.9.0
+    version: 0.9.0
+- type: replace
+  path: /stemcells/-
   value:
     alias: windows2012R2
     os: windows2012R2
     version: "1200.4"
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2012R2?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2012R2?
   value:
     description: Windows Server 2012 R2
     name: windows2012R2
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
   value:
     name: hwc_buildpack
     package: hwc-buildpack
-- path: /instance_groups/name=api/jobs/-
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/-
   value:
     name: hwc-buildpack
     release: hwc-buildpack
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/name=hwc_buildpack?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/name=hwc_buildpack?
   value:
     name: hwc_buildpack
     package: hwc-buildpack
-- path: /instance_groups/name=api/jobs/name=hwc-buildpack?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=hwc-buildpack?
   value:
     name: hwc-buildpack
     release: hwc-buildpack
-- path: /releases/name=hwc-buildpack?
-  type: replace
+- type: replace
+  path: /releases/name=hwc-buildpack?
   value:
     name: hwc-buildpack
     sha1: 9315c6cc800bcb69398beab38715760766838df7

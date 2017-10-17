@@ -8,6 +8,9 @@ RED='\033[0;31m'
 YELLOW='\033[0;93m'
 NOCOLOR='\033[0m'
 
+script_home="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+home="$( cd "${script_home}/.." && pwd )"
+
 fail() {
   echo -e "${RED}FAIL${NOCOLOR} - $1"
   exit_code=1
@@ -20,258 +23,126 @@ pass() {
 interpolate() {
   local tmp_vars_store
   tmp_vars_store=$(mktemp)
-  cp scripts/fixtures/test-base-vars-store.yml ${tmp_vars_store}
+  cp ${home}/scripts/fixtures/test-base-vars-store.yml ${tmp_vars_store}
 
-  bosh interpolate cf-deployment.yml $1  --vars-store ${tmp_vars_store} --var-errs --var-errs-unused > /dev/null
+  bosh interpolate ${home}/cf-deployment.yml $@ --vars-store ${tmp_vars_store} --var-errs --var-errs-unused > /dev/null
   return $?
 }
 
-test_opsfile_interpolation() {
-  pushd $(dirname $0)/.. > /dev/null
-    if interpolate ""; then
-      pass "cf-deployment.yml"
-    else
-      fail "cf-deployment.yml"
-    fi
-    version=$(bosh interpolate cf-deployment.yml -o operations/use-latest-stemcell.yml --path=/stemcells/alias=default/version)
-    if [ "${version}" == "latest" ]; then
-      pass "operations/use-latest-stemcell.yml"
-    else
-      fail "operations/use-latest-stemcell.yml, expected 'latest' but got '${version}'"
-    fi
-    if interpolate "-o operations/aws.yml"; then
-      pass "operations/aws.yml"
-    else
-      fail "operations/aws.yml"
-    fi
-    if interpolate "-o operations/azure.yml"; then
-      pass "operations/azure.yml"
-    else
-      fail "operations/azure.yml"
-    fi
-    if interpolate "-o operations/bosh-lite.yml"; then
-      pass "operations/bosh-lite.yml"
-    else
-      fail "operations/bosh-lite.yml"
-    fi
-    if interpolate "-o operations/cf-syslog-skip-cert-verify.yml"; then
-      pass "operations/cf-syslog-skip-cert-verify.yml"
-    else
-      fail "operations/cf-syslog-skip-cert-verify.yml"
-    fi
-    if interpolate "-o operations/configure-default-router-group.yml -v default_router_group_reservable_ports=1234-2024"; then
-      pass "operations/configure-default-router-group.yml"
-    else
-      fail "operations/configure-default-router-group.yml"
-    fi
-    if interpolate "-o operations/disable-router-tls-termination.yml"; then
-      pass "operations/disable-router-tls-termination.yml"
-    else
-      fail "operations/disable-router-tls-termination.yml"
-    fi
-    if interpolate "-o operations/enable-cc-rate-limiting.yml -v cc_rate_limiter_general_limit=blah -v cc_rate_limiter_unauthenticated_limit=something"; then
-      pass "operations/enable-cc-rate-limiting.yml"
-    else
-      fail "operations/enable-cc-rate-limiting.yml"
-    fi
-    if interpolate "-o operations/enable-privileged-container-support.yml"; then
-      pass "operations/enable-privileged-container-support.yml"
-    else
-      fail "operations/enable-privileged-container-support.yml"
-    fi
-    if interpolate "-o operations/experimental/deploy-bosh-backup-restore.yml"; then
-      pass "operations/experimental/deploy-bosh-backup-restore.yml"
-    else
-      fail "operations/experimental/deploy-bosh-backup-restore.yml"
-    fi
-    if interpolate "-o operations/experimental/enable-iptables-logger.yml"; then
-      pass "operations/experimental/enable-iptables-logger.yml"
-    else
-      fail "operations/experimental/enable-iptables-logger.yml"
-    fi
-    if interpolate "-o operations/windows-cell.yml -o operations/experimental/enable-prefer-declarative-healthchecks-windows.yml"; then
-      pass "operations/experimental/enable-prefer-declarative-healthchecks-windows.yml"
-    else
-      fail "operations/experimental/enable-prefer-declarative-healthchecks-windows.yml"
-    fi
-    if interpolate "-o operations/experimental/windows2016-cell.yml -o operations/experimental/enable-prefer-declarative-healthchecks-windows2016.yml"; then
-      pass "operations/experimental/enable-prefer-declarative-healthchecks-windows2016.yml"
-    else
-      fail "operations/experimental/enable-prefer-declarative-healthchecks-windows2016.yml"
-    fi
-    if interpolate "-o operations/experimental/enable-prefer-declarative-healthchecks.yml"; then
-      pass "operations/experimental/enable-prefer-declarative-healthchecks.yml"
-    else
-      fail "operations/experimental/enable-prefer-declarative-healthchecks.yml"
-    fi
-    if interpolate "-o operations/experimental/enable-instance-identity-credentials.yml -o operations/experimental/secure-service-credentials.yml"; then
-      pass "operations/experimental/secure-service-credentials.yml"
-    else
-      fail "operations/experimental/secure-service-credentials.yml"
-    fi
-    if interpolate "-o operations/experimental/enable-instance-identity-credentials.yml -o operations/experimental/secure-service-credentials.yml -o operations/use-external-dbs.yml -l operations/example-vars-files/vars-use-external-dbs.yml -o operations/experimental/secure-service-credentials-external-db.yml -l operations/experimental/example-vars-files/vars-secure-service-credentials-external-db.yml"; then
-      pass "operations/experimental/secure-service-credentials-external-db.yml"
-    else
-      fail "operations/experimental/secure-service-credentials-external-db.yml"
-    fi
-    if interpolate "-o operations/experimental/enable-instance-identity-credentials.yml -o operations/experimental/secure-service-credentials.yml -o operations/use-postgres.yml -o operations/experimental/secure-service-credentials-postgres.yml"; then
-      pass "operations/experimental/secure-service-credentials-postgres.yml"
-    else
-      fail "operations/experimental/secure-service-credentials-postgres.yml"
-    fi
-    if interpolate "-o operations/experimental/skip-consul-cell-registrations.yml"; then
-      pass "operations/experimental/skip-consul-cell-registrations.yml"
-    else
-      fail "operations/experimental/skip-consul-cell-registrations.yml"
-    fi
-    if interpolate "-o operations/experimental/skip-consul-locks.yml"; then
-      pass "operations/experimental/skip-consul-locks.yml"
-    else
-      fail "operations/experimental/skip-consul-locks.yml"
-    fi
-    if interpolate "-o operations/experimental/use-grootfs.yml"; then
-      pass "operations/experimental/use-grootfs.yml"
-    else
-      fail "operations/experimental/use-grootfs.yml"
-    fi
-    if interpolate "-o operations/experimental/bits-service.yml -o operations/experimental/bits-service-local.yml"; then
-      pass "operations/experimental/bits-service-local.yml"
-    else
-      fail "operations/experimental/bits-service-local.yml"
-    fi
-    if interpolate "-o operations/experimental/bits-service.yml -o operations/experimental/bits-service-webdav.yml"; then
-      pass "operations/experimental/bits-service-webdav.yml"
-    else
-      fail "operations/experimental/bits-service-webdav.yml"
-    fi
-    if interpolate "-o operations/use-s3-blobstore.yml -o operations/experimental/bits-service.yml -o operations/experimental/bits-service-s3.yml -l operations/example-vars-files/vars-use-s3-blobstore.yml"; then
-      pass "operations/experimental/bits-service-s3.yml"
-    else
-      fail "operations/experimental/bits-service-s3.yml"
-    fi
-    if interpolate "-o operations/rename-deployment.yml -v deployment_name=renamed_deployment"; then
-      pass "operations/rename-deployment.yml"
-    else
-      fail "operations/rename-deployment.yml"
-    fi
-    if interpolate "-o operations/rename-network.yml -v network_name=renamed_network"; then
-      pass "operations/rename-network.yml"
-    else
-      fail "operations/rename-network.yml"
-    fi
-    if interpolate "-o operations/scale-to-one-az.yml"; then
-      pass "operations/scale-to-one-az.yml"
-    else
-      fail "operations/scale-to-one-az.yml"
-    fi
-    if interpolate "-o operations/test/add-bosh-dns-to-cells.yml"; then
-      pass "operations/test/add-bosh-dns-to-cells.yml"
-    else
-      fail "operations/test/add-bosh-dns-to-cells.yml"
-    fi
-    if interpolate "-o operations/test/add-datadog-firehose-nozzle.yml -v datadog_api_key=XYZ -v datadog_metric_prefix=foo.bar -v traffic_controller_external_port=8443"; then
-      pass "operations/test/add-datadog-firehose-nozzle.yml"
-    else
-      fail "operations/test/add-datadog-firehose-nozzle.yml"
-    fi
-    if interpolate "-o operations/test/add-persistent-isolation-segment-diego-cell.yml"; then
-      pass "operations/test/add-persistent-isolation-segment-diego-cell.yml"
-    else
-      fail "operations/test/add-persistent-isolation-segment-diego-cell.yml"
-    fi
-    if interpolate "-o operations/test/add-persistent-isolation-segment-router.yml"; then
-      pass "operations/test/add-persistent-isolation-segment-router.yml"
-    else
-      fail "operations/test/add-persistent-isolation-segment-router.yml"
-    fi
-    if interpolate "-o operations/test/alter-ssh-proxy-redirect-uri.yml"; then
-      pass "operations/test/alter-ssh-proxy-redirect-uri.yml"
-    else
-      fail "operations/test/alter-ssh-proxy-redirect-uri.yml"
-    fi
-    if interpolate "-o operations/test/use-bosh-dns-for-containers.yml"; then
-      pass "operations/test/use-bosh-dns-for-containers.yml"
-    else
-      fail "operations/test/use-bosh-dns-for-containers.yml"
-    fi
-    if interpolate "-o operations/test/use-bosh-dns.yml"; then
-      pass "operations/test/use-bosh-dns.yml"
-    else
-      fail "operations/test/use-bosh-dns.yml"
-    fi
-    if interpolate "-o operations/use-blobstore-cdn.yml -l operations/example-vars-files/vars-use-blobstore-cdn.yml"; then
-      pass "operations/use-blobstore-cdn.yml"
-    else
-      fail "operations/use-blobstore-cdn.yml"
-    fi
-    if interpolate "-o operations/use-compiled-releases.yml"; then
-      pass "operations/use-compiled-releases.yml"
-    else
-      fail "operations/use-compiled-releases.yml"
-    fi
-    if interpolate "-o operations/use-external-dbs.yml -l operations/example-vars-files/vars-use-external-dbs.yml"; then
-      pass "operations/use-external-dbs.yml"
-    else
-      fail "operations/use-external-dbs.yml"
-    fi
-    if interpolate "-o operations/use-latest-stemcell.yml"; then
-      pass "operations/use-latest-stemcell.yml"
-    else
-      fail "operations/use-latest-stemcell.yml"
-    fi
-    if interpolate "-o operations/use-postgres.yml"; then
-      pass "operations/use-postgres.yml"
-    else
-      fail "operations/use-postgres.yml"
-    fi
-    if interpolate "-o operations/use-s3-blobstore.yml -l operations/example-vars-files/vars-use-s3-blobstore.yml"; then
-      pass "operations/use-s3-blobstore.yml"
-    else
-      fail "operations/use-s3-blobstore.yml"
-    fi
-    if interpolate "-o operations/windows-cell.yml"; then
-      pass "operations/windows-cell.yml"
-    else
-      fail "operations/windows-cell.yml"
-    fi
-    version=$(bosh interpolate cf-deployment.yml -o operations/windows-cell.yml -o operations/use-latest-windows-stemcell.yml --path=/stemcells/alias=windows2012R2/version)
-    if [ "${version}" == "latest" ]; then
-      pass "operations/use-latest-windows-stemcell.yml"
-    else
-      fail "operations/use-latest-windows-stemcell.yml, expected 'latest' but got '${version}'"
-    fi
-    if interpolate "-o operations/experimental/windows2016-cell.yml"; then
-      pass "operations/experimental/windows2016-cell.yml"
-    else
-      fail "operations/experimental/windows2016-cell.yml"
-    fi
-    version=$(bosh interpolate cf-deployment.yml -o operations/experimental/windows2016-cell.yml -o operations/experimental/use-latest-windows2016-stemcell.yml --path=/stemcells/alias=windows2016/version)
-    if [ "${version}" == "latest" ]; then
-      pass "operations/experimental/use-latest-windows2016-stemcell.yml"
-    else
-      fail "operations/experimental/use-latest-windows2016-stemcell.yml, expected 'latest' but got '${version}'"
-    fi
-    if interpolate "-o operations/windows-cell.yml -o operations/experimental/windows2016-cell.yml"; then
-      pass "operations/windows-cell.yml operations/experimental/windows2016-cell.yml"
-    else
-      fail "operations/windows-cell.yml operations/experimental/windows2016-cell.yml"
-    fi
-    if interpolate "-o operations/legacy/old-droplet-mitigation.yml"; then
-      pass "operations/legacy/old-droplet-mitigation.yml"
-    else
-      fail "operations/legacy/old-droplet-mitigation.yml"
-    fi
-    if interpolate "-o operations/stop-skipping-tls-validation.yml"; then
-      pass "operations/stop-skipping-tls-validation.yml"
-    else
-      fail "operations/stop-skipping-tls-validation.yml"
-    fi
+check_interpolation() {
+  if [[ ${1} == name:* ]]; then
+    name_under_test=$1
+    empty_string=""
+    ops_under_test="${name_under_test/name: /$empty_string}"; shift
+  else
+    ops_under_test="${1}"
+  fi
 
+  if interpolate "-o $@"; then
+    pass "${ops_under_test}"
+  else
+    fail "${ops_under_test}"
+  fi
+}
+
+new_test_opsfile_interpolation() {
+  pushd ${home} > /dev/null
+    pushd operations > /dev/null
+      echo
+      echo -e "${YELLOW}***** STANDARD OPSFILE INTERPOLATION TESTS *****${NOCOLOR}"
+
+      if interpolate ""; then
+        pass "cf-deployment.yml"
+      else
+        fail "cf-deployment.yml"
+      fi
+      check_interpolation "aws.yml"
+      check_interpolation "azure.yml"
+      check_interpolation "bosh-lite.yml"
+      check_interpolation "cf-syslog-skip-cert-verify.yml"
+      check_interpolation "configure-default-router-group.yml" "-v default_router_group_reservable_ports=1234-2024"
+      check_interpolation "disable-router-tls-termination.yml"
+      check_interpolation "enable-cc-rate-limiting.yml" "-v cc_rate_limiter_general_limit=blah" "-v cc_rate_limiter_unauthenticated_limit=something"
+      check_interpolation "enable-privileged-container-support.yml"
+      check_interpolation "rename-deployment.yml" "-v deployment_name=renamed_deployment"
+      check_interpolation "rename-network.yml" "-v network_name=renamed_network"
+      check_interpolation "scale-to-one-az.yml"
+      check_interpolation "stop-skipping-tls-validation.yml"
+      check_interpolation "use-blobstore-cdn.yml" "-l example-vars-files/vars-use-blobstore-cdn.yml"
+      check_interpolation "use-compiled-releases.yml"
+      check_interpolation "use-external-dbs.yml" "-l example-vars-files/vars-use-external-dbs.yml"
+      check_interpolation "use-latest-stemcell.yml"
+      version=$(bosh interpolate ${home}/cf-deployment.yml -o use-latest-stemcell.yml --path=/stemcells/alias=default/version)
+      if [ "${version}" == "latest" ]; then
+        pass "use-latest-stemcell.yml"
+      else
+        fail "use-latest-stemcell.yml, expected 'latest' but got '${version}'"
+      fi
+      version=$(bosh interpolate ${home}/cf-deployment.yml -o windows-cell.yml -o use-latest-windows-stemcell.yml --path=/stemcells/alias=windows2012R2/version)
+      if [ "${version}" == "latest" ]; then
+        pass "use-latest-windows-stemcell.yml"
+      else
+        fail "use-latest-windows-stemcell.yml, expected 'latest' but got '${version}'"
+      fi
+      check_interpolation "use-postgres.yml"
+      check_interpolation "use-s3-blobstore.yml" "-l example-vars-files/vars-use-s3-blobstore.yml"
+      check_interpolation "windows-cell.yml"
+    popd > /dev/null # operations
+
+    pushd operations/experimental > /dev/null
+      echo
+      echo -e "${YELLOW}***** EXPERIMENTAL OPSFILE INTERPOLATION TESTS *****${NOCOLOR}"
+
+      check_interpolation "name: add-credhub-lb.yml" "enable-instance-identity-credentials.yml" "-o secure-service-credentials.yml" "-o add-credhub-lb.yml"
+      check_interpolation "name: bits-service-local.yml" "bits-service.yml" "-o bits-service-local.yml"
+      check_interpolation "name: bits-service-s3.yml" "${home}/operations/use-s3-blobstore.yml" "-o bits-service.yml" "-o bits-service-s3.yml" "-l ${home}/operations/example-vars-files/vars-use-s3-blobstore.yml"
+      check_interpolation "name: bits-service-webdav.yml" "bits-service.yml" "-o bits-service-webdav.yml"
+      check_interpolation "enable-backup-restore.yml"
+      check_interpolation "enable-iptables-logger.yml"
+      check_interpolation "enable-prefer-declarative-healthchecks.yml"
+      check_interpolation "name: enable-prefer-declarative-healthchecks-windows.yml" "${home}/operations/windows-cell.yml" "-o enable-prefer-declarative-healthchecks-windows.yml"
+      check_interpolation "name: enable-prefer-declarative-healthchecks-windows2016.yml" "windows2016-cell.yml" "-o enable-prefer-declarative-healthchecks-windows2016.yml"
+      check_interpolation "name: secure-service-credentials.yml" "enable-instance-identity-credentials.yml" "-o secure-service-credentials.yml"
+      check_interpolation "name: secure-service-credentials-external-db.yml" "enable-instance-identity-credentials.yml" "-o secure-service-credentials.yml" "-o ${home}/operations/use-external-dbs.yml" "-l ${home}/operations/example-vars-files/vars-use-external-dbs.yml" "-o secure-service-credentials-external-db.yml" "-l example-vars-files/vars-secure-service-credentials-external-db.yml"
+      check_interpolation "name: secure-service-credentials-postgres.yml" "enable-instance-identity-credentials.yml" "-o secure-service-credentials.yml" "-o ${home}/operations/use-external-dbs.yml" "-l ${home}/operations/example-vars-files/vars-use-external-dbs.yml" "-o secure-service-credentials-external-db.yml" "-l example-vars-files/vars-secure-service-credentials-external-db.yml"
+      check_interpolation "skip-consul-cell-registrations.yml"
+      check_interpolation "skip-consul-locks.yml"
+      check_interpolation "use-bosh-dns.yml"
+      check_interpolation "use-bosh-dns-for-containers.yml"
+      check_interpolation "use-grootfs.yml"
+      version=$(bosh interpolate ${home}/cf-deployment.yml -o windows2016-cell.yml -o use-latest-windows2016-stemcell.yml --path=/stemcells/alias=windows2016/version)
+      if [ "${version}" == "latest" ]; then
+        pass "use-latest-windows2016-stemcell.yml"
+      else
+        fail "use-latest-windows2016-stemcell.yml, expected 'latest' but got '${version}'"
+      fi
+      check_interpolation "windows2016-cell.yml"
+      check_interpolation "name: operations/windows-cell.yml windows2016-cell.yml" "${home}/operations/windows-cell.yml" "-o windows2016-cell.yml"
+    popd > /dev/null # operations/experimental
+
+    pushd operations/test > /dev/null
+      echo
+      echo -e "${YELLOW}***** TEST OPSFILE INTERPOLATION TESTS *****${NOCOLOR}"
+
+      check_interpolation "name: add-datadog-firehose-nozzle.yml" "add-datadog-firehose-nozzle.yml" "-v datadog_api_key=XYZ" "-v datadog_metric_prefix=foo.bar" "-v traffic_controller_external_port=8443"
+      check_interpolation "add-persistent-isolation-segment-diego-cell.yml"
+      check_interpolation "add-persistent-isolation-segment-router.yml"
+      check_interpolation "alter-ssh-proxy-redirect-uri.yml"
+    popd > /dev/null # operations/test
+
+    pushd operations/legacy > /dev/null
+      echo
+      echo -e "${YELLOW}***** LEGACY OPSFILE INTERPOLATION TESTS *****${NOCOLOR}"
+
+      check_interpolation "old-droplet-mitigation.yml"
+      check_interpolation "keep-original-internal-usernames.yml" "-l example-vars-files/vars-keep-original-internal-usernames.yml"
+      check_interpolation "keep-static-ips.yml" "-l example-vars-files/vars-keep-static-ips.yml"
+    popd > /dev/null # operations/legacy
   popd > /dev/null
 }
 
 ensure_test_opsfiles_not_in_readme() {
-  pushd $(dirname $0)/.. > /dev/null
+  pushd ${home} > /dev/null
     local opsfiles=$(ls operations/test/*.yml)
     local output=$(grep $(for x in $opsfiles; do echo -n " -e $x"; done;) README.md -c)
 
@@ -287,7 +158,7 @@ ensure_opsfiles_in_readme() {
   local readme=$1
   shift
 
-  pushd $(dirname $0)/.. > /dev/null
+  pushd ${home} > /dev/null
     for x in $@; do
       local basename=$(basename $x)
       if [ $(grep \($basename\) $readme -c) != "0" ]; then
@@ -309,9 +180,7 @@ main() {
 
   ensure_test_opsfiles_not_in_readme
 
-  echo
-  echo -e "${YELLOW}***** OPSFILE INTERPOLATION TESTS *****${NOCOLOR}"
-  test_opsfile_interpolation
+  new_test_opsfile_interpolation
 
   exit $exit_code
 }

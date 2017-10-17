@@ -48,6 +48,7 @@
               client_key: ((diego_bbs_client.private_key))
             ca_cert: ((diego_rep_agent.ca))
             enable_legacy_api_endpoints: false
+            open_bindmounts_acl: true
             preloaded_rootfses:
             - windows2016:/var/vcap/packages/windows2016fs/rootfs
             require_tls: true
@@ -132,7 +133,6 @@
   type: replace
   value:
     name: winc
-    version: latest
     sha1: 2e91aaa8cb6d0b678e07fd4d8718c46f9b2bb0f1
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/winc-release?v=0.4.0
     version: 0.4.0

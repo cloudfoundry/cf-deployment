@@ -32,6 +32,7 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 | [`enable-cc-rate-limiting.yml`](enable-cc-rate-limiting.yml) | Enable rate limiting for UAA-authenticated endpoints. | Introduces variables `cc_rate_limiter_general_limit` and `cc_rate_limiter_unauthenticated_limit` |
 | [`enable-privileged-container-support.yml`](enable-privileged-container-support.yml) | Enables Diego privileged container support. | |
 | [`enable-uniq-consul-node-name.yml`](enable-uniq-consul-node-name.yml) | Configure Diego cell `consul_agent` jobs to have a unique id per instance. |  |
+| [`non-collocated-cf-syslog-drain.yml`](non-collocated-cf-syslog-drain.yml) | Deploy adapters from cf-syslog-drain as a standalone instance group. |  |
 | [`rename-deployment.yml`](rename-deployment.yml) | Allows a deployer to rename the deployment by passing a variable `deployment_name` |  |
 | [`rename-network.yml`](rename-network.yml) | Allows a deployer to rename the network by passing a variable `network_name` |  |
 | [`scale-to-one-az.yml`](scale-to-one-az.yml) | Scales cf-deployment down to a single instance per instance group, placing them all into a single AZ. | Effectively halves the deployment's footprint. Should be applied before other ops files. |
@@ -42,4 +43,4 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 | [`use-compiled-releases.yml`](use-compiled-releases.yml) | Instead of having your BOSH Director compile each release, use this ops-file to use pre-compiled releases for a deployment speed improvement. | These releases are compiled against a specific stemcell version that is listed in the opsfile.  Note that no Windows releases are currently compiled. |
 | [`use-latest-stemcell.yml`](use-latest-stemcell.yml) | Use the latest stemcell available on your BOSH director instead of the one in `cf-deployment.yml` |  |
 | [`use-latest-windows-stemcell.yml`](use-latest-windows-stemcell.yml) | Use the latest `windows2012R2` stemcell available on your BOSH director instead of the one in `windows-cell.yml` | Requires `windows-cell.yml` |
-| [`windows-cell.yml`](windows-cell.yml) | Deploys a Windows 2012R2 Diego cell and adds releases necessary for Windows. |  |
+| [`windows-cell.yml`](windows-cell.yml) | Deploys a Windows 2012R2 Diego cell and adds releases necessary for Windows. | **Known issue**: Windows cells deployed to AWS will likely have their disks fill up after ~9 days (depending on load). The bosh-windows team is actively working on a fix for this. Operators who want to deploy windows cells to AWS anyway may want to recreate those cells periodically.  |
