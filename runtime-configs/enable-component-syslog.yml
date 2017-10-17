@@ -5,11 +5,11 @@ addons:
     release: syslog
   properties:
     syslog:
-      address: ((address))
-      port: ((port))
-      transport: ((transport))
-      fallback_servers: ((fallback_servers))
-      custom_rule: ((custom_rule))
+      address: ((syslog_address))
+      port: ((syslog_port))
+      transport: ((syslog_transport))
+      fallback_servers: ((syslog_fallback_servers))
+      custom_rule: ((syslog_custom_rule))
 
 releases:
 - name: syslog
