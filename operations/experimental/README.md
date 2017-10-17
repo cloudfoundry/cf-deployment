@@ -15,6 +15,7 @@ and the ops-files will be removed.
 
 | Name | Purpose | Notes |
 |:---  |:---     |:---   |
+| [`add-credhub-lb.yml`](add-credhub-lb.yml) | Use load balancer to expose external address for CredHub. | Requires `secure-service-credentials.yml`. |
 | [`bits-service.yml`](bits-service.yml) | Adds the [bits-service](https://github.com/cloudfoundry-incubator/bits-service) job and enables it in the cloud-controller. | Also requires one of `bits-service-{local,webdav,s3}.yml` from the same directory. |
 | [`bits-service-local.yml`](bits-service-local.yml) | Use local storage for the [bits-service](https://github.com/cloudfoundry-incubator/bits-service). | |
 | [`bits-service-s3.yml`](bits-service-s3.yml) | Use s3 storage for the [bits-service](https://github.com/cloudfoundry-incubator/bits-service). | `use-s3-blobstore.yml` from the root `operations` directory is also required. |
@@ -33,8 +34,7 @@ and the ops-files will be removed.
 | [`enable-prefer-declarative-healthchecks.yml`](enable-prefer-declarative-healthchecks.yml) | Configure the Rep on the diego cells to prefer LRP CheckDefinition (a.k.a declarative healthchecks) over the old Monitor action | |
 | [`enable-prefer-declarative-healthchecks-windows.yml`](enable-prefer-declarative-healthchecks-windows.yml) | Configure the Rep on the windows 2012 cells to prefer LRP CheckDefinition (a.k.a declarative healthchecks) over the old Monitor action | |
 | [`enable-prefer-declarative-healthchecks-windows2016.yml`](enable-prefer-declarative-healthchecks-windows2016.yml) | Configure the Rep on the windows 2016 cells to prefer LRP CheckDefinition (a.k.a declarative healthchecks) over the old Monitor action | |
-| [`secure-service-credentials.yml`](secure-service-credentials.yml) | Use CredHub for service credentials. | Requires `enable-instance-identity-credentials.yml`. |
-| [`secure-service-credentials-add-load-balancer.yml`](secure-service-credentials-add-load-balancer.yml) | Use load balancer to expose external address for CredHub. | Requires `secure-service-credentials.yml`. |
+| [`secure-service-credentials.yml`](secure-service-credentials.yml) | Use CredHub for service credentials. | Requires `enable-instance-identity-credentials.yml`. BOSH DNS is required if not using a credhub load balancer. You can add a credhub load balancer with `add-credhub-lb.yml`. |
 | [`secure-service-credentials-external-db.yml`](secure-service-credentials-external-db.yml) | Use external database for CredHub data store. | Requires `secure-service-credentials.yml` and `use-external-dbs.yml`. |
 | [`secure-service-credentials-postgres.yml`](secure-service-credentials-postgres.yml) | Use local postgres database for CredHub data store. | Requires `secure-service-credentials.yml` and `use-postgres.yml`. |
 | [`skip-consul-cell-registrations.yml`](skip-consul-cell-registrations.yml) | Configure the BBS to only use locket to find cells in the deployment | |
