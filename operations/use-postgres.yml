@@ -2,9 +2,9 @@
   path: /releases/-
   value:
     name: postgres
-    sha1: 3f378bcab294e20316171d4e656636df88763664
-    url: https://bosh.io/d/github.com/cloudfoundry/postgres-release?v=20
-    version: "20"
+    sha1: b37916b709fb45ac7de3e195456301cb01a1ae22
+    url: https://bosh.io/d/github.com/cloudfoundry/postgres-release?v=21
+    version: "21"
 - type: remove
   path: /instance_groups/name=mysql/jobs/name=mysql
 - type: remove
@@ -173,7 +173,6 @@
   path: /variables/name=cf_mysql_mysql_galera_healthcheck_password?
 - type: replace
   path: /instance_groups/name=postgres/jobs/name=postgres/properties/databases/databases/-
-  error: "You must apply the `use-postgres.yml` ops-file first."
   value:
     citext: true
     name: locket
@@ -182,15 +181,14 @@
   path: /instance_groups/name=postgres/jobs/name=postgres/properties/databases/roles/-
   value:
     name: locket
+    password: ((locket_database_password))
     tag: locket
-    password: "((locket_database_password))"
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql
   value:
+    db_driver: postgres
     db_host: sql-db.service.cf.internal
+    db_password: ((locket_database_password))
     db_port: 5524
     db_schema: locket
     db_username: locket
-    db_password: "((locket_database_password))"
-    db_driver: postgres
-
