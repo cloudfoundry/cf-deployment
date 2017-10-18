@@ -613,13 +613,13 @@ instance_groups:
         stacks:
         - name: cflinuxfs2
           description: Cloud Foundry Linux-based filesystem
-        default_running_security_groups: &cc_default_running_security_groups
+        default_running_security_groups:
         - public_networks
         - dns
-        default_staging_security_groups: &cc_default_staging_security_groups
+        default_staging_security_groups:
         - public_networks
         - dns
-        security_group_definitions: &cc_security_group_definitions
+        security_group_definitions:
         - name: public_networks
           rules:
           - destination: 0.0.0.0-9.255.255.255
@@ -992,17 +992,9 @@ instance_groups:
   - name: cloud_controller_clock
     release: capi
     properties:
-      hm9000:
-        port: -1
       cc:
         db_encryption_key: "((cc_db_encryption_key))"
-        default_to_diego_backend: true
-        default_running_security_groups: *cc_default_running_security_groups
-        default_staging_security_groups: *cc_default_staging_security_groups
-        security_group_definitions: *cc_security_group_definitions
         internal_api_password: "((cc_internal_api_password))"
-        bulk_api_password: "((cc_bulk_api_password))"
-        quota_definitions: *quota_definitions
         staging_upload_user: staging_user
         staging_upload_password: "((cc_staging_upload_password))"
         resource_pool: *blobstore-properties
