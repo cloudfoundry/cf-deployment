@@ -35,7 +35,7 @@
           consul_server: nil
           consul_client: {from: consul_client_link}
  
- #CAPI properties
+  #CAPI properties
   - type: replace
     path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties?/cloud_controller/release_level_backup?
     value: true
