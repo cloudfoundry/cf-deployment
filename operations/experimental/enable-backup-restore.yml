@@ -53,7 +53,9 @@
   - type: replace
     path: /instance_groups/name=backup-restore/jobs/name=bbr-cloudcontrollerdb/properties?/cloud_controller/release_level_backup?
     value: true
-
   - type: replace
     path: /instance_groups/name=backup-restore/jobs/name=bbr-cfnetworkingdb/properties?/release_level_backup?
+    value: true
+  - type: replace
+    path: /instance_groups/name=uaa/jobs/name=uaa/properties?/release_level_backup?
     value: true
