@@ -34,8 +34,7 @@
           consul_common: {from: consul_common_link}
           consul_server: nil
           consul_client: {from: consul_client_link}
- 
-  #CAPI properties
+
   - type: replace
     path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties?/cloud_controller/release_level_backup?
     value: true
@@ -54,16 +53,9 @@
   - type: replace
     path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties?/cloud_controller/release_level_backup?
     value: true
-  
-  #cf-networking properties
   - type: replace
     path: /instance_groups/name=scheduler/jobs/name=tps/properties?/cloud_controller/release_level_backup?
     value: true
-  - type: replace
-    path: /instance_groups/name=uaa/jobs/name=uaa/properties?/release_level_backup?
-    value: true
-
-  #uaa properties
   - type: replace
     path: /instance_groups/name=uaa/jobs/name=uaa/properties?/release_level_backup?
     value: true
