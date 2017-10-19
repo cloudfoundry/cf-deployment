@@ -72,8 +72,6 @@ instance_groups:
   - name: metron_agent
     release: loggregator
     properties: &metron_agent_properties
-      metron_endpoint:
-        shared_secret: "((dropsonde_shared_secret))"
       loggregator:
         tls:
           ca_cert: "((loggregator_tls_metron.ca))"
@@ -141,8 +139,6 @@ instance_groups:
           doppler:
             cert: "((loggregator_tls_doppler.certificate))"
             key: "((loggregator_tls_doppler.private_key))"
-      doppler_endpoint:
-        shared_secret: "((dropsonde_shared_secret))"
   - name: adapter
     release: cf-syslog-drain
     properties:
@@ -1350,8 +1346,6 @@ variables:
 - name: router_status_password
   type: password
 - name: cf_admin_password
-  type: password
-- name: dropsonde_shared_secret
   type: password
 - name: router_route_services_secret
   type: password
