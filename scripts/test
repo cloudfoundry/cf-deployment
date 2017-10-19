@@ -98,6 +98,7 @@ new_test_opsfile_interpolation() {
       check_interpolation "name: bits-service-s3.yml" "${home}/operations/use-s3-blobstore.yml" "-o bits-service.yml" "-o bits-service-s3.yml" "-l ${home}/operations/example-vars-files/vars-use-s3-blobstore.yml"
       check_interpolation "name: bits-service-webdav.yml" "bits-service.yml" "-o bits-service-webdav.yml"
       check_interpolation "enable-backup-restore.yml"
+      check_interpolation "enable-bpm.yml"
       check_interpolation "enable-iptables-logger.yml"
       check_interpolation "enable-prefer-declarative-healthchecks.yml"
       check_interpolation "name: enable-prefer-declarative-healthchecks-windows.yml" "${home}/operations/windows-cell.yml" "-o enable-prefer-declarative-healthchecks-windows.yml"
