@@ -18,7 +18,7 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 | [`use-azure-storage-blobstore.yml`](use-azure-storage-blobstore.yml) | Replaces local WebDAV blobstore with external Azure Storage blobstore. | Introduces [new variables](example-vars-files/vars-use-azure-storage-blobstore.yml) for Azure credentials and container names. |
 | **Openstack** | | |
 | [`openstack.yml`](openstack.yml) | Used for deploying Cloud Foundry on OpenStack with BOSH | See [OpenStack](../iaas-support/openstack/README.md) documentation. |
-| [`use-swift-blobstore.yml`](use-swift-blobstore.yml) | Replaces local WebDAV blobstore with OpenStack swift blobstore. Used for deploying Cloud Foundry on OpenStack with BOSH | If you plan using the [Swift ops file](use-swift-blobstore.yml) to enable Swift as blobstore for the Cloud Controller, you should also run the [Swift extension](https://github.com/cloudfoundry-incubator/cf-openstack-validator/tree/master/extensions/object_storage). |
+| [`use-swift-blobstore.yml`](use-swift-blobstore.yml) | Replaces local WebDAV blobstore with OpenStack swift blobstore. Used for deploying Cloud Foundry on OpenStack with BOSH | Introduces [new variables](example-vars-files/vars-use-swift-blobstore.yml) for OpenStack credentials and directory names. If you plan using the [Swift ops file](use-swift-blobstore.yml) to enable Swift as blobstore for the Cloud Controller, you should also run the [Swift extension](https://github.com/cloudfoundry-incubator/cf-openstack-validator/tree/master/extensions/object_storage). |
 
 
 ## Feature-based Ops-files
