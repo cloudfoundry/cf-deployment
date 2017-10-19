@@ -72,8 +72,6 @@ instance_groups:
   - name: metron_agent
     release: loggregator
     properties: &metron_agent_properties
-      metron_endpoint:
-        shared_secret: "((dropsonde_shared_secret))"
       loggregator:
         tls:
           ca_cert: "((loggregator_tls_metron.ca))"
@@ -141,8 +139,6 @@ instance_groups:
           doppler:
             cert: "((loggregator_tls_doppler.certificate))"
             key: "((loggregator_tls_doppler.private_key))"
-      doppler_endpoint:
-        shared_secret: "((dropsonde_shared_secret))"
   - name: adapter
     release: cf-syslog-drain
     properties:
@@ -1351,8 +1347,6 @@ variables:
   type: password
 - name: cf_admin_password
   type: password
-- name: dropsonde_shared_secret
-  type: password
 - name: router_route_services_secret
   type: password
 - name: uaa_admin_client_secret
@@ -1658,9 +1652,9 @@ releases:
   version: 1.161.0
   sha1: 9eee181c745f8c086dcce570e3ecfbb8553b8f5a
 - name: consul
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=182
-  version: "182"
-  sha1: eb8dc539fdb2dc270eb75e5185acb364ffd030ed
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=183
+  version: "183"
+  sha1: 1068034619915512db7f714cfe71dd3f6c78515d
 - name: diego
   url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=1.28.0
   version: 1.28.0
