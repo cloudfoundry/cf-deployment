@@ -24,6 +24,8 @@
       release: winc
     - name: winc-network
       release: winc
+    - name: windows2016fs
+      release: windows2016fs
     - name: garden-windows
       properties:
         garden:
@@ -133,6 +135,14 @@
   type: replace
   value:
     name: winc
-    sha1: 2e91aaa8cb6d0b678e07fd4d8718c46f9b2bb0f1
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/winc-release?v=0.4.0
-    version: 0.4.0
+    sha1: ac219d33a4d3df9f0866c23699e879be75e60562
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/winc-release?v=0.5.0
+    version: 0.5.0
+
+- path: /releases/name=windows2016fs?
+  type: replace
+  value:
+    name: windows2016fs
+    sha1: 7b490aea78f5fb9f53fb9117ca777db9d35672d8
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows2016fs-online-release?v=0.0.1
+    version: 0.0.1
