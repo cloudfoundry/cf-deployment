@@ -144,6 +144,9 @@ and requires a bosh director with a valid cloud-config that has been configured 
 It also requires the new `bosh` CLI,
 which it relies on to generate and fill-in needed variables.
 
+### BOSH director
+`cf-deployment` requires BOSH [`v262`](https://github.com/cloudfoundry/bosh/releases/tag/v262).
+
 ### BOSH CLI
 `cf-deployment` requires the new [BOSH CLI](https://github.com/cloudfoundry/bosh-cli).
 
