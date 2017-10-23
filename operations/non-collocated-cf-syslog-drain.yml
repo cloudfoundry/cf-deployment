@@ -45,12 +45,3 @@
               cert: "((adapter_rlp_tls.certificate))"
               key: "((adapter_rlp_tls.private_key))"
               cn: reverselogproxy
-    - name: metron_agent
-      release: loggregator
-      properties:
-        loggregator:
-          tls:
-            ca_cert: "((loggregator_tls_metron.ca))"
-            metron:
-              cert: "((loggregator_tls_metron.certificate))"
-              key: "((loggregator_tls_metron.private_key))"

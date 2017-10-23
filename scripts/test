@@ -5,19 +5,23 @@ set -ue
 exit_code=0
 GREEN='\033[0;32m'
 RED='\033[0;31m'
+LIGHT_RED='\033[1;31m'
 YELLOW='\033[0;93m'
 NOCOLOR='\033[0m'
 
 script_home="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 home="$( cd "${script_home}/.." && pwd )"
 
+# If we get killed, kill backgrounded processes
+trap 'kill $(jobs -p) > /dev/null 2>&1' SIGTERM SIGINT
+
 fail() {
-  echo -e "${RED}FAIL${NOCOLOR} - $1"
+  echo -e "${RED} FAIL - ${LIGHT_RED} $suite_name ${RED} - ${NOCOLOR} $1"
   exit_code=1
 }
 
 pass() {
-  echo -e "${GREEN}PASS${NOCOLOR} - $1"
+  echo -e "${GREEN} PASS - ${YELLOW} $suite_name ${GREEN} - ${NOCOLOR} $1"
 }
 
 interpolate() {
@@ -45,12 +49,12 @@ check_interpolation() {
   fi
 }
 
-new_test_opsfile_interpolation() {
+test_standard_ops() {
+  # Padded for pretty output
+  suite_name="STANDARD    "
+
   pushd ${home} > /dev/null
     pushd operations > /dev/null
-      echo
-      echo -e "${YELLOW}***** STANDARD OPSFILE INTERPOLATION TESTS *****${NOCOLOR}"
-
       if interpolate ""; then
         pass "cf-deployment.yml"
       else
@@ -64,6 +68,7 @@ new_test_opsfile_interpolation() {
       check_interpolation "disable-router-tls-termination.yml"
       check_interpolation "enable-cc-rate-limiting.yml" "-v cc_rate_limiter_general_limit=blah" "-v cc_rate_limiter_unauthenticated_limit=something"
       check_interpolation "enable-privileged-container-support.yml"
+      check_interpolation "override-app-domains.yml" "-l example-vars-files/vars-override-app-domains.yml"
       check_interpolation "rename-deployment.yml" "-v deployment_name=renamed_deployment"
       check_interpolation "rename-network.yml" "-v network_name=renamed_network"
       check_interpolation "scale-to-one-az.yml"
@@ -86,13 +91,17 @@ new_test_opsfile_interpolation() {
       fi
       check_interpolation "use-postgres.yml"
       check_interpolation "use-s3-blobstore.yml" "-l example-vars-files/vars-use-s3-blobstore.yml"
+      check_interpolation "use-trusted-ca-cert-for-apps.yml" "-l example-vars-files/vars-use-trusted-ca-cert-for-apps.yml"
       check_interpolation "windows-cell.yml"
     popd > /dev/null # operations
+  popd > /dev/null
+}
 
+test_experimental_ops() {
+  suite_name="EXPERIMENTAL"
+
+  pushd ${home} > /dev/null
     pushd operations/experimental > /dev/null
-      echo
-      echo -e "${YELLOW}***** EXPERIMENTAL OPSFILE INTERPOLATION TESTS *****${NOCOLOR}"
-
       check_interpolation "name: add-credhub-lb.yml" "enable-instance-identity-credentials.yml" "-o secure-service-credentials.yml" "-o add-credhub-lb.yml"
       check_interpolation "name: bits-service-local.yml" "bits-service.yml" "-o bits-service-local.yml"
       check_interpolation "name: bits-service-s3.yml" "${home}/operations/use-s3-blobstore.yml" "-o bits-service.yml" "-o bits-service-s3.yml" "-l ${home}/operations/example-vars-files/vars-use-s3-blobstore.yml"
@@ -121,26 +130,45 @@ new_test_opsfile_interpolation() {
       check_interpolation "windows2016-cell.yml"
       check_interpolation "name: operations/windows-cell.yml windows2016-cell.yml" "${home}/operations/windows-cell.yml" "-o windows2016-cell.yml"
     popd > /dev/null # operations/experimental
+  popd > /dev/null
+}
 
+test_test_ops() {
+  # Padded for pretty output
+  suite_name="TEST        "
+
+  pushd ${home} > /dev/null
     pushd operations/test > /dev/null
-      echo
-      echo -e "${YELLOW}***** TEST OPSFILE INTERPOLATION TESTS *****${NOCOLOR}"
-
       check_interpolation "name: add-datadog-firehose-nozzle.yml" "add-datadog-firehose-nozzle.yml" "-v datadog_api_key=XYZ" "-v datadog_metric_prefix=foo.bar" "-v traffic_controller_external_port=8443"
       check_interpolation "add-persistent-isolation-segment-diego-cell.yml"
       check_interpolation "add-persistent-isolation-segment-router.yml"
       check_interpolation "alter-ssh-proxy-redirect-uri.yml"
     popd > /dev/null # operations/test
+  popd > /dev/null # operations/test
+}
 
+test_legacy_ops() {
+  # Padded for pretty output
+  suite_name="LEGACY      "
+
+  pushd ${home} > /dev/null
     pushd operations/legacy > /dev/null
-      echo
-      echo -e "${YELLOW}***** LEGACY OPSFILE INTERPOLATION TESTS *****${NOCOLOR}"
-
       check_interpolation "old-droplet-mitigation.yml"
       check_interpolation "keep-original-internal-usernames.yml" "-l example-vars-files/vars-keep-original-internal-usernames.yml"
       check_interpolation "keep-static-ips.yml" "-l example-vars-files/vars-keep-static-ips.yml"
     popd > /dev/null # operations/legacy
   popd > /dev/null
+}
+
+test_opsfile_interpolation() {
+  test_standard_ops &
+  test_experimental_ops &
+  test_test_ops &
+  test_legacy_ops &
+
+  for job in `jobs -p`; do
+    wait $job
+  done
 }
 
 ensure_test_opsfiles_not_in_readme() {
@@ -173,8 +201,8 @@ ensure_opsfiles_in_readme() {
 }
 
 main() {
-  echo
-  echo -e "${YELLOW}***** README TESTS *****${NOCOLOR}"
+  suite_name="README"
+
   ensure_opsfiles_in_readme "operations/README.md" $(ls operations/*.yml)
   ensure_opsfiles_in_readme "operations/legacy/README.md" $(ls operations/legacy/*.yml)
   ensure_opsfiles_in_readme "operations/community/README.md" $(ls operations/community/*.yml)
@@ -182,7 +210,7 @@ main() {
 
   ensure_test_opsfiles_not_in_readme
 
-  new_test_opsfile_interpolation
+  test_opsfile_interpolation
 
   exit $exit_code
 }

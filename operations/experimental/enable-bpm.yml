@@ -3,9 +3,9 @@
   path: /releases/-
   value:
     name: bpm
-    sha1: a4b793b631a53ed5bc7966772222292938c0ca5f
-    url: http://bosh.io/d/github.com/cloudfoundry-incubator/bpm-release?v=0.1.0
-    version: 0.1.0
+    sha1: f2bd126b17b3591160f501d88d79ccf0aba1ae54
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/bpm-release?v=0.2.0
+    version: 0.2.0
 
 - type: replace
   path: /addons?/-
@@ -14,6 +14,10 @@
     jobs:
     - name: bpm
       release: bpm
+
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/bpm?/enabled?
+  value: true
 
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=route_emitter/properties/bpm?/enabled?

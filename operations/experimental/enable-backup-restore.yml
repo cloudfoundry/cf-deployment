@@ -39,21 +39,23 @@
     path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties?/cloud_controller/release_level_backup?
     value: true
   - type: replace
-    path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties?/cloud_controller/release_level_backup?
+    path: /instance_groups/name=backup-restore/jobs/name=bbr-cfnetworkingdb/properties?/release_level_backup?
     value: true
   - type: replace
-    path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties?/cloud_controller/release_level_backup?
-    value: true
-  - type: replace
-    path: /instance_groups/name=scheduler/jobs/name=tps/properties?/cloud_controller/release_level_backup?
+    path: /instance_groups/name=backup-restore/jobs/name=bbr-cloudcontrollerdb/properties?/cloud_controller/release_level_backup?
     value: true
   - type: replace
     path: /instance_groups/name=blobstore/jobs/name=blobstore/properties?/blobstore/release_level_backup?
     value: true
   - type: replace
-    path: /instance_groups/name=backup-restore/jobs/name=bbr-cloudcontrollerdb/properties?/cloud_controller/release_level_backup?
+    path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties?/cloud_controller/release_level_backup?
     value: true
-
   - type: replace
-    path: /instance_groups/name=backup-restore/jobs/name=bbr-cfnetworkingdb/properties?/release_level_backup?
+    path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties?/cloud_controller/release_level_backup?
+    value: true
+  - type: replace
+    path: /instance_groups/name=scheduler/jobs/name=tps/properties?/cloud_controller/release_level_backup?
+    value: true
+  - type: replace
+    path: /instance_groups/name=uaa/jobs/name=uaa/properties?/release_level_backup?
     value: true

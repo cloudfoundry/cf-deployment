@@ -6,6 +6,21 @@ update:
   max_in_flight: 5
   serial: false
   update_watch_time: 5000-1200000
+addons:
+- name: metron_agent
+  include:
+    stemcell:
+    - os: ubuntu-trusty
+  jobs:
+  - name: metron_agent
+    release: loggregator
+    properties:
+      loggregator:
+        tls:
+          ca_cert: "((loggregator_tls_metron.ca))"
+          metron:
+            cert: "((loggregator_tls_metron.certificate))"
+            key: "((loggregator_tls_metron.private_key))"
 instance_groups:
 - name: smoke-tests
   lifecycle: errand
@@ -69,15 +84,6 @@ instance_groups:
         ca_cert: "((consul_agent.ca))"
         server_cert: "((consul_server.certificate))"
         server_key: "((consul_server.private_key))"
-  - name: metron_agent
-    release: loggregator
-    properties: &metron_agent_properties
-      loggregator:
-        tls:
-          ca_cert: "((loggregator_tls_metron.ca))"
-          metron:
-            cert: "((loggregator_tls_metron.certificate))"
-            key: "((loggregator_tls_metron.private_key))"
 - name: nats
   azs:
   - z1
@@ -102,9 +108,6 @@ instance_groups:
       nats:
         password: "((nats_password))"
         user: nats
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
 - name: doppler
   azs:
   - z1
@@ -157,9 +160,6 @@ instance_groups:
             cert: "((adapter_rlp_tls.certificate))"
             key: "((adapter_rlp_tls.private_key))"
             cn: reverselogproxy
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
 - name: mysql
   azs:
   - z1
@@ -224,9 +224,6 @@ instance_groups:
           api_password: "((cf_mysql_proxy_api_password))"
           consul_enabled: true
           consul_service_name: "sql-db"
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
 - name: diego-api
   migrated_from:
   - name: diego-bbs
@@ -302,9 +299,6 @@ instance_groups:
         ca_cert: "((loggregator_tls_metron.ca))"
         cert: "((loggregator_tls_metron.certificate))"
         key: "((loggregator_tls_metron.private_key))"
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
   - name: silk-controller
     release: cf-networking
     properties:
@@ -488,9 +482,6 @@ instance_groups:
           - "*.uaa.((system_domain))"
           - login.((system_domain))
           - "*.login.((system_domain))"
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
   - name: statsd_injector
     release: statsd-injector
     properties: &statsd_injector_properties
@@ -546,9 +537,6 @@ instance_groups:
             component: blobstore
           uris:
           - blobstore.((system_domain))
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
 - name: api
   azs:
   - z1
@@ -583,7 +571,7 @@ instance_groups:
       router:
         route_services_secret: "((router_route_services_secret))"
       system_domain: "((system_domain))"
-      app_domains: &app_domains
+      app_domains:
       - "((system_domain))"
       app_ssh:
         host_key_fingerprint: "((diego_ssh_proxy_host_key.public_key_fingerprint))"
@@ -609,13 +597,13 @@ instance_groups:
         stacks:
         - name: cflinuxfs2
           description: Cloud Foundry Linux-based filesystem
-        default_running_security_groups: &cc_default_running_security_groups
+        default_running_security_groups:
         - public_networks
         - dns
-        default_staging_security_groups: &cc_default_staging_security_groups
+        default_staging_security_groups:
         - public_networks
         - dns
-        security_group_definitions: &cc_security_group_definitions
+        security_group_definitions:
         - name: public_networks
           rules:
           - destination: 0.0.0.0-9.255.255.255
@@ -670,7 +658,7 @@ instance_groups:
         internal_api_password: "((cc_internal_api_password))"
         staging_upload_user: staging_user
         staging_upload_password: "((cc_staging_upload_password))"
-        quota_definitions: &quota_definitions
+        quota_definitions:
           default:
             memory_limit: 102400
             non_basic_services_allowed: true
@@ -740,9 +728,6 @@ instance_groups:
           registration_interval: 20s
           uris:
           - api.((system_domain))/networking
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
   - name: statsd_injector
     release: statsd-injector
     properties: *statsd_injector_properties
@@ -823,9 +808,6 @@ instance_groups:
       consul_common: {from: consul_common_link}
       consul_server: nil
       consul_client: {from: consul_client_link}
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
   - name: cloud_controller_worker
     release: capi
     properties:
@@ -905,9 +887,6 @@ instance_groups:
         ca_cert: "((uaa_ssl.ca))"
         ssl:
           port: 8443
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
 - name: tcp-router
   azs:
   - z1
@@ -935,9 +914,6 @@ instance_groups:
       uaa:
         ca_cert: "((uaa_ca.certificate))"
         tls_port: 8443
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
 - name: scheduler
   azs:
   - z1
@@ -988,17 +964,9 @@ instance_groups:
   - name: cloud_controller_clock
     release: capi
     properties:
-      hm9000:
-        port: -1
       cc:
         db_encryption_key: "((cc_db_encryption_key))"
-        default_to_diego_backend: true
-        default_running_security_groups: *cc_default_running_security_groups
-        default_staging_security_groups: *cc_default_staging_security_groups
-        security_group_definitions: *cc_security_group_definitions
         internal_api_password: "((cc_internal_api_password))"
-        bulk_api_password: "((cc_bulk_api_password))"
-        quota_definitions: *quota_definitions
         staging_upload_user: staging_user
         staging_upload_password: "((cc_staging_upload_password))"
         resource_pool: *blobstore-properties
@@ -1009,7 +977,6 @@ instance_groups:
         diego: *bypass_bridge
       ccdb: *ccdb
       system_domain: "((system_domain))"
-      app_domains: *app_domains
       routing_api: *routing_api
       uaa:
         ca_cert: "((uaa_ssl.ca))"
@@ -1018,12 +985,8 @@ instance_groups:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
           cc_routing:
             secret: "((uaa_clients_cc-routing_secret))"
-        url: https://uaa.((system_domain))
         ssl:
           port: 8443
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
   - name: statsd_injector
     release: statsd-injector
     properties: *statsd_injector_properties
@@ -1132,9 +1095,6 @@ instance_groups:
         ca_cert: "((diego_rep_agent.ca))"
         cert: "((diego_rep_agent.certificate))"
         key: "((diego_rep_agent.private_key))"
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
   - name: cfdot
     release: diego
     properties:
@@ -1258,9 +1218,6 @@ instance_groups:
           uris:
           - doppler.((system_domain))
           - "*.doppler.((system_domain))"
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
 
 variables:
 - name: blobstore_admin_users_password
@@ -1648,17 +1605,17 @@ releases:
   version: "2"
   sha1: c9954676033164f550ae645bd1216cf56d159905
 - name: cflinuxfs2
-  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.161.0
-  version: 1.161.0
-  sha1: 9eee181c745f8c086dcce570e3ecfbb8553b8f5a
+  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.164.0
+  version: 1.164.0
+  sha1: ec29f2ecb6e75b5acedc4555056de97e5aab755f
 - name: consul
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=183
-  version: "183"
-  sha1: 1068034619915512db7f714cfe71dd3f6c78515d
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=186
+  version: "186"
+  sha1: 1c7e3e477707304eec85d81020e7f084567fce98
 - name: diego
-  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=1.28.0
-  version: 1.28.0
-  sha1: f78e142e051ca8fd7a186dc321931531ab879a1c
+  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=1.29.0
+  version: 1.29.0
+  sha1: 1407da52a7318eb9f1b70ee01b0657a447a3f813
 - name: dotnet-core-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/dotnet-core-buildpack-release?v=1.0.27
   version: 1.0.27
@@ -1696,9 +1653,9 @@ releases:
   version: 1.5.26
   sha1: a8b679f5c1da6f71a9c5f9ef5dcd985366c3e38a
 - name: routing
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.164.0
-  version: 0.164.0
-  sha1: 1c31a19ca9718ba070620d090c684747c7529686
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.165.0
+  version: 0.165.0
+  sha1: d48a6dd9e0b4381e56c4c14dfbe3c60d3dbfadb1
 - name: ruby-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/ruby-buildpack-release?v=1.7.3
   version: 1.7.3
