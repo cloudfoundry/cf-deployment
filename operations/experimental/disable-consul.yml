@@ -27,6 +27,10 @@
   path: /instance_groups/name=diego-cell/jobs/name=consul_agent
 - type: remove
   path: /instance_groups/name=log-api/jobs/name=consul_agent
+- type: remove
+  path: /instance_groups/name=vizzini?/jobs/name=consul_agent
+- type: remove
+  path: /instance_groups/name=credhub?/jobs/name=consul_agent
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=auctioneer/properties/enable_consul_service_registration?
   value: false
