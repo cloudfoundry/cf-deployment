@@ -50,7 +50,8 @@ check_interpolation() {
 }
 
 test_standard_ops() {
-  suite_name="STANDARD"
+  # Padded for pretty output
+  suite_name="STANDARD    "
 
   pushd ${home} > /dev/null
     pushd operations > /dev/null
@@ -131,7 +132,8 @@ test_experimental_ops() {
 }
 
 test_test_ops() {
-  suite_name="TEST"
+  # Padded for pretty output
+  suite_name="TEST        "
 
   pushd ${home} > /dev/null
     pushd operations/test > /dev/null
@@ -144,7 +146,8 @@ test_test_ops() {
 }
 
 test_legacy_ops() {
-  suite_name="LEGACY"
+  # Padded for pretty output
+  suite_name="LEGACY      "
 
   pushd ${home} > /dev/null
     pushd operations/legacy > /dev/null
