@@ -6,6 +6,21 @@ update:
   max_in_flight: 5
   serial: false
   update_watch_time: 5000-1200000
+addons:
+- name: metron_agent
+  include:
+    stemcell:
+    - os: ubuntu-trusty
+  jobs:
+  - name: metron_agent
+    release: loggregator
+    properties:
+      loggregator:
+        tls:
+          ca_cert: "((loggregator_tls_metron.ca))"
+          metron:
+            cert: "((loggregator_tls_metron.certificate))"
+            key: "((loggregator_tls_metron.private_key))"
 instance_groups:
 - name: smoke-tests
   lifecycle: errand
@@ -69,15 +84,6 @@ instance_groups:
         ca_cert: "((consul_agent.ca))"
         server_cert: "((consul_server.certificate))"
         server_key: "((consul_server.private_key))"
-  - name: metron_agent
-    release: loggregator
-    properties: &metron_agent_properties
-      loggregator:
-        tls:
-          ca_cert: "((loggregator_tls_metron.ca))"
-          metron:
-            cert: "((loggregator_tls_metron.certificate))"
-            key: "((loggregator_tls_metron.private_key))"
 - name: nats
   azs:
   - z1
@@ -102,9 +108,6 @@ instance_groups:
       nats:
         password: "((nats_password))"
         user: nats
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
 - name: doppler
   azs:
   - z1
@@ -157,9 +160,6 @@ instance_groups:
             cert: "((adapter_rlp_tls.certificate))"
             key: "((adapter_rlp_tls.private_key))"
             cn: reverselogproxy
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
 - name: mysql
   azs:
   - z1
@@ -224,9 +224,6 @@ instance_groups:
           api_password: "((cf_mysql_proxy_api_password))"
           consul_enabled: true
           consul_service_name: "sql-db"
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
 - name: diego-api
   migrated_from:
   - name: diego-bbs
@@ -302,9 +299,6 @@ instance_groups:
         ca_cert: "((loggregator_tls_metron.ca))"
         cert: "((loggregator_tls_metron.certificate))"
         key: "((loggregator_tls_metron.private_key))"
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
   - name: silk-controller
     release: cf-networking
     properties:
@@ -488,9 +482,6 @@ instance_groups:
           - "*.uaa.((system_domain))"
           - login.((system_domain))
           - "*.login.((system_domain))"
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
   - name: statsd_injector
     release: statsd-injector
     properties: &statsd_injector_properties
@@ -546,9 +537,6 @@ instance_groups:
             component: blobstore
           uris:
           - blobstore.((system_domain))
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
 - name: api
   azs:
   - z1
@@ -740,9 +728,6 @@ instance_groups:
           registration_interval: 20s
           uris:
           - api.((system_domain))/networking
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
   - name: statsd_injector
     release: statsd-injector
     properties: *statsd_injector_properties
@@ -823,9 +808,6 @@ instance_groups:
       consul_common: {from: consul_common_link}
       consul_server: nil
       consul_client: {from: consul_client_link}
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
   - name: cloud_controller_worker
     release: capi
     properties:
@@ -905,9 +887,6 @@ instance_groups:
         ca_cert: "((uaa_ssl.ca))"
         ssl:
           port: 8443
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
 - name: tcp-router
   azs:
   - z1
@@ -935,9 +914,6 @@ instance_groups:
       uaa:
         ca_cert: "((uaa_ca.certificate))"
         tls_port: 8443
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
 - name: scheduler
   azs:
   - z1
@@ -1021,9 +997,6 @@ instance_groups:
         url: https://uaa.((system_domain))
         ssl:
           port: 8443
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
   - name: statsd_injector
     release: statsd-injector
     properties: *statsd_injector_properties
@@ -1132,9 +1105,6 @@ instance_groups:
         ca_cert: "((diego_rep_agent.ca))"
         cert: "((diego_rep_agent.certificate))"
         key: "((diego_rep_agent.private_key))"
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
   - name: cfdot
     release: diego
     properties:
@@ -1258,9 +1228,6 @@ instance_groups:
           uris:
           - doppler.((system_domain))
           - "*.doppler.((system_domain))"
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
 
 variables:
 - name: blobstore_admin_users_password
