@@ -571,7 +571,7 @@ instance_groups:
       router:
         route_services_secret: "((router_route_services_secret))"
       system_domain: "((system_domain))"
-      app_domains: &app_domains
+      app_domains:
       - "((system_domain))"
       app_ssh:
         host_key_fingerprint: "((diego_ssh_proxy_host_key.public_key_fingerprint))"
@@ -658,7 +658,7 @@ instance_groups:
         internal_api_password: "((cc_internal_api_password))"
         staging_upload_user: staging_user
         staging_upload_password: "((cc_staging_upload_password))"
-        quota_definitions: &quota_definitions
+        quota_definitions:
           default:
             memory_limit: 102400
             non_basic_services_allowed: true
@@ -977,7 +977,6 @@ instance_groups:
         diego: *bypass_bridge
       ccdb: *ccdb
       system_domain: "((system_domain))"
-      app_domains: *app_domains
       routing_api: *routing_api
       uaa:
         ca_cert: "((uaa_ssl.ca))"
@@ -986,7 +985,6 @@ instance_groups:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
           cc_routing:
             secret: "((uaa_clients_cc-routing_secret))"
-        url: https://uaa.((system_domain))
         ssl:
           port: 8443
   - name: statsd_injector
