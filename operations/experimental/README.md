@@ -22,11 +22,11 @@ and the ops-files will be removed.
 | [`bits-service-webdav.yml`](bits-service-webdav.yml) | Use the `blobstore`'s webdav storage for the [bits-service](https://github.com/cloudfoundry-incubator/bits-service). | Requires the `blobstore` job. |
 | [`disable-interpolate-service-bindings.yml`](disable-interpolate-service-bindings.yml) | Disables the interpolation of CredHub service credentials by Cloud Controller. |
 | [`enable-bpm.yml`](enable-bpm.yml) | Enables the [BOSH Process Manager](https://github.com/cloudfoundry-incubator/bpm-release) as a BOSH addon. | |
-| [`disable-consul.yml`](disable-consul.yml) | Removes `consul` jobs and instance_group | |
-| [`disable-consul-windows.yml`](disable-consul-windows.yml) | Removes `consul` job from `windows-cell` instance_group | |
-| [`disable-consul-service-registrations-locket.yml`](disable-consul-service-registrations-locket.yml) | Prevents the `locket` server from registering itself as a service with Consul | |
-| [`disable-consul-service-registrations-windows.yml`](disable-consul-service-registrations-windows.yml) | Prevents the Windows Cell `rep` from registering itself as a service with Consul | Requires `windows-cell.yml` |
-| [`disable-consul-service-registrations.yml`](disable-consul-service-registrations.yml) | Prevents the `auctioneer`, `ssh_proxy`, `file_server`, `rep`, and `bbs` jobs from registering as a service with Consul | |
+| [`disable-consul.yml`](disable-consul.yml) | Prevents the `auctioneer`, `ssh_proxy`, `file_server`, `rep`, `locket`, and `bbs` jobs from registering as a service with Consul and removes `consul` jobs and instance_group | |
+| [`disable-consul-windows.yml`](disable-consul-windows.yml) | Prevents the Windows Cell `rep` from registering itself as a service with Consul and removes `consul` job from `windows-cell` instance_group | Requires `windows-cell.yml` |
+| [`disable-consul-service-registrations-locket.yml`](disable-consul-service-registrations-locket.yml) | This is an empty file, kept for backward compatabilty. Its contents has been merged with `disable-consul.yml` | Previously: Prevents the `locket` server from registering itself as a service with Consul|
+| [`disable-consul-service-registrations-windows.yml`](disable-consul-service-registrations-windows.yml) | This is an empty file, kept for backward compatabilty. Its contents has been merged with `disable-consul-windows.yml` | Requires `windows-cell.yml` |
+| [`disable-consul-service-registrations.yml`](disable-consul-service-registrations.yml) | This is an empty file, kept for backward compatabilty. Its contents has been merged with `disable-consul.yml` | Previously: Prevents the `auctioneer`, `ssh_proxy`, `file_server`, `rep`, `locket`, and `bbs` jobs from registering as a service with Consul|
 | [`enable-backup-restore.yml`](enable-backup-restore.yml) | Deploy BOSH backup and restore instance and enable release level backup. | |
 | [`enable-container-proxy.yml`](enable-container-proxy.yml) | Enables container proxy on the Diego Cell `rep`. | Generates a templating error during deployment if [instance identity credentials](enable-instance-identity-credentials.yml) are not set. |
 | [`enable-instance-identity-credentials.yml`](enable-instance-identity-credentials.yml) | Enables identity credentials on Diego Cell `rep`. | |

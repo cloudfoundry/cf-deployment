@@ -27,3 +27,21 @@
   path: /instance_groups/name=diego-cell/jobs/name=consul_agent
 - type: remove
   path: /instance_groups/name=log-api/jobs/name=consul_agent
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=auctioneer/properties/enable_consul_service_registration?
+  value: false
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=ssh_proxy/properties/enable_consul_service_registration?
+  value: false
+- type: replace
+  path: /instance_groups/name=api/jobs/name=file_server/properties?/enable_consul_service_registration?
+  value: false
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=rep/properties/enable_consul_service_registration?
+  value: false
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=bbs/properties/enable_consul_service_registration?
+  value: false
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=locket/properties/enable_consul_service_registration?
+  value: false
