@@ -33,6 +33,7 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 | [`enable-privileged-container-support.yml`](enable-privileged-container-support.yml) | Enables Diego privileged container support. | |
 | [`enable-uniq-consul-node-name.yml`](enable-uniq-consul-node-name.yml) | Configure Diego cell `consul_agent` jobs to have a unique id per instance. |  |
 | [`non-collocated-cf-syslog-drain.yml`](non-collocated-cf-syslog-drain.yml) | Deploy adapters from cf-syslog-drain as a standalone instance group. |  |
+| [`override-app-domains.yml`](override-app-domains.yml) | Switches from using the system domain as a shared app domain; allows the configuration of one or more shared app domains instead. | Adds [new variables](example-vars-files/vars-override-app-domains.yml). |
 | [`rename-deployment.yml`](rename-deployment.yml) | Allows a deployer to rename the deployment by passing a variable `deployment_name` |  |
 | [`rename-network.yml`](rename-network.yml) | Allows a deployer to rename the network by passing a variable `network_name` |  |
 | [`scale-to-one-az.yml`](scale-to-one-az.yml) | Scales cf-deployment down to a single instance per instance group, placing them all into a single AZ. | Effectively halves the deployment's footprint. Should be applied before other ops files. |

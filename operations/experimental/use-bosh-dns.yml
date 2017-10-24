@@ -14,6 +14,8 @@
           _.cell.service.cf.internal:
           - _.diego-cell.default.cf.bosh
           - _.windows-cell.default.cf.bosh
+          - _.windows2016-cell.default.cf.bosh
+          - _.isolated-diego-cell.default.cf.bosh
           auctioneer.service.cf.internal:
           - '*.scheduler.default.cf.bosh'
           bbs.service.cf.internal:
@@ -71,6 +73,19 @@
     include:
       stemcell:
       - os: windows2012R2
+    jobs:
+    - name: bosh-dns-windows
+      release: bosh-dns
+      properties:
+        aliases: *bosh-dns-aliases
+
+- type: replace
+  path: /addons/-
+  value:
+    name: bosh-dns-windows
+    include:
+      stemcell:
+      - os: windows2016
     jobs:
     - name: bosh-dns-windows
       release: bosh-dns
