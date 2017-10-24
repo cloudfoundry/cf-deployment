@@ -717,6 +717,8 @@ instance_groups:
         - name: api
           registration_interval: 20s
           port: 9022
+          tags:
+            component: CloudController
           uris:
           - api.((system_domain))
           health_check:
