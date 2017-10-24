@@ -4,6 +4,7 @@ set -ue
 
 exit_code=0
 GREEN='\033[0;32m'
+LIGHT_GREEN='\033[0;92m'
 RED='\033[0;31m'
 LIGHT_RED='\033[1;31m'
 YELLOW='\033[0;93m'
@@ -11,6 +12,14 @@ NOCOLOR='\033[0m'
 
 script_home="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 home="$( cd "${script_home}/.." && pwd )"
+
+# suite_name should be defined by each of our test suite functions
+suite_name="UNDEFINED"
+
+# Grab each of our test suites, exercised by test_opsfile_interpolation()
+for script in `ls ${script_home}/*.sh`; do
+  source $script
+done
 
 # If we get killed, kill backgrounded processes
 trap 'kill $(jobs -p) > /dev/null 2>&1' SIGTERM SIGINT
@@ -49,115 +58,6 @@ check_interpolation() {
   fi
 }
 
-test_standard_ops() {
-  # Padded for pretty output
-  suite_name="STANDARD    "
-
-  pushd ${home} > /dev/null
-    pushd operations > /dev/null
-      if interpolate ""; then
-        pass "cf-deployment.yml"
-      else
-        fail "cf-deployment.yml"
-      fi
-      check_interpolation "aws.yml"
-      check_interpolation "azure.yml"
-      check_interpolation "bosh-lite.yml"
-      check_interpolation "cf-syslog-skip-cert-verify.yml"
-      check_interpolation "configure-default-router-group.yml" "-v default_router_group_reservable_ports=1234-2024"
-      check_interpolation "disable-router-tls-termination.yml"
-      check_interpolation "enable-cc-rate-limiting.yml" "-v cc_rate_limiter_general_limit=blah" "-v cc_rate_limiter_unauthenticated_limit=something"
-      check_interpolation "enable-privileged-container-support.yml"
-      check_interpolation "rename-deployment.yml" "-v deployment_name=renamed_deployment"
-      check_interpolation "rename-network.yml" "-v network_name=renamed_network"
-      check_interpolation "scale-to-one-az.yml"
-      check_interpolation "stop-skipping-tls-validation.yml"
-      check_interpolation "use-blobstore-cdn.yml" "-l example-vars-files/vars-use-blobstore-cdn.yml"
-      check_interpolation "use-compiled-releases.yml"
-      check_interpolation "use-external-dbs.yml" "-l example-vars-files/vars-use-external-dbs.yml"
-      check_interpolation "use-latest-stemcell.yml"
-      version=$(bosh interpolate ${home}/cf-deployment.yml -o use-latest-stemcell.yml --path=/stemcells/alias=default/version)
-      if [ "${version}" == "latest" ]; then
-        pass "use-latest-stemcell.yml"
-      else
-        fail "use-latest-stemcell.yml, expected 'latest' but got '${version}'"
-      fi
-      version=$(bosh interpolate ${home}/cf-deployment.yml -o windows-cell.yml -o use-latest-windows-stemcell.yml --path=/stemcells/alias=windows2012R2/version)
-      if [ "${version}" == "latest" ]; then
-        pass "use-latest-windows-stemcell.yml"
-      else
-        fail "use-latest-windows-stemcell.yml, expected 'latest' but got '${version}'"
-      fi
-      check_interpolation "use-postgres.yml"
-      check_interpolation "use-s3-blobstore.yml" "-l example-vars-files/vars-use-s3-blobstore.yml"
-      check_interpolation "use-trusted-ca-cert-for-apps.yml" "-l example-vars-files/vars-use-trusted-ca-cert-for-apps.yml"
-      check_interpolation "windows-cell.yml"
-    popd > /dev/null # operations
-  popd > /dev/null
-}
-
-test_experimental_ops() {
-  suite_name="EXPERIMENTAL"
-
-  pushd ${home} > /dev/null
-    pushd operations/experimental > /dev/null
-      check_interpolation "name: add-credhub-lb.yml" "enable-instance-identity-credentials.yml" "-o secure-service-credentials.yml" "-o add-credhub-lb.yml"
-      check_interpolation "name: bits-service-local.yml" "bits-service.yml" "-o bits-service-local.yml"
-      check_interpolation "name: bits-service-s3.yml" "${home}/operations/use-s3-blobstore.yml" "-o bits-service.yml" "-o bits-service-s3.yml" "-l ${home}/operations/example-vars-files/vars-use-s3-blobstore.yml"
-      check_interpolation "name: bits-service-webdav.yml" "bits-service.yml" "-o bits-service-webdav.yml"
-      check_interpolation "enable-backup-restore.yml"
-      check_interpolation "enable-bpm.yml"
-      check_interpolation "enable-iptables-logger.yml"
-      check_interpolation "enable-prefer-declarative-healthchecks.yml"
-      check_interpolation "name: enable-prefer-declarative-healthchecks-windows.yml" "${home}/operations/windows-cell.yml" "-o enable-prefer-declarative-healthchecks-windows.yml"
-      check_interpolation "name: enable-prefer-declarative-healthchecks-windows2016.yml" "windows2016-cell.yml" "-o enable-prefer-declarative-healthchecks-windows2016.yml"
-      check_interpolation "name: secure-service-credentials.yml" "enable-instance-identity-credentials.yml" "-o secure-service-credentials.yml"
-      check_interpolation "name: secure-service-credentials-external-db.yml" "enable-instance-identity-credentials.yml" "-o secure-service-credentials.yml" "-o ${home}/operations/use-external-dbs.yml" "-l ${home}/operations/example-vars-files/vars-use-external-dbs.yml" "-o secure-service-credentials-external-db.yml" "-l example-vars-files/vars-secure-service-credentials-external-db.yml"
-      check_interpolation "name: secure-service-credentials-postgres.yml" "enable-instance-identity-credentials.yml" "-o secure-service-credentials.yml" "-o ${home}/operations/use-external-dbs.yml" "-l ${home}/operations/example-vars-files/vars-use-external-dbs.yml" "-o secure-service-credentials-external-db.yml" "-l example-vars-files/vars-secure-service-credentials-external-db.yml"
-      check_interpolation "skip-consul-cell-registrations.yml"
-      check_interpolation "skip-consul-locks.yml"
-      check_interpolation "use-bosh-dns.yml"
-      check_interpolation "use-bosh-dns-for-containers.yml"
-      check_interpolation "use-grootfs.yml"
-      version=$(bosh interpolate ${home}/cf-deployment.yml -o windows2016-cell.yml -o use-latest-windows2016-stemcell.yml --path=/stemcells/alias=windows2016/version)
-      if [ "${version}" == "latest" ]; then
-        pass "use-latest-windows2016-stemcell.yml"
-      else
-        fail "use-latest-windows2016-stemcell.yml, expected 'latest' but got '${version}'"
-      fi
-      check_interpolation "windows2016-cell.yml"
-      check_interpolation "name: operations/windows-cell.yml windows2016-cell.yml" "${home}/operations/windows-cell.yml" "-o windows2016-cell.yml"
-    popd > /dev/null # operations/experimental
-  popd > /dev/null
-}
-
-test_test_ops() {
-  # Padded for pretty output
-  suite_name="TEST        "
-
-  pushd ${home} > /dev/null
-    pushd operations/test > /dev/null
-      check_interpolation "name: add-datadog-firehose-nozzle.yml" "add-datadog-firehose-nozzle.yml" "-v datadog_api_key=XYZ" "-v datadog_metric_prefix=foo.bar" "-v traffic_controller_external_port=8443"
-      check_interpolation "add-persistent-isolation-segment-diego-cell.yml"
-      check_interpolation "add-persistent-isolation-segment-router.yml"
-      check_interpolation "alter-ssh-proxy-redirect-uri.yml"
-    popd > /dev/null # operations/test
-  popd > /dev/null # operations/test
-}
-
-test_legacy_ops() {
-  # Padded for pretty output
-  suite_name="LEGACY      "
-
-  pushd ${home} > /dev/null
-    pushd operations/legacy > /dev/null
-      check_interpolation "old-droplet-mitigation.yml"
-      check_interpolation "keep-original-internal-usernames.yml" "-l example-vars-files/vars-keep-original-internal-usernames.yml"
-      check_interpolation "keep-static-ips.yml" "-l example-vars-files/vars-keep-static-ips.yml"
-    popd > /dev/null # operations/legacy
-  popd > /dev/null
-}
-
 test_opsfile_interpolation() {
   test_standard_ops &
   test_experimental_ops &
@@ -186,6 +86,8 @@ ensure_opsfiles_in_readme() {
   local readme=$1
   shift
 
+  suite_name="$readme"
+
   pushd ${home} > /dev/null
     for x in $@; do
       local basename=$(basename $x)
@@ -199,15 +101,19 @@ ensure_opsfiles_in_readme() {
 }
 
 main() {
-  suite_name="README"
-
+  echo
+  echo -e "${LIGHT_GREEN} ***** Begin positive readme operations tests ***** ${NOCOLOR}"
   ensure_opsfiles_in_readme "operations/README.md" $(ls operations/*.yml)
   ensure_opsfiles_in_readme "operations/legacy/README.md" $(ls operations/legacy/*.yml)
   ensure_opsfiles_in_readme "operations/community/README.md" $(ls operations/community/*.yml)
   ensure_opsfiles_in_readme "operations/experimental/README.md" $(ls operations/experimental/*.yml)
 
+  echo
+  echo -e "${LIGHT_GREEN} ***** Begin negative readme operations tests ***** ${NOCOLOR}"
   ensure_test_opsfiles_not_in_readme
 
+  echo
+  echo -e "${LIGHT_GREEN} ***** Begin interpolation operations tests ***** ${NOCOLOR}"
   test_opsfile_interpolation
 
   exit $exit_code
