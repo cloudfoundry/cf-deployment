@@ -45,7 +45,7 @@
     path: /instance_groups/name=backup-restore/jobs/name=bbr-cloudcontrollerdb/properties?/cloud_controller/release_level_backup?
     value: true
   - type: replace
-    path: /instance_groups/name=blobstore/jobs/name=blobstore/properties?/blobstore/release_level_backup?
+    path: /instance_groups/name=singleton-blobstore/jobs/name=blobstore/properties?/blobstore/release_level_backup?
     value: true
   - type: replace
     path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties?/cloud_controller/release_level_backup?

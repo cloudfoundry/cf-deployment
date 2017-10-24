@@ -493,7 +493,9 @@ instance_groups:
           statsd_injector:
             cert: "((loggregator_tls_statsdinjector.certificate))"
             key: "((loggregator_tls_statsdinjector.private_key))"
-- name: blobstore
+- name: singleton-blobstore
+  migrated_from:
+  - name: blobstore
   azs:
   - z1
   instances: 1

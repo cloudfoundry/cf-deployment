@@ -2,7 +2,7 @@
 # remove internal blobstore
 
 - type: remove
-  path: /instance_groups/name=blobstore
+  path: /instance_groups/name=singleton-blobstore
 
 - type: remove
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks
