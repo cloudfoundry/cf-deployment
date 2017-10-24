@@ -106,6 +106,7 @@ test_experimental_ops() {
       check_interpolation "name: bits-service-local.yml" "bits-service.yml" "-o bits-service-local.yml"
       check_interpolation "name: bits-service-s3.yml" "${home}/operations/use-s3-blobstore.yml" "-o bits-service.yml" "-o bits-service-s3.yml" "-l ${home}/operations/example-vars-files/vars-use-s3-blobstore.yml"
       check_interpolation "name: bits-service-webdav.yml" "bits-service.yml" "-o bits-service-webdav.yml"
+      check_interpolation "disable-interpolate-service-bindings.yml"
       check_interpolation "enable-backup-restore.yml"
       check_interpolation "enable-bpm.yml"
       check_interpolation "enable-iptables-logger.yml"
