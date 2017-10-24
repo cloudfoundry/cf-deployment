@@ -1196,7 +1196,7 @@ instance_groups:
   - name: reverse_log_proxy
     release: loggregator
     provides:
-      reverse_log_proxy: {as: reverse_log_proxy}
+      reverse_log_proxy: {as: reverse_log_proxy, shared: true}
     properties:
       loggregator:
         tls:
