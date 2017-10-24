@@ -64,7 +64,7 @@ test_opsfile_interpolation() {
   test_test_ops &
   test_legacy_ops &
 
-  for job in `jobs -p`; do
+  for job in $(jobs -p); do
     wait $job
   done
 }
@@ -100,9 +100,27 @@ ensure_opsfiles_in_readme() {
   popd > /dev/null
 }
 
+ensure_opsfiles_in_tests() {
+  local test=$1
+  shift
+
+  suite_name="$test"
+
+  pushd ${home} > /dev/null
+    for x in $@; do
+      local basename=$(basename $x)
+      if [ $(grep $basename $test -c) != "0" ]; then
+        pass "$x is tested in $test"
+      else
+        fail "$x is ${RED}NOT${NOCOLOR} tested in $test"
+      fi
+    done;
+  popd > /dev/null
+}
+
 main() {
   echo
-  echo -e "${LIGHT_GREEN} ***** Begin positive readme operations tests ***** ${NOCOLOR}"
+  echo -e "${LIGHT_GREEN} ***** Begin affirmative readme operations tests ***** ${NOCOLOR}"
   ensure_opsfiles_in_readme "operations/README.md" $(ls operations/*.yml)
   ensure_opsfiles_in_readme "operations/legacy/README.md" $(ls operations/legacy/*.yml)
   ensure_opsfiles_in_readme "operations/community/README.md" $(ls operations/community/*.yml)
@@ -111,6 +129,13 @@ main() {
   echo
   echo -e "${LIGHT_GREEN} ***** Begin negative readme operations tests ***** ${NOCOLOR}"
   ensure_test_opsfiles_not_in_readme
+
+  echo
+  echo -e "${LIGHT_GREEN} ***** Begin test coverage analysis ***** ${NOCOLOR}"
+  ensure_opsfiles_in_tests "scripts/test-standard-ops.sh" $(ls operations/*.yml)
+  ensure_opsfiles_in_tests "scripts/test-legacy-ops.sh" $(ls operations/legacy/*.yml)
+  ensure_opsfiles_in_tests "scripts/test-test-ops.sh" $(ls operations/test/*.yml)
+  ensure_opsfiles_in_tests "scripts/test-experimental-ops.sh" $(ls operations/experimental/*.yml)
 
   echo
   echo -e "${LIGHT_GREEN} ***** Begin interpolation operations tests ***** ${NOCOLOR}"
