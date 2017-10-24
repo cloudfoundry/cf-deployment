@@ -178,6 +178,19 @@ we can replace some of this discussion with better tooling,
 so please leave any feedback in GitHub issues.
 We'd love to hear from you.
 
+### Databases
+By default,
+`cf-deployment` includes
+`mysql` or `postgres` databases
+that are singletons
+and cannot be scaled out.
+Producation deployers
+may want to deploy
+a database with better availability guarantees,
+such as BOSH-managed [cf-mysql-deployment](https://github.com/cloudfoundry/cf-mysql-deployment)
+or IaaS-managed database systems
+such as [Amazon RDS](https://aws.amazon.com/rds/) or [Google Cloud SQL](https://cloud.google.com/sql/).
+
 ### The `update` section of instance groups
 The [`update` section of a deployment manifest](http://bosh.io/docs/manifest-v2.html#update)
 controls the way BOSH rolls out updates to instance groups.
