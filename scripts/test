@@ -92,6 +92,7 @@ test_standard_ops() {
       fi
       check_interpolation "use-postgres.yml"
       check_interpolation "use-s3-blobstore.yml" "-l example-vars-files/vars-use-s3-blobstore.yml"
+      check_interpolation "use-swift-blobstore.yml" "-l example-vars-files/vars-use-swift-blobstore.yml"
       check_interpolation "use-trusted-ca-cert-for-apps.yml" "-l example-vars-files/vars-use-trusted-ca-cert-for-apps.yml"
       check_interpolation "windows-cell.yml"
     popd > /dev/null # operations
