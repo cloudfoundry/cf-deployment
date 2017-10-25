@@ -5,6 +5,7 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 - For experimental Ops-files, check out the [Experimental Ops-file README](experimental/README.md).
 - For Community Ops-files, checkout the [Community Ops-file README](community/README.md).
 - For Legacy Ops-files, check out the [Legacy Ops-file README](legacy/README.md).
+- For Addons Ops-files that can be applied to manifests or runtime configs, check out the [Addons Ops-file README](addons/README.md).
 
 ## IaaS-required Ops-files
 

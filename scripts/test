@@ -63,6 +63,7 @@ test_opsfile_interpolation() {
   test_experimental_ops &
   test_test_ops &
   test_legacy_ops &
+  test_addons_ops &
 
   for job in $(jobs -p); do
     wait $job
@@ -136,6 +137,7 @@ main() {
   ensure_opsfiles_in_tests "scripts/test-legacy-ops.sh" $(ls operations/legacy/*.yml)
   ensure_opsfiles_in_tests "scripts/test-test-ops.sh" $(ls operations/test/*.yml)
   ensure_opsfiles_in_tests "scripts/test-experimental-ops.sh" $(ls operations/experimental/*.yml)
+  ensure_opsfiles_in_tests "scripts/test-addons-ops.sh" $(ls operations/addons/*.yml)
 
   echo
   echo -e "${LIGHT_GREEN} ***** Begin interpolation operations tests ***** ${NOCOLOR}"
