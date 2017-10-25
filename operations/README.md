@@ -18,7 +18,7 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 | [`use-azure-storage-blobstore.yml`](use-azure-storage-blobstore.yml) | Replaces local WebDAV blobstore with external Azure Storage blobstore. | Introduces [new variables](example-vars-files/vars-use-azure-storage-blobstore.yml) for Azure credentials and container names. |
 | **Openstack** | | |
 | [`openstack.yml`](openstack.yml) | Used for deploying Cloud Foundry on OpenStack with BOSH | See [OpenStack](../iaas-support/openstack/README.md) documentation. |
-| [`use-swift-blobstore.yml`](use-swift-blobstore.yml) | Replaces local WebDAV blobstore with OpenStack swift blobstore. Used for deploying Cloud Foundry on OpenStack with BOSH | If you plan using the [Swift ops file](use-swift-blobstore.yml) to enable Swift as blobstore for the Cloud Controller, you should also run the [Swift extension](https://github.com/cloudfoundry-incubator/cf-openstack-validator/tree/master/extensions/object_storage). |
+| [`use-swift-blobstore.yml`](use-swift-blobstore.yml) | Replaces local WebDAV blobstore with OpenStack swift blobstore. Used for deploying Cloud Foundry on OpenStack with BOSH | Introduces [new variables](example-vars-files/vars-use-swift-blobstore.yml) for OpenStack credentials and directory names. If you plan using the [Swift ops file](use-swift-blobstore.yml) to enable Swift as blobstore for the Cloud Controller, you should also run the [Swift extension](https://github.com/cloudfoundry-incubator/cf-openstack-validator/tree/master/extensions/object_storage). |
 
 
 ## Feature-based Ops-files
@@ -27,6 +27,7 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 |:---  |:---     |:---   |
 | [`bosh-lite.yml`](bosh-lite.yml) | Enables `cf-deployment` to be deployed on `bosh-lite`. | See [bosh-lite](../iaas-support/bosh-lite/README.md) documentation. |
 | [`cf-syslog-skip-cert-verify.yml`](cf-syslog-skip-cert-verify.yml) | This disables TLS verification when connecting to a HTTPS syslog drain. | |
+| [`configure-confab-timeout.yml`](configure-confab-timeout.yml) | Allows deployer to configure `consul_agent` Confab startup timeout on `consul` instances. | Adds new variable `confab_timeout` in seconds, must be at least 60. |
 | [`configure-default-router-group.yml`](configure-default-router-group.yml) | Allows deployer to configure reservable ports for default tcp router group by passing variable `default_router_group_reservable_ports`. |  |
 | [`disable-router-tls-termination.yml`](disable-router-tls-termination.yml) | Eliminates keys related to performing TLS termination within the gorouter job. | Useful for deployments where TLS termination is performed prior to the gorouter - for instance, on AWS, such termination is commonly done at the ELB. This also eliminates the need to specify `((router_ssl.certificate))` and `((router_ssl.private_key))` in the var files. |
 | [`enable-cc-rate-limiting.yml`](enable-cc-rate-limiting.yml) | Enable rate limiting for UAA-authenticated endpoints. | Introduces variables `cc_rate_limiter_general_limit` and `cc_rate_limiter_unauthenticated_limit` |

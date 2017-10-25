@@ -160,7 +160,9 @@ instance_groups:
             cert: "((adapter_rlp_tls.certificate))"
             key: "((adapter_rlp_tls.private_key))"
             cn: reverselogproxy
-- name: mysql
+- name: singleton-database
+  migrated_from:
+  - name: mysql
   azs:
   - z1
   persistent_disk_type: 10GB
@@ -491,7 +493,9 @@ instance_groups:
           statsd_injector:
             cert: "((loggregator_tls_statsdinjector.certificate))"
             key: "((loggregator_tls_statsdinjector.private_key))"
-- name: blobstore
+- name: singleton-blobstore
+  migrated_from:
+  - name: blobstore
   azs:
   - z1
   instances: 1

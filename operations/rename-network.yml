@@ -15,7 +15,7 @@
   value: ((network_name))
 
 - type: replace
-  path: /instance_groups/name=mysql/networks/name=default/name
+  path: /instance_groups/name=singleton-database/networks/name=default/name
   value: ((network_name))
 
 - type: replace
@@ -27,7 +27,7 @@
   value: ((network_name))
 
 - type: replace
-  path: /instance_groups/name=blobstore/networks/name=default/name
+  path: /instance_groups/name=singleton-blobstore/networks/name=default/name
   value: ((network_name))
 
 - type: replace

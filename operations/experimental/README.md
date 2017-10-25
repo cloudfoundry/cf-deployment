@@ -20,6 +20,7 @@ and the ops-files will be removed.
 | [`bits-service-local.yml`](bits-service-local.yml) | Use local storage for the [bits-service](https://github.com/cloudfoundry-incubator/bits-service). | |
 | [`bits-service-s3.yml`](bits-service-s3.yml) | Use s3 storage for the [bits-service](https://github.com/cloudfoundry-incubator/bits-service). | `use-s3-blobstore.yml` from the root `operations` directory is also required. |
 | [`bits-service-webdav.yml`](bits-service-webdav.yml) | Use the `blobstore`'s webdav storage for the [bits-service](https://github.com/cloudfoundry-incubator/bits-service). | Requires the `blobstore` job. |
+| [`disable-interpolate-service-bindings.yml`](disable-interpolate-service-bindings.yml) | Disables the interpolation of CredHub service credentials by Cloud Controller. |
 | [`enable-bpm.yml`](enable-bpm.yml) | Enables the [BOSH Process Manager](https://github.com/cloudfoundry-incubator/bpm-release) as a BOSH addon. | |
 | [`disable-consul.yml`](disable-consul.yml) | Removes `consul` jobs and instance_group | |
 | [`disable-consul-windows.yml`](disable-consul-windows.yml) | Removes `consul` job from `windows-cell` instance_group | |
@@ -29,7 +30,8 @@ and the ops-files will be removed.
 | [`enable-backup-restore.yml`](enable-backup-restore.yml) | Deploy BOSH backup and restore instance and enable release level backup. | |
 | [`enable-container-proxy.yml`](enable-container-proxy.yml) | Enables container proxy on the Diego Cell `rep`. | Generates a templating error during deployment if [instance identity credentials](enable-instance-identity-credentials.yml) are not set. |
 | [`enable-instance-identity-credentials.yml`](enable-instance-identity-credentials.yml) | Enables identity credentials on Diego Cell `rep`. | |
-| [`enable-instance-identity-credentials-windows.yml`](enable-instance-identity-credentials-windows.yml) | Enables identity credentials on the `rep` for Windows 2012 cells. | Requires `enable-instance-identity-credentials.yml` and `windows-cell.yml`|
+| [`enable-instance-identity-credentials-windows.yml`](enable-instance-identity-credentials-windows.yml) | Enables identity credentials on the `rep_windows` for Windows 2012 cells. | Requires `enable-instance-identity-credentials.yml` and `windows-cell.yml`|
+| [`enable-instance-identity-credentials-windows2016.yml`](enable-instance-identity-credentials-windows2016.yml) | Enables identity credentials on the `rep_windows` for Windows 2016 cells. | Requires `enable-instance-identity-credentials.yml` and `windows2016-cell.yml`|
 | [`enable-iptables-logger.yml`](enable-iptables-logger.yml) | Enables iptables logger. | |
 | [`enable-prefer-declarative-healthchecks.yml`](enable-prefer-declarative-healthchecks.yml) | Configure the Rep on the diego cells to prefer LRP CheckDefinition (a.k.a declarative healthchecks) over the old Monitor action | |
 | [`enable-prefer-declarative-healthchecks-windows.yml`](enable-prefer-declarative-healthchecks-windows.yml) | Configure the Rep on the windows 2012 cells to prefer LRP CheckDefinition (a.k.a declarative healthchecks) over the old Monitor action | |

@@ -178,6 +178,37 @@ we can replace some of this discussion with better tooling,
 so please leave any feedback in GitHub issues.
 We'd love to hear from you.
 
+### Databases
+By default,
+`cf-deployment` includes
+`mysql` or `postgres` databases
+that are singletons
+and cannot be scaled out.
+Producation deployers
+may want to deploy
+a database with better availability guarantees,
+such as BOSH-managed [cf-mysql-deployment](https://github.com/cloudfoundry/cf-mysql-deployment)
+or IaaS-managed database systems
+such as [Amazon RDS](https://aws.amazon.com/rds/) or [Google Cloud SQL](https://cloud.google.com/sql/).
+External databases
+will require the use of the [`use-external-dbs.yml`](operations/use-external-dbs.yml) opsfile.
+
+### Blobstore
+By default,
+`cf-deployment` includes
+a `webdav` blobstore
+that is a singleton
+and cannot be scaled out.
+Producation deployers
+may want to use
+a blobstore with better availability guarantees,
+such as [Amazon S3](https://aws.amazon.com/s3/),
+[Google Cloud Storage](https://cloud.google.com/storage/),
+[Azure Blob storage](https://azure.microsoft.com/en-us/services/storage/blobs/), or
+[OpenStack Swift](https://docs.openstack.org/swift/latest/).
+External blobstores
+require the use of opsfiles listed in the operations [README](operations/README.md#iaas-required-ops-files)
+
 ### The `update` section of instance groups
 The [`update` section of a deployment manifest](http://bosh.io/docs/manifest-v2.html#update)
 controls the way BOSH rolls out updates to instance groups.
