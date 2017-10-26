@@ -5,6 +5,7 @@ This is the README for Community Ops-files. To learn more about `cf-deployment`,
 - For general Ops-files, check out the [Ops-file README](../README.md).
 - For experimental Ops-files, check out the [Experimental Ops-file README](../experimental/README.md).
 - For Legacy Ops-files, checkout the [Legacy Ops-file README](../legacy/README.md).
+- For Addons Ops-files that can be applied to manifests or runtime configs, check out the [Addons Ops-file README](addons/README.md).
 
 Included in this directory is a collection of ops files submitted by the CF community.  They are **not** supported or tested in any way by the Release Integration team.  If you encounter an issue with any of these files, please contact the maintainer listed below.
 

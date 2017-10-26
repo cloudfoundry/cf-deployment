@@ -493,7 +493,9 @@ instance_groups:
           statsd_injector:
             cert: "((loggregator_tls_statsdinjector.certificate))"
             key: "((loggregator_tls_statsdinjector.private_key))"
-- name: blobstore
+- name: singleton-blobstore
+  migrated_from:
+  - name: blobstore
   azs:
   - z1
   instances: 1
@@ -1605,17 +1607,17 @@ releases:
   version: "39"
   sha1: a2d557302a1026f685514b34792b81c0432a48c8
 - name: cf-syslog-drain
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-syslog-drain-release?v=2
-  version: "2"
-  sha1: c9954676033164f550ae645bd1216cf56d159905
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-syslog-drain-release?v=3
+  version: "3"
+  sha1: ac3191fc7d944fc1f088e254521f55a61b3776b4
 - name: cflinuxfs2
   url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.164.0
   version: 1.164.0
   sha1: ec29f2ecb6e75b5acedc4555056de97e5aab755f
 - name: consul
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=186
-  version: "186"
-  sha1: 1c7e3e477707304eec85d81020e7f084567fce98
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=189
+  version: "189"
+  sha1: 89fb09786abc3f0701bb811c974186626f8867a8
 - name: diego
   url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=1.29.0
   version: 1.29.0

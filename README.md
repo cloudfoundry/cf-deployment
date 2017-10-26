@@ -46,8 +46,9 @@ and enables diego-specific features
 such as ssh access to apps by default.
 - deploys jobs to handle platform data persistence
 using singleton versions of the cf-mysql release for databases
-and the CAPI release's WebDAV job for blob storage.
-See [database section](deployment-guide.md#databases) of the deployment guide
+and the CAPI release's singleton WebDAV job for blob storage.
+See the  [database](deployment-guide.md#databases) and [blobstore](deployment-guide.md#blobstore) sections
+of the deployment guide
 for more resilient options.
 - assumes load-balancing will be handled by the IaaS
 or an external deployment.
