@@ -33,6 +33,7 @@ test_experimental_ops() {
       check_interpolation "use-bosh-dns-for-containers.yml"
       check_interpolation "name: use-bosh-dns-for-windows2016-containers.yml" "windows2016-cell.yml" "-o use-bosh-dns.yml" "-o use-bosh-dns-for-windows2016-containers.yml"
       check_interpolation "use-grootfs.yml"
+      check_interpolation "name: enable-oci-phase-1.yml" "use-grootfs.yml" "-o enable-oci-phase-1.yml"
       version=$(bosh interpolate ${home}/cf-deployment.yml -o windows2016-cell.yml -o use-latest-windows2016-stemcell.yml --path=/stemcells/alias=windows2016/version)
       if [ "${version}" == "latest" ]; then
         pass "use-latest-windows2016-stemcell.yml"
