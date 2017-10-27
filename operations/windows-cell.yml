@@ -89,6 +89,8 @@
         syslog_daemon_config:
           enable: false
       release: loggregator
+    - name: enable_ssh
+      release: windows-utilities
     name: windows-cell
     networks:
     - name: default
@@ -102,6 +104,13 @@
     name: garden-windows
     sha1: 2bf457f3c18cd8586f183d84cac31a9571dec559
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/garden-windows-bosh-release?v=0.10.0
+    version: 0.10.0
+- path: /releases/-
+  type: replace
+  value:
+    name: windows-utilities
+    sha1: 2b2cd7e3544804ca15bc7b843d59324c34ee933d
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.4.0
     version: 0.10.0
 - path: /stemcells/-
   type: replace
