@@ -66,7 +66,7 @@ If you manage your DNS with some other provider
 -- for example, with Route53 --
 you can copy the NS record data that `bbl` created,
 and paste it into the `value` section of the Route53 NS record for your domain.
- 
+
 After a few minutes,
 the your system domain should resolve to your load balancer.
 
@@ -183,7 +183,7 @@ By default,
 `cf-deployment` includes
 `mysql` or `postgres` databases
 that are singletons
-and cannot be scaled out.
+and cannot be scaled out<sup>[1](#mysql-footnote)</sup>.
 Producation deployers
 may want to deploy
 a database with better availability guarantees,
@@ -192,6 +192,11 @@ or IaaS-managed database systems
 such as [Amazon RDS](https://aws.amazon.com/rds/) or [Google Cloud SQL](https://cloud.google.com/sql/).
 External databases
 will require the use of the [`use-external-dbs.yml`](operations/use-external-dbs.yml) opsfile.
+
+<a name="mysql-footnote">1.</a> The team that maintains cf-mysql-release is in the process of vetting
+the colocation strategy we use in cf-deployment.
+Once they've verified its scalability,
+we'll rename the instance group to `database` and provide ways to scale the cluster to three nodes.
 
 ### Blobstore
 By default,
