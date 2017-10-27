@@ -11,6 +11,10 @@ addons:
   include:
     stemcell:
     - os: ubuntu-trusty
+  exclude:
+    jobs:
+    - name: smoke_tests
+      release: cf-smoke-tests
   jobs:
   - name: metron_agent
     release: loggregator
