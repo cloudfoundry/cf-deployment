@@ -20,6 +20,8 @@ test_standard_ops() {
       check_interpolation "disable-router-tls-termination.yml"
       check_interpolation "enable-cc-rate-limiting.yml" "-v cc_rate_limiter_general_limit=blah" "-v cc_rate_limiter_unauthenticated_limit=something"
       check_interpolation "enable-privileged-container-support.yml"
+      check_interpolation "enable-nfs-ldap.yml -l example-vars-files/vars-enable-nfs-ldap.yml"
+      check_interpolation "enable-nfs-volume-service.yml"
       check_interpolation "enable-uniq-consul-node-name.yml"
       check_interpolation "non-collocated-cf-syslog-drain.yml"
       check_interpolation "openstack.yml"
