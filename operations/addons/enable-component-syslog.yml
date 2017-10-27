@@ -16,6 +16,7 @@
           transport: ((syslog_transport))
           fallback_servers: ((syslog_fallback_servers))
           custom_rule: ((syslog_custom_rule))
+          forward_files: false
 
 - type: replace
   path: /releases/-
