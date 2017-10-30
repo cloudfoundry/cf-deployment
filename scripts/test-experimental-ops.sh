@@ -43,6 +43,7 @@ test_experimental_ops() {
       else
         fail "use-latest-windows2016-stemcell.yml, expected 'latest' but got '${version}'"
       fi
+      check_interpolation "name: use-offline-windows2016fs.yml" "windows2016-cell.yml" "-o use-offline-windows2016fs.yml"
       check_interpolation "windows2016-cell.yml"
       check_interpolation "name: operations/windows-cell.yml windows2016-cell.yml" "${home}/operations/windows-cell.yml" "-o windows2016-cell.yml"
     popd > /dev/null # operations/experimental
