@@ -88,6 +88,8 @@
         syslog_daemon_config:
           enable: false
       release: loggregator
+    - name: enable_ssh
+      release: windows-utilities
     name: windows2016-cell
     networks:
     - name: default
@@ -144,3 +146,11 @@
     sha1: 7b490aea78f5fb9f53fb9117ca777db9d35672d8
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows2016fs-online-release?v=0.0.1
     version: 0.0.1
+
+- path: /releases/name=windows-utilities?
+  type: replace
+  value:
+    name: windows-utilities
+    sha1: 2b2cd7e3544804ca15bc7b843d59324c34ee933d
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.4.0
+    version: 0.4.0
