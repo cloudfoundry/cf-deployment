@@ -1,0 +1,7 @@
+---
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=bbs/properties/diego/bbs/active_key_label
+  value: "((diego_bbs_active_key_label))"
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=bbs/properties/diego/bbs/encryption_keys/0/label
+  value: "((diego_bbs_active_key_label))"
