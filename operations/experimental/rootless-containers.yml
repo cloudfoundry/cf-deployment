@@ -1,3 +1,4 @@
+---
 # Requires grootfs 0.27.0 or later, and garden-runc 1.9.5 or later.
 
 - type: replace
@@ -5,7 +6,7 @@
   value: true
 
 - type: replace
-  path: /instance_groups/name=diego-cell/jobs/name=grootfs/properties/grootfs/skip_mount?
+  path: /instance_groups/name=diego-cell/jobs/name=grootfs/properties?/grootfs/skip_mount
   value: true
 
 - type: remove
