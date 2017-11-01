@@ -49,4 +49,5 @@ test_experimental_ops() {
       check_interpolation "name: operations/windows-cell.yml windows2016-cell.yml" "${home}/operations/windows-cell.yml" "-o windows2016-cell.yml"
     popd > /dev/null # operations/experimental
   popd > /dev/null
+  exit $exit_code
 }

@@ -55,5 +55,6 @@ test_standard_ops() {
       check_interpolation "windows-cell.yml"
     popd > /dev/null # operations
   popd > /dev/null
+  exit $exit_code
 }
 
