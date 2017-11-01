@@ -1,33 +1,5 @@
 ---
 - type: replace
-  path: /releases/-
-  value:
-    name: nfs-volume
-    version: 1.0.4
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/nfs-volume-release?v=1.0.4
-    sha1: b2c22394d30c212a9e6dfcdd0abf5879e931ebfe
-
-- type: replace
-  path: /releases/-
-  value:
-    name: broker-registrar
-    version: 3.2.2
-    url: https://bosh.io/d/github.com/cloudfoundry-community/broker-registrar-boshrelease?v=3.2.2
-    sha1: f82c6a346d871ccb9835b8e6341f966cf7ebc7c9
-
-- type: replace
-  path: /variables/-
-  value:
-    name: nfs-broker-password
-    type: password
-
-- type: replace
-  path: /variables/-
-  value:
-    name: nfs-broker-database-password
-    type: password
-
-- type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/volume_services_enabled?
   value: true
 
@@ -50,16 +22,18 @@
   path: /instance_groups/-
   value:
     name: nfsbroker
-    azs: [z1, z2]
-    instances: 2
+    azs: [z1]
+    instances: 1
     stemcell: default
     vm_type: minimal
-    networks: [ name: default ]
+    networks: [name: default]
     jobs:
     - name: consul_agent
       release: consul
       consumes:
-        consul: {from: consul_server}
+        consul_common: {from: consul_common_link}
+        consul_server: nil
+        consul_client: {from: consul_client_link}
     - name: nfsbroker
       release: nfs-volume
       properties:
@@ -108,7 +82,7 @@
         cf:
           api_url: api.((system_domain))
           username: admin
-          password: ((uaa_scim_users_admin_password))
+          password: ((cf_admin_password))
           skip_ssl_validation: true
 
 - type: replace
@@ -116,3 +90,32 @@
   value:
     name: nfsv3driver
     release: nfs-volume
+    properties: {}
+
+- type: replace
+  path: /variables/-
+  value:
+    name: nfs-broker-password
+    type: password
+
+- type: replace
+  path: /variables/-
+  value:
+    name: nfs-broker-database-password
+    type: password
+
+- type: replace
+  path: /releases/-
+  value:
+    name: nfs-volume
+    version: 1.1.1
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/nfs-volume-release?v=1.1.1
+    sha1: f70fdb94415597124f8b1cc78a1ed348a9e29945
+
+- type: replace
+  path: /releases/-
+  value:
+    name: broker-registrar
+    version: 3.3.1
+    url: https://bosh.io/d/github.com/cloudfoundry-community/broker-registrar-boshrelease?v=3.3.1
+    sha1: 3625828feca7134fd895adf0470bfd91b628bc22

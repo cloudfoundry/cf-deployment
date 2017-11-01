@@ -19,6 +19,7 @@ test_experimental_ops() {
       check_interpolation "disable-interpolate-service-bindings.yml"
       check_interpolation "enable-backup-restore.yml"
       check_interpolation "enable-bpm.yml"
+      check_interpolation "name: enable-nfs-broker-backup.yml" "enable-backup-restore.yml -o enable-nfs-broker-backup.yml -v nfs-broker-database-password=i_am_a_password"
       check_interpolation "name: enable-container-proxy.yml" "enable-instance-identity-credentials.yml" "-o enable-container-proxy.yml"
       check_interpolation "name: enable-instance-identity-credentials-windows.yml" "enable-instance-identity-credentials.yml" "-o ${home}/operations/windows-cell.yml" "-o enable-instance-identity-credentials-windows.yml"
       check_interpolation "name: enable-instance-identity-credentials-windows2016.yml" "enable-instance-identity-credentials.yml" "-o windows2016-cell.yml" "-o enable-instance-identity-credentials-windows2016.yml"
