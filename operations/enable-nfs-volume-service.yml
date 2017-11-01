@@ -1,3 +1,4 @@
+---
 - type: replace
   path: /releases/-
   value:
@@ -53,7 +54,7 @@
     instances: 1
     stemcell: default
     vm_type: minimal
-    networks: [ name: default ]
+    networks: [name: default]
     jobs:
     - name: consul_agent
       release: consul

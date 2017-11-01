@@ -1,5 +1,6 @@
+---
 - type: replace
-  path: /instance_groups/name=diego-cell/jobs/name=nfsv3driver?/properties
+  path: /instance_groups/name=diego-cell/jobs/name=nfsv3driver/properties
   value:
     nfsv3driver:
       ldap_svc_user: ((nfs-ldap-service-user))
