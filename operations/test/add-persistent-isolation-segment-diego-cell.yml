@@ -41,8 +41,6 @@
       release: diego
       properties:
         diego:
-          executor:
-            ca_certs_for_downloads: "((blobstore_tls.ca))"
           rep:
             bbs:
               ca_cert: "((diego_bbs_client.ca))"
