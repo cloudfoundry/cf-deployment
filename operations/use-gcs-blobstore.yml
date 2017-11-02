@@ -1,0 +1,114 @@
+---
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks
+  value: &blobstore-properties
+    blobstore_type: fog
+    fog_connection:
+      provider: Google
+      google_storage_access_key_id: ((blobstore_access_key_id))
+      google_storage_secret_access_key: ((blobstore_secret_access_key))
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/droplets
+  value: *blobstore-properties
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/packages
+  value: *blobstore-properties
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/resource_pool
+  value: *blobstore-properties
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/buildpacks
+  value: *blobstore-properties
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/droplets
+  value: *blobstore-properties
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/packages
+  value: *blobstore-properties
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/resource_pool
+  value: *blobstore-properties
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/buildpacks
+  value: *blobstore-properties
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/droplets
+  value: *blobstore-properties
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/packages
+  value: *blobstore-properties
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/resource_pool
+  value: *blobstore-properties
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks/buildpack_directory_key?
+  value: ((buildpack_directory_key))
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/droplets/droplet_directory_key?
+  value: ((droplet_directory_key))
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/packages/app_package_directory_key?
+  value: ((app_package_directory_key))
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/resource_pool/resource_directory_key?
+  value: ((resource_directory_key))
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/buildpacks/buildpack_directory_key?
+  value: ((buildpack_directory_key))
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/droplets/droplet_directory_key?
+  value: ((droplet_directory_key))
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/packages/app_package_directory_key?
+  value: ((app_package_directory_key))
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/resource_pool/resource_directory_key?
+  value: ((resource_directory_key))
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/buildpacks/buildpack_directory_key?
+  value: ((buildpack_directory_key))
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/droplets/droplet_directory_key?
+  value: ((droplet_directory_key))
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/packages/app_package_directory_key?
+  value: ((app_package_directory_key))
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/resource_pool/resource_directory_key?
+  value: ((resource_directory_key))
+
+# remove internal blobstore including its variables
+- type: remove
+  path: /instance_groups/name=singleton-blobstore
+
+- type: remove
+  path: /variables/name=blobstore_admin_users_password
+
+- type: remove
+  path: /variables/name=blobstore_secure_link_secret
+
+- type: remove
+  path: /variables/name=blobstore_tls

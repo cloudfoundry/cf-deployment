@@ -66,7 +66,7 @@ If you manage your DNS with some other provider
 -- for example, with Route53 --
 you can copy the NS record data that `bbl` created,
 and paste it into the `value` section of the Route53 NS record for your domain.
- 
+
 After a few minutes,
 the your system domain should resolve to your load balancer.
 
@@ -177,6 +177,42 @@ Our hope is that, over time,
 we can replace some of this discussion with better tooling,
 so please leave any feedback in GitHub issues.
 We'd love to hear from you.
+
+### Databases
+By default,
+`cf-deployment` includes
+`mysql` or `postgres` databases
+that are singletons
+and cannot be scaled out<sup>[1](#mysql-footnote)</sup>.
+Producation deployers
+may want to deploy
+a database with better availability guarantees,
+such as BOSH-managed [cf-mysql-deployment](https://github.com/cloudfoundry/cf-mysql-deployment)
+or IaaS-managed database systems
+such as [Amazon RDS](https://aws.amazon.com/rds/) or [Google Cloud SQL](https://cloud.google.com/sql/).
+External databases
+will require the use of the [`use-external-dbs.yml`](operations/use-external-dbs.yml) opsfile.
+
+<a name="mysql-footnote">1.</a> The team that maintains cf-mysql-release is in the process of vetting
+the colocation strategy we use in cf-deployment.
+Once they've verified its scalability,
+we'll rename the instance group to `database` and provide ways to scale the cluster to three nodes.
+
+### Blobstore
+By default,
+`cf-deployment` includes
+a `webdav` blobstore
+that is a singleton
+and cannot be scaled out.
+Producation deployers
+may want to use
+a blobstore with better availability guarantees,
+such as [Amazon S3](https://aws.amazon.com/s3/),
+[Google Cloud Storage](https://cloud.google.com/storage/),
+[Azure Blob storage](https://azure.microsoft.com/en-us/services/storage/blobs/), or
+[OpenStack Swift](https://docs.openstack.org/swift/latest/).
+External blobstores
+require the use of opsfiles listed in the operations [README](operations/README.md#iaas-required-ops-files)
 
 ### The `update` section of instance groups
 The [`update` section of a deployment manifest](http://bosh.io/docs/manifest-v2.html#update)

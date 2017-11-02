@@ -45,8 +45,11 @@ does not support DEAs,
 and enables diego-specific features
 such as ssh access to apps by default.
 - deploys jobs to handle platform data persistence
-using the cf-mysql release for databases
-and the CAPI release's WebDAV job for blob storage.
+using singleton versions of the cf-mysql release for databases
+and the CAPI release's singleton WebDAV job for blob storage.
+See the  [database](deployment-guide.md#databases) and [blobstore](deployment-guide.md#blobstore) sections
+of the deployment guide
+for more resilient options.
 - assumes load-balancing will be handled by the IaaS
 or an external deployment.
 
@@ -143,6 +146,9 @@ and tested with the latest sha of CATs.
 and requires a bosh director with a valid cloud-config that has been configured with a certificate authority.
 It also requires the new `bosh` CLI,
 which it relies on to generate and fill-in needed variables.
+
+### BOSH director
+`cf-deployment` requires BOSH [`v262`](https://github.com/cloudfoundry/bosh/releases/tag/v262).
 
 ### BOSH CLI
 `cf-deployment` requires the new [BOSH CLI](https://github.com/cloudfoundry/bosh-cli).

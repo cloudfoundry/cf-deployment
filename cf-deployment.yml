@@ -6,6 +6,25 @@ update:
   max_in_flight: 5
   serial: false
   update_watch_time: 5000-1200000
+addons:
+- name: metron_agent
+  include:
+    stemcell:
+    - os: ubuntu-trusty
+  exclude:
+    jobs:
+    - name: smoke_tests
+      release: cf-smoke-tests
+  jobs:
+  - name: metron_agent
+    release: loggregator
+    properties:
+      loggregator:
+        tls:
+          ca_cert: "((loggregator_tls_metron.ca))"
+          metron:
+            cert: "((loggregator_tls_metron.certificate))"
+            key: "((loggregator_tls_metron.private_key))"
 instance_groups:
 - name: smoke-tests
   lifecycle: errand
@@ -69,17 +88,6 @@ instance_groups:
         ca_cert: "((consul_agent.ca))"
         server_cert: "((consul_server.certificate))"
         server_key: "((consul_server.private_key))"
-  - name: metron_agent
-    release: loggregator
-    properties: &metron_agent_properties
-      metron_endpoint:
-        shared_secret: "((dropsonde_shared_secret))"
-      loggregator:
-        tls:
-          ca_cert: "((loggregator_tls_metron.ca))"
-          metron:
-            cert: "((loggregator_tls_metron.certificate))"
-            key: "((loggregator_tls_metron.private_key))"
 - name: nats
   azs:
   - z1
@@ -104,9 +112,6 @@ instance_groups:
       nats:
         password: "((nats_password))"
         user: nats
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
 - name: doppler
   azs:
   - z1
@@ -141,8 +146,6 @@ instance_groups:
           doppler:
             cert: "((loggregator_tls_doppler.certificate))"
             key: "((loggregator_tls_doppler.private_key))"
-      doppler_endpoint:
-        shared_secret: "((dropsonde_shared_secret))"
   - name: adapter
     release: cf-syslog-drain
     properties:
@@ -161,10 +164,9 @@ instance_groups:
             cert: "((adapter_rlp_tls.certificate))"
             key: "((adapter_rlp_tls.private_key))"
             cn: reverselogproxy
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
-- name: mysql
+- name: singleton-database
+  migrated_from:
+  - name: mysql
   azs:
   - z1
   persistent_disk_type: 10GB
@@ -223,14 +225,10 @@ instance_groups:
     release: cf-mysql
     properties:
       cf_mysql:
-        external_host: "((system_domain))"
         proxy:
           api_password: "((cf_mysql_proxy_api_password))"
           consul_enabled: true
           consul_service_name: "sql-db"
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
 - name: diego-api
   migrated_from:
   - name: diego-bbs
@@ -306,9 +304,6 @@ instance_groups:
         ca_cert: "((loggregator_tls_metron.ca))"
         cert: "((loggregator_tls_metron.certificate))"
         key: "((loggregator_tls_metron.private_key))"
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
   - name: silk-controller
     release: cf-networking
     properties:
@@ -492,9 +487,6 @@ instance_groups:
           - "*.uaa.((system_domain))"
           - login.((system_domain))
           - "*.login.((system_domain))"
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
   - name: statsd_injector
     release: statsd-injector
     properties: &statsd_injector_properties
@@ -504,7 +496,9 @@ instance_groups:
           statsd_injector:
             cert: "((loggregator_tls_statsdinjector.certificate))"
             key: "((loggregator_tls_statsdinjector.private_key))"
-- name: blobstore
+- name: singleton-blobstore
+  migrated_from:
+  - name: blobstore
   azs:
   - z1
   instances: 1
@@ -550,9 +544,6 @@ instance_groups:
             component: blobstore
           uris:
           - blobstore.((system_domain))
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
 - name: api
   azs:
   - z1
@@ -587,7 +578,7 @@ instance_groups:
       router:
         route_services_secret: "((router_route_services_secret))"
       system_domain: "((system_domain))"
-      app_domains: &app_domains
+      app_domains:
       - "((system_domain))"
       app_ssh:
         host_key_fingerprint: "((diego_ssh_proxy_host_key.public_key_fingerprint))"
@@ -613,13 +604,13 @@ instance_groups:
         stacks:
         - name: cflinuxfs2
           description: Cloud Foundry Linux-based filesystem
-        default_running_security_groups: &cc_default_running_security_groups
+        default_running_security_groups:
         - public_networks
         - dns
-        default_staging_security_groups: &cc_default_staging_security_groups
+        default_staging_security_groups:
         - public_networks
         - dns
-        security_group_definitions: &cc_security_group_definitions
+        security_group_definitions:
         - name: public_networks
           rules:
           - destination: 0.0.0.0-9.255.255.255
@@ -674,7 +665,7 @@ instance_groups:
         internal_api_password: "((cc_internal_api_password))"
         staging_upload_user: staging_user
         staging_upload_password: "((cc_staging_upload_password))"
-        quota_definitions: &quota_definitions
+        quota_definitions:
           default:
             memory_limit: 102400
             non_basic_services_allowed: true
@@ -733,6 +724,8 @@ instance_groups:
         - name: api
           registration_interval: 20s
           port: 9022
+          tags:
+            component: CloudController
           uris:
           - api.((system_domain))
           health_check:
@@ -744,9 +737,6 @@ instance_groups:
           registration_interval: 20s
           uris:
           - api.((system_domain))/networking
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
   - name: statsd_injector
     release: statsd-injector
     properties: *statsd_injector_properties
@@ -827,9 +817,6 @@ instance_groups:
       consul_common: {from: consul_common_link}
       consul_server: nil
       consul_client: {from: consul_client_link}
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
   - name: cloud_controller_worker
     release: capi
     properties:
@@ -909,9 +896,6 @@ instance_groups:
         ca_cert: "((uaa_ssl.ca))"
         ssl:
           port: 8443
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
 - name: tcp-router
   azs:
   - z1
@@ -939,9 +923,6 @@ instance_groups:
       uaa:
         ca_cert: "((uaa_ca.certificate))"
         tls_port: 8443
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
 - name: scheduler
   azs:
   - z1
@@ -992,17 +973,9 @@ instance_groups:
   - name: cloud_controller_clock
     release: capi
     properties:
-      hm9000:
-        port: -1
       cc:
         db_encryption_key: "((cc_db_encryption_key))"
-        default_to_diego_backend: true
-        default_running_security_groups: *cc_default_running_security_groups
-        default_staging_security_groups: *cc_default_staging_security_groups
-        security_group_definitions: *cc_security_group_definitions
         internal_api_password: "((cc_internal_api_password))"
-        bulk_api_password: "((cc_bulk_api_password))"
-        quota_definitions: *quota_definitions
         staging_upload_user: staging_user
         staging_upload_password: "((cc_staging_upload_password))"
         resource_pool: *blobstore-properties
@@ -1013,7 +986,6 @@ instance_groups:
         diego: *bypass_bridge
       ccdb: *ccdb
       system_domain: "((system_domain))"
-      app_domains: *app_domains
       routing_api: *routing_api
       uaa:
         ca_cert: "((uaa_ssl.ca))"
@@ -1022,12 +994,8 @@ instance_groups:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
           cc_routing:
             secret: "((uaa_clients_cc-routing_secret))"
-        url: https://uaa.((system_domain))
         ssl:
           port: 8443
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
   - name: statsd_injector
     release: statsd-injector
     properties: *statsd_injector_properties
@@ -1136,9 +1104,6 @@ instance_groups:
         ca_cert: "((diego_rep_agent.ca))"
         cert: "((diego_rep_agent.certificate))"
         key: "((diego_rep_agent.private_key))"
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
   - name: cfdot
     release: diego
     properties:
@@ -1238,7 +1203,7 @@ instance_groups:
   - name: reverse_log_proxy
     release: loggregator
     provides:
-      reverse_log_proxy: {as: reverse_log_proxy}
+      reverse_log_proxy: {as: reverse_log_proxy, shared: true}
     properties:
       loggregator:
         tls:
@@ -1262,9 +1227,6 @@ instance_groups:
           uris:
           - doppler.((system_domain))
           - "*.doppler.((system_domain))"
-  - name: metron_agent
-    release: loggregator
-    properties: *metron_agent_properties
 
 variables:
 - name: blobstore_admin_users_password
@@ -1350,8 +1312,6 @@ variables:
 - name: router_status_password
   type: password
 - name: cf_admin_password
-  type: password
-- name: dropsonde_shared_secret
   type: password
 - name: router_route_services_secret
   type: password
@@ -1638,9 +1598,9 @@ releases:
   version: 1.44.0
   sha1: 19c031dce270c23534c4423ba8a032a7d05396f8
 - name: cf-mysql
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-mysql-release?v=36.7.0
-  version: 36.7.0
-  sha1: 3130fa20304dbc6a61397bdf1695ad038c483c52
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-mysql-release?v=36.8.0
+  version: 36.8.0
+  sha1: b6ef2586c53c1b874f1aab0d42c0b94e9d601081
 - name: cf-networking
   url: https://bosh.io/d/github.com/cloudfoundry/cf-networking-release?v=1.8.1
   version: 1.8.1
@@ -1650,21 +1610,21 @@ releases:
   version: "39"
   sha1: a2d557302a1026f685514b34792b81c0432a48c8
 - name: cf-syslog-drain
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-syslog-drain-release?v=2
-  version: "2"
-  sha1: c9954676033164f550ae645bd1216cf56d159905
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-syslog-drain-release?v=3
+  version: "3"
+  sha1: ac3191fc7d944fc1f088e254521f55a61b3776b4
 - name: cflinuxfs2
-  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.161.0
-  version: 1.161.0
-  sha1: 9eee181c745f8c086dcce570e3ecfbb8553b8f5a
+  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.165.0
+  version: 1.165.0
+  sha1: 9fae3f441dc800c488020a3fba87769b015dc84c
 - name: consul
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=183
-  version: "183"
-  sha1: 1068034619915512db7f714cfe71dd3f6c78515d
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=190
+  version: "190"
+  sha1: 7a3dcd5a85fdedc8233b2e68b8aa9d97c46c3611
 - name: diego
-  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=1.28.0
-  version: 1.28.0
-  sha1: f78e142e051ca8fd7a186dc321931531ab879a1c
+  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=1.29.1
+  version: 1.29.1
+  sha1: 33bab9ec5d0d6045a33b276e4000ad80e83dbf96
 - name: dotnet-core-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/dotnet-core-buildpack-release?v=1.0.27
   version: 1.0.27
@@ -1682,9 +1642,9 @@ releases:
   version: "4.6"
   sha1: e9f6b1e7fe51079af70e7c42198f5e5201b7b663
 - name: loggregator
-  url: https://bosh.io/d/github.com/cloudfoundry/loggregator?v=99
+  url: https://bosh.io/d/github.com/cloudfoundry/loggregator-release?v=99
   version: "99"
-  sha1: c2fe986fae68a15424d11e78cf7f80c2c56f1913
+  sha1: 2080e1e0594591dafa716c69f207eb29929bce3d
 - name: nats
   url: https://bosh.io/d/github.com/cloudfoundry/nats-release?v=22
   version: "22"
@@ -1702,9 +1662,9 @@ releases:
   version: 1.5.26
   sha1: a8b679f5c1da6f71a9c5f9ef5dcd985366c3e38a
 - name: routing
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.164.0
-  version: 0.164.0
-  sha1: 1c31a19ca9718ba070620d090c684747c7529686
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.166.0
+  version: 0.166.0
+  sha1: 281941aa133070cbbfa6b494e68d0d53121c0a9a
 - name: ruby-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/ruby-buildpack-release?v=1.7.3
   version: 1.7.3
@@ -1718,10 +1678,10 @@ releases:
   version: 1.0.30
   sha1: b0f201e0341af9736848514c76149070ea902e41
 - name: uaa
-  url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=52
-  version: "52"
-  sha1: e7a1b9f368d30cc5e597be134844280b9887873e
+  url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=52.2
+  version: "52.2"
+  sha1: a10ad45747edd6dcc4d891d3b349223d0d2f8439
 stemcells:
 - alias: default
   os: ubuntu-trusty
-  version: "3468"
+  version: "3468.1"

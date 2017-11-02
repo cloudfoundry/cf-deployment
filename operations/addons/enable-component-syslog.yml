@@ -1,0 +1,27 @@
+---
+- type: replace
+  path: /addons?/-
+  value:
+    name: syslog_forwarder
+    include:
+      stemcell:
+      - os: ubuntu-trusty
+    jobs:
+    - name: syslog_forwarder
+      release: syslog
+      properties:
+        syslog:
+          address: ((syslog_address))
+          port: ((syslog_port))
+          transport: ((syslog_transport))
+          fallback_servers: ((syslog_fallback_servers))
+          custom_rule: ((syslog_custom_rule))
+          forward_files: false
+
+- type: replace
+  path: /releases/-
+  value:
+    name: syslog
+    url: https://bosh.io/d/github.com/cloudfoundry/syslog-release?v=11
+    version: '11'
+    sha1: 332ac15609b220a3fdf5efad0e0aa069d8235788

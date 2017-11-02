@@ -1,0 +1,7 @@
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/credential_references?/interpolate_service_bindings?
+  value: false
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/credential_references?/interpolate_service_bindings?
+  value: false

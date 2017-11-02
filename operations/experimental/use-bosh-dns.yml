@@ -1,25 +1,25 @@
----
 - type: replace
   path: /addons?/-
   value:
-    name: bosh-dns
     include:
       stemcell:
       - os: ubuntu-trusty
     jobs:
     - name: bosh-dns
-      release: bosh-dns
       properties:
-        aliases: &bosh-dns-aliases
+        aliases:
           _.cell.service.cf.internal:
           - _.diego-cell.default.cf.bosh
           - _.windows-cell.default.cf.bosh
+          - _.windows2016-cell.default.cf.bosh
+          - _.isolated-diego-cell.default.cf.bosh
           auctioneer.service.cf.internal:
           - '*.scheduler.default.cf.bosh'
           bbs.service.cf.internal:
           - '*.diego-api.default.cf.bosh'
           blobstore.service.cf.internal:
           - '*.blobstore.default.cf.bosh'
+          - '*.singleton-blobstore.default.cf.bosh'
           cc-uploader.service.cf.internal:
           - '*.api.default.cf.bosh'
           cf-etcd.service.cf.internal:
@@ -53,6 +53,7 @@
           sql-db.service.cf.internal:
           - '*.mysql.default.cf.bosh'
           - '*.postgres.default.cf.bosh'
+          - '*.singleton-database.default.cf.bosh'
           ssh-proxy.service.cf.internal:
           - '*.scheduler.default.cf.bosh'
           stager.service.cf.internal:
@@ -63,24 +64,148 @@
           - '*.scheduler.default.cf.bosh'
           uaa.service.cf.internal:
           - '*.uaa.default.cf.bosh'
-
+      release: bosh-dns
+    name: bosh-dns
 - type: replace
   path: /addons/-
   value:
-    name: bosh-dns-windows
     include:
       stemcell:
       - os: windows2012R2
     jobs:
     - name: bosh-dns-windows
-      release: bosh-dns
       properties:
-        aliases: *bosh-dns-aliases
-
+        aliases:
+          _.cell.service.cf.internal:
+          - _.diego-cell.default.cf.bosh
+          - _.windows-cell.default.cf.bosh
+          - _.windows2016-cell.default.cf.bosh
+          - _.isolated-diego-cell.default.cf.bosh
+          auctioneer.service.cf.internal:
+          - '*.scheduler.default.cf.bosh'
+          bbs.service.cf.internal:
+          - '*.diego-api.default.cf.bosh'
+          blobstore.service.cf.internal:
+          - '*.blobstore.default.cf.bosh'
+          - '*.singleton-blobstore.default.cf.bosh'
+          cc-uploader.service.cf.internal:
+          - '*.api.default.cf.bosh'
+          cf-etcd.service.cf.internal:
+          - '*.etcd.default.cf.bosh'
+          cloud-controller-ng.service.cf.internal:
+          - '*.api.default.cf.bosh'
+          consul.service.cf.internal:
+          - '*.consul.default.cf.bosh'
+          credhub.service.cf.internal:
+          - '*.credhub.default.cf.bosh'
+          doppler.service.cf.internal:
+          - '*.doppler.default.cf.bosh'
+          file-server.service.cf.internal:
+          - '*.api.default.cf.bosh'
+          gorouter.service.cf.internal:
+          - '*.router.default.cf.bosh'
+          locket.service.cf.internal:
+          - '*.diego-api.default.cf.bosh'
+          loggregator-trafficcontroller.service.cf.internal:
+          - '*.log-api.default.cf.bosh'
+          nsync.service.cf.internal:
+          - '*.scheduler.default.cf.bosh'
+          policy-server.service.cf.internal:
+          - '*.api.default.cf.bosh'
+          reverse-log-proxy.service.cf.internal:
+          - '*.log-api.default.cf.bosh'
+          routing-api.service.cf.internal:
+          - '*.api.default.cf.bosh'
+          silk-controller.service.cf.internal:
+          - '*.diego-api.default.cf.bosh'
+          sql-db.service.cf.internal:
+          - '*.mysql.default.cf.bosh'
+          - '*.postgres.default.cf.bosh'
+          - '*.singleton-database.default.cf.bosh'
+          ssh-proxy.service.cf.internal:
+          - '*.scheduler.default.cf.bosh'
+          stager.service.cf.internal:
+          - '*.api.default.cf.bosh'
+          tcp-router.service.cf.internal:
+          - '*.tcp-router.default.cf.bosh'
+          tps.service.cf.internal:
+          - '*.scheduler.default.cf.bosh'
+          uaa.service.cf.internal:
+          - '*.uaa.default.cf.bosh'
+      release: bosh-dns
+    name: bosh-dns-windows
+- type: replace
+  path: /addons/-
+  value:
+    include:
+      stemcell:
+      - os: windows2016
+    jobs:
+    - name: bosh-dns-windows
+      properties:
+        aliases:
+          _.cell.service.cf.internal:
+          - _.diego-cell.default.cf.bosh
+          - _.windows-cell.default.cf.bosh
+          - _.windows2016-cell.default.cf.bosh
+          - _.isolated-diego-cell.default.cf.bosh
+          auctioneer.service.cf.internal:
+          - '*.scheduler.default.cf.bosh'
+          bbs.service.cf.internal:
+          - '*.diego-api.default.cf.bosh'
+          blobstore.service.cf.internal:
+          - '*.blobstore.default.cf.bosh'
+          - '*.singleton-blobstore.default.cf.bosh'
+          cc-uploader.service.cf.internal:
+          - '*.api.default.cf.bosh'
+          cf-etcd.service.cf.internal:
+          - '*.etcd.default.cf.bosh'
+          cloud-controller-ng.service.cf.internal:
+          - '*.api.default.cf.bosh'
+          consul.service.cf.internal:
+          - '*.consul.default.cf.bosh'
+          credhub.service.cf.internal:
+          - '*.credhub.default.cf.bosh'
+          doppler.service.cf.internal:
+          - '*.doppler.default.cf.bosh'
+          file-server.service.cf.internal:
+          - '*.api.default.cf.bosh'
+          gorouter.service.cf.internal:
+          - '*.router.default.cf.bosh'
+          locket.service.cf.internal:
+          - '*.diego-api.default.cf.bosh'
+          loggregator-trafficcontroller.service.cf.internal:
+          - '*.log-api.default.cf.bosh'
+          nsync.service.cf.internal:
+          - '*.scheduler.default.cf.bosh'
+          policy-server.service.cf.internal:
+          - '*.api.default.cf.bosh'
+          reverse-log-proxy.service.cf.internal:
+          - '*.log-api.default.cf.bosh'
+          routing-api.service.cf.internal:
+          - '*.api.default.cf.bosh'
+          silk-controller.service.cf.internal:
+          - '*.diego-api.default.cf.bosh'
+          sql-db.service.cf.internal:
+          - '*.mysql.default.cf.bosh'
+          - '*.postgres.default.cf.bosh'
+          - '*.singleton-database.default.cf.bosh'
+          ssh-proxy.service.cf.internal:
+          - '*.scheduler.default.cf.bosh'
+          stager.service.cf.internal:
+          - '*.api.default.cf.bosh'
+          tcp-router.service.cf.internal:
+          - '*.tcp-router.default.cf.bosh'
+          tps.service.cf.internal:
+          - '*.scheduler.default.cf.bosh'
+          uaa.service.cf.internal:
+          - '*.uaa.default.cf.bosh'
+      release: bosh-dns
+    name: bosh-dns-windows
 - type: replace
   path: /releases/-
   value:
     name: bosh-dns
-    sha1: 0d55ec52b3a5c54a8284388d2400bf4c0172d7af
-    url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-release?v=0.0.8
-    version: 0.0.8
+    sha1: e38d3e5edd16ce2dca778440b636ab1ea61f892f
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-release?v=0.0.11
+    version: 0.0.11

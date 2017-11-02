@@ -6,13 +6,13 @@
 - type: remove
   path: /instance_groups/name=doppler/jobs/name=consul_agent
 - type: remove
-  path: /instance_groups/name=mysql/jobs/name=consul_agent
+  path: /instance_groups/name=singleton-database/jobs/name=consul_agent
 - type: remove
   path: /instance_groups/name=diego-api/jobs/name=consul_agent
 - type: remove
   path: /instance_groups/name=uaa/jobs/name=consul_agent
 - type: remove
-  path: /instance_groups/name=blobstore/jobs/name=consul_agent
+  path: /instance_groups/name=singleton-blobstore/jobs/name=consul_agent
 - type: remove
   path: /instance_groups/name=api/jobs/name=consul_agent
 - type: remove
@@ -28,4 +28,24 @@
 - type: remove
   path: /instance_groups/name=log-api/jobs/name=consul_agent
 - type: remove
-  path: /instance_groups/name=syslog-scheduler/jobs/name=consul_agent
+  path: /instance_groups/name=vizzini?/jobs/name=consul_agent
+- type: remove
+  path: /instance_groups/name=credhub?/jobs/name=consul_agent
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=auctioneer/properties/enable_consul_service_registration?
+  value: false
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=ssh_proxy/properties/enable_consul_service_registration?
+  value: false
+- type: replace
+  path: /instance_groups/name=api/jobs/name=file_server/properties?/enable_consul_service_registration?
+  value: false
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=rep/properties/enable_consul_service_registration?
+  value: false
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=bbs/properties/enable_consul_service_registration?
+  value: false
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=locket/properties/enable_consul_service_registration?
+  value: false

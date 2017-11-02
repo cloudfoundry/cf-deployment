@@ -1,0 +1,7 @@
+---
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/app_domains
+  value: ((app_domains))
+- type: replace
+  path: /instance_groups/name=smoke-tests/jobs/name=smoke_tests/properties/smoke_tests/apps_domain
+  value: ((smoke_test_app_domain))

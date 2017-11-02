@@ -86,11 +86,11 @@
               key: ((loggregator_tls_metron.private_key))
         metron_agent:
           deployment: ((system_domain))
-        metron_endpoint:
-          shared_secret: ((dropsonde_shared_secret))
         syslog_daemon_config:
           enable: false
       release: loggregator
+    - name: enable_ssh
+      release: windows-utilities
     name: windows-cell
     networks:
     - name: default
@@ -102,15 +102,22 @@
   path: /releases/-
   value:
     name: garden-windows
-    sha1: 4aa381c1f3203915e773e25a71b50ce27f7e32cc
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/garden-windows-bosh-release?v=0.9.0
-    version: 0.9.0
+    sha1: 20c7a4a30af7b1de25ad1f8f24824c9b516b81cc
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/garden-windows-bosh-release?v=0.11.0
+    version: 0.11.0
+- type: replace
+  path: /releases/name=windows-utilities?
+  value:
+    name: windows-utilities
+    sha1: 2b2cd7e3544804ca15bc7b843d59324c34ee933d
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.4.0
+    version: 0.4.0
 - type: replace
   path: /stemcells/-
   value:
     alias: windows2012R2
     os: windows2012R2
-    version: "1200.4"
+    version: "1200.7"
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2012R2?
   value:
