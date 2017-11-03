@@ -26,6 +26,8 @@
         release: cf-networking
       - name: bbr-cloudcontrollerdb
         release: capi
+      - name: bbr-routingdb
+        release: routing
       - name: bbr-uaadb
         release: uaa
       - name: consul_agent
@@ -37,6 +39,9 @@
 
   - type: replace
     path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties?/cloud_controller/release_level_backup?
+    value: true
+  - type: replace
+    path: /instance_groups/name=api/jobs/name=routing-api/properties?/release_level_backup?
     value: true
   - type: replace
     path: /instance_groups/name=backup-restore/jobs/name=bbr-cfnetworkingdb/properties?/release_level_backup?
