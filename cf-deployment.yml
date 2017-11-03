@@ -598,8 +598,6 @@ instance_groups:
           cc_service_key_client:
             secret: "((uaa_clients_cc_service_key_client_secret))"
         url: https://uaa.((system_domain))
-        ssl:
-          port: 8443
       cc:
         stacks:
         - name: cflinuxfs2
@@ -651,7 +649,6 @@ instance_groups:
           package: php-buildpack
         - name: binary_buildpack
           package: binary-buildpack
-        default_to_diego_backend: true
         diego: &bypass_bridge
           temporary_cc_uploader_mtls: true
           temporary_droplet_download_mtls: true
@@ -822,7 +819,6 @@ instance_groups:
     properties:
       cc:
         db_encryption_key: "((cc_db_encryption_key))"
-        default_to_diego_backend: true
         diego: *bypass_bridge
         internal_api_password: "((cc_internal_api_password))"
         staging_upload_user: staging_user
@@ -844,8 +840,6 @@ instance_groups:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
           cc_routing:
             secret: "((uaa_clients_cc-routing_secret))"
-        ssl:
-          port: 8443
 - name: router
   azs:
   - z1
