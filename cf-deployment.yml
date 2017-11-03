@@ -870,7 +870,6 @@ instance_groups:
     release: routing
     properties:
       router:
-        ssl_skip_validation: true
         enable_ssl: true
         tls_pem:
         - cert_chain: "((router_ssl.certificate))"
