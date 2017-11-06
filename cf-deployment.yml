@@ -45,8 +45,8 @@ instance_groups:
       smoke_tests:
         api: "https://api.((system_domain))"
         apps_domain: "((system_domain))"
-        user: admin
-        password: "((cf_admin_password))"
+        user: bosh
+        password: "((cf_bosh_password))"
         org: cf_smoke_tests_org
         space: cf_smoke_tests_space
         cf_dial_timeout_in_seconds: 300
@@ -390,6 +390,16 @@ instance_groups:
             - cloud_controller.admin
             - doppler.firehose
             - network.admin
+            - openid
+            - routing.router_groups.read
+            - routing.router_groups.write
+            - scim.read
+            - scim.write
+          - name: bosh
+            password: "((cf_bosh_password))"
+            groups:
+            - cloud_controller.admin
+            - doppler.firehose
             - openid
             - routing.router_groups.read
             - routing.router_groups.write
@@ -1305,6 +1315,8 @@ variables:
 - name: router_status_password
   type: password
 - name: cf_admin_password
+  type: password
+- name: cf_bosh_password
   type: password
 - name: router_route_services_secret
   type: password
