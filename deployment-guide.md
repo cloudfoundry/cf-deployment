@@ -259,8 +259,3 @@ Here's an example:
   path: /instance_groups/name=<JOB_NAME>/instances
   value: 10
 ```
-
-If you need to scale the cf syslog adapters independently of doppler, there is
-[operations/non-collocated-cf-syslog-drain.yml](operations/non-collocated-cf-syslog-drain.yml)
-that will move the adapter from the doppler instance group to an adapter
-instance group.
