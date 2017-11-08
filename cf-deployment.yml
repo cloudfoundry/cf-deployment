@@ -164,9 +164,10 @@ instance_groups:
             cert: "((adapter_rlp_tls.certificate))"
             key: "((adapter_rlp_tls.private_key))"
             cn: reverselogproxy
-- name: singleton-database
+- name: database
   migrated_from:
   - name: mysql
+  - name: singleton-database
   azs:
   - z1
   persistent_disk_type: 10GB
