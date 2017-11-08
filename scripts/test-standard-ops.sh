@@ -28,6 +28,7 @@ test_standard_ops() {
       check_interpolation "override-app-domains.yml" "-l example-vars-files/vars-override-app-domains.yml"
       check_interpolation "rename-deployment.yml" "-v deployment_name=renamed_deployment"
       check_interpolation "rename-network.yml" "-v network_name=renamed_network"
+      check_interpolation "scale-database-cluster.yml"
       check_interpolation "scale-to-one-az.yml"
       check_interpolation "set-bbs-active-key.yml" "-v diego_bbs_active_key_label=my_key_name"
       check_interpolation "stop-skipping-tls-validation.yml"
