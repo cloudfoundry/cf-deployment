@@ -6,15 +6,16 @@
     url: https://bosh.io/d/github.com/cloudfoundry/postgres-release?v=21
     version: "21"
 - type: remove
-  path: /instance_groups/name=singleton-database/jobs/name=mysql
+  path: /instance_groups/name=database/jobs/name=mysql
 - type: remove
-  path: /instance_groups/name=singleton-database/jobs/name=proxy
+  path: /instance_groups/name=database/jobs/name=proxy
 - type: replace
-  path: /instance_groups/name=singleton-database/jobs/-
+  path: /instance_groups/name=database/jobs/-
   value:
     name: postgres
     migrated_from:
     - name: postgres
+    - name: singleton-database
     properties:
       databases:
         databases:
@@ -59,7 +60,7 @@
           tag: admin
     release: postgres
 - type: replace
-  path: /instance_groups/name=singleton-database/jobs/name=consul_agent/properties?/consul/agent/services?
+  path: /instance_groups/name=database/jobs/name=consul_agent/properties?/consul/agent/services?
   value:
     sql_db:
       check: {}
@@ -145,19 +146,19 @@
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/port
   value: 5524
 - type: replace
-  path: /instance_groups/name=singleton-database/jobs/name=postgres/properties/databases/databases/name=routing-api?/name
+  path: /instance_groups/name=database/jobs/name=postgres/properties/databases/databases/name=routing-api?/name
   value: routing-api
 - type: replace
-  path: /instance_groups/name=singleton-database/jobs/name=postgres/properties/databases/databases/name=routing-api?/tag
+  path: /instance_groups/name=database/jobs/name=postgres/properties/databases/databases/name=routing-api?/tag
   value: routing-api
 - type: replace
-  path: /instance_groups/name=singleton-database/jobs/name=postgres/properties/databases/databases/name=routing-api?/citext
+  path: /instance_groups/name=database/jobs/name=postgres/properties/databases/databases/name=routing-api?/citext
   value: true
 - type: replace
-  path: /instance_groups/name=singleton-database/jobs/name=postgres/properties/databases/roles/name=routing-api?/name
+  path: /instance_groups/name=database/jobs/name=postgres/properties/databases/roles/name=routing-api?/name
   value: routing-api
 - type: replace
-  path: /instance_groups/name=singleton-database/jobs/name=postgres/properties/databases/roles/name=routing-api?/tag
+  path: /instance_groups/name=database/jobs/name=postgres/properties/databases/roles/name=routing-api?/tag
   value: admin
 - type: remove
   path: /releases/name=cf-mysql?
@@ -170,13 +171,13 @@
 - type: remove
   path: /variables/name=cf_mysql_mysql_galera_healthcheck_password?
 - type: replace
-  path: /instance_groups/name=singleton-database/jobs/name=postgres/properties/databases/databases/-
+  path: /instance_groups/name=database/jobs/name=postgres/properties/databases/databases/-
   value:
     citext: true
     name: locket
     tag: locket
 - type: replace
-  path: /instance_groups/name=singleton-database/jobs/name=postgres/properties/databases/roles/-
+  path: /instance_groups/name=database/jobs/name=postgres/properties/databases/roles/-
   value:
     name: locket
     password: ((locket_database_password))
