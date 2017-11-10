@@ -1,0 +1,8 @@
+---
+- type: replace
+  path: /instance_groups/name=router/azs
+  value: [z1,z2,z3,z4]
+
+- type: replace
+  path: /instance_groups/name=router/instances
+  value: 4
