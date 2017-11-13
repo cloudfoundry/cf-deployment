@@ -184,7 +184,7 @@ By default,
 `mysql` or `postgres` databases
 that are singletons
 and cannot be scaled out<sup>[1](#mysql-footnote)</sup>.
-Producation deployers
+Production deployers
 may want to deploy
 a database with better availability guarantees,
 such as BOSH-managed [cf-mysql-deployment](https://github.com/cloudfoundry/cf-mysql-deployment)
