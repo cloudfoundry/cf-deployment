@@ -17,7 +17,7 @@
           fallback_servers: ((syslog_fallback_servers))
           custom_rule: |
             ((syslog_custom_rule))
-            if ($programme startswith "vcap.") then ~
+            if ($programname startswith "vcap.") then ~
 
 - type: replace
   path: /releases/-
