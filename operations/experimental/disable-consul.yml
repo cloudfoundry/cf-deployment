@@ -31,6 +31,8 @@
   path: /instance_groups/name=vizzini?/jobs/name=consul_agent
 - type: remove
   path: /instance_groups/name=credhub?/jobs/name=consul_agent
+- type: remove
+  path: /instance_groups/name=adapter?/jobs/name=consul_agent
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=auctioneer/properties/enable_consul_service_registration?
   value: false
