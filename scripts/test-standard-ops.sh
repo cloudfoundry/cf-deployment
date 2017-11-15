@@ -23,7 +23,6 @@ test_standard_ops() {
       check_interpolation "name: enable-nfs-ldap.yml" "enable-nfs-volume-service.yml -o enable-nfs-ldap.yml -l example-vars-files/vars-enable-nfs-ldap.yml"
       check_interpolation "enable-nfs-volume-service.yml"
       check_interpolation "enable-uniq-consul-node-name.yml"
-      check_interpolation "non-collocated-cf-syslog-drain.yml"
       check_interpolation "openstack.yml"
       check_interpolation "override-app-domains.yml" "-l example-vars-files/vars-override-app-domains.yml"
       check_interpolation "rename-deployment.yml" "-v deployment_name=renamed_deployment"
