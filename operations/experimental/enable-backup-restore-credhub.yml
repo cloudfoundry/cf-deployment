@@ -1,0 +1,6 @@
+---
+- type: replace
+  path: /instance_groups/name=credhub/jobs/-
+  value:
+    name: database-backup-restorer
+    release: backup-and-restore-sdk

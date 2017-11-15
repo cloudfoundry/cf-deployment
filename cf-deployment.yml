@@ -146,9 +146,10 @@ instance_groups:
           doppler:
             cert: "((loggregator_tls_doppler.certificate))"
             key: "((loggregator_tls_doppler.private_key))"
-- name: singleton-database
+- name: database
   migrated_from:
   - name: mysql
+  - name: singleton-database
   azs:
   - z1
   persistent_disk_type: 10GB
@@ -240,6 +241,10 @@ instance_groups:
   - name: cfdot
     release: diego
     properties:
+      tls: &cfdot_tls_client_properties
+        ca_certificate: "((diego_rep_client.ca))"
+        certificate: "((diego_rep_client.certificate))"
+        private_key: "((diego_rep_client.private_key))"
       diego:
         cfdot:
           bbs: &diego_bbs_client_properties
@@ -935,6 +940,7 @@ instance_groups:
   - name: cfdot
     release: diego
     properties:
+      tls: *cfdot_tls_client_properties
       diego:
         cfdot:
           bbs: *diego_bbs_client_properties
@@ -1092,6 +1098,7 @@ instance_groups:
   - name: cfdot
     release: diego
     properties:
+      tls: *cfdot_tls_client_properties
       diego:
         cfdot:
           bbs: *diego_bbs_client_properties
@@ -1621,13 +1628,13 @@ releases:
   version: 1.0.15
   sha1: 4dc65769e860095822497f37c4a0c6c1fc2794ec
 - name: capi
-  url: https://bosh.io/d/github.com/cloudfoundry/capi-release?v=1.44.0
-  version: 1.44.0
-  sha1: 19c031dce270c23534c4423ba8a032a7d05396f8
+  url: https://bosh.io/d/github.com/cloudfoundry/capi-release?v=1.45.0
+  version: 1.45.0
+  sha1: 3ca25a7853302bdb9cabcd77ad3a4a3879dfe016
 - name: cf-mysql
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-mysql-release?v=36.8.0
-  version: 36.8.0
-  sha1: b6ef2586c53c1b874f1aab0d42c0b94e9d601081
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-mysql-release?v=36.9.0
+  version: 36.9.0
+  sha1: adf3ad18f608cd0f045c4feeb08422947c1481a7
 - name: cf-networking
   url: https://bosh.io/d/github.com/cloudfoundry/cf-networking-release?v=1.8.1
   version: 1.8.1
@@ -1641,9 +1648,9 @@ releases:
   version: "2"
   sha1: c9954676033164f550ae645bd1216cf56d159905
 - name: cflinuxfs2
-  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.166.0
-  version: 1.166.0
-  sha1: 283fcf78d0d2d68bc502523320c9ad973f6fa679
+  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.168.0
+  version: 1.168.0
+  sha1: cd5cfc8c73520b1d0c3a13b4ffaee7170edac762
 - name: consul
   url: https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=190
   version: "190"
