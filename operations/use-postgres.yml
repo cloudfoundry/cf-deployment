@@ -2,9 +2,9 @@
   path: /releases/-
   value:
     name: postgres
-    sha1: b37916b709fb45ac7de3e195456301cb01a1ae22
-    url: https://bosh.io/d/github.com/cloudfoundry/postgres-release?v=21
-    version: "21"
+    sha1: 86a1333122e9cdd051551c83ec26d36f6e325d6c
+    url: https://bosh.io/d/github.com/cloudfoundry/postgres-release?v=22
+    version: "22"
 - type: remove
   path: /instance_groups/name=database/jobs/name=mysql
 - type: remove
@@ -12,10 +12,10 @@
 - type: replace
   path: /instance_groups/name=database/jobs/-
   value:
-    name: postgres
     migrated_from:
     - name: postgres
     - name: singleton-database
+    name: postgres
     properties:
       databases:
         databases:
