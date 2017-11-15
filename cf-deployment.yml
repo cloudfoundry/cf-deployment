@@ -699,13 +699,6 @@ instance_groups:
         internal_api_password: "((cc_internal_api_password))"
         staging_upload_user: staging_user
         staging_upload_password: "((cc_staging_upload_password))"
-        quota_definitions:
-          default:
-            memory_limit: 102400
-            non_basic_services_allowed: true
-            total_routes: 1000
-            total_services: -1
-            total_reserved_route_ports: 100
         buildpacks: &blobstore-properties
           blobstore_type: webdav
           webdav_config:
