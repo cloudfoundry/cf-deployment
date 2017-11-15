@@ -24,7 +24,6 @@ test_experimental_ops() {
       check_interpolation "name: enable-backup-restore-credhub.yml" "enable-backup-restore.yml" "-o enable-instance-identity-credentials.yml" "-o secure-service-credentials.yml" "-o enable-backup-restore-credhub.yml"
       check_interpolation "enable-bpm.yml"
       check_interpolation "name: enable-nfs-broker-backup.yml" "enable-backup-restore.yml -o enable-nfs-broker-backup.yml -v nfs-broker-database-password=i_am_a_password"
-      check_interpolation "name: enable-container-proxy.yml" "enable-instance-identity-credentials.yml" "-o enable-container-proxy.yml"
       check_interpolation "name: enable-instance-identity-credentials-windows.yml" "enable-instance-identity-credentials.yml" "-o ${home}/operations/windows-cell.yml" "-o enable-instance-identity-credentials-windows.yml"
       check_interpolation "name: enable-instance-identity-credentials-windows2016.yml" "enable-instance-identity-credentials.yml" "-o windows2016-cell.yml" "-o enable-instance-identity-credentials-windows2016.yml"
       check_interpolation "name: rootless-containers.yml" "use-grootfs.yml" "-o rootless-containers.yml"
@@ -53,7 +52,7 @@ test_experimental_ops() {
       check_interpolation "name: use-offline-windows2016fs.yml" "windows2016-cell.yml" "-o use-offline-windows2016fs.yml"
       check_interpolation "windows2016-cell.yml"
       check_interpolation "name: operations/windows-cell.yml windows2016-cell.yml" "${home}/operations/windows-cell.yml" "-o windows2016-cell.yml"
-      check_interpolation "name: enable-routing-integrity.yml" "enable-routing-integrity.yml" "-o enable-instance-identity-credentials.yml" "-o enable-container-proxy.yml"
+      check_interpolation "name: enable-routing-integrity.yml" "enable-routing-integrity.yml" "-o enable-instance-identity-credentials.yml"
     popd > /dev/null # operations/experimental
   popd > /dev/null
   exit $exit_code
