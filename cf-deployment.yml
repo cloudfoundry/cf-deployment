@@ -112,6 +112,46 @@ instance_groups:
       nats:
         password: "((nats_password))"
         user: nats
+- name: adapter
+  azs:
+  - z1
+  - z2
+  instances: 2
+  vm_type: minimal
+  stemcell: default
+  networks:
+  - name: default
+  jobs:
+  - name: consul_agent
+    release: consul
+    consumes:
+      consul_common: {from: consul_common_link}
+      consul_server: nil
+      consul_client: {from: consul_client_link}
+    properties:
+      consul:
+        agent:
+          services:
+            doppler:
+              name: doppler
+  - name: adapter
+    release: cf-syslog-drain
+    properties:
+      scalablesyslog:
+        adapter:
+          tls:
+            ca: "((adapter_tls.ca))"
+            cert: "((adapter_tls.certificate))"
+            key: "((adapter_tls.private_key))"
+            cn: ss-adapter
+          logs:
+            addr: reverse-log-proxy.service.cf.internal:8082
+        adapter_rlp:
+          tls:
+            ca: "((adapter_rlp_tls.ca))"
+            cert: "((adapter_rlp_tls.certificate))"
+            key: "((adapter_rlp_tls.private_key))"
+            cn: reverselogproxy
 - name: doppler
   azs:
   - z1
@@ -1219,46 +1259,6 @@ instance_groups:
           uris:
           - doppler.((system_domain))
           - "*.doppler.((system_domain))"
-- name: adapter
-  azs:
-  - z1
-  - z2
-  instances: 2
-  vm_type: minimal
-  stemcell: default
-  networks:
-  - name: default
-  jobs:
-  - name: consul_agent
-    release: consul
-    consumes:
-      consul_common: {from: consul_common_link}
-      consul_server: nil
-      consul_client: {from: consul_client_link}
-    properties:
-      consul:
-        agent:
-          services:
-            doppler:
-              name: doppler
-  - name: adapter
-    release: cf-syslog-drain
-    properties:
-      scalablesyslog:
-        adapter:
-          tls:
-            ca: "((adapter_tls.ca))"
-            cert: "((adapter_tls.certificate))"
-            key: "((adapter_tls.private_key))"
-            cn: ss-adapter
-          logs:
-            addr: reverse-log-proxy.service.cf.internal:8082
-        adapter_rlp:
-          tls:
-            ca: "((adapter_rlp_tls.ca))"
-            cert: "((adapter_rlp_tls.certificate))"
-            key: "((adapter_rlp_tls.private_key))"
-            cn: reverselogproxy
 
 variables:
 - name: blobstore_admin_users_password
