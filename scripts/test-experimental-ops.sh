@@ -19,6 +19,7 @@ test_experimental_ops() {
       check_interpolation "name: disable-consul-windows.yml" "${home}/operations/windows-cell.yml" "-o disable-consul.yml" "-o disable-consul-windows.yml"
       check_interpolation "name: disable-consul-windows2016.yml" "windows2016-cell.yml" "-o disable-consul.yml" "-o disable-consul-windows2016.yml"
       check_interpolation "disable-interpolate-service-bindings.yml"
+      check_interpolation "enable-traffic-to-internal-networks.yml"
       check_interpolation "enable-backup-restore.yml"
       check_interpolation "name: enable-backup-restore-credhub.yml" "enable-backup-restore.yml" "-o enable-instance-identity-credentials.yml" "-o secure-service-credentials.yml" "-o enable-backup-restore-credhub.yml"
       check_interpolation "enable-bpm.yml"
