@@ -6,18 +6,6 @@
   - name: default
     static_ips: [10.244.0.34]
 
-- type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/diego?/use_privileged_containers_for_running
-  value: true
-
-- type: replace
-  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/diego?/use_privileged_containers_for_running
-  value: true
-
-- type: replace
-  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/diego?/use_privileged_containers_for_running
-  value: true
-
 # --- Add Bosh Lite Security Groups ---
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/default_running_security_groups
