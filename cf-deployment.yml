@@ -3,7 +3,7 @@ name: cf
 update:
   canaries: 1
   canary_watch_time: 30000-1200000
-  max_in_flight: 5
+  max_in_flight: 1
   serial: false
   update_watch_time: 5000-1200000
 addons:
@@ -34,7 +34,6 @@ instance_groups:
   vm_type: minimal
   stemcell: default
   update:
-    max_in_flight: 1
     serial: true
   networks:
   - name: default
@@ -61,7 +60,6 @@ instance_groups:
   vm_type: minimal
   stemcell: default
   update:
-    max_in_flight: 1
     serial: true
   networks:
   - name: default
@@ -880,7 +878,6 @@ instance_groups:
   - cf-router-network-properties
   stemcell: default
   update:
-    max_in_flight: 1
     serial: true
   networks:
   - name: default
@@ -1181,7 +1178,6 @@ instance_groups:
   vm_type: minimal
   stemcell: default
   update:
-    max_in_flight: 1
     serial: true
   networks:
   - name: default
