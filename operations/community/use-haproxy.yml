@@ -37,6 +37,9 @@
     instances: 1
     vm_type: minimal
     stemcell: default
+    update:
+      max_in_flight: 1
+      serial: true
     networks:
     - name: default
     jobs:
