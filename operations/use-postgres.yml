@@ -37,6 +37,9 @@
         - citext: false
           name: network_connectivity
           tag: networkconnectivity
+        - citext: true
+          name: locket
+          tag: locket
         db_scheme: postgres
         port: 5524
         roles:
@@ -58,6 +61,9 @@
         - name: network_connectivity
           password: ((network_connectivity_database_password))
           tag: admin
+        - name: locket
+          password: ((locket_database_password))
+          tag: locket
     release: postgres
 - type: replace
   path: /instance_groups/name=database/jobs/name=consul_agent/properties?/consul/agent/services?
@@ -140,26 +146,20 @@
     type: postgres
     username: network_connectivity
 - type: replace
+  path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql
+  value:
+    db_driver: postgres
+    db_host: sql-db.service.cf.internal
+    db_password: ((locket_database_password))
+    db_port: 5524
+    db_schema: locket
+    db_username: locket
+- type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/type
   value: postgres
 - type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/port
   value: 5524
-- type: replace
-  path: /instance_groups/name=database/jobs/name=postgres/properties/databases/databases/name=routing-api?/name
-  value: routing-api
-- type: replace
-  path: /instance_groups/name=database/jobs/name=postgres/properties/databases/databases/name=routing-api?/tag
-  value: routing-api
-- type: replace
-  path: /instance_groups/name=database/jobs/name=postgres/properties/databases/databases/name=routing-api?/citext
-  value: true
-- type: replace
-  path: /instance_groups/name=database/jobs/name=postgres/properties/databases/roles/name=routing-api?/name
-  value: routing-api
-- type: replace
-  path: /instance_groups/name=database/jobs/name=postgres/properties/databases/roles/name=routing-api?/tag
-  value: admin
 - type: remove
   path: /releases/name=cf-mysql?
 - type: remove
@@ -170,24 +170,3 @@
   path: /variables/name=cf_mysql_mysql_galera_healthcheck_endpoint_password?
 - type: remove
   path: /variables/name=cf_mysql_mysql_galera_healthcheck_password?
-- type: replace
-  path: /instance_groups/name=database/jobs/name=postgres/properties/databases/databases/-
-  value:
-    citext: true
-    name: locket
-    tag: locket
-- type: replace
-  path: /instance_groups/name=database/jobs/name=postgres/properties/databases/roles/-
-  value:
-    name: locket
-    password: ((locket_database_password))
-    tag: locket
-- type: replace
-  path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql
-  value:
-    db_driver: postgres
-    db_host: sql-db.service.cf.internal
-    db_password: ((locket_database_password))
-    db_port: 5524
-    db_schema: locket
-    db_username: locket
