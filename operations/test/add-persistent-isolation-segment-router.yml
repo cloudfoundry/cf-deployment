@@ -1,3 +1,4 @@
+---
 # --- enable iso-seg smoke tests ---
 - type: replace
   path: /instance_groups/name=smoke-tests/jobs/name=smoke_tests/properties/smoke_tests/enable_isolation_segment_tests?
@@ -26,9 +27,6 @@
     vm_extensions:
     - iso-seg-cf-router-network-properties
     stemcell: default
-    update:
-      max_in_flight: 1
-      serial: true
     networks:
     - name: default
     jobs:

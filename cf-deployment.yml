@@ -3,8 +3,8 @@ name: cf
 update:
   canaries: 1
   canary_watch_time: 30000-1200000
-  max_in_flight: 5
-  serial: false
+  max_in_flight: 1
+  serial: true
   update_watch_time: 5000-1200000
 addons:
 - name: metron_agent
@@ -33,9 +33,6 @@ instance_groups:
   instances: 1
   vm_type: minimal
   stemcell: default
-  update:
-    max_in_flight: 1
-    serial: true
   networks:
   - name: default
   jobs:
@@ -60,9 +57,6 @@ instance_groups:
   persistent_disk_type: 5GB
   vm_type: minimal
   stemcell: default
-  update:
-    max_in_flight: 1
-    serial: true
   networks:
   - name: default
   jobs:
@@ -196,8 +190,6 @@ instance_groups:
   instances: 1
   vm_type: small
   stemcell: default
-  update:
-    serial: true
   networks:
   - name: default
   jobs:
@@ -261,8 +253,6 @@ instance_groups:
   instances: 2
   vm_type: small
   stemcell: default
-  update:
-    serial: true
   networks:
   - name: default
   jobs:
@@ -879,9 +869,6 @@ instance_groups:
   vm_extensions:
   - cf-router-network-properties
   stemcell: default
-  update:
-    max_in_flight: 1
-    serial: true
   networks:
   - name: default
   jobs:
@@ -959,8 +946,6 @@ instance_groups:
   vm_extensions:
   - diego-ssh-proxy-network-properties
   stemcell: default
-  update:
-    serial: true
   networks:
   - name: default
   jobs:
@@ -1180,9 +1165,6 @@ instance_groups:
   instances: 2
   vm_type: minimal
   stemcell: default
-  update:
-    max_in_flight: 1
-    serial: true
   networks:
   - name: default
   jobs:
