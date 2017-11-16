@@ -204,7 +204,7 @@ By default,
 a `webdav` blobstore
 that is a singleton
 and cannot be scaled out.
-Producation deployers
+Production deployers
 may want to use
 a blobstore with better availability guarantees,
 such as [Amazon S3](https://aws.amazon.com/s3/),
