@@ -407,6 +407,7 @@ instance_groups:
         url: https://uaa.((system_domain))
         admin:
           client_secret: "((uaa_admin_client_secret))"
+        logging_level: INFO
         scim:
           users:
           - name: admin
