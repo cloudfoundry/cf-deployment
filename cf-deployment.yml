@@ -684,14 +684,6 @@ instance_groups:
           package: php-buildpack
         - name: binary_buildpack
           package: binary-buildpack
-        diego: &bypass_bridge
-          temporary_cc_uploader_mtls: true
-          temporary_droplet_download_mtls: true
-          temporary_local_apps: true
-          temporary_local_staging: true
-          temporary_local_sync: true
-          temporary_local_tasks: true
-          temporary_local_tps: true
         db_encryption_key: "((cc_db_encryption_key))"
         bulk_api_password: "((cc_bulk_api_password))"
         internal_api_password: "((cc_internal_api_password))"
@@ -847,7 +839,6 @@ instance_groups:
     properties:
       cc:
         db_encryption_key: "((cc_db_encryption_key))"
-        diego: *bypass_bridge
         internal_api_password: "((cc_internal_api_password))"
         staging_upload_user: staging_user
         staging_upload_password: "((cc_staging_upload_password))"
@@ -1004,7 +995,6 @@ instance_groups:
         droplets: *blobstore-properties
         buildpacks: *blobstore-properties
         mutual_tls: *cc_mutual_tls
-        diego: *bypass_bridge
       ccdb: *ccdb
       system_domain: "((system_domain))"
       routing_api: *routing_api
