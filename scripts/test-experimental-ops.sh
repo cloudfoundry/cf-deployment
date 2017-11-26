@@ -39,6 +39,7 @@ test_experimental_ops() {
       check_interpolation "skip-consul-cell-registrations.yml"
       check_interpolation "skip-consul-locks.yml"
       check_interpolation "use-bosh-dns.yml"
+      check_interpolation "use-bosh-dns-aliases.yml"
       check_interpolation "use-bosh-dns-for-containers.yml"
       check_interpolation "name: use-bosh-dns-for-windows2016-containers.yml" "windows2016-cell.yml" "-o use-bosh-dns.yml" "-o use-bosh-dns-for-windows2016-containers.yml"
       check_interpolation "use-grootfs.yml"

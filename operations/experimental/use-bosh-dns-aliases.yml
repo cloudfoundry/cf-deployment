@@ -1,0 +1,290 @@
+---
+- type: replace
+  path: /addons?/-
+  value:
+    name: cf-dns-aliases
+    include:
+      stemcell:
+      - os: ubuntu-trusty
+    jobs:
+    - name: bosh-dns-aliases
+      release: bosh-dns-aliases
+      properties:
+        aliases:
+        - domain: _.cell.service.cf.internal
+          targets:
+          - target: '_.diego-cell.default.cf.bosh'
+          - target: '_.windows-cell.default.cf.bosh'
+          - target: '_.windows2016-cell.default.cf.bosh'
+          - target: '_.isolated-diego-cell.default.cf.bosh'
+        - domain: auctioneer.service.cf.internal
+          targets:
+          - target: '*.scheduler.default.cf.bosh'
+        - domain: bbs.service.cf.internal
+          targets:
+          - target: '*.diego-api.default.cf.bosh'
+        - domain: blobstore.service.cf.internal
+          targets:
+          - target: '*.blobstore.default.cf.bosh'
+          - target: '*.singleton-blobstore.default.cf.bosh'
+        - domain: cc-uploader.service.cf.internal
+          targets:
+          - target: '*.api.default.cf.bosh'
+        - domain: cf-etcd.service.cf.internal
+          targets:
+          - target: '*.etcd.default.cf.bosh'
+        - domain: cloud-controller-ng.service.cf.internal
+          targets:
+          - target: '*.api.default.cf.bosh'
+        - domain: consul.service.cf.internal
+          targets:
+          - target: '*.consul.default.cf.bosh'
+        - domain: credhub.service.cf.internal
+          targets:
+          - target: '*.credhub.default.cf.bosh'
+        - domain: doppler.service.cf.internal
+          targets:
+          - target: '*.doppler.default.cf.bosh'
+        - domain: file-server.service.cf.internal
+          targets:
+          - target: '*.api.default.cf.bosh'
+        - domain: gorouter.service.cf.internal
+          targets:
+          - target: '*.router.default.cf.bosh'
+        - domain: locket.service.cf.internal
+          targets:
+          - target: '*.diego-api.default.cf.bosh'
+        - domain: loggregator-trafficcontroller.service.cf.internal
+          targets:
+          - target: '*.log-api.default.cf.bosh'
+        - domain: nsync.service.cf.internal
+          targets:
+          - target: '*.scheduler.default.cf.bosh'
+        - domain: policy-server.service.cf.internal
+          targets:
+          - target: '*.api.default.cf.bosh'
+        - domain: reverse-log-proxy.service.cf.internal
+          targets:
+          - target: '*.log-api.default.cf.bosh'
+        - domain: routing-api.service.cf.internal
+          targets:
+          - target: '*.api.default.cf.bosh'
+        - domain: silk-controller.service.cf.internal
+          targets:
+          - target: '*.diego-api.default.cf.bosh'
+        - domain: sql-db.service.cf.internal
+          targets:
+          - target: '*.mysql.default.cf.bosh'
+          - target: '*.postgres.default.cf.bosh'
+          - target: '*.database.default.cf.bosh'
+        - domain: ssh-proxy.service.cf.internal
+          targets:
+          - target: '*.scheduler.default.cf.bosh'
+        - domain: stager.service.cf.internal
+          targets:
+          - target: '*.api.default.cf.bosh'
+        - domain: tcp-router.service.cf.internal
+          targets:
+          - target: '*.tcp-router.default.cf.bosh'
+        - domain: tps.service.cf.internal
+          targets:
+          - target: '*.scheduler.default.cf.bosh'
+        - domain: uaa.service.cf.internal
+          targets:
+          - target: '*.uaa.default.cf.bosh'
+
+- type: replace
+  path: /addons/-
+  value:
+    name: cf-windows2012-dns-aliases
+    include:
+      stemcell:
+      - os: windows2012R2
+    jobs:
+    - name: bosh-dns-aliases
+      release: bosh-dns-aliases
+      properties:
+        aliases:
+        - domain: _.cell.service.cf.internal
+          targets:
+          - _.diego-cell.default.cf.bosh
+          - _.windows-cell.default.cf.bosh
+          - _.windows2016-cell.default.cf.bosh
+          - _.isolated-diego-cell.default.cf.bosh
+        - domain: auctioneer.service.cf.internal
+          targets:
+          - target: '*.scheduler.default.cf.bosh'
+        - domain: bbs.service.cf.internal
+          targets:
+          - target: '*.diego-api.default.cf.bosh'
+        - domain: blobstore.service.cf.internal
+          targets:
+          - target: '*.blobstore.default.cf.bosh'
+          - target: '*.singleton-blobstore.default.cf.bosh'
+        - domain: cc-uploader.service.cf.internal
+          targets:
+          - target: '*.api.default.cf.bosh'
+        - domain: cf-etcd.service.cf.internal
+          targets:
+          - target: '*.etcd.default.cf.bosh'
+        - domain: cloud-controller-ng.service.cf.internal
+          targets:
+          - target: '*.api.default.cf.bosh'
+        - domain: consul.service.cf.internal
+          targets:
+          - target: '*.consul.default.cf.bosh'
+        - domain: credhub.service.cf.internal
+          targets:
+          - target: '*.credhub.default.cf.bosh'
+        - domain: doppler.service.cf.internal
+          targets:
+          - target: '*.doppler.default.cf.bosh'
+        - domain: file-server.service.cf.internal
+          targets:
+          - target: '*.api.default.cf.bosh'
+        - domain: gorouter.service.cf.internal
+          targets:
+          - target: '*.router.default.cf.bosh'
+        - domain: locket.service.cf.internal
+          targets:
+          - target: '*.diego-api.default.cf.bosh'
+        - domain: loggregator-trafficcontroller.service.cf.internal
+          targets:
+          - target: '*.log-api.default.cf.bosh'
+        - domain: nsync.service.cf.internal
+          targets:
+          - target: '*.scheduler.default.cf.bosh'
+        - domain: policy-server.service.cf.internal
+          targets:
+          - target: '*.api.default.cf.bosh'
+        - domain: reverse-log-proxy.service.cf.internal
+          targets:
+          - target: '*.log-api.default.cf.bosh'
+        - domain: routing-api.service.cf.internal
+          targets:
+          - target: '*.api.default.cf.bosh'
+        - domain: silk-controller.service.cf.internal
+          targets:
+          - target: '*.diego-api.default.cf.bosh'
+        - domain: sql-db.service.cf.internal
+          targets:
+          - target: '*.mysql.default.cf.bosh'
+          - target: '*.postgres.default.cf.bosh'
+          - target: '*.database.default.cf.bosh'
+        - domain: ssh-proxy.service.cf.internal
+          targets:
+          - target: '*.scheduler.default.cf.bosh'
+        - domain: stager.service.cf.internal
+          targets:
+          - target: '*.api.default.cf.bosh'
+        - domain: tcp-router.service.cf.internal
+          targets:
+          - target: '*.tcp-router.default.cf.bosh'
+        - domain: tps.service.cf.internal
+          targets:
+          - target: '*.scheduler.default.cf.bosh'
+        - domain: uaa.service.cf.internal
+          targets:
+          - target: '*.uaa.default.cf.bosh'
+
+- type: replace
+  path: /addons/-
+  value:
+    name: cf-windows2016-dns-aliases
+    include:
+      stemcell:
+      - os: windows2016
+    jobs:
+    - name: bosh-dns-aliases
+      release: bosh-dns-aliases
+      properties:
+        aliases:
+        - domain: _.cell.service.cf.internal
+          targets:
+          - _.diego-cell.default.cf.bosh
+          - _.windows-cell.default.cf.bosh
+          - _.windows2016-cell.default.cf.bosh
+          - _.isolated-diego-cell.default.cf.bosh
+        - domain: auctioneer.service.cf.internal
+          targets:
+          - target: '*.scheduler.default.cf.bosh'
+        - domain: bbs.service.cf.internal
+          targets:
+          - target: '*.diego-api.default.cf.bosh'
+        - domain: blobstore.service.cf.internal
+          targets:
+          - target: '*.blobstore.default.cf.bosh'
+          - target: '*.singleton-blobstore.default.cf.bosh'
+        - domain: cc-uploader.service.cf.internal
+          targets:
+          - target: '*.api.default.cf.bosh'
+        - domain: cf-etcd.service.cf.internal
+          targets:
+          - target: '*.etcd.default.cf.bosh'
+        - domain: cloud-controller-ng.service.cf.internal
+          targets:
+          - target: '*.api.default.cf.bosh'
+        - domain: consul.service.cf.internal
+          targets:
+          - target: '*.consul.default.cf.bosh'
+        - domain: credhub.service.cf.internal
+          targets:
+          - target: '*.credhub.default.cf.bosh'
+        - domain: doppler.service.cf.internal
+          targets:
+          - target: '*.doppler.default.cf.bosh'
+        - domain: file-server.service.cf.internal
+          targets:
+          - target: '*.api.default.cf.bosh'
+        - domain: gorouter.service.cf.internal
+          targets:
+          - target: '*.router.default.cf.bosh'
+        - domain: locket.service.cf.internal
+          targets:
+          - target: '*.diego-api.default.cf.bosh'
+        - domain: loggregator-trafficcontroller.service.cf.internal
+          targets:
+          - target: '*.log-api.default.cf.bosh'
+        - domain: nsync.service.cf.internal
+          targets:
+          - target: '*.scheduler.default.cf.bosh'
+        - domain: policy-server.service.cf.internal
+          targets:
+          - target: '*.api.default.cf.bosh'
+        - domain: reverse-log-proxy.service.cf.internal
+          targets:
+          - target: '*.log-api.default.cf.bosh'
+        - domain: routing-api.service.cf.internal
+          targets:
+          - target: '*.api.default.cf.bosh'
+        - domain: silk-controller.service.cf.internal
+          targets:
+          - target: '*.diego-api.default.cf.bosh'
+        - domain: sql-db.service.cf.internal
+          targets:
+          - target: '*.mysql.default.cf.bosh'
+          - target: '*.postgres.default.cf.bosh'
+          - target: '*.database.default.cf.bosh'
+        - domain: ssh-proxy.service.cf.internal
+          targets:
+          - target: '*.scheduler.default.cf.bosh'
+        - domain: stager.service.cf.internal
+          targets:
+          - target: '*.api.default.cf.bosh'
+        - domain: tcp-router.service.cf.internal
+          targets:
+          - target: '*.tcp-router.default.cf.bosh'
+        - domain: tps.service.cf.internal
+          targets:
+          - target: '*.scheduler.default.cf.bosh'
+        - domain: uaa.service.cf.internal
+          targets:
+          - target: '*.uaa.default.cf.bosh'
+
+- type: replace
+  path: /releases/-
+  value:
+    name: bosh-dns-aliases
+    version: latest
+    # url: git+https://github.com/cloudfoundry/bosh-dns-aliases-release
+    # version: 0.0.1

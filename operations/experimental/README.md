@@ -1,6 +1,6 @@
 # cf-deployment Experimental Ops-files
 
-This is the README for Experimental Ops-files. To learn more about `cf-deployment`, go to the main [README](../README.md). 
+This is the README for Experimental Ops-files. To learn more about `cf-deployment`, go to the main [README](../README.md).
 
 - For general Ops-files, check out the [Ops-file README](../README.md).
 - For Legacy Ops-files, check out the [Legacy Ops-file README](../legacy/README.md).
@@ -50,7 +50,8 @@ and the ops-files will be removed.
 | [`secure-service-credentials-postgres.yml`](secure-service-credentials-postgres.yml) | Use local postgres database for CredHub data store. | Requires `secure-service-credentials.yml` and `use-postgres.yml`. |
 | [`skip-consul-cell-registrations.yml`](skip-consul-cell-registrations.yml) | Configure the BBS to only use Locket to find registered Diego cells | |
 | [`skip-consul-locks.yml`](skip-consul-locks.yml) | Prevent several components from also attempting to claim a lock in Consul | |
-| [`use-bosh-dns.yml`](use-bosh-dns.yml) | Adds `bosh-dns` job to all instance groups running ubuntu-trusty via Bosh Addon. | Aliases `service.cf.internal` domains to their `bosh-dns` equivalents. |
+| [`use-bosh-dns.yml`](use-bosh-dns.yml) | Adds `bosh-dns` job to all instance groups running ubuntu-trusty via Bosh Addon. Assumes BOSH environment does not have `runtime-config` adding `bosh-dns` job to all instances. | Aliases `service.cf.internal` domains to their `bosh-dns` equivalents. |
+| [`use-bosh-dns-aliases.yml`](use-bosh-dns-aliases.yml) | Alternative to `use-bosh-dns.yml` when BOSH environment has `runtime-config` to add `bosh-dns` job to all instance. | Aliases `service.cf.internal` domains to their `bosh-dns` equivalents. |
 | [`use-bosh-dns-for-containers.yml`](use-bosh-dns-for-containers.yml) | Sets the DNS server of application containers to the address of the local `bosh-dns` job. | Requires `use-bosh-dns.yml` |
 | [`use-bosh-dns-for-windows2016-containers.yml`](use-bosh-dns-for-windows2016-containers.yml) | Sets the DNS server of application containers (on windows2016 cell) to the address of the local `bosh-dns` job. | Requires `use-bosh-dns.yml` |
 | [`use-grootfs.yml`](use-grootfs.yml) | Enable grootfs on diego cells. | |
