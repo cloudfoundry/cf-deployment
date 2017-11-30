@@ -175,10 +175,7 @@ instance_groups:
   - name: doppler
     release: loggregator
     properties:
-      doppler:
-        disable_announce: true
       loggregator:
-        disable_syslog_drains: true
         tls:
           ca_cert: "((loggregator_tls_doppler.ca))"
           doppler:
