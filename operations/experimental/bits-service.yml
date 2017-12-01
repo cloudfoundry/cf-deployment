@@ -22,10 +22,6 @@
           client_key: "((cc_tls.private_key))"
 
 - type: replace
-  path: /instance_groups/name=api/jobs/name=consul_agent/properties/consul/agent/services/bits-service?
-  value: {}
-
-- type: replace
   path: /instance_groups/name=api/jobs/name=route_registrar/properties/route_registrar/routes/-
   value:
     name: bits-service
