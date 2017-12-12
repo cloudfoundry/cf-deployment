@@ -70,15 +70,18 @@ and paste it into the `value` section of the Route53 NS record for your domain.
 After a few minutes,
 the your system domain should resolve to your load balancer.
 
-### (For `bbl` users) Save `bbl-state.json`
+### (For `bbl` users) Save bbl state directory
 However you run `bbl` (command line or with Concourse),
-the side-effect of a successful bbl command is the creation/update of `bbl-state.json`.
-As a deployer, **you must persist this file somehow.**
+the side-effect of a successful bbl command is the creation/update of the directory 
+containing `bbl-state.json`.
+(This is either the directory that you ran `bbl` from, the directory provided as a 
+`--state-dir` argument to `bbl`, or the `$BBL_STATE_DIR` variable in your environment.)
+As a deployer, **you must persist this directory somehow.**
 
 Currently, our Concourse tasks assume
-that you want to check this file into a private git repo.
+that you want to check this directory into a private git repo.
 We'll likely prioritize work soon
-to persist that file to a more secure location such as Lastpass.
+to persist those files to a more secure location such as Lastpass.
 
 ## Target your BOSH Director
 There are several ways to target your new BOSH director.
