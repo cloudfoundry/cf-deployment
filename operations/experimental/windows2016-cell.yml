@@ -31,9 +31,12 @@
         garden:
           listen_address: "127.0.0.1:9241"
           image_plugin: "/var/vcap/packages/winc-image/winc-image.exe"
+          image_plugin_extra_args:
+          - "--log=/var/vcap/sys/log/winc-image/winc-image.log"
           network_plugin: "/var/vcap/packages/winc-network/winc-network.exe"
           network_plugin_extra_args:
           - "--configFile=/var/vcap/jobs/winc-network/config/interface.json"
+          - "--log=/var/vcap/sys/log/winc-network/winc-network.log"
           runtime_plugin: "/var/vcap/packages/winc/winc.exe"
           nstar_bin: "/var/vcap/packages/nstar/nstar.exe"
           destroy_containers_on_start: true
@@ -135,17 +138,17 @@
   type: replace
   value:
     name: winc
-    sha1: ac219d33a4d3df9f0866c23699e879be75e60562
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/winc-release?v=0.5.0
-    version: 0.5.0
+    sha1: f9b7f917cd38336717c22c6dae5fcaf0fef3fca7
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/winc-release?v=0.6.0
+    version: 0.6.0
 
 - path: /releases/name=windows2016fs?
   type: replace
   value:
     name: windows2016fs
-    sha1: 7b490aea78f5fb9f53fb9117ca777db9d35672d8
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows2016fs-online-release?v=0.0.1
-    version: 0.0.1
+    sha1: 018f2ff24d6f1feaf0366f61e81d803e0bba4d30
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows2016fs-online-release?v=0.0.5
+    version: 0.0.5
 
 - path: /releases/name=windows-utilities?
   type: replace
