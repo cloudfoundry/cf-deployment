@@ -43,6 +43,8 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 | [`rename-network.yml`](rename-network.yml) | Allows a deployer to rename the network by passing a variable `network_name` |  |
 | [`scale-database-cluster.yml`](scale-database-cluster.yml) | Scales cf-deployment database to 3 nodes across 3 zones (z1, z2, z3). | Cannot be used with postgres as it will not scale. |
 | [`scale-to-one-az.yml`](scale-to-one-az.yml) | Scales cf-deployment down to a single instance per instance group, placing them all into a single AZ. | Effectively halves the deployment's footprint. Should be applied before other ops files. |
+| [`secure-rep-admin-api.yml`](secure-rep-admin-api.yml) | Secure that the cell's admin API endpoints using TLS | |
+| [`secure-rep-admin-api-windows.yml`](secure-rep-admin-api-windows.yml) | Secure the Windows cells' admin API endpoints using TLS. | Requires `windows-cell.yml` |
 | [`set-bbs-active-key.yml`](set-bbs-active-key.yml) | Allows a deployer to set the `bbs` active key label by passing a variable `diego_bbs_active_key_label` |  |
 | [`stop-skipping-tls-validation.yml`](stop-skipping-tls-validation.yml) | Enforces `TLS` validation for all components which skip it in the base `cf-deployment.yml` manifest. | See the base [README](../README.md#tls) for details. |
 | [`use-blobstore-cdn.yml`](use-blobstore-cdn.yml) | Adds support for accessing the `droplets` and `resource_pool` blobstore buckets via signed urls over a cdn. | This assumes that you are using the same keypair for both buckets. Introduces [new variables](example-vars-files/vars-use-blobstore-cdn.yml) |

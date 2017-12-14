@@ -23,6 +23,7 @@ test_experimental_ops() {
       check_interpolation "enable-traffic-to-internal-networks.yml"
       check_interpolation "enable-backup-restore.yml"
       check_interpolation "name: enable-backup-restore-credhub.yml" "enable-backup-restore.yml" "-o enable-instance-identity-credentials.yml" "-o secure-service-credentials.yml" "-o enable-backup-restore-credhub.yml"
+      check_interpolation "name: enable-backup-restore-s3.yml" "enable-backup-restore.yml" "-o ${home}/operations/use-s3-blobstore.yml" "-o enable-backup-restore-s3.yml" "-l ${home}/operations/example-vars-files/vars-use-s3-blobstore.yml"
       check_interpolation "enable-bpm.yml"
       check_interpolation "name: enable-nfs-broker-backup.yml" "enable-backup-restore.yml -o enable-nfs-broker-backup.yml -v nfs-broker-database-password=i_am_a_password"
       check_interpolation "name: enable-instance-identity-credentials-windows.yml" "enable-instance-identity-credentials.yml" "-o ${home}/operations/windows-cell.yml" "-o enable-instance-identity-credentials-windows.yml"
