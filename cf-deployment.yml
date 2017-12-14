@@ -1094,6 +1094,9 @@ instance_groups:
   - name: rep
     release: diego
     properties:
+      containers:
+        proxy:
+          additional_memory_allocation_mb: 0
       diego:
         rep:
           bbs: *diego_bbs_client_properties

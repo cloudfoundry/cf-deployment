@@ -27,6 +27,9 @@
       release: garden-windows
     - name: rep_windows
       properties:
+        containers:
+          proxy:
+            additional_memory_allocation_mb: 0
         diego:
           executor:
             ca_certs_for_downloads: ((blobstore_tls.ca))
