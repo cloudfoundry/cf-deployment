@@ -187,6 +187,18 @@ More details can be found in the [Ops-file README](operations/README.md).
 The `operations` directory includes subdirectories
 for "community", "experimental", and "test" ops-files.
 
+#### Addons
+These ops-files make changes to
+most or all instance groups.
+They can be applied to the BOSH Director's
+runtime config,
+or directly to an individual deployment manifest.
+
+The ops-file to configure platform component logging
+with rsyslog is such an add-on.
+Please see the [Addon Ops-file README](operations/addons/README.md)
+for details.
+
 #### Community
 "Community" ops-files are contributed by the Cloud Foundry community. They are not maintained or supported by the Release Integration team. For details, see the [Community Ops-file README](operations/community/README.md)
 
