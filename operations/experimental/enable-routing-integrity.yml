@@ -3,6 +3,9 @@
   path: /instance_groups/name=diego-cell/jobs/name=rep/properties/containers?/proxy/enabled
   value: true
 
+- type: remove
+  path: /instance_groups/name=diego-cell/jobs/name=rep/properties/containers?/proxy/additional_memory_allocation_mb
+
 - type: replace
   path: /instance_groups/name=router/jobs/name=gorouter/properties/router/backends?/enable_tls
   value: true
