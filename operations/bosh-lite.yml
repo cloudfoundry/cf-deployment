@@ -56,7 +56,7 @@
 
 # ----- Scale Down ------
 - type: replace
-  path: /instance_groups/name=consul/instances
+  path: /instance_groups/name=consul?/instances
   value: 1
 - type: replace
   path: /instance_groups/name=nats/instances

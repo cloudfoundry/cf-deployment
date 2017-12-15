@@ -17,6 +17,7 @@ test_experimental_ops() {
       check_interpolation "name: disable-consul-service-registrations-windows.yml" "${home}/operations/windows-cell.yml" "-o disable-consul-service-registrations-windows.yml"
       check_interpolation "disable-consul-service-registrations.yml"
       check_interpolation "disable-consul.yml"
+      check_interpolation "name: disable-consul-bosh-lite.yml" "disable-consul.yml" "-o ${home}/operations/bosh-lite.yml" "-o disable-consul-bosh-lite.yml"
       check_interpolation "name: disable-consul-windows.yml" "${home}/operations/windows-cell.yml" "-o disable-consul.yml" "-o disable-consul-windows.yml"
       check_interpolation "name: disable-consul-windows2016.yml" "windows2016-cell.yml" "-o disable-consul.yml" "-o disable-consul-windows2016.yml"
       check_interpolation "disable-interpolate-service-bindings.yml"
