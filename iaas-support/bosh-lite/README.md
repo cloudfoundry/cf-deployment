@@ -76,7 +76,7 @@ https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent
 
 ```
 bosh \
--e MY_ENV
+-e MY_ENV \
 -d cf \
 deploy \
 cf-deployment/cf-deployment.yml \
