@@ -17,6 +17,8 @@
         consul:
           agent:
             node_name_includes_id: true
+            dns_config:
+              service_ttl: "10s"
         syslog_daemon_config:
           enable: false
       release: consul
