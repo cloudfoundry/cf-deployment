@@ -16,9 +16,9 @@
       properties:
         consul:
           agent:
-            node_name_includes_id: true
             dns_config:
-              service_ttl: "10s"
+              service_ttl: 10s
+            node_name_includes_id: true
         syslog_daemon_config:
           enable: false
       release: consul
@@ -119,7 +119,7 @@
   value:
     alias: windows2012R2
     os: windows2012R2
-    version: "1200.10"
+    version: "1200.11"
 - path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2012R2?
   type: replace
   value:
