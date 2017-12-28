@@ -26,9 +26,6 @@ CF_DEPLOYMENT_LOCAL=${RELEASES_ON_LOCAL}/cf-deployment-local.yml
 echo "" > ${CF_DEPLOYMENT_LOCAL}
 
 OLD_IFS="$IFS"
-IFS=
-TLD_IFS="$IFS"
-OIFS=$IFS
 RELEASES=false
 RELEASE_NAME=""
 cat $CF_DEPLOYMENT | while read LINE
@@ -67,6 +64,7 @@ do
             continue
         fi
     fi
-
+    IFS=
+    OIFS=$IFS
     echo $LINE >> $CF_DEPLOYMENT_LOCAL
 done

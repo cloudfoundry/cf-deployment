@@ -1,25 +1,26 @@
 #!/usr/bin/env bash
 
-#============ get the file name ===========
-Folder_A=$1
+#=========
+# $1 release local directory. Default to $(pwd)
+# $2 bosh director name
+#=========
 
 # upload cf release
-for file_a in ${Folder_A}/*; do
-    temp_file=`basename $file_a`
+RELEASES_ON_LOCAL=$1
+if [[ $RELEASES_ON_LOCAL == "" ]]; then
+    RELEASES_ON_LOCAL=$(pwd)
+    elif [[ $RELEASES_ON_LOCAL == */ ]]; then
+        tmp = $RELEASES_ON_LOCAL
+        RELEASES_ON_LOCAL= ${tmp%?}
+fi
+
+for file_r in ${RELEASES_ON_LOCAL}/*; do
+    temp_file=`basename $file_r`
     if [[ $temp_file == *.tgz ]]; then
-        bosh -e my-bosh upload-release $1/$temp_file
+        if [[ $2 == "" ]]; then
+            bosh upload-release ${RELEASES_ON_LOCAL}/$temp_file
+        else
+            bosh -e $2 upload-release ${RELEASES_ON_LOCAL}/$temp_file
+        fi
     fi
 done
-
-# update cf buildpack
-BUILDPACK_OSS=http://cf-buildpacks.oss-cn-hangzhou.aliyuncs.com
-
-cf update-buildpack staticfile_buildpack -p $BUILDPACK_OSS/staticfile_buildpack-cached-v1.4.18.zip -i 1
-cf update-buildpack java_buildpack -p $BUILDPACK_OSS/java-buildpack-offline-dad1000.zip -i 2
-cf update-buildpack ruby_buildpack -p $BUILDPACK_OSS/ruby_buildpack-cached-v1.7.5.zip -i 3
-cf update-buildpack dotnet_core_buildpack -p $BUILDPACK_OSS/dotnet-core_buildpack-cached-v1.0.31.zip -i 4
-cf update-buildpack nodejs_buildpack -p $BUILDPACK_OSS/nodejs_buildpack-cached-v1.6.11.zip -i 5
-cf update-buildpack go_buildpack -p $BUILDPACK_OSS/go_buildpack-cached-v1.8.13.zip -i 6
-cf update-buildpack python_buildpack -p $BUILDPACK_OSS/python_buildpack-cached-v1.6.2.zip -i 7
-cf update-buildpack php_buildpack -p $BUILDPACK_OSS/php_buildpack-cached-v4.3.44.zip -i 8
-cf update-buildpack binary_buildpack -p $BUILDPACK_OSS/binary_buildpack-cached-v1.0.15.zip -i 9
