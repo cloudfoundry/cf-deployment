@@ -12,7 +12,7 @@
 
 ## <a name='purpose'></a>Purpose
 This repo contains a canonical manifest
-for deploying Cloud Foundry without the use of `cf-release`,
+for deploying the CF Application Runtime without the use of `cf-release`,
 relying instead on individual component releases.
 It replaces the [manifest generation scripts in cf-release][cf-release-url]
 which is in the process of being deprecated.
@@ -23,7 +23,7 @@ and have their configurations extended
 in order to support `cf-deployment`.
 
 `cf-deployment` embodies several opinions
-about Cloud Foundry deployment.
+about the CF Application Rutnime.
 It:
 - prioritizes readability and meaning to a human operator.
   For instance, only necessary configuration is included.
