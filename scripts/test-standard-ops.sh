@@ -32,6 +32,7 @@ test_standard_ops() {
       check_interpolation "scale-database-cluster.yml"
       check_interpolation "scale-to-one-az.yml"
       check_interpolation "set-bbs-active-key.yml" "-v diego_bbs_active_key_label=my_key_name"
+      check_interpolation "set-router-static-ips.yml" "-v router_static_ips=[10.0.16.4,10.0.47.5]"
       check_interpolation "stop-skipping-tls-validation.yml"
       check_interpolation "use-azure-storage-blobstore.yml" "-l example-vars-files/vars-use-azure-storage-blobstore.yml"
       check_interpolation "use-blobstore-cdn.yml" "-l example-vars-files/vars-use-blobstore-cdn.yml"
