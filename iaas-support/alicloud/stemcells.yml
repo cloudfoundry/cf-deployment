@@ -1,0 +1,12 @@
+---
+# Light Stemcells
+- type: remove
+  path: /stemcells/alias=default/os?
+
+- type: replace
+  path: /stemcells/alias=default/name?
+  value: bosh-alicloud-kvm-ubuntu-trusty-go_agent
+
+- type: replace
+  path: /stemcells/alias=default/version?
+  value: 1016
