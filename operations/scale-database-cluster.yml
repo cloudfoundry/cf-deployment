@@ -5,3 +5,6 @@
 - type: replace
   path: /instance_groups/name=database/azs
   value: [z1, z2, z3]
+- type: replace
+  path: /instance_groups/name=database/jobs/name=proxy/properties/cf_mysql/proxy/shutdown_delay?
+  value: 30
