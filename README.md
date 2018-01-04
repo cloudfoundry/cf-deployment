@@ -23,7 +23,7 @@ and have their configurations extended
 in order to support `cf-deployment`.
 
 `cf-deployment` embodies several opinions
-about the CF Application Rutnime.
+about the CF Application Runtime.
 It:
 - prioritizes readability and meaning to a human operator.
   For instance, only necessary configuration is included.
