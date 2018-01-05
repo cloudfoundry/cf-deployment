@@ -1041,6 +1041,8 @@ instance_groups:
               name: doppler
   - name: doppler
     release: loggregator
+    provides:
+      doppler: {as: doppler, shared: true}
     properties:
       doppler:
         disable_announce: true
