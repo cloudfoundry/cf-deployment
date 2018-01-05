@@ -123,7 +123,7 @@ but if you used `bbl` to set up your BOSH director,
 
 For bosh-lite,
 ```
-bosh -e MY_ENV update-cloud-config bosh-lite/cloud-config.yml
+bosh -e MY_ENV update-cloud-config iaas-support/bosh-lite/cloud-config.yml
 ```
 
 ## Upload a stemcell
