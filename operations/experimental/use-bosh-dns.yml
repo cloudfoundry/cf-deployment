@@ -17,6 +17,8 @@
           - '*.scheduler.default.cf.bosh'
           bbs.service.cf.internal:
           - '*.diego-api.default.cf.bosh'
+          bits-service.service.cf.internal:
+          - '*.api.default.cf.bosh'
           blobstore.service.cf.internal:
           - '*.blobstore.default.cf.bosh'
           - '*.singleton-blobstore.default.cf.bosh'
@@ -40,8 +42,6 @@
           - '*.diego-api.default.cf.bosh'
           loggregator-trafficcontroller.service.cf.internal:
           - '*.log-api.default.cf.bosh'
-          nsync.service.cf.internal:
-          - '*.scheduler.default.cf.bosh'
           policy-server.service.cf.internal:
           - '*.api.default.cf.bosh'
           reverse-log-proxy.service.cf.internal:
@@ -53,11 +53,9 @@
           sql-db.service.cf.internal:
           - '*.mysql.default.cf.bosh'
           - '*.postgres.default.cf.bosh'
-          - '*.singleton-database.default.cf.bosh'
+          - '*.database.default.cf.bosh'
           ssh-proxy.service.cf.internal:
           - '*.scheduler.default.cf.bosh'
-          stager.service.cf.internal:
-          - '*.api.default.cf.bosh'
           tcp-router.service.cf.internal:
           - '*.tcp-router.default.cf.bosh'
           tps.service.cf.internal:
@@ -85,6 +83,8 @@
           - '*.scheduler.default.cf.bosh'
           bbs.service.cf.internal:
           - '*.diego-api.default.cf.bosh'
+          bits-service.service.cf.internal:
+          - '*.api.default.cf.bosh'
           blobstore.service.cf.internal:
           - '*.blobstore.default.cf.bosh'
           - '*.singleton-blobstore.default.cf.bosh'
@@ -108,8 +108,6 @@
           - '*.diego-api.default.cf.bosh'
           loggregator-trafficcontroller.service.cf.internal:
           - '*.log-api.default.cf.bosh'
-          nsync.service.cf.internal:
-          - '*.scheduler.default.cf.bosh'
           policy-server.service.cf.internal:
           - '*.api.default.cf.bosh'
           reverse-log-proxy.service.cf.internal:
@@ -121,11 +119,9 @@
           sql-db.service.cf.internal:
           - '*.mysql.default.cf.bosh'
           - '*.postgres.default.cf.bosh'
-          - '*.singleton-database.default.cf.bosh'
+          - '*.database.default.cf.bosh'
           ssh-proxy.service.cf.internal:
           - '*.scheduler.default.cf.bosh'
-          stager.service.cf.internal:
-          - '*.api.default.cf.bosh'
           tcp-router.service.cf.internal:
           - '*.tcp-router.default.cf.bosh'
           tps.service.cf.internal:
@@ -153,6 +149,8 @@
           - '*.scheduler.default.cf.bosh'
           bbs.service.cf.internal:
           - '*.diego-api.default.cf.bosh'
+          bits-service.service.cf.internal:
+          - '*.api.default.cf.bosh'
           blobstore.service.cf.internal:
           - '*.blobstore.default.cf.bosh'
           - '*.singleton-blobstore.default.cf.bosh'
@@ -176,8 +174,6 @@
           - '*.diego-api.default.cf.bosh'
           loggregator-trafficcontroller.service.cf.internal:
           - '*.log-api.default.cf.bosh'
-          nsync.service.cf.internal:
-          - '*.scheduler.default.cf.bosh'
           policy-server.service.cf.internal:
           - '*.api.default.cf.bosh'
           reverse-log-proxy.service.cf.internal:
@@ -189,11 +185,9 @@
           sql-db.service.cf.internal:
           - '*.mysql.default.cf.bosh'
           - '*.postgres.default.cf.bosh'
-          - '*.singleton-database.default.cf.bosh'
+          - '*.database.default.cf.bosh'
           ssh-proxy.service.cf.internal:
           - '*.scheduler.default.cf.bosh'
-          stager.service.cf.internal:
-          - '*.api.default.cf.bosh'
           tcp-router.service.cf.internal:
           - '*.tcp-router.default.cf.bosh'
           tps.service.cf.internal:
@@ -206,6 +200,6 @@
   path: /releases/-
   value:
     name: bosh-dns
-    sha1: cbc91a2ab43f228ad00eb511c32f9c3d1a7e8d62
-    url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-release?v=0.0.9
-    version: 0.0.9
+    sha1: 9231b7c7d2f6aa85e0cb77fdeef7add54fdb3f1a
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-release?v=0.2.0
+    version: 0.2.0

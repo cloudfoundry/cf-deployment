@@ -1,12 +1,8 @@
 # cf-deployment
 
-**This repo is still a work in progress for certain use cases.
-Take a look at <a href='#readiness'>this table</a>
-to see if it's recommended that you use it.**
-
 ### Table of Contents
 * <a href='#purpose'>Purpose</a>
-* <a href='#readiness'>Is `cf-deployment` ready to use?</a>
+* <a href='#migrating'>Migrating from cf-release to cf-deployment</a>
 * <a href='#tls'>TLS validation</a>
 * <a href='#deploying-cf'>Deploying CF</a>
 * <a href='#contributing'>Contributing</a>
@@ -16,10 +12,10 @@ to see if it's recommended that you use it.**
 
 ## <a name='purpose'></a>Purpose
 This repo contains a canonical manifest
-for deploying Cloud Foundry without the use of `cf-release`,
+for deploying the CF Application Runtime without the use of `cf-release`,
 relying instead on individual component releases.
-It will replace the [manifest generation scripts in cf-release][cf-release-url]
-when `cf-release` is deprecated.
+It replaces the [manifest generation scripts in cf-release][cf-release-url]
+which is in the process of being deprecated.
 It uses several newer features
 of the BOSH director and CLI.
 Older directors may need to be upgraded
@@ -27,7 +23,7 @@ and have their configurations extended
 in order to support `cf-deployment`.
 
 `cf-deployment` embodies several opinions
-about Cloud Foundry deployment.
+about the CF Application Runtime.
 It:
 - prioritizes readability and meaning to a human operator.
   For instance, only necessary configuration is included.
@@ -53,37 +49,11 @@ for more resilient options.
 - assumes load-balancing will be handled by the IaaS
 or an external deployment.
 
-### <a name='readiness'></a> Is `cf-deployment` ready to use?
-
-| Use Case | Is cf-deployment ready? | Blocked On |
-| -------- | ----------------------- | ---------- |
-| Test and development | Yes | |
-| New production deployments | No | Downtime testing |
-| Existing production deployments using cf-release | No | Migration tools |
-
-We've been testing cf-deployment for some time,
-and many of the development teams in the Cloud Foundry organization
-are using it for development and testing.
-If that describes your use case,
-you can use cf-deployment as your manifest.
-
-If you're hoping to use cf-deployment for a new _production_ deployment,
-we still wouldn't suggest using cf-deployment.
-We still need to be able to make some guarantees
-about app availability during rolling deploys.
-When we think cf-deployment is ready,
-we'll update this section and make announcements on the cf-dev mailing list.
-
-### Can I Transition from `cf-release`?
-A migration will be possible.
-It will be easier for some configurations
-than others.
-
+## <a name='migrating'></a>Can I Transition from `cf-release`?
 The Release Integration team
-is working on a transition path from `cf-release`.
-We don't advise anybody attempt the migration yet.
-Our in-progress tooling and documentation can be found at
-https://github.com/cloudfoundry/cf-deployment-transition
+supports a transition path from `cf-release`.
+You can find tooling and documentation for performing the migration
+in our [cf-deployment-transition repo](https://github.com/cloudfoundry/cf-deployment-transition).
 
 ## <a name='tls'></a> TLS validation
 
@@ -217,6 +187,18 @@ More details can be found in the [Ops-file README](operations/README.md).
 The `operations` directory includes subdirectories
 for "community", "experimental", and "test" ops-files.
 
+#### Addons
+These ops-files make changes to
+most or all instance groups.
+They can be applied to the BOSH Director's
+runtime config,
+or directly to an individual deployment manifest.
+
+The ops-file to configure platform component logging
+with rsyslog is such an add-on.
+Please see the [Addon Ops-file README](operations/addons/README.md)
+for details.
+
 #### Community
 "Community" ops-files are contributed by the Cloud Foundry community. They are not maintained or supported by the Release Integration team. For details, see the [Community Ops-file README](operations/community/README.md)
 
@@ -251,10 +233,12 @@ The [ci](https://release-integration.ci.cf-app.com/teams/main/pipelines/cf-deplo
 automatically bumps to the latest versions of its component releases on the `develop` branch.
 These bumps, along with any other changes made to `develop`, are deployed to a single long-running environment
 and tested with CATs before being merged to master if CATs goes green.
-There is not presently any versioning scheme,
-or way to correlate which version of CATs is associated with which sha of cf-deployment,
-other than the history in CI.
-As `cf-deployment` matures, we'll address versioning.
+
+Each version of cf-deployment is given a corresponding branch in the CATs repo,
+so that users can discover which version of CATs to run against their deployments.
+For example, if you've deployed cf-deployment v0.35.0,
+check out the `cf0.35` branch in cf-acceptance-tests to run CATs.
+
 The configuration for our pipeline can be found [here](https://github.com/cloudfoundry/runtime-ci/blob/master/pipelines/cf-deployment.yml).
 
 [cf-deployment-concourse-url]: https://release-integration.ci.cf-app.com/teams/main/pipelines/cf-deployment

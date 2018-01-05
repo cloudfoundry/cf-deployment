@@ -66,19 +66,22 @@ If you manage your DNS with some other provider
 -- for example, with Route53 --
 you can copy the NS record data that `bbl` created,
 and paste it into the `value` section of the Route53 NS record for your domain.
- 
+
 After a few minutes,
 the your system domain should resolve to your load balancer.
 
-### (For `bbl` users) Save `bbl-state.json`
+### (For `bbl` users) Save bbl state directory
 However you run `bbl` (command line or with Concourse),
-the side-effect of a successful bbl command is the creation/update of `bbl-state.json`.
-As a deployer, **you must persist this file somehow.**
+the side-effect of a successful bbl command is the creation/update of the directory 
+containing `bbl-state.json`.
+(This is either the directory that you ran `bbl` from, the directory provided as a 
+`--state-dir` argument to `bbl`, or the `$BBL_STATE_DIR` variable in your environment.)
+As a deployer, **you must persist this directory somehow.**
 
 Currently, our Concourse tasks assume
-that you want to check this file into a private git repo.
+that you want to check this directory into a private git repo.
 We'll likely prioritize work soon
-to persist that file to a more secure location such as Lastpass.
+to persist those files to a more secure location such as Lastpass.
 
 ## Target your BOSH Director
 There are several ways to target your new BOSH director.
@@ -120,7 +123,7 @@ but if you used `bbl` to set up your BOSH director,
 
 For bosh-lite,
 ```
-bosh -e MY_ENV update-cloud-config bosh-lite/cloud-config.yml
+bosh -e MY_ENV update-cloud-config iaas-support/bosh-lite/cloud-config.yml
 ```
 
 ## Upload a stemcell
@@ -183,8 +186,8 @@ By default,
 `cf-deployment` includes
 `mysql` or `postgres` databases
 that are singletons
-and cannot be scaled out.
-Producation deployers
+and cannot be scaled out<sup>[1](#mysql-footnote)</sup>.
+Production deployers
 may want to deploy
 a database with better availability guarantees,
 such as BOSH-managed [cf-mysql-deployment](https://github.com/cloudfoundry/cf-mysql-deployment)
@@ -193,13 +196,18 @@ such as [Amazon RDS](https://aws.amazon.com/rds/) or [Google Cloud SQL](https://
 External databases
 will require the use of the [`use-external-dbs.yml`](operations/use-external-dbs.yml) opsfile.
 
+<a name="mysql-footnote">1.</a> The team that maintains cf-mysql-release is in the process of vetting
+the colocation strategy we use in cf-deployment.
+Once they've verified its scalability,
+we'll rename the instance group to `database` and provide ways to scale the cluster to three nodes.
+
 ### Blobstore
 By default,
 `cf-deployment` includes
 a `webdav` blobstore
 that is a singleton
 and cannot be scaled out.
-Producation deployers
+Production deployers
 may want to use
 a blobstore with better availability guarantees,
 such as [Amazon S3](https://aws.amazon.com/s3/),
@@ -254,8 +262,3 @@ Here's an example:
   path: /instance_groups/name=<JOB_NAME>/instances
   value: 10
 ```
-
-If you need to scale the cf syslog adapters independently of doppler, there is
-[operations/non-collocated-cf-syslog-drain.yml](operations/non-collocated-cf-syslog-drain.yml)
-that will move the adapter from the doppler instance group to an adapter
-instance group.

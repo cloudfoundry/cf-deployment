@@ -89,8 +89,15 @@ One possible use for patch version updates
 might be backported security fixes for older versions of cf-deployment.
 
 
-### A wrench in the framework: Ops files
-`raise NotImplementedError`
+### Versioning and Ops-files
+Maintaining a stable interface for user-defined ops-files will be very difficult.
+Essentially, we have to ensure that _nothing_ changes with regards to
+the visible manifest structure
+or
+even with the structure of properties as defined by releases.
+
+We can start with the following guarantee:
+moving jobs into new instance groups will prompt a major version bump.
 
 ## On the language of versioning
 While cf-release is still king,

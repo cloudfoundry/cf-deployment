@@ -15,7 +15,11 @@
   value: ((network_name))
 
 - type: replace
-  path: /instance_groups/name=singleton-database/networks/name=default/name
+  path: /instance_groups/name=adapter/networks/name=default/name
+  value: ((network_name))
+
+- type: replace
+  path: /instance_groups/name=database/networks/name=default/name
   value: ((network_name))
 
 - type: replace

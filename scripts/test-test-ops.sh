@@ -13,4 +13,5 @@ test_test_ops() {
       check_interpolation "name: disable_windows_consul_agent_nameserver_overwriting.yml" "${home}/operations/windows-cell.yml" "-o disable_windows_consul_agent_nameserver_overwriting.yml"
     popd > /dev/null # operations/test
   popd > /dev/null
+  exit $exit_code
 }

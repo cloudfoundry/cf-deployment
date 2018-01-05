@@ -6,7 +6,8 @@ test_addons_ops() {
 
   pushd ${home} > /dev/null
     pushd operations/addons > /dev/null
-      check_interpolation "enable-component-syslog.yml" "-v syslog_address=papertrail-address.com" "-v syslog_port=5473" "-v syslog_transport=tcp" "-v syslog_fallback_servers=[]" "-v syslog_custom_rule=\"\""
+      check_interpolation "enable-component-syslog.yml" "-l example-vars-files/vars-enable-component-syslog.yml"
     popd > /dev/null # operations/addons
   popd > /dev/null
+  exit $exit_code
 }

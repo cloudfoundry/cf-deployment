@@ -11,4 +11,5 @@ test_legacy_ops() {
       check_interpolation "keep-static-ips.yml" "-l example-vars-files/vars-keep-static-ips.yml"
     popd > /dev/null # operations/legacy
   popd > /dev/null
+  exit $exit_code
 }

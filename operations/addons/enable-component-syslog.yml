@@ -15,7 +15,9 @@
           port: ((syslog_port))
           transport: ((syslog_transport))
           fallback_servers: ((syslog_fallback_servers))
-          custom_rule: ((syslog_custom_rule))
+          custom_rule: |
+            ((syslog_custom_rule))
+            if ($programname startswith "vcap.") then ~
 
 - type: replace
   path: /releases/-

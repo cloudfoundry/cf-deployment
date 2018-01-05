@@ -76,11 +76,11 @@ https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent
 
 ```
 bosh \
--e MY_ENV
+-e MY_ENV \
 -d cf \
 deploy \
 cf-deployment/cf-deployment.yml \
 -o cf-deployment/operations/bosh-lite.yml \
---vars-store vars-store.yml \
+--vars-store deployment-vars.yml \
 -v system_domain=<SYSTEM_DOMAIN>
 ```

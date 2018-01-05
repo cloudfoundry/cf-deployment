@@ -66,7 +66,7 @@ test_opsfile_interpolation() {
   test_addons_ops &
 
   for job in $(jobs -p); do
-    wait $job
+    wait $job || exit_code=1
   done
 }
 

@@ -16,10 +16,6 @@
       release: bpm
 
 - type: replace
-  path: /instance_groups/name=uaa/jobs/name=uaa/properties/bpm?/enabled?
-  value: true
-
-- type: replace
   path: /instance_groups/name=diego-cell/jobs/name=route_emitter/properties/bpm?/enabled?
   value: true
 
@@ -45,28 +41,4 @@
 
 - type: replace
   path: /instance_groups/name=api/jobs/name=file_server/properties?/bpm?/enabled?
-  value: true
-
-- type: replace
-  path: /instance_groups/name=singleton-blobstore/jobs/name=blobstore/properties/bpm?/enabled?
-  value: true
-
-- type: replace
-  path: /instance_groups/name=scheduler/jobs/name=tps/properties/bpm?/enabled?
-  value: true
-
-- type: replace
-  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/bpm?/enabled?
-  value: true
-
-- type: replace
-  path: /instance_groups/name=api/jobs/name=cc_uploader/properties/bpm?/enabled?
-  value: true
-
-- type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/bpm?/enabled?
-  value: true
-
-- type: replace
-  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/bpm?/enabled?
   value: true
