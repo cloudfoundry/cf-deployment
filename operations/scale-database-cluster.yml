@@ -6,7 +6,11 @@
   path: /instance_groups/name=database/azs
   value: [z1, z2, z3]
 
-# explicity set the db addresses for ha
+- type: replace
+  path: /instance_groups/name=database/jobs/name=proxy/properties/cf_mysql/proxy/shutdown_delay?
+  value: 30
+
+# Explicity set the db addresses for HA
 
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/address?
