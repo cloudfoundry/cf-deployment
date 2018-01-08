@@ -1214,7 +1214,7 @@ instance_groups:
     properties:
       loggregator:
         tls:
-          ca_cert: "((service_cf_internal_ca.certificate))"
+          ca_cert: "((loggregator_ca.certificate))"
           reverse_log_proxy:
             cert: "((loggregator_tls_rlp.certificate))"
             key: "((loggregator_tls_rlp.private_key))"
