@@ -241,7 +241,7 @@ instance_groups:
     release: diego
     properties:
       tls: &cfdot_tls_client_properties
-        ca_certificate: "((diego_rep_client.ca))"
+        ca_certificate: "((service_cf_internal_ca.certificate))"
         certificate: "((diego_rep_client.certificate))"
         private_key: "((diego_rep_client.private_key))"
       diego:
@@ -1047,7 +1047,7 @@ instance_groups:
       loggregator:
         disable_syslog_drains: true
         tls:
-          ca_cert: "((loggregator_tls_doppler.ca))"
+          ca_cert: "((loggregator_ca.certificate))"
           doppler:
             cert: "((loggregator_tls_doppler.certificate))"
             key: "((loggregator_tls_doppler.private_key))"
