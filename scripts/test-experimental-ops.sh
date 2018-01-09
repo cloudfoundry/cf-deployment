@@ -56,6 +56,7 @@ test_experimental_ops() {
       check_interpolation "windows2016-cell.yml"
       check_interpolation "name: operations/windows-cell.yml windows2016-cell.yml" "${home}/operations/windows-cell.yml" "-o windows2016-cell.yml"
       check_interpolation "name: enable-routing-integrity.yml" "enable-routing-integrity.yml" "-o enable-instance-identity-credentials.yml"
+      check_interpolation "name: enable-service-discovery.yml" "enable-service-discovery.yml"
     popd > /dev/null # operations/experimental
   popd > /dev/null
   exit $exit_code
