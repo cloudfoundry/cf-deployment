@@ -27,12 +27,12 @@ If you're having trouble with a specific question,
 please feel free to join the Cloud Foundry Slack,
 and ask us in the `#cf-deployment` channel.
 
-We have some [example cloud configs](../example-cloud-configs/README.md)
+We have some [example cloud configs](../iaas-support/README.md)
 in this repository
 that may be useful as a starting point.
 
 ## VM Types
-`cf-deployment` uses four VM types.
+`cf-deployment` uses three VM types.
 Here are their names
 and approximate resources:
 
