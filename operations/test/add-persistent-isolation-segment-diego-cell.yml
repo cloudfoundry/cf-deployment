@@ -6,7 +6,7 @@
     azs:
     - z1
     instances: 1
-    vm_type: r3.xlarge
+    vm_type: small-highmem
     vm_extensions:
     - 100GB_ephemeral_disk
     stemcell: default
@@ -19,6 +19,10 @@
         consul_common: {from: consul_common_link}
         consul_server: nil
         consul_client: {from: consul_client_link}
+      properties:
+        consul:
+          agent:
+            node_name_includes_id: true
     - name: cflinuxfs2-rootfs-setup
       release: cflinuxfs2
     - name: garden
@@ -37,8 +41,6 @@
       release: diego
       properties:
         diego:
-          executor:
-            ca_certs_for_downloads: "((blobstore_tls.ca))"
           rep:
             bbs:
               ca_cert: "((diego_bbs_client.ca))"
@@ -69,26 +71,3 @@
               ca_cert: "((diego_bbs_client.ca))"
               client_cert: "((diego_bbs_client.certificate))"
               client_key: "((diego_bbs_client.private_key))"
-    - name: metron_agent
-      release: loggregator
-      properties:
-        syslog_daemon_config:
-          enable: false
-        metron_agent:
-          deployment: "((system_domain))"
-          etcd:
-            client_cert: "((etcd_client.certificate))"
-            client_key: "((etcd_client.private_key))"
-        metron_endpoint:
-          shared_secret: "((dropsonde_shared_secret))"
-        loggregator:
-          tls:
-            ca_cert: "((loggregator_tls_metron.ca))"
-            metron:
-              cert: "((loggregator_tls_metron.certificate))"
-              key: "((loggregator_tls_metron.private_key))"
-          etcd:
-            require_ssl: true
-            ca_cert: "((etcd_server.ca))"
-            machines:
-            - cf-etcd.service.cf.internal

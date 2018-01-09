@@ -1,0 +1,63 @@
+- type: replace
+  path: /instance_groups/name=smoke-tests/networks/name=default/name
+  value: ((network_name))
+
+- type: replace
+  path: /instance_groups/name=consul/networks/name=default/name
+  value: ((network_name))
+
+- type: replace
+  path: /instance_groups/name=nats/networks/name=default/name
+  value: ((network_name))
+
+- type: replace
+  path: /instance_groups/name=doppler/networks/name=default/name
+  value: ((network_name))
+
+- type: replace
+  path: /instance_groups/name=adapter/networks/name=default/name
+  value: ((network_name))
+
+- type: replace
+  path: /instance_groups/name=database/networks/name=default/name
+  value: ((network_name))
+
+- type: replace
+  path: /instance_groups/name=diego-api/networks/name=default/name
+  value: ((network_name))
+
+- type: replace
+  path: /instance_groups/name=uaa/networks/name=default/name
+  value: ((network_name))
+
+- type: replace
+  path: /instance_groups/name=singleton-blobstore/networks/name=default/name
+  value: ((network_name))
+
+- type: replace
+  path: /instance_groups/name=api/networks/name=default/name
+  value: ((network_name))
+
+- type: replace
+  path: /instance_groups/name=cc-worker/networks/name=default/name
+  value: ((network_name))
+
+- type: replace
+  path: /instance_groups/name=router/networks/name=default/name
+  value: ((network_name))
+
+- type: replace
+  path: /instance_groups/name=scheduler/networks/name=default/name
+  value: ((network_name))
+
+- type: replace
+  path: /instance_groups/name=diego-cell/networks/name=default/name
+  value: ((network_name))
+
+- type: replace
+  path: /instance_groups/name=log-api/networks/name=default/name
+  value: ((network_name))
+
+- type: replace
+  path: /instance_groups/name=tcp-router/networks/name=default/name
+  value: ((network_name))

@@ -1,6 +1,6 @@
 # Remove MySQL
 - type: remove
-  path: /instance_groups/name=mysql
+  path: /instance_groups/name=database
 - type: remove
   path: /releases/name=cf-mysql
 
@@ -19,158 +19,181 @@
   path: /variables/name=network_policy_database_password
 - type: remove
   path: /variables/name=network_connectivity_database_password
+- type: remove
+  path: /variables/name=routing_api_database_password
+- type: remove
+  path: /variables/name=locket_database_password
 
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/db_scheme
-  value: ((db_type))
+  value: ((external_database_type))
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/port
-  value: ((db_port))
+  value: ((external_database_port))
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/databases/tag=uaa/name
-  value: ((uaa_db_name))
+  value: ((external_uaa_database_name))
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/address?
-  value: ((uaa_db_address))
+  value: ((external_uaa_database_address))
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/roles/name=uaa/password
-  value: ((uaa_db_password))
+  value: ((external_uaa_database_password))
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/roles/name=uaa/name
-  value: ((uaa_db_username))
+  value: ((external_uaa_database_username))
 
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ccdb/db_scheme
-  value: &cc_db_scheme "((db_type))"
+  value: &external_cc_database_scheme "((external_database_type))"
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ccdb/port
-  value: &cc_db_port "((db_port))"
+  value: &external_cc_database_port "((external_database_port))"
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ccdb/databases/tag=cc/name
-  value: &cc_db_name "((cc_db_name))"
+  value: &external_cc_database_name "((external_cc_database_name))"
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ccdb/address?
-  value: &cc_db_address "((cc_db_address))"
+  value: &external_cc_database_address "((external_cc_database_address))"
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ccdb/roles/name=cloud_controller/password
-  value: &cc_db_password "((cc_db_password))"
+  value: &external_cc_database_password "((external_cc_database_password))"
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ccdb/roles/name=cloud_controller/name
-  value: &cc_db_username "((cc_db_username))"
+  value: &external_cc_database_username "((external_cc_database_username))"
 
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/ccdb/db_scheme
-  value: *cc_db_scheme
+  value: *external_cc_database_scheme
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/ccdb/port
-  value: *cc_db_port
+  value: *external_cc_database_port
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/ccdb/databases/tag=cc/name
-  value: *cc_db_name
+  value: *external_cc_database_name
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/ccdb/address?
-  value: *cc_db_address
+  value: *external_cc_database_address
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/ccdb/roles/name=cloud_controller/password
-  value: *cc_db_password
+  value: *external_cc_database_password
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/ccdb/roles/name=cloud_controller/name
-  value: *cc_db_username
+  value: *external_cc_database_username
 
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/ccdb/db_scheme
-  value: *cc_db_scheme
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb/db_scheme
+  value: *external_cc_database_scheme
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/ccdb/port
-  value: *cc_db_port
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb/port
+  value: *external_cc_database_port
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/ccdb/databases/tag=cc/name
-  value: *cc_db_name
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb/databases/tag=cc/name
+  value: *external_cc_database_name
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/ccdb/address?
-  value: *cc_db_address
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb/address?
+  value: *external_cc_database_address
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/ccdb/roles/name=cloud_controller/password
-  value: *cc_db_password
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb/roles/name=cloud_controller/password
+  value: *external_cc_database_password
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/ccdb/roles/name=cloud_controller/name
-  value: *cc_db_username
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb/roles/name=cloud_controller/name
+  value: *external_cc_database_username
 
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=bbs/properties/diego/bbs/sql/db_driver
-  value: ((db_type))
+  value: ((external_database_type))
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=bbs/properties/diego/bbs/sql/db_port
-  value: ((db_port))
+  value: ((external_database_port))
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=bbs/properties/diego/bbs/sql/db_schema
-  value: ((bbs_db_name))
+  value: ((external_bbs_database_name))
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=bbs/properties/diego/bbs/sql/db_host?
-  value: ((bbs_db_address))
+  value: ((external_bbs_database_address))
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=bbs/properties/diego/bbs/sql/db_password
-  value: ((bbs_db_password))
+  value: ((external_bbs_database_password))
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=bbs/properties/diego/bbs/sql/db_username
-  value: ((bbs_db_username))
+  value: ((external_bbs_database_username))
 
 - type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/type
-  value: ((db_type))
+  value: ((external_database_type))
 - type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/port
-  value: ((db_port))
+  value: ((external_database_port))
 - type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/schema
-  value: ((routing_api_db_name))
+  value: ((external_routing_api_database_name))
 - type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/host?
-  value: ((routing_api_db_address))
+  value: ((external_routing_api_database_address))
 - type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/password
-  value: ((routing_api_db_password))
+  value: ((external_routing_api_database_password))
 - type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/username
-  value: ((routing_api_db_username))
+  value: ((external_routing_api_database_username))
 
 - type: replace
   path: /instance_groups/name=api/jobs/name=policy-server/properties/cf_networking/policy_server/database/type
-  value: ((db_type))
+  value: ((external_database_type))
 - type: replace
   path: /instance_groups/name=api/jobs/name=policy-server/properties/cf_networking/policy_server/database/username
-  value: ((policy_server_db_username))
+  value: ((external_policy_server_database_username))
 - type: replace
   path: /instance_groups/name=api/jobs/name=policy-server/properties/cf_networking/policy_server/database/password
-  value: ((policy_server_db_password))
+  value: ((external_policy_server_database_password))
 - type: replace
   path: /instance_groups/name=api/jobs/name=policy-server/properties/cf_networking/policy_server/database/host
-  value: ((policy_server_db_address))
+  value: ((external_policy_server_database_address))
 - type: replace
   path: /instance_groups/name=api/jobs/name=policy-server/properties/cf_networking/policy_server/database/port
-  value: ((db_port))
+  value: ((external_database_port))
 - type: replace
   path: /instance_groups/name=api/jobs/name=policy-server/properties/cf_networking/policy_server/database/name
-  value: ((policy_server_db_name))
+  value: ((external_policy_server_database_name))
 
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/type
-  value: ((db_type))
+  value: ((external_database_type))
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/username
-  value: ((silk_controller_db_username))
+  value: ((external_silk_controller_database_username))
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/password
-  value: ((silk_controller_db_password))
+  value: ((external_silk_controller_database_password))
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/host
-  value: ((silk_controller_db_address))
+  value: ((external_silk_controller_database_address))
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/port
-  value: ((db_port))
+  value: ((external_database_port))
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/name
-  value: ((silk_controller_db_name))
+  value: ((external_silk_controller_database_name))
+
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql/db_driver
+  value: ((external_database_type))
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql/db_port
+  value: ((external_database_port))
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql/db_schema
+  value: ((external_locket_database_name))
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql/db_host?
+  value: ((external_locket_database_address))
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql/db_password
+  value: ((external_locket_database_password))
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql/db_username
+  value: ((external_locket_database_username))
 
 # nil out database links
 - type: replace
@@ -183,11 +206,14 @@
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/consumes?
   value: {database: nil}
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/consumes?
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/consumes?
   value: {database: nil}
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=silk-controller/consumes?
   value: {database: nil}
 - type: replace
   path: /instance_groups/name=api/jobs/name=policy-server/consumes?
+  value: {database: nil}
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=locket/consumes?
   value: {database: nil}

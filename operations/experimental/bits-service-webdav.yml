@@ -1,0 +1,30 @@
+---
+- type: replace
+  path: /instance_groups/name=api/jobs/name=bits-service/properties/bits-service/app_stash
+  value:
+    blobstore_type: webdav
+    directory_key: cc-resources
+    webdav_config: &webdav-config
+      ca_cert: "((blobstore_tls.ca))"
+      password: "((blobstore_admin_users_password))"
+      private_endpoint: https://blobstore.service.cf.internal:4443
+      public_endpoint: https://blobstore.((system_domain))
+      username: blobstore-user
+- type: replace
+  path: /instance_groups/name=api/jobs/name=bits-service/properties/bits-service/buildpacks
+  value:
+    blobstore_type: webdav
+    directory_key: cc-buildpacks
+    webdav_config: *webdav-config
+- type: replace
+  path: /instance_groups/name=api/jobs/name=bits-service/properties/bits-service/droplets
+  value:
+    blobstore_type: webdav
+    directory_key: cc-droplets
+    webdav_config: *webdav-config
+- type: replace
+  path: /instance_groups/name=api/jobs/name=bits-service/properties/bits-service/packages
+  value:
+    blobstore_type: webdav
+    directory_key: cc-packages
+    webdav_config: *webdav-config

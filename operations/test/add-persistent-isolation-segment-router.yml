@@ -1,3 +1,4 @@
+---
 # --- enable iso-seg smoke tests ---
 - type: replace
   path: /instance_groups/name=smoke-tests/jobs/name=smoke_tests/properties/smoke_tests/enable_isolation_segment_tests?
@@ -22,12 +23,11 @@
     azs:
     - z1
     instances: 1
-    vm_type: m3.medium
+    vm_type: minimal
     vm_extensions:
     - iso-seg-cf-router-network-properties
     stemcell: default
     update:
-      max_in_flight: 1
       serial: true
     networks:
     - name: default
@@ -53,8 +53,9 @@
           routing_table_sharding_mode: segments
           ssl_skip_validation: true
           enable_ssl: true
-          ssl_cert: "((router_ssl.certificate))"
-          ssl_key: "((router_ssl.private_key))"
+          tls_pem:
+          - cert_chain: "((router_ssl.certificate))"
+            private_key: "((router_ssl.private_key))"
           status:
             password: "((router_status_password))"
             user: router-status
@@ -85,12 +86,4 @@
 
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/app_domains/-
-  value: "iso-seg.((system_domain))"
-
-- type: replace
-  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/app_domains/-
-  value: "iso-seg.((system_domain))"
-
-- type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/app_domains/-
   value: "iso-seg.((system_domain))"

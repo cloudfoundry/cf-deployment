@@ -1,0 +1,44 @@
+---
+- type: replace
+  path: /releases/-
+  value:
+    name: bpm
+    sha1: f2bd126b17b3591160f501d88d79ccf0aba1ae54
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/bpm-release?v=0.2.0
+    version: 0.2.0
+
+- type: replace
+  path: /addons?/-
+  value:
+    name: bpm
+    jobs:
+    - name: bpm
+      release: bpm
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=route_emitter/properties/bpm?/enabled?
+  value: true
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=rep/properties/bpm?/enabled?
+  value: true
+
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=bbs/properties/bpm?/enabled?
+  value: true
+
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=locket/properties/bpm?/enabled?
+  value: true
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=auctioneer/properties/bpm?/enabled?
+  value: true
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=ssh_proxy/properties/bpm?/enabled?
+  value: true
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=file_server/properties?/bpm?/enabled?
+  value: true

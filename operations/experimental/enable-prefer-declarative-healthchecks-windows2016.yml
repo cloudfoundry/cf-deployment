@@ -1,0 +1,8 @@
+---
+- type: replace
+  path: /instance_groups/name=windows2016-cell/jobs/name=rep_windows/properties/enable_declarative_healthcheck?
+  value: true
+
+- type: replace
+  path: /instance_groups/name=windows2016-cell/jobs/name=rep_windows/properties/declarative_healthcheck_path?
+  value: /var/vcap/packages/healthcheck_windows/internal

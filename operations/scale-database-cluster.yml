@@ -1,0 +1,29 @@
+---
+- type: replace
+  path: /instance_groups/name=database/instances
+  value: 3
+- type: replace
+  path: /instance_groups/name=database/azs
+  value: [z1, z2, z3]
+
+- type: replace
+  path: /instance_groups/name=database/jobs/name=proxy/properties/cf_mysql/proxy/shutdown_delay?
+  value: 30
+
+# Explicity set the db addresses for HA
+
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/address?
+  value: sql-db.service.cf.internal
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ccdb/address?
+  value: sql-db.service.cf.internal
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/ccdb/address?
+  value: sql-db.service.cf.internal
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb/address?
+  value: sql-db.service.cf.internal

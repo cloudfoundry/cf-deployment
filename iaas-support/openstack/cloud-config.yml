@@ -1,0 +1,286 @@
+vm_types:
+- name: minimal
+  cloud_properties:
+    instance_type: minimal
+- name: small
+  cloud_properties:
+    instance_type: small
+- name: small-highmem
+  cloud_properties:
+    instance_type: small-highmem
+- name: small-50GB-ephemeral-disk
+  cloud_properties:
+    instance_type: small-50GB-ephemeral-disk
+- name: small-highmem-100GB-ephemeral-disk
+  cloud_properties:
+    instance_type: small-highmem-100GB-ephemeral-disk
+
+disk_types:
+- name: 5GB
+  disk_size: 5000
+- name: 10GB
+  disk_size: 10000
+- name: 100GB
+  disk_size: 100000
+
+vm_extensions:
+- name: cf-router-network-properties
+  cloud_properties:
+    security_groups: [cf, cf-lb-https-router]
+    loadbalancer_pools:
+      - name: cf-https-pool
+        port: 443
+- name: diego-ssh-proxy-network-properties
+  cloud_properties:
+    security_groups: [cf, cf-lb-ssh-diego-brain]
+    loadbalancer_pools:
+      - name: cf-ssh-pool
+        port: 2222
+- name: cf-tcp-router-network-properties
+  cloud_properties:
+    security_groups: [cf, cf-lb-tcp-router]
+    loadbalancer_pools:
+      - name: cf-tcp-pool-1024
+        port: 1024
+      - name: cf-tcp-pool-1025
+        port: 1025
+      - name: cf-tcp-pool-1026
+        port: 1026
+      - name: cf-tcp-pool-1027
+        port: 1027
+      - name: cf-tcp-pool-1028
+        port: 1028
+      - name: cf-tcp-pool-1029
+        port: 1029
+      - name: cf-tcp-pool-1030
+        port: 1030
+      - name: cf-tcp-pool-1031
+        port: 1031
+      - name: cf-tcp-pool-1032
+        port: 1032
+      - name: cf-tcp-pool-1033
+        port: 1033
+      - name: cf-tcp-pool-1034
+        port: 1034
+      - name: cf-tcp-pool-1035
+        port: 1035
+      - name: cf-tcp-pool-1036
+        port: 1036
+      - name: cf-tcp-pool-1037
+        port: 1037
+      - name: cf-tcp-pool-1038
+        port: 1038
+      - name: cf-tcp-pool-1039
+        port: 1039
+      - name: cf-tcp-pool-1040
+        port: 1040
+      - name: cf-tcp-pool-1041
+        port: 1041
+      - name: cf-tcp-pool-1042
+        port: 1042
+      - name: cf-tcp-pool-1043
+        port: 1043
+      - name: cf-tcp-pool-1044
+        port: 1044
+      - name: cf-tcp-pool-1045
+        port: 1045
+      - name: cf-tcp-pool-1046
+        port: 1046
+      - name: cf-tcp-pool-1047
+        port: 1047
+      - name: cf-tcp-pool-1048
+        port: 1048
+      - name: cf-tcp-pool-1049
+        port: 1049
+      - name: cf-tcp-pool-1050
+        port: 1050
+      - name: cf-tcp-pool-1051
+        port: 1051
+      - name: cf-tcp-pool-1052
+        port: 1052
+      - name: cf-tcp-pool-1053
+        port: 1053
+      - name: cf-tcp-pool-1054
+        port: 1054
+      - name: cf-tcp-pool-1055
+        port: 1055
+      - name: cf-tcp-pool-1056
+        port: 1056
+      - name: cf-tcp-pool-1057
+        port: 1057
+      - name: cf-tcp-pool-1058
+        port: 1058
+      - name: cf-tcp-pool-1059
+        port: 1059
+      - name: cf-tcp-pool-1060
+        port: 1060
+      - name: cf-tcp-pool-1061
+        port: 1061
+      - name: cf-tcp-pool-1062
+        port: 1062
+      - name: cf-tcp-pool-1063
+        port: 1063
+      - name: cf-tcp-pool-1064
+        port: 1064
+      - name: cf-tcp-pool-1065
+        port: 1065
+      - name: cf-tcp-pool-1066
+        port: 1066
+      - name: cf-tcp-pool-1067
+        port: 1067
+      - name: cf-tcp-pool-1068
+        port: 1068
+      - name: cf-tcp-pool-1069
+        port: 1069
+      - name: cf-tcp-pool-1070
+        port: 1070
+      - name: cf-tcp-pool-1071
+        port: 1071
+      - name: cf-tcp-pool-1072
+        port: 1072
+      - name: cf-tcp-pool-1073
+        port: 1073
+      - name: cf-tcp-pool-1074
+        port: 1074
+      - name: cf-tcp-pool-1075
+        port: 1075
+      - name: cf-tcp-pool-1076
+        port: 1076
+      - name: cf-tcp-pool-1077
+        port: 1077
+      - name: cf-tcp-pool-1078
+        port: 1078
+      - name: cf-tcp-pool-1079
+        port: 1079
+      - name: cf-tcp-pool-1080
+        port: 1080
+      - name: cf-tcp-pool-1081
+        port: 1081
+      - name: cf-tcp-pool-1082
+        port: 1082
+      - name: cf-tcp-pool-1083
+        port: 1083
+      - name: cf-tcp-pool-1084
+        port: 1084
+      - name: cf-tcp-pool-1085
+        port: 1085
+      - name: cf-tcp-pool-1086
+        port: 1086
+      - name: cf-tcp-pool-1087
+        port: 1087
+      - name: cf-tcp-pool-1088
+        port: 1088
+      - name: cf-tcp-pool-1089
+        port: 1089
+      - name: cf-tcp-pool-1090
+        port: 1090
+      - name: cf-tcp-pool-1091
+        port: 1091
+      - name: cf-tcp-pool-1092
+        port: 1092
+      - name: cf-tcp-pool-1093
+        port: 1093
+      - name: cf-tcp-pool-1094
+        port: 1094
+      - name: cf-tcp-pool-1095
+        port: 1095
+      - name: cf-tcp-pool-1096
+        port: 1096
+      - name: cf-tcp-pool-1097
+        port: 1097
+      - name: cf-tcp-pool-1098
+        port: 1098
+      - name: cf-tcp-pool-1099
+        port: 1099
+      - name: cf-tcp-pool-1100
+        port: 1100
+      - name: cf-tcp-pool-1101
+        port: 1101
+      - name: cf-tcp-pool-1102
+        port: 1102
+      - name: cf-tcp-pool-1103
+        port: 1103
+      - name: cf-tcp-pool-1104
+        port: 1104
+      - name: cf-tcp-pool-1105
+        port: 1105
+      - name: cf-tcp-pool-1106
+        port: 1106
+      - name: cf-tcp-pool-1107
+        port: 1107
+      - name: cf-tcp-pool-1108
+        port: 1108
+      - name: cf-tcp-pool-1109
+        port: 1109
+      - name: cf-tcp-pool-1110
+        port: 1110
+      - name: cf-tcp-pool-1111
+        port: 1111
+      - name: cf-tcp-pool-1112
+        port: 1112
+      - name: cf-tcp-pool-1113
+        port: 1113
+      - name: cf-tcp-pool-1114
+        port: 1114
+      - name: cf-tcp-pool-1115
+        port: 1115
+      - name: cf-tcp-pool-1116
+        port: 1116
+      - name: cf-tcp-pool-1117
+        port: 1117
+      - name: cf-tcp-pool-1118
+        port: 1118
+      - name: cf-tcp-pool-1119
+        port: 1119
+      - name: cf-tcp-pool-1120
+        port: 1120
+      - name: cf-tcp-pool-1121
+        port: 1121
+      - name: cf-tcp-pool-1122
+        port: 1122
+      - name: cf-tcp-pool-1123
+        port: 1123
+
+azs:
+- name: z1
+  cloud_properties:
+    availability_zone: ((availability_zone1))
+- name: z2
+  cloud_properties:
+    availability_zone: ((availability_zone2))
+- name: z3
+  cloud_properties:
+    availability_zone: ((availability_zone3))
+
+networks:
+- name: default
+  type: manual
+  subnets:
+  - az: z1
+    range: 10.0.16.0/20
+    reserved: [10.0.16.2-10.0.16.50]
+    gateway: 10.0.16.1
+    cloud_properties:
+      net_id: ((network_id1))
+      security_groups: [cf]
+  - az: z2
+    range: 10.0.32.0/20
+    reserved: [10.0.32.2-10.0.32.50]
+    gateway: 10.0.32.1
+    cloud_properties:
+      net_id: ((network_id2))
+      security_groups: [cf]
+  - az: z3
+    range: 10.0.48.0/20
+    reserved: [10.0.48.2-10.0.48.50]
+    gateway: 10.0.48.1
+    cloud_properties:
+      net_id: ((network_id3))
+      security_groups: [cf]
+
+compilation:
+  workers: 5
+  reuse_compilation_vms: true
+  vm_type: minimal
+  network: default
+  az: z1

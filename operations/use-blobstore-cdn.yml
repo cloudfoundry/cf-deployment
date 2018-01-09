@@ -20,13 +20,13 @@
   value: ((cdn_private_key))
 
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/droplets/cdn?/uri
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/droplets/cdn?/uri
   value: ((droplets_cdn_uri))
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/droplets/cdn?/key_pair_id
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/droplets/cdn?/key_pair_id
   value: ((cdn_key_pair_id))
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/droplets/cdn?/private_key
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/droplets/cdn?/private_key
   value: ((cdn_private_key))
 
 - type: replace
@@ -50,11 +50,11 @@
   value: ((cdn_private_key))
 
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/resource_pool/cdn?/uri
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/resource_pool/cdn?/uri
   value: ((resource_pool_cdn_uri))
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/resource_pool/cdn?/key_pair_id
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/resource_pool/cdn?/key_pair_id
   value: ((cdn_key_pair_id))
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/resource_pool/cdn?/private_key
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/resource_pool/cdn?/private_key
   value: ((cdn_private_key))

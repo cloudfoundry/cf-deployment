@@ -1,0 +1,12 @@
+---
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=rep/properties/containers?/proxy/enabled
+  value: true
+
+- type: replace
+  path: /instance_groups/name=router/jobs/name=gorouter/properties/router/backends?/enable_tls
+  value: true
+
+- type: replace
+  path: /instance_groups/name=router/jobs/name=gorouter/properties/router?/ca_certs
+  value: ((application_ca.certificate))

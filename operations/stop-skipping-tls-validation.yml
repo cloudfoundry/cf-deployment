@@ -1,0 +1,12 @@
+---
+- type: remove
+  path: /instance_groups/name=smoke-tests/jobs/name=smoke_tests/properties/smoke_tests/skip_ssl_validation
+
+- type: remove
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ssl/skip_cert_verify
+
+- type: remove
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/ssl/skip_cert_verify
+
+- type: remove
+  path: /instance_groups/name=log-api/jobs/name=loggregator_trafficcontroller/properties/ssl/skip_cert_verify

@@ -1,0 +1,88 @@
+---
+azs:
+- name: z1
+  cloud_properties:
+    datacenters:
+    - clusters:
+      - ((z1_cluster)):
+          resource-pool: ((z1_resource_pool))
+- name: z2
+  cloud_properties:
+    datacenters:
+    - clusters:
+      - ((z2_cluster)):
+          resource-pool: ((z2_resource_pool))
+- name: z3
+  cloud_properties:
+    datacenters:
+    - clusters:
+      - ((z3_cluster)):
+          resource-pool: ((z3_resource_pool))
+
+networks:
+- name: default
+  subnets:
+  - az: z1
+    gateway: ((z1_network_gateway))
+    dns: ((z1_network_dns_array))
+    range: ((z1_network_range))
+    reserved: ((z1_network_reserved_array))
+    cloud_properties:
+      name: ((z1_network_name))
+  - az: z2
+    gateway: ((z2_network_gateway))
+    dns: ((z2_network_dns_array))
+    range: ((z2_network_range))
+    reserved: ((z2_network_reserved_array))
+    cloud_properties:
+      name: ((z2_network_name))
+  - az: z3
+    gateway: ((z3_network_gateway))
+    dns: ((z3_network_dns_array))
+    range: ((z3_network_range))
+    reserved: ((z3_network_reserved_array))
+    cloud_properties:
+      name: ((z3_network_name))
+
+vm_types:
+- name: minimal
+  cloud_properties:
+    cpu: 1
+    ram: 4096
+    disk: 10240
+- name: small
+  cloud_properties:
+    cpu: 2
+    ram: 8192
+    disk: 10240
+- name: small-highmem
+  cloud_properties:
+    cpu: 4
+    ram: 32768
+    disk: 10240
+
+disk_types:
+- disk_size: 5120
+  name: 5GB
+- disk_size: 10240
+  name: 10GB
+- disk_size: 100240
+  name: 100GB
+
+vm_extensions:
+- name: cf-router-network-properties
+- name: cf-tcp-router-network-properties
+- name: diego-ssh-proxy-network-properties
+- name: 50GB_ephemeral_disk
+  cloud_properties:
+    disk: 51200
+- name: 100GB_ephemeral_disk
+  cloud_properties:
+    disk: 102400
+
+compilation:
+  workers: 5
+  reuse_compilation_vms: true
+  az: z1
+  vm_type: small-highmem
+  network: default

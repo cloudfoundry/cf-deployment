@@ -9,12 +9,6 @@
   path: /instance_groups/name=nats/instances
   value: 1
 - type: replace
-  path: /instance_groups/name=etcd/instances
-  value: 1
-- type: replace
-  path: /instance_groups/name=etcd/jobs/name=etcd/properties/etcd/cluster/name=etcd/instances
-  value: 1
-- type: replace
   path: /instance_groups/name=diego-api/instances
   value: 1
 - type: replace
@@ -24,7 +18,7 @@
   path: /instance_groups/name=consul/instances
   value: 1
 - type: replace
-  path: /instance_groups/name=diego-brain/instances
+  path: /instance_groups/name=scheduler/instances
   value: 1
 - type: replace
   path: /instance_groups/name=diego-cell/instances
@@ -36,10 +30,10 @@
   path: /instance_groups/name=api/instances
   value: 1
 - type: replace
-  path: /instance_groups/name=cc-bridge/instances
+  path: /instance_groups/name=cc-worker/instances
   value: 1
 - type: replace
-  path: /instance_groups/name=cc-worker/instances
+  path: /instance_groups/name=adapter/instances
   value: 1
 - type: replace
   path: /instance_groups/name=doppler/instances
@@ -47,15 +41,15 @@
 - type: replace
   path: /instance_groups/name=log-api/instances
   value: 1
+- type: replace
+  path: /instance_groups/name=tcp-router/instances
+  value: 1
 
 - type: replace
   path: /instance_groups/name=consul/azs
   value: [ z1 ]
 - type: replace
   path: /instance_groups/name=nats/azs
-  value: [ z1 ]
-- type: replace
-  path: /instance_groups/name=etcd/azs
   value: [ z1 ]
 - type: replace
   path: /instance_groups/name=diego-api/azs
@@ -67,7 +61,7 @@
   path: /instance_groups/name=consul/azs
   value: [ z1 ]
 - type: replace
-  path: /instance_groups/name=diego-brain/azs
+  path: /instance_groups/name=scheduler/azs
   value: [ z1 ]
 - type: replace
   path: /instance_groups/name=diego-cell/azs
@@ -79,14 +73,17 @@
   path: /instance_groups/name=api/azs
   value: [ z1 ]
 - type: replace
-  path: /instance_groups/name=cc-bridge/azs
+  path: /instance_groups/name=cc-worker/azs
   value: [ z1 ]
 - type: replace
-  path: /instance_groups/name=cc-worker/azs
+  path: /instance_groups/name=adapter/azs
   value: [ z1 ]
 - type: replace
   path: /instance_groups/name=doppler/azs
   value: [ z1 ]
 - type: replace
   path: /instance_groups/name=log-api/azs
+  value: [ z1 ]
+- type: replace
+  path: /instance_groups/name=tcp-router/azs
   value: [ z1 ]

@@ -1,0 +1,159 @@
+---
+- path: /instance_groups/-
+  type: replace
+  value:
+    azs:
+    - z1
+    - z2
+    instances: 1
+    jobs:
+    - consumes:
+        consul_client:
+          from: consul_client_link
+        consul_common:
+          from: consul_common_link
+        consul_server: nil
+      name: consul_agent_windows
+      properties:
+        syslog_daemon_config:
+          enable: false
+      release: consul
+    - name: winc
+      release: winc
+    - name: winc-image
+      release: winc
+    - name: winc-network
+      release: winc
+    - name: windows2016fs
+      release: windows2016fs
+    - name: garden-windows
+      properties:
+        garden:
+          listen_address: "127.0.0.1:9241"
+          image_plugin: "/var/vcap/packages/winc-image/winc-image.exe"
+          image_plugin_extra_args:
+          - "--log=/var/vcap/sys/log/winc-image/winc-image.log"
+          network_plugin: "/var/vcap/packages/winc-network/winc-network.exe"
+          network_plugin_extra_args:
+          - "--configFile=/var/vcap/jobs/winc-network/config/interface.json"
+          - "--log=/var/vcap/sys/log/winc-network/winc-network.log"
+          runtime_plugin: "/var/vcap/packages/winc/winc.exe"
+          nstar_bin: "/var/vcap/packages/nstar/nstar.exe"
+          destroy_containers_on_start: true
+      release: garden-runc
+    - name: rep_windows
+      properties:
+        diego:
+          executor:
+            ca_certs_for_downloads: ((blobstore_tls.ca))
+          rep:
+            bbs:
+              ca_cert: ((diego_bbs_client.ca))
+              client_cert: ((diego_bbs_client.certificate))
+              client_key: ((diego_bbs_client.private_key))
+            ca_cert: ((diego_rep_agent.ca))
+            enable_legacy_api_endpoints: false
+            open_bindmounts_acl: true
+            preloaded_rootfses:
+            - windows2016:/var/vcap/packages/windows2016fs/rootfs
+            require_tls: true
+            server_cert: ((diego_rep_agent.certificate))
+            server_key: ((diego_rep_agent.private_key))
+            locket:
+              api_location: "locket.service.cf.internal:8891"
+        syslog_daemon_config:
+          enable: false
+        tls:
+          ca_cert: ((diego_rep_agent.ca))
+          cert: ((diego_rep_agent.certificate))
+          key: ((diego_rep_agent.private_key))
+      release: diego
+    - name: route_emitter_windows
+      properties:
+        diego:
+          route_emitter:
+            bbs:
+              ca_cert: ((diego_bbs_client.ca))
+              client_cert: ((diego_bbs_client.certificate))
+              client_key: ((diego_bbs_client.private_key))
+            local_mode: true
+      release: diego
+    - name: metron_agent_windows
+      properties:
+        loggregator:
+          tls:
+            ca_cert: ((loggregator_tls_metron.ca))
+            metron:
+              cert: ((loggregator_tls_metron.certificate))
+              key: ((loggregator_tls_metron.private_key))
+        metron_agent:
+          deployment: ((system_domain))
+        syslog_daemon_config:
+          enable: false
+      release: loggregator
+    - name: enable_ssh
+      release: windows-utilities
+    name: windows2016-cell
+    networks:
+    - name: default
+    stemcell: windows2016
+    vm_extensions:
+    - 100GB_ephemeral_disk
+    vm_type: small-highmem
+
+- path: /stemcells/-
+  type: replace
+  value:
+    alias: windows2016
+    os: windows2016
+    version: latest
+
+- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2016?
+  type: replace
+  value:
+    name: windows2016
+    description: Windows Server 2016
+
+- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/name=hwc_buildpack?
+  type: replace
+  value:
+    name: hwc_buildpack
+    package: hwc-buildpack
+
+- path: /instance_groups/name=api/jobs/name=hwc-buildpack?
+  type: replace
+  value:
+    name: hwc-buildpack
+    release: hwc-buildpack
+
+- path: /releases/name=hwc-buildpack?
+  type: replace
+  value:
+    name: hwc-buildpack
+    sha1: 8f00fbd534a59137b02514127a685408e723f199
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=2.3.11
+    version: 2.3.11
+
+- path: /releases/name=winc?
+  type: replace
+  value:
+    name: winc
+    sha1: f9b7f917cd38336717c22c6dae5fcaf0fef3fca7
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/winc-release?v=0.6.0
+    version: 0.6.0
+
+- path: /releases/name=windows2016fs?
+  type: replace
+  value:
+    name: windows2016fs
+    sha1: 018f2ff24d6f1feaf0366f61e81d803e0bba4d30
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows2016fs-online-release?v=0.0.5
+    version: 0.0.5
+
+- path: /releases/name=windows-utilities?
+  type: replace
+  value:
+    name: windows-utilities
+    sha1: 2b2cd7e3544804ca15bc7b843d59324c34ee933d
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.4.0
+    version: 0.4.0

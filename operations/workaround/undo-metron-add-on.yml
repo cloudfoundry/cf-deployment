@@ -1,0 +1,106 @@
+- type: remove
+  path: /addons/name=metron_agent?
+
+- type: replace
+  path: /instance_groups/name=consul/jobs/-
+  value:
+    name: metron_agent
+    release: loggregator
+    properties: &metron_agent_properties
+      loggregator:
+        tls:
+          ca_cert: "((loggregator_tls_metron.ca))"
+          metron:
+            cert: "((loggregator_tls_metron.certificate))"
+            key: "((loggregator_tls_metron.private_key))"
+
+- type: replace
+  path: /instance_groups/name=nats/jobs/-
+  value:
+    name: metron_agent
+    release: loggregator
+    properties: *metron_agent_properties
+
+- type: replace
+  path: /instance_groups/name=doppler/jobs/-
+  value:
+    name: metron_agent
+    release: loggregator
+    properties: *metron_agent_properties
+
+- type: replace
+  path: /instance_groups/name=database/jobs/-
+  value:
+    name: metron_agent
+    release: loggregator
+    properties: *metron_agent_properties
+
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/-
+  value:
+    name: metron_agent
+    release: loggregator
+    properties: *metron_agent_properties
+
+- type: replace
+  path: /instance_groups/name=uaa/jobs/-
+  value:
+    name: metron_agent
+    release: loggregator
+    properties: *metron_agent_properties
+
+- type: replace
+  path: /instance_groups/name=singleton-blobstore/jobs/-
+  value:
+    name: metron_agent
+    release: loggregator
+    properties: *metron_agent_properties
+
+- type: replace
+  path: /instance_groups/name=api/jobs/-
+  value:
+    name: metron_agent
+    release: loggregator
+    properties: *metron_agent_properties
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/-
+  value:
+    name: metron_agent
+    release: loggregator
+    properties: *metron_agent_properties
+
+- type: replace
+  path: /instance_groups/name=router/jobs/-
+  value:
+    name: metron_agent
+    release: loggregator
+    properties: *metron_agent_properties
+
+- type: replace
+  path: /instance_groups/name=tcp-router/jobs/-
+  value:
+    name: metron_agent
+    release: loggregator
+    properties: *metron_agent_properties
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/-
+  value:
+    name: metron_agent
+    release: loggregator
+    properties: *metron_agent_properties
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/-
+  value:
+    name: metron_agent
+    release: loggregator
+    properties: *metron_agent_properties
+
+- type: replace
+  path: /instance_groups/name=log-api/jobs/-
+  value:
+    name: metron_agent
+    release: loggregator
+    properties: *metron_agent_properties

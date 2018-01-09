@@ -1,0 +1,48 @@
+---
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/buildpacks/buildpack_directory_key?
+  value: ((buildpack_directory_key))
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/droplets/droplet_directory_key?
+  value: ((droplet_directory_key))
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/packages/app_package_directory_key?
+  value: ((app_package_directory_key))
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/resource_pool/resource_directory_key?
+  value: ((resource_directory_key))
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks/buildpack_directory_key?
+  value: ((buildpack_directory_key))
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/droplets/droplet_directory_key?
+  value: ((droplet_directory_key))
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/packages/app_package_directory_key?
+  value: ((app_package_directory_key))
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/resource_pool/resource_directory_key?
+  value: ((resource_directory_key))
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/buildpacks/buildpack_directory_key?
+  value: ((buildpack_directory_key))
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/droplets/droplet_directory_key?
+  value: ((droplet_directory_key))
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/packages/app_package_directory_key?
+  value: ((app_package_directory_key))
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/resource_pool/resource_directory_key?
+  value: ((resource_directory_key))

@@ -1,0 +1,7 @@
+---
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/rate_limiter?
+  value:
+    enabled: true
+    general_limit: "((cc_rate_limiter_general_limit))"
+    unauthenticated_limit: "((cc_rate_limiter_unauthenticated_limit))"

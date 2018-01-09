@@ -1,4 +1,12 @@
 ---
 - type: replace
-  path: /instance_groups/name=cc-bridge/jobs/name=nsync/properties/capi/nsync/diego_privileged_containers?
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/diego?/use_privileged_containers_for_running
+  value: true
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/diego?/use_privileged_containers_for_running
+  value: true
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/diego?/use_privileged_containers_for_running
   value: true

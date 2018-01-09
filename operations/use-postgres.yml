@@ -2,20 +2,22 @@
   path: /releases/-
   value:
     name: postgres
-    sha1: ad62d5d7e4b7875316ecd5b972f26ee842c4b605
-    url: https://bosh.io/d/github.com/cloudfoundry/postgres-release?v=18
-    version: "18"
+    sha1: 4b5265bfd5f92cf14335a75658658a0db0bca927
+    url: https://bosh.io/d/github.com/cloudfoundry/postgres-release?v=23
+    version: "23"
 - type: remove
-  path: /instance_groups/name=mysql/jobs/name=mysql
+  path: /instance_groups/name=database/jobs/name=mysql
 - type: remove
-  path: /instance_groups/name=mysql/jobs/name=proxy
+  path: /instance_groups/name=database/jobs/name=proxy
 - type: replace
-  path: /instance_groups/name=mysql/jobs/-
+  path: /instance_groups/name=database/jobs/-
   value:
+    migrated_from:
+    - name: postgres
+    - name: singleton-database
     name: postgres
     properties:
       databases:
-        address: sql-db.service.cf.internal
         databases:
         - citext: true
           name: cloud_controller
@@ -35,6 +37,9 @@
         - citext: false
           name: network_connectivity
           tag: networkconnectivity
+        - citext: true
+          name: locket
+          tag: locket
         db_scheme: postgres
         port: 5524
         roles:
@@ -56,12 +61,12 @@
         - name: network_connectivity
           password: ((network_connectivity_database_password))
           tag: admin
+        - name: locket
+          password: ((locket_database_password))
+          tag: locket
     release: postgres
 - type: replace
-  path: /instance_groups/name=mysql/name
-  value: postgres
-- type: replace
-  path: /instance_groups/name=postgres/jobs/name=consul_agent/properties?/consul/agent/services?
+  path: /instance_groups/name=database/jobs/name=consul_agent/properties?/consul/agent/services?
   value:
     sql_db:
       check: {}
@@ -90,7 +95,7 @@
       password: ((cc_database_password))
       tag: admin
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/ccdb
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb
   value:
     databases:
     - name: cloud_controller
@@ -141,26 +146,20 @@
     type: postgres
     username: network_connectivity
 - type: replace
+  path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql
+  value:
+    db_driver: postgres
+    db_host: sql-db.service.cf.internal
+    db_password: ((locket_database_password))
+    db_port: 5524
+    db_schema: locket
+    db_username: locket
+- type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/type
   value: postgres
 - type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/port
   value: 5524
-- type: replace
-  path: /instance_groups/name=postgres/jobs/name=postgres/properties/databases/databases/name=routing-api?/name
-  value: routing-api
-- type: replace
-  path: /instance_groups/name=postgres/jobs/name=postgres/properties/databases/databases/name=routing-api?/tag
-  value: routing-api
-- type: replace
-  path: /instance_groups/name=postgres/jobs/name=postgres/properties/databases/databases/name=routing-api?/citext
-  value: true
-- type: replace
-  path: /instance_groups/name=postgres/jobs/name=postgres/properties/databases/roles/name=routing-api?/name
-  value: routing-api
-- type: replace
-  path: /instance_groups/name=postgres/jobs/name=postgres/properties/databases/roles/name=routing-api?/tag
-  value: admin
 - type: remove
   path: /releases/name=cf-mysql?
 - type: remove

@@ -1,6 +1,6 @@
 ---
 - type: remove
-  path: /instance_groups/name=blobstore
+  path: /instance_groups/name=singleton-blobstore
 
 - type: remove
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks
@@ -21,13 +21,13 @@
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/resource_pool
 
 - type: remove
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/buildpacks
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/buildpacks
 - type: remove
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/droplets
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/droplets
 - type: remove
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/packages
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/packages
 - type: remove
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/resource_pool
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/resource_pool
 
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks?/fog_connection?
@@ -66,19 +66,19 @@
   value: *blobstore-properties
 
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/buildpacks?/fog_connection?
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/buildpacks?/fog_connection?
   value: *blobstore-properties
 
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/droplets?/fog_connection?
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/droplets?/fog_connection?
   value: *blobstore-properties
 
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/packages?/fog_connection?
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/packages?/fog_connection?
   value: *blobstore-properties
 
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/resource_pool?/fog_connection?
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/resource_pool?/fog_connection?
   value: *blobstore-properties
 
 - type: replace
@@ -115,36 +115,36 @@
   value: *webdav_config
 
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/buildpacks/webdav_config?
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/buildpacks/webdav_config?
   value: *webdav_config
 
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/droplets/webdav_config?
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/droplets/webdav_config?
   value: *webdav_config
 
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/packages/webdav_config?
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/packages/webdav_config?
   value: *webdav_config
 
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/resource_pool/webdav_config?
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/resource_pool/webdav_config?
   value: *webdav_config
 
 # replace s3 bucket names
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/buildpacks/buildpack_directory_key?
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/buildpacks/buildpack_directory_key?
   value: ((buildpack_directory_key))
 
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/droplets/droplet_directory_key?
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/droplets/droplet_directory_key?
   value: ((droplet_directory_key))
 
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/packages/app_package_directory_key?
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/packages/app_package_directory_key?
   value: ((app_package_directory_key))
 
 - type: replace
-  path: /instance_groups/name=cc-clock/jobs/name=cloud_controller_clock/properties/cc/resource_pool/resource_directory_key?
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/resource_pool/resource_directory_key?
   value: ((resource_directory_key))
 
 - type: replace

@@ -1,10 +1,149 @@
 #!/bin/bash
 
-pushd $(dirname $0)/.. > /dev/null
-  version=$(bosh interpolate cf-deployment.yml -o operations/use-latest-stemcell.yml --path=/stemcells/alias=default/version)
-  if [ "${version}" == "latest" ]; then
-    echo "PASS - operations/use-latest-stemcell.yml"
+set -ue
+
+exit_code=0
+GREEN='\033[0;32m'
+LIGHT_GREEN='\033[0;92m'
+RED='\033[0;31m'
+LIGHT_RED='\033[1;31m'
+YELLOW='\033[0;93m'
+NOCOLOR='\033[0m'
+
+script_home="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+home="$( cd "${script_home}/.." && pwd )"
+
+# suite_name should be defined by each of our test suite functions
+suite_name="UNDEFINED"
+
+# Grab each of our test suites, exercised by test_opsfile_interpolation()
+for script in `ls ${script_home}/*.sh`; do
+  source $script
+done
+
+# If we get killed, kill backgrounded processes
+trap 'kill $(jobs -p) > /dev/null 2>&1' SIGTERM SIGINT
+
+fail() {
+  echo -e "${RED} FAIL - ${LIGHT_RED} $suite_name ${RED} - ${NOCOLOR} $1"
+  exit_code=1
+}
+
+pass() {
+  echo -e "${GREEN} PASS - ${YELLOW} $suite_name ${GREEN} - ${NOCOLOR} $1"
+}
+
+interpolate() {
+  local tmp_vars_store
+  tmp_vars_store=$(mktemp)
+  cp ${home}/scripts/fixtures/test-base-vars-store.yml ${tmp_vars_store}
+
+  bosh interpolate ${home}/cf-deployment.yml $@ --vars-store ${tmp_vars_store} --var-errs --var-errs-unused > /dev/null
+  return $?
+}
+
+check_interpolation() {
+  if [[ ${1} == name:* ]]; then
+    name_under_test=$1
+    empty_string=""
+    ops_under_test="${name_under_test/name: /$empty_string}"; shift
   else
-    echo "FAIL - operations/use-latest-stemcell.yml, expected 'latest' but got '${version}'"
+    ops_under_test="${1}"
   fi
-popd > /dev/null
+
+  if interpolate "-o $@"; then
+    pass "${ops_under_test}"
+  else
+    fail "${ops_under_test}"
+  fi
+}
+
+test_opsfile_interpolation() {
+  test_standard_ops &
+  test_experimental_ops &
+  test_test_ops &
+  test_legacy_ops &
+  test_addons_ops &
+
+  for job in $(jobs -p); do
+    wait $job || exit_code=1
+  done
+}
+
+ensure_test_opsfiles_not_in_readme() {
+  pushd ${home} > /dev/null
+    local opsfiles=$(ls operations/test/*.yml)
+    local output=$(grep $(for x in $opsfiles; do echo -n " -e $x"; done;) README.md -c)
+
+    if [ $output == "0" ]; then
+      pass "Test opsfiles do not appear in README"
+    else
+      fail "Test opsfiles appear in README"
+    fi
+  popd > /dev/null
+}
+
+ensure_opsfiles_in_readme() {
+  local readme=$1
+  shift
+
+  suite_name="$readme"
+
+  pushd ${home} > /dev/null
+    for x in $@; do
+      local basename=$(basename $x)
+      if [ $(grep \($basename\) $readme -c) != "0" ]; then
+        pass "$x is in $readme"
+      else
+        fail "$x does not appear in $readme"
+      fi
+    done;
+  popd > /dev/null
+}
+
+ensure_opsfiles_in_tests() {
+  local test=$1
+  shift
+
+  suite_name="$test"
+
+  pushd ${home} > /dev/null
+    for x in $@; do
+      local basename=$(basename $x)
+      if [ $(grep $basename $test -c) != "0" ]; then
+        pass "$x is tested in $test"
+      else
+        fail "$x is ${RED}NOT${NOCOLOR} tested in $test"
+      fi
+    done;
+  popd > /dev/null
+}
+
+main() {
+  echo
+  echo -e "${LIGHT_GREEN} ***** Begin affirmative readme operations tests ***** ${NOCOLOR}"
+  ensure_opsfiles_in_readme "operations/README.md" $(ls operations/*.yml)
+  ensure_opsfiles_in_readme "operations/legacy/README.md" $(ls operations/legacy/*.yml)
+  ensure_opsfiles_in_readme "operations/community/README.md" $(ls operations/community/*.yml)
+  ensure_opsfiles_in_readme "operations/experimental/README.md" $(ls operations/experimental/*.yml)
+
+  echo
+  echo -e "${LIGHT_GREEN} ***** Begin negative readme operations tests ***** ${NOCOLOR}"
+  ensure_test_opsfiles_not_in_readme
+
+  echo
+  echo -e "${LIGHT_GREEN} ***** Begin test coverage analysis ***** ${NOCOLOR}"
+  ensure_opsfiles_in_tests "scripts/test-standard-ops.sh" $(ls operations/*.yml)
+  ensure_opsfiles_in_tests "scripts/test-legacy-ops.sh" $(ls operations/legacy/*.yml)
+  ensure_opsfiles_in_tests "scripts/test-test-ops.sh" $(ls operations/test/*.yml)
+  ensure_opsfiles_in_tests "scripts/test-experimental-ops.sh" $(ls operations/experimental/*.yml)
+  ensure_opsfiles_in_tests "scripts/test-addons-ops.sh" $(ls operations/addons/*.yml)
+
+  echo
+  echo -e "${LIGHT_GREEN} ***** Begin interpolation operations tests ***** ${NOCOLOR}"
+  test_opsfile_interpolation
+
+  exit $exit_code
+}
+
+main

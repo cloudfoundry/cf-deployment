@@ -2,6 +2,8 @@
 - type: remove
   path: /instance_groups/name=router/jobs/name=gorouter/properties/router/enable_ssl
 - type: remove
-  path: /instance_groups/name=router/jobs/name=gorouter/properties/router/ssl_cert
+  path: /instance_groups/name=router/jobs/name=gorouter/properties/router/tls_pem
 - type: remove
-  path: /instance_groups/name=router/jobs/name=gorouter/properties/router/ssl_key
+  path: /variables/name=router_ssl
+- type: remove
+  path: /variables/name=router_ca

@@ -1,0 +1,14 @@
+---
+# This is a mitigation for a vulnerability
+# in legacy (circa 2015) Java buildpacks.
+# This mitigation remains necessary
+# for any Cloud Foundry deployments
+# that might still host droplets
+# ever subject to the Java buildpack detect script
+# including those that were staged by a different buildpack.
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=rep/properties/diego/executor?/post_setup_user
+  value: root
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=rep/properties/diego/executor/post_setup_hook?
+  value: sh -c "rm -f /home/vcap/app/.java-buildpack.log /home/vcap/app/**/.java-buildpack.log"
