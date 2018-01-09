@@ -1,0 +1,71 @@
+---
+# requires capi-release > v1.47.0
+# requires bosh-dns-release >= 0.2.0
+# requires opsfile: https://github.com/cloudfoundry/cf-deployment/blob/master/operations/experimental/use-bosh-dns-for-containers.yml
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/-
+  value:
+    name: bosh-dns-adapter
+    release: cf-app-sd
+    properties:
+      dnshttps:
+        server:
+          ca: ((cf_app_sd_ca.ca))
+        client:
+          tls: ((cf_app_sd_client_tls))
+
+- type: replace
+  path: /instance_groups/name=router/jobs/-
+  value:
+    name: service-discovery-controller
+    release: cf-app-sd
+    properties:
+      dnshttps:
+        server:
+          tls: ((cf_app_sd_server_tls))
+        client:
+          ca: ((cf_app_sd_ca.ca))
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=route_emitter/properties/internal_routes?
+  value:
+    enabled: true
+
+- type: replace
+  path: /variables/-
+  value:
+    name: cf_app_sd_ca
+    type: certificate
+    options:
+      is_ca: true
+      common_name: service-discovery-controller.service.cf.internal
+
+- type: replace
+  path: /variables/-
+  value:
+    name: cf_app_sd_server_tls
+    type: certificate
+    options:
+      ca: cf_app_sd_ca
+      common_name: service-discovery-controller.service.cf.internal
+      extended_key_usage:
+      - server_auth
+
+- type: replace
+  path: /variables/-
+  value:
+    name: cf_app_sd_client_tls
+    type: certificate
+    options:
+      ca: cf_app_sd_ca
+      common_name: service-discovery-controller.service.cf.internal
+      extended_key_usage:
+      - client_auth
+
+- type: replace
+  path: /releases/-
+  value:
+    name: cf-app-sd
+    sha1: ee224657514a6961e9f8ec9e6b6d4427f9b0b457
+    url: https://bosh.io/d/github.com/cloudfoundry/cf-app-sd-release?v=0.2.0
+    version: 0.2.0
