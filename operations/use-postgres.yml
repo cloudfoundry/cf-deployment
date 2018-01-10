@@ -16,8 +16,8 @@
   - name: singleton-database
 - type: replace
   path: /instance_groups/name=database/jobs/-
-  name: postgres
   value:
+    name: postgres
     properties:
       databases:
         databases:
