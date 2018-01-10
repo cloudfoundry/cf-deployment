@@ -10,12 +10,14 @@
 - type: remove
   path: /instance_groups/name=database/jobs/name=proxy
 - type: replace
-  path: /instance_groups/name=database/jobs/-
+  path: /instance_groups/name=database/migrated_from?
   value:
-    migrated_from:
-    - name: postgres
-    - name: singleton-database
-    name: postgres
+  - name: postgres
+  - name: singleton-database
+- type: replace
+  path: /instance_groups/name=database/jobs/-
+  name: postgres
+  value:
     properties:
       databases:
         databases:
