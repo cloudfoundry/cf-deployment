@@ -38,6 +38,24 @@ test_scale_to_one_az() {
     fi
 }
 
+test_use_compiled_releases() {
+    local manifest_file=$(mktemp)
+
+    bosh int cf-deployment.yml \
+      -o operations/use-compiled-releases.yml > $manifest_file
+
+    set +e
+      yq r $manifest_file -j | jq -r .releases[].url | grep 'github.com'
+      local non_compiled_interpolated_releases_on_github=$?
+    set -e
+
+    if [[ $non_compiled_interpolated_releases_on_github -eq 0 ]]; then
+      fail "expected to find no release urls from bosh.io or github.com"
+    else
+      pass "use-compiled-releases.yml"
+    fi
+}
+
 semantic_tests() {
   # Padded for pretty output
   suite_name="SEMANTIC    "
@@ -45,6 +63,7 @@ semantic_tests() {
   pushd ${home} > /dev/null
     test_rename_network_opsfile
     test_scale_to_one_az
+    test_use_compiled_releases
   popd > /dev/null
   exit $exit_code
 }
