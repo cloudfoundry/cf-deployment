@@ -6,11 +6,5 @@
   value: true
 
 - type: replace
-  path: /instance_groups/name=diego-cell/jobs/name=grootfs/properties?/grootfs/skip_mount
+  path: /instance_groups/name=diego-cell/jobs/name=garden/properties?/grootfs/skip_mount
   value: true
-
-- type: remove
-  path: /instance_groups/name=diego-cell/jobs/name=garden/properties/garden/privileged_image_plugin?
-
-- type: remove
-  path: /instance_groups/name=diego-cell/jobs/name=garden/properties/garden/privileged_image_plugin_extra_args?
