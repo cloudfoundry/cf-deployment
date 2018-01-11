@@ -19,5 +19,6 @@ This is the README for Legacy Ops-files. To learn more about `cf-deployment`, go
 |:---  |:---     |:---   |
 | [`keep-original-blobstore-directory-keys.yml`](keep-original-blobstore-directory-keys.yml) | Maintains operator-provided blobstore directory keys | Provides ability to set values for `app_package_directory_key`, `buildpack_directory_key`, `droplet_directory_key`, and `resource_directory_key` |
 | [`keep-original-internal-usernames.yml`](keep-original-internal-usernames.yml) | Maintains operator-provided usernames | Provides ability to set values for `properties.nats.user`, `properties.cc.staging_upload_user`, `properties.router.status.user` |
+| [`keep-original-postgres-configuration.yml`](keep-original-postgres-configuration.yml) | Maintains operator-provided database names and usernames. Requires `use-postgres.yml` | Provides ability to set values for cc, uaa, bbs, and locket databases |
 | [`keep-static-ips.yml`](keep-static-ips.yml) | Holds `consul` and `nats` instances at a static IP address for transition between `cf-release` and `cf-deployment`. | Deployers must provide the IP addresses |
 | [`old-droplet-mitigation.yml`](old-droplet-mitigation.yml) | Mitigates against old droplets that may still have a legacy security vulnerability. | See comment in the ops file for more details. |
