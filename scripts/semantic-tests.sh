@@ -12,9 +12,9 @@ test_rename_network_opsfile() {
     local num_uniq_networks=$(echo "$interpolated_network_names" | wc -l)
 
     if [ $num_uniq_networks != "1" ]; then
-      fail "expected to find the same network name for all instance groups"
+      fail "rename-network.yml: expected to find the same network name for all instance groups"
     elif [ $interpolated_network_names != $new_network ]; then
-      fail "expected network name to be changed to ${new_network}"
+      fail "rename-network.yml: expected network name to be changed to ${new_network}"
     else
       pass "rename-network.yml"
     fi
@@ -30,9 +30,9 @@ test_scale_to_one_az() {
     local interpolated_azs=$(yq r $manifest_file -j | jq -r .instance_groups[].azs[] | uniq)
 
     if [ "$interpolated_instance_counts" != "1" ]; then
-      fail "expected all instance counts to be 1"
+      fail "scale-to-one-az.yml: expected all instance counts to be 1"
     elif [ "$interpolated_azs" != "z1" ]; then
-      fail "expected to find a single AZ for all instance groups"
+      fail "scale-to-one-az.yml: expected to find a single AZ for all instance groups"
     else
       pass "scale-to-one-az.yml"
     fi
@@ -50,11 +50,30 @@ test_use_compiled_releases() {
     set -e
 
     if [[ $non_compiled_interpolated_releases_on_github -eq 0 ]]; then
-      fail "expected to find no release urls from bosh.io or github.com"
+      fail "use-compiled-releases.yml: expected to find no release urls from bosh.io or github.com"
     else
       pass "use-compiled-releases.yml"
     fi
 }
+
+test_disable_consul() {
+    local manifest_file=$(mktemp)
+
+    bosh int cf-deployment.yml \
+      -o operations/experimental/disable-consul.yml > $manifest_file
+
+    set +e
+      yq r $manifest_file -j | jq -r .instance_groups[].jobs[].name | grep 'consul_agent' > /dev/null
+      local has_consul_agent=$?
+    set -e
+
+    if [[ $has_consul_agent -eq 0 ]]; then
+      fail "experimental/disable-consul.yml: expected to find no 'consul_agent' jobs"
+    else
+      pass "experimental/disable-consul.yml"
+    fi
+}
+
 
 semantic_tests() {
   # Padded for pretty output
@@ -64,6 +83,7 @@ semantic_tests() {
     test_rename_network_opsfile
     test_scale_to_one_az
     test_use_compiled_releases
+    test_disable_consul
   popd > /dev/null
   exit $exit_code
 }
