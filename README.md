@@ -101,6 +101,13 @@ please run `./scripts/test`
 which interpolates all of our ops files
 with the `bosh` cli.
 
+By default, the test suite omits `semantic` tests,
+which require both [jq](https://stedolan.github.io/jq/)
+and [yq](https://github.com/mikefarah/yq) installed.
+If you wish to run them,
+please install these requirements and
+set `RUN_SEMANTIC=true` in your environment.
+
 **Note:** it is necessary to run the tests
 from the root of the repo.
 
