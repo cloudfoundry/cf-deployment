@@ -243,12 +243,6 @@ instance_groups:
         ca_certificate: "((service_cf_internal_ca.certificate))"
         certificate: "((diego_rep_client.certificate))"
         private_key: "((diego_rep_client.private_key))"
-      diego:
-        cfdot:
-          bbs: &diego_bbs_client_properties
-            ca_cert: "((service_cf_internal_ca.certificate))"
-            client_cert: "((diego_bbs_client.certificate))"
-            client_key: "((diego_bbs_client.private_key))"
   - name: bbs
     release: diego
     properties:
@@ -925,15 +919,15 @@ instance_groups:
     release: diego
     properties:
       tls: *cfdot_tls_client_properties
-      diego:
-        cfdot:
-          bbs: *diego_bbs_client_properties
   - name: auctioneer
     release: diego
     properties:
       diego:
         auctioneer:
-          bbs: *diego_bbs_client_properties
+          bbs: &diego_bbs_client_properties
+            ca_cert: "((service_cf_internal_ca.certificate))"
+            client_cert: "((diego_bbs_client.certificate))"
+            client_key: "((diego_bbs_client.private_key))"
           ca_cert: "((service_cf_internal_ca.certificate))"
           server_cert: "((diego_auctioneer_server.certificate))"
           server_key: "((diego_auctioneer_server.private_key))"
@@ -1118,9 +1112,6 @@ instance_groups:
     release: diego
     properties:
       tls: *cfdot_tls_client_properties
-      diego:
-        cfdot:
-          bbs: *diego_bbs_client_properties
   - name: route_emitter
     release: diego
     properties:
