@@ -40,3 +40,31 @@
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql/db_username
   value: ((locket_database_username))
+
+- type: replace
+  path: /instance_groups/name=database/jobs/name=postgres/properties/databases/databases/tag=cc/name
+  value: ((cc_database_name))
+- type: replace
+  path: /instance_groups/name=database/jobs/name=postgres/properties/databases/roles/name=cloud_controller/name
+  value: ((cc_database_username))
+
+- type: replace
+  path: /instance_groups/name=database/jobs/name=postgres/properties/databases/databases/tag=uaa/name
+  value: ((uaa_database_name))
+- type: replace
+  path: /instance_groups/name=database/jobs/name=postgres/properties/databases/roles/name=uaa/name
+  value: ((uaa_database_username))
+
+- type: replace
+  path: /instance_groups/name=database/jobs/name=postgres/properties/databases/databases/tag=diego/name
+  value: ((bbs_database_name))
+- type: replace
+  path: /instance_groups/name=database/jobs/name=postgres/properties/databases/roles/name=diego/name
+  value: ((bbs_database_username))
+
+- type: replace
+  path: /instance_groups/name=database/jobs/name=postgres/properties/databases/databases/tag=locket/name
+  value: ((locket_database_name))
+- type: replace
+  path: /instance_groups/name=database/jobs/name=postgres/properties/databases/roles/name=locket/name
+  value: ((locket_database_username))
