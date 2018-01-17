@@ -36,7 +36,7 @@
           deny_networks:
           - 0.0.0.0/0
           persistent_image_list:
-          - "/var/vcap/packages/cflinuxfs2/rootfs"
+          - "/var/vcap/packages/cflinuxfs2/rootfs.tar"
     - name: rep
       release: diego
       properties:
@@ -48,7 +48,7 @@
               client_key: "((diego_bbs_client.private_key))"
             enable_legacy_api_endpoints: false
             preloaded_rootfses:
-            - cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs
+            - cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs.tar
             placement_tags:
             - persistent_isolation_segment
             require_tls: true
