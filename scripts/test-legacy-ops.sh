@@ -9,6 +9,7 @@ test_legacy_ops() {
       check_interpolation "old-droplet-mitigation.yml"
       check_interpolation "keep-original-blobstore-directory-keys.yml" "-l example-vars-files/vars-keep-original-blobstore-directory-keys.yml"
       check_interpolation "name: keep-original-postgres-configuration.yml" "${home}/operations/use-postgres.yml -o keep-original-postgres-configuration.yml -l example-vars-files/vars-keep-original-postgres-configuration.yml"
+      check_interpolation "name: keep-original-routing-postgres-configuration.yml" "${home}/operations/use-postgres.yml -o keep-original-routing-postgres-configuration.yml -v routing_api_database_name=routing-api-db -v routing_api_database_username=routing-api-user"
       check_interpolation "keep-original-internal-usernames.yml" "-l example-vars-files/vars-keep-original-internal-usernames.yml"
       check_interpolation "keep-static-ips.yml" "-l example-vars-files/vars-keep-static-ips.yml"
     popd > /dev/null # operations/legacy
