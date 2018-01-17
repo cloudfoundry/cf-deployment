@@ -29,7 +29,7 @@ test_experimental_ops() {
       check_interpolation "name: enable-nfs-broker-backup.yml" "enable-backup-restore.yml -o enable-nfs-broker-backup.yml -v nfs-broker-database-password=i_am_a_password"
       check_interpolation "name: enable-instance-identity-credentials-windows.yml" "enable-instance-identity-credentials.yml" "-o ${home}/operations/windows-cell.yml" "-o enable-instance-identity-credentials-windows.yml"
       check_interpolation "name: enable-instance-identity-credentials-windows2016.yml" "enable-instance-identity-credentials.yml" "-o windows2016-cell.yml" "-o enable-instance-identity-credentials-windows2016.yml"
-      check_interpolation "name: rootless-containers.yml" "use-grootfs.yml" "-o rootless-containers.yml"
+      check_interpolation "rootless-containers.yml"
       check_interpolation "enable-iptables-logger.yml"
       check_interpolation "enable-prefer-declarative-healthchecks.yml"
       check_interpolation "name: enable-prefer-declarative-healthchecks-windows.yml" "${home}/operations/windows-cell.yml" "-o enable-prefer-declarative-healthchecks-windows.yml"
@@ -44,8 +44,9 @@ test_experimental_ops() {
       check_interpolation "use-bosh-dns.yml"
       check_interpolation "use-bosh-dns-for-containers.yml"
       check_interpolation "name: use-bosh-dns-for-windows2016-containers.yml" "windows2016-cell.yml" "-o use-bosh-dns.yml" "-o use-bosh-dns-for-windows2016-containers.yml"
+      check_interpolation "use-shed.yml"
       check_interpolation "use-grootfs.yml"
-      check_interpolation "name: enable-oci-phase-1.yml" "use-grootfs.yml" "-o enable-oci-phase-1.yml"
+      check_interpolation "enable-oci-phase-1.yml"
       version=$(bosh interpolate ${home}/cf-deployment.yml -o windows2016-cell.yml -o use-latest-windows2016-stemcell.yml --path=/stemcells/alias=windows2016/version)
       if [ "${version}" == "latest" ]; then
         pass "use-latest-windows2016-stemcell.yml"

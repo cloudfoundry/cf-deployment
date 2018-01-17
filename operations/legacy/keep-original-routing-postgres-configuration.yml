@@ -1,0 +1,14 @@
+---
+- type: replace
+  path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/schema
+  value: ((routing_api_database_name))
+- type: replace
+  path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/username
+  value: ((routing_api_database_username))
+
+- type: replace
+  path: /instance_groups/name=database/jobs/name=postgres/properties/databases/databases/tag=routing-api/name
+  value: ((routing_api_database_name))
+- type: replace
+  path: /instance_groups/name=database/jobs/name=postgres/properties/databases/roles/name=routing-api/name
+  value: ((routing_api_database_username))

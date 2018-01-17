@@ -1,0 +1,13 @@
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=garden/properties/garden/deprecated_use_garden_shed?
+  value: true
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=garden/properties/garden/persistent_image_list
+  value:
+  - /var/vcap/packages/cflinuxfs2/rootfs
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=rep/properties/diego/rep/preloaded_rootfses
+  value:
+  - cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs
