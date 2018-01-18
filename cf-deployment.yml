@@ -349,8 +349,11 @@ instance_groups:
     properties:
       login:
         saml:
-          serviceProviderKey: "((uaa_login_saml.private_key))"
-          serviceProviderCertificate: "((uaa_login_saml.certificate))"
+          activeKeyId: key-1
+          keys:
+            key-1:
+              key: "((uaa_login_saml.private_key))"
+              certificate: "((uaa_login_saml.certificate))"
       uaa:
         sslCertificate: "((uaa_ssl.certificate))"
         sslPrivateKey: "((uaa_ssl.private_key))"
