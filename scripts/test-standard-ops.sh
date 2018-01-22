@@ -38,6 +38,7 @@ test_standard_ops() {
       check_interpolation "use-blobstore-cdn.yml" "-l example-vars-files/vars-use-blobstore-cdn.yml"
       check_interpolation "use-compiled-releases.yml"
       check_interpolation "use-external-dbs.yml" "-l example-vars-files/vars-use-external-dbs.yml"
+      check_interpolation "use-haproxy.yml" "-v haproxy_private_ip=10.0.10.10"
       check_interpolation "use-latest-stemcell.yml"
       version=$(bosh interpolate ${home}/cf-deployment.yml -o use-latest-stemcell.yml --path=/stemcells/alias=default/version)
       if [ "${version}" == "latest" ]; then

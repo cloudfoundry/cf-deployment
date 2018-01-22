@@ -1,0 +1,36 @@
+---
+- type: replace
+  path: /releases/-
+  value:
+    name: haproxy
+    version: 8.6.0
+    sha1: bac49ec028f2c8c43583779ae5afb9478e568437
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/haproxy-boshrelease?v=8.6.0
+
+- type: remove
+  path: /instance_groups/name=router/vm_extensions
+
+- type: remove
+  path: /instance_groups/name=tcp-router/vm_extensions
+
+- type: remove
+  path: /instance_groups/name=scheduler/vm_extensions
+
+- type: replace
+  path: /instance_groups/name=smoke-tests:before
+  value:
+    name: haproxy
+    azs: [z1]
+    instances: 1
+    stemcell: default
+    vm_type: minimal
+    networks:
+    - name: default
+      static_ips: [((haproxy_private_ip))]
+    jobs:
+    - name: haproxy
+      release: haproxy
+      properties:
+        ha_proxy:
+          ssl_pem: "((router_ssl.certificate))((router_ssl.private_key))"
+          tcp_link_port: 2222
