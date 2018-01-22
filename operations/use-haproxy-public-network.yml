@@ -1,0 +1,17 @@
+---
+- type: remove
+  path: /instance_groups/name=haproxy/networks/name=default/static_ips
+
+- type: replace
+  path: /instance_groups/name=haproxy/networks/name=default/default?
+  value: [dns, gateway]
+
+- type: replace
+  path: /instance_groups/name=haproxy/networks/-
+  value:
+    name: ((haproxy_public_network_name))
+    static_ips: [((haproxy_public_ip))]
+
+- type: replace
+  path: /instance_groups/name=haproxy/vm_extensions?/-
+  value: cf-haproxy-network-properties

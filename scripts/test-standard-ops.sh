@@ -39,7 +39,7 @@ test_standard_ops() {
       check_interpolation "use-compiled-releases.yml"
       check_interpolation "use-external-dbs.yml" "-l example-vars-files/vars-use-external-dbs.yml"
       check_interpolation "use-haproxy.yml" "-v haproxy_private_ip=10.0.10.10"
-      check_interpolation "use-latest-stemcell.yml"
+      check_interpolation "name: use-haproxy-public-network.yml" "use-haproxy.yml" "-o use-haproxy-public-network.yml -v haproxy_public_network_name=public -v haproxy_public_ip=6.7.8.9"
       version=$(bosh interpolate ${home}/cf-deployment.yml -o use-latest-stemcell.yml --path=/stemcells/alias=default/version)
       if [ "${version}" == "latest" ]; then
         pass "use-latest-stemcell.yml"
