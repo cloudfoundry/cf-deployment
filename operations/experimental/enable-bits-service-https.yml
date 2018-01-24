@@ -10,10 +10,18 @@
 - type: replace
   path: /instance_groups/name=api/jobs/name=bits-service/properties/bits-service/public_endpoint
   value: &public_endpoint https://bits-service.((system_domain))
-- type: replace
+- type: remove
   path: /instance_groups/name=api/jobs/name=route_registrar/properties/route_registrar/routes/name=bits-service/port
+- type: replace
+  path: /instance_groups/name=api/jobs/name=route_registrar/properties/route_registrar/routes/name=bits-service/tls_port?
   value: 443
+- type: replace
+  path: /instance_groups/name=api/jobs/name=route_registrar/properties/route_registrar/routes/name=bits-service/server_cert_domain_san?
+  value: *public_endpoint
 
+- type: replace
+  path: /instance_groups/name=router/jobs/name=gorouter/properties/router/backends?/enable_tls
+  value: true
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/bits_service/public_endpoint
   value: *public_endpoint
@@ -43,15 +51,9 @@
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/bits_service/ca_cert?
   value: *ca_cert
-
 - type: replace
-  path: /variables/name=bits_service_ca?
-  value:
-    name: bits_service_ca
-    type: certificate
-    options:
-      is_ca: true
-      common_name: bits_serviceCA
+  path: /instance_groups/name=router/jobs/name=gorouter/properties/router/ca_certs?
+  value: *ca_cert
 
 - type: replace
   path: /variables/name=bits_service_ssl?
@@ -64,7 +66,7 @@
       - bits-service.service.cf.internal
       - "((system_domain))"
       - "*.((system_domain))"
-      ca: bits_service_ca
+      ca: service_cf_internal_ca
 
 - type: replace
   path: /releases/name=bits-service
