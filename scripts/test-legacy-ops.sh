@@ -6,6 +6,7 @@ test_legacy_ops() {
 
   pushd ${home} > /dev/null
     pushd operations/legacy > /dev/null
+      check_interpolation "name: keep-haproxy-ssl-pem.yml" "${home}/operations/use-haproxy.yml -o keep-haproxy-ssl-pem.yml -v haproxy_ssl_pem=i-am-a-pem -v haproxy_private_ip=1.2.3.4"
       check_interpolation "old-droplet-mitigation.yml"
       check_interpolation "keep-original-blobstore-directory-keys.yml" "-l example-vars-files/vars-keep-original-blobstore-directory-keys.yml"
       check_interpolation "name: keep-original-postgres-configuration.yml" "${home}/operations/use-postgres.yml -o keep-original-postgres-configuration.yml -l example-vars-files/vars-keep-original-postgres-configuration.yml"

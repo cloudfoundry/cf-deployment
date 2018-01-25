@@ -17,6 +17,7 @@ This is the README for Legacy Ops-files. To learn more about `cf-deployment`, go
 
 | Name | Purpose | Notes |
 |:---  |:---     |:---   |
+| [`keep-haproxy-ssl-pem.yml`](keep-haproxy-ssl-pem.yml) | Maintains operator-provided pem for haproxy terminating ssl connections | Requires `use-haproxy.yml`. Provides ability to set value for `haproxy_ssl_pem` |
 | [`keep-original-blobstore-directory-keys.yml`](keep-original-blobstore-directory-keys.yml) | Maintains operator-provided blobstore directory keys | Provides ability to set values for `app_package_directory_key`, `buildpack_directory_key`, `droplet_directory_key`, and `resource_directory_key` |
 | [`keep-original-internal-usernames.yml`](keep-original-internal-usernames.yml) | Maintains operator-provided usernames | Provides ability to set values for `properties.nats.user`, `properties.cc.staging_upload_user`, `properties.router.status.user` |
 | [`keep-original-postgres-configuration.yml`](keep-original-postgres-configuration.yml) | Maintains operator-provided database names and usernames. Requires `use-postgres.yml` | Provides ability to set values for cc, uaa, bbs, and locket databases |

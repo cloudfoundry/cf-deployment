@@ -1,0 +1,10 @@
+---
+- type: replace
+  path: /instance_groups/name=haproxy/jobs/name=haproxy/properties/ha_proxy/ssl_pem
+  value: "((haproxy_ssl_pem))"
+
+- type: remove
+  path: /variables/name=haproxy_ca
+
+- type: remove
+  path: /variables/name=haproxy_ssl
