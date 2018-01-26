@@ -34,6 +34,7 @@
         ha_proxy:
           ssl_pem: "((haproxy_ssl.certificate))((haproxy_ssl.private_key))"
           tcp_link_port: 2222
+          backend_port: 443
           backend_ssl: verify
           backend_ca_file: "((router_ca.certificate))"
 
