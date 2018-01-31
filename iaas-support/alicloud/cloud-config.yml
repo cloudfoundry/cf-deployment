@@ -1,0 +1,106 @@
+azs:
+- name: z1
+  cloud_properties:
+    availability_zone: ((az1_zone))
+- name: z2
+  cloud_properties:
+    availability_zone: ((az2_zone))
+- name: z3
+  cloud_properties:
+    availability_zone: ((az3_zone))
+
+vm_types:
+- name: minimal
+  cloud_properties:
+    instance_type: ecs.mn4.small
+    ephemeral_disk: {size: "51_200"}
+- name: small
+  cloud_properties:
+    instance_type: ecs.sn2.medium
+    ephemeral_disk: {size: "51_200"}
+- name: default
+  cloud_properties:
+    instance_type: ecs.sn2.medium
+    ephemeral_disk: {size: "51_200"}
+- name: small-highmem
+  cloud_properties:
+    instance_type: ecs.sn2ne.xlarge
+    ephemeral_disk: {size: "51_200"}
+- name: compiler
+  cloud_properties:
+    instance_type: ecs.sn1.large
+    ephemeral_disk: {size: "51_200"}
+
+disk_types:
+- name: 5GB
+  disk_size: 20_480
+- name: 10GB
+  disk_size: 20_480
+- name: 100GB
+  disk_size: 102_400
+
+vm_extensions:
+- name: 5GB_ephemeral_disk
+  cloud_properties:
+    ephemeral_disk: {size: "20_480"}
+- name: 10GB_ephemeral_disk
+  cloud_properties:
+    ephemeral_disk: {size: "20_480"}
+- name: 50GB_ephemeral_disk
+  cloud_properties:
+    ephemeral_disk: {size: "50_120"}
+- name: 100GB_ephemeral_disk
+  cloud_properties:
+    ephemeral_disk: {size: "102_400"}
+- name: 500GB_ephemeral_disk
+  cloud_properties:
+    ephemeral_disk: {size: "512_000"}
+- name: 1TB_ephemeral_disk
+  cloud_properties:
+    ephemeral_disk: {size: "1024_000"}
+- name: cf-router-network-properties
+  cloud_properties:
+    slbs: ((http_slb_id_array))
+- name: cf-tcp-router-network-properties
+  cloud_properties:
+    slbs: ((tcp_slb_id_array))
+- name: diego-ssh-proxy-network-properties
+
+networks:
+- name: default
+  type: manual
+  subnets:
+  - range: ((az1_vswitch_range))
+    gateway: ((az1_vswitch_gateway))
+    az: z1
+    dns: [8.8.8.8]
+    cloud_properties:
+      vswitch_id: ((az1_vswitch_id))
+      security_group_ids:
+        - ((security_group_id_1))
+        - ((security_group_id_2))
+  - range: ((az2_vswitch_range))
+    gateway: ((az2_vswitch_gateway))
+    az: z2
+    dns: [8.8.8.8]
+    cloud_properties:
+      vswitch_id: ((az2_vswitch_id))
+      security_group_ids:
+        - ((security_group_id_1))
+        - ((security_group_id_2))
+  - range: ((az3_vswitch_range))
+    gateway: ((az3_vswitch_gateway))
+    az: z3
+    dns: [8.8.8.8]
+    cloud_properties:
+      vswitch_id: ((az3_vswitch_id))
+      security_group_ids: [((security_group_id_3))]
+- name: vip
+  type: vip
+
+compilation:
+  workers: 5
+  reuse_compilation_vms: true
+  az: z1
+  vm_type: compiler
+  network: default
