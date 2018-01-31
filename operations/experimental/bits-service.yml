@@ -6,8 +6,8 @@
     release: bits-service
     properties:
       bits-service:
-        private_endpoint: http://bits-service.service.cf.internal
-        public_endpoint: http://bits-service.((system_domain))
+        private_endpoint: &private_endpoint https://bits-service.service.cf.internal
+        public_endpoint: &public_endpoint https://bits-service.((system_domain))
         secret: "((bits_service_secret))"
         signing_users:
           - username: admin
@@ -25,10 +25,11 @@
   path: /instance_groups/name=api/jobs/name=route_registrar/properties/route_registrar/routes/-
   value:
     name: bits-service
-    port: 80
+    tls_port: 443
     registration_interval: 20s
     uris:
       - bits-service.((system_domain))
+    server_cert_domain_san: *public_endpoint
     tags:
       component: bits-service
 
@@ -36,10 +37,11 @@
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/bits_service?
   value: &bits-service-config
     enabled: true
-    public_endpoint: http://bits-service.((system_domain))
-    private_endpoint: http://bits-service.service.cf.internal
+    public_endpoint: *public_endpoint
+    private_endpoint: *private_endpoint
     username: admin
     password: "((bits_service_signing_password))"
+    ca_cert: &ca_cert ((bits_service_ssl.ca))
 
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/bits_service?
@@ -60,6 +62,33 @@
   value:
     name: bits_service_signing_password
     type: password
+
+- type: replace
+  path: /variables/name=bits_service_ssl?
+  value:
+    name: bits_service_ssl
+    type: certificate
+    options:
+      common_name:  bits-service.service.cf.internal
+      alternative_names:
+      - bits-service.service.cf.internal
+      - "((system_domain))"
+      - "*.((system_domain))"
+      ca: service_cf_internal_ca
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=bits-service/properties/bits-service/tls?
+  value:
+    cert: ((bits_service_ssl.certificate))
+    key: ((bits_service_ssl.private_key))
+
+- type: replace
+  path: /instance_groups/name=router/jobs/name=gorouter/properties/router/backends?/enable_tls
+  value: true
+
+- type: replace
+  path: /instance_groups/name=router/jobs/name=gorouter/properties/router/ca_certs?
+  value: *ca_cert
 
 - type: replace
   path: /releases/-
