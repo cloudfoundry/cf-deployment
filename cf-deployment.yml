@@ -354,6 +354,7 @@ instance_groups:
             key-1:
               key: "((uaa_login_saml.private_key))"
               certificate: "((uaa_login_saml.certificate))"
+              passphrase: ""
       uaa:
         sslCertificate: "((uaa_ssl.certificate))"
         sslPrivateKey: "((uaa_ssl.private_key))"
