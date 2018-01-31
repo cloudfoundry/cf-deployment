@@ -23,7 +23,7 @@ and the ops-files will be removed.
 | [`bits-service-webdav.yml`](bits-service-webdav.yml) | Use the `blobstore`'s webdav storage for the [bits-service](https://github.com/cloudfoundry-incubator/bits-service). | Requires the `blobstore` job. |
 | [`disable-interpolate-service-bindings.yml`](disable-interpolate-service-bindings.yml) | Disables the interpolation of CredHub service credentials by Cloud Controller. |
 | [`enable-bits-service-consul.yml`](enable-bits-service-consul.yml) | Registers the bits-service [bits-service](https://github.com/cloudfoundry-incubator/bits-service) job via consul | Requires `bits-service.yml` from the same directory. |
-| [`enable-bits-service-https.yml`](enable-bits-service-https.yml) | Makes the bits-service [bits-service](https://github.com/cloudfoundry-incubator/bits-service) job use https | Requires `bits-service.yml` from the same directory. |
+| [`enable-bits-service-https.yml`](enable-bits-service-https.yml) | Deprecated and left intentionally blank - the bits service is now `https` only | |
 | [`enable-bpm.yml`](enable-bpm.yml) | Enables the [BOSH Process Manager](https://github.com/cloudfoundry-incubator/bpm-release) as a BOSH addon. | |
 | [`disable-consul.yml`](disable-consul.yml) | Removes `consul` instance group and `consul_agent` jobs and prevents the `auctioneer`, `ssh_proxy`, `file_server`, `rep`, `locket`, and `bbs` jobs from registering as a service with Consul | Requires `skip-consul-cell-registrations.yml`, `skip-consul-locks.yml`, and `use-bosh-dns.yml` |
 | [`disable-consul-bosh-lite.yml`](disable-consul-bosh-lite.yml) | Compatibility shim for disabling Consul on BOSH-Lite. | Apply `disable-consul.yml`, `bosh-lite.yml`, and then `disable-consul-bosh-lite.yml`, in that order. |
