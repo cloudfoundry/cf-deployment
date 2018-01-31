@@ -15,16 +15,25 @@
           tls: ((cf_app_sd_client_tls))
 
 - type: replace
-  path: /instance_groups/name=router/jobs/-
+  path: /instance_groups/-
   value:
-    name: service-discovery-controller
-    release: cf-app-sd
-    properties:
-      dnshttps:
-        server:
-          tls: ((cf_app_sd_server_tls))
-        client:
-          ca: ((cf_app_sd_ca.ca))
+    name: service-discovery
+    azs:
+    - z1
+    instances: 1
+    vm_type: minimal
+    stemcell: default
+    networks:
+      - name: default
+    jobs:
+    - name: service-discovery-controller
+      release: cf-app-sd
+      properties:
+        dnshttps:
+          server:
+            tls: ((cf_app_sd_server_tls))
+          client:
+            ca: ((cf_app_sd_ca.ca))
 
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=route_emitter/properties/internal_routes?
@@ -66,6 +75,6 @@
   path: /releases/-
   value:
     name: cf-app-sd
-    sha1: ee224657514a6961e9f8ec9e6b6d4427f9b0b457
-    url: https://bosh.io/d/github.com/cloudfoundry/cf-app-sd-release?v=0.2.0
-    version: 0.2.0
+    sha1: 0f906c66d0f092ca1078757dbdd495ddd069806f
+    url: https://bosh.io/d/github.com/cloudfoundry/cf-app-sd-release?v=0.3.0
+    version: 0.3.0
