@@ -3,10 +3,6 @@
   path: /instance_groups/name=haproxy/jobs/name=haproxy/properties/ha_proxy/ssl_pem
   value: "((haproxy_ssl_pem))"
 
-- type: replace
-  path: /instance_groups/name=router/jobs/name=gorouter/properties/router/ca_certs?
-  value: "((haproxy_ssl_ca.certificate))"
-
 - type: remove
   path: /variables/name=haproxy_ca
 

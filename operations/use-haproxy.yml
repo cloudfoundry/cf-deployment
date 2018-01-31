@@ -58,7 +58,3 @@
       alternative_names:
       - "((system_domain))"
       - "*.((system_domain))"
-
-- type: replace
-  path: /instance_groups/name=router/jobs/name=gorouter/properties/router/ca_certs?
-  value: "((haproxy_ca.certificate))"
