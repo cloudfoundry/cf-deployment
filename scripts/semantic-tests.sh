@@ -74,6 +74,29 @@ test_disable_consul() {
     fi
 }
 
+test_bosh_dns_aliases_consistent() {
+  local manifest_file=$(mktemp)
+
+  bosh int cf-deployment.yml \
+    -o operations/experimental/use-bosh-dns.yml > $manifest_file
+
+  set +e
+    local bosh_dns_aliases=$(yq r $manifest_file -j | jq .addons[1].jobs[].properties.aliases)
+    local windows2012_bosh_dns_aliases=$(yq r $manifest_file -j | jq .addons[2].jobs[].properties.aliases)
+    local windows2016_bosh_dns_aliases=$(yq r $manifest_file -j | jq .addons[3].jobs[].properties.aliases)
+  set -e
+
+    if [[ "$bosh_dns_aliases" != "$windows2012_bosh_dns_aliases" ]]; then
+      fail "experimental/use-bosh-dns.yml: bosh-dns aliases have diverged"
+      diff <(echo $bosh_dns_aliases | jq .) <(echo $windows2012_bosh_dns_aliases | jq .)
+    elif [[ "$bosh_dns_aliases" != "$windows2016_bosh_dns_aliases" ]]; then
+      fail "experimental/use-bosh-dns.yml: bosh-dns aliases have diverged"
+      diff <(echo $bosh_dns_aliases | jq .) <(echo $windows2016_bosh_dns_aliases | jq .)
+    else
+      pass "experimental/use-bosh-dns.yml"
+    fi
+}
+
 
 semantic_tests() {
   # Padded for pretty output
@@ -84,6 +107,7 @@ semantic_tests() {
     test_scale_to_one_az
     test_use_compiled_releases
     test_disable_consul
+    test_bosh_dns_aliases_consistent
   popd > /dev/null
   exit $exit_code
 }
