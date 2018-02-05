@@ -720,6 +720,8 @@ instance_groups:
     properties: *statsd_injector_properties
   - name: file_server
     release: diego
+    properties:
+      loggregator: *diego_loggregator_client_properties
   - name: routing-api
     release: routing
     properties:
