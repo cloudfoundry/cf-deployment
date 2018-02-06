@@ -1,5 +1,5 @@
 - type: replace
-  path: /instance_groups/name=diego-cell/jobs/-
+  path: /instance_groups/name=diego-cell/jobs/name=bosh-dns-adapter?
   value:
     name: bosh-dns-adapter
     properties:
@@ -10,7 +10,7 @@
           ca: ((cf_app_sd_ca.ca))
     release: cf-app-sd
 - type: replace
-  path: /instance_groups/-
+  path: /instance_groups/name=service-discovery?
   value:
     azs:
     - z1
