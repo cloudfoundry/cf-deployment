@@ -37,15 +37,15 @@
               ca_cert: ((diego_bbs_client.ca))
               client_cert: ((diego_bbs_client.certificate))
               client_key: ((diego_bbs_client.private_key))
-            ca_cert: ((diego_rep_agent_v2.ca))
+            ca_cert: ((diego_rep_agent.ca))
             enable_legacy_api_endpoints: false
             locket:
               api_location: locket.service.cf.internal:8891
             preloaded_rootfses:
             - windows2012R2:/tmp/windows2012R2
             require_tls: true
-            server_cert: ((diego_rep_agent_v2.certificate))
-            server_key: ((diego_rep_agent_v2.private_key))
+            server_cert: ((diego_rep_agent.certificate))
+            server_key: ((diego_rep_agent.private_key))
         loggregator:
           ca_cert: ((loggregator_tls_metron.ca))
           cert: ((loggregator_tls_metron.certificate))
@@ -54,9 +54,9 @@
         syslog_daemon_config:
           enable: false
         tls:
-          ca_cert: ((diego_rep_agent_v2.ca))
-          cert: ((diego_rep_agent_v2.certificate))
-          key: ((diego_rep_agent_v2.private_key))
+          ca_cert: ((diego_rep_agent.ca))
+          cert: ((diego_rep_agent.certificate))
+          key: ((diego_rep_agent.private_key))
       release: diego
     - name: route_emitter_windows
       properties:

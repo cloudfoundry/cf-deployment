@@ -52,15 +52,15 @@
             placement_tags:
             - persistent_isolation_segment
             require_tls: true
-            ca_cert: "((diego_rep_agent_v2.ca))"
-            server_cert: "((diego_rep_agent_v2.certificate))"
-            server_key: "((diego_rep_agent_v2.private_key))"
+            ca_cert: "((diego_rep_agent.ca))"
+            server_cert: "((diego_rep_agent.certificate))"
+            server_key: "((diego_rep_agent.private_key))"
           ssl:
             skip_cert_verify: true
         tls:
-          ca_cert: "((diego_rep_agent_v2.ca))"
-          cert: "((diego_rep_agent_v2.certificate))"
-          key: "((diego_rep_agent_v2.private_key))"
+          ca_cert: "((diego_rep_agent.ca))"
+          cert: "((diego_rep_agent.certificate))"
+          key: "((diego_rep_agent.private_key))"
     - name: route_emitter
       release: diego
       properties:
