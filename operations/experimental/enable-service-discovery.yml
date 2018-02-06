@@ -68,3 +68,6 @@
     sha1: d0a22be980ddf2e0484489208c7de7719c6a0c30
     url: https://bosh.io/d/github.com/cloudfoundry/cf-app-sd-release?v=0.4.0
     version: 0.4.0
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/temporary_create_internal_domain?
+  value: true
