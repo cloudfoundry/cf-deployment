@@ -1104,16 +1104,18 @@ instance_groups:
           - cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs.tar
           require_tls: true
           ca_cert: "((service_cf_internal_ca.certificate))"
-          server_cert: "((diego_rep_agent.certificate))"
-          server_key: "((diego_rep_agent.private_key))"
+          server_cert: "((diego_rep_agent_v2.certificate))"
+          server_key: "((diego_rep_agent_v2.private_key))"
           enable_legacy_api_endpoints: false
           locket:
             api_location: "locket.service.cf.internal:8891"
+      use_v2_tls: true
       loggregator: *diego_loggregator_client_properties
       tls:
         ca_cert: "((service_cf_internal_ca.certificate))"
-        cert: "((diego_rep_agent.certificate))"
-        key: "((diego_rep_agent.private_key))"
+        cert: "((diego_rep_agent_v2.certificate))"
+        key: "((diego_rep_agent_v2.private_key))"
+
   - name: cfdot
     release: diego
     properties:
@@ -1425,7 +1427,7 @@ variables:
     common_name: rep client
     extended_key_usage:
     - client_auth
-- name: diego_rep_agent
+- name: diego_rep_agent_v2
   type: certificate
   options:
     ca: service_cf_internal_ca
