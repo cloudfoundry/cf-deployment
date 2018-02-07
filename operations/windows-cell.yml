@@ -29,9 +29,14 @@
       release: garden-windows
     - name: rep_windows
       properties:
+        containers:
+          trusted_ca_certificates:
+            - ((diego_instance_identity_ca.ca))
         diego:
           executor:
             ca_certs_for_downloads: ((blobstore_tls.ca))
+            instance_identity_ca_cert: ((diego_instance_identity_ca.certificate))
+            instance_identity_key: ((diego_instance_identity_ca.private_key))
           rep:
             bbs:
               ca_cert: ((diego_bbs_client.ca))
