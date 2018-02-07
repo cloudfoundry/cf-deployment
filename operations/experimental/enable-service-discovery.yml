@@ -1,5 +1,5 @@
 - type: replace
-  path: /instance_groups/name=diego-cell/jobs/-
+  path: /instance_groups/name=diego-cell/jobs/name=bosh-dns-adapter?
   value:
     name: bosh-dns-adapter
     properties:
@@ -10,7 +10,7 @@
           ca: ((cf_app_sd_ca.ca))
     release: cf-app-sd
 - type: replace
-  path: /instance_groups/-
+  path: /instance_groups/name=service-discovery?
   value:
     azs:
     - z1
@@ -62,9 +62,12 @@
       - client_auth
     type: certificate
 - type: replace
-  path: /releases/-
+  path: /releases/name=cf-app-sd?
   value:
     name: cf-app-sd
     sha1: d0a22be980ddf2e0484489208c7de7719c6a0c30
     url: https://bosh.io/d/github.com/cloudfoundry/cf-app-sd-release?v=0.4.0
     version: 0.4.0
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/temporary_create_internal_domain?
+  value: true
