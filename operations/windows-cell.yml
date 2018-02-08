@@ -31,7 +31,7 @@
       properties:
         containers:
           trusted_ca_certificates:
-            - ((diego_instance_identity_ca.ca))
+          - ((diego_instance_identity_ca.ca))
         diego:
           executor:
             ca_certs_for_downloads: ((blobstore_tls.ca))
@@ -154,6 +154,6 @@
   path: /releases/name=hwc-buildpack?
   value:
     name: hwc-buildpack
-    sha1: 41652f8bed61846ac09ce832fdc70c0a114de651
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=2.3.13
-    version: 2.3.13
+    sha1: 17c4d18bc5bbb49a0b0476b6aa41524b4285a0bc
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=2.3.14
+    version: 2.3.14
