@@ -86,21 +86,44 @@ test_bosh_dns_aliases_consistent() {
     local windows2016_bosh_dns_aliases=$(yq r $manifest_file -j | jq .addons[3].jobs[].properties.aliases)
   set -e
 
-    if [[ "$bosh_dns_aliases" != "$windows2012_bosh_dns_aliases" ]]; then
-      fail "experimental/use-bosh-dns.yml: bosh-dns aliases have diverged"
-      diff <(echo $bosh_dns_aliases | jq .) <(echo $windows2012_bosh_dns_aliases | jq .)
-    elif [[ "$bosh_dns_aliases" != "$windows2016_bosh_dns_aliases" ]]; then
-      fail "experimental/use-bosh-dns.yml: bosh-dns aliases have diverged"
-      diff <(echo $bosh_dns_aliases | jq .) <(echo $windows2016_bosh_dns_aliases | jq .)
-    else
-      pass "experimental/use-bosh-dns.yml"
-    fi
+  if [[ "$bosh_dns_aliases" != "$windows2012_bosh_dns_aliases" ]]; then
+    fail "experimental/use-bosh-dns.yml: bosh-dns aliases have diverged"
+    diff <(echo $bosh_dns_aliases | jq .) <(echo $windows2012_bosh_dns_aliases | jq .)
+  elif [[ "$bosh_dns_aliases" != "$windows2016_bosh_dns_aliases" ]]; then
+    fail "experimental/use-bosh-dns.yml: bosh-dns aliases have diverged"
+    diff <(echo $bosh_dns_aliases | jq .) <(echo $windows2016_bosh_dns_aliases | jq .)
+  else
+    pass "experimental/use-bosh-dns.yml is consistent"
+  fi
 }
 
+test_bosh_dns_aliases_consistent_between_files() {
+  local manifest_file=$(mktemp)
+  local manifest_file_renamed=$(mktemp)
+
+  bosh int cf-deployment.yml \
+    -o operations/experimental/use-bosh-dns.yml > $manifest_file
+
+  bosh int cf-deployment.yml \
+    -o operations/experimental/use-bosh-dns-rename-network-and-deployment.yml \
+    -v deployment_name=cf \
+    -v network_name=default > $manifest_file_renamed
+
+  set +e
+    diff $manifest_file $manifest_file_renamed
+    local diff_exit_code=$?
+  set -e
+
+  if [[ $diff_exit_code != 0 ]]; then
+    fail "bosh-dns aliases have diverged between use-bosh-dns.yml and use-bosh-dns-with-renamed-network-and-deployment.yml"
+  else
+    pass "experimental/use-bosh-dns-with-renamed-network-and-deployment is consistent with experimental/use-bosh-dns.yml"
+  fi
+}
 
 semantic_tests() {
-  # Padded for pretty output
-  suite_name="SEMANTIC    "
+  # padded for pretty output
+  suite_name="semantic    "
 
   pushd ${home} > /dev/null
     test_rename_network_opsfile
@@ -108,6 +131,7 @@ semantic_tests() {
     test_use_compiled_releases
     test_disable_consul
     test_bosh_dns_aliases_consistent
+    test_bosh_dns_aliases_consistent_between_files
   popd > /dev/null
   exit $exit_code
 }

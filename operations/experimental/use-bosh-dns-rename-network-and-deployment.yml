@@ -1,0 +1,206 @@
+---
+- type: replace
+  path: /addons?/-
+  value:
+    include:
+      stemcell:
+      - os: ubuntu-trusty
+    jobs:
+    - name: bosh-dns
+      properties:
+        aliases:
+          _.cell.service.cf.internal:
+          - _.diego-cell.((network_name)).((deployment_name)).bosh
+          - _.windows-cell.((network_name)).((deployment_name)).bosh
+          - _.windows2016-cell.((network_name)).((deployment_name)).bosh
+          - _.isolated-diego-cell.((network_name)).((deployment_name)).bosh
+          auctioneer.service.cf.internal:
+          - '*.scheduler.((network_name)).((deployment_name)).bosh'
+          bbs.service.cf.internal:
+          - '*.diego-api.((network_name)).((deployment_name)).bosh'
+          bits-service.service.cf.internal:
+          - '*.api.((network_name)).((deployment_name)).bosh'
+          blobstore.service.cf.internal:
+          - '*.blobstore.((network_name)).((deployment_name)).bosh'
+          - '*.singleton-blobstore.((network_name)).((deployment_name)).bosh'
+          cc-uploader.service.cf.internal:
+          - '*.api.((network_name)).((deployment_name)).bosh'
+          cf-etcd.service.cf.internal:
+          - '*.etcd.((network_name)).((deployment_name)).bosh'
+          cloud-controller-ng.service.cf.internal:
+          - '*.api.((network_name)).((deployment_name)).bosh'
+          consul.service.cf.internal:
+          - '*.consul.((network_name)).((deployment_name)).bosh'
+          credhub.service.cf.internal:
+          - '*.credhub.((network_name)).((deployment_name)).bosh'
+          doppler.service.cf.internal:
+          - '*.doppler.((network_name)).((deployment_name)).bosh'
+          file-server.service.cf.internal:
+          - '*.api.((network_name)).((deployment_name)).bosh'
+          gorouter.service.cf.internal:
+          - '*.router.((network_name)).((deployment_name)).bosh'
+          locket.service.cf.internal:
+          - '*.diego-api.((network_name)).((deployment_name)).bosh'
+          loggregator-trafficcontroller.service.cf.internal:
+          - '*.log-api.((network_name)).((deployment_name)).bosh'
+          policy-server.service.cf.internal:
+          - '*.api.((network_name)).((deployment_name)).bosh'
+          reverse-log-proxy.service.cf.internal:
+          - '*.log-api.((network_name)).((deployment_name)).bosh'
+          routing-api.service.cf.internal:
+          - '*.api.((network_name)).((deployment_name)).bosh'
+          silk-controller.service.cf.internal:
+          - '*.diego-api.((network_name)).((deployment_name)).bosh'
+          sql-db.service.cf.internal:
+          - '*.mysql.((network_name)).((deployment_name)).bosh'
+          - '*.postgres.((network_name)).((deployment_name)).bosh'
+          - '*.database.((network_name)).((deployment_name)).bosh'
+          ssh-proxy.service.cf.internal:
+          - '*.scheduler.((network_name)).((deployment_name)).bosh'
+          tcp-router.service.cf.internal:
+          - '*.tcp-router.((network_name)).((deployment_name)).bosh'
+          tps.service.cf.internal:
+          - '*.scheduler.((network_name)).((deployment_name)).bosh'
+          uaa.service.cf.internal:
+          - '*.uaa.((network_name)).((deployment_name)).bosh'
+      release: bosh-dns
+    name: bosh-dns
+- type: replace
+  path: /addons/-
+  value:
+    include:
+      stemcell:
+      - os: windows2012R2
+    jobs:
+    - name: bosh-dns-windows
+      properties:
+        aliases:
+          _.cell.service.cf.internal:
+          - _.diego-cell.((network_name)).((deployment_name)).bosh
+          - _.windows-cell.((network_name)).((deployment_name)).bosh
+          - _.windows2016-cell.((network_name)).((deployment_name)).bosh
+          - _.isolated-diego-cell.((network_name)).((deployment_name)).bosh
+          auctioneer.service.cf.internal:
+          - '*.scheduler.((network_name)).((deployment_name)).bosh'
+          bbs.service.cf.internal:
+          - '*.diego-api.((network_name)).((deployment_name)).bosh'
+          bits-service.service.cf.internal:
+          - '*.api.((network_name)).((deployment_name)).bosh'
+          blobstore.service.cf.internal:
+          - '*.blobstore.((network_name)).((deployment_name)).bosh'
+          - '*.singleton-blobstore.((network_name)).((deployment_name)).bosh'
+          cc-uploader.service.cf.internal:
+          - '*.api.((network_name)).((deployment_name)).bosh'
+          cf-etcd.service.cf.internal:
+          - '*.etcd.((network_name)).((deployment_name)).bosh'
+          cloud-controller-ng.service.cf.internal:
+          - '*.api.((network_name)).((deployment_name)).bosh'
+          consul.service.cf.internal:
+          - '*.consul.((network_name)).((deployment_name)).bosh'
+          credhub.service.cf.internal:
+          - '*.credhub.((network_name)).((deployment_name)).bosh'
+          doppler.service.cf.internal:
+          - '*.doppler.((network_name)).((deployment_name)).bosh'
+          file-server.service.cf.internal:
+          - '*.api.((network_name)).((deployment_name)).bosh'
+          gorouter.service.cf.internal:
+          - '*.router.((network_name)).((deployment_name)).bosh'
+          locket.service.cf.internal:
+          - '*.diego-api.((network_name)).((deployment_name)).bosh'
+          loggregator-trafficcontroller.service.cf.internal:
+          - '*.log-api.((network_name)).((deployment_name)).bosh'
+          policy-server.service.cf.internal:
+          - '*.api.((network_name)).((deployment_name)).bosh'
+          reverse-log-proxy.service.cf.internal:
+          - '*.log-api.((network_name)).((deployment_name)).bosh'
+          routing-api.service.cf.internal:
+          - '*.api.((network_name)).((deployment_name)).bosh'
+          silk-controller.service.cf.internal:
+          - '*.diego-api.((network_name)).((deployment_name)).bosh'
+          sql-db.service.cf.internal:
+          - '*.mysql.((network_name)).((deployment_name)).bosh'
+          - '*.postgres.((network_name)).((deployment_name)).bosh'
+          - '*.database.((network_name)).((deployment_name)).bosh'
+          ssh-proxy.service.cf.internal:
+          - '*.scheduler.((network_name)).((deployment_name)).bosh'
+          tcp-router.service.cf.internal:
+          - '*.tcp-router.((network_name)).((deployment_name)).bosh'
+          tps.service.cf.internal:
+          - '*.scheduler.((network_name)).((deployment_name)).bosh'
+          uaa.service.cf.internal:
+          - '*.uaa.((network_name)).((deployment_name)).bosh'
+      release: bosh-dns
+    name: bosh-dns-windows2012
+- type: replace
+  path: /addons/-
+  value:
+    include:
+      stemcell:
+      - os: windows2016
+    jobs:
+    - name: bosh-dns-windows
+      properties:
+        aliases:
+          _.cell.service.cf.internal:
+          - _.diego-cell.((network_name)).((deployment_name)).bosh
+          - _.windows-cell.((network_name)).((deployment_name)).bosh
+          - _.windows2016-cell.((network_name)).((deployment_name)).bosh
+          - _.isolated-diego-cell.((network_name)).((deployment_name)).bosh
+          auctioneer.service.cf.internal:
+          - '*.scheduler.((network_name)).((deployment_name)).bosh'
+          bbs.service.cf.internal:
+          - '*.diego-api.((network_name)).((deployment_name)).bosh'
+          bits-service.service.cf.internal:
+          - '*.api.((network_name)).((deployment_name)).bosh'
+          blobstore.service.cf.internal:
+          - '*.blobstore.((network_name)).((deployment_name)).bosh'
+          - '*.singleton-blobstore.((network_name)).((deployment_name)).bosh'
+          cc-uploader.service.cf.internal:
+          - '*.api.((network_name)).((deployment_name)).bosh'
+          cf-etcd.service.cf.internal:
+          - '*.etcd.((network_name)).((deployment_name)).bosh'
+          cloud-controller-ng.service.cf.internal:
+          - '*.api.((network_name)).((deployment_name)).bosh'
+          consul.service.cf.internal:
+          - '*.consul.((network_name)).((deployment_name)).bosh'
+          credhub.service.cf.internal:
+          - '*.credhub.((network_name)).((deployment_name)).bosh'
+          doppler.service.cf.internal:
+          - '*.doppler.((network_name)).((deployment_name)).bosh'
+          file-server.service.cf.internal:
+          - '*.api.((network_name)).((deployment_name)).bosh'
+          gorouter.service.cf.internal:
+          - '*.router.((network_name)).((deployment_name)).bosh'
+          locket.service.cf.internal:
+          - '*.diego-api.((network_name)).((deployment_name)).bosh'
+          loggregator-trafficcontroller.service.cf.internal:
+          - '*.log-api.((network_name)).((deployment_name)).bosh'
+          policy-server.service.cf.internal:
+          - '*.api.((network_name)).((deployment_name)).bosh'
+          reverse-log-proxy.service.cf.internal:
+          - '*.log-api.((network_name)).((deployment_name)).bosh'
+          routing-api.service.cf.internal:
+          - '*.api.((network_name)).((deployment_name)).bosh'
+          silk-controller.service.cf.internal:
+          - '*.diego-api.((network_name)).((deployment_name)).bosh'
+          sql-db.service.cf.internal:
+          - '*.mysql.((network_name)).((deployment_name)).bosh'
+          - '*.postgres.((network_name)).((deployment_name)).bosh'
+          - '*.database.((network_name)).((deployment_name)).bosh'
+          ssh-proxy.service.cf.internal:
+          - '*.scheduler.((network_name)).((deployment_name)).bosh'
+          tcp-router.service.cf.internal:
+          - '*.tcp-router.((network_name)).((deployment_name)).bosh'
+          tps.service.cf.internal:
+          - '*.scheduler.((network_name)).((deployment_name)).bosh'
+          uaa.service.cf.internal:
+          - '*.uaa.((network_name)).cf.bosh'
+      release: bosh-dns
+    name: bosh-dns-windows2016
+- type: replace
+  path: /releases/-
+  value:
+    name: bosh-dns
+    sha1: 9231b7c7d2f6aa85e0cb77fdeef7add54fdb3f1a
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-release?v=0.2.0
+    version: 0.2.0

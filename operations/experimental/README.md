@@ -57,6 +57,8 @@ and the ops-files will be removed.
 | [`use-bosh-dns.yml`](use-bosh-dns.yml) | Adds `bosh-dns` job to all instance groups running ubuntu-trusty via Bosh Addon. | Aliases `service.cf.internal` domains to their `bosh-dns` equivalents. |
 | [`use-bosh-dns-for-containers.yml`](use-bosh-dns-for-containers.yml) | Sets the DNS server of application containers to the address of the local `bosh-dns` job. | Requires `use-bosh-dns.yml` |
 | [`use-bosh-dns-for-windows2016-containers.yml`](use-bosh-dns-for-windows2016-containers.yml) | Sets the DNS server of application containers (on windows2016 cell) to the address of the local `bosh-dns` job. | Requires `use-bosh-dns.yml` |
+| [`use-bosh-dns-rename-network-and-deployment.yml`](use-bosh-dns-rename-network-and-deployment.yml) | Adds `bosh-dns` job to all instance groups running ubuntu-trusty via Bosh Addon, and renames network and deployment in domain aliases. | |
+| [`use-bosh-dns-for-containers.yml`](use-bosh-dns-for-containers.yml) | Sets the DNS server of application containers to the address of the local `bosh-dns` job. | Requires `use-bosh-dns.yml` |
 | [`use-shed.yml`](use-shed.yml) | Enable deprecated garden-shed on diego cells. | |
 | [`use-grootfs.yml`](use-grootfs.yml) | Groot is enabled by default. This file is blank to avoid breaking deployment scripts. | |
 | [`enable-oci-phase-1.yml`](enable-oci-phase-1.yml) | Configure Garden to create OCI compatible images. | |
