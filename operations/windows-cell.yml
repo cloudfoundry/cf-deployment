@@ -29,23 +29,28 @@
       release: garden-windows
     - name: rep_windows
       properties:
+        containers:
+          trusted_ca_certificates:
+            - ((diego_instance_identity_ca.ca))
         diego:
           executor:
             ca_certs_for_downloads: ((blobstore_tls.ca))
+            instance_identity_ca_cert: ((diego_instance_identity_ca.certificate))
+            instance_identity_key: ((diego_instance_identity_ca.private_key))
           rep:
             bbs:
               ca_cert: ((diego_bbs_client.ca))
               client_cert: ((diego_bbs_client.certificate))
               client_key: ((diego_bbs_client.private_key))
-            ca_cert: ((diego_rep_agent.ca))
+            ca_cert: ((diego_rep_agent_v2.ca))
             enable_legacy_api_endpoints: false
             locket:
               api_location: locket.service.cf.internal:8891
             preloaded_rootfses:
             - windows2012R2:/tmp/windows2012R2
             require_tls: true
-            server_cert: ((diego_rep_agent.certificate))
-            server_key: ((diego_rep_agent.private_key))
+            server_cert: ((diego_rep_agent_v2.certificate))
+            server_key: ((diego_rep_agent_v2.private_key))
         loggregator:
           ca_cert: ((loggregator_tls_metron.ca))
           cert: ((loggregator_tls_metron.certificate))
@@ -54,9 +59,9 @@
         syslog_daemon_config:
           enable: false
         tls:
-          ca_cert: ((diego_rep_agent.ca))
-          cert: ((diego_rep_agent.certificate))
-          key: ((diego_rep_agent.private_key))
+          ca_cert: ((diego_rep_agent_v2.ca))
+          cert: ((diego_rep_agent_v2.certificate))
+          key: ((diego_rep_agent_v2.private_key))
       release: diego
     - name: route_emitter_windows
       properties:

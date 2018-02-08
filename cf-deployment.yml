@@ -1078,6 +1078,9 @@ instance_groups:
           node_name_includes_id: true
   - name: cflinuxfs2-rootfs-setup
     release: cflinuxfs2
+    properties:
+      cflinuxfs2-rootfs:
+        trusted_certs: ((diego_instance_identity_ca.ca))
   - name: garden
     release: garden-runc
     properties:
@@ -1098,22 +1101,30 @@ instance_groups:
     release: diego
     properties:
       diego:
+        executor:
+          instance_identity_ca_cert: ((diego_instance_identity_ca.certificate))
+          instance_identity_key: ((diego_instance_identity_ca.private_key))
         rep:
           bbs: *diego_bbs_client_properties
           preloaded_rootfses:
           - cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs.tar
           require_tls: true
           ca_cert: "((service_cf_internal_ca.certificate))"
-          server_cert: "((diego_rep_agent.certificate))"
-          server_key: "((diego_rep_agent.private_key))"
+          server_cert: "((diego_rep_agent_v2.certificate))"
+          server_key: "((diego_rep_agent_v2.private_key))"
           enable_legacy_api_endpoints: false
           locket:
             api_location: "locket.service.cf.internal:8891"
+      containers:
+        trusted_ca_certificates:
+          - ((diego_instance_identity_ca.ca))
+      use_v2_tls: true
       loggregator: *diego_loggregator_client_properties
       tls:
         ca_cert: "((service_cf_internal_ca.certificate))"
-        cert: "((diego_rep_agent.certificate))"
-        key: "((diego_rep_agent.private_key))"
+        cert: "((diego_rep_agent_v2.certificate))"
+        key: "((diego_rep_agent_v2.private_key))"
+
   - name: cfdot
     release: diego
     properties:
@@ -1425,7 +1436,7 @@ variables:
     common_name: rep client
     extended_key_usage:
     - client_auth
-- name: diego_rep_agent
+- name: diego_rep_agent_v2
   type: certificate
   options:
     ca: service_cf_internal_ca
@@ -1598,6 +1609,17 @@ variables:
     - client_auth
 - name: locket_database_password
   type: password
+- name: application_ca
+  type: certificate
+  options:
+    common_name: appRootCA
+    is_ca: true
+- name: diego_instance_identity_ca
+  type: certificate
+  options:
+    ca: application_ca
+    common_name: instanceIdentityCA
+    is_ca: true
 
 releases:
 - name: binary-buildpack

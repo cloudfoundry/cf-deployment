@@ -35,8 +35,8 @@ and the ops-files will be removed.
 | [`enable-backup-restore.yml`](enable-backup-restore.yml) | Deploy BOSH backup and restore instance and enable release level backup. | |
 | [`enable-backup-restore-credhub.yml`](enable-backup-restore-credhub.yml) | Collocate database-backup-restorer job on the credhub instance. Should be applied after `secure-service-credentials.yml` Ops-file. | |
 | [`enable-backup-restore-s3.yml`](enable-backup-restore-s3.yml) | Enables the backup and restore of S3 blobstores. | Requires `enable-backup-restore.yml` and `use-s3-blobstore.yml` |
-| [`enable-instance-identity-credentials.yml`](enable-instance-identity-credentials.yml) | Enables identity credentials on Diego Cell `rep`. | |
-| [`enable-instance-identity-credentials-windows.yml`](enable-instance-identity-credentials-windows.yml) | Enables identity credentials on the `rep_windows` for Windows 2012 cells. | Requires `enable-instance-identity-credentials.yml` and `windows-cell.yml`|
+| [`enable-instance-identity-credentials.yml`](enable-instance-identity-credentials.yml) | Deprecated and left intentionally blank - Enables identity credentials on Diego Cell `rep`. | |
+| [`enable-instance-identity-credentials-windows.yml`](enable-instance-identity-credentials-windows.yml) | Deprecated and left intentionally blank - Enables identity credentials on the `rep_windows` for Windows 2012 cells. | |
 | [`enable-instance-identity-credentials-windows2016.yml`](enable-instance-identity-credentials-windows2016.yml) | Enables identity credentials on the `rep_windows` for Windows 2016 cells. | Requires `enable-instance-identity-credentials.yml` and `windows2016-cell.yml`|
 | [`enable-iptables-logger.yml`](enable-iptables-logger.yml) | Enables iptables logger. | |
 | [`enable-nfs-broker-backup.yml`](enable-nfs-broker-backup.yml) | Deploy BOSH backup and restore scripts for the NFS service broker. | Requires `enable-backup-restore.yml` and `operations/enable-nfs-volume-service.yml`. |
