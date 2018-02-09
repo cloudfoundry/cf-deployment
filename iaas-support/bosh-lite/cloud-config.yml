@@ -17,6 +17,11 @@ disk_types:
   name: 10GB
 - disk_size: 100240
   name: 100GB
+# Note: the "default" disk type is not used in cf-deployment.
+# it is included for compatibility with the bosh-deployment
+# cloud-config.
+- disk_size: 1024
+  name: default
 networks:
 - name: default
   subnets:
@@ -57,3 +62,7 @@ vm_types:
 - name: minimal
 - name: small
 - name: small-highmem
+# Note: the "default" vm type is not used in cf-deployment.
+# it is included for compatibility with the bosh-deployment
+# cloud-config.
+- name: default
