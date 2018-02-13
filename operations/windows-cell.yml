@@ -51,6 +51,7 @@
             require_tls: true
             server_cert: ((diego_rep_agent_v2.certificate))
             server_key: ((diego_rep_agent_v2.private_key))
+        use_v2_tls: true
         loggregator:
           ca_cert: ((loggregator_tls_metron.ca))
           cert: ((loggregator_tls_metron.certificate))
