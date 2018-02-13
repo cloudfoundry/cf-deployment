@@ -11,7 +11,7 @@
           address: ((syslog_address))
           custom_rule: |
             ((syslog_custom_rule))
-            if ($programname startswith "vcap.") then ~
+            if ($programname startswith "vcap.") then stop
           fallback_servers: ((syslog_fallback_servers))
           port: ((syslog_port))
           transport: ((syslog_transport))
