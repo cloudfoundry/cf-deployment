@@ -62,11 +62,11 @@
             server_key: ((diego_rep_agent_v2.private_key))
         syslog_daemon_config:
           enable: false
-        use_v2_tls: true
         tls:
           ca_cert: ((diego_rep_agent_v2.ca))
           cert: ((diego_rep_agent_v2.certificate))
           key: ((diego_rep_agent_v2.private_key))
+        use_v2_tls: true
       release: diego
     - name: route_emitter_windows
       properties:
@@ -139,9 +139,9 @@
   path: /releases/name=windows2016fs?
   value:
     name: windows2016fs
-    sha1: 063e520be199da439277ea64516f0709711c243d
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows2016fs-online-release?v=0.0.10
-    version: 0.0.10
+    sha1: 2acb5eeba5d474ccba404e7a3d74895f0a2f3700
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows2016fs-online-release?v=0.0.11
+    version: 0.0.11
 - type: replace
   path: /releases/name=windows-utilities?
   value:
