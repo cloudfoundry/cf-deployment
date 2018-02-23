@@ -1105,13 +1105,9 @@ instance_groups:
           instance_identity_ca_cert: ((diego_instance_identity_ca.certificate))
           instance_identity_key: ((diego_instance_identity_ca.private_key))
         rep:
-          bbs: *diego_bbs_client_properties
           preloaded_rootfses:
           - cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs.tar
           require_tls: true
-          ca_cert: "((service_cf_internal_ca.certificate))"
-          server_cert: "((diego_rep_agent_v2.certificate))"
-          server_key: "((diego_rep_agent_v2.private_key))"
           enable_legacy_api_endpoints: false
           locket:
             api_location: "locket.service.cf.internal:8891"

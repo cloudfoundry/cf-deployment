@@ -46,11 +46,6 @@
           executor:
             ca_certs_for_downloads: ((blobstore_tls.ca))
           rep:
-            bbs:
-              ca_cert: ((diego_bbs_client.ca))
-              client_cert: ((diego_bbs_client.certificate))
-              client_key: ((diego_bbs_client.private_key))
-            ca_cert: ((diego_rep_agent_v2.ca))
             enable_legacy_api_endpoints: false
             locket:
               api_location: locket.service.cf.internal:8891
@@ -58,8 +53,6 @@
             preloaded_rootfses:
             - windows2016:/var/vcap/packages/windows2016fs/rootfs
             require_tls: true
-            server_cert: ((diego_rep_agent_v2.certificate))
-            server_key: ((diego_rep_agent_v2.private_key))
         syslog_daemon_config:
           enable: false
         tls:
