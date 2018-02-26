@@ -11,11 +11,11 @@
 * <a href='#ci'>CI</a>
 
 ## <a name='purpose'></a>Purpose
-This repo contains a canonical manifest
+This repo contains a canonical [BOSH](http://bosh.io/docs) deployment manifest
 for deploying the CF Application Runtime without the use of `cf-release`,
 relying instead on individual component releases.
 It replaces the [manifest generation scripts in cf-release][cf-release-url]
-which is in the process of being deprecated.
+which have finally been deprecated.
 It uses several newer features
 of the BOSH director and CLI.
 Older directors may need to be upgraded
@@ -36,8 +36,8 @@ It:
 The third is used only for instance groups
 that should not have even instance counts,
 such as consul.
-- uses Diego natively,
-does not support DEAs,
+- uses [Diego](http://docs.cloudfoundry.org/concepts/diego/diego-architecture.html) ([source code](https://github.com/cloudfoundry/diego-release)) natively,
+does not support the deprecated [DEAs](https://docs.cloudfoundry.org/concepts/architecture/execution-agent.html),
 and enables diego-specific features
 such as ssh access to apps by default.
 - deploys jobs to handle platform data persistence
