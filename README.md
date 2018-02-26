@@ -11,11 +11,11 @@
 * <a href='#ci'>CI</a>
 
 ## <a name='purpose'></a>Purpose
-This repo contains a canonical manifest
+This repo contains a canonical [BOSH](http://bosh.io/docs) deployment manifest
 for deploying the CF Application Runtime without the use of `cf-release`,
 relying instead on individual component releases.
 It replaces the [manifest generation scripts in cf-release][cf-release-url]
-which is in the process of being deprecated.
+which have finally been deprecated.
 It uses several newer features
 of the BOSH director and CLI.
 Older directors may need to be upgraded
@@ -36,8 +36,8 @@ It:
 The third is used only for instance groups
 that should not have even instance counts,
 such as consul.
-- uses Diego natively,
-does not support DEAs,
+- uses [Diego](http://docs.cloudfoundry.org/concepts/diego/diego-architecture.html) ([source code](https://github.com/cloudfoundry/diego-release)) natively,
+does not support the deprecated [DEAs](https://docs.cloudfoundry.org/concepts/architecture/execution-agent.html),
 and enables diego-specific features
 such as ssh access to apps by default.
 - deploys jobs to handle platform data persistence
@@ -134,10 +134,11 @@ which it relies on to generate and fill-in needed variables.
 `cf-deployment` assumes that
 you've uploaded a compatible [cloud-config](http://bosh.io/docs/cloud-config.html) to the BOSH director.
 The cloud-config produced by `bbl` is compatible by default,
-which covers GCP and AWS.
-For bosh-lite, you can use the cloud-config in the `bosh-lite` directory of this repo.
-We have not yet tested cf-deployment against other IaaSes,
-so you may need to do some engineering work to figure out the right cloud config (and possibly ops files)
+which covers GCP, AWS, and Azure.
+The `iaas-support` directory includes tools and templates for building cloud-configs for other IaaSes,
+including bosh-lite, vSphere, Openstack, and Alibaba Cloud.
+For other IaaSes,
+you may need to do some engineering work to figure out the right cloud config (and possibly ops files)
 to get it working for `cf-deployment`.
 
 ### Deployment variables and the var-store
