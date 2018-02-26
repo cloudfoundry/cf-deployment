@@ -128,14 +128,35 @@ bosh -e MY_ENV update-cloud-config iaas-support/bosh-lite/cloud-config.yml
 
 ## Upload a stemcell
 
-Upload the current stemcell for `cf`
-by running the command below with the appropriate
-stemcell type and version number.
-The stemcell type will vary by IaaS provider
-(you can find a list of stemcells at http://bosh.io/stemcells),
-and the version number is specified on the last line of `cf-deployment.yml`.
+Before BOSH can deploy your Cloud Foundry Application Runtime,
+it needs a base VM image to start with.
+In the BOSH ecosystem, these images are called [stemcells](http://bosh.io/docs/stemcell.html).
+
+Stemcells are closely tied to the IaaS against which they're compatible,
+but the BOSH team versions stemcells for different IaaSes consistently.
+As such, we can encode the stemcell version in the cf-deployment manifest,
+but we can't encode the IaaS.
+
+As such, as an operator, you'll need to [upload the stemcell](http://bosh.io/docs/uploading-stemcells.html) to the BOSH director yourself.
+Still, cf-deployment should be able to help.
+Take a look at the list of stemcells at http://bosh.io/stemcells
+and find the stemcell for your IaaS.
+Each stemcell will have an important descriptor in its url that describes the platform and virtualization technology.
+For example, for GCP, the url containers `google-kvm`; for AWS, its `aws-xen-hvm`.
+Find that value and set it:
 ```
-bosh upload-stemcell https://bosh.io/d/stemcells/bosh-IAAS_INFO-ubuntu-trusty-go_agent?v=VERSION
+export IAAS_INFO=google-kvm
+```
+
+Now, discover the appropriate stemcell version.
+You can pull that info from cf-deployment:
+```
+export STEMCELL_VERSION=$(bosh interpolate cf-deployment.yml --path=/stemcells/alias=default/version)
+```
+
+Finally, upload the stemcell:
+```
+bosh upload-stemcell https://bosh.io/d/stemcells/bosh-IAAS_INFO-ubuntu-trusty-go_agent?v=STEMCELL_VERSION
 ```
 
 ## Deploy CF
