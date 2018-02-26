@@ -175,6 +175,20 @@ The CF Admin credentials will be stored in the file passed to the `--vars-store`
 (`env-repo/deployment.yml` in the example).
 You can find them by searching for `cf_admin_password`.
 
+**For operators trying out cf-deployment for the first time**
+
+In the hope of saving you some time,
+we'd advise that you add the `scale-to-one-az.yml` and `use-compiled-releases.yml` ops-files:
+```
+bosh -e my-env -d cf deploy cf-deployment/cf-deployment.yml \
+  --vars-store env-repo/deployment-vars.yml \
+  -v system_domain=$SYSTEM_DOMAIN \
+  -o operations/scale-to-one-az.yml \
+  -o operations/use-compiled-releases.yml
+```
+
+**bosh-lite**
+
 If you're using a local bosh-lite,
 remember to add the `operations/bosh-lite.yml` ops-file
 to your deploy command:
@@ -185,6 +199,7 @@ to your deploy command:
     --vars-store deployment-vars.yml \
     -v system_domain=bosh-lite.com
   ```
+
 
 ## Notes for operators
 `cf-deployment` includes tooling
