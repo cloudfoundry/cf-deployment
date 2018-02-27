@@ -45,8 +45,6 @@
           - --log=/var/vcap/sys/log/winc-network/winc-network.log
           nstar_bin: /var/vcap/packages/nstar/nstar.exe
           runtime_plugin: /var/vcap/packages/winc/winc.exe
-          runtime_plugin_extra_args:
-          - --image-store=/var/vcap/data/groot
       release: garden-runc
     - name: rep_windows
       properties:
