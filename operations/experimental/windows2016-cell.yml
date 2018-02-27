@@ -29,14 +29,14 @@
         groot:
           cached_image_uris:
             - oci:///C:/var/vcap/packages/windows2016fs
-          driver_store: "c:\\var\\vcap\\data\\groot"
+          driver_store: "/var/vcap/data/groot"
     - name: garden-windows
       properties:
         garden:
           destroy_containers_on_start: true
           image_plugin: /var/vcap/packages/groot/groot.exe
           image_plugin_extra_args:
-          - --driver-store="c:\\var\\vcap\\data\\groot"
+          - --driver-store=/var/vcap/data/groot
           - --config=/var/vcap/jobs/groot/config/groot.yml
           listen_address: 127.0.0.1:9241
           network_plugin: /var/vcap/packages/winc-network/winc-network.exe
@@ -46,7 +46,7 @@
           nstar_bin: /var/vcap/packages/nstar/nstar.exe
           runtime_plugin: /var/vcap/packages/winc/winc.exe
           runtime_plugin_extra_args:
-          - --image-store="c:\\var\\vcap\\data\\groot"
+          - --image-store=/var/vcap/data/groot
       release: garden-runc
     - name: rep_windows
       properties:
