@@ -24,12 +24,12 @@
     - name: windows2016fs
       release: windows2016fs
     - name: groot
-      release: winc
       properties:
         groot:
           cached_image_uris:
-            - oci:///C:/var/vcap/packages/windows2016fs
-          driver_store: "/var/vcap/data/groot"
+          - oci:///C:/var/vcap/packages/windows2016fs
+          driver_store: /var/vcap/data/groot
+      release: winc
     - name: garden-windows
       properties:
         garden:
