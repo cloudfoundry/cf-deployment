@@ -19,19 +19,25 @@
       release: consul
     - name: winc
       release: winc
-    - name: winc-image
-      release: winc
     - name: winc-network
       release: winc
     - name: windows2016fs
       release: windows2016fs
+    - name: groot
+      release: winc
+      properties:
+        groot:
+          cached_image_uris:
+            - oci:///C:/var/vcap/packages/windows2016fs
+          driver_store: "/var/vcap/data/groot"
     - name: garden-windows
       properties:
         garden:
           destroy_containers_on_start: true
-          image_plugin: /var/vcap/packages/winc-image/winc-image.exe
+          image_plugin: /var/vcap/packages/groot/groot.exe
           image_plugin_extra_args:
-          - --log=/var/vcap/sys/log/winc-image/winc-image.log
+          - --driver-store=/var/vcap/data/groot
+          - --config=/var/vcap/jobs/groot/config/groot.yml
           listen_address: 127.0.0.1:9241
           network_plugin: /var/vcap/packages/winc-network/winc-network.exe
           network_plugin_extra_args:
@@ -51,7 +57,7 @@
               api_location: locket.service.cf.internal:8891
             open_bindmounts_acl: true
             preloaded_rootfses:
-            - windows2016:/var/vcap/packages/windows2016fs/rootfs
+            - windows2016:oci:///C:/var/vcap/packages/windows2016fs
             require_tls: true
         syslog_daemon_config:
           enable: false
@@ -125,9 +131,9 @@
   path: /releases/name=winc?
   value:
     name: winc
-    sha1: 6a43f75228f44eb2571db9e952821e19d6ff8048
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/winc-release?v=0.8.0
-    version: 0.8.0
+    sha1: b1d7188deaf273e5e4c6b83cf65742eb4fd3b3f8
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/winc-release?v=1.0.0
+    version: 1.0.0
 - type: replace
   path: /releases/name=windows2016fs?
   value:
