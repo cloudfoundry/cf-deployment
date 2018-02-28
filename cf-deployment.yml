@@ -1114,7 +1114,6 @@ instance_groups:
       containers:
         trusted_ca_certificates:
           - ((diego_instance_identity_ca.ca))
-      use_v2_tls: true
       loggregator: *diego_loggregator_client_properties
       tls:
         ca_cert: "((service_cf_internal_ca.certificate))"
