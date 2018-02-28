@@ -62,6 +62,3 @@ and the ops-files will be removed.
 | [`use-shed.yml`](use-shed.yml) | Enable deprecated garden-shed on diego cells. | |
 | [`use-grootfs.yml`](use-grootfs.yml) | Groot is enabled by default. This file is blank to avoid breaking deployment scripts. | |
 | [`enable-oci-phase-1.yml`](enable-oci-phase-1.yml) | Configure Garden to create OCI compatible images. | |
-| [`use-latest-windows2016-stemcell.yml`](use-latest-windows2016-stemcell.yml) | Use the latest `windows2016` stemcell available on your BOSH director instead of the one in `windows2016-cell.yml` | Requires `windows2016-cell.yml` |
-| [`use-offline-windows2016fs.yml`](use-offline-windows2016fs.yml) | Use the offline version of [windows2016fs-release](https://github.com/cloudfoundry-incubator/windows2016fs-release) | Requires `windows2016-cell.yml`. Suitable for environments without internet access. Follow instructions [here](https://github.com/cloudfoundry-incubator/windows2016fs-release/blob/master/README.md) to upload the release prior to deploying. |
-| [`windows2016-cell.yml`](windows2016-cell.yml) | Deploys a windows 2016 diego cell, adds releases necessary for windows. |  |
