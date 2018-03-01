@@ -8,6 +8,11 @@
     jobs:
     - name: bosh-dns
       properties:
+        api:
+          client:
+            tls: ((dns_api_client_tls))
+          server:
+            tls: ((dns_api_server_tls))
         aliases:
           _.cell.service.cf.internal:
           - _.diego-cell.default.cf.bosh
@@ -72,6 +77,11 @@
     jobs:
     - name: bosh-dns-windows
       properties:
+        api:
+          client:
+            tls: ((dns_api_client_tls))
+          server:
+            tls: ((dns_api_server_tls))
         aliases:
           _.cell.service.cf.internal:
           - _.diego-cell.default.cf.bosh
@@ -136,6 +146,11 @@
     jobs:
     - name: bosh-dns-windows
       properties:
+        api:
+          client:
+            tls: ((dns_api_client_tls))
+          server:
+            tls: ((dns_api_server_tls))
         aliases:
           _.cell.service.cf.internal:
           - _.diego-cell.default.cf.bosh
@@ -191,10 +206,42 @@
           - '*.uaa.default.cf.bosh'
       release: bosh-dns
     name: bosh-dns-windows2016
+
 - type: replace
   path: /releases/-
   value:
     name: bosh-dns
-    sha1: 9231b7c7d2f6aa85e0cb77fdeef7add54fdb3f1a
-    url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-release?v=0.2.0
-    version: 0.2.0
+    sha1: 206805c1404b304b701a4e2aba8b7359fdf86047
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-release?v=1.1.0
+    version: 1.1.0
+
+- type: replace
+  path: /variables/-
+  value:
+    name: dns_api_tls_ca
+    type: certificate
+    options:
+      is_ca: true
+      common_name: dnsApiTlsCa
+
+- type: replace
+  path: /variables/-
+  value:
+    name: dns_api_client_tls
+    type: certificate
+    options:
+      ca: dns_api_tls_ca
+      common_name: api.bosh-dns
+      extended_key_usage:
+      - client_auth
+
+- type: replace
+  path: /variables/-
+  value:
+    name: dns_api_server_tls
+    type: certificate
+    options:
+      ca: dns_api_tls_ca
+      common_name: api.bosh-dns
+      extended_key_usage:
+        - server_auth
