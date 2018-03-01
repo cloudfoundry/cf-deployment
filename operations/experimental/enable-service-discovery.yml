@@ -7,7 +7,7 @@
         client:
           tls: ((cf_app_sd_client_tls))
         server:
-          ca: ((cf_app_sd_ca.ca))
+          ca: ((cf_app_sd_ca.certificate))
     release: cf-app-sd
 - type: replace
   path: /instance_groups/name=service-discovery?
@@ -21,7 +21,7 @@
       properties:
         dnshttps:
           client:
-            ca: ((cf_app_sd_ca.ca))
+            ca: ((cf_app_sd_ca.certificate))
           server:
             tls: ((cf_app_sd_server_tls))
       release: cf-app-sd

@@ -50,7 +50,7 @@
       properties:
         diego:
           executor:
-            ca_certs_for_downloads: ((blobstore_tls.ca))
+            ca_certs_for_downloads: ((service_cf_internal_ca.certificate))
           rep:
             enable_legacy_api_endpoints: false
             locket:
@@ -62,7 +62,7 @@
         syslog_daemon_config:
           enable: false
         tls:
-          ca_cert: ((diego_rep_agent_v2.ca))
+          ca_cert: ((service_cf_internal_ca.certificate))
           cert: ((diego_rep_agent_v2.certificate))
           key: ((diego_rep_agent_v2.private_key))
         use_v2_tls: true
@@ -72,7 +72,7 @@
         diego:
           route_emitter:
             bbs:
-              ca_cert: ((diego_bbs_client.ca))
+              ca_cert: ((service_cf_internal_ca.certificate))
               client_cert: ((diego_bbs_client.certificate))
               client_key: ((diego_bbs_client.private_key))
             local_mode: true
@@ -81,7 +81,7 @@
       properties:
         loggregator:
           tls:
-            ca_cert: ((loggregator_tls_metron.ca))
+            ca_cert: ((loggregator_ca.certificate))
             metron:
               cert: ((loggregator_tls_metron.certificate))
               key: ((loggregator_tls_metron.private_key))

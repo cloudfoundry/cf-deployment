@@ -38,7 +38,7 @@
     properties:
       loggregator: &diego_loggregator_client_properties
         use_v2_api: true
-        ca_cert: "((loggregator_tls_metron.ca))"
+        ca_cert: "((loggregator_ca.certificate))"
         cert: "((loggregator_tls_metron.certificate))"
         key: "((loggregator_tls_metron.private_key))"
       diego:
@@ -51,7 +51,7 @@
           uaa:
             port: 8443
           bbs: &5
-            ca_cert: "((diego_bbs_client.ca))"
+            ca_cert: "((service_cf_internal_ca.certificate))"
             client_cert: "((diego_bbs_client.certificate))"
             client_key: "((diego_bbs_client.private_key))"
 

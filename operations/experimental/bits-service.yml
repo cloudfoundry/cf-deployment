@@ -17,7 +17,7 @@
         droplets:
         packages:
         cc_updates:
-          ca_cert: "((cc_tls.ca))"
+          ca_cert: "((service_cf_internal_ca.certificate))"
           client_cert: "((cc_tls.certificate))"
           client_key: "((cc_tls.private_key))"
 
@@ -41,7 +41,7 @@
     private_endpoint: *private_endpoint
     username: admin
     password: "((bits_service_signing_password))"
-    ca_cert: &ca_cert ((bits_service_ssl.ca))
+    ca_cert: &ca_cert ((service_cf_internal_ca.certificate))
 
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/bits_service?

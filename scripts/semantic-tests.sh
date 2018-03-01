@@ -140,7 +140,7 @@ test_bosh_dns_aliases_consistent_between_files() {
 test_use_trusted_ca_cert_for_apps_includes_diego_instance_ca() {
   local trusted_app_cas=$(bosh int cf-deployment.yml -o operations/use-trusted-ca-cert-for-apps.yml --path /instance_groups/name=diego-cell/jobs/name=cflinuxfs2-rootfs-setup/properties/cflinuxfs2-rootfs/trusted_certs)
 
-  if [[ $trusted_app_cas != $'((diego_instance_identity_ca.ca))\n((trusted_cert_for_apps.ca))' ]]; then
+  if [[ $trusted_app_cas != $'((application_ca.certificate))\n((trusted_cert_for_apps.ca))' ]]; then
     fail "experimental/use-trusted-ca-cert-for-apps.yml [ $trusted_app_cas ] doesn't include diego_instance_identity_ca from cf-deployment.yml"
   else
     pass "experimental/use-trusted-ca-cert-for-apps.yml"

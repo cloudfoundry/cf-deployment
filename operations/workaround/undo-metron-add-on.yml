@@ -9,7 +9,7 @@
     properties: &metron_agent_properties
       loggregator:
         tls:
-          ca_cert: "((loggregator_tls_metron.ca))"
+          ca_cert: "((loggregator_ca.certificate))"
           metron:
             cert: "((loggregator_tls_metron.certificate))"
             key: "((loggregator_tls_metron.private_key))"

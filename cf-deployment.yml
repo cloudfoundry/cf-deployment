@@ -1080,7 +1080,7 @@ instance_groups:
     release: cflinuxfs2
     properties:
       cflinuxfs2-rootfs:
-        trusted_certs: ((diego_instance_identity_ca.ca))
+        trusted_certs: ((application_ca.certificate))
   - name: garden
     release: garden-runc
     properties:
@@ -1113,7 +1113,7 @@ instance_groups:
             api_location: "locket.service.cf.internal:8891"
       containers:
         trusted_ca_certificates:
-          - ((diego_instance_identity_ca.ca))
+          - ((application_ca.certificate))
       loggregator: *diego_loggregator_client_properties
       tls:
         ca_cert: "((service_cf_internal_ca.certificate))"

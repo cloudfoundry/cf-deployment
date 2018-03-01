@@ -43,7 +43,7 @@
         diego:
           rep:
             bbs:
-              ca_cert: "((diego_bbs_client.ca))"
+              ca_cert: "((service_cf_internal_ca.certificate))"
               client_cert: "((diego_bbs_client.certificate))"
               client_key: "((diego_bbs_client.private_key))"
             enable_legacy_api_endpoints: false
@@ -52,14 +52,14 @@
             placement_tags:
             - persistent_isolation_segment
             require_tls: true
-            ca_cert: "((diego_rep_agent_v2.ca))"
+            ca_cert: "((service_cf_internal_ca.certificate))"
             server_cert: "((diego_rep_agent_v2.certificate))"
             server_key: "((diego_rep_agent_v2.private_key))"
           ssl:
             skip_cert_verify: true
         use_v2_tls: true
         tls:
-          ca_cert: "((diego_rep_agent_v2.ca))"
+          ca_cert: "((service_cf_internal_ca.certificate))"
           cert: "((diego_rep_agent_v2.certificate))"
           key: "((diego_rep_agent_v2.private_key))"
     - name: route_emitter
@@ -69,6 +69,6 @@
           route_emitter:
             local_mode: true
             bbs:
-              ca_cert: "((diego_bbs_client.ca))"
+              ca_cert: "((service_cf_internal_ca.certificate))"
               client_cert: "((diego_bbs_client.certificate))"
               client_key: "((diego_bbs_client.private_key))"

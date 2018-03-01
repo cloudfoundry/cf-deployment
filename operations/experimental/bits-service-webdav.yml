@@ -5,7 +5,7 @@
     blobstore_type: webdav
     directory_key: cc-resources
     webdav_config: &webdav-config
-      ca_cert: "((blobstore_tls.ca))"
+      ca_cert: "((service_cf_internal_ca.certificate))"
       password: "((blobstore_admin_users_password))"
       private_endpoint: https://blobstore.service.cf.internal:4443
       public_endpoint: https://blobstore.((system_domain))

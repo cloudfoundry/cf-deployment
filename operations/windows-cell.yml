@@ -31,10 +31,10 @@
       properties:
         containers:
           trusted_ca_certificates:
-          - ((diego_instance_identity_ca.ca))
+          - ((application_ca.certificate))
         diego:
           executor:
-            ca_certs_for_downloads: ((blobstore_tls.ca))
+            ca_certs_for_downloads: ((service_cf_internal_ca.certificate))
             instance_identity_ca_cert: ((diego_instance_identity_ca.certificate))
             instance_identity_key: ((diego_instance_identity_ca.private_key))
           rep:
@@ -45,14 +45,14 @@
             - windows2012R2:/tmp/windows2012R2
             require_tls: true
         loggregator:
-          ca_cert: ((loggregator_tls_metron.ca))
+          ca_cert: ((loggregator_ca.certificate))
           cert: ((loggregator_tls_metron.certificate))
           key: ((loggregator_tls_metron.private_key))
           use_v2_api: true
         syslog_daemon_config:
           enable: false
         tls:
-          ca_cert: ((diego_rep_agent_v2.ca))
+          ca_cert: ((service_cf_internal_ca.certificate))
           cert: ((diego_rep_agent_v2.certificate))
           key: ((diego_rep_agent_v2.private_key))
         use_v2_tls: true
@@ -62,12 +62,12 @@
         diego:
           route_emitter:
             bbs:
-              ca_cert: ((diego_bbs_client.ca))
+              ca_cert: ((service_cf_internal_ca.certificate))
               client_cert: ((diego_bbs_client.certificate))
               client_key: ((diego_bbs_client.private_key))
             local_mode: true
         loggregator:
-          ca_cert: ((loggregator_tls_metron.ca))
+          ca_cert: ((loggregator_ca.certificate))
           cert: ((loggregator_tls_metron.certificate))
           key: ((loggregator_tls_metron.private_key))
           use_v2_api: true
@@ -81,7 +81,7 @@
       properties:
         loggregator:
           tls:
-            ca_cert: ((loggregator_tls_metron.ca))
+            ca_cert: ((loggregator_ca.certificate))
             metron:
               cert: ((loggregator_tls_metron.certificate))
               key: ((loggregator_tls_metron.private_key))
