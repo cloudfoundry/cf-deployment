@@ -1,0 +1,130 @@
+---
+- type: replace
+  path: /releases/-
+  value:
+    name: bpm
+    sha1: f2bd126b17b3591160f501d88d79ccf0aba1ae54
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/bpm-release?v=0.2.0
+    version: 0.2.0
+
+- type: replace
+  path: /releases/-
+  value:
+    name: istio
+    version: latest
+
+- type: replace
+  path: /instance_groups/name=istio?
+  value:
+    name: istio
+    networks:
+    - name: default
+    stemcell: default
+    vm_type: small
+    azs:
+    - z1
+    - z2
+    instances: 1
+    jobs:
+    - consumes:
+        consul_client:
+          from: consul_client_link
+        consul_common:
+          from: consul_common_link
+        consul_server: nil
+      name: consul_agent
+      release: consul
+    - name: bpm
+      release: bpm
+    - name: pilot-discovery
+      release: istio
+      properties:
+        copilot:
+          server_ca_cert: "((copilot.ca))"
+          client_cert: "((pilot.certificate))"
+          client_key: "((pilot.private_key))"
+        bpm:
+          enable: true
+    - name: copilot
+      release: istio
+      properties:
+        pilot_client_ca_cert: "((pilot.ca))"
+        cloud_controller_client_ca_cert: "((service_cf_internal_ca.certificate))"
+        server_cert: "((copilot.certificate))"
+        server_key: "((copilot.private_key))"
+        bbs:
+          server_ca_cert: "((diego_bbs_client.ca))"
+          client_cert: "((diego_bbs_client.certificate))"
+          client_key: "((diego_bbs_client.private_key))"
+
+- type: replace
+  path: /instance_groups/name=envoy-proxy?
+  value:
+    name: envoy-proxy
+    networks:
+    - name: default
+    stemcell: default
+    vm_type: small
+    azs:
+    - z1
+    - z2
+    instances: 1
+    jobs:
+    - name: bpm
+      release: bpm
+    - name: envoy
+      release: istio
+      properties: {}
+
+- type: replace
+  path: /variables?/-
+  value:
+    name: copilot
+    type: certificate
+    options:
+      ca: service_cf_internal_ca
+      common_name: copilot.service.cf.internal
+      extended_key_usage:
+      - server_auth
+
+- type: replace
+  path: /variables?/-
+  value:
+    name: pilot
+    type: certificate
+    options:
+      ca: service_cf_internal_ca
+      common_name: pilot.service.cf.internal
+      extended_key_usage:
+      - client_auth
+
+- type: replace
+  path: /addons/name=bosh-dns/jobs/name=bosh-dns/properties/aliases/copilot.service.cf.internal?
+  value:
+    - "*.istio.default.cf.bosh"
+
+- type: replace
+  path: /addons/name=bosh-dns/jobs/name=bosh-dns/properties/aliases/pilot.service.cf.internal?
+  value:
+    - "*.istio.default.cf.bosh"
+
+# enable copilot in CAPI
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/copilot?
+  value:
+    enabled: true
+    host: copilot.service.cf.internal
+    port: 9001
+    client_ca_file: ((service_cf_internal_ca.certificate))
+    client_key_file: ((copilot_client.private_key))
+    client_chain_file: ((copilot_client.certificate))
+- type: replace
+  path: /variables/-
+  value:
+    name: copilot_client
+    options:
+      ca: service_cf_internal_ca
+      common_name: copilot.service.cf.internal
+      extended_key_usage:
+      - client_auth
+    type: certificate
