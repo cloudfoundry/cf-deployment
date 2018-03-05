@@ -55,7 +55,6 @@
           ca_cert: ((service_cf_internal_ca.certificate))
           cert: ((diego_rep_agent_v2.certificate))
           key: ((diego_rep_agent_v2.private_key))
-        use_v2_tls: true
       release: diego
     - name: route_emitter_windows
       properties:
