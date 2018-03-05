@@ -17,7 +17,7 @@ and the ops-files will be removed.
 | Name | Purpose | Notes |
 |:---  |:---     |:---   |
 | [`add-credhub-lb.yml`](add-credhub-lb.yml) | Use load balancer to expose external address for CredHub. | Requires `secure-service-credentials.yml`. |
-| [`add-istio-release.yml`](add-istio-release.yml) | Add istio instance group for cloud foundry routing tier. Enables communication between capi-release and istio copilot API. | Requires bosh DNS to be enabled. |
+| [`add-istio-release.yml`](add-istio-release.yml) | Add istio instance group for cloud foundry routing tier. Enables communication between capi-release and istio copilot API. | Requires `use-bosh-dns.yml`. |
 | [`bits-service.yml`](bits-service.yml) | Adds the [bits-service](https://github.com/cloudfoundry-incubator/bits-service) job and enables it in the cloud-controller. | Also requires one of `bits-service-{local,webdav,s3}.yml` from the same directory. |
 | [`bits-service-local.yml`](bits-service-local.yml) | Use local storage for the [bits-service](https://github.com/cloudfoundry-incubator/bits-service). | |
 | [`bits-service-s3.yml`](bits-service-s3.yml) | Use s3 storage for the [bits-service](https://github.com/cloudfoundry-incubator/bits-service). | `use-s3-blobstore.yml` from the root `operations` directory is also required. |
