@@ -31,10 +31,9 @@ The CF Routers need a way to receive traffic.
 The most common way to accomplish this is to configure load balancers
 to route traffic to them.
 While we cannot offer help for each IaaS specifically,
-for IaaSes like AWS and GCP,
+for IaaSes like AWS, GCP, and Azure
 you can use `bbl` to create load balancers
-by running `bbl create-lbs --type cf --domain <SYSTEM_DOMAIN>`.
-(`bbl` support for creating load balancer on Azure is coming soon.)
+by running `bbl plan --lb-type cf`.
 
 #### On certificates
 Before you can create your load balancers,
