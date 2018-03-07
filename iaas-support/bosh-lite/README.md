@@ -7,39 +7,35 @@
 - You have set the required environment variables for your IaaS environment as documented in `bbl up --help` and also the [README](https://github.com/cloudfoundry/bosh-bootloader/blob/master/README.md) of bosh-bootloader
 - You have both `cf-deployment` and `bosh-deployment` repos handy
 
-## 1. Concatenate needed ops files
+## 1. Obtain the plan patch and bbl up
 
-`bbl` only accepts a single ops file, so you need to concatenate all the necessary ops files into a single file, and then pass that to the `bbl up` command.  The ops files you will need reside in the [bosh-deployment](https://github.com/cloudfoundry/bosh-deployment) repository.
+`bbl` allows you to modify
+the IaaS resources it creates
+and the ops files it uses
+by passing it a `plan-patch.`
 
-For `AWS`, you will need:
-- bosh-lite.yml
-- bosh-lite-runc.yml
+To deploy BOSH lite to GCP
+you will need the [`bosh-lite-gcp`](https://github.com/cloudfoundry/bosh-bootloader/tree/master/plan-patches/bosh-lite-gcp) plan patch.
+More information about [plan-patches](https://github.com/cloudfoundry/bosh-bootloader/tree/master/plan-patches)
+can be found in the [BOSH Bootloader](https://github.com/cloudfoundry/bosh-bootloader) repository.
 
-For `GCP`, you will need:
-- bosh-lite.yml
-- bosh-lite-runc.yml
-- gcp/bosh-lite-vm-type.yml
-
-## 2. `bbl up` the environment
-
-The command you'll need to run will look something like:
+You will need to run `bbl plan`
+before you modify it with the plan patch.
+`git clone` the bosh-bootloader repository 
+to a local directory
+and then run the following commands.
 
 ```
-bbl \
-up \
---name <ENV_NAME> \
---ops-file <CONCATENATED_OPS_FILE>
-
-# ...
-# IaaS-specific flags
-# ...
+mkdir -p my-env/bbl-state && cd my-env/bbl-state
+bbl plan --name my-env
+cp -r /path/to/patch-dir/. .
+bbl up
 ```
 
-## 3. Ensure required firewall ports open
+The path to the plan patch should be something like
+`~/workspace/bosh-bootloader/plan-patches/bosh-lite-gcp/`
 
-Until `bbl` offers a `--lite` option, you'll also need to ensure the ports `80,443,2222` are opened on the firewall to the vm created by `bbl`.
-
-## 4. Targeting and Logging in
+## 2. Targeting and Logging in
 
 There a several ways to target a bosh director.
 This doc will use `alias-env` and `-e`,
@@ -55,16 +51,8 @@ Then, log in:
 bosh -e MY_ENV login --client $(bbl director-username) --client-secret $(bbl director-password)
 ```
 
-## 5. Upload the cloud config
 
-```
-bosh \
--e MY_ENV
-update-cloud-config \
-cf-deployment/iaas-support/bosh-lite/cloud-config.yml
-```
-
-## 6. Upload a stemcell
+## 3. Upload a stemcell
 ```
 bosh \
 -e MY_ENV \
@@ -72,7 +60,7 @@ upload-stemcell \
 https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent
 ```
 
-## 7. Deploy CF
+## 4. Deploy CF
 
 ```
 bosh \
