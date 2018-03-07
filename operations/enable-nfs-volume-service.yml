@@ -1,121 +1,116 @@
----
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/volume_services_enabled?
   value: true
-
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/volume_services_enabled?
   value: true
-
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/volume_services_enabled?
   value: true
-
 - type: replace
   path: /instance_groups/name=database/jobs/name=mysql/properties/cf_mysql/mysql/seeded_databases/-
   value:
     name: nfs-broker
+    password: ((nfs-broker-database-password))
     username: nfs-broker
-    password: "((nfs-broker-database-password))"
-
 - type: replace
   path: /instance_groups/-
   value:
-    name: nfsbroker
-    azs: [z1]
+    azs:
+    - z1
     instances: 1
-    stemcell: default
-    vm_type: minimal
-    networks: [name: default]
     jobs:
-    - name: consul_agent
-      release: consul
-      consumes:
-        consul_common: {from: consul_common_link}
+    - consumes:
+        consul_client:
+          from: consul_client_link
+        consul_common:
+          from: consul_common_link
         consul_server: nil
-        consul_client: {from: consul_client_link}
+      name: consul_agent
+      release: consul
     - name: nfsbroker
-      release: nfs-volume
       properties:
         nfsbroker:
+          db_driver: mysql
+          db_hostname: sql-db.service.cf.internal
+          db_name: nfs-broker
+          db_password: ((nfs-broker-database-password))
+          db_port: 3306
+          db_username: nfs-broker
+          password: ((nfs-broker-password))
           plan_desc: broker for exisiting NFS shares
           username: nfs-broker
-          password: ((nfs-broker-password))
-          db_driver: mysql
-          db_username: nfs-broker
-          db_password: ((nfs-broker-database-password))
-          db_hostname: sql-db.service.cf.internal
-          db_port: 3306
-          db_name: nfs-broker
+      release: nfs-volume
     - name: route_registrar
-      release: routing
       properties:
         route_registrar:
           routes:
-            - name: nfs-broker
-              port: 8999
-              registration_interval: 20s
-              tags:
-                component: nfs-broker
-              uris:
-                - nfs-broker.((system_domain))
-
+          - name: nfs-broker
+            port: 8999
+            registration_interval: 20s
+            tags:
+              component: nfs-broker
+            uris:
+            - nfs-broker.((system_domain))
+      release: routing
+    name: nfsbroker
+    networks:
+    - name: default
+    stemcell: default
+    vm_type: minimal
 - type: replace
   path: /instance_groups/-
   value:
-    name: nfs-broker-registrar
+    azs:
+    - z1
     instances: 1
-    azs: [z1]
-    lifecycle: errand
-    vm_type: minimal
-    stemcell: default
-    networks: [{name: default}]
     jobs:
     - name: broker-registrar
-      release: broker-registrar
       properties:
-        servicebroker:
-          url: http://nfs-broker.((system_domain))
-          name: nfs-broker
-          username: nfs-broker
-          password: ((nfs-broker-password))
         cf:
           api_url: api.((system_domain))
-          username: admin
           password: ((cf_admin_password))
           skip_ssl_validation: true
-
+          username: admin
+        servicebroker:
+          name: nfs-broker
+          password: ((nfs-broker-password))
+          url: http://nfs-broker.((system_domain))
+          username: nfs-broker
+      release: broker-registrar
+    lifecycle: errand
+    name: nfs-broker-registrar
+    networks:
+    - name: default
+    stemcell: default
+    vm_type: minimal
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/-
   value:
     name: nfsv3driver
-    release: nfs-volume
     properties: {}
-
+    release: nfs-volume
 - type: replace
   path: /variables/-
   value:
     name: nfs-broker-password
     type: password
-
 - type: replace
   path: /variables/-
   value:
     name: nfs-broker-database-password
     type: password
-
 - type: replace
   path: /releases/-
   value:
     name: nfs-volume
-    version: 1.2.0
-    url: https://bosh.io/d/github.com/cloudfoundry/nfs-volume-release?v=1.2.0
     sha1: de807ffa3fc84949bb92edac6a4152245826d6da
-
+    url: https://bosh.io/d/github.com/cloudfoundry/nfs-volume-release?v=1.2.0
+    version: 1.2.0
 - type: replace
   path: /releases/-
   value:
     name: broker-registrar
-    version: 3.4.0
-    url: https://bosh.io/d/github.com/cloudfoundry-community/broker-registrar-boshrelease?v=3.4.0
     sha1: d44d9af8fd06ecf6d50004c9bfd5516a6e482201
+    url: https://bosh.io/d/github.com/cloudfoundry-community/broker-registrar-boshrelease?v=3.4.0
+    version: 3.4.0
