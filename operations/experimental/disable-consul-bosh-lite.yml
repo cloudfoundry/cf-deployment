@@ -1,3 +1,6 @@
-
 - type: remove
   path: /instance_groups/name=consul
+
+- type: replace
+  path: /instance_groups/name=router/jobs/name=ssh_proxy/properties/enable_consul_service_registration?
+  value: false
