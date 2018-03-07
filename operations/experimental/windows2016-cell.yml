@@ -48,11 +48,13 @@
       release: garden-runc
     - name: rep_windows
       properties:
+        loggregator:
+          ca_cert: ((loggregator_ca.certificate))
+          cert: ((loggregator_tls_metron.certificate))
+          key: ((loggregator_tls_metron.private_key))
+          use_v2_api: true
         diego:
-          executor:
-            ca_certs_for_downloads: ((service_cf_internal_ca.certificate))
           rep:
-            enable_legacy_api_endpoints: false
             locket:
               api_location: locket.service.cf.internal:8891
             open_bindmounts_acl: true
@@ -68,6 +70,11 @@
       release: diego
     - name: route_emitter_windows
       properties:
+        loggregator:
+          ca_cert: ((loggregator_ca.certificate))
+          cert: ((loggregator_tls_metron.certificate))
+          key: ((loggregator_tls_metron.private_key))
+          use_v2_api: true
         diego:
           route_emitter:
             bbs:
