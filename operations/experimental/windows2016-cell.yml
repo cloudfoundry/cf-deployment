@@ -59,6 +59,11 @@
             preloaded_rootfses:
             - windows2016:oci:///C:/var/vcap/packages/windows2016fs
             require_tls: true
+        loggregator:
+          ca_cert: ((loggregator_ca.certificate))
+          cert: ((loggregator_tls_metron.certificate))
+          key: ((loggregator_tls_metron.private_key))
+          use_v2_api: true
         syslog_daemon_config:
           enable: false
         tls:
