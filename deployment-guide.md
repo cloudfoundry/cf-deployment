@@ -33,7 +33,8 @@ to route traffic to them.
 While we cannot offer help for each IaaS specifically,
 for IaaSes like AWS, GCP, and Azure
 you can use `bbl` to create load balancers
-by running `bbl plan --lb-type cf --lb-domain <SYSTEM_DOMAIN> --lb-cert <LB_CERT> --lb-key <LB_KEY>`.
+by running `bbl plan --lb-type cf --lb-domain <SYSTEM_DOMAIN> --lb-cert <LB_CERT> --lb-key <LB_KEY>`
+before running `bbl up`.
 
 
 #### On certificates
