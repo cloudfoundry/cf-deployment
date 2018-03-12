@@ -1,0 +1,55 @@
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller
+  value:
+    name: silk-controller
+    properties:
+      ca_cert: ((silk_ca.certificate))
+      database:
+        host: sql-db.service.cf.internal
+        name: network_connectivity
+        password: ((network_connectivity_database_password))
+        port: 3306
+        type: mysql
+        username: network_connectivity
+      server_cert: ((silk_controller.certificate))
+      server_key: ((silk_controller.private_key))
+      silk_daemon:
+        ca_cert: ((silk_ca.certificate))
+        client_cert: ((silk_daemon.certificate))
+        client_key: ((silk_daemon.private_key))
+    release: silk
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=silk-daemon
+  value:
+    name: silk-daemon
+    properties:
+      ca_cert: ((silk_ca.certificate))
+      client_cert: ((silk_daemon.certificate))
+      client_key: ((silk_daemon.private_key))
+    release: silk
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=netmon
+  value:
+    name: netmon
+    release: silk
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=vxlan-policy-agent
+  value:
+    name: vxlan-policy-agent
+    properties:
+      ca_cert: ((network_policy_ca.certificate))
+      client_cert: ((network_policy_client.certificate))
+      client_key: ((network_policy_client.private_key))
+    release: silk
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=cni
+  value:
+    name: cni
+    release: silk
+- type: replace
+  path: /releases/-
+  value:
+    name: silk
+    sha1: 11378cacb7cbaa623305007619926a0d9ea89bca
+    url: https://bosh.io/d/github.com/cloudfoundry/silk-release?v=0.1.0
+    version: 0.1.0

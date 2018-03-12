@@ -1,0 +1,9 @@
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/database
+  value:
+    host: sql-db.service.cf.internal
+    name: network_connectivity
+    password: ((network_connectivity_database_password))
+    port: 5524
+    type: postgres
+    username: network_connectivity

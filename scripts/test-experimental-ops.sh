@@ -44,6 +44,7 @@ test_experimental_ops() {
       check_interpolation "use-bosh-dns.yml"
       check_interpolation "use-bosh-dns-for-containers.yml"
       check_interpolation "name: use-bosh-dns-for-windows2016-containers.yml" "windows2016-cell.yml" "-o use-bosh-dns.yml" "-o use-bosh-dns-for-windows2016-containers.yml"
+      check_interpolation "name: use-bosh-dns-for-containers-with-silk-release.yml" "use-bosh-dns.yml" "-o use-silk-release.yml" "-o use-bosh-dns-for-containers-with-silk-release.yml"
       check_interpolation "use-bosh-dns-rename-network-and-deployment.yml" "-v network_name=new-network" "-v deployment_name=new-deployment"
       check_interpolation "use-shed.yml"
       check_interpolation "use-grootfs.yml"
@@ -59,6 +60,10 @@ test_experimental_ops() {
       check_interpolation "name: operations/windows-cell.yml windows2016-cell.yml" "${home}/operations/windows-cell.yml" "-o windows2016-cell.yml"
       check_interpolation "name: enable-routing-integrity.yml" "enable-routing-integrity.yml" "-o enable-instance-identity-credentials.yml"
       check_interpolation "name: enable-service-discovery.yml" "use-bosh-dns-for-containers.yml" "-o enable-service-discovery.yml"
+      check_interpolation "use-silk-release.yml"
+      check_interpolation "name: use-silk-release-external-db.yml" "${home}/operations/use-external-dbs.yml" "-o use-silk-release.yml" "-o use-silk-release-external-db.yml" "-l ${home}/operations/example-vars-files/vars-use-external-dbs.yml"
+      check_interpolation "name: use-silk-release-postgres.yml" "${home}/operations/use-postgres.yml" "-o use-silk-release.yml" "-o use-silk-release-postgres.yml"
+      check_interpolation "use-log-cache.yml"
     popd > /dev/null # operations/experimental
   popd > /dev/null
   exit $exit_code

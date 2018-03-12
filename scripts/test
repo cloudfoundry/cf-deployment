@@ -36,11 +36,7 @@ pass() {
 }
 
 interpolate() {
-  local tmp_vars_store
-  tmp_vars_store=$(mktemp)
-  cp ${home}/scripts/fixtures/test-base-vars-store.yml ${tmp_vars_store}
-
-  bosh interpolate ${home}/cf-deployment.yml $@ --vars-store ${tmp_vars_store} --var-errs --var-errs-unused > /dev/null
+  bosh interpolate ${home}/cf-deployment.yml $@ > /dev/null
   return $?
 }
 
