@@ -60,7 +60,6 @@ and the ops-files will be removed.
 | [`use-bosh-dns-for-containers-with-silk-release.yml`](use-bosh-dns-for-containers-with-silk-release.yml) | Sets the DNS server of application containers to the address of the local `bosh-dns` job in case you are using silk-release plugin. | Requires `use-bosh-dns.yml` and `use-silk-release.yml` |
 | [`use-bosh-dns-for-windows2016-containers.yml`](use-bosh-dns-for-windows2016-containers.yml) | Sets the DNS server of application containers (on windows2016 cell) to the address of the local `bosh-dns` job. | Requires `use-bosh-dns.yml` |
 | [`use-bosh-dns-rename-network-and-deployment.yml`](use-bosh-dns-rename-network-and-deployment.yml) | Adds `bosh-dns` job to all instance groups running ubuntu-trusty via Bosh Addon, and renames network and deployment in domain aliases. | |
-| [`use-bosh-dns-for-containers.yml`](use-bosh-dns-for-containers.yml) | Sets the DNS server of application containers to the address of the local `bosh-dns` job. | Requires `use-bosh-dns.yml` |
 | [`use-grootfs.yml`](use-grootfs.yml) | Groot is enabled by default. This file is blank to avoid breaking deployment scripts. | |
 | [`use-log-cache.yml`](use-log-cache.yml) | Adds the [Log Cache Release](https://github.com/cloudfoundry/log-cache-release) for logs and metrics. | |
 | [`use-shed.yml`](use-shed.yml) | Enable deprecated garden-shed on diego cells. | |
