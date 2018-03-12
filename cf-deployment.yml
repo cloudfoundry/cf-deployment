@@ -259,11 +259,6 @@ instance_groups:
             db_username: diego
             db_password: "((diego_database_password))"
             db_driver: mysql
-          etcd:
-            machines: []
-            ca_cert: nil
-            client_cert: nil
-            client_key: nil
           ca_cert: "((service_cf_internal_ca.certificate))"
           auctioneer: &diego_auctioneer_client_properties
             ca_cert: "((service_cf_internal_ca.certificate))"
@@ -1108,7 +1103,6 @@ instance_groups:
           preloaded_rootfses:
           - cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs.tar
           require_tls: true
-          enable_legacy_api_endpoints: false
           locket:
             api_location: "locket.service.cf.internal:8891"
       containers:

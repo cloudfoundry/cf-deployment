@@ -34,11 +34,9 @@
           - ((application_ca.certificate))
         diego:
           executor:
-            ca_certs_for_downloads: ((service_cf_internal_ca.certificate))
             instance_identity_ca_cert: ((diego_instance_identity_ca.certificate))
             instance_identity_key: ((diego_instance_identity_ca.private_key))
           rep:
-            enable_legacy_api_endpoints: false
             locket:
               api_location: locket.service.cf.internal:8891
             preloaded_rootfses:
