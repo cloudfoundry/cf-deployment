@@ -48,11 +48,6 @@
       release: garden-runc
     - name: rep_windows
       properties:
-        loggregator:
-          ca_cert: ((loggregator_ca.certificate))
-          cert: ((loggregator_tls_metron.certificate))
-          key: ((loggregator_tls_metron.private_key))
-          use_v2_api: true
         diego:
           rep:
             locket:
@@ -75,11 +70,6 @@
       release: diego
     - name: route_emitter_windows
       properties:
-        loggregator:
-          ca_cert: ((loggregator_ca.certificate))
-          cert: ((loggregator_tls_metron.certificate))
-          key: ((loggregator_tls_metron.private_key))
-          use_v2_api: true
         diego:
           route_emitter:
             bbs:
@@ -87,6 +77,11 @@
               client_cert: ((diego_bbs_client.certificate))
               client_key: ((diego_bbs_client.private_key))
             local_mode: true
+        loggregator:
+          ca_cert: ((loggregator_ca.certificate))
+          cert: ((loggregator_tls_metron.certificate))
+          key: ((loggregator_tls_metron.private_key))
+          use_v2_api: true
       release: diego
     - name: metron_agent_windows
       properties:
@@ -156,6 +151,6 @@
   path: /releases/name=windows-utilities?
   value:
     name: windows-utilities
-    sha1: 4cb16591fb2dce238df87962873f5224f5fe5c8a
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.6.0
-    version: 0.6.0
+    sha1: d47290d4ec28775de28ef793aa9095b1983833be
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.7.0
+    version: 0.7.0
