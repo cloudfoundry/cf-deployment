@@ -271,8 +271,6 @@ instance_groups:
             ca_cert: "((service_cf_internal_ca.certificate))"
             client_cert: "((diego_rep_client.certificate))"
             client_key: "((diego_rep_client.private_key))"
-          locket:
-            api_location: "locket.service.cf.internal:8891"
       loggregator: &diego_loggregator_client_properties
         use_v2_api: true
         ca_cert: "((loggregator_ca.certificate))"
@@ -937,8 +935,6 @@ instance_groups:
             ca_cert: "((service_cf_internal_ca.certificate))"
             client_cert: "((diego_rep_client.certificate))"
             client_key: "((diego_rep_client.private_key))"
-          locket:
-            api_location: "locket.service.cf.internal:8891"
       loggregator: *diego_loggregator_client_properties
   - name: cloud_controller_clock
     release: capi
@@ -1102,9 +1098,6 @@ instance_groups:
         rep:
           preloaded_rootfses:
           - cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs.tar
-          require_tls: true
-          locket:
-            api_location: "locket.service.cf.internal:8891"
       containers:
         trusted_ca_certificates:
           - ((application_ca.certificate))
