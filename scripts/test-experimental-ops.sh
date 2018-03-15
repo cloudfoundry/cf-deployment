@@ -65,6 +65,7 @@ test_experimental_ops() {
       check_interpolation "name: use-silk-release-external-db.yml" "${home}/operations/use-external-dbs.yml" "-o use-silk-release.yml" "-o use-silk-release-external-db.yml" "-l ${home}/operations/example-vars-files/vars-use-external-dbs.yml"
       check_interpolation "name: use-silk-release-postgres.yml" "${home}/operations/use-postgres.yml" "-o use-silk-release.yml" "-o use-silk-release-postgres.yml"
       check_interpolation "use-log-cache.yml"
+      check_interpolation "fast-deploy-with-downtime-and-danger.yml"
     popd > /dev/null # operations/experimental
   popd > /dev/null
   exit $exit_code
