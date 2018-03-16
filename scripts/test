@@ -68,6 +68,14 @@ test_opsfile_interpolation() {
   done
 }
 
+test_iaas_opsfile_interpolation() {
+  test_iaas_ops &
+
+  for job in $(jobs -p); do
+    wait $job || exit_code=1
+  done
+}
+
 ensure_test_opsfiles_not_in_readme() {
   pushd ${home} > /dev/null
     local opsfiles=$(ls operations/test/*.yml)
@@ -140,6 +148,10 @@ main() {
   echo
   echo -e "${LIGHT_GREEN} ***** Begin interpolation operations tests ***** ${NOCOLOR}"
   test_opsfile_interpolation
+
+  echo
+  echo -e "${LIGHT_GREEN} ***** Begin interpolation iaas operations tests ***** ${NOCOLOR}"
+  test_iaas_opsfile_interpolation
 
   if [ "$RUN_SEMANTIC" == "true" ]; then
     echo
