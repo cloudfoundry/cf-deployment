@@ -123,6 +123,23 @@
     persistent_disk_type: 5GB
     stemcell: default
     vm_type: minimal
+
+- type: replace
+  path: /instance_groups/-
+  value:
+    azs:
+    - z1
+    - z2
+    instances: 1
+    jobs:
+    - name: log-cache-scheduler
+      release: log-cache
+    name: log-cache-scheduler
+    networks:
+    - name: default
+    persistent_disk_type: 5GB
+    stemcell: default
+    vm_type: minimal
 - type: replace
   path: /variables/-
   value:
