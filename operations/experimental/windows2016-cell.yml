@@ -50,12 +50,9 @@
       properties:
         diego:
           rep:
-            locket:
-              api_location: locket.service.cf.internal:8891
             open_bindmounts_acl: true
             preloaded_rootfses:
             - windows2016:oci:///C:/var/vcap/packages/windows2016fs
-            require_tls: true
         loggregator:
           ca_cert: ((loggregator_ca.certificate))
           cert: ((loggregator_tls_metron.certificate))

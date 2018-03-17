@@ -37,11 +37,8 @@
             instance_identity_ca_cert: ((diego_instance_identity_ca.certificate))
             instance_identity_key: ((diego_instance_identity_ca.private_key))
           rep:
-            locket:
-              api_location: locket.service.cf.internal:8891
             preloaded_rootfses:
             - windows2012R2:/tmp/windows2012R2
-            require_tls: true
         loggregator:
           ca_cert: ((loggregator_ca.certificate))
           cert: ((loggregator_tls_metron.certificate))
