@@ -14,6 +14,7 @@ This is the README for Legacy Ops-files. To learn more about `cf-deployment`, go
 - For experimental Ops-files, check out the [Experimental Ops-file README](../experimental/README.md).
 - For Community Ops-files, check out the [Community Ops-file README](../community/README.md).
 - For Addons Ops-files that can be applied to manifests or runtime configs, check out the [Addons Ops-file README](addons/README.md).
+- For Backup and Restore Ops-files (for configuring your deployment for use with [BBR](https://github.com/cloudfoundry-incubator/bosh-backup-and-restore)), checkout the [Backup and Restore Ops-files README](../backup-and-restore/README.md).
 
 | Name | Purpose | Notes |
 |:---  |:---     |:---   |

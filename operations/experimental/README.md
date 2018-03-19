@@ -6,6 +6,7 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 - For Legacy Ops-files, check out the [Legacy Ops-file README](../legacy/README.md).
 - For Community Ops-files, checkout the [Community Ops-file README](../community/README.md).
 - For Addons Ops-files that can be applied to manifests or runtime configs, check out the [Addons Ops-file README](addons/README.md).
+- For Backup and Restore Ops-files (for configuring your deployment for use with [BBR](https://github.com/cloudfoundry-incubator/bosh-backup-and-restore)), checkout the [Backup and Restore Ops-files README](../backup-and-restore/README.md).
 
 "Experimental" ops-files represent configurations
 that we expect to promote to blessed configuration eventually,
@@ -30,9 +31,6 @@ and the ops-files will be removed.
 | [`disable-consul-service-registrations-locket.yml`](disable-consul-service-registrations-locket.yml) | This file is a no-op and should not be used, but kept for backward compatabilty. Please use `disable-consul.yml` instead. | Previously: Prevents the `locket` server from registering itself as a service with Consul |
 | [`disable-consul-service-registrations-windows.yml`](disable-consul-service-registrations-windows.yml) | This file is a no-op and should not be used, but kept for backward compatabilty. Please use `disable-consul-windows.yml` instead. | Requires `windows-cell.yml` |
 | [`disable-consul-service-registrations.yml`](disable-consul-service-registrations.yml) | This file is a no-op and should not be used, but kept for backward compatabilty. Please use `disable-consul.yml` instead. | Previously: Prevents the `auctioneer`, `ssh_proxy`, `file_server`, `rep`, `locket`, and `bbs` jobs from registering as a service with Consul |
-| [`enable-backup-restore.yml`](enable-backup-restore.yml) | Deploy BOSH backup and restore instance and enable release level backup. | |
-| [`enable-backup-restore-credhub.yml`](enable-backup-restore-credhub.yml) | Collocate database-backup-restorer job on the credhub instance. Should be applied after `secure-service-credentials.yml` Ops-file. | |
-| [`enable-backup-restore-s3.yml`](enable-backup-restore-s3.yml) | Enables the backup and restore of S3 blobstores. | Requires `enable-backup-restore.yml` and `use-s3-blobstore.yml` |
 | [`enable-bits-service-consul.yml`](enable-bits-service-consul.yml) | Registers the bits-service [bits-service](https://github.com/cloudfoundry-incubator/bits-service) job via consul | Requires `bits-service.yml` from the same directory. |
 | [`enable-bits-service-https.yml`](enable-bits-service-https.yml) | Deprecated and left intentionally blank - the bits service is now `https` only | |
 | [`enable-bpm.yml`](enable-bpm.yml) | Enables the [BOSH Process Manager](https://github.com/cloudfoundry-incubator/bpm-release) as a BOSH addon. | |
@@ -40,7 +38,6 @@ and the ops-files will be removed.
 | [`enable-instance-identity-credentials-windows.yml`](enable-instance-identity-credentials-windows.yml) | Deprecated and left intentionally blank for backward compatibility. | Identity credentials for `windows2012R2` cells are enabled in `windows-cell.yml` ops file by default. |
 | [`enable-instance-identity-credentials-windows2016.yml`](enable-instance-identity-credentials-windows2016.yml) | Enables identity credentials on the `rep_windows` for Windows 2016 cells. | Requires `operations/windows2016-cell.yml`|
 | [`enable-iptables-logger.yml`](enable-iptables-logger.yml) | Enables iptables logger. | |
-| [`enable-nfs-broker-backup.yml`](enable-nfs-broker-backup.yml) | Deploy BOSH backup and restore scripts for the NFS service broker. | Requires `enable-backup-restore.yml` and `operations/enable-nfs-volume-service.yml`. |
 | [`enable-oci-phase-1.yml`](enable-oci-phase-1.yml) | Configure Garden to create OCI compatible images. | |
 | [`enable-prefer-declarative-healthchecks.yml`](enable-prefer-declarative-healthchecks.yml) | Configure the Rep on the diego cells to prefer LRP CheckDefinition (a.k.a declarative healthchecks) over the old Monitor action | |
 | [`enable-prefer-declarative-healthchecks-windows.yml`](enable-prefer-declarative-healthchecks-windows.yml) | Configure the Rep on the windows 2012 cells to prefer LRP CheckDefinition (a.k.a declarative healthchecks) over the old Monitor action | |
