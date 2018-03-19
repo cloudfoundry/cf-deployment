@@ -125,21 +125,10 @@
     vm_type: minimal
 
 - type: replace
-  path: /instance_groups/-
+  path: /instance_groups/name=scheduler/jobs/name=log-cache-scheduler?
   value:
-    azs:
-    - z1
-    - z2
-    instances: 1
-    jobs:
-    - name: log-cache-scheduler
-      release: log-cache
     name: log-cache-scheduler
-    networks:
-    - name: default
-    persistent_disk_type: 5GB
-    stemcell: default
-    vm_type: minimal
+    release: log-cache
 - type: replace
   path: /variables/-
   value:
