@@ -1,0 +1,15 @@
+---
+- type: replace
+  path: /instance_groups/name=backup-restore/jobs/-
+  value:
+    name: nfsbroker-bbr
+    release: nfs-volume
+    properties:
+      nfsbroker:
+        db_driver: mysql
+        db_username: nfs-broker
+        db_password: ((nfs-broker-database-password))
+        db_hostname: sql-db.service.cf.internal
+        db_port: 3306
+        db_name: nfs-broker
+        release_level_backup: true

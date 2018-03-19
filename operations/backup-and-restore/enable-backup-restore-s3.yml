@@ -1,0 +1,24 @@
+---
+- type: replace
+  path: /instance_groups/name=backup-restore/jobs/-
+  value:
+    name: s3-versioned-blobstore-backup-restorer
+    release: backup-and-restore-sdk
+    properties:
+      enabled: true
+      buckets:
+        droplets:
+          name: "((droplet_directory_key))"
+          region: "((aws_region))"
+          aws_access_key_id: "((blobstore_access_key_id))"
+          aws_secret_access_key: "((blobstore_secret_access_key))"
+        packages:
+          name: "((app_package_directory_key))"
+          region: "((aws_region))"
+          aws_access_key_id: "((blobstore_access_key_id))"
+          aws_secret_access_key: "((blobstore_secret_access_key))"
+        buildpacks:
+          name: "((buildpack_directory_key))"
+          region: "((aws_region))"
+          aws_access_key_id: "((blobstore_access_key_id))"
+          aws_secret_access_key: "((blobstore_secret_access_key))"
