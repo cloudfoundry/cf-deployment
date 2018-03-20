@@ -31,6 +31,9 @@ and the ops-files will be removed.
 | [`disable-consul-service-registrations-locket.yml`](disable-consul-service-registrations-locket.yml) | This file is a no-op and should not be used, but kept for backward compatabilty. Please use `disable-consul.yml` instead. | Previously: Prevents the `locket` server from registering itself as a service with Consul |
 | [`disable-consul-service-registrations-windows.yml`](disable-consul-service-registrations-windows.yml) | This file is a no-op and should not be used, but kept for backward compatabilty. Please use `disable-consul-windows.yml` instead. | Requires `windows-cell.yml` |
 | [`disable-consul-service-registrations.yml`](disable-consul-service-registrations.yml) | This file is a no-op and should not be used, but kept for backward compatabilty. Please use `disable-consul.yml` instead. | Previously: Prevents the `auctioneer`, `ssh_proxy`, `file_server`, `rep`, `locket`, and `bbs` jobs from registering as a service with Consul |
+| [`enable-backup-restore.yml`](enable-backup-restore.yml) | Deprecated, use equivalent file in `operations/backup-and-restore`. | |
+| [`enable-backup-restore-credhub.yml`](enable-backup-restore-credhub.yml) | Deprecated, use equivalent file in `operations/backup-and-restore`.  | |
+| [`enable-backup-restore-s3.yml`](enable-backup-restore-s3.yml) | Deprecated, use equivalent file in `operations/backup-and-restore`. | |
 | [`enable-bits-service-consul.yml`](enable-bits-service-consul.yml) | Registers the bits-service [bits-service](https://github.com/cloudfoundry-incubator/bits-service) job via consul | Requires `bits-service.yml` from the same directory. |
 | [`enable-bits-service-https.yml`](enable-bits-service-https.yml) | Deprecated and left intentionally blank - the bits service is now `https` only | |
 | [`enable-bpm.yml`](enable-bpm.yml) | Enables the [BOSH Process Manager](https://github.com/cloudfoundry-incubator/bpm-release) as a BOSH addon. | |
@@ -38,6 +41,7 @@ and the ops-files will be removed.
 | [`enable-instance-identity-credentials-windows.yml`](enable-instance-identity-credentials-windows.yml) | Deprecated and left intentionally blank for backward compatibility. | Identity credentials for `windows2012R2` cells are enabled in `windows-cell.yml` ops file by default. |
 | [`enable-instance-identity-credentials-windows2016.yml`](enable-instance-identity-credentials-windows2016.yml) | Enables identity credentials on the `rep_windows` for Windows 2016 cells. | Requires `operations/windows2016-cell.yml`|
 | [`enable-iptables-logger.yml`](enable-iptables-logger.yml) | Enables iptables logger. | |
+| [`enable-nfs-broker-backup.yml`](enable-nfs-broker-backup.yml) | Deprecated, use equivalent file in `operations/backup-and-restore` | |
 | [`enable-oci-phase-1.yml`](enable-oci-phase-1.yml) | Configure Garden to create OCI compatible images. | |
 | [`enable-prefer-declarative-healthchecks.yml`](enable-prefer-declarative-healthchecks.yml) | Configure the Rep on the diego cells to prefer LRP CheckDefinition (a.k.a declarative healthchecks) over the old Monitor action | |
 | [`enable-prefer-declarative-healthchecks-windows.yml`](enable-prefer-declarative-healthchecks-windows.yml) | Configure the Rep on the windows 2012 cells to prefer LRP CheckDefinition (a.k.a declarative healthchecks) over the old Monitor action | |
