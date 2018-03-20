@@ -1,0 +1,30 @@
+---
+- type: replace
+  path: /update/canaries
+  value: 0
+
+- type: replace
+  path: /update/max_in_flight
+  value: 100%
+
+- type: replace
+  path: /instance_groups/name=smoke-tests/update/serial
+  value: false
+- type: replace
+  path: /instance_groups/name=database/update/serial
+  value: true
+- type: replace
+  path: /instance_groups/name=diego-api/update/serial
+  value: false
+- type: replace
+  path: /instance_groups/name=singleton-blobstore/update/serial
+  value: false
+- type: replace
+  path: /instance_groups/name=router/update/serial
+  value: false
+- type: replace
+  path: /instance_groups/name=scheduler/update/serial
+  value: false
+- type: replace
+  path: /instance_groups/name=log-api/update/serial
+  value: false
