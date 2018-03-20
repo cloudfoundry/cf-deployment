@@ -1080,7 +1080,6 @@ instance_groups:
         debug_listen_address: 127.0.0.1:17019
         default_container_grace_time: 0
         destroy_containers_on_start: true
-        graph_cleanup_threshold_in_mb: 0
         deny_networks:
         - 0.0.0.0/0
         persistent_image_list:
@@ -1088,6 +1087,8 @@ instance_groups:
         network_plugin: /var/vcap/packages/runc-cni/bin/garden-external-networker
         network_plugin_extra_args:
         - --configFile=/var/vcap/jobs/garden-cni/config/adapter.json
+      grootfs:
+        reserved_space_for_other_jobs_in_mb: 15360
   - name: rep
     release: diego
     properties:
@@ -1095,6 +1096,7 @@ instance_groups:
         executor:
           instance_identity_ca_cert: ((diego_instance_identity_ca.certificate))
           instance_identity_key: ((diego_instance_identity_ca.private_key))
+          max_cache_size_in_bytes: 10000000000
         rep:
           preloaded_rootfses:
           - cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs.tar
