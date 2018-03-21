@@ -147,6 +147,23 @@ test_use_trusted_ca_cert_for_apps_includes_diego_instance_ca() {
   fi
 }
 
+test_add_persistent_isolation_segment_diego_cell() {
+  local diego_cell_rep_properties=$(bosh int cf-deployment.yml --path /instance_groups/name=diego-cell/jobs/name=rep/properties)
+  local iso_seg_diego_cell_rep_properties=$(bosh int cf-deployment.yml -o operations/test/add-persistent-isolation-segment-diego-cell.yml \
+    --path /instance_groups/name=isolated-diego-cell/jobs/name=rep/properties | grep -v placement_tags | grep -v persistent_isolation_segment)
+
+  set +e
+    diff <(echo "$diego_cell_rep_properties") <(echo "$iso_seg_diego_cell_rep_properties")
+    local rep_diff_exit_code=$?
+  set -e
+
+  if [[ $rep_diff_exit_code != 0 ]]; then
+    fail "rep properties on diego-cell have diverged between cf-deployment.yml and test/add-persistent-isolation-segment-diego-cell.yml"
+  else
+    pass "test/add-persistent-isolation-segment-diego-cell.yml is consistent with cf-deployment.yml"
+  fi
+}
+
 semantic_tests() {
   # padded for pretty output
   suite_name="semantic    "
@@ -160,6 +177,7 @@ semantic_tests() {
     test_bosh_dns_aliases_consistent
     test_bosh_dns_aliases_consistent_between_files
     test_use_trusted_ca_cert_for_apps_includes_diego_instance_ca
+    test_add_persistent_isolation_segment_diego_cell
   popd > /dev/null
   exit $exit_code
 }

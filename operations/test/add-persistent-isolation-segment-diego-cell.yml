@@ -41,21 +41,22 @@
       release: diego
       properties:
         diego:
+          executor:
+            instance_identity_ca_cert: ((diego_instance_identity_ca.certificate))
+            instance_identity_key: ((diego_instance_identity_ca.private_key))
           rep:
-            bbs:
-              ca_cert: "((service_cf_internal_ca.certificate))"
-              client_cert: "((diego_bbs_client.certificate))"
-              client_key: "((diego_bbs_client.private_key))"
             preloaded_rootfses:
             - cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs.tar
             placement_tags:
             - persistent_isolation_segment
-            require_tls: true
-            ca_cert: "((service_cf_internal_ca.certificate))"
-            server_cert: "((diego_rep_agent_v2.certificate))"
-            server_key: "((diego_rep_agent_v2.private_key))"
-          ssl:
-            skip_cert_verify: true
+        containers:
+          trusted_ca_certificates:
+            - ((application_ca.certificate))
+        loggregator:
+          use_v2_api: true
+          ca_cert: "((loggregator_ca.certificate))"
+          cert: "((loggregator_tls_metron.certificate))"
+          key: "((loggregator_tls_metron.private_key))"
         tls:
           ca_cert: "((service_cf_internal_ca.certificate))"
           cert: "((diego_rep_agent_v2.certificate))"
@@ -63,6 +64,11 @@
     - name: route_emitter
       release: diego
       properties:
+        loggregator:
+          use_v2_api: true
+          ca_cert: "((loggregator_ca.certificate))"
+          cert: "((loggregator_tls_metron.certificate))"
+          key: "((loggregator_tls_metron.private_key))"
         diego:
           route_emitter:
             local_mode: true
