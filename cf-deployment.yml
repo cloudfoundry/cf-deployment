@@ -1096,7 +1096,6 @@ instance_groups:
         executor:
           instance_identity_ca_cert: ((diego_instance_identity_ca.certificate))
           instance_identity_key: ((diego_instance_identity_ca.private_key))
-          max_cache_size_in_bytes: 10000000000
         rep:
           preloaded_rootfses:
           - cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs.tar
