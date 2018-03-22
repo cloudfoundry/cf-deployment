@@ -1080,7 +1080,6 @@ instance_groups:
         debug_listen_address: 127.0.0.1:17019
         default_container_grace_time: 0
         destroy_containers_on_start: true
-        graph_cleanup_threshold_in_mb: 0
         deny_networks:
         - 0.0.0.0/0
         persistent_image_list:
@@ -1088,6 +1087,8 @@ instance_groups:
         network_plugin: /var/vcap/packages/runc-cni/bin/garden-external-networker
         network_plugin_extra_args:
         - --configFile=/var/vcap/jobs/garden-cni/config/adapter.json
+      grootfs:
+        reserved_space_for_other_jobs_in_mb: 15360
   - name: rep
     release: diego
     properties:
@@ -1625,9 +1626,9 @@ releases:
   version: 40.0.1
   sha1: f4ab8b2f11ec61583c2a0b3f23d25fef12c99e47
 - name: cf-syslog-drain
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-syslog-drain-release?v=6.0
-  version: "6.0"
-  sha1: 6207b0b7d0a7ae294f0aa46aaccd9d61698395e5
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-syslog-drain-release?v=6.1
+  version: "6.1"
+  sha1: 0079a97d721f0802708eb0cd78c58410ef879212
 - name: cflinuxfs2
   url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.194.0
   version: 1.194.0
@@ -1689,9 +1690,9 @@ releases:
   version: 1.4.24
   sha1: 2eceabe7e65bb041cb7612dc3380d388c5b33ad1
 - name: statsd-injector
-  url: https://bosh.io/d/github.com/cloudfoundry/statsd-injector-release?v=1.2.0
-  version: 1.2.0
-  sha1: f995b553969a73d717cf42e7d240f4e899efd8ac
+  url: https://bosh.io/d/github.com/cloudfoundry/statsd-injector-release?v=1.3.0
+  version: 1.3.0
+  sha1: 5b9357484032e5217cead8f20362f5802c751de0
 - name: uaa
   url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=56
   version: "56"
