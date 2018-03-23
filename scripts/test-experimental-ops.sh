@@ -57,6 +57,14 @@ test_experimental_ops() {
       check_interpolation "name: use-silk-release-postgres.yml" "${home}/operations/use-postgres.yml" "-o use-silk-release.yml" "-o use-silk-release-postgres.yml"
       check_interpolation "use-log-cache.yml"
       check_interpolation "fast-deploy-with-downtime-and-danger.yml"
+      version=$(bosh interpolate ${home}/cf-deployment.yml -o windows2016-cell.yml -o use-latest-windows2016-stemcell.yml --path=/stemcells/alias=windows2016/version)
+      if [ "${version}" == "latest" ]; then
+        pass "use-latest-windows2016-stemcell.yml"
+      else
+        fail "use-latest-windows2016-stemcell.yml, expected 'latest' but got '${version}'"
+      fi
+      check_interpolation "name: use-offline-windows2016fs.yml" "windows2016-cell.yml" "-o use-offline-windows2016fs.yml"
+      check_interpolation "windows2016-cell.yml"
     popd > /dev/null # operations/experimental
   popd > /dev/null
   exit $exit_code
