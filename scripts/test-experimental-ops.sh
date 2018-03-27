@@ -65,6 +65,9 @@ test_experimental_ops() {
       fi
       check_interpolation "name: use-offline-windows2016fs.yml" "windows2016-cell.yml" "-o use-offline-windows2016fs.yml"
       check_interpolation "windows2016-cell.yml"
+      check_interpolation "improve-diego-log-format.yml"
+      check_interpolation "name: improve-diego-log-format-windows.yml" "${home}/operations/windows-cell.yml" "-o improve-diego-log-format-windows.yml"
+      check_interpolation "name: improve-diego-log-format-windows2016.yml" "windows2016-cell.yml" "-o improve-diego-log-format-windows2016.yml"
     popd > /dev/null # operations/experimental
   popd > /dev/null
   exit $exit_code
