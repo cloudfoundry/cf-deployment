@@ -1,6 +1,6 @@
 # Ops-files
 
-This is the README for Ops-files. To learn more about `cf-deployment`, go to the main [README](../README.md). 
+This is the README for Ops-files. To learn more about `cf-deployment`, go to the main [README](../README.md).
 
 - For experimental Ops-files, check out the [Experimental Ops-file README](experimental/README.md).
 - For Community Ops-files, checkout the [Community Ops-file README](community/README.md).
@@ -61,4 +61,4 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 | [`windows-cell.yml`](windows-cell.yml) | Deploys a Windows 2012R2 Diego cell and adds releases necessary for Windows. | **Known issue**: Windows cells deployed to AWS will likely have their disks fill up after ~9 days (depending on load). The bosh-windows team is actively working on a fix for this. Operators who want to deploy windows cells to AWS anyway may want to recreate those cells periodically.  |
 | [`use-latest-windows2016-stemcell.yml`](use-latest-windows2016-stemcell.yml) | Use the latest `windows2016` stemcell available on your BOSH director instead of the one in `windows2016-cell.yml` | Requires `windows2016-cell.yml` |
 | [`use-offline-windows2016fs.yml`](use-offline-windows2016fs.yml) | Use the offline version of [windows2016fs-release](https://github.com/cloudfoundry-incubator/windows2016fs-release) | Requires `windows2016-cell.yml`. Suitable for environments without internet access. Follow instructions [here](https://github.com/cloudfoundry-incubator/windows2016fs-release/blob/master/README.md) to upload the release prior to deploying. |
-| [`windows2016-cell.yml`](windows2016-cell.yml) | Deploys a windows 2016 diego cell, adds releases necessary for windows. | Windows2016 stemcell is currently only supported on GCP and Azure. AWS support is currently under developement. |
+| [`windows2016-cell.yml`](windows2016-cell.yml) | Deploys a windows 2016 diego cell, adds releases necessary for windows. | Windows2016 stemcell is currently only supported on GCP and Azure. AWS support is currently under development. |
