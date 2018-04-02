@@ -59,6 +59,6 @@ you must "update" the director
 with an empty runtime config.
 
 [runtime-config-docs]: https://bosh.io/docs/runtime-config.html
-[syslog-custom-rule-examples]: https://github.com/cloudfoundry/syslog-release/blob/master/example-custom-rules.md
+[syslog-custom-rule-examples]: https://github.com/cloudfoundry/syslog-release/blob/develop/examples/example-custom-rules.md
 [syslog-release-repo]: https://github.com/cloudfoundry/syslog-release
 [addons-docs]: http://bosh.io/docs/runtime-config.html#addons
