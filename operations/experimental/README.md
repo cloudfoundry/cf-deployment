@@ -68,7 +68,7 @@ and the ops-files will be removed.
 | [`use-log-cache.yml`](use-log-cache.yml) | Adds the [Log Cache Release](https://github.com/cloudfoundry/log-cache-release) for logs and metrics. | |
 | [`use-shed.yml`](use-shed.yml) | Enable deprecated garden-shed on diego cells. | |
 | [`use-silk-release.yml`](use-silk-release.yml) | Use [Silk Release](https://github.com/cloudfoundry/silk-release) as the container networking plugin. |  |
-| [`use-silk-release-external-db.yml`](use-silk-release-external-db.yml) | Use [Silk Release](https://github.com/cloudfoundry/silk-release) with an external database. | Requires `use-external-dbs.yml` and `use-silk-release.yml`.|
+| [`use-silk-release-external-db.yml`](use-silk-release-external-db.yml) | Use [Silk Release](https://github.com/cloudfoundry/silk-release) with an external database. | Requires `use-external-dbs.yml` and `use-silk-release.yml`. The required order is `use-external-dbs.yml`, `use-silk-release.yml`, and finally `use-silk-release-external-db.yml`|
 | [`use-silk-release-postgres.yml`](use-silk-release-postgres.yml) | Use [Silk Release](https://github.com/cloudfoundry/silk-release) with postgres as its data store. | Requires `use-postgres.yml` and `use-silk-release.yml`.|
 | [`use-latest-windows2016-stemcell.yml`](use-latest-windows2016-stemcell.yml) | **DEPRECATED** Please use `operations/use-latest-windows2016-stemcell.yml` instead. This file is kept as a symlink for backwards compatibility. | |
 | [`use-offline-windows2016fs.yml`](use-offline-windows2016fs.yml) | **DEPRECATED** Please use `operations/use-offline-windows2016fs.yml` instead. This file is kept as a symlink for backwards compatibility. | |
