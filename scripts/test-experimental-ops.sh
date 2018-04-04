@@ -48,6 +48,7 @@ test_experimental_ops() {
       check_interpolation "use-bosh-dns-rename-network-and-deployment.yml" "-v network_name=new-network" "-v deployment_name=new-deployment"
       check_interpolation "use-shed.yml"
       check_interpolation "use-pxc.yml"
+      check_interpolation "migrate-cf-mysql-to-pxc.yml"
       check_interpolation "use-grootfs.yml"
       check_interpolation "enable-oci-phase-1.yml"
       check_interpolation "name: enable-routing-integrity.yml" "enable-routing-integrity.yml" "-o enable-instance-identity-credentials.yml"

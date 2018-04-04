@@ -51,6 +51,7 @@ and the ops-files will be removed.
 | [`improve-diego-log-format.yml`](improve-diego-log-format.yml) | Enable human readable format for timestamp (rfc3339) and log level in linux component logs. | Incompatible with `bosh-lite.yml`, which enables this already. |
 | [`improve-diego-log-format-windows.yml`](improve-diego-log-format-windows.yml) | Enable human readable format for timestamp (rfc3339) and log level in Windows 2012 component logs. | Requires `windows-cell.yml` |
 | [`improve-diego-log-format-windows2016.yml`](improve-diego-log-format-windows2016.yml) | Enable human readable format for timestamp (rfc3339) and log level in Windows 2016 component logs. | Requires `windows2016-cell.yml` |
+| [`migrate-cf-mysql-to-pxc.yml`](migrate-cf-mysql-to-pxc.yml) | Migrates from an existing cf-mysql database to [pxc-release](https://github.com/cloudfoundry-incubator/pxc-release). After the migration is complete, switch to the `use-pxc.yml` operations file. | |
 | [`rootless-containers.yml`](rootless-containers.yml) | Enable rootless garden-runc containers. | Requires garden-runc 1.9.5 or later and grootfs 0.27.0 or later. |
 | [`secure-service-credentials.yml`](secure-service-credentials.yml) | Use CredHub for service credentials. | BOSH DNS is required if not using a credhub load balancer. You can add a credhub load balancer with `add-credhub-lb.yml`. |
 | [`secure-service-credentials-windows-cell.yml`](secure-service-credentials-windows-cell.yml) | Adds CredHub TLS CA as a trusted cert to the Windows Cell. | Requires `secure-service-credentials.yml`. |
