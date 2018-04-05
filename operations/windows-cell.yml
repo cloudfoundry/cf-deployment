@@ -81,6 +81,7 @@
               key: ((loggregator_tls_metron.private_key))
         metron_agent:
           deployment: ((system_domain))
+          disable_udp: true
         syslog_daemon_config:
           enable: false
       release: loggregator
