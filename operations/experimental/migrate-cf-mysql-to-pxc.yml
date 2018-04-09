@@ -8,14 +8,6 @@
     sha: 79c576f4682243f471000ab2901b863bb3cd4d30
 
 - type: replace
-  path: /releases/name=cf-mysql
-  value:
-    name: cf-mysql
-    url: https://bosh.io/d/github.com/cloudfoundry/cf-mysql-release?v=36.12.0
-    version: 36.12.0
-    sha1: 401cd27775423ee6b3a6e53e89010261c17e0c5c
-
-- type: replace
   path: /instance_groups/name=database/jobs/name=mysql/properties/cf_mysql_enabled?
   value: false
 
