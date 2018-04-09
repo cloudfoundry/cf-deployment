@@ -1,0 +1,101 @@
+---
+- type: replace
+  path: /releases/name=cf-mysql
+  value:
+    name: pxc
+    version: 0.2.0
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/pxc-release?v=0.2.0
+    sha: 79c576f4682243f471000ab2901b863bb3cd4d30
+
+- type: replace
+  path: /instance_groups/name=database/jobs/name=mysql/name
+  value: mysql-clustered
+
+- type: replace
+  path: /instance_groups/name=database/jobs/name=mysql-clustered/release
+  value: pxc
+
+- type: replace
+  path: /instance_groups/name=database/jobs/name=mysql-clustered?/properties
+  value:
+    admin_password: "((cf_mysql_mysql_admin_password))"
+    port: 33306
+    binlog_enabled: false
+    cluster_health:
+      password: "((cf_mysql_mysql_cluster_health_password))"
+    galera_agent:
+      db_password: "((cf_mysql_mysql_galera_healthcheck_password))"
+      endpoint_username: galera_healthcheck
+      endpoint_password: "((cf_mysql_mysql_galera_healthcheck_endpoint_password))"
+    seeded_databases:
+    - name: cloud_controller
+      username: cloud_controller
+      password: "((cc_database_password))"
+    - name: diego
+      username: diego
+      password: "((diego_database_password))"
+    - name: network_connectivity
+      username: network_connectivity
+      password: "((network_connectivity_database_password))"
+    - name: network_policy
+      username: network_policy
+      password: "((network_policy_database_password))"
+    - name: routing-api
+      username: routing-api
+      password: "((routing_api_database_password))"
+    - name: uaa
+      username: uaa
+      password: "((uaa_database_password))"
+    - name: locket
+      username: locket
+      password: "((locket_database_password))"
+    tls:
+      galera: ((galera_server_certificate))
+      server: ((mysql_server_certificate))
+
+- type: replace
+  path: /instance_groups/name=database/jobs/name=proxy/release
+  value: pxc
+
+- type: replace
+  path: /instance_groups/name=database/jobs/name=proxy/properties
+  value:
+    api_password: "((cf_mysql_proxy_api_password))"
+    consul_enabled: true
+    consul_service_name: "sql-db"
+
+- type: replace
+  path: /variables/-
+  value:
+    name: pxc_galera_ca
+    type: certificate
+    options:
+      is_ca: true
+      common_name: pxc_galera_ca
+
+- type: replace
+  path: /variables/-
+  value:
+    name: pxc_server_ca
+    type: certificate
+    options:
+      is_ca: true
+      common_name: pxc_server_ca
+
+- type: replace
+  path: /variables/-
+  value:
+    name: galera_server_certificate
+    type: certificate
+    options:
+      ca: pxc_galera_ca
+      extended_key_usage: [ "server_auth", "client_auth" ]
+
+- type: replace
+  path: /variables/-
+  value:
+    name: mysql_server_certificate
+    type: certificate
+    options:
+      ca: pxc_server_ca
+      common_name: "sql-db.service.cf.internal"
