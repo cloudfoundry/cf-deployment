@@ -51,6 +51,7 @@ and the ops-files will be removed.
 | [`improve-diego-log-format.yml`](improve-diego-log-format.yml) | Enable human readable format for timestamp (rfc3339) and log level in linux component logs. | Incompatible with `bosh-lite.yml`, which enables this already. |
 | [`improve-diego-log-format-windows.yml`](improve-diego-log-format-windows.yml) | Enable human readable format for timestamp (rfc3339) and log level in Windows 2012 component logs. | Requires `windows-cell.yml` |
 | [`improve-diego-log-format-windows2016.yml`](improve-diego-log-format-windows2016.yml) | Enable human readable format for timestamp (rfc3339) and log level in Windows 2016 component logs. | Requires `windows2016-cell.yml` |
+| [`migrate-cf-mysql-to-pxc.yml`](migrate-cf-mysql-to-pxc.yml) | Migrates from an existing cf-mysql database to [pxc-release](https://github.com/cloudfoundry-incubator/pxc-release). After the migration is complete, switch to the `use-pxc.yml` operations file. | |
 | [`rootless-containers.yml`](rootless-containers.yml) | Enable rootless garden-runc containers. | Requires garden-runc 1.9.5 or later and grootfs 0.27.0 or later. |
 | [`secure-service-credentials.yml`](secure-service-credentials.yml) | Use CredHub for service credentials. | BOSH DNS is required if not using a credhub load balancer. You can add a credhub load balancer with `add-credhub-lb.yml`. |
 | [`secure-service-credentials-windows-cell.yml`](secure-service-credentials-windows-cell.yml) | Adds CredHub TLS CA as a trusted cert to the Windows Cell. | Requires `secure-service-credentials.yml`. |
@@ -66,6 +67,7 @@ and the ops-files will be removed.
 | [`use-bosh-dns-rename-network-and-deployment.yml`](use-bosh-dns-rename-network-and-deployment.yml) | Adds `bosh-dns` job to all instance groups running ubuntu-trusty via Bosh Addon, and renames network and deployment in domain aliases. | |
 | [`use-grootfs.yml`](use-grootfs.yml) | Groot is enabled by default. This file is blank to avoid breaking deployment scripts. | |
 | [`use-log-cache.yml`](use-log-cache.yml) | Adds the [Log Cache Release](https://github.com/cloudfoundry/log-cache-release) for logs and metrics. | |
+| [`use-pxc.yml`](use-pxc.yml) | Uses the [pxc-release](https://github.com/cloudfoundry-incubator/pxc-release) instead of the [cf-mysql-release](https://github.com/cloudfoundry/cf-mysql-release/) as the internal mysql database. This ops-file is for clean-installs of cf or for redeploying cf already running pxc. It's not for migrating from cf-mysql-release. | | 
 | [`use-shed.yml`](use-shed.yml) | Enable deprecated garden-shed on diego cells. | |
 | [`use-silk-release.yml`](use-silk-release.yml) | Use [Silk Release](https://github.com/cloudfoundry/silk-release) as the container networking plugin. |  |
 | [`use-silk-release-external-db.yml`](use-silk-release-external-db.yml) | Use [Silk Release](https://github.com/cloudfoundry/silk-release) with an external database. | Requires `use-external-dbs.yml` and `use-silk-release.yml`. The required order is `use-external-dbs.yml`, `use-silk-release.yml`, and finally `use-silk-release-external-db.yml`|
