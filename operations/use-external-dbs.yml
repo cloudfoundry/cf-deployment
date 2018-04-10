@@ -164,22 +164,22 @@
   value: ((external_policy_server_database_name))
 
 - type: replace
-  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/type
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/database/type
   value: ((external_database_type))
 - type: replace
-  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/username
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/database/username
   value: ((external_silk_controller_database_username))
 - type: replace
-  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/password
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/database/password
   value: ((external_silk_controller_database_password))
 - type: replace
-  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/host
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/database/host
   value: ((external_silk_controller_database_address))
 - type: replace
-  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/port
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/database/port
   value: ((external_database_port))
 - type: replace
-  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database/name
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/database/name
   value: ((external_silk_controller_database_name))
 
 - type: replace
