@@ -38,7 +38,6 @@
       release: log-cache
     - consumes:
         reverse_log_proxy:
-          deployment: cf
           from: reverse_log_proxy
       name: log-cache-nozzle
       properties:
