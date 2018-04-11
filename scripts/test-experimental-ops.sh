@@ -58,6 +58,7 @@ test_experimental_ops() {
       check_interpolation "name: use-silk-release-postgres.yml" "${home}/operations/use-postgres.yml" "-o use-silk-release.yml" "-o use-silk-release-postgres.yml"
       check_interpolation "use-log-cache.yml"
       check_interpolation "fast-deploy-with-downtime-and-danger.yml"
+      check_interpolation "name: enable-tls-cloud-controller-postgres" "${home}/operations/use-postgres.yml" "-o enable-tls-cloud-controller-postgres.yml"
       version=$(bosh interpolate ${home}/cf-deployment.yml -o windows2016-cell.yml -o use-latest-windows2016-stemcell.yml --path=/stemcells/alias=windows2016/version)
       if [ "${version}" == "latest" ]; then
         pass "use-latest-windows2016-stemcell.yml"
