@@ -85,10 +85,10 @@
         deployment: ((system_domain))
         loggregator:
           tls:
-            ca_cert: ((loggregator_ca.certificate))
             agent:
               cert: ((loggregator_tls_agent.certificate))
               key: ((loggregator_tls_agent.private_key))
+            ca_cert: ((loggregator_ca.certificate))
         syslog_daemon_config:
           enable: false
       release: loggregator-agent
@@ -140,9 +140,9 @@
   path: /releases/name=windows2016fs?
   value:
     name: windows2016fs
-    sha1: 11448aec0c05e13d99552045637a403df9e610de
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows2016fs-online-release?v=1.0.0
-    version: 1.0.0
+    sha1: d24c1c2aa4b785cdd67095b41592a6e7329a3e7c
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows2016fs-online-release?v=1.2.0
+    version: 1.2.0
 - type: replace
   path: /releases/name=windows-utilities?
   value:
