@@ -1453,10 +1453,12 @@ variables:
     - client_auth
     - server_auth
     alternative_names:
-    - "loggregator_agent"
-    - "metron"
-    - "localhost"
-    - "127.0.0.1"
+    - loggregator_agent.service.cf.internal
+    - metron.service.cf.internal
+    - 127.0.0.1
+    - localhost
+    - ip6-localhost
+    - ::1
 - name: loggregator_tls_doppler
   type: certificate
   options:
