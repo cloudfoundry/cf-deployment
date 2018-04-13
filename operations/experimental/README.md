@@ -58,6 +58,7 @@ and the ops-files will be removed.
 | [`secure-service-credentials-windows2016-cell.yml`](secure-service-credentials-windows2016-cell.yml) | Adds CredHub TLS CA as a trusted cert to the Windows 2016 Cell. | Requires `secure-service-credentials.yml`, `operations/windows2016-cell.yml` and `enable-instance-identity-credentials-windows2016.yml`. |
 | [`secure-service-credentials-external-db.yml`](secure-service-credentials-external-db.yml) | Use external database for CredHub data store. | Requires `secure-service-credentials.yml` and `use-external-dbs.yml`. |
 | [`secure-service-credentials-postgres.yml`](secure-service-credentials-postgres.yml) | Use local postgres database for CredHub data store. | Requires `secure-service-credentials.yml` and `use-postgres.yml`. |
+| [`secure-service-credentials-with-pxc-release.yml`](secure-service-credentials-with-pxc-release.yml) | Use [pxc-release](https://github.com/cloudfoundry-incubator/pxc-release) for CredHub data store. | Requires `secure-service-credentials.yml` and `use-pxc.yml`. |
 | [`skip-consul-cell-registrations.yml`](skip-consul-cell-registrations.yml) | Configure the BBS to only use Locket to find registered Diego cells | |
 | [`skip-consul-locks.yml`](skip-consul-locks.yml) | Prevent several components from also attempting to claim a lock in Consul | |
 | [`use-bosh-dns.yml`](use-bosh-dns.yml) | Adds `bosh-dns` job to all instance groups running ubuntu-trusty via Bosh Addon. | Aliases `service.cf.internal` domains to their `bosh-dns` equivalents. |
