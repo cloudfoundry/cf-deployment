@@ -1,0 +1,22 @@
+- type: replace
+  path: /addons?/-
+  value:
+    exclude:
+      stemcell:
+      - os: ubuntu-trusty
+    jobs:
+    - name: syslog_forwarder_windows
+      properties:
+        syslog:
+          address: ((syslog_address))
+          port: ((syslog_port))
+          transport: ((syslog_transport))
+      release: windows-syslog
+    name: windows_syslog_forwarder
+- type: replace
+  path: /releases/-
+  value:
+    name: windows-syslog
+    sha1: 00278487933cbb9a273126a0cbcc812fb3b545df
+    url: https://bosh.io/d/github.com/cloudfoundry/windows-syslog-release?v=0.1.0
+    version: 0.1.0
