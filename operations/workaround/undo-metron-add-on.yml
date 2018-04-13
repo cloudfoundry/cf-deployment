@@ -15,6 +15,13 @@
             key: "((loggregator_tls_agent.private_key))"
 
 - type: replace
+  path: /instance_groups/name=adapter/jobs/-
+  value:
+    name: loggregator_agent
+    release: loggregator-agent
+    properties: *loggregator_agent_properties
+
+- type: replace
   path: /instance_groups/name=nats/jobs/-
   value:
     name: loggregator_agent
