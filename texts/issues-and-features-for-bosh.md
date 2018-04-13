@@ -133,7 +133,7 @@ Also, some configuration there is user-provided
 Should that be shared via link?
 **Update**: See above.
 
-What about configuration such as the loggregator agent,
+What about configuration such as the metron agent,
 which doesn't have an obvious candidate for an "owner" of the configuration?
 How can tighten that configuration?
 Does a runtime-config make the most sense?
