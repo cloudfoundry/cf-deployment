@@ -1448,17 +1448,10 @@ variables:
   type: certificate
   options:
     ca: loggregator_ca
-    common_name: loggregator_agent
+    common_name: agent
     extended_key_usage:
     - client_auth
     - server_auth
-    alternative_names:
-    - loggregator_agent
-    - metron
-    - localhost
-    - 127.0.0.1
-    - ip6-localhost
-    - ::1
 - name: loggregator_tls_doppler
   type: certificate
   options:
