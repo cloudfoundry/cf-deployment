@@ -1448,12 +1448,12 @@ variables:
   type: certificate
   options:
     ca: loggregator_ca
-    common_name: loggregator-agent
+    common_name: loggregator_agent
     extended_key_usage:
     - client_auth
     - server_auth
     alternative_names:
-    - loggregator-agent.service.cf.internal
+    - loggregator_agent.service.cf.internal
     - metron.service.cf.internal
     - 127.0.0.1
     - localhost
