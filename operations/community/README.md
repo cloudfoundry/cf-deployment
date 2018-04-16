@@ -13,5 +13,5 @@ Included in this directory is a collection of ops files submitted by the CF comm
 
 | File | Maintainer | Purpose |
 | --- | --- | --- |
-| [`change-metron-agent-deployment.yml`](change-metron-agent-deployment.yml) | [SAP SE](https://www.sap.com/) - submitted by [jsievers](https://github.com/jsievers) | Adds an ops file for changing the loggregator agent (née metron agent) deployment property in all jobs |
+| [`change-metron-agent-deployment.yml`](change-metron-agent-deployment.yml) | [SAP SE](https://www.sap.com/) - submitted by [jsievers](https://github.com/jsievers) | Adds an ops file for changing the metron agent deployment property in all jobs |
 | [`use-haproxy.yml`](use-haproxy.yml) | [Stark & Wayne](https://www.starkandwayne.com/) - submitted by [rkoster](https://github.com/rkoster) | Adds https://github.com/cloudfoundry-incubator/haproxy-boshrelease as a load balancer for environments without IaaS provided load blancers. |
