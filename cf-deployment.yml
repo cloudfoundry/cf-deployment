@@ -277,24 +277,22 @@ instance_groups:
         cert: "((loggregator_tls_agent.certificate))"
         key: "((loggregator_tls_agent.private_key))"
   - name: silk-controller
-    release: cf-networking
+    release: silk
     properties:
-      cf_networking:
-        silk_controller:
-          ca_cert: ((silk_ca.certificate))
-          server_cert: ((silk_controller.certificate))
-          server_key: ((silk_controller.private_key))
-          database:
-            type: mysql
-            username: network_connectivity
-            password: ((network_connectivity_database_password))
-            host: sql-db.service.cf.internal
-            port: 3306
-            name: network_connectivity
-        silk_daemon:
-          ca_cert: ((silk_ca.certificate))
-          client_cert: ((silk_daemon.certificate))
-          client_key: ((silk_daemon.private_key))
+      ca_cert: ((silk_ca.certificate))
+      database:
+        host: sql-db.service.cf.internal
+        name: network_connectivity
+        password: ((network_connectivity_database_password))
+        port: 3306
+        type: mysql
+        username: network_connectivity
+      server_cert: ((silk_controller.certificate))
+      server_key: ((silk_controller.private_key))
+      silk_daemon:
+        ca_cert: ((silk_ca.certificate))
+        client_cert: ((silk_daemon.certificate))
+        client_key: ((silk_daemon.private_key))
   - name: locket
     release: diego
     properties:
@@ -1131,25 +1129,21 @@ instance_groups:
   - name: garden-cni
     release: cf-networking
   - name: netmon
-    release: cf-networking
+    release: silk
   - name: vxlan-policy-agent
-    release: cf-networking
+    release: silk
     properties:
-      cf_networking:
-        vxlan_policy_agent:
-          ca_cert: ((network_policy_ca.certificate))
-          client_cert: ((network_policy_client.certificate))
-          client_key: ((network_policy_client.private_key))
+      ca_cert: ((network_policy_ca.certificate))
+      client_cert: ((network_policy_client.certificate))
+      client_key: ((network_policy_client.private_key))
   - name: silk-daemon
-    release: cf-networking
+    release: silk
     properties:
-      cf_networking:
-        silk_daemon:
-          ca_cert: ((silk_ca.certificate))
-          client_cert: ((silk_daemon.certificate))
-          client_key: ((silk_daemon.private_key))
+      ca_cert: ((silk_ca.certificate))
+      client_cert: ((silk_daemon.certificate))
+      client_key: ((silk_daemon.private_key))
   - name: cni
-    release: cf-networking
+    release: silk
 - name: log-api
   azs:
   - z1
@@ -1696,6 +1690,10 @@ releases:
   url: https://bosh.io/d/github.com/cloudfoundry/ruby-buildpack-release?v=1.7.16
   version: 1.7.16
   sha1: 1ca144320e7fcdb072603a5aa0d224d73237fd87
+- name: silk
+  sha1: 47123dfd9f206b77f5838aaec375fda3095d0f1e
+  url: https://bosh.io/d/github.com/cloudfoundry/silk-release?v=0.2.0
+  version: 0.2.0
 - name: staticfile-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/staticfile-buildpack-release?v=1.4.26
   version: 1.4.26
