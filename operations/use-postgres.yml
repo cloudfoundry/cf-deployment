@@ -129,6 +129,26 @@
     db_port: 5524
     db_schema: diego
     db_username: diego
+# new denamespaced properties for cf-networking-release
+- type: replace
+  path: /instance_groups/name=api/jobs/name=policy-server/properties/database
+  value:
+    host: sql-db.service.cf.internal
+    name: network_policy
+    password: ((network_policy_database_password))
+    port: 5524
+    type: postgres
+    username: network_policy
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/database
+  value:
+    host: sql-db.service.cf.internal
+    name: network_connectivity
+    password: ((network_connectivity_database_password))
+    port: 5524
+    type: postgres
+    username: network_connectivity
+# old namespaced properties (will get removed in subsequent PR) for cf-networking-release
 - type: replace
   path: /instance_groups/name=api/jobs/name=policy-server/properties/cf_networking/policy_server/database
   value:
