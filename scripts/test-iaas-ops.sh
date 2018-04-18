@@ -2,7 +2,7 @@
 
 test_iaas_ops() {
   # Padded for pretty output
-  suite_name="IaaS      "
+  suite_name="IaaS              "
 
   pushd ${home} > /dev/null
     pushd iaas-support/softlayer > /dev/null

@@ -2,7 +2,7 @@
 
 test_test_ops() {
   # Padded for pretty output
-  suite_name="TEST        "
+  suite_name="TEST              "
 
   pushd ${home} > /dev/null
     pushd operations/test > /dev/null

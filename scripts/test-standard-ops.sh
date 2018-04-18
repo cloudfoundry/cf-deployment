@@ -2,7 +2,7 @@
 
 test_standard_ops() {
   # Padded for pretty output
-  suite_name="STANDARD    "
+  suite_name="STANDARD          "
 
   pushd ${home} > /dev/null
     pushd operations > /dev/null
