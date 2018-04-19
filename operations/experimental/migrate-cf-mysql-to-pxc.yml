@@ -90,6 +90,12 @@
     consul_service_name: "sql-db"
 
 - type: replace
+  path: /instance_groups/name=database/jobs/-
+  value:
+    name: bootstrap
+    release: pxc
+
+- type: replace
   path: /variables/-
   value:
     name: pxc_galera_ca
