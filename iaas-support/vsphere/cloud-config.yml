@@ -5,19 +5,22 @@ azs:
     datacenters:
     - clusters:
       - ((z1_cluster)):
-          resource-pool: ((z1_resource_pool))
+          resource_pool: ((z1_resource_pool))
+      name: ((z1_datacenter_name))
 - name: z2
   cloud_properties:
     datacenters:
     - clusters:
       - ((z2_cluster)):
-          resource-pool: ((z2_resource_pool))
+          resource_pool: ((z2_resource_pool))
+      name: ((z2_datacenter_name))
 - name: z3
   cloud_properties:
     datacenters:
     - clusters:
       - ((z3_cluster)):
-          resource-pool: ((z3_resource_pool))
+          resource_pool: ((z3_resource_pool))
+      name: ((z3_datacenter_name))
 
 networks:
 - name: default

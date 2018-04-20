@@ -7,7 +7,6 @@ test_experimental_ops() {
   pushd ${home} > /dev/null
     pushd operations/experimental > /dev/null
       check_interpolation "name: add-credhub-lb.yml" "enable-instance-identity-credentials.yml" "-o secure-service-credentials.yml" "-o add-credhub-lb.yml"
-      check_interpolation "name: add-istio-release.yml" "use-bosh-dns.yml" "-o add-istio-release.yml"
       check_interpolation "name: bits-service-local.yml" "bits-service.yml" "-o bits-service-local.yml"
       check_interpolation "name: enable-bits-service-consul.yml" "bits-service.yml" "-o bits-service-local.yml" "-o enable-bits-service-consul.yml"
       check_interpolation "name: bits-service-s3.yml" "${home}/operations/use-s3-blobstore.yml" "-o bits-service.yml" "-o bits-service-s3.yml" "-l ${home}/operations/example-vars-files/vars-use-s3-blobstore.yml"
@@ -36,11 +35,12 @@ test_experimental_ops() {
       check_interpolation "enable-prefer-declarative-healthchecks.yml"
       check_interpolation "name: enable-prefer-declarative-healthchecks-windows.yml" "${home}/operations/windows-cell.yml" "-o enable-prefer-declarative-healthchecks-windows.yml"
       check_interpolation "name: enable-prefer-declarative-healthchecks-windows2016.yml" "${home}/operations/windows2016-cell.yml" "-o enable-prefer-declarative-healthchecks-windows2016.yml"
-      check_interpolation "name: secure-service-credentials.yml" "enable-instance-identity-credentials.yml" "-o secure-service-credentials.yml"
-      check_interpolation "name: secure-service-credentials-windows-cell.yml" "enable-instance-identity-credentials.yml" "-o ${home}/operations/windows-cell.yml" "-o enable-instance-identity-credentials-windows.yml" "-o secure-service-credentials.yml" "-o secure-service-credentials-windows-cell.yml"
-      check_interpolation "name: secure-service-credentials-windows2016-cell.yml" "enable-instance-identity-credentials.yml" "-o ${home}/operations/windows2016-cell.yml" "-o enable-instance-identity-credentials-windows2016.yml" "-o secure-service-credentials.yml" "-o secure-service-credentials-windows2016-cell.yml"
-      check_interpolation "name: secure-service-credentials-external-db.yml" "enable-instance-identity-credentials.yml" "-o secure-service-credentials.yml" "-o ${home}/operations/use-external-dbs.yml" "-l ${home}/operations/example-vars-files/vars-use-external-dbs.yml" "-o secure-service-credentials-external-db.yml" "-l example-vars-files/vars-secure-service-credentials-external-db.yml"
-      check_interpolation "name: secure-service-credentials-postgres.yml" "enable-instance-identity-credentials.yml" "-o secure-service-credentials.yml" "-o ${home}/operations/use-external-dbs.yml" "-l ${home}/operations/example-vars-files/vars-use-external-dbs.yml" "-o secure-service-credentials-external-db.yml" "-l example-vars-files/vars-secure-service-credentials-external-db.yml"
+      check_interpolation "secure-service-credentials.yml"
+      check_interpolation "name: secure-service-credentials-windows-cell.yml" "${home}/operations/windows-cell.yml" "-o secure-service-credentials.yml" "-o secure-service-credentials-windows-cell.yml"
+      check_interpolation "name: secure-service-credentials-windows2016-cell.yml" "${home}/operations/windows2016-cell.yml" "-o secure-service-credentials.yml" "-o secure-service-credentials-windows2016-cell.yml"
+      check_interpolation "name: secure-service-credentials-external-db.yml" "secure-service-credentials.yml" "-o ${home}/operations/use-external-dbs.yml" "-l ${home}/operations/example-vars-files/vars-use-external-dbs.yml" "-o secure-service-credentials-external-db.yml" "-l example-vars-files/vars-secure-service-credentials-external-db.yml"
+      check_interpolation "name: secure-service-credentials-postgres.yml" "secure-service-credentials.yml" "-o ${home}/operations/use-external-dbs.yml" "-l ${home}/operations/example-vars-files/vars-use-external-dbs.yml" "-o secure-service-credentials-external-db.yml" "-l example-vars-files/vars-secure-service-credentials-external-db.yml"
+      check_interpolation "name: secure-service-credentials-with-pxc-release.yml" "secure-service-credentials.yml" "-o use-pxc.yml" "-o secure-service-credentials-with-pxc-release.yml"
       check_interpolation "skip-consul-cell-registrations.yml"
       check_interpolation "skip-consul-locks.yml"
       check_interpolation "use-bosh-dns.yml"
@@ -49,6 +49,8 @@ test_experimental_ops() {
       check_interpolation "name: use-bosh-dns-for-containers-with-silk-release.yml" "use-bosh-dns.yml" "-o use-silk-release.yml" "-o use-bosh-dns-for-containers-with-silk-release.yml"
       check_interpolation "use-bosh-dns-rename-network-and-deployment.yml" "-v network_name=new-network" "-v deployment_name=new-deployment"
       check_interpolation "use-shed.yml"
+      check_interpolation "use-pxc.yml"
+      check_interpolation "migrate-cf-mysql-to-pxc.yml"
       check_interpolation "use-grootfs.yml"
       check_interpolation "enable-oci-phase-1.yml"
       check_interpolation "name: enable-routing-integrity.yml" "enable-routing-integrity.yml" "-o enable-instance-identity-credentials.yml"
@@ -65,7 +67,11 @@ test_experimental_ops() {
         fail "use-latest-windows2016-stemcell.yml, expected 'latest' but got '${version}'"
       fi
       check_interpolation "name: use-offline-windows2016fs.yml" "windows2016-cell.yml" "-o use-offline-windows2016fs.yml"
+      check_interpolation "name: windows-enable-component-syslog.yml" "windows-enable-component-syslog.yml" "-l ${home}/operations/addons/example-vars-files/vars-enable-component-syslog.yml"
       check_interpolation "windows2016-cell.yml"
+      check_interpolation "improve-diego-log-format.yml"
+      check_interpolation "name: improve-diego-log-format-windows.yml" "${home}/operations/windows-cell.yml" "-o improve-diego-log-format-windows.yml"
+      check_interpolation "name: improve-diego-log-format-windows2016.yml" "windows2016-cell.yml" "-o improve-diego-log-format-windows2016.yml"
     popd > /dev/null # operations/experimental
   popd > /dev/null
   exit $exit_code
