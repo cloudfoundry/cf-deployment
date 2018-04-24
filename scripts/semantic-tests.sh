@@ -61,14 +61,22 @@ test_use_compiled_releases() {
       -o operations/use-compiled-releases.yml > $manifest_file
 
     set +e
-      yq r $manifest_file -j | jq -r .releases[].url | grep 'github.com'
-      local non_compiled_interpolated_releases_on_github=$?
+      missing_releases=$(yq r $manifest_file -j | jq -r .releases[].url | grep 'github.com')
+
+      local non_recently_added_releases
+      for r in $missing_releases; do
+        git show | grep "+  url: $r" > /dev/null
+        local is_recently_added=$?
+        if [[ $is_recently_added -ne 0 ]]; then
+          non_recently_added_releases="$non_recently_added_releases $r"
+        fi
+      done
     set -e
 
-    if [[ $non_compiled_interpolated_releases_on_github -eq 0 ]]; then
-      fail "use-compiled-releases.yml: expected to find no release urls from bosh.io or github.com"
+    if [ -z "$non_recently_added_releases" ]; then
+       pass "use-compiled-releases.yml"
     else
-      pass "use-compiled-releases.yml"
+      fail "use-compiled-releases.yml: expected not to find the following releases urls on bosh.io or github.com: $non_recently_added_releases"
     fi
 }
 
