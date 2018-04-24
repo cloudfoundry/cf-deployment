@@ -63,7 +63,7 @@ test_use_compiled_releases() {
     set +e
       missing_releases=$(yq r $manifest_file -j | jq -r .releases[].url | grep 'github.com')
 
-      local non_recently_added_releases
+      local non_recently_added_releases=""
       for r in $missing_releases; do
         git show | grep "+  url: $r" > /dev/null
         local is_recently_added=$?
