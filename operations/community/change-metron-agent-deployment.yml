@@ -1,6 +1,6 @@
 ---
 # cf-deployment uses system_domain as metron agent deployment.
-# Use this to override metron agent deployment name in the metron_agent addon
+# Use this to override metron agent deployment name in the loggregator_agent addon
 - type: replace
-  path: /addons/name=metron_agent/jobs/name=metron_agent/properties/metron_agent?/deployment
-  value: ((metron_agent_deployment))
+  path: /addons/name=loggregator_agent/jobs/name=loggregator_agent/properties/deployment?
+  value: ((loggregator_agent_deployment))

@@ -41,8 +41,8 @@
             - windows2012R2:/tmp/windows2012R2
         loggregator:
           ca_cert: ((loggregator_ca.certificate))
-          cert: ((loggregator_tls_metron.certificate))
-          key: ((loggregator_tls_metron.private_key))
+          cert: ((loggregator_tls_agent.certificate))
+          key: ((loggregator_tls_agent.private_key))
           use_v2_api: true
         syslog_daemon_config:
           enable: false
@@ -62,8 +62,8 @@
             local_mode: true
         loggregator:
           ca_cert: ((loggregator_ca.certificate))
-          cert: ((loggregator_tls_metron.certificate))
-          key: ((loggregator_tls_metron.private_key))
+          cert: ((loggregator_tls_agent.certificate))
+          key: ((loggregator_tls_agent.private_key))
           use_v2_api: true
         tcp:
           enabled: true
@@ -71,17 +71,16 @@
           ca_cert: ((uaa_ca.certificate))
           client_secret: ((uaa_clients_tcp_emitter_secret))
       release: diego
-    - name: metron_agent_windows
+    - name: loggregator_agent_windows
       properties:
         loggregator:
           tls:
             ca_cert: ((loggregator_ca.certificate))
-            metron:
-              cert: ((loggregator_tls_metron.certificate))
-              key: ((loggregator_tls_metron.private_key))
-        metron_agent:
-          deployment: ((system_domain))
-          disable_udp: true
+            agent:
+              cert: ((loggregator_tls_agent.certificate))
+              key: ((loggregator_tls_agent.private_key))
+        deployment: ((system_domain))
+        disable_udp: true
         syslog_daemon_config:
           enable: false
       release: loggregator
