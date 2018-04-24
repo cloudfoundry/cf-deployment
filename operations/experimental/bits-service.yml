@@ -12,8 +12,8 @@
           client_key: ((cc_tls.private_key))
         droplets: null
         packages: null
-        private_endpoint: https://bits-service.service.cf.internal
-        public_endpoint: https://bits-service.((system_domain))
+        private_endpoint: https://bits.service.cf.internal
+        public_endpoint: https://bits.((system_domain))
         secret: ((bits_service_secret))
         signing_users:
         - password: ((bits_service_signing_password))
@@ -24,20 +24,20 @@
   value:
     name: bits-service
     registration_interval: 20s
-    server_cert_domain_san: https://bits-service.((system_domain))
+    server_cert_domain_san: https://bits.((system_domain))
     tags:
       component: bits-service
     tls_port: 443
     uris:
-    - bits-service.((system_domain))
+    - bits.((system_domain))
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/bits_service?
   value:
     ca_cert: ((service_cf_internal_ca.certificate))
     enabled: true
     password: ((bits_service_signing_password))
-    private_endpoint: https://bits-service.service.cf.internal
-    public_endpoint: https://bits-service.((system_domain))
+    private_endpoint: https://bits.service.cf.internal
+    public_endpoint: https://bits.((system_domain))
     username: admin
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/bits_service?
@@ -45,8 +45,8 @@
     ca_cert: ((service_cf_internal_ca.certificate))
     enabled: true
     password: ((bits_service_signing_password))
-    private_endpoint: https://bits-service.service.cf.internal
-    public_endpoint: https://bits-service.((system_domain))
+    private_endpoint: https://bits.service.cf.internal
+    public_endpoint: https://bits.((system_domain))
     username: admin
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/bits_service?
@@ -54,8 +54,8 @@
     ca_cert: ((service_cf_internal_ca.certificate))
     enabled: true
     password: ((bits_service_signing_password))
-    private_endpoint: https://bits-service.service.cf.internal
-    public_endpoint: https://bits-service.((system_domain))
+    private_endpoint: https://bits.service.cf.internal
+    public_endpoint: https://bits.((system_domain))
     username: admin
 - type: replace
   path: /variables/-
@@ -73,11 +73,11 @@
     name: bits_service_ssl
     options:
       alternative_names:
-      - bits-service.service.cf.internal
+      - bits.service.cf.internal
       - ((system_domain))
       - '*.((system_domain))'
       ca: service_cf_internal_ca
-      common_name: bits-service.service.cf.internal
+      common_name: bits.service.cf.internal
     type: certificate
 - type: replace
   path: /instance_groups/name=api/jobs/name=bits-service/properties/bits-service/tls?
