@@ -1,9 +1,19 @@
 # Enable iptables logging for ASGs
+# new denamespaced properties
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=cni/properties?/iptables_logging
+  value: true
+# old namespaced properties (will get removed in subsequent PR)
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=cni/properties?/cf_networking/iptables_logging
   value: true
 
 # Enable iptables logging for c2c
+# new denamespaced properties
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=vxlan-policy-agent/properties?/iptables_logging
+  value: true
+# old namespaced properties (will get removed in subsequent PR)
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=vxlan-policy-agent/properties?/cf_networking/iptables_logging
   value: true

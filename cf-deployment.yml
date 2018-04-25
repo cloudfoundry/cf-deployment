@@ -279,6 +279,20 @@ instance_groups:
   - name: silk-controller
     release: cf-networking
     properties:
+      # de-namespacing cf-networking-release
+      # new properties
+      ca_cert: ((silk_ca.certificate))
+      server_cert: ((silk_controller.certificate))
+      server_key: ((silk_controller.private_key))
+      database:
+        type: mysql
+        username: network_connectivity
+        password: ((network_connectivity_database_password))
+        host: sql-db.service.cf.internal
+        port: 3306
+        name: network_connectivity
+      # old properties
+      # will get removed in subsequent PR (to follow a major release)
       cf_networking:
         silk_controller:
           ca_cert: ((silk_ca.certificate))
@@ -742,6 +756,19 @@ instance_groups:
   - name: policy-server
     release: cf-networking
     properties:
+      # de-namespacing cf-networking-release
+      # new properties
+      uaa_client_secret: ((uaa_clients_network_policy_secret))
+      uaa_ca: ((uaa_ca.certificate))
+      database:
+        type: mysql
+        username: network_policy
+        password: ((network_policy_database_password))
+        host: sql-db.service.cf.internal
+        port: 3306
+        name: network_policy
+      # old properties
+      # will get removed in subsequent PR (to follow a major release)
       cf_networking:
         policy_server:
           uaa_client_secret: ((uaa_clients_network_policy_secret))
@@ -756,6 +783,13 @@ instance_groups:
   - name: policy-server-internal
     release: cf-networking
     properties:
+      # de-namespacing cf-networking-release
+      # new properties
+      ca_cert: ((network_policy_ca.certificate))
+      server_cert: ((network_policy_server.certificate))
+      server_key: ((network_policy_server.private_key))
+      # old properties
+      # will get removed in subsequent PR (to follow a major release)
       cf_networking:
         policy_server_internal:
           ca_cert: ((network_policy_ca.certificate))
@@ -1135,6 +1169,13 @@ instance_groups:
   - name: vxlan-policy-agent
     release: cf-networking
     properties:
+      # de-namespacing cf-networking-release
+      # new properties
+      ca_cert: ((network_policy_ca.certificate))
+      client_cert: ((network_policy_client.certificate))
+      client_key: ((network_policy_client.private_key))
+      # old properties
+      # will get removed in subsequent PR (to follow a major release)
       cf_networking:
         vxlan_policy_agent:
           ca_cert: ((network_policy_ca.certificate))
@@ -1143,6 +1184,13 @@ instance_groups:
   - name: silk-daemon
     release: cf-networking
     properties:
+      # de-namespacing cf-networking-release
+      # new properties
+      ca_cert: ((silk_ca.certificate))
+      client_cert: ((silk_daemon.certificate))
+      client_key: ((silk_daemon.private_key))
+      # old properties
+      # will get removed in subsequent PR (to follow a major release)
       cf_networking:
         silk_daemon:
           ca_cert: ((silk_ca.certificate))

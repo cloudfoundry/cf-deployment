@@ -144,6 +144,46 @@
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/username
   value: ((external_routing_api_database_username))
 
+# new denamespaced properties for cf-networking-release
+- type: replace
+  path: /instance_groups/name=api/jobs/name=policy-server/properties/database/type
+  value: ((external_database_type))
+- type: replace
+  path: /instance_groups/name=api/jobs/name=policy-server/properties/database/username
+  value: ((external_policy_server_database_username))
+- type: replace
+  path: /instance_groups/name=api/jobs/name=policy-server/properties/database/password
+  value: ((external_policy_server_database_password))
+- type: replace
+  path: /instance_groups/name=api/jobs/name=policy-server/properties/database/host
+  value: ((external_policy_server_database_address))
+- type: replace
+  path: /instance_groups/name=api/jobs/name=policy-server/properties/database/port
+  value: ((external_database_port))
+- type: replace
+  path: /instance_groups/name=api/jobs/name=policy-server/properties/database/name
+  value: ((external_policy_server_database_name))
+
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/database/type
+  value: ((external_database_type))
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/database/username
+  value: ((external_silk_controller_database_username))
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/database/password
+  value: ((external_silk_controller_database_password))
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/database/host
+  value: ((external_silk_controller_database_address))
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/database/port
+  value: ((external_database_port))
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/database/name
+  value: ((external_silk_controller_database_name))
+
+# old namespaced properties (will get removed in subsequent PR) for cf-networking-release
 - type: replace
   path: /instance_groups/name=api/jobs/name=policy-server/properties/cf_networking/policy_server/database/type
   value: ((external_database_type))

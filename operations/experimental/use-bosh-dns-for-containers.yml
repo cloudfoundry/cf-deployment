@@ -1,4 +1,10 @@
 ---
+# new denamespaced properties
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=cni/properties?/dns_servers
+  value:
+  - 169.254.0.2
+# old namespaced properties (will get removed in subsequent PR)
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=cni/properties?/cf_networking/dns_servers
   value:
