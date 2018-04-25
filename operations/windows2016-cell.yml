@@ -88,6 +88,7 @@
             agent:
               cert: ((loggregator_tls_agent.certificate))
               key: ((loggregator_tls_agent.private_key))
+        deployment: ((system_domain))
         syslog_daemon_config:
           enable: false
       release: loggregator-agent
