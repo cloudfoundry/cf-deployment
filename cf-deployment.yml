@@ -8,7 +8,7 @@ update:
   serial: false
   update_watch_time: 5000-1200000
 addons:
-- name: loggregator_agent
+- name: metron_agent
   include:
     stemcell:
     - os: ubuntu-trusty
@@ -17,15 +17,15 @@ addons:
     - name: smoke_tests
       release: cf-smoke-tests
   jobs:
-  - name: loggregator_agent
-    release: loggregator-agent
+  - name: metron_agent
+    release: loggregator
     properties:
       loggregator:
         tls:
           ca_cert: "((loggregator_ca.certificate))"
-          agent:
-            cert: "((loggregator_tls_agent.certificate))"
-            key: "((loggregator_tls_agent.private_key))"
+          metron:
+            cert: "((loggregator_tls_metron.certificate))"
+            key: "((loggregator_tls_metron.private_key))"
 instance_groups:
 - name: smoke-tests
   lifecycle: errand
@@ -274,8 +274,8 @@ instance_groups:
       loggregator: &diego_loggregator_client_properties
         use_v2_api: true
         ca_cert: "((loggregator_ca.certificate))"
-        cert: "((loggregator_tls_agent.certificate))"
-        key: "((loggregator_tls_agent.private_key))"
+        cert: "((loggregator_tls_metron.certificate))"
+        key: "((loggregator_tls_metron.private_key))"
   - name: silk-controller
     release: cf-networking
     properties:
@@ -314,8 +314,8 @@ instance_groups:
       loggregator:
         use_v2_api: true
         ca_cert: "((loggregator_ca.certificate))"
-        cert: "((loggregator_tls_agent.certificate))"
-        key: "((loggregator_tls_agent.private_key))"
+        cert: "((loggregator_tls_metron.certificate))"
+        key: "((loggregator_tls_metron.private_key))"
 - name: uaa
   azs:
   - z1
@@ -1444,7 +1444,7 @@ variables:
     common_name: statsdinjector
     extended_key_usage:
     - client_auth
-- name: loggregator_tls_agent
+- name: loggregator_tls_metron
   type: certificate
   options:
     ca: loggregator_ca
@@ -1697,10 +1697,6 @@ releases:
   url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=57.1
   version: "57.1"
   sha1: b96e5965e890d9cdd6ad96890cdaad719c368c31
-- name: loggregator-agent
-  url: https://bosh.io/d/github.com/cloudfoundry/loggregator-agent-release?v=1.0
-  version: "1.0"
-  sha1: aa70e3bc95e25fe86ab00f3b698216a24a44c9d5
 stemcells:
 - alias: default
   os: ubuntu-trusty
