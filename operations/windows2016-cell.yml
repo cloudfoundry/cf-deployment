@@ -57,8 +57,8 @@
         enable_declarative_healthcheck: true
         loggregator:
           ca_cert: ((loggregator_ca.certificate))
-          cert: ((loggregator_tls_metron.certificate))
-          key: ((loggregator_tls_metron.private_key))
+          cert: ((loggregator_tls_agent.certificate))
+          key: ((loggregator_tls_agent.private_key))
           use_v2_api: true
         syslog_daemon_config:
           enable: false
@@ -78,23 +78,21 @@
             local_mode: true
         loggregator:
           ca_cert: ((loggregator_ca.certificate))
-          cert: ((loggregator_tls_metron.certificate))
-          key: ((loggregator_tls_metron.private_key))
+          cert: ((loggregator_tls_agent.certificate))
+          key: ((loggregator_tls_agent.private_key))
           use_v2_api: true
       release: diego
-    - name: metron_agent_windows
+    - name: loggregator_agent_windows
       properties:
         loggregator:
           tls:
             ca_cert: ((loggregator_ca.certificate))
-            metron:
-              cert: ((loggregator_tls_metron.certificate))
-              key: ((loggregator_tls_metron.private_key))
-        metron_agent:
-          deployment: ((system_domain))
+            agent:
+              cert: ((loggregator_tls_agent.certificate))
+              key: ((loggregator_tls_agent.private_key))
         syslog_daemon_config:
           enable: false
-      release: loggregator
+      release: loggregator-agent
     - name: enable_ssh
       release: windows-utilities
     name: windows2016-cell
