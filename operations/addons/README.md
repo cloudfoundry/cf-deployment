@@ -25,7 +25,7 @@ to VMs via the use of [addons][addons-docs].
 
 | Name | Purpose | Notes |
 |:---  |:---     |:---   |
-| [`enable-component-syslog.yml`](enable-component-syslog.yml) | This collocates a job from [syslog release][syslog-release-repo] to forward local syslog events in RFC5424 format to a remote syslog endpoint. | Uses rsyslog, which is available on the stemcell. Further documentation of the `custom_rule` property can be found [here][syslog-custom-rule-examples]. |
+| [`enable-component-syslog.yml`](enable-component-syslog.yml) | This collocates a job from [syslog release][syslog-release-repo] to forward local syslog events in RFC5424 format to a remote syslog endpoint. | Uses rsyslog, which is available on the stemcell. Further documentation of the `custom_rule` property can be found [here][syslog-custom-rule-examples]. For the windows equivalent, see `operations/experimental/windows-enable-component-syslog.yml`. |
 
 ## Adding a Runtime Config
 To add a runtime config to a director for the first time,

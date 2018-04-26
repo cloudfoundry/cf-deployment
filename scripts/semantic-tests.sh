@@ -61,14 +61,22 @@ test_use_compiled_releases() {
       -o operations/use-compiled-releases.yml > $manifest_file
 
     set +e
-      yq r $manifest_file -j | jq -r .releases[].url | grep 'github.com'
-      local non_compiled_interpolated_releases_on_github=$?
+      missing_releases=$(yq r $manifest_file -j | jq -r .releases[].url | grep 'github.com')
+
+      local non_recently_added_releases=""
+      for r in $missing_releases; do
+        git show | grep "+  url: $r" > /dev/null
+        local is_recently_added=$?
+        if [[ $is_recently_added -ne 0 ]]; then
+          non_recently_added_releases="$non_recently_added_releases $r"
+        fi
+      done
     set -e
 
-    if [[ $non_compiled_interpolated_releases_on_github -eq 0 ]]; then
-      fail "use-compiled-releases.yml: expected to find no release urls from bosh.io or github.com"
+    if [ -z "$non_recently_added_releases" ]; then
+       pass "use-compiled-releases.yml"
     else
-      pass "use-compiled-releases.yml"
+      fail "use-compiled-releases.yml: expected not to find the following releases urls on bosh.io or github.com: $non_recently_added_releases"
     fi
 }
 
@@ -164,6 +172,23 @@ test_add_persistent_isolation_segment_diego_cell() {
   fi
 }
 
+test_use_log_cache() {
+  local log_cache_release_version
+  log_cache_release_version=$(bosh int cf-deployment.yml -o operations/experimental/use-log-cache.yml \
+    --path /releases/name=log-cache/version)
+  local reverse_log_proxy_link
+  reverse_log_proxy_link=$(bosh int cf-deployment.yml -o operations/experimental/use-log-cache.yml \
+    --path /instance_groups/name=log-cache/jobs/name=log-cache-nozzle/consumes/reverse_log_proxy/deployment?)
+
+  if [ ${log_cache_release_version} = "latest" ]; then
+    fail "experimental/use-log-cache.yml: log-cache release should have specific version, not 'latest'"
+  elif [ ${reverse_log_proxy_link} != "null" ]; then
+    fail "experimental/use-log-cache.yml: expeted to find no cross-deployment links"
+  else
+    pass "experimental/use-log-cache.yml"
+  fi
+}
+
 semantic_tests() {
   # padded for pretty output
   suite_name="semantic    "
@@ -178,6 +203,7 @@ semantic_tests() {
     test_bosh_dns_aliases_consistent_between_files
     test_use_trusted_ca_cert_for_apps_includes_diego_instance_ca
     test_add_persistent_isolation_segment_diego_cell
+    test_use_log_cache
   popd > /dev/null
   exit $exit_code
 }
