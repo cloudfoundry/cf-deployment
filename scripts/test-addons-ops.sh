@@ -2,7 +2,7 @@
 
 test_addons_ops() {
   # Padded for pretty output
-  suite_name="ADDONS      "
+  suite_name="ADDONS            "
 
   pushd ${home} > /dev/null
     pushd operations/addons > /dev/null

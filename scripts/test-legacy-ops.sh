@@ -2,7 +2,7 @@
 
 test_legacy_ops() {
   # Padded for pretty output
-  suite_name="LEGACY      "
+  suite_name="LEGACY            "
 
   pushd ${home} > /dev/null
     pushd operations/legacy > /dev/null

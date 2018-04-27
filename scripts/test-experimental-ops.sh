@@ -1,7 +1,8 @@
 #!/bin/bash
 
 test_experimental_ops() {
-  suite_name="EXPERIMENTAL"
+  # Padded for pretty output
+  suite_name="EXPERIMENTAL      "
 
   pushd ${home} > /dev/null
     pushd operations/experimental > /dev/null
