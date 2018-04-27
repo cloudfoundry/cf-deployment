@@ -3,9 +3,9 @@
   path: /releases/-
   value:
     name: pxc
-    version: 0.2.0
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/pxc-release?v=0.2.0
-    sha: 79c576f4682243f471000ab2901b863bb3cd4d30
+    sha1: e4509d2b76f05aa6fcd83fe2710a5997ff7add92
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/pxc-release?v=0.3.0
+    version: 0.3.0
 
 - type: replace
   path: /instance_groups/name=database/jobs/name=mysql/properties/cf_mysql_enabled?
@@ -16,9 +16,25 @@
   value: 1
 
 - type: replace
+  path: /instance_groups/name=database/jobs/name=mysql/consumes?/mysql
+  value:
+    from: mysql-legacy
+
+- type: replace
+  path: /instance_groups/name=database/jobs/name=mysql/provides?/mysql
+  value:
+    as: mysql-legacy
+
+- type: replace
   path: /instance_groups/name=database/jobs/-
   value:
     name: mysql-clustered
+    provides:
+      mysql:
+        as: mysql-clustered
+    consumes:
+      mysql:
+        from: mysql-clustered
     properties:
       pxc_enabled: true
       admin_password: "((cf_mysql_mysql_admin_password))"
@@ -62,11 +78,22 @@
   value: pxc
 
 - type: replace
+  path: /instance_groups/name=database/jobs/name=proxy/consumes?/mysql
+  value:
+    from: mysql-clustered
+
+- type: replace
   path: /instance_groups/name=database/jobs/name=proxy/properties
   value:
     api_password: "((cf_mysql_proxy_api_password))"
     consul_enabled: true
     consul_service_name: "sql-db"
+
+- type: replace
+  path: /instance_groups/name=database/jobs/-
+  value:
+    name: bootstrap
+    release: pxc
 
 - type: replace
   path: /variables/-
