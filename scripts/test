@@ -62,6 +62,7 @@ test_opsfile_interpolation() {
   test_test_ops &
   test_legacy_ops &
   test_addons_ops &
+  test_backup_and_restore_ops &
 
   for job in $(jobs -p); do
     wait $job || exit_code=1
@@ -132,6 +133,7 @@ main() {
   ensure_opsfiles_in_readme "operations/legacy/README.md" $(ls operations/legacy/*.yml)
   ensure_opsfiles_in_readme "operations/community/README.md" $(ls operations/community/*.yml)
   ensure_opsfiles_in_readme "operations/experimental/README.md" $(ls operations/experimental/*.yml)
+  ensure_opsfiles_in_readme "operations/backup-and-restore/README.md" $(ls operations/backup-and-restore/*.yml)
 
   echo
   echo -e "${LIGHT_GREEN} ***** Begin negative readme operations tests ***** ${NOCOLOR}"
@@ -144,6 +146,7 @@ main() {
   ensure_opsfiles_in_tests "scripts/test-test-ops.sh" $(ls operations/test/*.yml)
   ensure_opsfiles_in_tests "scripts/test-experimental-ops.sh" $(ls operations/experimental/*.yml)
   ensure_opsfiles_in_tests "scripts/test-addons-ops.sh" $(ls operations/addons/*.yml)
+  ensure_opsfiles_in_tests "scripts/test-backup-and-restore-ops.sh" $(ls operations/backup-and-restore/*.yml)
 
   echo
   echo -e "${LIGHT_GREEN} ***** Begin interpolation operations tests ***** ${NOCOLOR}"
