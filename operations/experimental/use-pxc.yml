@@ -60,6 +60,32 @@
 - type: replace
   path: /instance_groups/name=database/jobs/-
   value:
+    release: routing
+    name: route_registrar
+    consumes:
+      nats: {from: nats, deployment: cf}
+    properties:
+      route_registrar:
+        routes:
+        - name: cf-mysql-proxy
+          port: 8080
+          registration_interval: 10s
+          uris:
+          - &proxy_base_uri proxy.((system_domain))
+          prepend_instance_index: true
+        - name: cf-mysql-proxy-aggregator
+          port: 8082
+          registration_interval: 10s
+          uris:
+          - *proxy_base_uri
+
+- type: replace
+  path: /instance_groups/name=database/jobs/name=proxy/properties/api_uri?
+  value: *proxy_base_uri
+
+- type: replace
+  path: /instance_groups/name=database/jobs/-
+  value:
     name: bootstrap
     release: pxc
 - type: replace
@@ -84,6 +110,7 @@
     name: galera_server_certificate
     options:
       ca: pxc_galera_ca
+      common_name: galera_server_certificate
       extended_key_usage:
       - server_auth
       - client_auth
