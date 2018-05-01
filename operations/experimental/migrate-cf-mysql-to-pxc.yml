@@ -88,6 +88,7 @@
     api_password: "((cf_mysql_proxy_api_password))"
     consul_enabled: true
     consul_service_name: "sql-db"
+    api_port: 8083
 
 - type: replace
   path: /instance_groups/name=database/jobs/-
@@ -100,7 +101,7 @@
       route_registrar:
         routes:
         - name: cf-mysql-proxy
-          port: 8080
+          port: 8083
           registration_interval: 10s
           uris:
           - &proxy_base_uri proxy.((system_domain))
