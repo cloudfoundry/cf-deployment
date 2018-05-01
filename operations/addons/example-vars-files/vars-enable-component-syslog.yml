@@ -1,9 +1,12 @@
 ---
 syslog_address: papertrail-address.com
 syslog_port: 5473
-syslog_transport: tcp
 syslog_fallback_servers: []
 syslog_custom_rule: ''
 # Note: single quotes work well for a simple single-line rule.
 # However, the yaml `|` multi-line syntax works better
 # for multiple rules, or rules with multiple lines.
+
+# This property only necessary/used
+# if using the component-syslog-custom-ca ops file.
+syslog_ca: |

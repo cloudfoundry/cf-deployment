@@ -10,9 +10,10 @@
         syslog:
           address: ((syslog_address))
           port: ((syslog_port))
-          transport: ((syslog_transport))
+          transport: tcp
+          tls_enabled: true
       release: windows-syslog
-    name: windows_syslog_forwarder
+    name: syslog_forwarder_windows
 - type: replace
   path: /releases/-
   value:
