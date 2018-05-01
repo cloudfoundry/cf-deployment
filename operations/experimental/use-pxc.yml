@@ -2,18 +2,15 @@
   path: /releases/name=cf-mysql
   value:
     name: pxc
-    sha1: e4509d2b76f05aa6fcd83fe2710a5997ff7add92
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/pxc-release?v=0.3.0
-    version: 0.3.0
-
+    sha1: bd784bb93ffeff62cdec6aeb62ba0fea4eba6f41
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/pxc-release?v=0.4.0
+    version: 0.4.0
 - type: replace
   path: /instance_groups/name=database/jobs/name=mysql/name
   value: mysql-clustered
-
 - type: replace
   path: /instance_groups/name=database/jobs/name=mysql-clustered/release
   value: pxc
-
 - type: replace
   path: /instance_groups/name=database/jobs/name=mysql-clustered?/properties
   value:
@@ -51,24 +48,20 @@
     tls:
       galera: ((galera_server_certificate))
       server: ((mysql_server_certificate))
-
 - type: replace
   path: /instance_groups/name=database/jobs/name=proxy/release
   value: pxc
-
 - type: replace
   path: /instance_groups/name=database/jobs/name=proxy/properties
   value:
     api_password: ((cf_mysql_proxy_api_password))
     consul_enabled: true
     consul_service_name: sql-db
-
 - type: replace
   path: /instance_groups/name=database/jobs/-
   value:
     name: bootstrap
     release: pxc
-
 - type: replace
   path: /variables/-
   value:
@@ -77,7 +70,6 @@
       common_name: pxc_galera_ca
       is_ca: true
     type: certificate
-
 - type: replace
   path: /variables/-
   value:
@@ -86,7 +78,6 @@
       common_name: pxc_server_ca
       is_ca: true
     type: certificate
-
 - type: replace
   path: /variables/-
   value:
@@ -97,7 +88,6 @@
       - server_auth
       - client_auth
     type: certificate
-
 - type: replace
   path: /variables/-
   value:
