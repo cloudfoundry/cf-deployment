@@ -54,6 +54,7 @@ test_standard_ops() {
       fi
       check_interpolation "use-postgres.yml"
       check_interpolation "use-s3-blobstore.yml" "-l example-vars-files/vars-use-s3-blobstore.yml"
+      check_interpolation "use-s3-custom-blobstore.yml" "-l example-vars-files/vars-use-s3-custom-blobstore.yml"
       check_interpolation "use-gcs-blobstore.yml" "-l example-vars-files/vars-use-gcs-blobstore.yml"
       check_interpolation "name: use-gcs-blobstore-service-account.yml" "use-gcs-blobstore.yml -o use-gcs-blobstore-service-account.yml -l example-vars-files/vars-use-gcs-blobstore-service-account.yml"
       check_interpolation "use-swift-blobstore.yml" "-l example-vars-files/vars-use-swift-blobstore.yml"
