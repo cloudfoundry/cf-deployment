@@ -78,7 +78,8 @@ test_experimental_ops() {
       check_interpolation "improve-diego-log-format.yml"
       check_interpolation "name: improve-diego-log-format-windows.yml" "${home}/operations/windows-cell.yml" "-o improve-diego-log-format-windows.yml"
       check_interpolation "name: improve-diego-log-format-windows2016.yml" "windows2016-cell.yml" "-o improve-diego-log-format-windows2016.yml"
-      check_interpolation "name: perm-service.yml" "use-bosh-dns.yml" "-o perm-service.yml"
+      check_interpolation "enable-mysql-tls.yml"
+      check_interpolation "name: perm-service.yml" "use-bosh-dns.yml" "-o enable-mysql-tls.yml" "-o perm-service.yml"
 
     popd > /dev/null # operations/experimental
   popd > /dev/null

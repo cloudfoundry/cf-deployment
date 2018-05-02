@@ -40,6 +40,7 @@ and the ops-files will be removed.
 | [`enable-instance-identity-credentials-windows.yml`](enable-instance-identity-credentials-windows.yml) | Deprecated and left intentionally blank for backward compatibility. | Identity credentials for `windows2012R2` cells are enabled in `windows-cell.yml` ops file by default. |
 | [`enable-instance-identity-credentials-windows2016.yml`](enable-instance-identity-credentials-windows2016.yml) | Enables identity credentials on the `rep_windows` for Windows 2016 cells. | Requires `operations/windows2016-cell.yml`|
 | [`enable-iptables-logger.yml`](enable-iptables-logger.yml) | Enables iptables logger. | |
+| [`enable-mysql-tls.yml`](enable-mysql-tls.yml) | Enables TLS on the database job | |
 | [`enable-nfs-broker-backup.yml`](enable-nfs-broker-backup.yml) | Deprecated, use equivalent file in `operations/backup-and-restore` | |
 | [`enable-oci-phase-1.yml`](enable-oci-phase-1.yml) | Configure Garden to create OCI compatible images. | |
 | [`enable-prefer-declarative-healthchecks.yml`](enable-prefer-declarative-healthchecks.yml) | Deprecated and left intentionally blank for backward compatibility. | Preferring declarative healthchecks is enabled in `cf-deployment.yml` by default. | |
@@ -54,7 +55,7 @@ and the ops-files will be removed.
 | [`improve-diego-log-format-windows.yml`](improve-diego-log-format-windows.yml) | Enable human readable format for timestamp (rfc3339) and log level in Windows 2012 component logs. | Requires `windows-cell.yml` |
 | [`improve-diego-log-format-windows2016.yml`](improve-diego-log-format-windows2016.yml) | Enable human readable format for timestamp (rfc3339) and log level in Windows 2016 component logs. | Requires `windows2016-cell.yml` |
 | [`migrate-cf-mysql-to-pxc.yml`](migrate-cf-mysql-to-pxc.yml) | Migrates from an existing cf-mysql database to [pxc-release](https://github.com/cloudfoundry-incubator/pxc-release). After the migration is complete, switch to the `use-pxc.yml` operations file. | |
-| [`perm-service.yml`](perm-service.yml) | Deploy CF with [Perm Service](https://github.com/cloudfoundry-incubator/perm) | Requires use-bosh-dns.yml |
+| [`perm-service.yml`](perm-service.yml) | Deploy CF with [Perm Service](https://github.com/cloudfoundry-incubator/perm) | Requires `use-bosh-dns.yml` and `enable-mysql-tls.yml` |
 | [`rootless-containers.yml`](rootless-containers.yml) | Enable rootless garden-runc containers. | Requires garden-runc 1.9.5 or later and grootfs 0.27.0 or later. |
 | [`secure-service-credentials.yml`](secure-service-credentials.yml) | Use CredHub for service credentials. | BOSH DNS is required if not using a credhub load balancer. You can add a credhub load balancer with `add-credhub-lb.yml`. |
 | [`secure-service-credentials-windows-cell.yml`](secure-service-credentials-windows-cell.yml) | Adds CredHub TLS CA as a trusted cert to the Windows Cell. | Requires `secure-service-credentials.yml`. |
