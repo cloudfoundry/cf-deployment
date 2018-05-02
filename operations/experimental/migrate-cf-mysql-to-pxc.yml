@@ -3,9 +3,9 @@
   path: /releases/-
   value:
     name: pxc
-    sha1: e4509d2b76f05aa6fcd83fe2710a5997ff7add92
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/pxc-release?v=0.3.0
-    version: 0.3.0
+    sha1: bd784bb93ffeff62cdec6aeb62ba0fea4eba6f41
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/pxc-release?v=0.4.0
+    version: 0.4.0
 
 - type: replace
   path: /instance_groups/name=database/jobs/name=mysql/properties/cf_mysql_enabled?
@@ -88,12 +88,42 @@
     api_password: "((cf_mysql_proxy_api_password))"
     consul_enabled: true
     consul_service_name: "sql-db"
+    api_port: 8083
+
+- type: replace
+  path: /instance_groups/name=database/jobs/-
+  value:
+    release: routing
+    name: route_registrar
+    consumes:
+      nats: {from: nats, deployment: cf}
+    properties:
+      route_registrar:
+        routes:
+        - name: cf-mysql-proxy
+          port: 8083
+          registration_interval: 10s
+          uris:
+          - &proxy_base_uri proxy.((system_domain))
+          prepend_instance_index: true
+        - name: cf-mysql-proxy-aggregator
+          port: 8082
+          registration_interval: 10s
+          uris:
+          - *proxy_base_uri
+
+- type: replace
+  path: /instance_groups/name=database/jobs/name=proxy/properties/api_uri?
+  value: *proxy_base_uri
 
 - type: replace
   path: /instance_groups/name=database/jobs/-
   value:
     name: bootstrap
     release: pxc
+    consumes:
+      mysql:
+        from: mysql-clustered
 
 - type: replace
   path: /variables/-
@@ -120,6 +150,7 @@
     type: certificate
     options:
       ca: pxc_galera_ca
+      common_name: galera_server_certificate
       extended_key_usage: [ "server_auth", "client_auth" ]
 
 - type: replace
@@ -129,4 +160,4 @@
     type: certificate
     options:
       ca: pxc_server_ca
-      common_name: "sql-db.service.cf.internal"
+      common_name: sql-db.service.cf.internal
