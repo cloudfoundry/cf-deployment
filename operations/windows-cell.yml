@@ -24,6 +24,8 @@
       release: consul
     - name: garden-windows
       properties:
+        garden:
+          max_container_procs: 20
         syslog_daemon_config:
           enable: false
       release: garden-windows
@@ -39,6 +41,7 @@
           rep:
             preloaded_rootfses:
             - windows2012R2:/tmp/windows2012R2
+        enable_declarative_healthcheck: true
         loggregator:
           ca_cert: ((loggregator_ca.certificate))
           cert: ((loggregator_tls_metron.certificate))

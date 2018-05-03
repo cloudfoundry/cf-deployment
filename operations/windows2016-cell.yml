@@ -53,6 +53,8 @@
             open_bindmounts_acl: true
             preloaded_rootfses:
             - windows2016:oci:///C:/var/vcap/packages/windows2016fs
+        enable_declarative_healthcheck: true
+        declarative_healthcheck_path: /var/vcap/packages/healthcheck_windows/internal
         loggregator:
           ca_cert: ((loggregator_ca.certificate))
           cert: ((loggregator_tls_metron.certificate))
