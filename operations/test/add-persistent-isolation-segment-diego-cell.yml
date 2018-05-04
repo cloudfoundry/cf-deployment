@@ -52,6 +52,7 @@
         containers:
           trusted_ca_certificates:
             - ((application_ca.certificate))
+        enable_declarative_healthcheck: true
         loggregator:
           use_v2_api: true
           ca_cert: "((loggregator_ca.certificate))"

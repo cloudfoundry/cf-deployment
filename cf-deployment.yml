@@ -340,6 +340,11 @@ instance_groups:
   - name: uaa
     release: uaa
     properties:
+      encryption:
+        active_key_label: default_key
+        encryption_keys:
+          - label: default_key
+            passphrase: ((uaa_default_encryption_passphrase))
       login:
         saml:
           activeKeyId: key-1
@@ -1102,6 +1107,7 @@ instance_groups:
       containers:
         trusted_ca_certificates:
           - ((application_ca.certificate))
+      enable_declarative_healthcheck: true
       loggregator: *diego_loggregator_client_properties
       tls:
         ca_cert: "((service_cf_internal_ca.certificate))"
@@ -1265,6 +1271,8 @@ variables:
 - name: network_connectivity_database_password
   type: password
 - name: uaa_clients_network_policy_secret
+  type: password
+- name: uaa_default_encryption_passphrase
   type: password
 - name: silk_ca
   type: certificate
@@ -1626,9 +1634,9 @@ releases:
   version: 40.0.3
   sha1: 8190d27c235b6718b8a2c7f87b28257b8ca4336e
 - name: cf-syslog-drain
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-syslog-drain-release?v=6.4
-  version: "6.4"
-  sha1: 71538f44f21e44ec13fa28481c64dc2976d10119
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-syslog-drain-release?v=6.5
+  version: "6.5"
+  sha1: 2764d9ad86e71b354dc127238895c0db8352d5eb
 - name: cflinuxfs2
   url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.203.0
   version: 1.203.0

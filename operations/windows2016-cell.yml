@@ -53,6 +53,8 @@
             open_bindmounts_acl: true
             preloaded_rootfses:
             - windows2016:oci:///C:/var/vcap/packages/windows2016fs
+        enable_declarative_healthcheck: true
+        declarative_healthcheck_path: /var/vcap/packages/healthcheck_windows/internal
         loggregator:
           ca_cert: ((loggregator_ca.certificate))
           cert: ((loggregator_tls_metron.certificate))
@@ -134,9 +136,9 @@
   path: /releases/name=winc?
   value:
     name: winc
-    sha1: ee950e25e0e52236d6fa45cc4fedf50b2a0b2a42
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/winc-release?v=1.1.0
-    version: 1.1.0
+    sha1: 9c1c4fe76ede10f36005f3f18cb07750d772b8e5
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/winc-release?v=1.2.0
+    version: 1.2.0
 - type: replace
   path: /releases/name=windows2016fs?
   value:
@@ -148,6 +150,6 @@
   path: /releases/name=windows-utilities?
   value:
     name: windows-utilities
-    sha1: f9b95e442a168591d87e9b392607096cca05de32
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.9.0
-    version: 0.9.0
+    sha1: 2bf15743be48e696a72236c05e8e3e137474cedd
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.10.0
+    version: 0.10.0
