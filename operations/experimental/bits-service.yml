@@ -73,11 +73,12 @@
     name: bits_service_ssl
     options:
       alternative_names:
+      - bits.service.cf.internal
       - bits-service.service.cf.internal
       - ((system_domain))
       - '*.((system_domain))'
       ca: service_cf_internal_ca
-      common_name: bits-service.service.cf.internal
+      common_name: bits.service.cf.internal
     type: certificate
 - type: replace
   path: /instance_groups/name=api/jobs/name=bits-service/properties/bits-service/tls?
