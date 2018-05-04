@@ -340,6 +340,11 @@ instance_groups:
   - name: uaa
     release: uaa
     properties:
+      encryption:
+        active_key_label: default_key
+        encryption_keys:
+          - label: default_key
+            passphrase: ((uaa_default_encryption_passphrase))
       login:
         saml:
           activeKeyId: key-1
@@ -1266,6 +1271,8 @@ variables:
 - name: network_connectivity_database_password
   type: password
 - name: uaa_clients_network_policy_secret
+  type: password
+- name: uaa_default_encryption_passphrase
   type: password
 - name: silk_ca
   type: certificate
