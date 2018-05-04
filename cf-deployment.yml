@@ -340,6 +340,11 @@ instance_groups:
   - name: uaa
     release: uaa
     properties:
+      encryption:
+        active_key_label: default_key
+        encryption_keys:
+          - label: default_key
+            passphrase: ((default_encryption_passphrase))
       login:
         saml:
           activeKeyId: key-1
@@ -1231,6 +1236,8 @@ instance_groups:
           - "*.doppler.((system_domain))"
 
 variables:
+- name: default_encryption_passphrase
+  type: password
 - name: blobstore_admin_users_password
   type: password
 - name: blobstore_secure_link_secret
