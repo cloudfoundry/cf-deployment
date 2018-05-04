@@ -344,7 +344,7 @@ instance_groups:
         active_key_label: default_key
         encryption_keys:
           - label: default_key
-            passphrase: ((default_encryption_passphrase))
+            passphrase: ((uaa_default_encryption_passphrase))
       login:
         saml:
           activeKeyId: key-1
@@ -1236,8 +1236,6 @@ instance_groups:
           - "*.doppler.((system_domain))"
 
 variables:
-- name: default_encryption_passphrase
-  type: password
 - name: blobstore_admin_users_password
   type: password
 - name: blobstore_secure_link_secret
@@ -1273,6 +1271,8 @@ variables:
 - name: network_connectivity_database_password
   type: password
 - name: uaa_clients_network_policy_secret
+  type: password
+- name: uaa_default_encryption_passphrase
   type: password
 - name: silk_ca
   type: certificate
