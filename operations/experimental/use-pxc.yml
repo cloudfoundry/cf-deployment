@@ -2,9 +2,9 @@
   path: /releases/name=cf-mysql
   value:
     name: pxc
-    sha1: bd784bb93ffeff62cdec6aeb62ba0fea4eba6f41
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/pxc-release?v=0.4.0
-    version: 0.4.0
+    sha1: 1c8ea6aceffe189871295e552526f032cee2114e
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/pxc-release?v=0.5.0
+    version: 0.5.0
 - type: replace
   path: /instance_groups/name=database/jobs/name=mysql/name
   value: mysql-clustered
@@ -55,34 +55,31 @@
   path: /instance_groups/name=database/jobs/name=proxy/properties
   value:
     api_password: ((cf_mysql_proxy_api_password))
+    api_port: 8083
     consul_enabled: true
     consul_service_name: sql-db
-    api_port: 8083
-
 - type: replace
   path: /instance_groups/name=database/jobs/-
   value:
-    release: routing
     name: route_registrar
     properties:
       route_registrar:
         routes:
         - name: cf-mysql-proxy
           port: 8083
+          prepend_instance_index: true
           registration_interval: 10s
           uris:
-          - &proxy_base_uri proxy.((system_domain))
-          prepend_instance_index: true
+          - proxy.((system_domain))
         - name: cf-mysql-proxy-aggregator
           port: 8082
           registration_interval: 10s
           uris:
-          - *proxy_base_uri
-
+          - proxy.((system_domain))
+    release: routing
 - type: replace
   path: /instance_groups/name=database/jobs/name=proxy/properties/api_uri?
-  value: *proxy_base_uri
-
+  value: proxy.((system_domain))
 - type: replace
   path: /instance_groups/name=database/jobs/-
   value:
