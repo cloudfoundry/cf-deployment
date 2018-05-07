@@ -35,10 +35,13 @@
     provider: AWS
     aws_access_key_id: ((blobstore_access_key_id))
     aws_secret_access_key: ((blobstore_secret_access_key))
+    aws_signature_version: ((s3_signature_version))
     region: ((aws_region))
     host: ((s3_host))
     endpoint: ((s3_endpoint))
     path_style: ((s3_path_style))
+    port: ((s3_port))
+    
 
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/droplets?/fog_connection?
