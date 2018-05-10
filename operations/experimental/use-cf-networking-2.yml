@@ -1,0 +1,99 @@
+---
+# use this with cf-deployment to use cf-networking 2.0
+- type: replace
+  path: /instance_groups/name=api/jobs/name=policy-server/properties
+  value:
+    uaa_client_secret: ((uaa_clients_network_policy_secret))
+    uaa_ca: ((uaa_ca.certificate))
+    database:
+      type: mysql
+      username: network_policy
+      password: ((network_policy_database_password))
+      host: sql-db.service.cf.internal
+      port: 3306
+      name: network_policy
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=policy-server-internal/properties
+  value:
+    ca_cert: ((network_policy_ca.certificate))
+    server_cert: ((network_policy_server.certificate))
+    server_key: ((network_policy_server.private_key))
+
+- type: replace
+  path: /releases/name=cf-networking
+  value:
+    name: cf-networking
+    version: 2.0.0
+    url: https://bosh.io/d/github.com/cloudfoundry/cf-networking-release?v=2.0.0
+    sha1: 8b9654744b3c61e2d756e33ba65113a6cac7e49a
+
+# Add silk 2.0
+- type: replace
+  path: /releases/name=silk?
+  value:
+    name: silk
+    version: 2.0.0
+    url: https://bosh.io/d/github.com/cloudfoundry/silk-release?v=2.0.0
+    sha1: 5a72094b0e1287230c2c6d8c1461288302d3f84e
+
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller
+  value:
+    name: silk-controller
+    properties:
+      ca_cert: ((silk_ca.certificate))
+      database:
+        host: sql-db.service.cf.internal
+        name: network_connectivity
+        password: ((network_connectivity_database_password))
+        port: 3306
+        type: mysql
+        username: network_connectivity
+      server_cert: ((silk_controller.certificate))
+      server_key: ((silk_controller.private_key))
+      silk_daemon:
+        ca_cert: ((silk_ca.certificate))
+        client_cert: ((silk_daemon.certificate))
+        client_key: ((silk_daemon.private_key))
+    release: silk
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=silk-daemon
+  value:
+    name: silk-daemon
+    properties:
+      ca_cert: ((silk_ca.certificate))
+      client_cert: ((silk_daemon.certificate))
+      client_key: ((silk_daemon.private_key))
+    release: silk
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=netmon
+  value:
+    name: netmon
+    release: silk
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=vxlan-policy-agent
+  value:
+    name: vxlan-policy-agent
+    properties:
+      ca_cert: ((network_policy_ca.certificate))
+      client_cert: ((network_policy_client.certificate))
+      client_key: ((network_policy_client.private_key))
+    release: silk
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=cni
+  value:
+    name: silk-cni
+    release: silk
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=garden-cni/properties?/cni_plugin_dir
+  value: /var/vcap/packages/silk-cni/bin
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=garden-cni/properties?/cni_config_dir
+  value: /var/vcap/jobs/silk-cni/config/cni
