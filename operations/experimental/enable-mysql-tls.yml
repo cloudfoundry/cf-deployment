@@ -1,7 +1,7 @@
 ---
 - type: replace
   path: /instance_groups/name=database?/jobs/name=mysql/properties/cf_mysql/mysql/tls?/ca_certificate
-  value: ((mysql_server_certificate.ca))
+  value: ((pxc_server_ca.certificate))
 
 - type: replace
   path: /instance_groups/name=database?/jobs/name=mysql/properties/cf_mysql/mysql/tls?/server_certificate
