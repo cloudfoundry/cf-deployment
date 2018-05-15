@@ -126,28 +126,10 @@
 - type: replace
   path: /variables/-
   value:
-    name: pxc_galera_ca
-    type: certificate
-    options:
-      is_ca: true
-      common_name: pxc_galera_ca
-
-- type: replace
-  path: /variables/-
-  value:
-    name: pxc_server_ca
-    type: certificate
-    options:
-      is_ca: true
-      common_name: pxc_server_ca
-
-- type: replace
-  path: /variables/-
-  value:
     name: galera_server_certificate
     type: certificate
     options:
-      ca: pxc_galera_ca
+      ca: service_cf_internal_ca
       common_name: galera_server_certificate
       extended_key_usage: [ "server_auth", "client_auth" ]
 
@@ -157,5 +139,5 @@
     name: mysql_server_certificate
     type: certificate
     options:
-      ca: pxc_server_ca
+      ca: service_cf_internal_ca
       common_name: sql-db.service.cf.internal

@@ -85,28 +85,13 @@
   value:
     name: bootstrap
     release: pxc
-- type: replace
-  path: /variables/-
-  value:
-    name: pxc_galera_ca
-    options:
-      common_name: pxc_galera_ca
-      is_ca: true
-    type: certificate
-- type: replace
-  path: /variables/-
-  value:
-    name: pxc_server_ca
-    options:
-      common_name: pxc_server_ca
-      is_ca: true
-    type: certificate
+
 - type: replace
   path: /variables/-
   value:
     name: galera_server_certificate
     options:
-      ca: pxc_galera_ca
+      ca: service_cf_internal_ca
       common_name: galera_server_certificate
       extended_key_usage:
       - server_auth
@@ -117,6 +102,6 @@
   value:
     name: mysql_server_certificate
     options:
-      ca: pxc_server_ca
+      ca: service_cf_internal_ca
       common_name: sql-db.service.cf.internal
     type: certificate
