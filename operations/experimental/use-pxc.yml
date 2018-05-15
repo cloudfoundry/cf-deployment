@@ -5,12 +5,15 @@
     sha1: 4dd970acd8fb059e73d9922adb9cc40206334882
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/pxc-release?v=0.6.0
     version: 0.6.0
+
 - type: replace
   path: /instance_groups/name=database/jobs/name=mysql/name
   value: mysql-clustered
+
 - type: replace
   path: /instance_groups/name=database/jobs/name=mysql-clustered/release
   value: pxc
+
 - type: replace
   path: /instance_groups/name=database/jobs/name=mysql-clustered?/properties
   value:
@@ -48,9 +51,11 @@
     tls:
       galera: ((galera_server_certificate))
       server: ((mysql_server_certificate))
+
 - type: replace
   path: /instance_groups/name=database/jobs/name=proxy/release
   value: pxc
+
 - type: replace
   path: /instance_groups/name=database/jobs/name=proxy/properties
   value:
@@ -58,6 +63,7 @@
     api_port: 8083
     consul_enabled: true
     consul_service_name: sql-db
+
 - type: replace
   path: /instance_groups/name=database/jobs/-
   value:
@@ -77,9 +83,11 @@
           uris:
           - proxy.((system_domain))
     release: routing
+
 - type: replace
   path: /instance_groups/name=database/jobs/name=proxy/properties/api_uri?
   value: proxy.((system_domain))
+
 - type: replace
   path: /instance_groups/name=database/jobs/-
   value:
@@ -97,6 +105,7 @@
       - server_auth
       - client_auth
     type: certificate
+
 - type: replace
   path: /variables/-
   value:
