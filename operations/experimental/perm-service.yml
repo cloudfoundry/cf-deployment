@@ -31,6 +31,11 @@
 
 # Changes to other instance groups
 - type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/scim/users/name=admin/groups/-
+  value:
+   perm.admin
+
+- type: replace
   path: /instance_groups/name=database/jobs/name=mysql/properties/cf_mysql/mysql/seeded_databases/-
   value:
     name: perm
