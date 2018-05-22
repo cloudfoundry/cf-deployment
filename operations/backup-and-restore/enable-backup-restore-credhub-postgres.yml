@@ -16,8 +16,8 @@
         data_storage:
           database: credhub
           host: sql-db.service.cf.internal
-          password: ((credhub_database_password))
-          port: 3306
+          password: "((credhub_database_password))"
+          port: 5524
           require_tls: false
-          type: mysql
+          type: postgres
           username: credhub
