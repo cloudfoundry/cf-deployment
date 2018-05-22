@@ -1,30 +1,24 @@
 - type: replace
   path: /instance_groups/name=api:before
   value:
-    name: bits
     azs:
     - z1
     - z2
     instances: 2
-    vm_type: small
-    vm_extensions:
-    - 50GB_ephemeral_disk
-    stemcell: default
-    networks:
-    - name: default
     jobs:
-    - name: consul_agent
-      release: consul
-      consumes:
-        consul_common: {from: consul_common_link}
+    - consumes:
+        consul_client:
+          from: consul_client_link
+        consul_common:
+          from: consul_common_link
         consul_server: nil
-        consul_client: {from: consul_client_link}
+      name: consul_agent
       properties:
         consul:
           agent:
             services: {}
+      release: consul
     - name: route_registrar
-      release: routing
       properties:
         route_registrar:
           routes:
@@ -36,15 +30,16 @@
             tls_port: 443
             uris:
             - bits-service.((system_domain))
+      release: routing
     - name: statsd_injector
-      release: statsd-injector
       properties:
         loggregator:
           tls:
-            ca_cert: "((loggregator_ca.certificate))"
+            ca_cert: ((loggregator_ca.certificate))
             statsd_injector:
-              cert: "((loggregator_tls_statsdinjector.certificate))"
-              key: "((loggregator_tls_statsdinjector.private_key))"
+              cert: ((loggregator_tls_statsdinjector.certificate))
+              key: ((loggregator_tls_statsdinjector.private_key))
+      release: statsd-injector
     - name: bits-service
       properties:
         bits-service:
@@ -66,7 +61,13 @@
             cert: ((bits_service_ssl.certificate))
             key: ((bits_service_ssl.private_key))
       release: bits-service
-
+    name: bits
+    networks:
+    - name: default
+    stemcell: default
+    vm_extensions:
+    - 50GB_ephemeral_disk
+    vm_type: small
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/bits_service?
   value:
@@ -127,6 +128,6 @@
   path: /releases/-
   value:
     name: bits-service
-    sha1: 3c5b3606cdc19a99c25db3fb67af8958e662a27b
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/bits-service-release?v=1.8.0
-    version: 1.8.0
+    sha1: 5c4a25a4cea81f09f6e39c9d3735b56c2170553d
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/bits-service-release?v=2.3.0
+    version: 2.3.0
