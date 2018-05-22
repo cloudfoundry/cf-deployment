@@ -10,26 +10,16 @@
           ca: ((cf_app_sd_ca.certificate))
     release: cf-app-sd
 - type: replace
-  path: /instance_groups/name=service-discovery?
+  path: /instance_groups/name=scheduler/jobs/-
   value:
-    azs:
-    - z1
-    - z2
-    instances: 2
-    jobs:
-    - name: service-discovery-controller
-      properties:
-        dnshttps:
-          client:
-            ca: ((cf_app_sd_ca.certificate))
-          server:
-            tls: ((cf_app_sd_server_tls))
-      release: cf-app-sd
-    name: service-discovery
-    networks:
-    - name: default
-    stemcell: default
-    vm_type: minimal
+    name: service-discovery-controller
+    properties:
+      dnshttps:
+        client:
+          ca: ((cf_app_sd_ca.certificate))
+        server:
+          tls: ((cf_app_sd_server_tls))
+    release: cf-app-sd
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=route_emitter/properties/internal_routes?
   value:
