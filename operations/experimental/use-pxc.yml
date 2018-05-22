@@ -5,12 +5,23 @@
     sha1: 4dd970acd8fb059e73d9922adb9cc40206334882
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/pxc-release?v=0.6.0
     version: 0.6.0
+
+- type: replace
+  path: /releases/name=os-conf?
+  value:
+    name: os-conf
+    version: 20
+    url: https://bosh.io/d/github.com/cloudfoundry/os-conf-release?v=20
+    sha1: 42b1295896c1fbcd36b55bfdedfe86782b2c9fba
+
 - type: replace
   path: /instance_groups/name=database/jobs/name=mysql/name
   value: mysql-clustered
+
 - type: replace
   path: /instance_groups/name=database/jobs/name=mysql-clustered/release
   value: pxc
+
 - type: replace
   path: /instance_groups/name=database/jobs/name=mysql-clustered?/properties
   value:
@@ -48,9 +59,11 @@
     tls:
       galera: ((galera_server_certificate))
       server: ((mysql_server_certificate))
+
 - type: replace
   path: /instance_groups/name=database/jobs/name=proxy/release
   value: pxc
+
 - type: replace
   path: /instance_groups/name=database/jobs/name=proxy/properties
   value:
@@ -58,6 +71,7 @@
     api_port: 8083
     consul_enabled: true
     consul_service_name: sql-db
+
 - type: replace
   path: /instance_groups/name=database/jobs/-
   value:
@@ -77,14 +91,17 @@
           uris:
           - proxy.((system_domain))
     release: routing
+
 - type: replace
   path: /instance_groups/name=database/jobs/name=proxy/properties/api_uri?
   value: proxy.((system_domain))
+
 - type: replace
   path: /instance_groups/name=database/jobs/-
   value:
     name: bootstrap
     release: pxc
+
 - type: replace
   path: /variables/-
   value:
@@ -93,6 +110,7 @@
       common_name: pxc_galera_ca
       is_ca: true
     type: certificate
+
 - type: replace
   path: /variables/-
   value:
@@ -101,6 +119,7 @@
       common_name: pxc_server_ca
       is_ca: true
     type: certificate
+
 - type: replace
   path: /variables/-
   value:
@@ -112,6 +131,7 @@
       - server_auth
       - client_auth
     type: certificate
+
 - type: replace
   path: /variables/-
   value:
@@ -120,3 +140,63 @@
       ca: pxc_server_ca
       common_name: sql-db.service.cf.internal
     type: certificate
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ccdb/address?
+  value: sql-db.service.cf.internal
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/ccdb/address?
+  value: sql-db.service.cf.internal
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb/address?
+  value: sql-db.service.cf.internal
+
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/address?
+  value: sql-db.service.cf.internal
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/ca_cert?
+  value: "((pxc_server_ca.certificate))"
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ccdb/ca_cert?
+  value: "((pxc_server_ca.certificate))"
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/ccdb/ca_cert?
+  value: "((pxc_server_ca.certificate))"
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb/ca_cert?
+  value: "((pxc_server_ca.certificate))"
+
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=bbs/properties/diego/bbs/sql/ca_cert?
+  value: "((pxc_server_ca.certificate))"
+
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=bbs/properties/diego/bbs/sql/require_ssl?
+  value: true
+
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql/ca_cert?
+  value: "((pxc_server_ca.certificate))"
+
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql/require_ssl?
+  value: true
+
+- type: replace
+  path: /instance_groups/name=uaa/jobs/-
+  value:
+    name: ca_certs
+    release: os-conf
+    properties:
+      certs: "((pxc_server_ca.certificate))"
+
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb?/tls_enabled
+  value: true
