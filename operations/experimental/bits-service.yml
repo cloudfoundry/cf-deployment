@@ -48,18 +48,14 @@
     - name: bits-service
       properties:
         bits-service:
-          app_stash:
-            blobstore_type: &blobstore_type webdav
-          buildpacks:
-            blobstore_type: *blobstore_type
+          app_stash: null
+          buildpacks: null
           cc_updates:
             ca_cert: ((service_cf_internal_ca.certificate))
             client_cert: ((cc_tls.certificate))
             client_key: ((cc_tls.private_key))
-          droplets:
-            blobstore_type: *blobstore_type
-          packages:
-            blobstore_type: *blobstore_type
+          droplets: null
+          packages: null
           private_endpoint: https://bits-service.service.cf.internal
           public_endpoint: https://bits-service.((system_domain))
           secret: ((bits_service_secret))
