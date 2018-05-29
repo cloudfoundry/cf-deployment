@@ -1,3 +1,4 @@
+---
 - type: replace
   path: /releases/-
   value:
@@ -130,7 +131,7 @@
     db_schema: diego
     db_username: diego
 - type: replace
-  path: /instance_groups/name=api/jobs/name=policy-server/properties/cf_networking/policy_server/database
+  path: /instance_groups/name=api/jobs/name=policy-server/properties/database
   value:
     host: sql-db.service.cf.internal
     name: network_policy
@@ -139,7 +140,7 @@
     type: postgres
     username: network_policy
 - type: replace
-  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/cf_networking/silk_controller/database
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/database
   value:
     host: sql-db.service.cf.internal
     name: network_connectivity
