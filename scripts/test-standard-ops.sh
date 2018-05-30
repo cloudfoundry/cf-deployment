@@ -37,6 +37,7 @@ test_standard_ops() {
       check_interpolation "use-azure-storage-blobstore.yml" "-l example-vars-files/vars-use-azure-storage-blobstore.yml"
       check_interpolation "use-blobstore-cdn.yml" "-l example-vars-files/vars-use-blobstore-cdn.yml"
       check_interpolation "use-compiled-releases.yml"
+      check_interpolation "use-external-blobstore.yml" "-l example-vars-files/vars-use-external-blobstore.yml"
       check_interpolation "use-external-dbs.yml" "-l example-vars-files/vars-use-external-dbs.yml"
       check_interpolation "use-haproxy.yml" "-v haproxy_private_ip=10.0.10.10"
       check_interpolation "name: use-haproxy-public-network.yml" "use-haproxy.yml" "-o use-haproxy-public-network.yml -v haproxy_public_network_name=public -v haproxy_public_ip=6.7.8.9"
