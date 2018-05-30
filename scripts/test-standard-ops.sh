@@ -57,6 +57,8 @@ test_standard_ops() {
       check_interpolation "use-s3-blobstore.yml" "-l example-vars-files/vars-use-s3-blobstore.yml"
       check_interpolation "use-s3-custom-blobstore.yml" "-l example-vars-files/vars-use-s3-custom-blobstore.yml"
       check_interpolation "use-gcs-blobstore.yml" "-l example-vars-files/vars-use-gcs-blobstore.yml"
+      check_interpolation "use-gcs-blobstore-access-key.yml" "-o ${home}/operations/use-external-blobstore.yml -o ${home}/operations/use-gcs-blobstore-access-key.yml
+      -v blobstore_access_key_id=TEST_ACCESS_KEY -v blobstore_secret_access_key=TEST_SECRET_ACCESS_KEY -l example-vars-files/vars-use-gcs-blobstore.yml"
       check_interpolation "name: use-gcs-blobstore-service-account.yml" "use-gcs-blobstore.yml -o use-gcs-blobstore-service-account.yml -l example-vars-files/vars-use-gcs-blobstore-service-account.yml"
       check_interpolation "use-swift-blobstore.yml" "-l example-vars-files/vars-use-swift-blobstore.yml"
       check_interpolation "use-trusted-ca-cert-for-apps.yml" "-l example-vars-files/vars-use-trusted-ca-cert-for-apps.yml"
