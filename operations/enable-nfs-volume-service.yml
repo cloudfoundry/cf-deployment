@@ -16,44 +16,34 @@
 - type: replace
   path: /instance_groups/-
   value:
-    azs:
-    - z1
+    azs: [z1]
+    lifecycle: errand
     instances: 1
     jobs:
-    - consumes:
-        consul_client:
-          from: consul_client_link
-        consul_common:
-          from: consul_common_link
-        consul_server: nil
-      name: consul_agent
-      release: consul
-    - name: nfsbroker
+    - name: nfsbrokerpush
       properties:
-        nfsbroker:
-          db_driver: mysql
-          db_hostname: sql-db.service.cf.internal
-          db_name: nfs-broker
-          db_password: ((nfs-broker-database-password))
-          db_port: 3306
-          db_username: nfs-broker
+        nfsbrokerpush:
+          app_name: nfs-broker
+          domain: ((system_domain))
+          app_domain: ((system_domain))
+          register_broker: false
+          cf:
+            admin_password: ((cf_admin_password))
+            admin_user: admin
+          organization: system
+          space: nfs-broker-space
           password: ((nfs-broker-password))
-          plan_desc: broker for exisiting NFS shares
           username: nfs-broker
+          syslog_url: ""
+          skip_cert_verify: true
+          db:
+            driver: mysql
+            name: nfs-broker
+            password: ((nfs-broker-database-password))
+            port: 3306
+            username: nfs-broker
       release: nfs-volume
-    - name: route_registrar
-      properties:
-        route_registrar:
-          routes:
-          - name: nfs-broker
-            port: 8999
-            registration_interval: 20s
-            tags:
-              component: nfs-broker
-            uris:
-            - nfs-broker.((system_domain))
-      release: routing
-    name: nfsbroker
+    name: nfs-broker-push
     networks:
     - name: default
     stemcell: default
