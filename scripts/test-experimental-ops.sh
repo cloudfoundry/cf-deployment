@@ -55,6 +55,7 @@ test_experimental_ops() {
       check_interpolation "migrate-cf-mysql-to-pxc.yml"
       check_interpolation "use-grootfs.yml"
       check_interpolation "enable-oci-phase-1.yml"
+      check_interpolation "use-garden-containerd.yml"
       check_interpolation "name: enable-routing-integrity.yml" "enable-routing-integrity.yml" "-o enable-instance-identity-credentials.yml"
       check_interpolation "name: enable-service-discovery.yml" "use-bosh-dns-for-containers.yml" "-o enable-service-discovery.yml"
       check_interpolation "use-cf-networking-2.yml"

@@ -76,6 +76,7 @@ and the ops-files will be removed.
 | [`enable-iptables-logger-with-networking-2.yml`](enable-iptables-logger-with-networking-2.yml) | Enable iptables logger when using cf-networking 2.x. | Requires `use-cf-networking-2.yml` |
 | [`use-external-dbs-with-networking-2.yml`](use-external-dbs-with-networking-2.yml) | Updates policy-server and silk-controller to use external dbs when using cf-networking 2.x. | Requires `use-external-dbs.yml` and `use-cf-networking-2.yml` |
 | [`use-postgres-with-networking-2.yml`](use-postgres-with-networking-2.yml) | Updates policy-server and silk-controller to use postgres db when using cf-networking 2.x. | Requires `use-postgres.yml` and `use-cf-networking-2.yml` |
+| [`use-garden-containerd.yml`](use-garden-containerd.yml) | Configure Garden to create containers via containerd. | |
 | [`use-grootfs.yml`](use-grootfs.yml) | Groot is enabled by default. This file is blank to avoid breaking deployment scripts. | |
 | [`use-log-cache.yml`](use-log-cache.yml) | Adds the [Log Cache Release](https://github.com/cloudfoundry/log-cache-release) for logs and metrics. | |
 | [`use-pxc.yml`](use-pxc.yml) | Uses the [pxc-release](https://github.com/cloudfoundry-incubator/pxc-release) instead of the [cf-mysql-release](https://github.com/cloudfoundry/cf-mysql-release/) as the internal mysql database. This ops-file is for clean-installs of cf or for redeploying cf already running pxc. It's not for migrating from cf-mysql-release. | | 
