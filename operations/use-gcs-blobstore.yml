@@ -100,15 +100,3 @@
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/resource_pool/resource_directory_key?
   value: ((resource_directory_key))
 
-# remove internal blobstore including its variables
-- type: remove
-  path: /instance_groups/name=singleton-blobstore
-
-- type: remove
-  path: /variables/name=blobstore_admin_users_password
-
-- type: remove
-  path: /variables/name=blobstore_secure_link_secret
-
-- type: remove
-  path: /variables/name=blobstore_tls
