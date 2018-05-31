@@ -8,7 +8,6 @@
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks
   value: &blobstore-properties
-    blobstore_type: fog
     fog_connection:
       provider: Google
       google_storage_access_key_id: ((blobstore_access_key_id))
