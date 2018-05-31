@@ -54,7 +54,7 @@ test_standard_ops() {
         fail "use-latest-windows-stemcell.yml, expected 'latest' but got '${version}'"
       fi
       check_interpolation "use-postgres.yml"
-      check_interpolation "use-s3-blobstore.yml" "-l example-vars-files/vars-use-s3-blobstore.yml"
+      check_interpolation "name: use-s3-blobstore.yml" "use-external-blobstore.yml -o use-s3-blobstore.yml -l example-vars-files/vars-use-s3-blobstore.yml"
       check_interpolation "use-s3-custom-blobstore.yml" "-l example-vars-files/vars-use-s3-custom-blobstore.yml"
       check_interpolation "use-gcs-blobstore.yml" "-l example-vars-files/vars-use-gcs-blobstore.yml"
       check_interpolation "name: use-gcs-blobstore-access-key.yml" "use-external-blobstore.yml -o use-gcs-blobstore-access-key.yml
