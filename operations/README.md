@@ -17,7 +17,7 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 | [`use-s3-blobstore.yml`](use-s3-blobstore.yml) | Configures external blobstore to use Amazon S3. | Requires `use-external-blobstore.yml`. Introduces [new variables](example-vars-files/vars-use-s3-blobstore.yml) for s3 credentials and bucket names. |
 | **Azure** | | |
 | [`azure.yml`](azure.yml) | Sets gorouter's `frontend_idle_timeout` to value appropriate for Azure load balancers. | Any value below 240 should work. |
-| [`use-azure-storage-blobstore.yml`](use-azure-storage-blobstore.yml) | Replaces local WebDAV blobstore with external Azure Storage blobstore. | Introduces [new variables](example-vars-files/vars-use-azure-storage-blobstore.yml) for Azure credentials and container names. |
+| [`use-azure-storage-blobstore.yml`](use-azure-storage-blobstore.yml) | Configures external blobstore to use Azure Storage. | Requires `use-external-blobstore.yml`. Introduces [new variables](example-vars-files/vars-use-azure-storage-blobstore.yml) for Azure credentials and container names. |
 | **GCP** | | |
 | [`use-gcs-blobstore.yml`](use-gcs-blobstore.yml) | Configures external blobstore to use Google Cloud Storage. | Requires `use-external-blobstore.yml`. Introduces [new variables](example-vars-files/vars-use-gcs-blobstore.yml) for gcp credentials and bucket names. |
 | [`use-gcs-blobstore-service-account.yml`](use-gcs-blobstore-service-account.yml) | Enables service account credentials for Google blobstore. | Requires `use-gcs-blobstore.yml`. Introduces [new variables](example-vars-files/vars-use-gcs-blobstore-service-account.yml) for gcp service account credentials. |
