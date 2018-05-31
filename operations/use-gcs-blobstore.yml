@@ -1,7 +1,15 @@
 ---
+# this is intentionally redundant with the second `replace` operation
+# we need to check for the existence of the `fog connection` key
+# to confirm that `use-external-blobstore.yml` has been applied
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks/fog_connection
+  error: "Please apply `use-external-blobstore.yml` first."
+  value:
+    provider: Google
+
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks
-  error: "Please apply `use-external-blobstore.yml` first."
   value: &blobstore-properties
     fog_connection:
       provider: Google
