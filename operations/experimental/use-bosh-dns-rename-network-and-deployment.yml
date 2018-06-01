@@ -1,3 +1,4 @@
+---
 - type: replace
   path: /addons?/-
   value:
@@ -60,9 +61,29 @@
           - '*.uaa.((network_name)).((deployment_name)).bosh'
         api:
           client:
-            tls: ((dns_api_client_tls))
+            tls:
+              ca: ((dns_api_tls_ca.certificate))
+              certificate: ((dns_api_client_tls.certificate))
+              private_key: ((dns_api_client_tls.private_key))
           server:
-            tls: ((dns_api_server_tls))
+            tls:
+              ca: ((dns_api_tls_ca.certificate))
+              certificate: ((dns_api_server_tls.certificate))
+              private_key: ((dns_api_server_tls.private_key))
+        cache:
+          enabled: true
+        health:
+          enabled: true
+          server:
+            tls:
+              ca: ((dns_healthcheck_tls_ca.certificate))
+              certificate: ((dns_healthcheck_server_tls.certificate))
+              private_key: ((dns_healthcheck_server_tls.private_key))
+          client:
+            tls:
+              ca: ((dns_healthcheck_tls_ca.certificate))
+              certificate: ((dns_healthcheck_client_tls.certificate))
+              private_key: ((dns_healthcheck_client_tls.private_key))
       release: bosh-dns
     name: bosh-dns
 - type: replace
@@ -127,9 +148,29 @@
           - '*.uaa.((network_name)).((deployment_name)).bosh'
         api:
           client:
-            tls: ((dns_api_client_tls))
+            tls:
+              ca: ((dns_api_tls_ca.certificate))
+              certificate: ((dns_api_client_tls.certificate))
+              private_key: ((dns_api_client_tls.private_key))
           server:
-            tls: ((dns_api_server_tls))
+            tls:
+              ca: ((dns_api_tls_ca.certificate))
+              certificate: ((dns_api_server_tls.certificate))
+              private_key: ((dns_api_server_tls.private_key))
+        cache:
+          enabled: true
+        health:
+          enabled: true
+          server:
+            tls:
+              ca: ((dns_healthcheck_tls_ca.certificate))
+              certificate: ((dns_healthcheck_server_tls.certificate))
+              private_key: ((dns_healthcheck_server_tls.private_key))
+          client:
+            tls:
+              ca: ((dns_healthcheck_tls_ca.certificate))
+              certificate: ((dns_healthcheck_client_tls.certificate))
+              private_key: ((dns_healthcheck_client_tls.private_key))
       release: bosh-dns
     name: bosh-dns-windows2012
 - type: replace
@@ -194,9 +235,29 @@
           - '*.uaa.((network_name)).cf.bosh'
         api:
           client:
-            tls: ((dns_api_client_tls))
+            tls:
+              ca: ((dns_api_tls_ca.certificate))
+              certificate: ((dns_api_client_tls.certificate))
+              private_key: ((dns_api_client_tls.private_key))
           server:
-            tls: ((dns_api_server_tls))
+            tls:
+              ca: ((dns_api_tls_ca.certificate))
+              certificate: ((dns_api_server_tls.certificate))
+              private_key: ((dns_api_server_tls.private_key))
+        cache:
+          enabled: true
+        health:
+          enabled: true
+          server:
+            tls:
+              ca: ((dns_healthcheck_tls_ca.certificate))
+              certificate: ((dns_healthcheck_server_tls.certificate))
+              private_key: ((dns_healthcheck_server_tls.private_key))
+          client:
+            tls:
+              ca: ((dns_healthcheck_tls_ca.certificate))
+              certificate: ((dns_healthcheck_client_tls.certificate))
+              private_key: ((dns_healthcheck_client_tls.private_key))
       release: bosh-dns
     name: bosh-dns-windows2016
 - type: replace
@@ -234,3 +295,31 @@
       extended_key_usage:
       - server_auth
     type: certificate
+- type: replace
+  path: /variables/-
+  value:
+    name: dns_healthcheck_tls_ca
+    type: certificate
+    options:
+      common_name: dnsHealthCheckTlsCa
+      is_ca: true
+- type: replace
+  path: /variables/-
+  value:
+    name: dns_healthcheck_server_tls
+    type: certificate
+    options:
+      ca: dns_healthcheck_tls_ca
+      common_name: health.bosh-dns
+      extended_key_usage:
+      - server_auth
+- type: replace
+  path: /variables/-
+  value:
+    name: dns_healthcheck_client_tls
+    type: certificate
+    options:
+      ca: dns_healthcheck_tls_ca
+      common_name: health.bosh-dns
+      extended_key_usage:
+      - client_auth
