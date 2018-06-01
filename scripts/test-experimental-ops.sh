@@ -51,18 +51,9 @@ test_experimental_ops() {
       check_interpolation "use-log-cache.yml"
       check_interpolation "fast-deploy-with-downtime-and-danger.yml"
       check_interpolation "name: enable-tls-cloud-controller-postgres" "${home}/operations/use-postgres.yml" "-o enable-tls-cloud-controller-postgres.yml"
-      version=$(bosh interpolate ${home}/cf-deployment.yml -o windows2016-cell.yml -o use-latest-windows2016-stemcell.yml --path=/stemcells/alias=windows2016/version)
-      if [ "${version}" == "latest" ]; then
-        pass "use-latest-windows2016-stemcell.yml"
-      else
-        fail "use-latest-windows2016-stemcell.yml, expected 'latest' but got '${version}'"
-      fi
-      check_interpolation "name: use-offline-windows2016fs.yml" "windows2016-cell.yml" "-o use-offline-windows2016fs.yml"
       check_interpolation "name: windows-enable-component-syslog.yml" "windows-enable-component-syslog.yml" "-l ${home}/operations/addons/example-vars-files/vars-enable-component-syslog.yml"
-      check_interpolation "windows2016-cell.yml"
       check_interpolation "improve-diego-log-format.yml"
       check_interpolation "name: improve-diego-log-format-windows.yml" "${home}/operations/windows-cell.yml" "-o improve-diego-log-format-windows.yml"
-      check_interpolation "name: improve-diego-log-format-windows2016.yml" "windows2016-cell.yml" "-o improve-diego-log-format-windows2016.yml"
       check_interpolation "enable-mysql-tls.yml"
       check_interpolation "name: perm-service.yml" "use-bosh-dns.yml" "-o enable-mysql-tls.yml" "-o perm-service.yml"
       check_interpolation "name: perm-service-with-pxc-release.yml" "use-bosh-dns.yml" "-o perm-service.yml" "-o use-pxc.yml" "-o perm-service-with-pxc-release.yml"
