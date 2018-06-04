@@ -14,12 +14,12 @@
     version: 20
 - type: replace
   path: /instance_groups/name=database/jobs/name=mysql/name
-  value: mysql-clustered
+  value: pxc-mysql
 - type: replace
-  path: /instance_groups/name=database/jobs/name=mysql-clustered/release
+  path: /instance_groups/name=database/jobs/name=pxc-mysql/release
   value: pxc
 - type: replace
-  path: /instance_groups/name=database/jobs/name=mysql-clustered?/properties
+  path: /instance_groups/name=database/jobs/name=pxc-mysql?/properties
   value:
     admin_password: ((cf_mysql_mysql_admin_password))
     binlog_enabled: false
