@@ -138,7 +138,7 @@
           hostname: uaa.((system_domain))
           port: 443
           ca_certs:
-          - ((router_ssl.ca))
+          - ((router_ca.certificate))
 
         cloud_controller:
           hostname: api.((system_domain))
