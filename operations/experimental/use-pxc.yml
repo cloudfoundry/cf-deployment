@@ -6,13 +6,6 @@
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/pxc-release?v=0.7.0
     version: 0.7.0
 - type: replace
-  path: /releases/name=os-conf?
-  value:
-    name: os-conf
-    sha1: 42b1295896c1fbcd36b55bfdedfe86782b2c9fba
-    url: https://bosh.io/d/github.com/cloudfoundry/os-conf-release?v=20
-    version: 20
-- type: replace
   path: /instance_groups/name=database/jobs/name=mysql/name
   value: mysql-clustered
 - type: replace

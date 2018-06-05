@@ -6,13 +6,6 @@
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/pxc-release?v=0.7.0
     version: 0.7.0
 - type: replace
-  path: /releases/name=os-conf?
-  value:
-    name: os-conf
-    sha1: 42b1295896c1fbcd36b55bfdedfe86782b2c9fba
-    url: https://bosh.io/d/github.com/cloudfoundry/os-conf-release?v=20
-    version: 20
-- type: replace
   path: /instance_groups/name=database/jobs/name=mysql/properties/cf_mysql_enabled?
   value: false
 - type: replace
@@ -162,9 +155,6 @@
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb/address?
   value: sql-db.service.cf.internal
 - type: replace
-  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/address?
-  value: sql-db.service.cf.internal
-- type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/ca_cert?
   value: ((pxc_server_ca.certificate))
 - type: replace
@@ -187,14 +177,4 @@
   value: ((pxc_server_ca.certificate))
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql/require_ssl?
-  value: true
-- type: replace
-  path: /instance_groups/name=uaa/jobs/-
-  value:
-    name: ca_certs
-    properties:
-      certs: ((pxc_server_ca.certificate))
-    release: os-conf
-- type: replace
-  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/tls_enabled?
   value: true
