@@ -105,9 +105,9 @@ test_bosh_dns_aliases_consistent() {
     -o operations/experimental/use-bosh-dns.yml > $manifest_file
 
   set +e
-    local bosh_dns_aliases=$(yq r $manifest_file -j | jq .addons[1].jobs[].properties.aliases)
-    local windows2012_bosh_dns_aliases=$(yq r $manifest_file -j | jq .addons[2].jobs[].properties.aliases)
-    local windows2016_bosh_dns_aliases=$(yq r $manifest_file -j | jq .addons[3].jobs[].properties.aliases)
+    local bosh_dns_aliases=$(yq r $manifest_file -j | jq .addons[2].jobs[].properties.aliases)
+    local windows2012_bosh_dns_aliases=$(yq r $manifest_file -j | jq .addons[3].jobs[].properties.aliases)
+    local windows2016_bosh_dns_aliases=$(yq r $manifest_file -j | jq .addons[4].jobs[].properties.aliases)
   set -e
 
   if [[ "$bosh_dns_aliases" != "$windows2012_bosh_dns_aliases" ]]; then

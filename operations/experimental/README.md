@@ -35,7 +35,7 @@ and the ops-files will be removed.
 | [`enable-backup-restore-s3.yml`](enable-backup-restore-s3.yml) | Deprecated, use equivalent file in `operations/backup-and-restore`. | |
 | [`enable-bits-service-consul.yml`](enable-bits-service-consul.yml) | Registers the bits-service [bits-service](https://github.com/cloudfoundry-incubator/bits-service) job via consul | Requires `bits-service.yml` from the same directory. |
 | [`enable-bits-service-https.yml`](enable-bits-service-https.yml) | Deprecated and left intentionally blank - the bits service is now `https` only | |
-| [`enable-bpm.yml`](enable-bpm.yml) | Enables the [BOSH Process Manager](https://github.com/cloudfoundry-incubator/bpm-release) as a BOSH addon. | |
+| [`enable-bpm.yml`](enable-bpm.yml) | Enables the [BOSH Process Manager](https://github.com/cloudfoundry-incubator/bpm-release) for several BOSH jobs. | |
 | [`enable-instance-identity-credentials.yml`](enable-instance-identity-credentials.yml) | Deprecated and left intentionally blank for backward compatibility. | Identity credentials are enabled in `cf-deployment.yml` by default. |
 | [`enable-instance-identity-credentials-windows.yml`](enable-instance-identity-credentials-windows.yml) | Deprecated and left intentionally blank for backward compatibility. | Identity credentials for `windows2012R2` cells are enabled in `windows-cell.yml` ops file by default. |
 | [`enable-instance-identity-credentials-windows2016.yml`](enable-instance-identity-credentials-windows2016.yml) | Enables identity credentials on the `rep_windows` for Windows 2016 cells. | Requires `operations/windows2016-cell.yml`|
