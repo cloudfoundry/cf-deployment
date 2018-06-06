@@ -1,0 +1,16 @@
+---
+- type: replace
+  path: /stemcells/alias=default/os
+  value: ubuntu-xenial
+
+- type: replace
+  path: /stemcells/alias=default/version
+  value: "60"
+
+- type: replace
+  path: /addons/name=metron_agent/include/stemcell/os=ubuntu-trusty
+  value: ubuntu-xenial
+
+- type: replace
+  path: /addons/name=bpm/include/stemcell/os=ubuntu-trusty
+  value: ubuntu-xenial
