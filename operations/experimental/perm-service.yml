@@ -28,6 +28,11 @@
             required: true
             ca_certs:
             - ((pxc_server_ca.certificate))
+        uaa:
+          hostname: uaa.((system_domain))
+          port: 443
+          ca_certs:
+          - ((router_ca.certificate))
 
 # Changes to other instance groups
 - type: replace
