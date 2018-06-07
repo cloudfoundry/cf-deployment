@@ -1,0 +1,30 @@
+---
+- type: replace
+  path: /instance_groups/name=backup-restore/jobs/-
+  value:
+    name: azure-blobstore-backup-restorer
+    release: backup-and-restore-sdk
+    properties:
+      enabled: true
+      containers:
+        droplets:
+          name: "((droplet_directory_key))"
+          azure_storage_account: "((blobstore_storage_account_name))"
+          azure_storage_key: "((blobstore_storage_access_key))"
+          restore_from:
+            azure_storage_account: "((restore_from_blobstore_storage_account_name))"
+            azure_storage_key: "((restore_from_blobstore_storage_access_key))"
+        packages:
+          name: "((app_package_directory_key))"
+          azure_storage_account: "((blobstore_storage_account_name))"
+          azure_storage_key: "((blobstore_storage_access_key))"
+          restore_from:
+            azure_storage_account: "((restore_from_blobstore_storage_account_name))"
+            azure_storage_key: "((restore_from_blobstore_storage_access_key))"
+        buildpacks:
+          name: "((buildpack_directory_key))"
+          azure_storage_account: "((blobstore_storage_account_name))"
+          azure_storage_key: "((blobstore_storage_access_key))"
+          restore_from:
+            azure_storage_account: "((restore_from_blobstore_storage_account_name))"
+            azure_storage_key: "((restore_from_blobstore_storage_access_key))"
