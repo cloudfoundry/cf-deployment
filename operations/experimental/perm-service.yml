@@ -138,12 +138,12 @@
           hostname: uaa.((system_domain))
           port: 443
           ca_certs:
-          - ((router_ssl.ca))
+          - ((router_ca.certificate))
 
         cloud_controller:
           hostname: api.((system_domain))
           port: 443
-          client_id: cloud-controller-monitor
+          client_id: cloud_controller_monitor
           client_secret: ((perm_uaa_clients_cloud_controller_monitor_secret))
           client_scopes:
           - cloud_controller.admin_read_only
