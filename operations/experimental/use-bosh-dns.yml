@@ -16,9 +16,9 @@
           auctioneer.service.cf.internal:
           - '*.scheduler.default.cf.bosh'
           bbs.service.cf.internal:
-          - '*.diego-api.default.cf.bosh'
-          bits-service.service.cf.internal:
-          - '*.api.default.cf.bosh'
+          - q-s4.diego-api.default.cf.bosh
+          bits.service.cf.internal:
+          - '*.bits.default.cf.bosh'
           blobstore.service.cf.internal:
           - '*.blobstore.default.cf.bosh'
           - '*.singleton-blobstore.default.cf.bosh'
@@ -60,9 +60,29 @@
           - '*.uaa.default.cf.bosh'
         api:
           client:
-            tls: ((dns_api_client_tls))
+            tls:
+              ca: ((dns_api_tls_ca.certificate))
+              certificate: ((dns_api_client_tls.certificate))
+              private_key: ((dns_api_client_tls.private_key))
           server:
-            tls: ((dns_api_server_tls))
+            tls:
+              ca: ((dns_api_tls_ca.certificate))
+              certificate: ((dns_api_server_tls.certificate))
+              private_key: ((dns_api_server_tls.private_key))
+        cache:
+          enabled: true
+        health:
+          enabled: true
+          server:
+            tls:
+              ca: ((dns_healthcheck_tls_ca.certificate))
+              certificate: ((dns_healthcheck_server_tls.certificate))
+              private_key: ((dns_healthcheck_server_tls.private_key))
+          client:
+            tls:
+              ca: ((dns_healthcheck_tls_ca.certificate))
+              certificate: ((dns_healthcheck_client_tls.certificate))
+              private_key: ((dns_healthcheck_client_tls.private_key))
       release: bosh-dns
     name: bosh-dns
 - type: replace
@@ -83,9 +103,9 @@
           auctioneer.service.cf.internal:
           - '*.scheduler.default.cf.bosh'
           bbs.service.cf.internal:
-          - '*.diego-api.default.cf.bosh'
-          bits-service.service.cf.internal:
-          - '*.api.default.cf.bosh'
+          - q-s4.diego-api.default.cf.bosh
+          bits.service.cf.internal:
+          - '*.bits.default.cf.bosh'
           blobstore.service.cf.internal:
           - '*.blobstore.default.cf.bosh'
           - '*.singleton-blobstore.default.cf.bosh'
@@ -127,9 +147,29 @@
           - '*.uaa.default.cf.bosh'
         api:
           client:
-            tls: ((dns_api_client_tls))
+            tls:
+              ca: ((dns_api_tls_ca.certificate))
+              certificate: ((dns_api_client_tls.certificate))
+              private_key: ((dns_api_client_tls.private_key))
           server:
-            tls: ((dns_api_server_tls))
+            tls:
+              ca: ((dns_api_tls_ca.certificate))
+              certificate: ((dns_api_server_tls.certificate))
+              private_key: ((dns_api_server_tls.private_key))
+        cache:
+          enabled: true
+        health:
+          enabled: true
+          server:
+            tls:
+              ca: ((dns_healthcheck_tls_ca.certificate))
+              certificate: ((dns_healthcheck_server_tls.certificate))
+              private_key: ((dns_healthcheck_server_tls.private_key))
+          client:
+            tls:
+              ca: ((dns_healthcheck_tls_ca.certificate))
+              certificate: ((dns_healthcheck_client_tls.certificate))
+              private_key: ((dns_healthcheck_client_tls.private_key))
       release: bosh-dns
     name: bosh-dns-windows2012
 - type: replace
@@ -150,9 +190,9 @@
           auctioneer.service.cf.internal:
           - '*.scheduler.default.cf.bosh'
           bbs.service.cf.internal:
-          - '*.diego-api.default.cf.bosh'
-          bits-service.service.cf.internal:
-          - '*.api.default.cf.bosh'
+          - q-s4.diego-api.default.cf.bosh
+          bits.service.cf.internal:
+          - '*.bits.default.cf.bosh'
           blobstore.service.cf.internal:
           - '*.blobstore.default.cf.bosh'
           - '*.singleton-blobstore.default.cf.bosh'
@@ -194,18 +234,38 @@
           - '*.uaa.default.cf.bosh'
         api:
           client:
-            tls: ((dns_api_client_tls))
+            tls:
+              ca: ((dns_api_tls_ca.certificate))
+              certificate: ((dns_api_client_tls.certificate))
+              private_key: ((dns_api_client_tls.private_key))
           server:
-            tls: ((dns_api_server_tls))
+            tls:
+              ca: ((dns_api_tls_ca.certificate))
+              certificate: ((dns_api_server_tls.certificate))
+              private_key: ((dns_api_server_tls.private_key))
+        cache:
+          enabled: true
+        health:
+          enabled: true
+          server:
+            tls:
+              ca: ((dns_healthcheck_tls_ca.certificate))
+              certificate: ((dns_healthcheck_server_tls.certificate))
+              private_key: ((dns_healthcheck_server_tls.private_key))
+          client:
+            tls:
+              ca: ((dns_healthcheck_tls_ca.certificate))
+              certificate: ((dns_healthcheck_client_tls.certificate))
+              private_key: ((dns_healthcheck_client_tls.private_key))
       release: bosh-dns
     name: bosh-dns-windows2016
 - type: replace
   path: /releases/-
   value:
     name: bosh-dns
-    sha1: 66e74bb601b691ea4836f859c556de8a5c6c1264
-    url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-release?v=1.5.0
-    version: 1.5.0
+    sha1: bb7f1cf29c4186fdba4a049fb6feb5638227d9a4
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-release?v=1.6.0
+    version: 1.6.0
 - type: replace
   path: /variables/-
   value:
@@ -234,3 +294,31 @@
       extended_key_usage:
       - server_auth
     type: certificate
+- type: replace
+  path: /variables/-
+  value:
+    name: dns_healthcheck_tls_ca
+    type: certificate
+    options:
+      common_name: dnsHealthCheckTlsCa
+      is_ca: true
+- type: replace
+  path: /variables/-
+  value:
+    name: dns_healthcheck_server_tls
+    type: certificate
+    options:
+      ca: dns_healthcheck_tls_ca
+      common_name: health.bosh-dns
+      extended_key_usage:
+      - server_auth
+- type: replace
+  path: /variables/-
+  value:
+    name: dns_healthcheck_client_tls
+    type: certificate
+    options:
+      ca: dns_healthcheck_tls_ca
+      common_name: health.bosh-dns
+      extended_key_usage:
+      - client_auth

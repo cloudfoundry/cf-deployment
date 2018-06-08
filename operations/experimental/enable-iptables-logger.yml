@@ -1,11 +1,12 @@
+---
 # Enable iptables logging for ASGs
 - type: replace
-  path: /instance_groups/name=diego-cell/jobs/name=cni/properties?/cf_networking/iptables_logging
+  path: /instance_groups/name=diego-cell/jobs/name=silk-cni/properties?/iptables_logging
   value: true
 
 # Enable iptables logging for c2c
 - type: replace
-  path: /instance_groups/name=diego-cell/jobs/name=vxlan-policy-agent/properties?/cf_networking/iptables_logging
+  path: /instance_groups/name=diego-cell/jobs/name=vxlan-policy-agent/properties?/iptables_logging
   value: true
 
 # Turn on iptables-logger job

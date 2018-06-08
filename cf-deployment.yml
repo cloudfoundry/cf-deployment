@@ -1,6 +1,6 @@
 ---
 name: cf
-manifest_version: v1.28.0
+manifest_version: v1.39.0
 update:
   canaries: 1
   canary_watch_time: 30000-1200000
@@ -277,24 +277,22 @@ instance_groups:
         cert: "((loggregator_tls_metron.certificate))"
         key: "((loggregator_tls_metron.private_key))"
   - name: silk-controller
-    release: cf-networking
+    release: silk
     properties:
-      cf_networking:
-        silk_controller:
-          ca_cert: ((silk_ca.certificate))
-          server_cert: ((silk_controller.certificate))
-          server_key: ((silk_controller.private_key))
-          database:
-            type: mysql
-            username: network_connectivity
-            password: ((network_connectivity_database_password))
-            host: sql-db.service.cf.internal
-            port: 3306
-            name: network_connectivity
-        silk_daemon:
-          ca_cert: ((silk_ca.certificate))
-          client_cert: ((silk_daemon.certificate))
-          client_key: ((silk_daemon.private_key))
+      ca_cert: ((silk_ca.certificate))
+      server_cert: ((silk_controller.certificate))
+      server_key: ((silk_controller.private_key))
+      database:
+        type: mysql
+        username: network_connectivity
+        password: ((network_connectivity_database_password))
+        host: sql-db.service.cf.internal
+        port: 3306
+        name: network_connectivity
+      silk_daemon:
+        ca_cert: ((silk_ca.certificate))
+        client_cert: ((silk_daemon.certificate))
+        client_key: ((silk_daemon.private_key))
   - name: locket
     release: diego
     properties:
@@ -340,6 +338,11 @@ instance_groups:
   - name: uaa
     release: uaa
     properties:
+      encryption:
+        active_key_label: default_key
+        encryption_keys:
+          - label: default_key
+            passphrase: ((uaa_default_encryption_passphrase))
       login:
         saml:
           activeKeyId: key-1
@@ -408,7 +411,7 @@ instance_groups:
             authorized-grant-types: password,refresh_token
             override: true
             refresh-token-validity: 2592000
-            scope: network.admin,network.write,cloud_controller.read,cloud_controller.write,openid,password.write,cloud_controller.admin,scim.read,scim.write,doppler.firehose,uaa.user,routing.router_groups.read,routing.router_groups.write,cloud_controller.admin_read_only,cloud_controller.global_auditor
+            scope: network.admin,network.write,cloud_controller.read,cloud_controller.write,openid,password.write,cloud_controller.admin,scim.read,scim.write,doppler.firehose,uaa.user,routing.router_groups.read,routing.router_groups.write,cloud_controller.admin_read_only,cloud_controller.global_auditor,perm.admin
             secret: ''
           cloud_controller_username_lookup:
             authorities: scim.userids
@@ -742,25 +745,21 @@ instance_groups:
   - name: policy-server
     release: cf-networking
     properties:
-      cf_networking:
-        policy_server:
-          uaa_client_secret: ((uaa_clients_network_policy_secret))
-          uaa_ca: ((uaa_ca.certificate))
-          database:
-            type: mysql
-            username: network_policy
-            password: ((network_policy_database_password))
-            host: sql-db.service.cf.internal
-            port: 3306
-            name: network_policy
+      uaa_client_secret: ((uaa_clients_network_policy_secret))
+      uaa_ca: ((uaa_ca.certificate))
+      database:
+        type: mysql
+        username: network_policy
+        password: ((network_policy_database_password))
+        host: sql-db.service.cf.internal
+        port: 3306
+        name: network_policy
   - name: policy-server-internal
     release: cf-networking
     properties:
-      cf_networking:
-        policy_server_internal:
-          ca_cert: ((network_policy_ca.certificate))
-          server_cert: ((network_policy_server.certificate))
-          server_key: ((network_policy_server.private_key))
+      ca_cert: ((network_policy_ca.certificate))
+      server_cert: ((network_policy_server.certificate))
+      server_key: ((network_policy_server.private_key))
   - name: cc_uploader
     release: capi
     properties:
@@ -1102,6 +1101,7 @@ instance_groups:
       containers:
         trusted_ca_certificates:
           - ((application_ca.certificate))
+      enable_declarative_healthcheck: true
       loggregator: *diego_loggregator_client_properties
       tls:
         ca_cert: "((service_cf_internal_ca.certificate))"
@@ -1130,26 +1130,25 @@ instance_groups:
         client_secret: "((uaa_clients_tcp_emitter_secret))"
   - name: garden-cni
     release: cf-networking
+    properties:
+      cni_plugin_dir: /var/vcap/packages/silk-cni/bin
+      cni_config_dir: /var/vcap/jobs/silk-cni/config/cni
   - name: netmon
-    release: cf-networking
+    release: silk
   - name: vxlan-policy-agent
-    release: cf-networking
+    release: silk
     properties:
-      cf_networking:
-        vxlan_policy_agent:
-          ca_cert: ((network_policy_ca.certificate))
-          client_cert: ((network_policy_client.certificate))
-          client_key: ((network_policy_client.private_key))
+      ca_cert: ((network_policy_ca.certificate))
+      client_cert: ((network_policy_client.certificate))
+      client_key: ((network_policy_client.private_key))
   - name: silk-daemon
-    release: cf-networking
+    release: silk
     properties:
-      cf_networking:
-        silk_daemon:
-          ca_cert: ((silk_ca.certificate))
-          client_cert: ((silk_daemon.certificate))
-          client_key: ((silk_daemon.private_key))
-  - name: cni
-    release: cf-networking
+      ca_cert: ((silk_ca.certificate))
+      client_cert: ((silk_daemon.certificate))
+      client_key: ((silk_daemon.private_key))
+  - name: silk-cni
+    release: silk
 - name: log-api
   azs:
   - z1
@@ -1265,6 +1264,8 @@ variables:
 - name: network_connectivity_database_password
   type: password
 - name: uaa_clients_network_policy_secret
+  type: password
+- name: uaa_default_encryption_passphrase
   type: password
 - name: silk_ca
   type: certificate
@@ -1606,98 +1607,102 @@ variables:
 
 releases:
 - name: binary-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/binary-buildpack-release?v=1.0.18
-  version: 1.0.18
-  sha1: e903612106b20b6cf969be83dfb2bdd0bb4d9db2
+  url: https://bosh.io/d/github.com/cloudfoundry/binary-buildpack-release?v=1.0.19
+  version: 1.0.19
+  sha1: fa71efbd352c11f31ab12b91c7542b8e930ec4b1
 - name: capi
-  url: https://bosh.io/d/github.com/cloudfoundry/capi-release?v=1.54.0
-  version: 1.54.0
-  sha1: 5a98d51ba553f56c04a7134c4e9626031cd2140b
+  url: https://bosh.io/d/github.com/cloudfoundry/capi-release?v=1.59.0
+  version: 1.59.0
+  sha1: 7186a29f2dd437479731ed267ccd4e60d2b27606
 - name: cf-mysql
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-mysql-release?v=36.13.0
-  version: 36.13.0
-  sha1: dc09695207bce0df81e85c5b8284a69a4e814651
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-mysql-release?v=36.14.0
+  version: 36.14.0
+  sha1: 383f70fd4d776bf91d9043d8fd9ad79516cc8478
 - name: cf-networking
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-networking-release?v=1.13.0
-  version: 1.13.0
-  sha1: 0433fb00ad31c3534e8cea5fa57c572cd7eaff8b
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-networking-release?v=2.2.0
+  version: 2.2.0
+  sha1: f1eca604f63cf393526a7e1267a081d4112c1c79
 - name: cf-smoke-tests
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=40.0.2
-  version: 40.0.2
-  sha1: b33941e0514d2e9957dfc69e5160181bb0fc27fe
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=40.0.5
+  version: 40.0.5
+  sha1: 6f6081d24490a82c5b9fea73283e0cfe21cbf207
 - name: cf-syslog-drain
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-syslog-drain-release?v=6.4
-  version: "6.4"
-  sha1: 71538f44f21e44ec13fa28481c64dc2976d10119
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-syslog-drain-release?v=6.5
+  version: "6.5"
+  sha1: 2764d9ad86e71b354dc127238895c0db8352d5eb
 - name: cflinuxfs2
-  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.203.0
-  version: 1.203.0
-  sha1: a6bbfe9b6ca7afa1a2c065cca94d4b40bd09d871
+  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.212.0
+  version: 1.212.0
+  sha1: 7aa46dfc98fc9c28254f267e44cdc2abce3ffa12
 - name: consul
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=192
-  version: "192"
-  sha1: 399894e3b4f5d4ba7ea5abe4ab89190ec2d4ad56
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=193
+  version: "193"
+  sha1: 3596fa1a1692d9e48d2e28789b60e0c72e984d31
 - name: diego
-  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=2.5.0
-  version: 2.5.0
-  sha1: 1ae9cb9ba62b7fccdab5eb8900bf82ea98b1a255
+  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=2.8.0
+  version: 2.8.0
+  sha1: 8ff6e2120af4d0ee5b42f440dc7ab432bf41a763
 - name: dotnet-core-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/dotnet-core-buildpack-release?v=2.0.6
-  version: 2.0.6
-  sha1: acc2cda9b79d875842f82e888ceb88fea377a88b
+  url: https://bosh.io/d/github.com/cloudfoundry/dotnet-core-buildpack-release?v=2.0.7
+  version: 2.0.7
+  sha1: a4d00973773e6cf30daa0a9004e4e52555f84317
 - name: garden-runc
-  url: https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.13.1
-  version: 1.13.1
-  sha1: 54cbb89cae1be0708aa056185671665d7f4b2a4f
+  url: https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.14.0
+  version: 1.14.0
+  sha1: be5e6d6a263be1437d99dc5e818deeb8ab2a03a4
 - name: go-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/go-buildpack-release?v=1.8.21
-  version: 1.8.21
-  sha1: 7ed54d5d1449c946eead324089e79faadf87a87a
+  url: https://bosh.io/d/github.com/cloudfoundry/go-buildpack-release?v=1.8.23
+  version: 1.8.23
+  sha1: 937b84449f7203266f9cb5f44941cc96a2b9d05a
 - name: java-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/java-buildpack-release?v=4.10
-  version: "4.10"
-  sha1: 811866eff83751c12e06eef2af4ac33e91d193fd
+  url: https://bosh.io/d/github.com/cloudfoundry/java-buildpack-release?v=4.12
+  version: "4.12"
+  sha1: 4932d769feb5987fdd6fcc60c9c132746e14dade
 - name: loggregator
-  url: https://bosh.io/d/github.com/cloudfoundry/loggregator-release?v=102.1
-  version: "102.1"
-  sha1: 61949aff688e368a11d03daa18855800517666d3
+  url: https://bosh.io/d/github.com/cloudfoundry/loggregator-release?v=102.2
+  version: "102.2"
+  sha1: 1ff4ad235be2720ed119cbb775f6ffdb712e53ea
 - name: nats
-  url: https://bosh.io/d/github.com/cloudfoundry/nats-release?v=23
-  version: "23"
-  sha1: d56195a7cc0b7781c9de7bb7479472f16fcc1049
+  url: https://bosh.io/d/github.com/cloudfoundry/nats-release?v=24
+  version: "24"
+  sha1: 65d8efc68d86a03d0f51562e16763075c37e419d
 - name: nodejs-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/nodejs-buildpack-release?v=1.6.22
-  version: 1.6.22
-  sha1: 527ca54f9d3fd836a8f689eb0c77b32ea66b98d6
+  url: https://bosh.io/d/github.com/cloudfoundry/nodejs-buildpack-release?v=1.6.25
+  version: 1.6.25
+  sha1: 70b7cf1267ef2df2ce5d6bff54ac312e2f441813
 - name: php-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/php-buildpack-release?v=4.3.53
-  version: 4.3.53
-  sha1: fd6eaec4090066a0cee8953da8edab58e4e7983a
+  url: https://bosh.io/d/github.com/cloudfoundry/php-buildpack-release?v=4.3.56
+  version: 4.3.56
+  sha1: 29db7c0ad6fb939d43dff16af19263a0b534d3a2
 - name: python-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/python-buildpack-release?v=1.6.14
-  version: 1.6.14
-  sha1: 8e4f68197f78aa5ef2e5ba4a25b1a80991b8ed27
+  url: https://bosh.io/d/github.com/cloudfoundry/python-buildpack-release?v=1.6.17
+  version: 1.6.17
+  sha1: 8dec8296ad14ddbee0a5335e1397644f115037a5
 - name: routing
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.175.0
-  version: 0.175.0
-  sha1: 7314e7b070520561aef6fd4026501f3d23c5d67c
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.178.0
+  version: 0.178.0
+  sha1: b07e1e0e2d7bd56b754d065867649f276896f783
 - name: ruby-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/ruby-buildpack-release?v=1.7.16
-  version: 1.7.16
-  sha1: 1ca144320e7fcdb072603a5aa0d224d73237fd87
+  url: https://bosh.io/d/github.com/cloudfoundry/ruby-buildpack-release?v=1.7.19
+  version: 1.7.19
+  sha1: 07d3353f5ab9af26be10790f0a440dee2ae7a643
+- name: silk
+  url: https://bosh.io/d/github.com/cloudfoundry/silk-release?v=2.2.0
+  version: 2.2.0
+  sha1: 26c6a11e7dd1e088efa72072052161affc8f5c00
 - name: staticfile-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/staticfile-buildpack-release?v=1.4.27
-  version: 1.4.27
-  sha1: b4abd75f2b34e4eac2ee9814a8405f580c193a07
+  url: https://bosh.io/d/github.com/cloudfoundry/staticfile-buildpack-release?v=1.4.28
+  version: 1.4.28
+  sha1: ba9d9e68cf41029e2aec6a6acd3e5d578f6dd298
 - name: statsd-injector
   url: https://bosh.io/d/github.com/cloudfoundry/statsd-injector-release?v=1.3.0
   version: 1.3.0
   sha1: 5b9357484032e5217cead8f20362f5802c751de0
 - name: uaa
-  url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=57.1
-  version: "57.1"
-  sha1: b96e5965e890d9cdd6ad96890cdaad719c368c31
+  url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=59
+  version: "59"
+  sha1: 6aa5cd78892f4ea09070c0cf5155aa7a12c17d13
 stemcells:
 - alias: default
   os: ubuntu-trusty
-  version: "3541.12"
+  version: "3586.16"

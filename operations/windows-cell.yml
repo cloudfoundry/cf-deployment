@@ -24,6 +24,8 @@
       release: consul
     - name: garden-windows
       properties:
+        garden:
+          max_container_procs: 20
         syslog_daemon_config:
           enable: false
       release: garden-windows
@@ -39,6 +41,7 @@
           rep:
             preloaded_rootfses:
             - windows2012R2:/tmp/windows2012R2
+        enable_declarative_healthcheck: true
         loggregator:
           ca_cert: ((loggregator_ca.certificate))
           cert: ((loggregator_tls_metron.certificate))
@@ -105,15 +108,15 @@
   path: /releases/name=windows-utilities?
   value:
     name: windows-utilities
-    sha1: f9b95e442a168591d87e9b392607096cca05de32
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.9.0
-    version: 0.9.0
+    sha1: 2bf15743be48e696a72236c05e8e3e137474cedd
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.10.0
+    version: 0.10.0
 - type: replace
   path: /stemcells/-
   value:
     alias: windows2012R2
     os: windows2012R2
-    version: "1200.16"
+    version: "1200.19"
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2012R2?
   value:
@@ -143,6 +146,6 @@
   path: /releases/name=hwc-buildpack?
   value:
     name: hwc-buildpack
-    sha1: e74f644baa48f31f08cddcda1b4363454ab1c5af
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=2.3.15
-    version: 2.3.15
+    sha1: c57c96ebd050b632db94c6de2199bd78ee39dbd7
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=2.3.17
+    version: 2.3.17

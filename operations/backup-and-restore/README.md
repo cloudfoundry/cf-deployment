@@ -16,6 +16,8 @@ To learn more about `cf-deployment`, go to the main [README](../README.md).
 |:---  |:---     |:---   |
 | [`enable-backup-restore.yml`](enable-backup-restore.yml) | Deploy BOSH backup and restore instance and enable release level backup. | |
 | [`enable-backup-restore-credhub.yml`](enable-backup-restore-credhub.yml) | Collocate database-backup-restorer job on the credhub instance. Should be applied after `secure-service-credentials.yml` Ops-file. | |
+| [`enable-backup-restore-credhub-postgres.yml`](enable-backup-restore-credhub-postgres.yml) | Collocate database-backup-restorer job on the credhub instance. Should be applied after `secure-service-credentials-postgres.yml` Ops-file. | |
+| [`enable-backup-restore-credhub-external-db.yml`](enable-backup-restore-credhub-external-db.yml) | Collocate database-backup-restorer job on the credhub instance. Should be applied after `secure-service-credentials-external-db.yml` Ops-file. | |
 | [`enable-backup-restore-s3-versioned.yml`](enable-backup-restore-s3-versioned.yml) | Enables the backup and restore of versioned S3 blobstores. | Requires `enable-backup-restore.yml` and `use-s3-blobstore.yml` |
 | [`enable-backup-restore-s3-unversioned.yml`](enable-backup-restore-s3-unversioned.yml) | Enables the backup and restore of unversioned S3 blobstores. | Requires `enable-backup-restore.yml` and `use-s3-blobstore.yml`. Introduces [new variables](example-vars-files/vars-enable-backup-restore-s3-unversioned.yml) |
 | [`enable-backup-restore-nfs-broker.yml`](enable-backup-restore-nfs-broker.yml) | Deploy BOSH backup and restore scripts for the NFS service broker. | Requires `enable-backup-restore.yml` and `operations/enable-nfs-volume-service.yml`. |
