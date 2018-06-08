@@ -168,6 +168,13 @@
     secret: ((perm_uaa_clients_cloud_controller_monitor_secret))
 
 - type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/cc_perm?
+  value:
+    authorities: perm.admin
+    authorized-grant-types: client_credentials
+    secret: ((perm_uaa_clients_cc_perm_secret))
+
+- type: replace
   path: /variables/-
   value:
     name: perm_uaa_clients_cloud_controller_monitor_secret
