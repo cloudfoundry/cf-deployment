@@ -74,6 +74,7 @@ and the ops-files will be removed.
 | [`use-cf-networking-2.yml`](use-cf-networking-2.yml) | Use `cf-networking` and `silk-cni` 2.x with `cf-deployment` 1.x. | |
 | [`use-bosh-dns-for-containers-with-networking-2.yml`](use-bosh-dns-for-containers-with-networking-2.yml) | Sets the DNS server of application containers to the address of the local `bosh-dns` job when using cf-networking 2.x. | Requires `use-bosh-dns.yml` and `use-cf-networking-2.yml` |
 | [`enable-iptables-logger-with-networking-2.yml`](enable-iptables-logger-with-networking-2.yml) | Enable iptables logger when using cf-networking 2.x. | Requires `use-cf-networking-2.yml` |
+| [`use-compiled-releases-xenial-stemcell.yml`](use-compiled-releases-xenial-stemcell.yml) | Use releases compiled for Xenial stemcell, as opposed to Trusty | Requires `operations/experimental/use-xenial-stemcell.yml` |
 | [`use-external-dbs-with-networking-2.yml`](use-external-dbs-with-networking-2.yml) | Updates policy-server and silk-controller to use external dbs when using cf-networking 2.x. | Requires `use-external-dbs.yml` and `use-cf-networking-2.yml` |
 | [`use-postgres-with-networking-2.yml`](use-postgres-with-networking-2.yml) | Updates policy-server and silk-controller to use postgres db when using cf-networking 2.x. | Requires `use-postgres.yml` and `use-cf-networking-2.yml` |
 | [`use-garden-containerd.yml`](use-garden-containerd.yml) | Configure Garden to create containers via containerd. | |
