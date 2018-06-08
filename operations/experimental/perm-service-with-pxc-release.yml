@@ -1,6 +1,6 @@
 ---
 - type: replace
-  path: /instance_groups/name=database/jobs/name=mysql-clustered/properties/seeded_databases/-
+  path: /instance_groups/name=database/jobs/name=pxc-mysql/properties/seeded_databases/-
   value:
     name: perm
     password: ((perm_database_password))

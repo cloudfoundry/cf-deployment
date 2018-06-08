@@ -2,9 +2,9 @@
   path: /releases/-
   value:
     name: pxc
-    sha1: 83c31baefc57a9c393e7e8e2bd144cc05855bade
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/pxc-release?v=0.7.0
-    version: 0.7.0
+    sha1: eae164b8715f239d9255649bc56aa4beb79d1a81
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/pxc-release?v=0.9.0
+    version: 0.9.0
 - type: replace
   path: /releases/name=os-conf?
   value:
@@ -31,8 +31,8 @@
   value:
     consumes:
       mysql:
-        from: mysql-clustered
-    name: mysql-clustered
+        from: pxc-mysql
+    name: pxc-mysql
     properties:
       admin_password: ((cf_mysql_mysql_admin_password))
       binlog_enabled: false
@@ -71,7 +71,7 @@
         server: ((mysql_server_certificate))
     provides:
       mysql:
-        as: mysql-clustered
+        as: pxc-mysql
     release: pxc
 - type: replace
   path: /instance_groups/name=database/jobs/name=proxy/release
@@ -79,7 +79,7 @@
 - type: replace
   path: /instance_groups/name=database/jobs/name=proxy/consumes?/mysql
   value:
-    from: mysql-clustered
+    from: pxc-mysql
 - type: replace
   path: /instance_groups/name=database/jobs/name=proxy/properties
   value:
@@ -114,7 +114,7 @@
   value:
     consumes:
       mysql:
-        from: mysql-clustered
+        from: pxc-mysql
     name: bootstrap
     release: pxc
 - type: replace

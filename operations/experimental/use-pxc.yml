@@ -2,9 +2,9 @@
   path: /releases/name=cf-mysql
   value:
     name: pxc
-    sha1: 83c31baefc57a9c393e7e8e2bd144cc05855bade
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/pxc-release?v=0.7.0
-    version: 0.7.0
+    sha1: eae164b8715f239d9255649bc56aa4beb79d1a81
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/pxc-release?v=0.9.0
+    version: 0.9.0
 - type: replace
   path: /releases/name=os-conf?
   value:
@@ -14,12 +14,12 @@
     version: 20
 - type: replace
   path: /instance_groups/name=database/jobs/name=mysql/name
-  value: mysql-clustered
+  value: pxc-mysql
 - type: replace
-  path: /instance_groups/name=database/jobs/name=mysql-clustered/release
+  path: /instance_groups/name=database/jobs/name=pxc-mysql/release
   value: pxc
 - type: replace
-  path: /instance_groups/name=database/jobs/name=mysql-clustered?/properties
+  path: /instance_groups/name=database/jobs/name=pxc-mysql?/properties
   value:
     admin_password: ((cf_mysql_mysql_admin_password))
     binlog_enabled: false
