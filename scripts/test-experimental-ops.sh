@@ -50,6 +50,7 @@ test_experimental_ops() {
       check_interpolation "fast-deploy-with-downtime-and-danger.yml"
       check_interpolation "name: enable-tls-cloud-controller-postgres" "${home}/operations/use-postgres.yml" "-o enable-tls-cloud-controller-postgres.yml"
       check_interpolation "name: windows-enable-component-syslog.yml" "windows-enable-component-syslog.yml" "-l ${home}/operations/addons/example-vars-files/vars-enable-component-syslog.yml"
+      check_interpolation "name: windows-component-syslog-ca.yml" "windows-enable-component-syslog.yml" "-o windows-component-syslog-ca.yml" "-l ${home}/operations/addons/example-vars-files/vars-enable-component-syslog.yml"
       check_interpolation "improve-diego-log-format.yml"
       check_interpolation "name: improve-diego-log-format-windows.yml" "${home}/operations/windows-cell.yml" "-o improve-diego-log-format-windows.yml"
       check_interpolation "name: improve-diego-log-format-windows2016.yml" "${home}/operations/windows2016-cell.yml" "-o improve-diego-log-format-windows2016.yml"
