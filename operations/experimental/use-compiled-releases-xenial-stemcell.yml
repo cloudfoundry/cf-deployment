@@ -205,6 +205,11 @@
 - path: /releases/name=cf-syslog-drain/sha1
   type: replace
   value: 78982370504662b62af2e0b1b145ae75fb610617
+- path: /releases/name=bpm/stemcell?
+  type: replace
+  value:
+    os: ubuntu-xenial
+    version: "60"
 - path: /releases/name=capi/stemcell?
   type: replace
   value:
