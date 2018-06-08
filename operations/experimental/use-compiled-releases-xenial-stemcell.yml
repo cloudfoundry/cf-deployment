@@ -18,13 +18,13 @@
   value: 3a56adda3529889b4819d6f0bf3c00c6b27a5cec
 - path: /releases/name=binary-buildpack/url
   type: replace
-  value: https://storage.googleapis.com/cf-deployment-compiled-releases/binary-buildpack-1.0.19-ubuntu-xenial-60-20180608-180649-96177472.tgz
+  value: https://storage.googleapis.com/cf-deployment-compiled-releases/binary-buildpack-1.0.19-ubuntu-xenial-60-20180608-205718-848031467.tgz
 - path: /releases/name=binary-buildpack/version
   type: replace
   value: 1.0.19
 - path: /releases/name=binary-buildpack/sha1
   type: replace
-  value: 3efd3722cb947b720ee9aa54874fe098fadb251c
+  value: 00a0c3f5a79366cbfccb9d8c6912c32128a0e9bf
 - path: /releases/name=cf-networking/url
   type: replace
   value: https://storage.googleapis.com/cf-deployment-compiled-releases/cf-networking-1.13.0-ubuntu-trusty-3586.16-20180606-170814-608741188.tgz
@@ -205,132 +205,8 @@
 - path: /releases/name=cf-syslog-drain/sha1
   type: replace
   value: 154000b4a38325995a3159e402346c8bcef5965b
-- path: /releases/name=capi/stemcell?
-  type: replace
-  value:
-    os: ubuntu-trusty
-    version: "3586.16"
-- path: /releases/name=cf-mysql/stemcell?
-  type: replace
-  value:
-    os: ubuntu-trusty
-    version: "3586.16"
 - path: /releases/name=binary-buildpack/stemcell?
   type: replace
   value:
-    os: ubuntu-trusty
-    version: "3586.16"
-- path: /releases/name=cf-networking/stemcell?
-  type: replace
-  value:
-    os: ubuntu-trusty
-    version: "3586.16"
-- path: /releases/name=cf-smoke-tests/stemcell?
-  type: replace
-  value:
-    os: ubuntu-trusty
-    version: "3586.16"
-- path: /releases/name=cf-syslog-drain/stemcell?
-  type: replace
-  value:
-    os: ubuntu-trusty
-    version: "3586.16"
-- path: /releases/name=cflinuxfs2/stemcell?
-  type: replace
-  value:
-    os: ubuntu-trusty
-    version: "3586.16"
-- path: /releases/name=consul/stemcell?
-  type: replace
-  value:
-    os: ubuntu-trusty
-    version: "3586.16"
-- path: /releases/name=diego/stemcell?
-  type: replace
-  value:
-    os: ubuntu-trusty
-    version: "3586.16"
-- path: /releases/name=dotnet-core-buildpack/stemcell?
-  type: replace
-  value:
-    os: ubuntu-trusty
-    version: "3586.16"
-- path: /releases/name=garden-runc/stemcell?
-  type: replace
-  value:
-    os: ubuntu-trusty
-    version: "3586.16"
-- path: /releases/name=go-buildpack/stemcell?
-  type: replace
-  value:
-    os: ubuntu-trusty
-    version: "3586.16"
-- path: /releases/name=java-buildpack/stemcell?
-  type: replace
-  value:
-    os: ubuntu-trusty
-    version: "3586.16"
-- path: /releases/name=loggregator/stemcell?
-  type: replace
-  value:
-    os: ubuntu-trusty
-    version: "3586.16"
-- path: /releases/name=nats/stemcell?
-  type: replace
-  value:
-    os: ubuntu-trusty
-    version: "3586.16"
-- path: /releases/name=nodejs-buildpack/stemcell?
-  type: replace
-  value:
-    os: ubuntu-trusty
-    version: "3586.16"
-- path: /releases/name=php-buildpack/stemcell?
-  type: replace
-  value:
-    os: ubuntu-trusty
-    version: "3586.16"
-- path: /releases/name=python-buildpack/stemcell?
-  type: replace
-  value:
-    os: ubuntu-trusty
-    version: "3586.16"
-- path: /releases/name=routing/stemcell?
-  type: replace
-  value:
-    os: ubuntu-trusty
-    version: "3586.16"
-- path: /releases/name=ruby-buildpack/stemcell?
-  type: replace
-  value:
-    os: ubuntu-trusty
-    version: "3586.16"
-- path: /releases/name=cf-mysql/stemcell?
-  type: replace
-  value:
-    os: ubuntu-trusty
-    version: "3586.16"
-- path: /releases/name=staticfile-buildpack/stemcell?
-  type: replace
-  value:
-    os: ubuntu-trusty
-    version: "3586.16"
-- path: /releases/name=statsd-injector/stemcell?
-  type: replace
-  value:
-    os: ubuntu-trusty
-    version: "3586.16"
-- path: /releases/name=uaa/stemcell?
-  type: replace
-  value:
-    os: ubuntu-trusty
-    version: "3586.16"
-- path: /releases/name=bpm/url
-  type: replace
-  value: https://storage.googleapis.com/cf-deployment-compiled-releases/bpm-0.6.0-ubuntu-trusty-3586.16-20180606-214750-711562676.tgz
-- path: /releases/name=bpm/version
-  type: replace
-  value: 0.6.0
-- path: /releases/name=bpm/sha1
-  type: replace
-  value: 643baece0215f88066d2a98ce12fad6cfecf48d2
+    os: "ubuntu-xenial"
+    version: "60"
