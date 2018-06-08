@@ -14,7 +14,8 @@
             if ($programname startswith "vcap.") then stop
           fallback_servers: ((syslog_fallback_servers))
           port: ((syslog_port))
-          transport: ((syslog_transport))
+          transport: tcp
+          tls_enabled: true
       release: syslog
     name: syslog_forwarder
 - type: replace
