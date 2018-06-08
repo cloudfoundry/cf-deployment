@@ -59,7 +59,7 @@ test_standard_ops() {
       check_interpolation "name: use-gcs-blobstore-access-key.yml" "use-external-blobstore.yml -o use-gcs-blobstore-access-key.yml
       -v blobstore_access_key_id=TEST_ACCESS_KEY -v blobstore_secret_access_key=TEST_SECRET_ACCESS_KEY -l example-vars-files/vars-use-gcs-blobstore-access-key.yml"
       check_interpolation "name: use-gcs-blobstore-service-account.yml" "use-external-blobstore.yml -o use-gcs-blobstore-service-account.yml -l example-vars-files/vars-use-gcs-blobstore-service-account.yml"
-      check_interpolation "use-swift-blobstore.yml" "-l example-vars-files/vars-use-swift-blobstore.yml"
+      check_interpolation "name: use-swift-blobstore.yml" "use-external-blobstore.yml -o use-swift-blobstore.yml -l example-vars-files/vars-use-swift-blobstore.yml"
       check_interpolation "use-trusted-ca-cert-for-apps.yml" "-l example-vars-files/vars-use-trusted-ca-cert-for-apps.yml"
       check_interpolation "windows-cell.yml"
       version=$(bosh interpolate ${home}/cf-deployment.yml -o windows2016-cell.yml -o use-latest-windows2016-stemcell.yml --path=/stemcells/alias=windows2016/version)
