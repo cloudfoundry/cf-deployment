@@ -1,11 +1,8 @@
 ---
-# add swift blobstore properties
-
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks/fog_connection
-  error: "Please apply `use-external-blobstore.yml` before applying `use-swift-blobstore.yml`"
+  error: "Please apply 'use-external-blobstore.yml' before applying 'use-swift-blobstore.yml'."
   value: &blobstore-properties
-
     provider: OpenStack
     openstack_api_key: ((openstack_password))
     openstack_auth_url: ((auth_url))

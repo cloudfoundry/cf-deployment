@@ -1,16 +1,7 @@
 ---
-# this is intentionally redundant with the second `replace` operation
-# we need to check for the existence of the `fog connection` key
-# to confirm that `use-external-blobstore.yml` has been applied
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks/fog_connection
-  error: "Please apply `use-external-blobstore.yml` first."
-  value:
-    provider: AzureRM
-
-- type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks/fog_connection
-  error: "Please apply `use-external-blobstore.yml` first."
+  error: "Please apply 'use-external-blobstore.yml' before applying 'use-azure-storage-blobstore.yml'."
   value: &blobstore-properties
     provider: AzureRM
     environment: ((environment))
