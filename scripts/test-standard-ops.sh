@@ -55,7 +55,6 @@ test_standard_ops() {
       fi
       check_interpolation "use-postgres.yml"
       check_interpolation "name: use-s3-blobstore.yml" "use-external-blobstore.yml -o use-s3-blobstore.yml -l example-vars-files/vars-use-s3-blobstore.yml"
-      check_interpolation "use-s3-custom-blobstore.yml" "-l example-vars-files/vars-use-s3-custom-blobstore.yml"
       check_interpolation "name: use-gcs-blobstore-access-key.yml" "use-external-blobstore.yml -o use-gcs-blobstore-access-key.yml
       -v blobstore_access_key_id=TEST_ACCESS_KEY -v blobstore_secret_access_key=TEST_SECRET_ACCESS_KEY -l example-vars-files/vars-use-gcs-blobstore-access-key.yml"
       check_interpolation "name: use-gcs-blobstore-service-account.yml" "use-external-blobstore.yml -o use-gcs-blobstore-service-account.yml -l example-vars-files/vars-use-gcs-blobstore-service-account.yml"
