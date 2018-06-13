@@ -64,7 +64,6 @@ export CF_DOMAIN=...
 
 ```
 bosh -d cf deploy cf-deployment/cf-deployment.yml \
-     --vars-store cf-vars.yml \
      -o cf-deployment/iaas-support/alicloud/stemcells.yml \
      -v region="<region_id>" \
      -v system_domain=$CF_DOMAIN
@@ -96,7 +95,6 @@ export CF_DOMAIN=...
 
 ```
 bosh -d cf deploy cf-deployment/releases/cf-deployment-local.yml \
-     --vars-store cf-vars.yml \
      -o cf-deployment/iaas-support/alicloud/stemcells.yml \
      -v region="<region_id>" \
      -v system_domain=$CF_DOMAIN

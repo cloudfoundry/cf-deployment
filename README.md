@@ -28,7 +28,7 @@ It:
 - prioritizes readability and meaning to a human operator.
   For instance, only necessary configuration is included.
 - emphasizes security and production-readiness by default.
-  - bosh's `--vars-store` feature is used
+  - CredHub is used by default
   to generate strong passwords, certs, and keys.
   There are no default credentials, even in bosh-lite.
   - TLS/SSL features are enabled on every job which supports TLS.
@@ -141,22 +141,26 @@ For other IaaSes,
 you may need to do some engineering work to figure out the right cloud config (and possibly ops files)
 to get it working for `cf-deployment`.
 
-### Deployment variables and the var-store
+### Deployment variables and CredHub
 `cf-deployment.yml` requires additional information
 to provide environment-specific or sensitive configuration
 such as the system domain and various credentials.
 To do this in the default configuration,
-we use the `--vars-store` flag in the new BOSH CLI.
-This flag takes the name of a `yml` file that it will read and write to.
+we use [CredHub](https://github.com/pivotal-cf/credhub-release), 
+which is deployed on your BOSH director by default if you are using `bbl`.
 Where necessary credential values are not present,
-it will generate new values
+CredHub will generate new values
 based on the type information stored in `cf-deployment.yml`.
 
-Necessary variables that BOSH can't generate
+**Note: BOSH `vars-store` is no longer the default way to store 
+and generate credentials and will be deprecated in 
+`cf-deployment` 3.0.**
+
+Necessary variables that BOSH can't ask CredHub to generate
 need to be supplied as well.
-Though in the default case
+In the default case
 this is just the system domain,
-some ops files introduce additional variables.
+but some ops files introduce additional variables.
 See the summary for the particular ops files you're using
 for any additional necessary variables.
 
@@ -173,14 +177,17 @@ such additional variables.
    `-l` or `--vars-file` flag.
    This is the recommended method for configuring
    external persistence services.
-3. They can be inserted directly in `--vars-store` file
-   alongside BOSH-managed variables.
-   This can confuse things,
-   but you may find the simplicity worth it.
+3. They can be stored in CredHub directly
+   with the [CredHub CLI](https://credhub-api.cfapps.io/#introduction).
+   If you do this, then you need follow variable namespacing
+   rules respected by BOSH described [here](https://github.com/cloudfoundry-incubator/credhub/blob/master/docs/operator-quick-start.md#variable-namespacing).
 
-Variables passed with `-v` or `-l`
-will override those already in the var store,
-but will not be stored there.
+#### Migrating from Vars Store to CredHub
+
+If you have an existing Cloud Froundry deployment using BOSH `vars-store`, 
+you will need to migrate your credentials from `vars-store` to CredHub
+prior to switching to the CredHub deploy workflow. 
+We have a [utility](https://github.com/ishustava/migrator) to help you migrate.
 
 ## <a name='ops-files'></a>Ops Files
 The configuration of CF represented by `cf-deployment.yml` is intended to be a workable, secure, fully-featured default.
