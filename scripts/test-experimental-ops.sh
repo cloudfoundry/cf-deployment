@@ -23,7 +23,6 @@ test_experimental_ops() {
       check_interpolation "disable-interpolate-service-bindings.yml"
       check_interpolation "enable-traffic-to-internal-networks.yml"
       check_interpolation "enable-bpm.yml"
-      check_interpolation "name: enable-instance-identity-credentials-windows2016.yml" "${home}/operations/windows2016-cell.yml" "-o enable-instance-identity-credentials-windows2016.yml"
       check_interpolation "rootless-containers.yml"
       check_interpolation "enable-iptables-logger.yml"
       check_interpolation "secure-service-credentials.yml"
