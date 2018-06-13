@@ -152,9 +152,9 @@ Where necessary credential values are not present,
 CredHub will generate new values
 based on the type information stored in `cf-deployment.yml`.
 
-**Note: BOSH `vars-store` is no longer the default way to store 
+**Note:** BOSH `vars-store` is no longer the default way to store 
 and generate credentials and will be deprecated in 
-`cf-deployment` 3.0.**
+`cf-deployment` 3.0.
 
 Necessary variables that BOSH can't ask CredHub to generate
 need to be supplied as well.
@@ -184,9 +184,8 @@ such additional variables.
 
 #### Migrating from Vars Store to CredHub
 
-If you have an existing Cloud Froundry deployment using BOSH `vars-store`, 
-you will need to migrate your credentials from `vars-store` to CredHub
-prior to switching to the CredHub deploy workflow. 
+Before using CredHub for cf-deployment,
+you will need to migrate your credentials from `vars-store` to CredHub.
 We have a [utility](https://github.com/ishustava/migrator) to help you migrate.
 
 ## <a name='ops-files'></a>Ops Files
