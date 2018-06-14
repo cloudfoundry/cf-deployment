@@ -160,52 +160,52 @@ ensure_opsfiles_in_tests() {
 }
 
 main() {
-  echo
-  echo -e "${LIGHT_GREEN} ***** Begin affirmative readme operations tests ***** ${NOCOLOR}"
-  ensure_opsfiles_in_readme "operations/README.md" $(ls operations/*.yml)
-  ensure_opsfiles_in_readme "operations/legacy/README.md" $(ls operations/legacy/*.yml)
-  ensure_opsfiles_in_readme "operations/community/README.md" $(ls operations/community/*.yml)
-  ensure_opsfiles_in_readme "operations/experimental/README.md" $(ls operations/experimental/*.yml)
-  ensure_opsfiles_in_readme "operations/backup-and-restore/README.md" $(ls operations/backup-and-restore/*.yml)
-
-  echo
-  echo -e "${LIGHT_GREEN} ***** Begin affirmative operations in readme tests ***** ${NOCOLOR}"
-  ensure_opsfiles_in_readme_exist "operations"
-  ensure_opsfiles_in_readme_exist "operations/legacy"
-  ensure_opsfiles_in_readme_exist "operations/community"
-  ensure_opsfiles_in_readme_exist "operations/experimental"
-  ensure_opsfiles_in_readme_exist "operations/backup-and-restore"
-
-  echo
-  echo -e "${LIGHT_GREEN} ***** Begin negative readme operations tests ***** ${NOCOLOR}"
-  ensure_test_opsfiles_not_in_readme
-
-  echo
-  echo -e "${LIGHT_GREEN} ***** Begin test coverage analysis ***** ${NOCOLOR}"
-  ensure_opsfiles_in_tests "scripts/test-standard-ops.sh" $(ls operations/*.yml)
-  ensure_opsfiles_in_tests "scripts/test-legacy-ops.sh" $(ls operations/legacy/*.yml)
-  ensure_opsfiles_in_tests "scripts/test-test-ops.sh" $(ls operations/test/*.yml)
-  ensure_opsfiles_in_tests "scripts/test-experimental-ops.sh" $(ls operations/experimental/*.yml)
-  ensure_opsfiles_in_tests "scripts/test-addons-ops.sh" $(ls operations/addons/*.yml)
-  ensure_opsfiles_in_tests "scripts/test-backup-and-restore-ops.sh" $(ls operations/backup-and-restore/*.yml)
-
-  echo
-  echo -e "${LIGHT_GREEN} ***** Begin interpolation operations tests ***** ${NOCOLOR}"
-  test_opsfile_interpolation
-
-  echo
-  echo -e "${LIGHT_GREEN} ***** Begin interpolation iaas operations tests ***** ${NOCOLOR}"
-  test_iaas_opsfile_interpolation
-
+  # echo
+  # echo -e "${LIGHT_GREEN} ***** Begin affirmative readme operations tests ***** ${NOCOLOR}"
+  # ensure_opsfiles_in_readme "operations/README.md" $(ls operations/*.yml)
+  # ensure_opsfiles_in_readme "operations/legacy/README.md" $(ls operations/legacy/*.yml)
+  # ensure_opsfiles_in_readme "operations/community/README.md" $(ls operations/community/*.yml)
+  # ensure_opsfiles_in_readme "operations/experimental/README.md" $(ls operations/experimental/*.yml)
+  # ensure_opsfiles_in_readme "operations/backup-and-restore/README.md" $(ls operations/backup-and-restore/*.yml)
+  #
+  # echo
+  # echo -e "${LIGHT_GREEN} ***** Begin affirmative operations in readme tests ***** ${NOCOLOR}"
+  # ensure_opsfiles_in_readme_exist "operations"
+  # ensure_opsfiles_in_readme_exist "operations/legacy"
+  # ensure_opsfiles_in_readme_exist "operations/community"
+  # ensure_opsfiles_in_readme_exist "operations/experimental"
+  # ensure_opsfiles_in_readme_exist "operations/backup-and-restore"
+  #
+  # echo
+  # echo -e "${LIGHT_GREEN} ***** Begin negative readme operations tests ***** ${NOCOLOR}"
+  # ensure_test_opsfiles_not_in_readme
+  #
+  # echo
+  # echo -e "${LIGHT_GREEN} ***** Begin test coverage analysis ***** ${NOCOLOR}"
+  # ensure_opsfiles_in_tests "scripts/test-standard-ops.sh" $(ls operations/*.yml)
+  # ensure_opsfiles_in_tests "scripts/test-legacy-ops.sh" $(ls operations/legacy/*.yml)
+  # ensure_opsfiles_in_tests "scripts/test-test-ops.sh" $(ls operations/test/*.yml)
+  # ensure_opsfiles_in_tests "scripts/test-experimental-ops.sh" $(ls operations/experimental/*.yml)
+  # ensure_opsfiles_in_tests "scripts/test-addons-ops.sh" $(ls operations/addons/*.yml)
+  # ensure_opsfiles_in_tests "scripts/test-backup-and-restore-ops.sh" $(ls operations/backup-and-restore/*.yml)
+  #
+  # echo
+  # echo -e "${LIGHT_GREEN} ***** Begin interpolation operations tests ***** ${NOCOLOR}"
+  # test_opsfile_interpolation
+  #
+  # echo
+  # echo -e "${LIGHT_GREEN} ***** Begin interpolation iaas operations tests ***** ${NOCOLOR}"
+  # test_iaas_opsfile_interpolation
+  #
   echo
   echo -e "${LIGHT_GREEN} ***** Begin interpolation example vars files tests ***** ${NOCOLOR}"
   test_example_vars_files_interpolation
 
-  if [ "$RUN_SEMANTIC" == "true" ]; then
-    echo
-    echo -e "${LIGHT_GREEN} ***** Begin semantic operations tests ***** ${NOCOLOR}"
-    semantic_tests
-  fi
+  # if [ "$RUN_SEMANTIC" == "true" ]; then
+  #   echo
+  #   echo -e "${LIGHT_GREEN} ***** Begin semantic operations tests ***** ${NOCOLOR}"
+  #   semantic_tests
+  # fi
 
   exit $exit_code
 }
