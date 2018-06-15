@@ -1,5 +1,5 @@
-- path: /instance_groups/-
-  type: replace
+- type: replace
+  path: /instance_groups/-
   value:
     azs:
     - z1
@@ -48,10 +48,10 @@
       release: garden-runc
     - name: rep_windows
       properties:
-        declarative_healthcheck_path: /var/vcap/packages/healthcheck_windows/internal
         containers:
           trusted_ca_certificates:
           - ((application_ca.certificate))
+        declarative_healthcheck_path: /var/vcap/packages/healthcheck_windows/internal
         diego:
           executor:
             instance_identity_ca_cert: ((diego_instance_identity_ca.certificate))
@@ -92,10 +92,10 @@
       properties:
         loggregator:
           tls:
-            ca_cert: ((loggregator_ca.certificate))
             agent:
               cert: ((loggregator_tls_agent.certificate))
               key: ((loggregator_tls_agent.private_key))
+            ca_cert: ((loggregator_ca.certificate))
         syslog_daemon_config:
           enable: false
       release: loggregator-agent
@@ -108,50 +108,50 @@
     vm_extensions:
     - 100GB_ephemeral_disk
     vm_type: small-highmem
-- path: /stemcells/-
-  type: replace
+- type: replace
+  path: /stemcells/-
   value:
     alias: windows2016
     os: windows2016
     version: "1709.8"
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2016?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2016?
   value:
     description: Windows Server 2016
     name: windows2016
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/name=hwc_buildpack?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/name=hwc_buildpack?
   value:
     name: hwc_buildpack
     package: hwc-buildpack
-- path: /instance_groups/name=api/jobs/name=hwc-buildpack?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=hwc-buildpack?
   value:
     name: hwc-buildpack
     release: hwc-buildpack
-- path: /releases/name=hwc-buildpack?
-  type: replace
+- type: replace
+  path: /releases/name=hwc-buildpack?
   value:
     name: hwc-buildpack
     sha1: c57c96ebd050b632db94c6de2199bd78ee39dbd7
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=2.3.17
     version: 2.3.17
-- path: /releases/name=winc?
-  type: replace
+- type: replace
+  path: /releases/name=winc?
   value:
     name: winc
     sha1: 31233d99408e41824a7682c04cb6ab1b1424e313
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/winc-release?v=1.3.0
     version: 1.3.0
-- path: /releases/name=windows2016fs?
-  type: replace
+- type: replace
+  path: /releases/name=windows2016fs?
   value:
     name: windows2016fs
-    sha1: 1944dfe5ce477f777ff70d47204f7bfda8aadd0c
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows2016fs-online-release?v=1.3.0
-    version: 1.3.0
-- path: /releases/name=windows-utilities?
-  type: replace
+    sha1: d8a3456f5d784867029e75a4626c701f795045ec
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows2016fs-online-release?v=1.4.0
+    version: 1.4.0
+- type: replace
+  path: /releases/name=windows-utilities?
   value:
     name: windows-utilities
     sha1: 2bf15743be48e696a72236c05e8e3e137474cedd
