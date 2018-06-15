@@ -16,8 +16,6 @@ To learn more about `cf-deployment`, go to the main [README](../README.md).
 |:---  |:---     |:---   |
 | [`enable-backup-restore.yml`](enable-backup-restore.yml) | Deploy BOSH backup and restore instance and enable release level backup. | |
 | [`enable-backup-restore-credhub.yml`](enable-backup-restore-credhub.yml) | Enables the backup and restore of CredHub. | Requires `enable-backup-restore.yml` and `secure-service-credentials.yml`. |
-| [`enable-backup-restore-credhub-postgres.yml`](enable-backup-restore-credhub-postgres.yml) | **DEPRECATED** Please use `enable-backup-restore-credhub.yml` instead. Enables the backup and restore of CredHub when using postgres. Should be applied after `secure-service-credentials-postgres.yml` Ops-file. | |
-| [`enable-backup-restore-credhub-external-db.yml`](enable-backup-restore-credhub-external-db.yml) | **DEPRECATED** Please use `enable-backup-restore-credhub.yml` instead. Enables the backup and restore of CredHub when using an external database. Should be applied after `secure-service-credentials-external-db.yml` Ops-file. | |
 | [`enable-backup-restore-azure.yml`](enable-backup-restore-azure.yml) | Enables the backup and restore of Azure blobstores with soft delete enabled. | Requires `enable-backup-restore.yml` and `use-azure-storage-blobstore.yml` |
 | [`enable-restore-azure-clone.yml`](enable-restore-azure-clone.yml) | Deploy with this Ops-files when restoring to a different Azure storage account. | Requires `enable-backup-restore.yml` and `use-azure-storage-blobstore.yml` |
 | [`enable-backup-restore-s3-versioned.yml`](enable-backup-restore-s3-versioned.yml) | Enables the backup and restore of versioned S3 blobstores. | Requires `enable-backup-restore.yml` and `use-s3-blobstore.yml` |
