@@ -97,6 +97,23 @@
     name: perm_database_password
     type: password
 
+- type: replace
+  path: /variables/-
+  value:
+    name: perm_uaa_clients_cloud_controller_monitor_secret
+    type: password
+
+- type: replace
+  path: /variables/-
+  value:
+    name: perm_uaa_clients_perm_monitor_secret
+    type: password
+
+- type: replace
+  path: /variables/-
+  value:
+    name: perm_uaa_clients_cc_perm_secret
+    type: password
 
 # Perm Errands
 
@@ -185,9 +202,3 @@
     authorities: perm.admin
     authorized-grant-types: client_credentials
     secret: ((perm_uaa_clients_perm_monitor_secret))
-
-- type: replace
-  path: /variables/-
-  value:
-    name: perm_uaa_clients_cloud_controller_monitor_secret
-    type: password
