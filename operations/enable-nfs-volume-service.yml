@@ -16,33 +16,34 @@
 - type: replace
   path: /instance_groups/-
   value:
-    azs: [z1]
-    lifecycle: errand
+    azs:
+    - z1
     instances: 1
     jobs:
     - name: nfsbrokerpush
       properties:
         nfsbrokerpush:
-          app_name: nfs-broker
-          domain: ((system_domain))
           app_domain: ((system_domain))
-          register_broker: false
+          app_name: nfs-broker
           cf:
             admin_password: ((cf_admin_password))
             admin_user: admin
-          organization: system
-          space: nfs-broker-space
-          password: ((nfs-broker-password))
-          username: nfs-broker
-          syslog_url: ""
-          skip_cert_verify: true
           db:
             driver: mysql
             name: nfs-broker
             password: ((nfs-broker-database-password))
             port: 3306
             username: nfs-broker
+          domain: ((system_domain))
+          organization: system
+          password: ((nfs-broker-password))
+          register_broker: false
+          skip_cert_verify: true
+          space: nfs-broker-space
+          syslog_url: ""
+          username: nfs-broker
       release: nfs-volume
+    lifecycle: errand
     name: nfs-broker-push
     networks:
     - name: default
@@ -99,9 +100,9 @@
   path: /releases/-
   value:
     name: nfs-volume
-    sha1: 54108a968da6052d8ddaaa5b615f4d2f7f068e20
-    url: https://bosh.io/d/github.com/cloudfoundry/nfs-volume-release?v=1.3.1
-    version: 1.3.1
+    sha1: 84c39ded90aed61d38dc52d10b2ff59d3248f621
+    url: https://bosh.io/d/github.com/cloudfoundry/nfs-volume-release?v=1.4.0
+    version: 1.4.0
 - type: replace
   path: /releases/-
   value:
