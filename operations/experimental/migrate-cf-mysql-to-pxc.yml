@@ -155,6 +155,9 @@
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb/address?
   value: sql-db.service.cf.internal
 - type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/address?
+  value: sql-db.service.cf.internal
+- type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/ca_cert?
   value: ((pxc_server_ca.certificate))
 - type: replace
@@ -177,4 +180,10 @@
   value: ((pxc_server_ca.certificate))
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql/require_ssl?
+  value: true
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa?/ca_certs/-
+  value: ((pxc_server_ca.certificate))
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/tls_enabled?
   value: true
