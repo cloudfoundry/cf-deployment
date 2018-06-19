@@ -36,8 +36,14 @@ pass() {
 }
 
 interpolate() {
+  local vars_store=$(mktemp)
+  cp ${home}/scripts/fixtures/unit-test-vars-store.yml $vars_store
+
   bosh interpolate --vars-store $vars_store --var-errs -v system_domain=foo.bar.com ${home}/cf-deployment.yml $@ > /dev/null
-  return $?
+  local exit_code=$?
+
+  rm $vars_store
+  return $exit_code
 }
 
 check_interpolation() {
@@ -57,9 +63,6 @@ check_interpolation() {
 }
 
 test_opsfile_interpolation() {
-  vars_store=$(mktemp)
-  cp ${home}/scripts/fixtures/unit-test-vars-store.yml $vars_store
-
   test_standard_ops &
   test_experimental_ops &
   test_test_ops &
@@ -70,8 +73,6 @@ test_opsfile_interpolation() {
   for job in $(jobs -p); do
     wait $job || exit_code=1
   done
-
-  rm $vars_store
 }
 
 test_iaas_opsfile_interpolation() {
