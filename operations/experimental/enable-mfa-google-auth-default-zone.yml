@@ -1,0 +1,11 @@
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/login?/mfa
+  value:
+    providers:
+      2fa:
+        type: google-authenticator
+        config:
+          providerDescription: Add google authenticator/authy to the default zone
+          issuer: uaa
+    providerName: 2fa
+    enabled: true
