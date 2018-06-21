@@ -1,6 +1,6 @@
 ### What is this change about?
 
-_In your own words, describe the change and why it's needed._
+_Describe the change and why it's needed._
 
 
 ### Please provide contextual information.
@@ -11,8 +11,8 @@ _Include any links to other PRs, stories, slack discussions, etc... that will he
 
 ### Has a cf-deployment including this change passed our [cf-acceptance-tests](https://github.com/cloudfoundry/cf-acceptance-tests)?
 
-- YES 
-- NO
+- [ ] YES 
+- [ ] NO
 
 
 
@@ -25,17 +25,13 @@ See [previous release notes](https://github.com/cloudfoundry/cf-deployment/relea
 
 ### Does this PR introduce a breaking change? 
 
-_Introduces changes that would require operators to take action in order to deploy without a failure._
+_Does this introduce changes that would require operators to take action in order to deploy without a failure?_
 
 Examples of breaking changes:
-
-- changes the name of a job
+- changes the name of a job or instance group
+- deletes a job or instance group
 - moves a job to a different instance group
-
-### Has this change passed our (cf-acceptance-tests)?
-- YES 
-- NO
-
+- changes the name of a credential
 
 
 
@@ -49,8 +45,8 @@ _Does it update/impact multiple CF components?_
 
 ### Will this change increase the VM footprint of cf-deployment?
 
-- YES
-- NO
+- [ ] YES --- does it really have to?
+- [ ] NO
 
 
 ### Does this PR make a change to an experimental or GA'd feature/component?
@@ -60,25 +56,11 @@ _Does it update/impact multiple CF components?_
 
 
 
-### What is the level of urgency publishing this change?
+### What is the level of urgency for publishing this change?
 
-[] **Critical** - addresses critical security issue 
-[] **High** - addresses broken cf component in current
-[] **Medium** - 
-[] **Low**
+[] **Urgent** - unblocks current or future work
+[] **Slightly Less than Urgent**
 
-### Please provide output that helps describe the issue:
-
-_It's helpful to include snippets of the error response or logs output_
-
-
-### What IaaS is this issue occurring on?
-
-[IaaS name(s) here]
-
-### Is there anything else unique or special about your setup?
-
-[Description here]
 
 ### Tag your pair, your PM, and/or team!
 _It's helpful to tag a few other folks on your team or your team alias in case we need to follow up later._
