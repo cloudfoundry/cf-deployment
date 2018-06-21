@@ -31,8 +31,9 @@
         uaa:
           hostname: uaa.((system_domain))
           port: 443
-          ca_certs:
-          - ((router_ca.certificate))
+          tls:
+            ca_certs:
+            - ((router_ca.certificate))
 
 # Changes to other instance groups
 - type: replace
