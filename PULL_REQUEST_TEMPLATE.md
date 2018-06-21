@@ -3,6 +3,7 @@
 _Describe the change and why it's needed._
 
 
+
 ### Please provide contextual information.
 
 _Include any links to other PRs, stories, slack discussions, etc... that will help establish context._
@@ -35,18 +36,11 @@ Examples of breaking changes:
 
 
 
-### Is this a cross-cutting change? 
-
-_Does it update/impact multiple CF components?_
-
--if so, please list them...
-
-
-
 ### Will this change increase the VM footprint of cf-deployment?
 
 - [ ] YES --- does it really have to?
 - [ ] NO
+
 
 
 ### Does this PR make a change to an experimental or GA'd feature/component?
@@ -58,8 +52,9 @@ _Does it update/impact multiple CF components?_
 
 ### What is the level of urgency for publishing this change?
 
-[] **Urgent** - unblocks current or future work
-[] **Slightly Less than Urgent**
+- [ ] **Urgent** - unblocks current or future work
+- [ ] **Slightly Less than Urgent**
+
 
 
 ### Tag your pair, your PM, and/or team!
