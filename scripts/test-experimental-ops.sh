@@ -42,7 +42,6 @@ test_experimental_ops() {
       check_interpolation "use-garden-containerd.yml"
       check_interpolation "enable-routing-integrity.yml"
       check_interpolation "name: enable-service-discovery.yml" "use-bosh-dns-for-containers.yml" "-o enable-service-discovery.yml"
-      check_interpolation "use-log-cache.yml"
       check_interpolation "fast-deploy-with-downtime-and-danger.yml"
       check_interpolation "name: enable-tls-cloud-controller-postgres" "${home}/operations/use-postgres.yml" "-o enable-tls-cloud-controller-postgres.yml"
       check_interpolation "use-xenial-stemcell.yml"
