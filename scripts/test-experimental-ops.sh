@@ -31,6 +31,7 @@ test_experimental_ops() {
       check_interpolation "skip-consul-cell-registrations.yml"
       check_interpolation "skip-consul-locks.yml"
       check_interpolation "use-bosh-dns.yml"
+      check_interpolation "name: use-bosh-dns-with-renamed-network" "use-bosh-dns.yml" "-o use-bosh-dns-with-renamed-network.yml" "-v network_name=this-is-a-renamed-network"
       check_interpolation "use-bosh-dns-for-containers.yml"
       check_interpolation "name: use-bosh-dns-for-windows2016-containers.yml" "${home}/operations/windows2016-cell.yml" "-o use-bosh-dns.yml" "-o use-bosh-dns-for-windows2016-containers.yml"
       check_interpolation "use-bosh-dns-rename-network-and-deployment.yml" "-v network_name=new-network" "-v deployment_name=new-deployment"

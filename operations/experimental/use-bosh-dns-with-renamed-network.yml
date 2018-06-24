@@ -1,0 +1,171 @@
+- type: replace
+  path: /addons/name=bosh-dns/jobs/name=bosh-dns/properties/aliases
+  value:
+    _.cell.service.cf.internal:
+    - _.diego-cell.((network_name)).cf.bosh
+    - _.windows-cell.((network_name)).cf.bosh
+    - _.windows2016-cell.((network_name)).cf.bosh
+    - _.isolated-diego-cell.((network_name)).cf.bosh
+    auctioneer.service.cf.internal:
+    - '*.scheduler.((network_name)).cf.bosh'
+    bbs.service.cf.internal:
+    - '*.diego-api.((network_name)).cf.bosh'
+    bits-service.service.cf.internal:
+    - '*.api.((network_name)).cf.bosh'
+    blobstore.service.cf.internal:
+    - '*.blobstore.((network_name)).cf.bosh'
+    - '*.singleton-blobstore.((network_name)).cf.bosh'
+    cc-uploader.service.cf.internal:
+    - '*.api.((network_name)).cf.bosh'
+    cf-etcd.service.cf.internal:
+    - '*.etcd.((network_name)).cf.bosh'
+    cloud-controller-ng.service.cf.internal:
+    - '*.api.((network_name)).cf.bosh'
+    consul.service.cf.internal:
+    - '*.consul.((network_name)).cf.bosh'
+    credhub.service.cf.internal:
+    - '*.credhub.((network_name)).cf.bosh'
+    doppler.service.cf.internal:
+    - '*.doppler.((network_name)).cf.bosh'
+    file-server.service.cf.internal:
+    - '*.api.((network_name)).cf.bosh'
+    gorouter.service.cf.internal:
+    - '*.router.((network_name)).cf.bosh'
+    locket.service.cf.internal:
+    - '*.diego-api.((network_name)).cf.bosh'
+    loggregator-trafficcontroller.service.cf.internal:
+    - '*.log-api.((network_name)).cf.bosh'
+    policy-server.service.cf.internal:
+    - '*.api.((network_name)).cf.bosh'
+    reverse-log-proxy.service.cf.internal:
+    - '*.log-api.((network_name)).cf.bosh'
+    routing-api.service.cf.internal:
+    - '*.api.((network_name)).cf.bosh'
+    silk-controller.service.cf.internal:
+    - '*.diego-api.((network_name)).cf.bosh'
+    sql-db.service.cf.internal:
+    - '*.mysql.((network_name)).cf.bosh'
+    - '*.postgres.((network_name)).cf.bosh'
+    - '*.database.((network_name)).cf.bosh'
+    ssh-proxy.service.cf.internal:
+    - '*.scheduler.((network_name)).cf.bosh'
+    tcp-router.service.cf.internal:
+    - '*.tcp-router.((network_name)).cf.bosh'
+    tps.service.cf.internal:
+    - '*.scheduler.((network_name)).cf.bosh'
+    uaa.service.cf.internal:
+    - '*.uaa.((network_name)).cf.bosh'
+- type: replace
+  path: /addons/name=bosh-dns-windows2012/jobs/name=bosh-dns-windows/properties/aliases
+  value:
+    _.cell.service.cf.internal:
+    - _.diego-cell.((network_name)).cf.bosh
+    - _.windows-cell.((network_name)).cf.bosh
+    - _.windows2016-cell.((network_name)).cf.bosh
+    - _.isolated-diego-cell.((network_name)).cf.bosh
+    auctioneer.service.cf.internal:
+    - '*.scheduler.((network_name)).cf.bosh'
+    bbs.service.cf.internal:
+    - '*.diego-api.((network_name)).cf.bosh'
+    bits-service.service.cf.internal:
+    - '*.api.((network_name)).cf.bosh'
+    blobstore.service.cf.internal:
+    - '*.blobstore.((network_name)).cf.bosh'
+    - '*.singleton-blobstore.((network_name)).cf.bosh'
+    cc-uploader.service.cf.internal:
+    - '*.api.((network_name)).cf.bosh'
+    cf-etcd.service.cf.internal:
+    - '*.etcd.((network_name)).cf.bosh'
+    cloud-controller-ng.service.cf.internal:
+    - '*.api.((network_name)).cf.bosh'
+    consul.service.cf.internal:
+    - '*.consul.((network_name)).cf.bosh'
+    credhub.service.cf.internal:
+    - '*.credhub.((network_name)).cf.bosh'
+    doppler.service.cf.internal:
+    - '*.doppler.((network_name)).cf.bosh'
+    file-server.service.cf.internal:
+    - '*.api.((network_name)).cf.bosh'
+    gorouter.service.cf.internal:
+    - '*.router.((network_name)).cf.bosh'
+    locket.service.cf.internal:
+    - '*.diego-api.((network_name)).cf.bosh'
+    loggregator-trafficcontroller.service.cf.internal:
+    - '*.log-api.((network_name)).cf.bosh'
+    policy-server.service.cf.internal:
+    - '*.api.((network_name)).cf.bosh'
+    reverse-log-proxy.service.cf.internal:
+    - '*.log-api.((network_name)).cf.bosh'
+    routing-api.service.cf.internal:
+    - '*.api.((network_name)).cf.bosh'
+    silk-controller.service.cf.internal:
+    - '*.diego-api.((network_name)).cf.bosh'
+    sql-db.service.cf.internal:
+    - '*.mysql.((network_name)).cf.bosh'
+    - '*.postgres.((network_name)).cf.bosh'
+    - '*.database.((network_name)).cf.bosh'
+    ssh-proxy.service.cf.internal:
+    - '*.scheduler.((network_name)).cf.bosh'
+    tcp-router.service.cf.internal:
+    - '*.tcp-router.((network_name)).cf.bosh'
+    tps.service.cf.internal:
+    - '*.scheduler.((network_name)).cf.bosh'
+    uaa.service.cf.internal:
+    - '*.uaa.((network_name)).cf.bosh'
+- type: replace
+  path: /addons/name=bosh-dns-windows2016/jobs/name=bosh-dns-windows/properties/aliases
+  value:
+    _.cell.service.cf.internal:
+    - _.diego-cell.((network_name)).cf.bosh
+    - _.windows-cell.((network_name)).cf.bosh
+    - _.windows2016-cell.((network_name)).cf.bosh
+    - _.isolated-diego-cell.((network_name)).cf.bosh
+    auctioneer.service.cf.internal:
+    - '*.scheduler.((network_name)).cf.bosh'
+    bbs.service.cf.internal:
+    - '*.diego-api.((network_name)).cf.bosh'
+    bits-service.service.cf.internal:
+    - '*.api.((network_name)).cf.bosh'
+    blobstore.service.cf.internal:
+    - '*.blobstore.((network_name)).cf.bosh'
+    - '*.singleton-blobstore.((network_name)).cf.bosh'
+    cc-uploader.service.cf.internal:
+    - '*.api.((network_name)).cf.bosh'
+    cf-etcd.service.cf.internal:
+    - '*.etcd.((network_name)).cf.bosh'
+    cloud-controller-ng.service.cf.internal:
+    - '*.api.((network_name)).cf.bosh'
+    consul.service.cf.internal:
+    - '*.consul.((network_name)).cf.bosh'
+    credhub.service.cf.internal:
+    - '*.credhub.((network_name)).cf.bosh'
+    doppler.service.cf.internal:
+    - '*.doppler.((network_name)).cf.bosh'
+    file-server.service.cf.internal:
+    - '*.api.((network_name)).cf.bosh'
+    gorouter.service.cf.internal:
+    - '*.router.((network_name)).cf.bosh'
+    locket.service.cf.internal:
+    - '*.diego-api.((network_name)).cf.bosh'
+    loggregator-trafficcontroller.service.cf.internal:
+    - '*.log-api.((network_name)).cf.bosh'
+    policy-server.service.cf.internal:
+    - '*.api.((network_name)).cf.bosh'
+    reverse-log-proxy.service.cf.internal:
+    - '*.log-api.((network_name)).cf.bosh'
+    routing-api.service.cf.internal:
+    - '*.api.((network_name)).cf.bosh'
+    silk-controller.service.cf.internal:
+    - '*.diego-api.((network_name)).cf.bosh'
+    sql-db.service.cf.internal:
+    - '*.mysql.((network_name)).cf.bosh'
+    - '*.postgres.((network_name)).cf.bosh'
+    - '*.database.((network_name)).cf.bosh'
+    ssh-proxy.service.cf.internal:
+    - '*.scheduler.((network_name)).cf.bosh'
+    tcp-router.service.cf.internal:
+    - '*.tcp-router.((network_name)).cf.bosh'
+    tps.service.cf.internal:
+    - '*.scheduler.((network_name)).cf.bosh'
+    uaa.service.cf.internal:
+    - '*.uaa.((network_name)).cf.bosh'

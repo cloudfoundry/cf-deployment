@@ -1,6 +1,6 @@
 # cf-deployment Experimental Ops-files
 
-This is the README for Experimental Ops-files. To learn more about `cf-deployment`, go to the main [README](../README.md). 
+This is the README for Experimental Ops-files. To learn more about `cf-deployment`, go to the main [README](../README.md).
 
 - For general Ops-files, check out the [Ops-file README](../README.md).
 - For Legacy Ops-files, check out the [Legacy Ops-file README](../legacy/README.md).
@@ -53,6 +53,7 @@ and the ops-files will be removed.
 | [`skip-consul-cell-registrations.yml`](skip-consul-cell-registrations.yml) | Configure the BBS to only use Locket to find registered Diego cells | |
 | [`skip-consul-locks.yml`](skip-consul-locks.yml) | Prevent several components from also attempting to claim a lock in Consul | |
 | [`use-bosh-dns.yml`](use-bosh-dns.yml) | Adds `bosh-dns` job to all instance groups running ubuntu-trusty via Bosh Addon. | Aliases `service.cf.internal` domains to their `bosh-dns` equivalents. |
+| [`use-bosh-dns-with-renamed-network.yml`](use-bosh-dns-with-renamed-network.yml) | Replaces the default network in bosh-dns aliases created by `use-bosh-dns.yml` by the `network_name` variable. | Use with `rename-network.yml`. Apply `use-bosh-dns.yml` first  |
 | [`use-bosh-dns-for-containers.yml`](use-bosh-dns-for-containers.yml) | Sets the DNS server of application containers to the address of the local `bosh-dns` job. | Requires `use-bosh-dns.yml` |
 | [`use-bosh-dns-for-windows2016-containers.yml`](use-bosh-dns-for-windows2016-containers.yml) | Sets the DNS server of application containers (on windows2016 cell) to the address of the local `bosh-dns` job. | Requires `use-bosh-dns.yml` and `operations/windows2016-cell.yml` |
 | [`use-bosh-dns-rename-network-and-deployment.yml`](use-bosh-dns-rename-network-and-deployment.yml) | Adds `bosh-dns` job to all instance groups running ubuntu-trusty via Bosh Addon, and renames network and deployment in domain aliases. | |
