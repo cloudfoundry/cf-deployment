@@ -28,6 +28,11 @@
             required: true
             ca_certs:
             - ((pxc_server_ca.certificate))
+        uaa:
+          hostname: uaa.((system_domain))
+          port: 443
+          ca_certs:
+          - ((router_ca.certificate))
 
 # Changes to other instance groups
 - type: replace
@@ -92,6 +97,23 @@
     name: perm_database_password
     type: password
 
+- type: replace
+  path: /variables/-
+  value:
+    name: perm_uaa_clients_cloud_controller_monitor_secret
+    type: password
+
+- type: replace
+  path: /variables/-
+  value:
+    name: perm_uaa_clients_perm_monitor_secret
+    type: password
+
+- type: replace
+  path: /variables/-
+  value:
+    name: perm_uaa_clients_cc_perm_secret
+    type: password
 
 # Perm Errands
 
@@ -138,12 +160,12 @@
           hostname: uaa.((system_domain))
           port: 443
           ca_certs:
-          - ((router_ssl.ca))
+          - ((router_ca.certificate))
 
         cloud_controller:
           hostname: api.((system_domain))
           port: 443
-          client_id: cloud-controller-monitor
+          client_id: cloud_controller_monitor
           client_secret: ((perm_uaa_clients_cloud_controller_monitor_secret))
           client_scopes:
           - cloud_controller.admin_read_only
@@ -168,7 +190,15 @@
     secret: ((perm_uaa_clients_cloud_controller_monitor_secret))
 
 - type: replace
-  path: /variables/-
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/cc_perm?
   value:
-    name: perm_uaa_clients_cloud_controller_monitor_secret
-    type: password
+    authorities: perm.admin
+    authorized-grant-types: client_credentials
+    secret: ((perm_uaa_clients_cc_perm_secret))
+
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/perm_monitor?
+  value:
+    authorities: perm.admin
+    authorized-grant-types: client_credentials
+    secret: ((perm_uaa_clients_perm_monitor_secret))

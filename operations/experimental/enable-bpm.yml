@@ -1,17 +1,4 @@
-- type: replace
-  path: /releases/-
-  value:
-    name: bpm
-    sha1: 4f0f239abdc801d71de9063625aa56e3c42634b5
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/bpm-release?v=0.6.0
-    version: 0.6.0
-- type: replace
-  path: /addons?/-
-  value:
-    jobs:
-    - name: bpm
-      release: bpm
-    name: bpm
+---
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/bpm?/enabled?
   value: true

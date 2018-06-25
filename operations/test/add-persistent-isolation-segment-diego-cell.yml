@@ -56,8 +56,8 @@
         loggregator:
           use_v2_api: true
           ca_cert: "((loggregator_ca.certificate))"
-          cert: "((loggregator_tls_metron.certificate))"
-          key: "((loggregator_tls_metron.private_key))"
+          cert: "((loggregator_tls_agent.certificate))"
+          key: "((loggregator_tls_agent.private_key))"
         tls:
           ca_cert: "((service_cf_internal_ca.certificate))"
           cert: "((diego_rep_agent_v2.certificate))"
@@ -68,8 +68,8 @@
         loggregator:
           use_v2_api: true
           ca_cert: "((loggregator_ca.certificate))"
-          cert: "((loggregator_tls_metron.certificate))"
-          key: "((loggregator_tls_metron.private_key))"
+          cert: "((loggregator_tls_agent.certificate))"
+          key: "((loggregator_tls_agent.private_key))"
         diego:
           route_emitter:
             local_mode: true

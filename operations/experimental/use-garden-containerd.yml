@@ -1,0 +1,13 @@
+---
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/-
+  value:
+    name: containerd
+    release: garden-runc
+    properties:
+      garden:
+        experimental_containerd_mode: true
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=garden/properties/garden/experimental_containerd_mode?
+  value: true

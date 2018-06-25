@@ -25,7 +25,8 @@ to VMs via the use of [addons][addons-docs].
 
 | Name | Purpose | Notes |
 |:---  |:---     |:---   |
-| [`enable-component-syslog.yml`](enable-component-syslog.yml) | This collocates a job from [syslog release][syslog-release-repo] to forward local syslog events in RFC5424 format to a remote syslog endpoint. | Uses rsyslog, which is available on the stemcell. Further documentation of the `custom_rule` property can be found [here][syslog-custom-rule-examples]. For the windows equivalent, see `operations/experimental/windows-enable-component-syslog.yml`. |
+| [`component-syslog-custom-ca.yml`](component-syslog-custom-ca.yml) | The syslog_forwarder job will only trust certs signed by the provided cert chain. | Requires `enable-component-syslog.yml. Not necessary if syslog target has a cert signed by a public CA. |
+| [`enable-component-syslog.yml`](enable-component-syslog.yml) | This collocates a job from [syslog release][syslog-release-repo] to forward local syslog events in RFC5424 format to a remote syslog endpoint. | Uses rsyslog, which is available on the stemcell. Further documentation of the `custom_rule` property can be found [here][syslog-custom-rule-examples]. For the windows equivalent, see `operations/experimental/windows-enable-component-syslog.yml`. Requires that target have a valid cert. To configure a custom CA, use `component-syslog-custom-ca.yml`. |
 
 ## Adding a Runtime Config
 To add a runtime config to a director for the first time,

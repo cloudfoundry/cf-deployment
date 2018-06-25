@@ -5,7 +5,6 @@ The updated `create-env` command is the following:
 
 ```
 bosh -e <your-bosh-alias> deploy -d cf cf-deployment/cf-deployment.yml \
-    --vars-store deployment-vars.yml \
     -o cf-deployment/operations/bosh-lite.yml \
     -o cf-deployment/operations/experimental/use-bosh-dns.yml \
     -o cf-deployment/iaas-support/softlayer/add-system-domain-dns-alias.yml \

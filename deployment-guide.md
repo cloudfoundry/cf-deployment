@@ -166,15 +166,20 @@ To deploy to a configured BOSH director using the new `bosh` CLI:
 ```
 export SYSTEM_DOMAIN=some-domain.that.you.have
 bosh -e my-env -d cf deploy cf-deployment/cf-deployment.yml \
-  --vars-store env-repo/deployment-vars.yml \
   -v system_domain=$SYSTEM_DOMAIN \
   [ -o operations/CUSTOMIZATION1 ] \
   [ -o operations/CUSTOMIZATION2 (etc.) ]
 ```
 
-The CF Admin credentials will be stored in the file passed to the `--vars-store` flag
-(`env-repo/deployment.yml` in the example).
-You can find them by searching for `cf_admin_password`.
+The CF Admin credentials will be stored in CredHub
+You can find them by searching CredHub for `cf_admin_password`.
+You will need to first find the credential to get the full path
+of the stored variable in your BOSH deployment namespace:
+
+```
+credhub find -n cf_admin_password
+credhub get -n <FULL_CREDENTIAL_NAME>
+```
 
 **For operators trying out cf-deployment for the first time**
 
@@ -182,7 +187,6 @@ In the hope of saving you some time,
 we'd advise that you add the `scale-to-one-az.yml` and `use-compiled-releases.yml` ops-files:
 ```
 bosh -e my-env -d cf deploy cf-deployment/cf-deployment.yml \
-  --vars-store env-repo/deployment-vars.yml \
   -v system_domain=$SYSTEM_DOMAIN \
   -o operations/scale-to-one-az.yml \
   -o operations/use-compiled-releases.yml
@@ -197,7 +201,6 @@ to your deploy command:
 
   bosh -e 192.168.50.6 -d cf deploy cf-deployment.yml \
     -o operations/bosh-lite.yml \
-    --vars-store deployment-vars.yml \
     -v system_domain=bosh-lite.com
   ```
 

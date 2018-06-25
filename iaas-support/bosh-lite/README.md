@@ -69,6 +69,5 @@ bosh \
 deploy \
 cf-deployment/cf-deployment.yml \
 -o cf-deployment/operations/bosh-lite.yml \
---vars-store deployment-vars.yml \
 -v system_domain=<SYSTEM_DOMAIN>
 ```

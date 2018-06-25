@@ -36,8 +36,14 @@ pass() {
 }
 
 interpolate() {
-  bosh interpolate ${home}/cf-deployment.yml $@ > /dev/null
-  return $?
+  local vars_store=$(mktemp)
+  cp ${home}/scripts/fixtures/unit-test-vars-store.yml $vars_store
+
+  bosh interpolate --vars-store $vars_store --var-errs -v system_domain=foo.bar.com ${home}/cf-deployment.yml $@ > /dev/null
+  local exit_code=$?
+
+  rm $vars_store
+  return $exit_code
 }
 
 check_interpolation() {
@@ -77,6 +83,14 @@ test_iaas_opsfile_interpolation() {
   done
 }
 
+test_example_vars_files_interpolation() {
+  test_example_vars_files &
+
+  for job in $(jobs -p); do
+    wait $job || exit_code=1
+  done
+}
+
 ensure_test_opsfiles_not_in_readme() {
   pushd ${home} > /dev/null
     local opsfiles=$(ls operations/test/*.yml)
@@ -108,6 +122,31 @@ ensure_opsfiles_in_readme() {
   popd > /dev/null
 }
 
+ensure_opsfiles_in_readme_exist() {
+  local ops_dir=$1
+  local readme=${ops_dir}/README.md
+
+
+  ops_files_in_readme=$(cat ${readme} | grep -Eo '\((.+\.yml)\)' | cut -d '(' -f2 | cut -d ')' -f1)
+
+  pushd ${home} > /dev/null
+    for ops_file in ${ops_files_in_readme}; do
+      set +e
+        ls ${ops_dir}/${ops_file} > /dev/null 2>&1
+        local ops_file_exists=$?
+      set -e
+
+      suite_name="${ops_dir}/${ops_file}"
+      if [ "${ops_file_exists}" == "0" ]; then
+          pass "$ops_file from $readme exists"
+      else
+          fail "$ops_file from $readme doesn't exist"
+      fi
+    done
+  popd > /dev/null
+
+}
+
 ensure_opsfiles_in_tests() {
   local test=$1
   shift
@@ -136,6 +175,14 @@ main() {
   ensure_opsfiles_in_readme "operations/backup-and-restore/README.md" $(ls operations/backup-and-restore/*.yml)
 
   echo
+  echo -e "${LIGHT_GREEN} ***** Begin affirmative operations in readme tests ***** ${NOCOLOR}"
+  ensure_opsfiles_in_readme_exist "operations"
+  ensure_opsfiles_in_readme_exist "operations/legacy"
+  ensure_opsfiles_in_readme_exist "operations/community"
+  ensure_opsfiles_in_readme_exist "operations/experimental"
+  ensure_opsfiles_in_readme_exist "operations/backup-and-restore"
+
+  echo
   echo -e "${LIGHT_GREEN} ***** Begin negative readme operations tests ***** ${NOCOLOR}"
   ensure_test_opsfiles_not_in_readme
 
@@ -155,6 +202,10 @@ main() {
   echo
   echo -e "${LIGHT_GREEN} ***** Begin interpolation iaas operations tests ***** ${NOCOLOR}"
   test_iaas_opsfile_interpolation
+
+  # echo
+  # echo -e "${LIGHT_GREEN} ***** Begin interpolation example vars files tests ***** ${NOCOLOR}"
+  # test_example_vars_files_interpolation
 
   if [ "$RUN_SEMANTIC" == "true" ]; then
     echo

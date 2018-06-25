@@ -1,3 +1,4 @@
+---
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=bosh-dns-adapter?
   value:
@@ -8,7 +9,7 @@
           tls: ((cf_app_sd_client_tls))
         server:
           ca: ((cf_app_sd_ca.certificate))
-    release: cf-app-sd
+    release: cf-networking
 - type: replace
   path: /instance_groups/name=scheduler/jobs/-
   value:
@@ -19,7 +20,7 @@
           ca: ((cf_app_sd_ca.certificate))
         server:
           tls: ((cf_app_sd_server_tls))
-    release: cf-app-sd
+    release: cf-networking
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=route_emitter/properties/internal_routes?
   value:
@@ -52,13 +53,6 @@
       extended_key_usage:
       - client_auth
     type: certificate
-- type: replace
-  path: /releases/name=cf-app-sd?
-  value:
-    name: cf-app-sd
-    sha1: 7bf7656beeda5f9a2ba598481dc2ef61ca19f019
-    url: https://bosh.io/d/github.com/cloudfoundry/cf-app-sd-release?v=0.6.0
-    version: 0.6.0
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/temporary_create_internal_domain?
   value: true

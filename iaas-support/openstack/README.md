@@ -64,7 +64,6 @@ To deploy Cloud Foundry run the following command filling in the necessary varia
 bosh -d cf deploy cf-deployment/cf-deployment.yml \
      -o cf-deployment/operations/use-compiled-releases.yml \
      -o cf-deployment/operations/openstack.yml \
-     --vars-store <vars-store> \
      -v system_domain="<system-domain>"
 ```
 

@@ -1,5 +1,5 @@
-- path: /instance_groups/-
-  type: replace
+- type: replace
+  path: /instance_groups/-
   value:
     azs:
     - z1
@@ -44,8 +44,8 @@
         enable_declarative_healthcheck: true
         loggregator:
           ca_cert: ((loggregator_ca.certificate))
-          cert: ((loggregator_tls_metron.certificate))
-          key: ((loggregator_tls_metron.private_key))
+          cert: ((loggregator_tls_agent.certificate))
+          key: ((loggregator_tls_agent.private_key))
           use_v2_api: true
         syslog_daemon_config:
           enable: false
@@ -65,8 +65,8 @@
             local_mode: true
         loggregator:
           ca_cert: ((loggregator_ca.certificate))
-          cert: ((loggregator_tls_metron.certificate))
-          key: ((loggregator_tls_metron.private_key))
+          cert: ((loggregator_tls_agent.certificate))
+          key: ((loggregator_tls_agent.private_key))
           use_v2_api: true
         tcp:
           enabled: true
@@ -74,20 +74,18 @@
           ca_cert: ((uaa_ca.certificate))
           client_secret: ((uaa_clients_tcp_emitter_secret))
       release: diego
-    - name: metron_agent_windows
+    - name: loggregator_agent_windows
       properties:
         loggregator:
           tls:
             ca_cert: ((loggregator_ca.certificate))
-            metron:
-              cert: ((loggregator_tls_metron.certificate))
-              key: ((loggregator_tls_metron.private_key))
-        metron_agent:
-          deployment: ((system_domain))
-          disable_udp: true
+            agent:
+              cert: ((loggregator_tls_agent.certificate))
+              key: ((loggregator_tls_agent.private_key))
+        disable_udp: true
         syslog_daemon_config:
           enable: false
-      release: loggregator
+      release: loggregator-agent
     - name: enable_ssh
       release: windows-utilities
     name: windows-cell
@@ -97,55 +95,55 @@
     vm_extensions:
     - 100GB_ephemeral_disk
     vm_type: small-highmem
-- path: /releases/-
-  type: replace
+- type: replace
+  path: /releases/-
   value:
     name: garden-windows
     sha1: f678d11039d0719b100c45321057dca0788f92dd
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/garden-windows-bosh-release?v=0.14.0
     version: 0.14.0
-- path: /releases/name=windows-utilities?
-  type: replace
+- type: replace
+  path: /releases/name=windows-utilities?
   value:
     name: windows-utilities
     sha1: 2bf15743be48e696a72236c05e8e3e137474cedd
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.10.0
     version: 0.10.0
-- path: /stemcells/-
-  type: replace
+- type: replace
+  path: /stemcells/-
   value:
     alias: windows2012R2
     os: windows2012R2
-    version: "1200.18"
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2012R2?
-  type: replace
+    version: "1200.19"
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2012R2?
   value:
     description: Windows Server 2012 R2
     name: windows2012R2
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
   value:
     name: hwc_buildpack
     package: hwc-buildpack
-- path: /instance_groups/name=api/jobs/-
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/-
   value:
     name: hwc-buildpack
     release: hwc-buildpack
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/name=hwc_buildpack?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/name=hwc_buildpack?
   value:
     name: hwc_buildpack
     package: hwc-buildpack
-- path: /instance_groups/name=api/jobs/name=hwc-buildpack?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=hwc-buildpack?
   value:
     name: hwc-buildpack
     release: hwc-buildpack
-- path: /releases/name=hwc-buildpack?
-  type: replace
+- type: replace
+  path: /releases/name=hwc-buildpack?
   value:
     name: hwc-buildpack
-    sha1: 4e290d685082a0803d75fe3fddbca3bcc2962f66
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=2.3.16
-    version: 2.3.16
+    sha1: c57c96ebd050b632db94c6de2199bd78ee39dbd7
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=2.3.17
+    version: 2.3.17

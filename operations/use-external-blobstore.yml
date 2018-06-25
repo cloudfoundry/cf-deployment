@@ -31,14 +31,7 @@
 
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks?/fog_connection?
-  value: &blobstore-properties
-    provider: AWS
-    aws_access_key_id: ((blobstore_access_key_id))
-    aws_secret_access_key: ((blobstore_secret_access_key))
-    region: ((aws_region))
-    host: ((s3_host))
-    endpoint: ((s3_endpoint))
-    path_style: ((s3_path_style))
+  value: &blobstore-properties ((fog_connection))
 
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/droplets?/fog_connection?
@@ -84,56 +77,7 @@
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/resource_pool?/fog_connection?
   value: *blobstore-properties
 
-- type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks/webdav_config?
-  value: &webdav_config
-    public_endpoint: blobstore.((system_domain))
-
-- type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/droplets/webdav_config?
-  value: *webdav_config
-
-- type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/packages/webdav_config?
-  value: *webdav_config
-
-- type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/resource_pool/webdav_config?
-  value: *webdav_config
-
-- type: replace
-  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/buildpacks/webdav_config?
-  value: *webdav_config
-
-- type: replace
-  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/droplets/webdav_config?
-  value: *webdav_config
-
-- type: replace
-  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/packages/webdav_config?
-  value: *webdav_config
-
-- type: replace
-  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/resource_pool/webdav_config?
-  value: *webdav_config
-
-- type: replace
-  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/buildpacks/webdav_config?
-  value: *webdav_config
-
-- type: replace
-  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/droplets/webdav_config?
-  value: *webdav_config
-
-- type: replace
-  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/packages/webdav_config?
-  value: *webdav_config
-
-- type: replace
-  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/resource_pool/webdav_config?
-  value: *webdav_config
-
-# replace s3 bucket names
+# replace bucket names
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/buildpacks/buildpack_directory_key?
   value: ((buildpack_directory_key))
@@ -183,7 +127,6 @@
   value: ((resource_directory_key))
 
 # remove unnecessary variables for internal blobstore
-
 - type: remove
   path: /variables/name=blobstore_admin_users_password
 

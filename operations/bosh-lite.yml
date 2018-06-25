@@ -39,8 +39,8 @@
       loggregator: &diego_loggregator_client_properties
         use_v2_api: true
         ca_cert: "((loggregator_ca.certificate))"
-        cert: "((loggregator_tls_metron.certificate))"
-        key: "((loggregator_tls_metron.private_key))"
+        cert: "((loggregator_tls_agent.certificate))"
+        key: "((loggregator_tls_agent.private_key))"
       diego:
         ssl:
           skip_cert_verify: true
@@ -48,8 +48,6 @@
           enable_cf_auth: true
           host_key: "((diego_ssh_proxy_host_key.private_key))"
           uaa_secret: "((uaa_clients_ssh-proxy_secret))"
-          uaa:
-            port: 8443
           bbs: &5
             ca_cert: "((service_cf_internal_ca.certificate))"
             client_cert: "((diego_bbs_client.certificate))"

@@ -1,9 +1,11 @@
+---
 - type: replace
   path: /addons?/-
   value:
     include:
       stemcell:
       - os: ubuntu-trusty
+      - os: ubuntu-xenial
     jobs:
     - name: syslog_forwarder
       properties:
@@ -14,7 +16,9 @@
             if ($programname startswith "vcap.") then stop
           fallback_servers: ((syslog_fallback_servers))
           port: ((syslog_port))
-          transport: ((syslog_transport))
+          transport: tcp
+          tls_enabled: true
+          permitted_peer: ((permitted_peer))
       release: syslog
     name: syslog_forwarder
 - type: replace
