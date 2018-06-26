@@ -62,6 +62,7 @@ test_standard_ops() {
       check_interpolation "name: use-swift-blobstore.yml" "use-external-blobstore.yml -o use-swift-blobstore.yml -l example-vars-files/vars-use-swift-blobstore.yml"
       check_interpolation "use-bosh-dns.yml"
       check_interpolation "use-bosh-dns-for-containers.yml"
+      check_interpolation "name: use-bosh-dns-for-windows2016-containers.yml" "${home}/operations/windows2016-cell.yml" "-o ${home}/operations/use-bosh-dns.yml" "-o use-bosh-dns-for-windows2016-containers.yml"
       check_interpolation "use-bosh-dns-rename-network-and-deployment.yml" "-v network_name=new-network" "-v deployment_name=new-deployment"
       check_interpolation "use-trusted-ca-cert-for-apps.yml" "-l example-vars-files/vars-use-trusted-ca-cert-for-apps.yml"
       check_interpolation "windows-cell.yml"
