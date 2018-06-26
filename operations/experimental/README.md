@@ -29,6 +29,7 @@ and the ops-files will be removed.
 | [`disable-consul-windows2016.yml`](disable-consul-windows2016.yml) | Removes `consul` job from `windows2016-cell` instance group and prevents the Windows 2016 cell rep from registering itself as a service with Consul | Requires `operations/use-bosh-dns.yml` and `operations/windows2016-cell.yml` |
 | [`enable-bits-service-consul.yml`](enable-bits-service-consul.yml) | Registers the bits-service [bits-service](https://github.com/cloudfoundry-incubator/bits-service) job via consul | Requires `bits-service.yml` from the same directory. |
 | [`enable-bpm.yml`](enable-bpm.yml) | Enables the [BOSH Process Manager](https://github.com/cloudfoundry-incubator/bpm-release) for several BOSH jobs. | |
+| [`enable-service-discovery.yml`](enable-service-discovery.yml) | **DEPRECATED. Please use `operations/enable-service-discovery.yml`** Enables application service discovery | Requires bosh-dns-release >= 0.2.0, capi-release >= 1.47.0, and `use-bosh-dns-for-containers.yml` |
 | [`enable-iptables-logger.yml`](enable-iptables-logger.yml) | Enables iptables logger. | |
 | [`enable-mysql-tls.yml`](enable-mysql-tls.yml) | Enables TLS on the database job | |
 | [`enable-oci-phase-1.yml`](enable-oci-phase-1.yml) | Configure Garden to create OCI compatible images. | |
@@ -51,6 +52,8 @@ and the ops-files will be removed.
 | [`secure-service-credentials-with-pxc-release.yml`](secure-service-credentials-with-pxc-release.yml) | Use [pxc-release](https://github.com/cloudfoundry-incubator/pxc-release) for CredHub data store. | Requires `secure-service-credentials.yml` and `use-pxc.yml`. |
 | [`skip-consul-cell-registrations.yml`](skip-consul-cell-registrations.yml) | Configure the BBS to only use Locket to find registered Diego cells | |
 | [`skip-consul-locks.yml`](skip-consul-locks.yml) | Prevent several components from also attempting to claim a lock in Consul | |
+| [`use-bosh-dns.yml`](use-bosh-dns.yml) | **DEPRECATED. Please use `operations/use-bosh-dns.yml`** Adds `bosh-dns` job to all instance groups running ubuntu-trusty via Bosh Addon. | Aliases `service.cf.internal` domains to their `bosh-dns` equivalents. |
+| [`use-bosh-dns-for-containers.yml`](use-bosh-dns-for-containers.yml) | **DEPRECATED. Please use `operations/use-bosh-dns-for-containers.yml`** Sets the DNS server of application containers to the address of the local `bosh-dns` job. | Requires `use-bosh-dns.yml` |
 | [`use-bosh-dns-for-windows2016-containers.yml`](use-bosh-dns-for-windows2016-containers.yml) | Sets the DNS server of application containers (on windows2016 cell) to the address of the local `bosh-dns` job. | Requires `operations/use-bosh-dns.yml` and `operations/windows2016-cell.yml` |
 | [`use-bosh-dns-rename-network-and-deployment.yml`](use-bosh-dns-rename-network-and-deployment.yml) | Adds `bosh-dns` job to all instance groups running ubuntu-trusty via Bosh Addon, and renames network and deployment in domain aliases. | |
 | [`use-compiled-releases-xenial-stemcell.yml`](use-compiled-releases-xenial-stemcell.yml) | Use releases compiled for Xenial stemcell, as opposed to Trusty | Requires `operations/experimental/use-xenial-stemcell.yml` |
