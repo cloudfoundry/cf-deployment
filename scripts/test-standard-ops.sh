@@ -54,6 +54,7 @@ test_standard_ops() {
         fail "use-latest-windows-stemcell.yml, expected 'latest' but got '${version}'"
       fi
       check_interpolation "use-postgres.yml"
+      check_interpolation "name: use-alicloud-oss-blobstore.yml" "use-external-blobstore.yml -o use-alicloud-oss-blobstore.yml -l example-vars-files/vars-use-alicloud-oss-blobstore.yml"
       check_interpolation "name: use-s3-blobstore.yml" "use-external-blobstore.yml -o use-s3-blobstore.yml -l example-vars-files/vars-use-s3-blobstore.yml"
       check_interpolation "name: use-gcs-blobstore-access-key.yml" "use-external-blobstore.yml -o use-gcs-blobstore-access-key.yml
       -v blobstore_access_key_id=TEST_ACCESS_KEY -v blobstore_secret_access_key=TEST_SECRET_ACCESS_KEY -l example-vars-files/vars-use-gcs-blobstore-access-key.yml"
