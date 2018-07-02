@@ -43,6 +43,14 @@
   path: /instance_groups/name=adapter?/jobs/name=consul_agent
 - type: remove
   path: /instance_groups/name=bits?/jobs/name=consul_agent
+- type: remove
+  path: /variables/name=consul_encrypt_key?
+- type: remove
+  path: /variables/name=consul_agent_ca?
+- type: remove
+  path: /variables/name=consul_agent?
+- type: remove
+  path: /variables/name=consul_server?
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=auctioneer/properties/enable_consul_service_registration?
   value: false
