@@ -23,6 +23,7 @@ test_standard_ops() {
       check_interpolation "name: enable-nfs-ldap.yml" "enable-nfs-volume-service.yml -o enable-nfs-ldap.yml -l example-vars-files/vars-enable-nfs-ldap.yml"
       check_interpolation "enable-nfs-volume-service.yml"
       check_interpolation "enable-uniq-consul-node-name.yml"
+      check_interpolation "name: enable-service-discovery.yml" "use-bosh-dns-for-containers.yml" "-o enable-service-discovery.yml"
       check_interpolation "openstack.yml"
       check_interpolation "secure-rep-admin-api.yml"
       check_interpolation "name: secure-rep-admin-api-windows.yml" "${home}/operations/windows-cell.yml" "-o secure-rep-admin-api-windows.yml"
@@ -59,6 +60,10 @@ test_standard_ops() {
       -v blobstore_access_key_id=TEST_ACCESS_KEY -v blobstore_secret_access_key=TEST_SECRET_ACCESS_KEY -l example-vars-files/vars-use-gcs-blobstore-access-key.yml"
       check_interpolation "name: use-gcs-blobstore-service-account.yml" "use-external-blobstore.yml -o use-gcs-blobstore-service-account.yml -l example-vars-files/vars-use-gcs-blobstore-service-account.yml"
       check_interpolation "name: use-swift-blobstore.yml" "use-external-blobstore.yml -o use-swift-blobstore.yml -l example-vars-files/vars-use-swift-blobstore.yml"
+      check_interpolation "use-bosh-dns.yml"
+      check_interpolation "use-bosh-dns-for-containers.yml"
+      check_interpolation "name: use-bosh-dns-for-windows2016-containers.yml" "${home}/operations/windows2016-cell.yml" "-o ${home}/operations/use-bosh-dns.yml" "-o use-bosh-dns-for-windows2016-containers.yml"
+      check_interpolation "use-bosh-dns-rename-network-and-deployment.yml" "-v network_name=new-network" "-v deployment_name=new-deployment"
       check_interpolation "use-trusted-ca-cert-for-apps.yml" "-l example-vars-files/vars-use-trusted-ca-cert-for-apps.yml"
       check_interpolation "windows-cell.yml"
       version=$(bosh interpolate ${home}/cf-deployment.yml -o windows2016-cell.yml -o use-latest-windows2016-stemcell.yml --path=/stemcells/alias=windows2016/version)
