@@ -173,6 +173,11 @@ instance_groups:
       consul_common: {from: consul_common_link}
       consul_server: nil
       consul_client: {from: consul_client_link}
+    properties:
+      consul:
+        agent:
+          services:
+            sql-db: {}
   - name: mysql
     release: cf-mysql
     properties:
@@ -215,8 +220,6 @@ instance_groups:
       cf_mysql:
         proxy:
           api_password: "((cf_mysql_proxy_api_password))"
-          consul_enabled: true
-          consul_service_name: "sql-db"
 - name: diego-api
   migrated_from:
   - name: diego-bbs
