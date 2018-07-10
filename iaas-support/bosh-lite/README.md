@@ -49,9 +49,11 @@ eval "$(bbl print-env)"
 
 With your bosh director targeted:
 ```
+STEMCELL_VERSION=$(bosh interpolate cf-deployment/cf-deployment.yml --path /stemcells/alias=default/version)
+
 bosh \
-upload-stemcell \
-https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent
+  upload-stemcell \
+  https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent?v=${STEMCELL_VERSION}
 ```
 
 ## 4. Deploy CF
