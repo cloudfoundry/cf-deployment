@@ -19,6 +19,7 @@ test_standard_ops() {
       check_interpolation "configure-default-router-group.yml" "-v default_router_group_reservable_ports=1234-2024"
       check_interpolation "disable-router-tls-termination.yml"
       check_interpolation "enable-cc-rate-limiting.yml" "-v cc_rate_limiter_general_limit=blah" "-v cc_rate_limiter_unauthenticated_limit=something"
+      check_interpolation "enable-docker.yml" "-v graph-threshold=blah" "-v space-allocation=something" "-v docker-registry=registry"
       check_interpolation "enable-privileged-container-support.yml"
       check_interpolation "name: enable-nfs-ldap.yml" "enable-nfs-volume-service.yml -o enable-nfs-ldap.yml -l example-vars-files/vars-enable-nfs-ldap.yml"
       check_interpolation "enable-nfs-volume-service.yml"

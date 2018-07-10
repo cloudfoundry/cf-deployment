@@ -1,0 +1,7 @@
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=garden/properties/grootfs?
+  value: 
+    graph_cleanup_threshold_in_mb: ((graph-threshold))
+    reserved_space_for_other_jobs_in_mb: ((space-allocation))
+    insecure_docker_registry_list:
+      - ((docker-registry))
