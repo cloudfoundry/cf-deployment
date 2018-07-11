@@ -28,10 +28,10 @@ See [previous release notes](https://github.com/cloudfoundry/cf-deployment/relea
 
 _Does this introduce changes that would require operators to take action in order to deploy without a failure?_
 
-Examples of breaking changes:
+**Examples of breaking changes:**
 - changes the name of a job or instance group
-- deletes a job or instance group
 - moves a job to a different instance group
+- deletes a job or instance group
 - changes the name of a credential
 
 
