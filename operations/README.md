@@ -48,8 +48,8 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 | [`rename-network.yml`](rename-network.yml) | Allows a deployer to rename the network by passing a variable `network_name` |  |
 | [`scale-database-cluster.yml`](scale-database-cluster.yml) | Scales cf-deployment database to 3 nodes across 3 zones (z1, z2, z3). | Cannot be used with postgres as it will not scale. |
 | [`scale-to-one-az.yml`](scale-to-one-az.yml) | Scales cf-deployment down to a single instance per instance group, placing them all into a single AZ. | Effectively halves the deployment's footprint. Should be applied before other ops files. |
-| [`secure-rep-admin-api.yml`](secure-rep-admin-api.yml) | Secure that the cell's admin API endpoints using TLS | |
-| [`secure-rep-admin-api-windows.yml`](secure-rep-admin-api-windows.yml) | Secure the Windows cells' admin API endpoints using TLS. | Requires `windows-cell.yml` |
+| [`secure-rep-admin-api.yml`](secure-rep-admin-api.yml) | **Deprecated**: Empty, but kept for backwards compatibility. | Previously: secure the Linux Diego cells' admin API endpoints using TLS. |
+| [`secure-rep-admin-api-windows.yml`](secure-rep-admin-api-windows.yml) | **Deprecated**: Empty, but kept for backwards compatibility. | Previously: secure the Windows Diego cells' admin API endpoints using TLS. |
 | [`set-bbs-active-key.yml`](set-bbs-active-key.yml) | Allows a deployer to set the `bbs` active key label by passing a variable `diego_bbs_active_key_label` |  |
 | [`set-router-static-ips.yml`](set-router-static-ips.yml) | Allows a deployer to set the static IPs for the `router` VMs by passing a variable `router_static_ips` | `router_static_ips` variable must be provided as a compacted YAML array, e.g. `-v router_static_ips=[10.0.16.4,10.0.47.5]` |
 | [`stop-skipping-tls-validation.yml`](stop-skipping-tls-validation.yml) | Enforces `TLS` validation for all components which skip it in the base `cf-deployment.yml` manifest. | See the base [README](../README.md#tls) for details. |
