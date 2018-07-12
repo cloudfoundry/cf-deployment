@@ -2,9 +2,9 @@
   path: /releases/-
   value:
     name: pxc
-    sha1: 44822031ded0e4c48133df92775964dcebe99204
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/pxc-release?v=0.10.0
-    version: 0.10.0
+    sha1: ec71552ab435506abb287efce9356baa5dc12c67
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/pxc-release?v=0.11.0
+    version: 0.11.0
 - type: replace
   path: /instance_groups/name=database/jobs/name=mysql/properties/cf_mysql_enabled?
   value: false
@@ -28,13 +28,11 @@
     name: pxc-mysql
     properties:
       admin_password: ((cf_mysql_mysql_admin_password))
-      binlog_enabled: false
-      cluster_health:
-        password: ((cf_mysql_mysql_cluster_health_password))
-      galera_agent:
-        db_password: ((cf_mysql_mysql_galera_healthcheck_password))
-        endpoint_password: ((cf_mysql_mysql_galera_healthcheck_endpoint_password))
-        endpoint_username: galera_healthcheck
+      engine_config:
+        binlog:
+          enabled: false
+        galera:
+          enabled: true
       port: 13306
       pxc_enabled: true
       seeded_databases:
@@ -66,6 +64,35 @@
       mysql:
         as: pxc-mysql
     release: pxc
+- type: replace
+  path: /instance_groups/name=database/jobs/-
+  value:
+    name: galera-agent
+    consumes:
+      mysql:
+        from: pxc-mysql
+    properties:
+      endpoint_password: ((cf_mysql_mysql_galera_healthcheck_endpoint_password))
+      db_password: ((cf_mysql_mysql_galera_healthcheck_password))
+    release: pxc
+- type: replace
+  path: /instance_groups/name=database/jobs/-
+  value:
+    name: gra-log-purger
+    consumes:
+      mysql:
+        from: pxc-mysql
+    release: pxc
+- type: replace
+  path: /instance_groups/name=database/jobs/-
+  value:
+    name: cluster-health-logger
+    consumes:
+      mysql:
+        from: pxc-mysql
+    release: pxc
+    properties:
+      db_password: ((cf_mysql_mysql_cluster_health_password))
 - type: replace
   path: /instance_groups/name=database/jobs/name=proxy/release
   value: pxc
@@ -103,9 +130,6 @@
 - type: replace
   path: /instance_groups/name=database/jobs/-
   value:
-    consumes:
-      mysql:
-        from: pxc-mysql
     name: bootstrap
     release: pxc
 - type: replace
