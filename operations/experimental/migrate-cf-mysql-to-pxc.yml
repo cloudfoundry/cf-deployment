@@ -185,3 +185,15 @@
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/tls_enabled?
   value: true
+- type: replace
+  path: /instance_groups/name=api/jobs/name=policy-server/properties/database/ca_cert?
+  value: ((pxc_server_ca.certificate))
+- type: replace
+  path: /instance_groups/name=api/jobs/name=policy-server/properties/database/require_ssl?
+  value: true
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/database/ca_cert?
+  value: ((pxc_server_ca.certificate))
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/database/require_ssl?
+  value: true
