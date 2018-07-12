@@ -51,8 +51,8 @@
   value:
     name: galera-agent
     properties:
-      endpoint_password: ((cf_mysql_mysql_galera_healthcheck_endpoint_password))
       db_password: ((cf_mysql_mysql_galera_healthcheck_password))
+      endpoint_password: ((cf_mysql_mysql_galera_healthcheck_endpoint_password))
     release: pxc
 - type: replace
   path: /instance_groups/name=database/jobs/-
@@ -63,9 +63,9 @@
   path: /instance_groups/name=database/jobs/-
   value:
     name: cluster-health-logger
-    release: pxc
     properties:
       db_password: ((cf_mysql_mysql_cluster_health_password))
+    release: pxc
 - type: replace
   path: /instance_groups/name=database/jobs/name=proxy/release
   value: pxc
