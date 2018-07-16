@@ -102,6 +102,11 @@
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/default_app_memory?
   value: 256
 
+# ----- Increase route registrar's CC timeout, in case of load ------
+- type: replace
+  path: /instance_groups/name=api/jobs/name=route_registrar/properties/route_registrar/routes/name=api/health_check/timeout?
+  value: 10s
+
 # ----- Improve diego log format ------
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=auctioneer/properties?/logging/format/timestamp
