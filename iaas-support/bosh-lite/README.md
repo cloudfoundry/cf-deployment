@@ -35,36 +35,32 @@ bbl up
 The path to the plan patch should be something like
 `~/workspace/bosh-bootloader/plan-patches/bosh-lite-gcp/`
 
-## 2. Targeting and Logging in
+## 2. Targeting
 
 There a several ways to target a bosh director.
-This doc will use `alias-env` and `-e`,
-but you can set environment variables if you prefer.
+This doc will use environment variables.
 
-First, create an alias for your director:
 ```
-bosh -e $(bbl director-address) --ca-cert <(bbl director-ca-cert) alias-env MY_ENV
-```
-
-Then, log in:
-```
-bosh -e MY_ENV login --client $(bbl director-username) --client-secret $(bbl director-password)
+eval "$(bbl print-env)"
 ```
 
 
 ## 3. Upload a stemcell
+
+With your bosh director targeted:
 ```
+STEMCELL_VERSION=$(bosh interpolate cf-deployment/cf-deployment.yml --path /stemcells/alias=default/version)
+
 bosh \
--e MY_ENV \
-upload-stemcell \
-https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent
+  upload-stemcell \
+  https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent?v=${STEMCELL_VERSION}
 ```
 
 ## 4. Deploy CF
 
+With your bosh director targeted:
 ```
 bosh \
--e MY_ENV \
 -d cf \
 deploy \
 cf-deployment/cf-deployment.yml \

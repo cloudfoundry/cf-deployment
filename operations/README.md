@@ -12,6 +12,8 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 
 | Name | Purpose | Notes |
 |:---  |:---     |:---   |
+| **Alibaba Cloud** | | |
+| [`use-alicloud-oss-blobstore.yml`](use-alicloud-oss-blobstore.yml) | Configures external blobstore to use Alibaba Cloud OSS blobstore. | Requires `use-external-blobstore.yml`. Introduces [new variables](example-vars-files/vars-use-alicloud-oss-blobstore.yml) for oss credentials and bucket names. |
 | **AWS** | | |
 | [`aws.yml`](aws.yml) | Overrides the loggregator endpoint port to 4443. | It is required to have a separate port from the standard HTTPS port (443) for loggregator traffic in order to use "classic" AWS ELBs. Newer Application Load Balancers should not require this port override, so no need to use this ops-file if you're using the newer load balancer. |
 | [`use-s3-blobstore.yml`](use-s3-blobstore.yml) | Configures external blobstore to use Amazon S3. | Requires `use-external-blobstore.yml`. Introduces [new variables](example-vars-files/vars-use-s3-blobstore.yml) for s3 credentials and bucket names. |
@@ -39,15 +41,15 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 | [`enable-nfs-ldap.yml`](enable-nfs-ldap.yml) | Enables LDAP authentication for NFS volume services | Requires `enable-nfs-volume-service.yml`. Introduces [new variables](example-vars-files/vars-enable-nfs-ldap.yml) |
 | [`enable-nfs-volume-service.yml`](enable-nfs-volume-service.yml) | Enables volume support and deploys an NFS broker and volume driver | As of cf-deployment v2, you must use the `nfsbrokerpush` errand to cf push the nfs broker after `bosh deploy` completes. |
 | [`enable-privileged-container-support.yml`](enable-privileged-container-support.yml) | Enables Diego privileged container support. | |
-| [`enable-service-discovery.yml`](enable-service-discovery.yml) | Enables application service discovery | Requires `use-bosh-dns-for-containers.yml`, and requires configuring at least one internal domain. Configure the default domain by running `cf curl /v2/shared_domains -d '{"name": "apps.internal", "internal": true}`|
+| [`enable-service-discovery.yml`](enable-service-discovery.yml) | Enables application service discovery | Requires `use-bosh-dns-for-containers.yml`, and requires configuring at least one internal domain. Configure the default domain by running `cf curl /v2/shared_domains -d '{"name": "apps.internal", "internal": true}'`|
 | [`enable-uniq-consul-node-name.yml`](enable-uniq-consul-node-name.yml) | Configure Diego cell `consul_agent` jobs to have a unique id per instance. |  |
 | [`override-app-domains.yml`](override-app-domains.yml) | Switches from using the system domain as a shared app domain; allows the configuration of one or more shared app domains instead. | Adds [new variables](example-vars-files/vars-override-app-domains.yml).<br/> **CAUTION:** Seeding domains with a router group name (including TCP domains) may cause problems deploying. Please use the `cf` CLI to add shared domains with router group names. |
 | [`rename-deployment.yml`](rename-deployment.yml) | Allows a deployer to rename the deployment by passing a variable `deployment_name` |  |
 | [`rename-network.yml`](rename-network.yml) | Allows a deployer to rename the network by passing a variable `network_name` |  |
 | [`scale-database-cluster.yml`](scale-database-cluster.yml) | Scales cf-deployment database to 3 nodes across 3 zones (z1, z2, z3). | Cannot be used with postgres as it will not scale. |
 | [`scale-to-one-az.yml`](scale-to-one-az.yml) | Scales cf-deployment down to a single instance per instance group, placing them all into a single AZ. | Effectively halves the deployment's footprint. Should be applied before other ops files. |
-| [`secure-rep-admin-api.yml`](secure-rep-admin-api.yml) | Secure that the cell's admin API endpoints using TLS | |
-| [`secure-rep-admin-api-windows.yml`](secure-rep-admin-api-windows.yml) | Secure the Windows cells' admin API endpoints using TLS. | Requires `windows-cell.yml` |
+| [`secure-rep-admin-api.yml`](secure-rep-admin-api.yml) | **Deprecated**: Empty, but kept for backwards compatibility. | Previously: secure the Linux Diego cells' admin API endpoints using TLS. |
+| [`secure-rep-admin-api-windows.yml`](secure-rep-admin-api-windows.yml) | **Deprecated**: Empty, but kept for backwards compatibility. | Previously: secure the Windows Diego cells' admin API endpoints using TLS. |
 | [`set-bbs-active-key.yml`](set-bbs-active-key.yml) | Allows a deployer to set the `bbs` active key label by passing a variable `diego_bbs_active_key_label` |  |
 | [`set-router-static-ips.yml`](set-router-static-ips.yml) | Allows a deployer to set the static IPs for the `router` VMs by passing a variable `router_static_ips` | `router_static_ips` variable must be provided as a compacted YAML array, e.g. `-v router_static_ips=[10.0.16.4,10.0.47.5]` |
 | [`stop-skipping-tls-validation.yml`](stop-skipping-tls-validation.yml) | Enforces `TLS` validation for all components which skip it in the base `cf-deployment.yml` manifest. | See the base [README](../README.md#tls) for details. |

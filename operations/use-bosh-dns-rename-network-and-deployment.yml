@@ -233,7 +233,7 @@
           tps.service.cf.internal:
           - '*.scheduler.((network_name)).((deployment_name)).bosh'
           uaa.service.cf.internal:
-          - '*.uaa.((network_name)).cf.bosh'
+          - '*.uaa.((network_name)).((deployment_name)).bosh'
         api:
           client:
             tls:
