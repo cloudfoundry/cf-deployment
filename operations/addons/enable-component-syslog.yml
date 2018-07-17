@@ -18,6 +18,7 @@
           port: ((syslog_port))
           transport: tcp
           tls_enabled: true
+          permitted_peer: ((permitted_peer))
       release: syslog
     name: syslog_forwarder
 - type: replace

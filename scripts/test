@@ -36,8 +36,14 @@ pass() {
 }
 
 interpolate() {
-  bosh interpolate ${home}/cf-deployment.yml $@ > /dev/null
-  return $?
+  local vars_store=$(mktemp)
+  cp ${home}/scripts/fixtures/unit-test-vars-store.yml $vars_store
+
+  bosh interpolate --vars-store $vars_store --var-errs -v system_domain=foo.bar.com ${home}/cf-deployment.yml $@ > /dev/null
+  local exit_code=$?
+
+  rm $vars_store
+  return $exit_code
 }
 
 check_interpolation() {
@@ -71,6 +77,14 @@ test_opsfile_interpolation() {
 
 test_iaas_opsfile_interpolation() {
   test_iaas_ops &
+
+  for job in $(jobs -p); do
+    wait $job || exit_code=1
+  done
+}
+
+test_example_vars_files_interpolation() {
+  test_example_vars_files &
 
   for job in $(jobs -p); do
     wait $job || exit_code=1
@@ -142,7 +156,7 @@ ensure_opsfiles_in_tests() {
   pushd ${home} > /dev/null
     for x in $@; do
       local basename=$(basename $x)
-      if [ $(grep $basename $test -c) != "0" ]; then
+      if [ $(grep "[^/]$basename" $test -c) != "0" ]; then
         pass "$x is tested in $test"
       else
         fail "$x is ${RED}NOT${NOCOLOR} tested in $test"
@@ -188,6 +202,10 @@ main() {
   echo
   echo -e "${LIGHT_GREEN} ***** Begin interpolation iaas operations tests ***** ${NOCOLOR}"
   test_iaas_opsfile_interpolation
+
+  # echo
+  # echo -e "${LIGHT_GREEN} ***** Begin interpolation example vars files tests ***** ${NOCOLOR}"
+  # test_example_vars_files_interpolation
 
   if [ "$RUN_SEMANTIC" == "true" ]; then
     echo

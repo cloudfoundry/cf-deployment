@@ -22,6 +22,7 @@ test_experimental_ops() {
       check_interpolation "enable-bpm.yml"
       check_interpolation "rootless-containers.yml"
       check_interpolation "enable-iptables-logger.yml"
+      check_interpolation "name: enable-service-discovery.yml" "use-bosh-dns-for-containers.yml" "-o enable-service-discovery.yml"
       check_interpolation "secure-service-credentials.yml"
       check_interpolation "name: secure-service-credentials-windows-cell.yml" "${home}/operations/windows-cell.yml" "-o secure-service-credentials.yml" "-o secure-service-credentials-windows-cell.yml"
       check_interpolation "name: secure-service-credentials-windows2016-cell.yml" "${home}/operations/windows2016-cell.yml" "-o secure-service-credentials.yml" "-o secure-service-credentials-windows2016-cell.yml"
@@ -30,9 +31,9 @@ test_experimental_ops() {
       check_interpolation "name: secure-service-credentials-with-pxc-release.yml" "secure-service-credentials.yml" "-o use-pxc.yml" "-o secure-service-credentials-with-pxc-release.yml"
       check_interpolation "skip-consul-cell-registrations.yml"
       check_interpolation "skip-consul-locks.yml"
+      check_interpolation "name: use-bosh-dns-for-windows2016-containers.yml" "${home}/operations/windows2016-cell.yml" "-o ${home}/operations/use-bosh-dns.yml" "-o use-bosh-dns-for-windows2016-containers.yml"
       check_interpolation "use-bosh-dns.yml"
       check_interpolation "use-bosh-dns-for-containers.yml"
-      check_interpolation "name: use-bosh-dns-for-windows2016-containers.yml" "${home}/operations/windows2016-cell.yml" "-o use-bosh-dns.yml" "-o use-bosh-dns-for-windows2016-containers.yml"
       check_interpolation "use-bosh-dns-rename-network-and-deployment.yml" "-v network_name=new-network" "-v deployment_name=new-deployment"
       check_interpolation "use-shed.yml"
       check_interpolation "use-pxc.yml"
@@ -52,9 +53,8 @@ test_experimental_ops() {
       check_interpolation "name: improve-diego-log-format-windows.yml" "${home}/operations/windows-cell.yml" "-o improve-diego-log-format-windows.yml"
       check_interpolation "name: improve-diego-log-format-windows2016.yml" "${home}/operations/windows2016-cell.yml" "-o improve-diego-log-format-windows2016.yml"
       check_interpolation "enable-mysql-tls.yml"
-      check_interpolation "name: perm-service.yml" "use-bosh-dns.yml" "-o enable-mysql-tls.yml" "-o perm-service.yml"
-      check_interpolation "name: perm-service-with-pxc-release.yml" "use-bosh-dns.yml" "-o perm-service.yml" "-o use-pxc.yml" "-o perm-service-with-pxc-release.yml"
-
+      check_interpolation "name: perm-service.yml" "${home}/operations/use-bosh-dns.yml" "-o enable-mysql-tls.yml" "-o perm-service.yml -v perm_uaa_clients_cc_perm_secret=perm_secret -v perm_uaa_clients_perm_monitor_secret=perm_monitor_secret"
+      check_interpolation "name: perm-service-with-pxc-release.yml" "${home}/operations/use-bosh-dns.yml" "-o perm-service.yml" "-o use-pxc.yml" "-o perm-service-with-pxc-release.yml -v perm_uaa_clients_cc_perm_secret=perm_secret -v perm_uaa_clients_perm_monitor_secret=perm_monitor_secret"
     popd > /dev/null # operations/experimental
   popd > /dev/null
   exit $exit_code

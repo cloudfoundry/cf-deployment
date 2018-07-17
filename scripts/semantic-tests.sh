@@ -102,7 +102,7 @@ test_bosh_dns_aliases_consistent() {
   local manifest_file=$(mktemp)
 
   bosh int cf-deployment.yml \
-    -o operations/experimental/use-bosh-dns.yml > $manifest_file
+    -o operations/use-bosh-dns.yml > $manifest_file
 
   set +e
     local bosh_dns_aliases=$(yq r $manifest_file -j | jq .addons[2].jobs[].properties.aliases)
@@ -111,13 +111,13 @@ test_bosh_dns_aliases_consistent() {
   set -e
 
   if [[ "$bosh_dns_aliases" != "$windows2012_bosh_dns_aliases" ]]; then
-    fail "experimental/use-bosh-dns.yml: bosh-dns aliases have diverged"
+    fail "use-bosh-dns.yml: bosh-dns aliases have diverged"
     diff <(echo $bosh_dns_aliases | jq .) <(echo $windows2012_bosh_dns_aliases | jq .)
   elif [[ "$bosh_dns_aliases" != "$windows2016_bosh_dns_aliases" ]]; then
-    fail "experimental/use-bosh-dns.yml: bosh-dns aliases have diverged"
+    fail "use-bosh-dns.yml: bosh-dns aliases have diverged"
     diff <(echo $bosh_dns_aliases | jq .) <(echo $windows2016_bosh_dns_aliases | jq .)
   else
-    pass "experimental/use-bosh-dns.yml is consistent"
+    pass "use-bosh-dns.yml is consistent"
   fi
 }
 
@@ -126,7 +126,7 @@ test_bosh_dns_aliases_consistent_between_files() {
   local manifest_file_renamed=$(mktemp)
 
   bosh int cf-deployment.yml \
-    -o operations/experimental/use-bosh-dns.yml > $manifest_file
+    -o operations/use-bosh-dns.yml > $manifest_file
 
   bosh int cf-deployment.yml \
     -o operations/experimental/use-bosh-dns-rename-network-and-deployment.yml \
@@ -141,7 +141,7 @@ test_bosh_dns_aliases_consistent_between_files() {
   if [[ $diff_exit_code != 0 ]]; then
     fail "bosh-dns aliases have diverged between use-bosh-dns.yml and use-bosh-dns-with-renamed-network-and-deployment.yml"
   else
-    pass "experimental/use-bosh-dns-with-renamed-network-and-deployment is consistent with experimental/use-bosh-dns.yml"
+    pass "experimental/use-bosh-dns-with-renamed-network-and-deployment is consistent with use-bosh-dns.yml"
   fi
 }
 

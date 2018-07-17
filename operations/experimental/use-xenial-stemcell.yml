@@ -1,18 +1,14 @@
----
-- type: replace
-  path: /stemcells/alias=default/os
+- path: /stemcells/alias=default/os
+  type: replace
   value: ubuntu-xenial
-
-- type: replace
-  path: /stemcells/alias=default/version
-  value: "60"
-
-- type: replace
-  path: /addons/name=loggregator_agent/include/stemcell/os=ubuntu-trusty
+- path: /stemcells/alias=default/version
+  type: replace
+  value: "87.3"
+- path: /addons/name=loggregator_agent/include/stemcell/os=ubuntu-trusty
+  type: replace
   value:
     os: ubuntu-xenial
-
-- type: replace
-  path: /addons/name=bpm/include/stemcell/os=ubuntu-trusty
+- path: /addons/name=bpm/include/stemcell/os=ubuntu-trusty
+  type: replace
   value:
     os: ubuntu-xenial

@@ -76,13 +76,13 @@
       release: diego
     - name: loggregator_agent_windows
       properties:
+        disable_udp: true
         loggregator:
           tls:
-            ca_cert: ((loggregator_ca.certificate))
             agent:
               cert: ((loggregator_tls_agent.certificate))
               key: ((loggregator_tls_agent.private_key))
-        disable_udp: true
+            ca_cert: ((loggregator_ca.certificate))
         syslog_daemon_config:
           enable: false
       release: loggregator-agent
@@ -114,7 +114,7 @@
   value:
     alias: windows2012R2
     os: windows2012R2
-    version: "1200.19"
+    version: "1200.21"
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2012R2?
   value:
@@ -144,6 +144,6 @@
   path: /releases/name=hwc-buildpack?
   value:
     name: hwc-buildpack
-    sha1: c57c96ebd050b632db94c6de2199bd78ee39dbd7
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=2.3.17
-    version: 2.3.17
+    sha1: b9c4e232de192f4e290f22aecb22013fd6b19664
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=2.3.18
+    version: 2.3.18

@@ -2,9 +2,9 @@
   path: /releases/name=cf-mysql
   value:
     name: pxc
-    sha1: 44822031ded0e4c48133df92775964dcebe99204
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/pxc-release?v=0.10.0
-    version: 0.10.0
+    sha1: ec71552ab435506abb287efce9356baa5dc12c67
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/pxc-release?v=0.11.0
+    version: 0.11.0
 - type: replace
   path: /instance_groups/name=database/jobs/name=mysql/name
   value: pxc-mysql
@@ -15,13 +15,11 @@
   path: /instance_groups/name=database/jobs/name=pxc-mysql?/properties
   value:
     admin_password: ((cf_mysql_mysql_admin_password))
-    binlog_enabled: false
-    cluster_health:
-      password: ((cf_mysql_mysql_cluster_health_password))
-    galera_agent:
-      db_password: ((cf_mysql_mysql_galera_healthcheck_password))
-      endpoint_password: ((cf_mysql_mysql_galera_healthcheck_endpoint_password))
-      endpoint_username: galera_healthcheck
+    engine_config:
+      binlog:
+        enabled: false
+      galera:
+        enabled: true
     port: 13306
     seeded_databases:
     - name: cloud_controller
@@ -49,6 +47,26 @@
       galera: ((galera_server_certificate))
       server: ((mysql_server_certificate))
 - type: replace
+  path: /instance_groups/name=database/jobs/-
+  value:
+    name: galera-agent
+    properties:
+      db_password: ((cf_mysql_mysql_galera_healthcheck_password))
+      endpoint_password: ((cf_mysql_mysql_galera_healthcheck_endpoint_password))
+    release: pxc
+- type: replace
+  path: /instance_groups/name=database/jobs/-
+  value:
+    name: gra-log-purger
+    release: pxc
+- type: replace
+  path: /instance_groups/name=database/jobs/-
+  value:
+    name: cluster-health-logger
+    properties:
+      db_password: ((cf_mysql_mysql_cluster_health_password))
+    release: pxc
+- type: replace
   path: /instance_groups/name=database/jobs/name=proxy/release
   value: pxc
 - type: replace
@@ -56,8 +74,6 @@
   value:
     api_password: ((cf_mysql_proxy_api_password))
     api_port: 8083
-    consul_enabled: true
-    consul_service_name: sql-db
 - type: replace
   path: /instance_groups/name=database/jobs/-
   value:
@@ -130,6 +146,9 @@
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb/address?
   value: sql-db.service.cf.internal
 - type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/address?
+  value: sql-db.service.cf.internal
+- type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/ca_cert?
   value: ((pxc_server_ca.certificate))
 - type: replace
@@ -152,4 +171,22 @@
   value: ((pxc_server_ca.certificate))
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql/require_ssl?
+  value: true
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa?/ca_certs/-
+  value: ((pxc_server_ca.certificate))
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/tls_enabled?
+  value: true
+- type: replace
+  path: /instance_groups/name=api/jobs/name=policy-server/properties/database/ca_cert?
+  value: ((pxc_server_ca.certificate))
+- type: replace
+  path: /instance_groups/name=api/jobs/name=policy-server/properties/database/require_ssl?
+  value: true
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/database/ca_cert?
+  value: ((pxc_server_ca.certificate))
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/database/require_ssl?
   value: true
