@@ -655,6 +655,10 @@ instance_groups:
         - name: binary_buildpack
           package: binary-buildpack
         db_encryption_key: "((cc_db_encryption_key))"
+        database_encryption: &cc-database-encryption
+          current_key_label: "encryption_key_0"
+          keys:
+            encryption_key_0: "((cc_db_encryption_key))"
         bulk_api_password: "((cc_bulk_api_password))"
         internal_api_password: "((cc_internal_api_password))"
         staging_upload_user: staging_user
@@ -807,6 +811,7 @@ instance_groups:
     properties:
       cc:
         db_encryption_key: "((cc_db_encryption_key))"
+        database_encryption: *cc-database-encryption
         internal_api_password: "((cc_internal_api_password))"
         staging_upload_user: staging_user
         staging_upload_password: "((cc_staging_upload_password))"
@@ -953,6 +958,7 @@ instance_groups:
     properties:
       cc:
         db_encryption_key: "((cc_db_encryption_key))"
+        database_encryption: *cc-database-encryption
         internal_api_password: "((cc_internal_api_password))"
         staging_upload_user: staging_user
         staging_upload_password: "((cc_staging_upload_password))"
