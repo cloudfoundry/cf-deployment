@@ -709,7 +709,7 @@ instance_groups:
       route_registrar:
         routes:
         - name: api
-          registration_interval: 20s
+          registration_interval: 10s
           port: 9022
           tags:
             component: CloudController
@@ -718,7 +718,7 @@ instance_groups:
           health_check:
             name: api-health-check
             script_path: "/var/vcap/jobs/cloud_controller_ng/bin/cloud_controller_ng_health_check"
-            timeout: 3s
+            timeout: 6s
         - name: policy-server
           port: 4002
           registration_interval: 20s
