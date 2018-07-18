@@ -22,7 +22,6 @@ test_experimental_ops() {
       check_interpolation "enable-bpm.yml"
       check_interpolation "rootless-containers.yml"
       check_interpolation "enable-iptables-logger.yml"
-      check_interpolation "name: enable-service-discovery.yml" "use-bosh-dns-for-containers.yml" "-o enable-service-discovery.yml"
       check_interpolation "secure-service-credentials.yml"
       check_interpolation "name: secure-service-credentials-windows-cell.yml" "${home}/operations/windows-cell.yml" "-o secure-service-credentials.yml" "-o secure-service-credentials-windows-cell.yml"
       check_interpolation "name: secure-service-credentials-windows2016-cell.yml" "${home}/operations/windows2016-cell.yml" "-o secure-service-credentials.yml" "-o secure-service-credentials-windows2016-cell.yml"
