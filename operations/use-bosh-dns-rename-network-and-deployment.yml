@@ -1,4 +1,3 @@
----
 - type: replace
   path: /addons?/-
   value:
@@ -74,17 +73,17 @@
         cache:
           enabled: true
         health:
+          client:
+            tls:
+              ca: ((dns_healthcheck_tls_ca.certificate))
+              certificate: ((dns_healthcheck_client_tls.certificate))
+              private_key: ((dns_healthcheck_client_tls.private_key))
           enabled: true
           server:
             tls:
               ca: ((dns_healthcheck_tls_ca.certificate))
               certificate: ((dns_healthcheck_server_tls.certificate))
               private_key: ((dns_healthcheck_server_tls.private_key))
-          client:
-            tls:
-              ca: ((dns_healthcheck_tls_ca.certificate))
-              certificate: ((dns_healthcheck_client_tls.certificate))
-              private_key: ((dns_healthcheck_client_tls.private_key))
       release: bosh-dns
     name: bosh-dns
 - type: replace
@@ -161,17 +160,17 @@
         cache:
           enabled: true
         health:
+          client:
+            tls:
+              ca: ((dns_healthcheck_tls_ca.certificate))
+              certificate: ((dns_healthcheck_client_tls.certificate))
+              private_key: ((dns_healthcheck_client_tls.private_key))
           enabled: true
           server:
             tls:
               ca: ((dns_healthcheck_tls_ca.certificate))
               certificate: ((dns_healthcheck_server_tls.certificate))
               private_key: ((dns_healthcheck_server_tls.private_key))
-          client:
-            tls:
-              ca: ((dns_healthcheck_tls_ca.certificate))
-              certificate: ((dns_healthcheck_client_tls.certificate))
-              private_key: ((dns_healthcheck_client_tls.private_key))
       release: bosh-dns
     name: bosh-dns-windows2012
 - type: replace
@@ -248,26 +247,26 @@
         cache:
           enabled: true
         health:
+          client:
+            tls:
+              ca: ((dns_healthcheck_tls_ca.certificate))
+              certificate: ((dns_healthcheck_client_tls.certificate))
+              private_key: ((dns_healthcheck_client_tls.private_key))
           enabled: true
           server:
             tls:
               ca: ((dns_healthcheck_tls_ca.certificate))
               certificate: ((dns_healthcheck_server_tls.certificate))
               private_key: ((dns_healthcheck_server_tls.private_key))
-          client:
-            tls:
-              ca: ((dns_healthcheck_tls_ca.certificate))
-              certificate: ((dns_healthcheck_client_tls.certificate))
-              private_key: ((dns_healthcheck_client_tls.private_key))
       release: bosh-dns
     name: bosh-dns-windows2016
 - type: replace
   path: /releases/-
   value:
     name: bosh-dns
-    sha1: bb7f1cf29c4186fdba4a049fb6feb5638227d9a4
-    url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-release?v=1.6.0
-    version: 1.6.0
+    sha1: 3046a07083751ae7740bbf7a25a1df6162628469
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-release?v=1.7.0
+    version: 1.7.0
 - type: replace
   path: /variables/-
   value:
@@ -300,27 +299,27 @@
   path: /variables/-
   value:
     name: dns_healthcheck_tls_ca
-    type: certificate
     options:
       common_name: dnsHealthCheckTlsCa
       is_ca: true
+    type: certificate
 - type: replace
   path: /variables/-
   value:
     name: dns_healthcheck_server_tls
-    type: certificate
     options:
       ca: dns_healthcheck_tls_ca
       common_name: health.bosh-dns
       extended_key_usage:
       - server_auth
+    type: certificate
 - type: replace
   path: /variables/-
   value:
     name: dns_healthcheck_client_tls
-    type: certificate
     options:
       ca: dns_healthcheck_tls_ca
       common_name: health.bosh-dns
       extended_key_usage:
       - client_auth
+    type: certificate
