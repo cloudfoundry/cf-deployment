@@ -39,7 +39,7 @@
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/scim/users/name=admin/groups/-
   value:
-   perm.admin
+    perm.admin
 
 - type: replace
   path: /instance_groups/name=database/jobs/name=mysql/properties/cf_mysql/mysql/seeded_databases/-
@@ -57,9 +57,14 @@
     - ((perm_tls_ca.certificate))
 
 - type: replace
-  path: /addons/name=bosh-dns/jobs/name=bosh-dns/properties/aliases/perm.service.cf.internal?
+  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/domain=perm.service.cf.internal?
   value:
-    - "*.perm.default.cf.bosh"
+    targets:
+    - query: '*'
+      instance_group: perm
+      deployment: cf
+      network: default
+      domain: bosh
 
 # Changes to releases
 - type: replace
