@@ -1306,7 +1306,6 @@ instance_groups:
         ca_cert: "((service_cf_internal_ca.certificate))"
         cert: "((diego_rep_agent_v2.certificate))"
         key: "((diego_rep_agent_v2.private_key))"
-
   - name: cfdot
     release: diego
     properties:
@@ -1348,6 +1347,10 @@ instance_groups:
       client_key: ((silk_daemon.private_key))
   - name: silk-cni
     release: silk
+    properties:
+      dns_servers:
+      - 169.254.0.2
+
 - name: log-api
   azs:
   - z1
