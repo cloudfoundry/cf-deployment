@@ -20,11 +20,11 @@
     - name: winc
       release: winc
     - name: winc-network
-      release: winc
       properties:
         winc_network:
           dns_servers:
           - 172.30.0.1
+      release: winc
     - name: windows2016fs
       release: windows2016fs
     - name: groot
@@ -151,9 +151,9 @@
   path: /releases/name=windows2016fs?
   value:
     name: windows2016fs
-    sha1: d8a3456f5d784867029e75a4626c701f795045ec
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows2016fs-online-release?v=1.4.0
-    version: 1.4.0
+    sha1: 44c4a228967ee19fc68145e496dee1701c743bdb
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows2016fs-online-release?v=1.5.0
+    version: 1.5.0
 - type: replace
   path: /releases/name=windows-utilities?
   value:
