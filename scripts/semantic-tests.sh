@@ -63,7 +63,7 @@ test_use_compiled_releases() {
       -o operations/use-compiled-releases.yml > $manifest_file
 
     set +e
-      missing_releases=$(yq r $manifest_file -j | jq -r .releases[].url | grep 'github.com')
+    missing_releases=$(yq r $manifest_file -j | jq -r .releases[].url | grep -E '(github\.com|bosh\.io)')
 
       local non_recently_added_releases=""
       for r in $missing_releases; do
@@ -78,7 +78,7 @@ test_use_compiled_releases() {
     if [ -z "$non_recently_added_releases" ]; then
        pass "use-compiled-releases.yml"
     else
-      fail "use-compiled-releases.yml: expected not to find the following releases urls on bosh.io or github.com: $non_recently_added_releases"
+      fail "use-compiled-releases.yml: the following releases were not compiled releases and use a github.com or bosh.io url: $non_recently_added_releases."
     fi
 }
 
