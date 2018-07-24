@@ -12,10 +12,8 @@ the `system_domain`
 with your own
 static or dynamic DNS domain
 (which should point to the director VM).
-It is required to deploy Cloud Foundry
-with the [Bosh-DNS](https://github.com/cloudfoundry/bosh-dns-release) addon
-and add the alias for your `system_domain`,
-in order to resolve the custom domain.
+In order to resolve the custom domain, it is required
+to add the Bosh DNS alias for your `system_domain`.
 
 The updated `deploy` command is the following:
 
