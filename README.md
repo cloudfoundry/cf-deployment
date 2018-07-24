@@ -124,8 +124,8 @@ and requires a bosh director with a valid cloud-config that has been configured 
 It also requires the new `bosh` CLI,
 which it relies on to generate and fill-in needed variables.
 
-### BOSH director
-`cf-deployment` requires BOSH [`v262`](https://github.com/cloudfoundry/bosh/releases/tag/v262).
+### BOSH director and stemcells
+`cf-deployment` requires BOSH v262+ and 3468+ Linux stemcells.
 
 ### BOSH CLI
 `cf-deployment` requires the new [BOSH CLI](https://github.com/cloudfoundry/bosh-cli).
@@ -140,6 +140,16 @@ including bosh-lite, vSphere, Openstack, and Alibaba Cloud.
 For other IaaSes,
 you may need to do some engineering work to figure out the right cloud config (and possibly ops files)
 to get it working for `cf-deployment`.
+
+### BOSH `runtime-config`
+`cf-deployment` requires that you have uploaded
+a [runtime-config](https://bosh.io/docs/runtime-config/) for [BOSH DNS](https://bosh.io/docs/dns/).
+We recommended that you use the one provided by the
+[bosh-deployment](https://github.com/cloudfoundry/bosh-deployment/blob/master/runtime-configs/dns.yml) repo:
+
+```
+bosh update-runtime-config bosh-deployment/runtime-configs/dns.yml --name dns
+```
 
 ### Deployment variables and CredHub
 `cf-deployment.yml` requires additional information

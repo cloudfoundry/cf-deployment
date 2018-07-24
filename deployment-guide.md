@@ -127,6 +127,16 @@ For bosh-lite,
 bosh -e MY_ENV update-cloud-config iaas-support/bosh-lite/cloud-config.yml
 ```
 
+## Upload a `runtime-config`
+`cf-deployment` requires that you have uploaded
+a [runtime-config](https://bosh.io/docs/runtime-config/) for [BOSH DNS](https://bosh.io/docs/dns/).
+We recommended that you use the one provided by the
+[bosh-deployment](https://github.com/cloudfoundry/bosh-deployment/blob/master/runtime-configs/dns.yml) repo:
+
+```
+bosh update-runtime-config bosh-deployment/runtime-configs/dns.yml --name dns
+```
+
 ## Upload a stemcell
 
 Before BOSH can deploy your Cloud Foundry Application Runtime,
