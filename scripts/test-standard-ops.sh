@@ -26,8 +26,6 @@ test_standard_ops() {
       check_interpolation "enable-uniq-consul-node-name.yml"
       check_interpolation "enable-service-discovery.yml"
       check_interpolation "openstack.yml"
-      check_interpolation "secure-rep-admin-api.yml"
-      check_interpolation "name: secure-rep-admin-api-windows.yml" "${home}/operations/windows-cell.yml" "-o secure-rep-admin-api-windows.yml"
       check_interpolation "override-app-domains.yml" "-l example-vars-files/vars-override-app-domains.yml"
       check_interpolation "rename-network-and-deployment.yml" "-v deployment_name=renamed_deployment -v network_name=renamed_network"
       check_interpolation "scale-database-cluster.yml"
