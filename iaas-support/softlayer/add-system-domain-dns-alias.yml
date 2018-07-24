@@ -1,3 +1,4 @@
 - type: replace
-  path: /addons/name=bosh-dns/jobs/name=bosh-dns/properties/aliases/_.((system_domain))?/-
-  value: 10.244.0.34
+  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/domain=_.((system_domain))?/targets/-
+  value:
+    query: 10.244.0.34

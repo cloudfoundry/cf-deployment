@@ -1,6 +1,6 @@
 ---
 name: cf
-manifest_version: v2.8.0
+manifest_version: v2.9.0
 update:
   canaries: 1
   canary_watch_time: 30000-1200000
@@ -33,6 +33,187 @@ addons:
   jobs:
   - name: bpm
     release: bpm
+- name: bosh-dns-aliases
+  include:
+    stemcell:
+    - os: ubuntu-trusty
+    - os: windows2012R2
+    - os: windows2016
+  jobs:
+  - name: bosh-dns-aliases
+    release: bosh-dns-aliases
+    properties:
+      aliases:
+      - domain: '_.cell.service.cf.internal'
+        targets:
+        - query: '_'
+          instance_group: diego-cell
+          deployment: cf
+          network: default
+          domain: bosh
+        - query: '_'
+          instance_group: windows-cell
+          deployment: cf
+          network: default
+          domain: bosh
+        - query: '_'
+          instance_group: windows2016-cell
+          deployment: cf
+          network: default
+          domain: bosh
+        - query: '_'
+          instance_group: isolated-diego-cell
+          deployment: cf
+          network: default
+          domain: bosh
+      - domain: auctioneer.service.cf.internal
+        targets:
+        - query: '*'
+          instance_group: scheduler
+          deployment: cf
+          network: default
+          domain: bosh
+      - domain: bbs.service.cf.internal
+        targets:
+        - query: 'q-s4'
+          instance_group: diego-api
+          deployment: cf
+          network: default
+          domain: bosh
+      - domain: bits.service.cf.internal
+        targets:
+        - query: '*'
+          instance_group: bits
+          deployment: cf
+          network: default
+          domain: bosh
+      - domain: blobstore.service.cf.internal
+        targets:
+        - query: '*'
+          instance_group: singleton-blobstore
+          deployment: cf
+          network: default
+          domain: bosh
+      - domain: cc-uploader.service.cf.internal
+        targets:
+        - query: '*'
+          instance_group: api
+          deployment: cf
+          network: default
+          domain: bosh
+      - domain: cloud-controller-ng.service.cf.internal
+        targets:
+        - query: '*'
+          instance_group: api
+          deployment: cf
+          network: default
+          domain: bosh
+      - domain: consul.service.cf.internal
+        targets:
+        - query: '*'
+          instance_group: consul
+          deployment: cf
+          network: default
+          domain: bosh
+      - domain: credhub.service.cf.internal
+        targets:
+        - query: '*'
+          instance_group: credhub
+          deployment: cf
+          network: default
+          domain: bosh
+      - domain: doppler.service.cf.internal
+        targets:
+        - query: '*'
+          instance_group: doppler
+          deployment: cf
+          network: default
+          domain: bosh
+      - domain: file-server.service.cf.internal
+        targets:
+        - query: '*'
+          instance_group: api
+          deployment: cf
+          network: default
+          domain: bosh
+      - domain: gorouter.service.cf.internal
+        targets:
+        - query: '*'
+          instance_group: router
+          deployment: cf
+          network: default
+          domain: bosh
+      - domain: locket.service.cf.internal
+        targets:
+        - query: '*'
+          instance_group: diego-api
+          deployment: cf
+          network: default
+          domain: bosh
+      - domain: loggregator-trafficcontroller.service.cf.internal
+        targets:
+        - query: '*'
+          instance_group: log-api
+          deployment: cf
+          network: default
+          domain: bosh
+      - domain: policy-server.service.cf.internal
+        targets:
+        - query: '*'
+          instance_group: api
+          deployment: cf
+          network: default
+          domain: bosh
+      - domain: reverse-log-proxy.service.cf.internal
+        targets:
+        - query: '*'
+          instance_group: log-api
+          deployment: cf
+          network: default
+          domain: bosh
+      - domain: routing-api.service.cf.internal
+        targets:
+        - query: '*'
+          instance_group: api
+          deployment: cf
+          network: default
+          domain: bosh
+      - domain: silk-controller.service.cf.internal
+        targets:
+        - query: '*'
+          instance_group: diego-api
+          deployment: cf
+          network: default
+          domain: bosh
+      - domain: sql-db.service.cf.internal
+        targets:
+        - query: '*'
+          instance_group: database
+          deployment: cf
+          network: default
+          domain: bosh
+      - domain: ssh-proxy.service.cf.internal
+        targets:
+        - query: '*'
+          instance_group: scheduler
+          deployment: cf
+          network: default
+          domain: bosh
+      - domain: tps.service.cf.internal
+        targets:
+        - query: '*'
+          instance_group: scheduler
+          deployment: cf
+          network: default
+          domain: bosh
+      - domain: uaa.service.cf.internal
+        targets:
+        - query: '*'
+          instance_group: uaa
+          deployment: cf
+          network: default
+          domain: bosh
+
 instance_groups:
 - name: smoke-tests
   lifecycle: errand
@@ -655,6 +836,10 @@ instance_groups:
         - name: binary_buildpack
           package: binary-buildpack
         db_encryption_key: "((cc_db_encryption_key))"
+        database_encryption: &cc-database-encryption
+          current_key_label: "encryption_key_0"
+          keys:
+            encryption_key_0: "((cc_db_encryption_key))"
         bulk_api_password: "((cc_bulk_api_password))"
         internal_api_password: "((cc_internal_api_password))"
         staging_upload_user: staging_user
@@ -709,7 +894,7 @@ instance_groups:
       route_registrar:
         routes:
         - name: api
-          registration_interval: 20s
+          registration_interval: 10s
           port: 9022
           tags:
             component: CloudController
@@ -718,7 +903,7 @@ instance_groups:
           health_check:
             name: api-health-check
             script_path: "/var/vcap/jobs/cloud_controller_ng/bin/cloud_controller_ng_health_check"
-            timeout: 3s
+            timeout: 6s
         - name: policy-server
           port: 4002
           registration_interval: 20s
@@ -807,6 +992,7 @@ instance_groups:
     properties:
       cc:
         db_encryption_key: "((cc_db_encryption_key))"
+        database_encryption: *cc-database-encryption
         internal_api_password: "((cc_internal_api_password))"
         staging_upload_user: staging_user
         staging_upload_password: "((cc_staging_upload_password))"
@@ -953,6 +1139,7 @@ instance_groups:
     properties:
       cc:
         db_encryption_key: "((cc_db_encryption_key))"
+        database_encryption: *cc-database-encryption
         internal_api_password: "((cc_internal_api_password))"
         staging_upload_user: staging_user
         staging_upload_password: "((cc_staging_upload_password))"
@@ -1258,7 +1445,6 @@ instance_groups:
         ca_cert: "((service_cf_internal_ca.certificate))"
         cert: "((diego_rep_agent_v2.certificate))"
         key: "((diego_rep_agent_v2.private_key))"
-
   - name: cfdot
     release: diego
     properties:
@@ -1300,6 +1486,10 @@ instance_groups:
       client_key: ((silk_daemon.private_key))
   - name: silk-cni
     release: silk
+    properties:
+      dns_servers:
+      - 169.254.0.2
+
 - name: log-api
   azs:
   - z1
@@ -1806,9 +1996,9 @@ releases:
   version: 36.15.0
   sha1: 0764d9d6aae7cefd10019437ed83e7715e614633
 - name: cf-networking
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-networking-release?v=2.8.0
-  version: 2.8.0
-  sha1: 31d1651d973cf50a9f052982030eb860fe1b7543
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-networking-release?v=2.10.0
+  version: 2.10.0
+  sha1: 993a47bc0b97460833ee0be3823b72c87d06ba84
 - name: cf-smoke-tests
   url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=40.0.5
   version: 40.0.5
@@ -1826,9 +2016,9 @@ releases:
   version: "195"
   sha1: 53529e3a9646d82087a65f215138ae45b9ba7b6c
 - name: diego
-  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=2.12.2
-  version: 2.12.2
-  sha1: fa5e82f9c587ace5827036302f307e29d1cd3902
+  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=2.13.0
+  version: 2.13.0
+  sha1: 8d7c9be689e8638fdc626336dcb6e6560d190587
 - name: dotnet-core-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/dotnet-core-buildpack-release?v=2.1.3
   version: 2.1.3
@@ -1850,9 +2040,9 @@ releases:
   version: "103.0"
   sha1: 41fe210afef030a9bae37795fdd7c5e5ca779ea3
 - name: nats
-  url: https://bosh.io/d/github.com/cloudfoundry/nats-release?v=24
-  version: "24"
-  sha1: 65d8efc68d86a03d0f51562e16763075c37e419d
+  url: https://bosh.io/d/github.com/cloudfoundry/nats-release?v=25
+  version: "25"
+  sha1: a83d5ae37125e48284fd50b099befac1de419a8a
 - name: nodejs-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/nodejs-buildpack-release?v=1.6.28
   version: 1.6.28
@@ -1874,9 +2064,9 @@ releases:
   version: 1.7.21
   sha1: 081a7ed4f12e2b79149d82e732390e4280dcbb10
 - name: silk
-  url: https://bosh.io/d/github.com/cloudfoundry/silk-release?v=2.9.0
-  version: 2.9.0
-  sha1: 2c0520039a456f034d20fd951d44a70f259f143e
+  url: https://bosh.io/d/github.com/cloudfoundry/silk-release?v=2.10.0
+  version: 2.10.0
+  sha1: f039c0eab50d8007ab28b2defa2b386a9042fefa
 - name: staticfile-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/staticfile-buildpack-release?v=1.4.29
   version: 1.4.29
@@ -1897,6 +2087,10 @@ releases:
   url: https://bosh.io/d/github.com/cloudfoundry/log-cache-release?v=1.4.0
   version: 1.4.0
   sha1: c8a850652f1efc88d89971e4892c5a97f8ff1b7b
+- name: bosh-dns-aliases
+  url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-aliases-release?v=0.0.2
+  version: 0.0.2
+  sha1: 630ff814e5cf38b44c57eda68c60f48462b4b9a8
 stemcells:
 - alias: default
   os: ubuntu-trusty

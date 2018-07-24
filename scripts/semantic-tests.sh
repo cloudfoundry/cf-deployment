@@ -1,22 +1,24 @@
 #!/bin/bash
 
-test_rename_network_opsfile() {
+test_rename_network_and_deployment_opsfile() {
     local new_network="test_network"
+    local new_deployment="test_deployment"
     local manifest_file=$(mktemp)
 
     bosh int cf-deployment.yml \
-      -o operations/rename-network.yml \
-      -v network_name=$new_network > $manifest_file
+      -o operations/rename-network-and-deployment.yml \
+      -v network_name=$new_network \
+      -v deployment_name=$new_deployment > $manifest_file
 
     local interpolated_network_names=$(yq r $manifest_file -j | jq -r .instance_groups[].networks[].name | uniq)
     local num_uniq_networks=$(echo "$interpolated_network_names" | wc -l)
 
     if [ $num_uniq_networks != "1" ]; then
-      fail "rename-network.yml: expected to find the same network name for all instance groups"
+      fail "rename-network-and-deployment.yml: expected to find the same network name for all instance groups"
     elif [ $interpolated_network_names != $new_network ]; then
-      fail "rename-network.yml: expected network name to be changed to ${new_network}"
+      fail "rename-network-and-deployment.yml: expected network name to be changed to ${new_network}"
     else
-      pass "rename-network.yml"
+      pass "rename-network-and-deployment.yml"
     fi
 }
 
@@ -98,53 +100,6 @@ test_disable_consul() {
     fi
 }
 
-test_bosh_dns_aliases_consistent() {
-  local manifest_file=$(mktemp)
-
-  bosh int cf-deployment.yml \
-    -o operations/use-bosh-dns.yml > $manifest_file
-
-  set +e
-    local bosh_dns_aliases=$(yq r $manifest_file -j | jq .addons[2].jobs[].properties.aliases)
-    local windows2012_bosh_dns_aliases=$(yq r $manifest_file -j | jq .addons[3].jobs[].properties.aliases)
-    local windows2016_bosh_dns_aliases=$(yq r $manifest_file -j | jq .addons[4].jobs[].properties.aliases)
-  set -e
-
-  if [[ "$bosh_dns_aliases" != "$windows2012_bosh_dns_aliases" ]]; then
-    fail "use-bosh-dns.yml: bosh-dns aliases have diverged"
-    diff <(echo $bosh_dns_aliases | jq .) <(echo $windows2012_bosh_dns_aliases | jq .)
-  elif [[ "$bosh_dns_aliases" != "$windows2016_bosh_dns_aliases" ]]; then
-    fail "use-bosh-dns.yml: bosh-dns aliases have diverged"
-    diff <(echo $bosh_dns_aliases | jq .) <(echo $windows2016_bosh_dns_aliases | jq .)
-  else
-    pass "use-bosh-dns.yml is consistent"
-  fi
-}
-
-test_bosh_dns_aliases_consistent_between_files() {
-  local manifest_file=$(mktemp)
-  local manifest_file_renamed=$(mktemp)
-
-  bosh int cf-deployment.yml \
-    -o operations/use-bosh-dns.yml > $manifest_file
-
-  bosh int cf-deployment.yml \
-    -o operations/experimental/use-bosh-dns-rename-network-and-deployment.yml \
-    -v deployment_name=cf \
-    -v network_name=default > $manifest_file_renamed
-
-  set +e
-    diff $manifest_file $manifest_file_renamed
-    local diff_exit_code=$?
-  set -e
-
-  if [[ $diff_exit_code != 0 ]]; then
-    fail "bosh-dns aliases have diverged between use-bosh-dns.yml and use-bosh-dns-with-renamed-network-and-deployment.yml"
-  else
-    pass "experimental/use-bosh-dns-with-renamed-network-and-deployment is consistent with use-bosh-dns.yml"
-  fi
-}
-
 test_use_trusted_ca_cert_for_apps_includes_diego_instance_ca() {
   local trusted_app_cas=$(bosh int cf-deployment.yml -o operations/use-trusted-ca-cert-for-apps.yml --path /instance_groups/name=diego-cell/jobs/name=cflinuxfs2-rootfs-setup/properties/cflinuxfs2-rootfs/trusted_certs)
 
@@ -177,13 +132,11 @@ semantic_tests() {
   suite_name="semantic    "
 
   pushd ${home} > /dev/null
-    test_rename_network_opsfile
+    test_rename_network_and_deployment_opsfile
     test_aws_opsfile
     test_scale_to_one_az
     test_use_compiled_releases
     test_disable_consul
-    test_bosh_dns_aliases_consistent
-    test_bosh_dns_aliases_consistent_between_files
     test_use_trusted_ca_cert_for_apps_includes_diego_instance_ca
     test_add_persistent_isolation_segment_diego_cell
   popd > /dev/null
