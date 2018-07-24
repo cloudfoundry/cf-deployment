@@ -127,23 +127,6 @@ test_add_persistent_isolation_segment_diego_cell() {
   fi
 }
 
-test_use_log_cache() {
-  local log_cache_release_version
-  log_cache_release_version=$(bosh int cf-deployment.yml -o operations/experimental/use-log-cache.yml \
-    --path /releases/name=log-cache/version)
-  local reverse_log_proxy_link
-  reverse_log_proxy_link=$(bosh int cf-deployment.yml -o operations/experimental/use-log-cache.yml \
-    --path /instance_groups/name=doppler/jobs/name=log-cache-nozzle/consumes/reverse_log_proxy/deployment?)
-
-  if [ ${log_cache_release_version} = "latest" ]; then
-    fail "experimental/use-log-cache.yml: log-cache release should have specific version, not 'latest'"
-  elif [ ${reverse_log_proxy_link} != "null" ]; then
-    fail "experimental/use-log-cache.yml: expected to not find cross-deployment links"
-  else
-    pass "experimental/use-log-cache.yml"
-  fi
-}
-
 semantic_tests() {
   # padded for pretty output
   suite_name="semantic    "
@@ -156,7 +139,6 @@ semantic_tests() {
     test_disable_consul
     test_use_trusted_ca_cert_for_apps_includes_diego_instance_ca
     test_add_persistent_isolation_segment_diego_cell
-    test_use_log_cache
   popd > /dev/null
   exit $exit_code
 }

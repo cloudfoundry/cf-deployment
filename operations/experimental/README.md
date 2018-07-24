@@ -1,6 +1,6 @@
 # cf-deployment Experimental Ops-files
 
-This is the README for Experimental Ops-files. To learn more about `cf-deployment`, go to the main [README](../README.md). 
+This is the README for Experimental Ops-files. To learn more about `cf-deployment`, go to the main [README](../README.md).
 
 - For general Ops-files, check out the [Ops-file README](../README.md).
 - For Legacy Ops-files, check out the [Legacy Ops-file README](../legacy/README.md).
@@ -55,8 +55,7 @@ and the ops-files will be removed.
 | [`use-compiled-releases-xenial-stemcell.yml`](use-compiled-releases-xenial-stemcell.yml) | Use releases compiled for Xenial stemcell, as opposed to Trusty | Requires `operations/experimental/use-xenial-stemcell.yml` |
 | [`use-garden-containerd.yml`](use-garden-containerd.yml) | Configure Garden to create containers via containerd. | |
 | [`use-grootfs.yml`](use-grootfs.yml) | Groot is enabled by default. This file is blank to avoid breaking deployment scripts. | |
-| [`use-log-cache.yml`](use-log-cache.yml) | Adds the [Log Cache Release](https://github.com/cloudfoundry/log-cache-release) for logs and metrics. | |
-| [`use-pxc.yml`](use-pxc.yml) | Uses the [pxc-release](https://github.com/cloudfoundry-incubator/pxc-release) instead of the [cf-mysql-release](https://github.com/cloudfoundry/cf-mysql-release/) as the internal mysql database. This ops-file is for clean-installs of cf or for redeploying cf already running pxc. It's not for migrating from cf-mysql-release. | | 
+| [`use-pxc.yml`](use-pxc.yml) | Uses the [pxc-release](https://github.com/cloudfoundry-incubator/pxc-release) instead of the [cf-mysql-release](https://github.com/cloudfoundry/cf-mysql-release/) as the internal mysql database. This ops-file is for clean-installs of cf or for redeploying cf already running pxc. It's not for migrating from cf-mysql-release. | |
 | [`use-shed.yml`](use-shed.yml) | Enable deprecated garden-shed on diego cells. | |
 | [`use-xenial-stemcell.yml`](use-xenial-stemcell.yml) | Use Ubuntu Xenial as the default stemcell | |
 | [`windows-component-syslog-ca.yml`](windows-component-syslog-ca.yml) | Forces windows component syslog to respect only the provided CA for cert validation. | Requires `windows-enable-component-syslog.yml`. Can also be applied to runtime config, in the manner of `operations/addons/component-syslog-custom-ca.yml`. The operations in this file are intended to be merged into that one when they graduate from experimental status. This ops file gets all its variables from the same place as that one, though not all are used. |

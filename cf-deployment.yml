@@ -1243,6 +1243,145 @@ instance_groups:
           doppler:
             cert: "((loggregator_tls_doppler.certificate))"
             key: "((loggregator_tls_doppler.private_key))"
+  - name: log-cache
+    provides:
+      log-cache: {shared: true}
+    properties:
+      egress_port: 8080
+      health_addr: localhost:6060
+      tls:
+        ca_cert: ((log_cache.ca))
+        cert: ((log_cache.certificate))
+        key: ((log_cache.private_key))
+    release: log-cache
+  - name: log-cache-gateway
+    properties:
+      gateway_addr: localhost:8081
+    release: log-cache
+  - name: log-cache-group-reader
+    properties:
+      port: 8084
+    release: log-cache
+  - consumes:
+      reverse_log_proxy:
+        from: reverse_log_proxy
+    name: log-cache-nozzle
+    properties:
+      logs_provider:
+        tls:
+          ca_cert: ((logs_provider.ca))
+          cert: ((logs_provider.certificate))
+          key: ((logs_provider.private_key))
+    release: log-cache
+  - name: log-cache-expvar-forwarder
+    properties:
+      counters:
+        # Log Cache
+      - name: egress
+        source_id: log-cache
+        addr: http://localhost:6060/debug/vars
+        template: "{{.LogCache.Egress}}"
+      - name: ingress
+        source_id: log-cache
+        addr: http://localhost:6060/debug/vars
+        template: "{{.LogCache.Ingress}}"
+      - name: expired
+        source_id: log-cache
+        addr: http://localhost:6060/debug/vars
+        template: "{{.LogCache.Expired}}"
+      - name: dropped
+        source_id: log-cache
+        addr: http://localhost:6060/debug/vars
+        template: "{{.LogCache.Dropped}}"
+      - name: promql-timeout
+        source_id: log-cache
+        addr: http://localhost:6060/debug/vars
+        template: "{{.LogCache.PromQLTimeout}}"
+
+        # Nozzle
+      - name: egress
+        source_id: log-cache-nozzle
+        addr: http://localhost:6061/debug/vars
+        template: "{{.Nozzle.Egress}}"
+      - name: ingress
+        source_id: log-cache-nozzle
+        addr: http://localhost:6061/debug/vars
+        template: "{{.Nozzle.Ingress}}"
+      - name: err
+        source_id: log-cache-nozzle
+        addr: http://localhost:6061/debug/vars
+        template: "{{.Nozzle.Err}}"
+      - name: dropped
+        source_id: log-cache-nozzle
+        addr: http://localhost:6061/debug/vars
+        template: "{{.Nozzle.Dropped}}"
+      gauges:
+        # Log Cache
+      - name: cache-period
+        source_id: log-cache
+        addr: http://localhost:6060/debug/vars
+        template: "{{.LogCache.CachePeriod}}"
+      - name: store-size
+        source_id: log-cache
+        addr: http://localhost:6060/debug/vars
+        template: "{{.LogCache.StoreSize}}"
+      - name: total-system-memory
+        source_id: log-cache
+        addr: http://localhost:6060/debug/vars
+        template: "{{.LogCache.TotalSystemMemory}}"
+      - name: available-system-memory
+        source_id: log-cache
+        addr: http://localhost:6060/debug/vars
+        template: "{{.LogCache.AvailableSystemMemory}}"
+
+        # CF Auth Proxy
+      - name: last-uaa-latency
+        source_id: log-cache-cf-auth-proxy
+        addr: http://localhost:6065/debug/vars
+        template: "{{.CFAuthProxy.LastUAALatency}}"
+      - name: last-capi-v3-apps-latency
+        source_id: log-cache-cf-auth-proxy
+        addr: http://localhost:6065/debug/vars
+        template: "{{.CFAuthProxy.LastCAPIV3AppsLatency}}"
+      - name: last-capi-v2-list-service-instances-latency
+        source_id: log-cache-cf-auth-proxy
+        addr: http://localhost:6065/debug/vars
+        template: "{{.CFAuthProxy.LastCAPIV2ListServiceInstancesLatency}}"
+      - name: last-capi-v4-log-access-latency
+        source_id: log-cache-cf-auth-proxy
+        addr: http://localhost:6065/debug/vars
+        template: "{{.CFAuthProxy.LastCAPIV4LogAccessLatency}}"
+      - name: last-capi-v2-service-instances-latency
+        source_id: log-cache-cf-auth-proxy
+        addr: http://localhost:6065/debug/vars
+        template: "{{.CFAuthProxy.LastCAPIV2ServiceInstancesLatency}}"
+    release: log-cache
+  - name: route_registrar
+    properties:
+      route_registrar:
+        routes:
+        - name: log-cache-reverse-proxy
+          port: 8083
+          registration_interval: 20s
+          uris:
+          - log-cache.((system_domain))
+          - '*.log-cache.((system_domain))'
+    release: routing
+  - name: log-cache-cf-auth-proxy
+    properties:
+      cc:
+        ca_cert: ((log_cache_tls_cc_auth_proxy.ca))
+        capi_internal_addr: https://cloud-controller-ng.service.cf.internal:9023
+        cert: ((log_cache_tls_cc_auth_proxy.certificate))
+        common_name: cloud-controller-ng.service.cf.internal
+        key: ((log_cache_tls_cc_auth_proxy.private_key))
+      proxy_port: 8083
+      uaa:
+        ca_cert: ((uaa_ca.certificate))
+        client_id: doppler
+        client_secret: ((uaa_clients_doppler_secret))
+        internal_addr: https://uaa.service.cf.internal:8443
+    release: log-cache
 - name: diego-cell
   azs:
   - z1
@@ -1717,6 +1856,38 @@ variables:
     common_name: ss-scheduler
     extended_key_usage:
     - client_auth
+- name: logs_provider
+  options:
+    ca: loggregator_ca
+    common_name: log-cache
+    extended_key_usage:
+    - client_auth
+    - server_auth
+  type: certificate
+- name: log_cache_ca
+  options:
+    common_name: log-cache
+    is_ca: true
+  type: certificate
+- name: log_cache
+  options:
+    alternative_names:
+    - log_cache
+    - log-cache
+    - logcache
+    ca: log_cache_ca
+    common_name: log-cache
+    extended_key_usage:
+    - client_auth
+    - server_auth
+  type: certificate
+- name: log_cache_tls_cc_auth_proxy
+  options:
+    ca: service_cf_internal_ca
+    common_name: log-cache
+    extended_key_usage:
+    - client_auth
+  type: certificate
 - name: router_ca
   type: certificate
   options:
@@ -1912,6 +2083,10 @@ releases:
   url: https://bosh.io/d/github.com/cloudfoundry/loggregator-agent-release?v=2.0
   version: "2.0"
   sha1: df91c31c15da68c7b2905645b20b93a930627d46
+- name: log-cache
+  url: https://bosh.io/d/github.com/cloudfoundry/log-cache-release?v=1.4.0
+  version: 1.4.0
+  sha1: c8a850652f1efc88d89971e4892c5a97f8ff1b7b
 - name: bosh-dns-aliases
   url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-aliases-release?v=0.0.2
   version: 0.0.2
