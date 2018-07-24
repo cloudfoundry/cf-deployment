@@ -59,6 +59,7 @@
 - type: replace
   path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/domain=perm.service.cf.internal?
   value:
+    domain: perm.service.cf.internal
     targets:
     - query: '*'
       instance_group: perm
