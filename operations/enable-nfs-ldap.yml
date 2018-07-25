@@ -9,6 +9,7 @@
       ldap_port: ((nfs-ldap-port))
       ldap_proto: ((nfs-ldap-proto))
       ldap_user_fqdn: ((nfs-ldap-fqdn))
+      allowed-in-source: ""
 - type: replace
   path: /instance_groups/name=nfs-broker-push/jobs/name=nfsbrokerpush/properties/nfsbrokerpush/ldap_enabled?
   value: true
