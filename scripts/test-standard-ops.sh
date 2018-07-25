@@ -75,6 +75,7 @@ test_standard_ops() {
       pass "use-bosh-dns-for-containers.yml"
       pass "use-bosh-dns-for-windows2016-containers.yml"
       pass "use-bosh-dns-rename-network-and-deployment.yml"
+      check_interpolation "use-log-cache.yml"
     popd > /dev/null # operations
   popd > /dev/null
   exit $exit_code
