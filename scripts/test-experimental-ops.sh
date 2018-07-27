@@ -56,6 +56,7 @@ test_experimental_ops() {
 
       check_interpolation "name: use-compiled-releases-xenial-stemcell.yml" "use-xenial-stemcell.yml" "-o use-compiled-releases-xenial-stemcell.yml"
       check_interpolation "use-garden-containerd.yml"
+      check_interpolation "enable-bpm-garden.yml"
       check_interpolation "use-grootfs.yml"
       check_interpolation "use-pxc.yml"
       check_interpolation "use-shed.yml"
