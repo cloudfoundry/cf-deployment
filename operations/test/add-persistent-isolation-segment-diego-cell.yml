@@ -40,6 +40,8 @@
     - name: rep
       release: diego
       properties:
+        bpm:
+          enabled: true
         diego:
           executor:
             instance_identity_ca_cert: ((diego_instance_identity_ca.certificate))
@@ -65,6 +67,8 @@
     - name: route_emitter
       release: diego
       properties:
+        bpm:
+          enabled: true
         loggregator:
           use_v2_api: true
           ca_cert: "((loggregator_ca.certificate))"
