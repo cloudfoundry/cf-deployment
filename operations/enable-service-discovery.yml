@@ -4,6 +4,7 @@
   value:
     name: bosh-dns-adapter
     properties:
+      internal_domains: ["apps.internal."]
       dnshttps:
         client:
           tls: ((cf_app_sd_client_tls))
@@ -54,5 +55,7 @@
       - client_auth
     type: certificate
 - type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/temporary_create_internal_domain?
-  value: true
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/app_domains/-
+  value:
+    name: apps.internal
+    internal: true
