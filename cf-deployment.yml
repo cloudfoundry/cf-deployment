@@ -68,7 +68,7 @@ addons:
           domain: bosh
       - domain: auctioneer.service.cf.internal
         targets:
-        - query: '*'
+        - query: 'q-s4'
           instance_group: scheduler
           deployment: cf
           network: default
