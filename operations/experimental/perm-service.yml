@@ -34,6 +34,15 @@
           tls:
             ca_certs:
             - ((uaa_ca.certificate))
+    - name: statsd_injector
+      release: statsd-injector
+      properties:
+        loggregator:
+          tls:
+            ca_cert: "((loggregator_ca.certificate))"
+            statsd_injector:
+              cert: "((loggregator_tls_statsdinjector.certificate))"
+              key: "((loggregator_tls_statsdinjector.private_key))"
 
 # Changes to other instance groups
 - type: replace
