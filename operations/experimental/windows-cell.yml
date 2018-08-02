@@ -1,0 +1,163 @@
+- path: /instance_groups/-
+  type: replace
+  value:
+    azs:
+    - z1
+    - z2
+    instances: 1
+    jobs:
+    - consumes:
+        consul_client:
+          from: consul_client_link
+        consul_common:
+          from: consul_common_link
+        consul_server: nil
+      name: consul_agent_windows
+      properties:
+        syslog_daemon_config:
+          enable: false
+      release: consul
+    - name: winc
+      release: winc
+    - name: winc-network-1803
+      properties:
+        winc_network:
+          dns_servers:
+          - 172.30.0.1
+      release: winc
+    - name: windows1803fs
+      release: windows1803fs
+    - name: groot
+      properties:
+        groot:
+          cached_image_uris:
+          - oci:///C:/var/vcap/packages/windows1803fs
+          driver_store: /var/vcap/data/groot
+      release: winc
+    - name: garden-windows
+      properties:
+        garden:
+          destroy_containers_on_start: true
+          image_plugin: /var/vcap/packages/groot/groot.exe
+          image_plugin_extra_args:
+          - --driver-store=/var/vcap/data/groot
+          - --config=/var/vcap/jobs/groot/config/groot.yml
+          listen_address: 127.0.0.1:9241
+          network_plugin: /var/vcap/packages/winc-network-1803/winc-network.exe
+          network_plugin_extra_args:
+          - --configFile=/var/vcap/jobs/winc-network-1803/config/interface.json
+          - --log=/var/vcap/sys/log/winc-network-1803/winc-network.log
+          nstar_bin: /var/vcap/packages/nstar/nstar.exe
+          runtime_plugin: /var/vcap/packages/winc/winc.exe
+      release: garden-runc
+    - name: rep_windows
+      properties:
+        containers:
+          trusted_ca_certificates:
+          - ((application_ca.certificate))
+        declarative_healthcheck_path: /var/vcap/packages/healthcheck_windows/internal
+        diego:
+          executor:
+            instance_identity_ca_cert: ((diego_instance_identity_ca.certificate))
+            instance_identity_key: ((diego_instance_identity_ca.private_key))
+          rep:
+            open_bindmounts_acl: true
+            preloaded_rootfses:
+            - windows2016:oci:///C:/var/vcap/packages/windows1803fs
+        enable_declarative_healthcheck: true
+        loggregator:
+          ca_cert: ((loggregator_ca.certificate))
+          cert: ((loggregator_tls_agent.certificate))
+          key: ((loggregator_tls_agent.private_key))
+          use_v2_api: true
+        syslog_daemon_config:
+          enable: false
+        tls:
+          ca_cert: ((service_cf_internal_ca.certificate))
+          cert: ((diego_rep_agent_v2.certificate))
+          key: ((diego_rep_agent_v2.private_key))
+      release: diego
+    - name: route_emitter_windows
+      properties:
+        diego:
+          route_emitter:
+            bbs:
+              ca_cert: ((service_cf_internal_ca.certificate))
+              client_cert: ((diego_bbs_client.certificate))
+              client_key: ((diego_bbs_client.private_key))
+            local_mode: true
+        loggregator:
+          ca_cert: ((loggregator_ca.certificate))
+          cert: ((loggregator_tls_agent.certificate))
+          key: ((loggregator_tls_agent.private_key))
+          use_v2_api: true
+      release: diego
+    - name: loggregator_agent_windows
+      properties:
+        loggregator:
+          tls:
+            agent:
+              cert: ((loggregator_tls_agent.certificate))
+              key: ((loggregator_tls_agent.private_key))
+            ca_cert: ((loggregator_ca.certificate))
+        syslog_daemon_config:
+          enable: false
+      release: loggregator-agent
+    - name: enable_ssh
+      release: windows-utilities
+    name: windows2016-cell
+    networks:
+    - name: default
+    stemcell: windows2016
+    vm_extensions:
+    - 100GB_ephemeral_disk
+    vm_type: small-highmem
+- path: /stemcells/-
+  type: replace
+  value:
+    #TODO: hardcode version when moving from experimental
+    alias: windows2016
+    os: windows2016
+    version: latest
+- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2016?
+  type: replace
+  value:
+    description: Windows Server 2016
+    name: windows2016
+- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/name=hwc_buildpack?
+  type: replace
+  value:
+    name: hwc_buildpack
+    package: hwc-buildpack
+- path: /instance_groups/name=api/jobs/name=hwc-buildpack?
+  type: replace
+  value:
+    name: hwc-buildpack
+    release: hwc-buildpack
+- path: /releases/name=hwc-buildpack?
+  type: replace
+  value:
+    name: hwc-buildpack
+    sha1: c57c96ebd050b632db94c6de2199bd78ee39dbd7
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=2.3.17
+    version: 2.3.17
+- path: /releases/name=winc?
+  type: replace
+  value:
+    name: winc
+    sha1: 31233d99408e41824a7682c04cb6ab1b1424e313
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/winc-release?v=1.3.0
+    version: 1.3.0
+- path: /releases/name=windows1803fs?
+  type: replace
+  value:
+    #TODO: hardcode version, URL, and SHA when moving from experimental
+    name: windows1803fs
+    version: latest
+- path: /releases/name=windows-utilities?
+  type: replace
+  value:
+    name: windows-utilities
+    sha1: 2bf15743be48e696a72236c05e8e3e137474cedd
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.10.0
+    version: 0.10.0
