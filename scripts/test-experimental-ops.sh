@@ -49,6 +49,7 @@ test_experimental_ops() {
       check_interpolation "enable-mysql-tls.yml"
       check_interpolation "name: perm-service.yml" "enable-mysql-tls.yml" "-o perm-service.yml -v perm_uaa_clients_cc_perm_secret=perm_secret -v perm_uaa_clients_perm_monitor_secret=perm_monitor_secret"
       check_interpolation "name: perm-service-with-pxc-release.yml" "perm-service.yml" "-o use-pxc.yml" "-o perm-service-with-pxc-release.yml -v perm_uaa_clients_cc_perm_secret=perm_secret -v perm_uaa_clients_perm_monitor_secret=perm_monitor_secret"
+      check_interpolation "enable-suspect-actual-lrp-generation.yml"
     popd > /dev/null # operations/experimental
   popd > /dev/null
   exit $exit_code
