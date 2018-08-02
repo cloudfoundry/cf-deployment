@@ -1597,6 +1597,18 @@ instance_groups:
           uris:
           - doppler.((system_domain))
           - "*.doppler.((system_domain))"
+- name: rotate-cc-database-key
+  instances: 1
+  azs: [z1]
+  lifecycle: errand
+  vm_type: minimal
+  stemcell: default
+  networks:
+  - name: default
+  jobs:
+  - name: rotate_cc_database_key
+    release: capi
+    properties: {}
 
 variables:
 - name: blobstore_admin_users_password
