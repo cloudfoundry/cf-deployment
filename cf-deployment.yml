@@ -870,6 +870,10 @@ instance_groups:
           ca_cert: "((service_cf_internal_ca.certificate))"
           public_cert: "((cc_tls.certificate))"
           private_key: "((cc_tls.private_key))"
+        public_tls:
+          ca_cert: "((service_cf_internal_ca.certificate))"
+          certificate: "((cc_public_tls.certificate))"
+          private_key: "((cc_public_tls.private_key))"
       ccdb: &ccdb
         databases:
         - name: cloud_controller
@@ -906,6 +910,8 @@ instance_groups:
         - name: api
           registration_interval: 10s
           port: 9022
+          tls_port: 9024
+          server_cert_domain_san: "api.((system_domain))"
           tags:
             component: CloudController
           uris:
@@ -1062,6 +1068,11 @@ instance_groups:
         tls_pem:
         - cert_chain: "((router_ssl.certificate))"
           private_key: "((router_ssl.private_key))"
+        ca_certs: |
+          ((application_ca.certificate))
+          ((service_cf_internal_ca.certificate))
+        backends:
+          enable_tls: true
         status:
           password: "((router_status_password))"
           user: router-status
@@ -1967,6 +1978,14 @@ variables:
     extended_key_usage:
     - client_auth
     - server_auth
+- name: cc_public_tls
+  type: certificate
+  options:
+    ca: service_cf_internal_ca
+    common_name: "api.((system_domain))"
+    alternative_names:
+    - "api.((system_domain))"
+    - cloud-controller-ng.service.cf.internal
 - name: cc_bridge_tps
   type: certificate
   options:
