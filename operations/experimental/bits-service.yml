@@ -119,12 +119,6 @@
       common_name: bits.service.cf.internal
     type: certificate
 - type: replace
-  path: /instance_groups/name=router/jobs/name=gorouter/properties/router/backends?/enable_tls
-  value: true
-- type: replace
-  path: /instance_groups/name=router/jobs/name=gorouter/properties/router/ca_certs?
-  value: ((service_cf_internal_ca.certificate))
-- type: replace
   path: /releases/-
   value:
     name: bits-service
