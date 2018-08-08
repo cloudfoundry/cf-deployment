@@ -57,6 +57,7 @@ test_experimental_ops() {
       check_interpolation "use-pxc.yml"
       check_interpolation "use-shed.yml"
       check_interpolation "use-xenial-stemcell.yml"
+      check_interpolation "set-cpu-weight.yml"
 
       check_interpolation "windows1803-cell.yml"
       check_interpolation "name: windows-component-syslog-ca.yml" "windows-enable-component-syslog.yml" "-o windows-component-syslog-ca.yml" "-l ${home}/operations/addons/example-vars-files/vars-enable-component-syslog.yml"
