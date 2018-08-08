@@ -156,7 +156,15 @@ ensure_opsfiles_in_tests() {
   pushd ${home} > /dev/null
     for x in $@; do
       local basename=$(basename $x)
-      if [ $(grep "[^/]$basename" $test -c) != "0" ]; then
+      # 'grep -E': Use extended regex
+      # '?:':      This is an uncaptured group.  We were trying to be clear that we didn't want to use the result of the match.
+      # A match has the following form:
+      #   A line starting with 'check_interpolation "', optionally followed by 'name: '
+      #   OR
+      #   A line starting with 'pass "'
+      #   AND
+      #   Followed by "$basename"
+      if [ $(grep -E "(?:check_interpolation\s+\"(name:\s+)?|pass\s+\")($basename)" $test -c) != "0" ]; then
         pass "$x is tested in $test"
       else
         fail "$x is ${RED}NOT${NOCOLOR} tested in $test"
