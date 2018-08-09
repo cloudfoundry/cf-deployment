@@ -828,23 +828,23 @@ instance_groups:
         install_buildpacks:
         ## Order is important here
         - name: staticfile_buildpack
-          package: staticfile-buildpack
+          package: staticfile-buildpack-cflinuxfs2
         - name: java_buildpack
-          package: java-buildpack
+          package: java-buildpack-cflinuxfs2
         - name: ruby_buildpack
-          package: ruby-buildpack
+          package: ruby-buildpack-cflinuxfs2
         - name: dotnet_core_buildpack
-          package: dotnet-core-buildpack
+          package: dotnet-core-buildpack-cflinuxfs2
         - name: nodejs_buildpack
-          package: nodejs-buildpack
+          package: nodejs-buildpack-cflinuxfs2
         - name: go_buildpack
-          package: go-buildpack
+          package: go-buildpack-cflinuxfs2
         - name: python_buildpack
-          package: python-buildpack
+          package: python-buildpack-cflinuxfs2
         - name: php_buildpack
-          package: php-buildpack
+          package: php-buildpack-cflinuxfs2
         - name: binary_buildpack
-          package: binary-buildpack
+          package: binary-buildpack-cflinuxfs2
         db_encryption_key: "((cc_db_encryption_key))"
         database_encryption: &cc-database-encryption
           current_key_label: "encryption_key_0"
