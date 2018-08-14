@@ -125,12 +125,17 @@
   value:
     name: hwc_buildpack
     package: hwc-buildpack
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
+- path: /instance_groups/name=api/jobs/-
   type: replace
   value:
-    name: binary_buildpack
-    package: binary-buildpack-windows2012R2
-- path: /instance_groups/name=api/jobs/-
+    name: hwc-buildpack
+    release: hwc-buildpack
+- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/name=hwc_buildpack?
+  type: replace
+  value:
+    name: hwc_buildpack
+    package: hwc-buildpack
+- path: /instance_groups/name=api/jobs/name=hwc-buildpack?
   type: replace
   value:
     name: hwc-buildpack

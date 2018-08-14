@@ -830,7 +830,7 @@ instance_groups:
         - name: staticfile_buildpack
           package: staticfile-buildpack-cflinuxfs2
         - name: java_buildpack
-          package: java-buildpack-cflinuxfs2
+          package: java-buildpack
         - name: ruby_buildpack
           package: ruby-buildpack-cflinuxfs2
         - name: dotnet_core_buildpack
@@ -844,7 +844,7 @@ instance_groups:
         - name: php_buildpack
           package: php-buildpack-cflinuxfs2
         - name: binary_buildpack
-          package: binary-buildpack-cflinuxfs2
+          package: binary-buildpack
         db_encryption_key: "((cc_db_encryption_key))"
         database_encryption: &cc-database-encryption
           current_key_label: "encryption_key_0"
