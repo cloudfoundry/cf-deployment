@@ -44,8 +44,18 @@ This doc will use environment variables.
 eval "$(bbl print-env)"
 ```
 
+## 3. Upload a `runtime-config`
 
-## 3. Upload a stemcell
+`cf-deployment` requires that you have uploaded a [runtime-config](https://bosh.io/docs/runtime-config/) for [BOSH DNS](https://bosh.io/docs/dns/).
+
+We recommended that you use the one provided by the [bosh-deployment](https://github.com/cloudfoundry/bosh-deployment/blob/master/runtime-configs/dns.yml) repo:
+
+```
+bosh update-runtime-config bosh-deployment/runtime-configs/dns.yml --name dns
+```
+
+
+## 4. Upload a stemcell
 
 With your bosh director targeted:
 ```
@@ -56,7 +66,8 @@ bosh \
   https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent?v=${STEMCELL_VERSION}
 ```
 
-## 4. Deploy CF
+
+## 5. Deploy CF
 
 With your bosh director targeted:
 ```
