@@ -1244,6 +1244,20 @@ instance_groups:
               cn: "cloud-controller-ng.service.cf.internal"
   - name: log-cache-scheduler
     release: log-cache
+  - name: log-cache-expvar-forwarder
+    release: log-cache
+    properties:
+      counters: []
+      gauges: []
+      maps:
+      - name: worker-assignments
+        source_id: log-cache-scheduler
+        addr: http://localhost:6064/debug/vars
+        template: "{{.WorkerAssignments | jsonMap}}"
+      - name: worker-health
+        source_id: log-cache-scheduler
+        addr: http://localhost:6064/debug/vars
+        template: "{{.WorkerHealth | jsonMap}}"
 - name: doppler
   azs:
   - z1
@@ -1300,8 +1314,7 @@ instance_groups:
       port: 8084
     release: log-cache
   - consumes:
-      reverse_log_proxy:
-        from: reverse_log_proxy
+      reverse_log_proxy: {from: reverse_log_proxy}
     name: log-cache-nozzle
     properties:
       logs_provider:
@@ -1312,6 +1325,7 @@ instance_groups:
     release: log-cache
   - name: log-cache-expvar-forwarder
     properties:
+      maps: []
       counters:
         # Log Cache
       - name: egress
