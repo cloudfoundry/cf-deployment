@@ -1,5 +1,5 @@
-- type: replace
-  path: /instance_groups/-
+- path: /instance_groups/-
+  type: replace
   value:
     azs:
     - z1
@@ -112,50 +112,50 @@
     vm_extensions:
     - 100GB_ephemeral_disk
     vm_type: small-highmem
-- type: replace
-  path: /stemcells/-
+- path: /stemcells/-
+  type: replace
   value:
     alias: windows2016
     os: windows2016
-    version: "1709.11"
-- type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2016?
+    version: "1709.12"
+- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2016?
+  type: replace
   value:
     description: Windows Server 2016
     name: windows2016
-- type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/name=hwc_buildpack?
+- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/name=hwc_buildpack?
+  type: replace
   value:
     name: hwc_buildpack
     package: hwc-buildpack
-- type: replace
-  path: /instance_groups/name=api/jobs/name=hwc-buildpack?
+- path: /instance_groups/name=api/jobs/name=hwc-buildpack?
+  type: replace
   value:
     name: hwc-buildpack
     release: hwc-buildpack
-- type: replace
-  path: /releases/name=hwc-buildpack?
+- path: /releases/name=hwc-buildpack?
+  type: replace
   value:
     name: hwc-buildpack
     sha1: ba4a628beff026e4d1dd7e1a21eea708fbd4897f
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=2.3.19
     version: 2.3.19
-- type: replace
-  path: /releases/name=winc?
+- path: /releases/name=winc?
+  type: replace
   value:
     name: winc
     sha1: 232aff9b04266bd743208160cc27f4266214e0ee
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/winc-release?v=1.4.0
     version: 1.4.0
-- type: replace
-  path: /releases/name=windows2016fs?
+- path: /releases/name=windows2016fs?
+  type: replace
   value:
     name: windows2016fs
     sha1: 76e6fc1096a8edf709753fd4470e393aba8275c2
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows2016fs-online-release?v=1.6.0
     version: 1.6.0
-- type: replace
-  path: /releases/name=windows-utilities?
+- path: /releases/name=windows-utilities?
+  type: replace
   value:
     name: windows-utilities
     sha1: 2bf15743be48e696a72236c05e8e3e137474cedd
