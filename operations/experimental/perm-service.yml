@@ -103,6 +103,12 @@
     options:
       ca: perm_tls_ca
       common_name: perm.service.cf.internal
+      alternative_names:
+      - perm.service.cf.internal
+      - "((system_domain))"
+      - "*.((system_domain))"
+      - "tcp.((system_domain))"
+      - "*.tcp.((system_domain))"
       extended_key_usage:
       - client_auth
       - server_auth

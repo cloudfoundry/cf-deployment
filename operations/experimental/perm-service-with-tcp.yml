@@ -1,0 +1,22 @@
+- type: replace
+  path: /instance_groups/name=perm/jobs/-
+  value:
+    name: route_registrar
+    release: routing
+    properties:
+      route_registrar:
+        routing_api:
+          api_url: http://routing-api.service.cf.internal:3000
+          oauth_url: https://uaa.service.cf.internal:8443
+          client_id: routing_api_client
+          client_secret: ((uaa_clients_routing_api_client_secret))
+          ca_certs:
+          - ((uaa_ca.certificate))
+        routes:
+        - name: perm
+          type: tcp
+          port: 1024
+          router_group: default-tcp
+          backend_host: perm.service.cf.internal
+          backend_port: 6283
+          registration_interval: 10s
