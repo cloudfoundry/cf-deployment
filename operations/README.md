@@ -43,7 +43,6 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 | [`enable-nfs-volume-service.yml`](enable-nfs-volume-service.yml) | Enables volume support and deploys an NFS broker and volume driver | As of cf-deployment v2, you must use the `nfsbrokerpush` errand to cf push the nfs broker after `bosh deploy` completes. |
 | [`enable-privileged-container-support.yml`](enable-privileged-container-support.yml) | Enables Diego privileged container support. | |
 | [`enable-service-discovery.yml`](enable-service-discovery.yml) | Enables application service discovery | |
-| [`enable-smb-volume-service.yml`](enable-smb-volume-service.yml) | Enables volume support and deploys an SMB broker and volume driver | As of cf-deployment v2, you must use the `azurefilebrokerpush` errand to cf push the smb broker after `bosh deploy` completes. |
 | [`enable-uniq-consul-node-name.yml`](enable-uniq-consul-node-name.yml) | Configure Diego cell `consul_agent` jobs to have a unique id per instance. |  |
 | [`improve-diego-log-format.yml`](improve-diego-log-format.yml) | Enable human readable format for timestamp (rfc3339) and log level in linux component logs. | Incompatible with `bosh-lite.yml`, which enables this already. |
 | [`improve-diego-log-format-windows.yml`](improve-diego-log-format-windows.yml) | Enable human readable format for timestamp (rfc3339) and log level in Windows 2012 component logs. | Requires `windows-cell.yml` |

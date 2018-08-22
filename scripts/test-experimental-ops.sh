@@ -26,6 +26,7 @@ test_experimental_ops() {
       check_interpolation "enable-mysql-tls.yml"
       check_interpolation "enable-oci-phase-1.yml"
       check_interpolation "enable-routing-integrity.yml"
+      check_interpolation "enable-smb-volume-service.yml"
       check_interpolation "enable-suspect-actual-lrp-generation.yml"
       check_interpolation "enable-traffic-to-internal-networks.yml"
       check_interpolation "name: enable-tls-cloud-controller-postgres.yml" "${home}/operations/use-postgres.yml" "-o enable-tls-cloud-controller-postgres.yml"
