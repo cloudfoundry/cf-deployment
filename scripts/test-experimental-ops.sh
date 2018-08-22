@@ -7,6 +7,7 @@ test_experimental_ops() {
   pushd ${home} > /dev/null
     pushd operations/experimental > /dev/null
       check_interpolation "name: add-credhub-lb.yml" "secure-service-credentials.yml" "-o add-credhub-lb.yml"
+      check_interpolation "add-cflinuxfs3.yml"
 
       check_interpolation "bits-service.yml"
       check_interpolation "name: bits-service-local.yml" "bits-service.yml" "-o bits-service-local.yml"
