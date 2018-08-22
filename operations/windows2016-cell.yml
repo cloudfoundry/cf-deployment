@@ -117,7 +117,7 @@
   value:
     alias: windows2016
     os: windows2016
-    version: "1709.11"
+    version: "1709.12"
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2016?
   value:
@@ -151,13 +151,13 @@
   path: /releases/name=windows2016fs?
   value:
     name: windows2016fs
-    sha1: 44c4a228967ee19fc68145e496dee1701c743bdb
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows2016fs-online-release?v=1.5.0
-    version: 1.5.0
+    sha1: 76e6fc1096a8edf709753fd4470e393aba8275c2
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows2016fs-online-release?v=1.6.0
+    version: 1.6.0
 - type: replace
   path: /releases/name=windows-utilities?
   value:
     name: windows-utilities
-    sha1: 2bf15743be48e696a72236c05e8e3e137474cedd
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.10.0
-    version: 0.10.0
+    sha1: efc10ac0f4acae23637ce2c6f864d20df2e3a781
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.11.0
+    version: 0.11.0

@@ -7,6 +7,7 @@ test_experimental_ops() {
   pushd ${home} > /dev/null
     pushd operations/experimental > /dev/null
       check_interpolation "name: add-credhub-lb.yml" "secure-service-credentials.yml" "-o add-credhub-lb.yml"
+      check_interpolation "add-cflinuxfs3.yml"
 
       check_interpolation "bits-service.yml"
       check_interpolation "name: bits-service-local.yml" "bits-service.yml" "-o bits-service-local.yml"
@@ -25,6 +26,7 @@ test_experimental_ops() {
       check_interpolation "enable-mysql-tls.yml"
       check_interpolation "enable-oci-phase-1.yml"
       check_interpolation "enable-routing-integrity.yml"
+      check_interpolation "enable-smb-volume-service.yml"
       check_interpolation "enable-suspect-actual-lrp-generation.yml"
       check_interpolation "enable-traffic-to-internal-networks.yml"
       check_interpolation "name: enable-tls-cloud-controller-postgres.yml" "${home}/operations/use-postgres.yml" "-o enable-tls-cloud-controller-postgres.yml"
