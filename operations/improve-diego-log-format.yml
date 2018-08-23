@@ -1,0 +1,32 @@
+---
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=auctioneer/properties?/logging/format/timestamp
+  value: "rfc3339"
+
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=bbs/properties?/logging/format/timestamp
+  value: "rfc3339"
+
+- type: replace
+  path: /instance_groups/name=diego-api/jobs/name=locket/properties?/logging/format/timestamp
+  value: "rfc3339"
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=file_server/properties?/logging/format/timestamp
+  value: "rfc3339"
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=garden/properties?/logging/format/timestamp
+  value: "rfc3339"
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=rep/properties?/logging/format/timestamp
+  value: "rfc3339"
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=route_emitter/properties?/logging/format/timestamp
+  value: "rfc3339"
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=ssh_proxy/properties?/logging/format/timestamp
+  value: "rfc3339"

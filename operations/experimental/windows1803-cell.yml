@@ -115,10 +115,9 @@
 - path: /stemcells/-
   type: replace
   value:
-    #TODO: hardcode version when moving from experimental
-    alias: windows2016
-    os: windows2016
-    version: latest
+    alias: windows1803
+    os: windows1803
+    version: "1803.1"
 - path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2016?
   type: replace
   value:
@@ -153,7 +152,8 @@
   value:
     #TODO: hardcode version, URL, and SHA when moving from experimental
     name: windows1803fs
-    version: latest
+    url: https://github.com/cloudfoundry/windows1803fs-online-release/releases/download/v1.2.0/windows1803fs-1.2.0.tgz
+    version: 1.2.0
 - path: /releases/name=windows-utilities?
   type: replace
   value:

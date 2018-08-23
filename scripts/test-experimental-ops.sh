@@ -7,6 +7,7 @@ test_experimental_ops() {
   pushd ${home} > /dev/null
     pushd operations/experimental > /dev/null
       check_interpolation "name: add-credhub-lb.yml" "secure-service-credentials.yml" "-o add-credhub-lb.yml"
+      check_interpolation "add-cflinuxfs3.yml"
 
       check_interpolation "bits-service.yml"
       check_interpolation "name: bits-service-local.yml" "bits-service.yml" "-o bits-service-local.yml"
@@ -17,6 +18,7 @@ test_experimental_ops() {
       check_interpolation "name: disable-consul-bosh-lite.yml" "disable-consul.yml" "-o ${home}/operations/bosh-lite.yml" "-o disable-consul-bosh-lite.yml"
       check_interpolation "name: disable-consul-windows.yml" "${home}/operations/windows-cell.yml" "-o disable-consul.yml" "-o disable-consul-windows.yml"
       check_interpolation "name: disable-consul-windows2016.yml" "${home}/operations/windows2016-cell.yml" "-o disable-consul.yml" "-o disable-consul-windows2016.yml"
+      check_interpolation "name: disable-consul-windows1803.yml" "windows1803-cell.yml" "-o disable-consul.yml" "-o disable-consul-windows1803.yml"
       check_interpolation "disable-interpolate-service-bindings.yml"
 
       check_interpolation "name: enable-bits-service-consul.yml" "bits-service.yml" "-o bits-service-local.yml" "-o enable-bits-service-consul.yml"
@@ -25,6 +27,7 @@ test_experimental_ops() {
       check_interpolation "enable-mysql-tls.yml"
       check_interpolation "enable-oci-phase-1.yml"
       check_interpolation "enable-routing-integrity.yml"
+      check_interpolation "enable-smb-volume-service.yml"
       check_interpolation "enable-suspect-actual-lrp-generation.yml"
       check_interpolation "enable-traffic-to-internal-networks.yml"
       check_interpolation "name: enable-tls-cloud-controller-postgres.yml" "${home}/operations/use-postgres.yml" "-o enable-tls-cloud-controller-postgres.yml"
@@ -53,11 +56,13 @@ test_experimental_ops() {
 
       check_interpolation "name: use-compiled-releases-xenial-stemcell.yml" "use-xenial-stemcell.yml" "-o use-compiled-releases-xenial-stemcell.yml"
       check_interpolation "use-garden-containerd.yml"
+      check_interpolation "enable-bpm-garden.yml"
       check_interpolation "use-grootfs.yml"
       check_interpolation "use-logcache-for-cloud-controller-app-stats.yml"
       check_interpolation "use-pxc.yml"
       check_interpolation "use-shed.yml"
       check_interpolation "use-xenial-stemcell.yml"
+      check_interpolation "set-cpu-weight.yml"
 
       check_interpolation "windows1803-cell.yml"
       check_interpolation "name: windows-component-syslog-ca.yml" "windows-enable-component-syslog.yml" "-o windows-component-syslog-ca.yml" "-l ${home}/operations/addons/example-vars-files/vars-enable-component-syslog.yml"

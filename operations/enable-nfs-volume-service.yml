@@ -43,6 +43,8 @@
           syslog_url: ""
           username: nfs-broker
       release: nfs-volume
+    - name: cf-cli-6-linux
+      release: cf-cli
     lifecycle: errand
     name: nfs-broker-push
     networks:
@@ -100,9 +102,9 @@
   path: /releases/-
   value:
     name: nfs-volume
-    sha1: 39cb877d1cf94dde8cf572cc547a2ad2b3af3140
-    url: https://bosh.io/d/github.com/cloudfoundry/nfs-volume-release?v=1.5.0
-    version: 1.5.0
+    sha1: 967dcefbdc789b874abfcd5bb715af66aa1dca4b
+    url: https://bosh.io/d/github.com/cloudfoundry/nfs-volume-release?v=1.5.3
+    version: 1.5.3
 - type: replace
   path: /releases/-
   value:
@@ -114,6 +116,13 @@
   path: /releases/name=mapfs?
   value:
     name: mapfs
-    sha1: 9dcea268d327caff76690229ac09f57a0c83cf65
-    url: https://bosh.io/d/github.com/cloudfoundry/mapfs-release?v=1.0.1
-    version: 1.0.1
+    sha1: 1ab1dfb802819ec6cda2d0d60370638d6f878528
+    url: https://bosh.io/d/github.com/cloudfoundry/mapfs-release?v=1.1.0
+    version: 1.1.0
+- type: replace
+  path: /releases/name=cf-cli?
+  value:
+    name: cf-cli
+    sha1: c5a578bfdb8e51f479acee23356417538e5a0a36
+    url: https://bosh.io/d/github.com/bosh-packages/cf-cli-release?v=1.6.0
+    version: 1.6.0

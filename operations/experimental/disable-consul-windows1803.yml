@@ -1,0 +1,6 @@
+---
+- type: remove
+  path: /instance_groups/name=windows2016-cell/jobs/name=consul_agent_windows
+- type: replace
+  path: /instance_groups/name=windows2016-cell/jobs/name=rep_windows/properties/enable_consul_service_registration?
+  value: false
