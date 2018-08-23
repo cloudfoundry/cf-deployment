@@ -1,0 +1,40 @@
+---
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=garden/properties/bpm?/enabled
+  value: true
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=rep/properties/diego/executor/garden?/address
+  value: /var/vcap/data/garden/sockets/garden.sock
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=garden/properties/garden/listen_address?
+  value: /var/vcap/data/garden/sockets/garden.sock
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=garden/properties/garden/network_plugin
+  value: /var/vcap/packages/netplugin-shim/bin/garden-plugin
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=garden/properties/garden/network_plugin_extra_args
+  value:
+    - "--socket"
+    - "/var/vcap/data/netplugin-server/sockets/network-shim.sock"
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=garden/properties/garden/additional_bpm_volumes?
+  value:
+    - "/var/vcap/data/rep/shared_data"
+    - "/var/vcap/data/netplugin-server/sockets"
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=netplugin-server?
+  value:
+    name: netplugin-server
+    release: garden-runc
+    properties:
+      netplugin-server:
+        plugin_path: "/var/vcap/packages/runc-cni/bin/garden-external-networker"
+        plugin_extra_args:
+          - "--configFile"
+          - "/var/vcap/jobs/garden-cni/config/adapter.json"
