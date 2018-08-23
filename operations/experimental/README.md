@@ -58,6 +58,7 @@ and the ops-files will be removed.
 | [`use-compiled-releases-xenial-stemcell.yml`](use-compiled-releases-xenial-stemcell.yml) | Use releases compiled for Xenial stemcell, as opposed to Trusty | Requires `use-xenial-stemcell.yml` |
 | [`use-garden-containerd.yml`](use-garden-containerd.yml) | Configure Garden to create containers via containerd. | |
 | [`use-grootfs.yml`](use-grootfs.yml) | Groot is enabled by default. This file is blank to avoid breaking deployment scripts. | |
+| [`set-cpu-weight.yml`](set-cpu-weight.yml) | CPU shares for each garden container are proportional to its memory limits. | |
 | [`use-pxc.yml`](use-pxc.yml) | Uses the [pxc-release](https://github.com/cloudfoundry-incubator/pxc-release) instead of the [cf-mysql-release](https://github.com/cloudfoundry/cf-mysql-release/) as the internal mysql database. This ops-file is for clean-installs of cf or for redeploying cf already running pxc. It's not for migrating from cf-mysql-release. | |
 | [`use-shed.yml`](use-shed.yml) | Enable deprecated garden-shed on diego cells. | |
 | [`use-xenial-stemcell.yml`](use-xenial-stemcell.yml) | Use Ubuntu Xenial as the default stemcell. | |
