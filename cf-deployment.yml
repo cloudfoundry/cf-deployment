@@ -1073,6 +1073,8 @@ instance_groups:
           ((service_cf_internal_ca.certificate))
         backends:
           enable_tls: true
+          cert_chain: ((gorouter_backend_tls.certificate))
+          private_key: ((gorouter_backend_tls.private_key))
         status:
           password: "((router_status_password))"
           user: router-status
@@ -2051,6 +2053,15 @@ variables:
     ca: application_ca
     common_name: instanceIdentityCA
     is_ca: true
+- name: gorouter_backend_tls
+  type: certificate
+  options:
+    ca: service_cf_internal_ca
+    extended_key_usage:
+    - client_auth
+    common_name: gorouter_backend_tls
+    alternative_names:
+    - gorouter.service.cf.internal
 
 releases:
 - name: binary-buildpack
