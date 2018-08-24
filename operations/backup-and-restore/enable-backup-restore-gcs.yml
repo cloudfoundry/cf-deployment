@@ -1,0 +1,18 @@
+---
+- type: replace
+  path: /instance_groups/name=backup-restore/jobs/-
+  value:
+    name: gcs-blobstore-backup-restorer
+    release: backup-and-restore-sdk
+    properties:
+      enabled: true
+      buckets:
+        droplets:
+          gcp_service_account_key: ((gcs_service_account_json_key))
+          name: ((droplet_directory_key))
+        buildpacks:
+          gcp_service_account_key: ((gcs_service_account_json_key))
+          name: ((buildpack_directory_key))
+        packages:
+          gcp_service_account_key: ((gcs_service_account_json_key))
+          name: ((app_package_directory_key))
