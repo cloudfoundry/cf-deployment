@@ -2,3 +2,17 @@
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=rep/properties/containers?/proxy/enabled
   value: true
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=rep/properties/containers?/proxy/require_and_verify_client_certificates
+  value: true
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=rep/properties/containers?/proxy/trusted_ca_certificates
+  value:
+  - ((gorouter_backend_tls.ca))
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=rep/properties/containers?/proxy/verify_subject_alt_name
+  value:
+  - gorouter.service.cf.internal
