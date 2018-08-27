@@ -2,7 +2,7 @@
 
 _Describe the change._
 
-### WHY is this change being made (What problem is being solved)?
+### WHY is this change being made (What problem is being addressed)?
 
 _Understanding why this change is being made is fantastically helpful. Please do tell..._
 
