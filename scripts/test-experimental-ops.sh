@@ -41,9 +41,6 @@ test_experimental_ops() {
 
       check_interpolation "rootless-containers.yml"
 
-      check_interpolation "skip-consul-cell-registrations.yml"
-      check_interpolation "skip-consul-locks.yml"
-
       check_interpolation "name: use-compiled-releases-xenial-stemcell.yml" "use-xenial-stemcell.yml" "-o use-compiled-releases-xenial-stemcell.yml"
       check_interpolation "use-garden-containerd.yml"
       check_interpolation "enable-bpm-garden.yml"
