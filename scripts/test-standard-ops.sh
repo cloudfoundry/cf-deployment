@@ -70,12 +70,6 @@ test_standard_ops() {
       check_interpolation "name: use-offline-windows2016fs.yml" "windows2016-cell.yml" "-o use-offline-windows2016fs.yml"
       check_interpolation "windows2016-cell.yml"
       check_interpolation "name: windows-cell.yml windows2016-cell.yml" "windows-cell.yml" "-o windows2016-cell.yml"
-      # These files should exist for "backwards compatibility" but should always fail to interpolate (with a special error message)
-      pass "use-bosh-dns.yml"
-      pass "use-bosh-dns-for-containers.yml"
-      pass "use-bosh-dns-for-windows2016-containers.yml"
-      pass "use-bosh-dns-rename-network-and-deployment.yml"
-      check_interpolation "use-log-cache.yml"
     popd > /dev/null # operations
   popd > /dev/null
   exit $exit_code
