@@ -448,6 +448,7 @@ instance_groups:
       diego:
         bbs:
           active_key_label: key-2016-06
+          detect_consul_cell_registrations: false
           encryption_keys:
           - label: key-2016-06
             passphrase: "((diego_bbs_encryption_keys_passphrase))"
@@ -465,6 +466,7 @@ instance_groups:
             client_key: "((diego_auctioneer_client.private_key))"
           server_cert: "((diego_bbs_server.certificate))"
           server_key: "((diego_bbs_server.private_key))"
+          skip_consul_lock: true
           rep:
             require_tls: true
             ca_cert: "((service_cf_internal_ca.certificate))"
@@ -953,6 +955,7 @@ instance_groups:
     release: routing
     properties:
       routing_api:
+        skip_consul_lock: true
         system_domain: "((system_domain))"
         router_groups:
         - name: default-tcp
@@ -1175,13 +1178,14 @@ instance_groups:
             client_cert: "((diego_bbs_client.certificate))"
             client_key: "((diego_bbs_client.private_key))"
           ca_cert: "((service_cf_internal_ca.certificate))"
-          server_cert: "((diego_auctioneer_server.certificate))"
-          server_key: "((diego_auctioneer_server.private_key))"
           rep:
             require_tls: true
             ca_cert: "((service_cf_internal_ca.certificate))"
             client_cert: "((diego_rep_client.certificate))"
             client_key: "((diego_rep_client.private_key))"
+          server_cert: "((diego_auctioneer_server.certificate))"
+          server_key: "((diego_auctioneer_server.private_key))"
+          skip_consul_lock: true
       loggregator: *diego_loggregator_client_properties
       logging:
         format:
@@ -1228,6 +1232,7 @@ instance_groups:
           watcher:
             locket:
               api_location: "locket.service.cf.internal:8891"
+            skip_consul_lock: true
           cc:
             ca_cert: "((service_cf_internal_ca.certificate))"
             client_cert: "((cc_bridge_tps.certificate))"
