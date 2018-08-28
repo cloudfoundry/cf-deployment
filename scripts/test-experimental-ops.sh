@@ -34,10 +34,6 @@ test_experimental_ops() {
 
       check_interpolation "fast-deploy-with-downtime-and-danger.yml"
 
-      check_interpolation "improve-diego-log-format.yml"
-      check_interpolation "name: improve-diego-log-format-windows.yml" "${home}/operations/windows-cell.yml" "-o improve-diego-log-format-windows.yml"
-      check_interpolation "name: improve-diego-log-format-windows2016.yml" "${home}/operations/windows2016-cell.yml" "-o improve-diego-log-format-windows2016.yml"
-
       check_interpolation "migrate-cf-mysql-to-pxc.yml"
 
       check_interpolation "name: perm-service.yml" "enable-mysql-tls.yml" "-o perm-service.yml -v perm_uaa_clients_cc_perm_secret=perm_secret -v perm_uaa_clients_perm_monitor_secret=perm_monitor_secret"

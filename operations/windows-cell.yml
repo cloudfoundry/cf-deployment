@@ -53,6 +53,9 @@
           ca_cert: ((service_cf_internal_ca.certificate))
           cert: ((diego_rep_agent_v2.certificate))
           key: ((diego_rep_agent_v2.private_key))
+        logging:
+          format:
+            timestamp: "rfc3339"
       release: diego
     - name: route_emitter_windows
       properties:
@@ -73,6 +76,9 @@
         uaa:
           ca_cert: ((uaa_ca.certificate))
           client_secret: ((uaa_clients_tcp_emitter_secret))
+        logging:
+          format:
+            timestamp: "rfc3339"
       release: diego
     - name: loggregator_agent_windows
       properties:

@@ -76,6 +76,9 @@
           ca_cert: ((service_cf_internal_ca.certificate))
           cert: ((diego_rep_agent_v2.certificate))
           key: ((diego_rep_agent_v2.private_key))
+        logging:
+          format:
+            timestamp: "rfc3339"
       release: diego
     - name: route_emitter_windows
       properties:
@@ -91,6 +94,9 @@
           cert: ((loggregator_tls_agent.certificate))
           key: ((loggregator_tls_agent.private_key))
           use_v2_api: true
+        logging:
+          format:
+            timestamp: "rfc3339"
       release: diego
     - name: loggregator_agent_windows
       properties:

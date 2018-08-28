@@ -472,6 +472,9 @@ instance_groups:
         ca_cert: "((loggregator_ca.certificate))"
         cert: "((loggregator_tls_agent.certificate))"
         key: "((loggregator_tls_agent.private_key))"
+      logging:
+        format:
+          timestamp: "rfc3339"
   - name: silk-controller
     release: silk
     properties:
@@ -512,6 +515,9 @@ instance_groups:
         ca_cert: "((loggregator_ca.certificate))"
         cert: "((loggregator_tls_agent.certificate))"
         key: "((loggregator_tls_agent.private_key))"
+      logging:
+        format:
+          timestamp: "rfc3339"
 - name: uaa
   azs:
   - z1
@@ -958,6 +964,9 @@ instance_groups:
       uaa:
         ca_cert: "((uaa_ca.certificate))"
         tls_port: 8443
+      logging:
+        format:
+          timestamp: "rfc3339"
   - name: policy-server
     release: cf-networking
     properties:
@@ -1165,6 +1174,9 @@ instance_groups:
             client_cert: "((diego_rep_client.certificate))"
             client_key: "((diego_rep_client.private_key))"
       loggregator: *diego_loggregator_client_properties
+      logging:
+        format:
+          timestamp: "rfc3339"
   - name: cloud_controller_clock
     release: capi
     properties:
@@ -1226,6 +1238,9 @@ instance_groups:
             ca_cert: "((uaa_ca.certificate))"
           bbs: *diego_bbs_client_properties
       loggregator: *diego_loggregator_client_properties
+      logging:
+        format:
+          timestamp: "rfc3339"
   - name: scheduler
     release: cf-syslog-drain
     properties:
@@ -1479,6 +1494,9 @@ instance_groups:
         - --configFile=/var/vcap/jobs/garden-cni/config/adapter.json
       grootfs:
         reserved_space_for_other_jobs_in_mb: 15360
+      logging:
+        format:
+          timestamp: "rfc3339"
   - name: rep
     release: diego
     properties:
@@ -1500,6 +1518,9 @@ instance_groups:
         ca_cert: "((service_cf_internal_ca.certificate))"
         cert: "((diego_rep_agent_v2.certificate))"
         key: "((diego_rep_agent_v2.private_key))"
+      logging:
+        format:
+          timestamp: "rfc3339"
   - name: cfdot
     release: diego
     properties:
@@ -1522,6 +1543,9 @@ instance_groups:
       uaa:
         ca_cert: "((uaa_ca.certificate))"
         client_secret: "((uaa_clients_tcp_emitter_secret))"
+      logging:
+        format:
+          timestamp: "rfc3339"
   - name: garden-cni
     release: cf-networking
     properties:
