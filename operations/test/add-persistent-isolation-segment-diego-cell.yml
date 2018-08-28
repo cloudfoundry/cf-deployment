@@ -37,6 +37,9 @@
           - 0.0.0.0/0
           persistent_image_list:
           - "/var/vcap/packages/cflinuxfs2/rootfs.tar"
+        logging:
+          format:
+            timestamp: "rfc3339"
     - name: rep
       release: diego
       properties:
@@ -64,6 +67,9 @@
           ca_cert: "((service_cf_internal_ca.certificate))"
           cert: "((diego_rep_agent_v2.certificate))"
           key: "((diego_rep_agent_v2.private_key))"
+        logging:
+          format:
+            timestamp: "rfc3339"
     - name: route_emitter
       release: diego
       properties:
@@ -81,3 +87,6 @@
               ca_cert: "((service_cf_internal_ca.certificate))"
               client_cert: "((diego_bbs_client.certificate))"
               client_key: "((diego_bbs_client.private_key))"
+        logging:
+          format:
+            timestamp: "rfc3339"
