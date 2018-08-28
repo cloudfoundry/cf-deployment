@@ -6,7 +6,7 @@ test_experimental_ops() {
 
   pushd ${home} > /dev/null
     pushd operations/experimental > /dev/null
-      check_interpolation "name: add-credhub-lb.yml" "secure-service-credentials.yml" "-o add-credhub-lb.yml"
+      check_interpolation "add-credhub-lb.yml"
       check_interpolation "add-cflinuxfs3.yml"
 
       check_interpolation "bits-service.yml"
@@ -41,12 +41,6 @@ test_experimental_ops() {
 
       check_interpolation "rootless-containers.yml"
 
-      check_interpolation "secure-service-credentials.yml"
-      check_interpolation "name: secure-service-credentials-windows-cell.yml" "${home}/operations/windows-cell.yml" "-o secure-service-credentials.yml" "-o secure-service-credentials-windows-cell.yml"
-      check_interpolation "name: secure-service-credentials-windows2016-cell.yml" "${home}/operations/windows2016-cell.yml" "-o secure-service-credentials.yml" "-o secure-service-credentials-windows2016-cell.yml"
-      check_interpolation "name: secure-service-credentials-external-db.yml" "secure-service-credentials.yml" "-o ${home}/operations/use-external-dbs.yml" "-l ${home}/operations/example-vars-files/vars-use-external-dbs.yml" "-o secure-service-credentials-external-db.yml" "-l example-vars-files/vars-secure-service-credentials-external-db.yml"
-      check_interpolation "name: secure-service-credentials-postgres.yml" "secure-service-credentials.yml" "-o ${home}/operations/use-external-dbs.yml" "-l ${home}/operations/example-vars-files/vars-use-external-dbs.yml" "-o secure-service-credentials-external-db.yml" "-l example-vars-files/vars-secure-service-credentials-external-db.yml"
-      check_interpolation "name: secure-service-credentials-with-pxc-release.yml" "secure-service-credentials.yml" "-o use-pxc.yml" "-o secure-service-credentials-with-pxc-release.yml"
       check_interpolation "skip-consul-cell-registrations.yml"
       check_interpolation "skip-consul-locks.yml"
 

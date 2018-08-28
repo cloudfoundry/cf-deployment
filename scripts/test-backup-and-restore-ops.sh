@@ -7,7 +7,6 @@ test_backup_and_restore_ops() {
   pushd ${home} > /dev/null
     pushd operations/backup-and-restore > /dev/null
       check_interpolation "enable-backup-restore.yml"
-      check_interpolation "name: enable-backup-restore-credhub.yml"        "enable-backup-restore.yml" "-o ${home}/operations/experimental/secure-service-credentials.yml" "-o enable-backup-restore-credhub.yml"
 
       check_interpolation "name: enable-backup-restore-s3-versioned.yml"   "enable-backup-restore.yml" "-o ${home}/operations/use-external-blobstore.yml" "-o ${home}/operations/use-s3-blobstore.yml" "-o enable-backup-restore-s3-versioned.yml"   "-l ${home}/operations/example-vars-files/vars-use-s3-blobstore.yml"
       check_interpolation "name: enable-backup-restore-s3-unversioned.yml" "enable-backup-restore.yml" "-o ${home}/operations/use-external-blobstore.yml" "-o ${home}/operations/use-s3-blobstore.yml" "-o enable-backup-restore-s3-unversioned.yml" "-l ${home}/operations/example-vars-files/vars-use-s3-blobstore.yml" "-l example-vars-files/vars-enable-backup-restore-s3-unversioned.yml"

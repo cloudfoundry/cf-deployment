@@ -57,6 +57,8 @@
         containers:
           trusted_ca_certificates:
             - ((application_ca.certificate))
+            - ((credhub_ca.certificate))
+            - ((uaa_ca.certificate))
         enable_declarative_healthcheck: true
         loggregator:
           use_v2_api: true

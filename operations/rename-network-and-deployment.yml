@@ -65,6 +65,10 @@
   value: ((network_name))
 
 - type: replace
+  path: /instance_groups/name=credhub/networks/name=default/name
+  value: ((network_name))
+
+- type: replace
   path: /instance_groups/name=rotate-cc-database-key/networks/name=default/name
   value: ((network_name))
 

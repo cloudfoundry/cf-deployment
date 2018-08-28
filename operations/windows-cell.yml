@@ -34,6 +34,8 @@
         containers:
           trusted_ca_certificates:
           - ((application_ca.certificate))
+          - ((credhub_ca.certificate))
+          - ((uaa_ca.certificate))
         diego:
           executor:
             instance_identity_ca_cert: ((diego_instance_identity_ca.certificate))

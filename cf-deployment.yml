@@ -380,6 +380,9 @@ instance_groups:
           - name: cloud_controller
             username: cloud_controller
             password: "((cc_database_password))"
+          - name: credhub
+            password: ((credhub_database_password))
+            username: credhub
           - name: diego
             username: diego
             password: "((diego_database_password))"
@@ -623,6 +626,10 @@ instance_groups:
             authorities: scim.userids
             authorized-grant-types: client_credentials
             secret: "((uaa_clients_cloud_controller_username_lookup_secret))"
+          credhub_admin_client:
+            authorities: credhub.read,credhub.write
+            authorized-grant-types: client_credentials
+            secret: ((credhub_admin_client_secret))
           doppler:
             authorities: uaa.resource
             override: true
@@ -786,6 +793,8 @@ instance_groups:
         host_key_fingerprint: "((diego_ssh_proxy_host_key.public_key_fingerprint))"
       routing_api: &routing_api
         enabled: true
+      credhub_api:
+        ca_cert: ((credhub_ca.certificate))
       ssl:
         skip_cert_verify: true
       uaa:
@@ -1476,7 +1485,10 @@ instance_groups:
     release: cflinuxfs2
     properties:
       cflinuxfs2-rootfs:
-        trusted_certs: ((application_ca.certificate))
+        trusted_certs: |
+          ((application_ca.certificate))
+          ((credhub_ca.certificate))
+          ((uaa_ca.certificate))
   - name: garden
     release: garden-runc
     properties:
@@ -1512,6 +1524,8 @@ instance_groups:
       containers:
         trusted_ca_certificates:
           - ((application_ca.certificate))
+          - ((credhub_ca.certificate))
+          - ((uaa_ca.certificate))
       enable_declarative_healthcheck: true
       loggregator: *diego_loggregator_client_properties
       tls:
@@ -1648,6 +1662,68 @@ instance_groups:
           uris:
           - doppler.((system_domain))
           - "*.doppler.((system_domain))"
+- name: credhub
+  azs: [z1, z2]
+  instances: 2
+  networks:
+  - name: default
+  stemcell: default
+  vm_type: minimal
+  jobs:
+  - consumes:
+      consul_client:
+        from: consul_client_link
+      consul_common:
+        from: consul_common_link
+      consul_server: nil
+    name: consul_agent
+    properties:
+      consul:
+        agent:
+          services:
+            credhub: {}
+    release: consul
+  - name: credhub
+    properties:
+      credhub:
+        authentication:
+          mutual_tls:
+            trusted_cas:
+            - ((application_ca.certificate))
+          uaa:
+            ca_certs:
+            - ((uaa_ca.certificate))
+            url: https://uaa.service.cf.internal:8443
+            verification_key: ((uaa_jwt_signing_key.public_key))
+        authorization:
+          acls:
+            enabled: true
+          permissions:
+          - path: /*
+            actors: ["uaa-client:credhub_admin_client"]
+            operations: [read, write, delete, read_acl, write_acl]
+          - path: /*
+            actors: ["uaa-client:cc_service_key_client"]
+            operations: [read]
+        data_storage:
+          database: credhub
+          host: sql-db.service.cf.internal
+          password: ((credhub_database_password))
+          port: 3306
+          require_tls: false
+          type: mysql
+          username: credhub
+        encryption:
+          keys:
+          - active: true
+            key_properties:
+              encryption_password: ((credhub_encryption_password))
+            provider_name: internal-provider
+          providers:
+          - name: internal-provider
+            type: internal
+        tls: ((credhub_tls))
+    release: credhub
 - name: rotate-cc-database-key
   instances: 1
   azs: [z1]
@@ -1686,6 +1762,8 @@ variables:
   type: password
 - name: cc_database_password
   type: password
+- name: credhub_database_password
+  type: password
 - name: diego_database_password
   type: password
 - name: uaa_database_password
@@ -1695,8 +1773,6 @@ variables:
 - name: network_policy_database_password
   type: password
 - name: network_connectivity_database_password
-  type: password
-- name: uaa_clients_network_policy_secret
   type: password
 - name: uaa_default_encryption_passphrase
   type: password
@@ -1766,6 +1842,8 @@ variables:
   type: password
 - name: uaa_clients_gorouter_secret
   type: password
+- name: uaa_clients_network_policy_secret
+  type: password
 - name: uaa_clients_ssh-proxy_secret
   type: password
 - name: uaa_clients_tcp_router_secret
@@ -1773,6 +1851,10 @@ variables:
 - name: diego_bbs_encryption_keys_passphrase
   type: password
 - name: consul_encrypt_key
+  type: password
+- name: credhub_encryption_password
+  type: password
+- name: credhub_admin_client_secret
   type: password
 - name: diego_ssh_proxy_host_key
   type: ssh
@@ -2086,6 +2168,19 @@ variables:
     common_name: gorouter_backend_tls
     alternative_names:
     - gorouter.service.cf.internal
+- name: credhub_ca
+  type: certificate
+  options:
+    common_name: credhubServerCa
+    is_ca: true
+- name: credhub_tls
+  type: certificate
+  options:
+    ca: credhub_ca
+    common_name: credhub.((system_domain))
+    alternative_names:
+    - credhub.service.cf.internal
+    - credhub.((system_domain))
 
 releases:
 - name: binary-buildpack
@@ -2124,6 +2219,10 @@ releases:
   url: https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=195
   version: "195"
   sha1: 53529e3a9646d82087a65f215138ae45b9ba7b6c
+- name: credhub
+  sha1: 2390e855f092b0fb9c58f9cb88853ea938e87a3e
+  url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=1.9.5
+  version: 1.9.5
 - name: diego
   url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=2.16.0
   version: 2.16.0

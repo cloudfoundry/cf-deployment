@@ -15,7 +15,6 @@ To learn more about `cf-deployment`, go to the main [README](../README.md).
 | Name | Purpose | Notes |
 |:---  |:---     |:---   |
 | [`enable-backup-restore.yml`](enable-backup-restore.yml) | Deploy BOSH backup and restore instance and enable release level backup. | |
-| [`enable-backup-restore-credhub.yml`](enable-backup-restore-credhub.yml) | Enables the backup and restore of CredHub. | Requires `enable-backup-restore.yml` and `secure-service-credentials.yml`. |
 | [`enable-backup-restore-azure.yml`](enable-backup-restore-azure.yml) | Enables the backup and restore of Azure blobstores with soft delete enabled. | Requires `enable-backup-restore.yml` and `use-azure-storage-blobstore.yml` |
 | [`enable-restore-azure-clone.yml`](enable-restore-azure-clone.yml) | Deploy with this ops file when restoring to a different Azure storage account. | Requires `enable-backup-restore.yml` and `use-azure-storage-blobstore.yml` |
 | [`enable-backup-restore-s3-versioned.yml`](enable-backup-restore-s3-versioned.yml) | Enables the backup and restore of versioned S3 blobstores. | Requires `enable-backup-restore.yml` and `use-s3-blobstore.yml` |
