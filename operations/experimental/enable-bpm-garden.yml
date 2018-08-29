@@ -1,4 +1,5 @@
 ---
+# enable-bpm-garden.yml cannot be deployed with use-garden-containerd.yml
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=garden/properties/bpm?/enabled
   value: true

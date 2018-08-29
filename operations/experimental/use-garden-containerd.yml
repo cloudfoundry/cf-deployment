@@ -1,4 +1,5 @@
 ---
+# use-garden-containerd.yml cannot be deployed with either rootless-containerd.yml or enable-bpm-garden.yml
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/-
   value:
