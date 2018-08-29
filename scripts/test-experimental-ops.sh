@@ -6,7 +6,7 @@ test_experimental_ops() {
 
   pushd ${home} > /dev/null
     pushd operations/experimental > /dev/null
-      check_interpolation "name: add-credhub-lb.yml" "secure-service-credentials.yml" "-o add-credhub-lb.yml"
+      check_interpolation "add-credhub-lb.yml"
       check_interpolation "add-cflinuxfs3.yml"
 
       check_interpolation "bits-service.yml"
@@ -34,25 +34,12 @@ test_experimental_ops() {
 
       check_interpolation "fast-deploy-with-downtime-and-danger.yml"
 
-      check_interpolation "improve-diego-log-format.yml"
-      check_interpolation "name: improve-diego-log-format-windows.yml" "${home}/operations/windows-cell.yml" "-o improve-diego-log-format-windows.yml"
-      check_interpolation "name: improve-diego-log-format-windows2016.yml" "${home}/operations/windows2016-cell.yml" "-o improve-diego-log-format-windows2016.yml"
-
       check_interpolation "migrate-cf-mysql-to-pxc.yml"
 
       check_interpolation "name: perm-service.yml" "enable-mysql-tls.yml" "-o perm-service.yml -v perm_uaa_clients_cc_perm_secret=perm_secret -v perm_uaa_clients_perm_monitor_secret=perm_monitor_secret"
       check_interpolation "name: perm-service-with-pxc-release.yml" "perm-service.yml" "-o use-pxc.yml" "-o perm-service-with-pxc-release.yml -v perm_uaa_clients_cc_perm_secret=perm_secret -v perm_uaa_clients_perm_monitor_secret=perm_monitor_secret"
 
       check_interpolation "rootless-containers.yml"
-
-      check_interpolation "secure-service-credentials.yml"
-      check_interpolation "name: secure-service-credentials-windows-cell.yml" "${home}/operations/windows-cell.yml" "-o secure-service-credentials.yml" "-o secure-service-credentials-windows-cell.yml"
-      check_interpolation "name: secure-service-credentials-windows2016-cell.yml" "${home}/operations/windows2016-cell.yml" "-o secure-service-credentials.yml" "-o secure-service-credentials-windows2016-cell.yml"
-      check_interpolation "name: secure-service-credentials-external-db.yml" "secure-service-credentials.yml" "-o ${home}/operations/use-external-dbs.yml" "-l ${home}/operations/example-vars-files/vars-use-external-dbs.yml" "-o secure-service-credentials-external-db.yml" "-l example-vars-files/vars-secure-service-credentials-external-db.yml"
-      check_interpolation "name: secure-service-credentials-postgres.yml" "secure-service-credentials.yml" "-o ${home}/operations/use-external-dbs.yml" "-l ${home}/operations/example-vars-files/vars-use-external-dbs.yml" "-o secure-service-credentials-external-db.yml" "-l example-vars-files/vars-secure-service-credentials-external-db.yml"
-      check_interpolation "name: secure-service-credentials-with-pxc-release.yml" "secure-service-credentials.yml" "-o use-pxc.yml" "-o secure-service-credentials-with-pxc-release.yml"
-      check_interpolation "skip-consul-cell-registrations.yml"
-      check_interpolation "skip-consul-locks.yml"
 
       check_interpolation "name: use-compiled-releases-xenial-stemcell.yml" "use-xenial-stemcell.yml" "-o use-compiled-releases-xenial-stemcell.yml"
       check_interpolation "use-garden-containerd.yml"

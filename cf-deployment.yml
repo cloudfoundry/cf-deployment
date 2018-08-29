@@ -1,6 +1,6 @@
 ---
 name: cf
-manifest_version: v3.5.0
+manifest_version: v3.6.0
 update:
   canaries: 1
   canary_watch_time: 30000-1200000
@@ -380,6 +380,9 @@ instance_groups:
           - name: cloud_controller
             username: cloud_controller
             password: "((cc_database_password))"
+          - name: credhub
+            password: ((credhub_database_password))
+            username: credhub
           - name: diego
             username: diego
             password: "((diego_database_password))"
@@ -445,6 +448,7 @@ instance_groups:
       diego:
         bbs:
           active_key_label: key-2016-06
+          detect_consul_cell_registrations: false
           encryption_keys:
           - label: key-2016-06
             passphrase: "((diego_bbs_encryption_keys_passphrase))"
@@ -462,6 +466,7 @@ instance_groups:
             client_key: "((diego_auctioneer_client.private_key))"
           server_cert: "((diego_bbs_server.certificate))"
           server_key: "((diego_bbs_server.private_key))"
+          skip_consul_lock: true
           rep:
             require_tls: true
             ca_cert: "((service_cf_internal_ca.certificate))"
@@ -472,6 +477,9 @@ instance_groups:
         ca_cert: "((loggregator_ca.certificate))"
         cert: "((loggregator_tls_agent.certificate))"
         key: "((loggregator_tls_agent.private_key))"
+      logging:
+        format:
+          timestamp: "rfc3339"
   - name: silk-controller
     release: silk
     properties:
@@ -512,6 +520,9 @@ instance_groups:
         ca_cert: "((loggregator_ca.certificate))"
         cert: "((loggregator_tls_agent.certificate))"
         key: "((loggregator_tls_agent.private_key))"
+      logging:
+        format:
+          timestamp: "rfc3339"
 - name: uaa
   azs:
   - z1
@@ -617,6 +628,10 @@ instance_groups:
             authorities: scim.userids
             authorized-grant-types: client_credentials
             secret: "((uaa_clients_cloud_controller_username_lookup_secret))"
+          credhub_admin_client:
+            authorities: credhub.read,credhub.write
+            authorized-grant-types: client_credentials
+            secret: ((credhub_admin_client_secret))
           doppler:
             authorities: uaa.resource
             override: true
@@ -780,6 +795,8 @@ instance_groups:
         host_key_fingerprint: "((diego_ssh_proxy_host_key.public_key_fingerprint))"
       routing_api: &routing_api
         enabled: true
+      credhub_api:
+        ca_cert: ((credhub_ca.certificate))
       ssl:
         skip_cert_verify: true
       uaa:
@@ -938,6 +955,7 @@ instance_groups:
     release: routing
     properties:
       routing_api:
+        skip_consul_lock: true
         system_domain: "((system_domain))"
         router_groups:
         - name: default-tcp
@@ -958,6 +976,9 @@ instance_groups:
       uaa:
         ca_cert: "((uaa_ca.certificate))"
         tls_port: 8443
+      logging:
+        format:
+          timestamp: "rfc3339"
   - name: policy-server
     release: cf-networking
     properties:
@@ -1073,6 +1094,8 @@ instance_groups:
           ((service_cf_internal_ca.certificate))
         backends:
           enable_tls: true
+          cert_chain: ((gorouter_backend_tls.certificate))
+          private_key: ((gorouter_backend_tls.private_key))
         status:
           password: "((router_status_password))"
           user: router-status
@@ -1155,14 +1178,18 @@ instance_groups:
             client_cert: "((diego_bbs_client.certificate))"
             client_key: "((diego_bbs_client.private_key))"
           ca_cert: "((service_cf_internal_ca.certificate))"
-          server_cert: "((diego_auctioneer_server.certificate))"
-          server_key: "((diego_auctioneer_server.private_key))"
           rep:
             require_tls: true
             ca_cert: "((service_cf_internal_ca.certificate))"
             client_cert: "((diego_rep_client.certificate))"
             client_key: "((diego_rep_client.private_key))"
+          server_cert: "((diego_auctioneer_server.certificate))"
+          server_key: "((diego_auctioneer_server.private_key))"
+          skip_consul_lock: true
       loggregator: *diego_loggregator_client_properties
+      logging:
+        format:
+          timestamp: "rfc3339"
   - name: cloud_controller_clock
     release: capi
     properties:
@@ -1205,6 +1232,7 @@ instance_groups:
           watcher:
             locket:
               api_location: "locket.service.cf.internal:8891"
+            skip_consul_lock: true
           cc:
             ca_cert: "((service_cf_internal_ca.certificate))"
             client_cert: "((cc_bridge_tps.certificate))"
@@ -1224,6 +1252,9 @@ instance_groups:
             ca_cert: "((uaa_ca.certificate))"
           bbs: *diego_bbs_client_properties
       loggregator: *diego_loggregator_client_properties
+      logging:
+        format:
+          timestamp: "rfc3339"
   - name: scheduler
     release: cf-syslog-drain
     properties:
@@ -1459,7 +1490,10 @@ instance_groups:
     release: cflinuxfs2
     properties:
       cflinuxfs2-rootfs:
-        trusted_certs: ((application_ca.certificate))
+        trusted_certs: |
+          ((application_ca.certificate))
+          ((credhub_ca.certificate))
+          ((uaa_ca.certificate))
   - name: garden
     release: garden-runc
     properties:
@@ -1477,6 +1511,9 @@ instance_groups:
         - --configFile=/var/vcap/jobs/garden-cni/config/adapter.json
       grootfs:
         reserved_space_for_other_jobs_in_mb: 15360
+      logging:
+        format:
+          timestamp: "rfc3339"
   - name: rep
     release: diego
     properties:
@@ -1492,12 +1529,17 @@ instance_groups:
       containers:
         trusted_ca_certificates:
           - ((application_ca.certificate))
+          - ((credhub_ca.certificate))
+          - ((uaa_ca.certificate))
       enable_declarative_healthcheck: true
       loggregator: *diego_loggregator_client_properties
       tls:
         ca_cert: "((service_cf_internal_ca.certificate))"
         cert: "((diego_rep_agent_v2.certificate))"
         key: "((diego_rep_agent_v2.private_key))"
+      logging:
+        format:
+          timestamp: "rfc3339"
   - name: cfdot
     release: diego
     properties:
@@ -1520,6 +1562,9 @@ instance_groups:
       uaa:
         ca_cert: "((uaa_ca.certificate))"
         client_secret: "((uaa_clients_tcp_emitter_secret))"
+      logging:
+        format:
+          timestamp: "rfc3339"
   - name: garden-cni
     release: cf-networking
     properties:
@@ -1622,6 +1667,68 @@ instance_groups:
           uris:
           - doppler.((system_domain))
           - "*.doppler.((system_domain))"
+- name: credhub
+  azs: [z1, z2]
+  instances: 2
+  networks:
+  - name: default
+  stemcell: default
+  vm_type: minimal
+  jobs:
+  - consumes:
+      consul_client:
+        from: consul_client_link
+      consul_common:
+        from: consul_common_link
+      consul_server: nil
+    name: consul_agent
+    properties:
+      consul:
+        agent:
+          services:
+            credhub: {}
+    release: consul
+  - name: credhub
+    properties:
+      credhub:
+        authentication:
+          mutual_tls:
+            trusted_cas:
+            - ((application_ca.certificate))
+          uaa:
+            ca_certs:
+            - ((uaa_ca.certificate))
+            url: https://uaa.service.cf.internal:8443
+            verification_key: ((uaa_jwt_signing_key.public_key))
+        authorization:
+          acls:
+            enabled: true
+          permissions:
+          - path: /*
+            actors: ["uaa-client:credhub_admin_client"]
+            operations: [read, write, delete, read_acl, write_acl]
+          - path: /*
+            actors: ["uaa-client:cc_service_key_client"]
+            operations: [read]
+        data_storage:
+          database: credhub
+          host: sql-db.service.cf.internal
+          password: ((credhub_database_password))
+          port: 3306
+          require_tls: false
+          type: mysql
+          username: credhub
+        encryption:
+          keys:
+          - active: true
+            key_properties:
+              encryption_password: ((credhub_encryption_password))
+            provider_name: internal-provider
+          providers:
+          - name: internal-provider
+            type: internal
+        tls: ((credhub_tls))
+    release: credhub
 - name: rotate-cc-database-key
   instances: 1
   azs: [z1]
@@ -1660,6 +1767,8 @@ variables:
   type: password
 - name: cc_database_password
   type: password
+- name: credhub_database_password
+  type: password
 - name: diego_database_password
   type: password
 - name: uaa_database_password
@@ -1669,8 +1778,6 @@ variables:
 - name: network_policy_database_password
   type: password
 - name: network_connectivity_database_password
-  type: password
-- name: uaa_clients_network_policy_secret
   type: password
 - name: uaa_default_encryption_passphrase
   type: password
@@ -1740,6 +1847,8 @@ variables:
   type: password
 - name: uaa_clients_gorouter_secret
   type: password
+- name: uaa_clients_network_policy_secret
+  type: password
 - name: uaa_clients_ssh-proxy_secret
   type: password
 - name: uaa_clients_tcp_router_secret
@@ -1747,6 +1856,10 @@ variables:
 - name: diego_bbs_encryption_keys_passphrase
   type: password
 - name: consul_encrypt_key
+  type: password
+- name: credhub_encryption_password
+  type: password
+- name: credhub_admin_client_secret
   type: password
 - name: diego_ssh_proxy_host_key
   type: ssh
@@ -2051,6 +2164,28 @@ variables:
     ca: application_ca
     common_name: instanceIdentityCA
     is_ca: true
+- name: gorouter_backend_tls
+  type: certificate
+  options:
+    ca: service_cf_internal_ca
+    extended_key_usage:
+    - client_auth
+    common_name: gorouter_backend_tls
+    alternative_names:
+    - gorouter.service.cf.internal
+- name: credhub_ca
+  type: certificate
+  options:
+    common_name: credhubServerCa
+    is_ca: true
+- name: credhub_tls
+  type: certificate
+  options:
+    ca: credhub_ca
+    common_name: credhub.((system_domain))
+    alternative_names:
+    - credhub.service.cf.internal
+    - credhub.((system_domain))
 
 releases:
 - name: binary-buildpack
@@ -2062,9 +2197,9 @@ releases:
   version: 0.12.2
   sha1: f2edbf3d1417a253205338c9941ca989cd2f8331
 - name: capi
-  url: https://bosh.io/d/github.com/cloudfoundry/capi-release?v=1.66.0
-  version: 1.66.0
-  sha1: 4236495d4a047fb9396996aba3daea9e0cb3f1bf
+  url: https://bosh.io/d/github.com/cloudfoundry/capi-release?v=1.67.0
+  version: 1.67.0
+  sha1: 62494245b713bdfe748382827bf6872f7e96cb9d
 - name: cf-mysql
   url: https://bosh.io/d/github.com/cloudfoundry/cf-mysql-release?v=36.15.0
   version: 36.15.0
@@ -2082,13 +2217,17 @@ releases:
   version: "7.0"
   sha1: 5b633a277044f78f333b68da54f804b2384d889d
 - name: cflinuxfs2
-  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.233.0
-  version: 1.233.0
-  sha1: a64b14ff25c13a482124c094ab4884e2ebf67e08
+  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.234.0
+  version: 1.234.0
+  sha1: 65fe28f5f036d4a333e6d47c6942465629b714ec
 - name: consul
   url: https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=195
   version: "195"
   sha1: 53529e3a9646d82087a65f215138ae45b9ba7b6c
+- name: credhub
+  url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=1.9.5
+  version: 1.9.5
+  sha1: 2390e855f092b0fb9c58f9cb88853ea938e87a3e
 - name: diego
   url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=2.16.0
   version: 2.16.0
@@ -2168,4 +2307,4 @@ releases:
 stemcells:
 - alias: default
   os: ubuntu-trusty
-  version: "3586.36"
+  version: "3586.40"

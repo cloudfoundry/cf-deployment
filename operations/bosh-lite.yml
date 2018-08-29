@@ -96,6 +96,9 @@
 - type: replace
   path: /instance_groups/name=log-api/instances
   value: 1
+- type: replace
+  path: /instance_groups/name=credhub/instances
+  value: 1
 
 # ----- Reduce default app memory to 256M ------
 - type: replace

@@ -42,6 +42,9 @@
         - citext: true
           name: locket
           tag: locket
+        - citext: true
+          name: credhub
+          tag: credhub
         db_scheme: postgres
         port: 5524
         roles:
@@ -66,6 +69,9 @@
         - name: locket
           password: ((locket_database_password))
           tag: locket
+        - name: credhub
+          password: "((credhub_database_password))"
+          tag: admin
     release: postgres
 - type: replace
   path: /instance_groups/name=database/jobs/name=consul_agent/properties?/consul/agent/services?
@@ -156,6 +162,16 @@
     db_port: 5524
     db_schema: locket
     db_username: locket
+- type: replace
+  path: /instance_groups/name=credhub/jobs/name=credhub/properties/credhub/data_storage
+  value:
+    database: credhub
+    host: sql-db.service.cf.internal
+    password: "((credhub_database_password))"
+    port: 5524
+    require_tls: false
+    type: postgres
+    username: credhub
 - type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/type
   value: postgres

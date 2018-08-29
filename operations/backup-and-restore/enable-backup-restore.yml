@@ -22,6 +22,10 @@
       release: routing
     - name: bbr-uaadb
       release: uaa
+    - name: bbr-credhubdb
+      release: credhub
+      properties:
+        release_level_backup: true
     - consumes:
         consul_client:
           from: consul_client_link

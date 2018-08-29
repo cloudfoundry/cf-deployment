@@ -25,9 +25,6 @@ test_standard_ops() {
       check_interpolation "enable-nfs-volume-service.yml"
       check_interpolation "enable-uniq-consul-node-name.yml"
       check_interpolation "enable-service-discovery.yml"
-      check_interpolation "improve-diego-log-format.yml"
-      check_interpolation "name: improve-diego-log-format-windows.yml" "${home}/operations/windows-cell.yml" "-o improve-diego-log-format-windows.yml"
-      check_interpolation "name: improve-diego-log-format-windows2016.yml" "${home}/operations/windows2016-cell.yml" "-o improve-diego-log-format-windows2016.yml"
       check_interpolation "openstack.yml"
       check_interpolation "override-app-domains.yml" "-l example-vars-files/vars-override-app-domains.yml"
       check_interpolation "rename-network-and-deployment.yml" "-v deployment_name=renamed_deployment -v network_name=renamed_network"
@@ -73,12 +70,6 @@ test_standard_ops() {
       check_interpolation "name: use-offline-windows2016fs.yml" "windows2016-cell.yml" "-o use-offline-windows2016fs.yml"
       check_interpolation "windows2016-cell.yml"
       check_interpolation "name: windows-cell.yml windows2016-cell.yml" "windows-cell.yml" "-o windows2016-cell.yml"
-      # These files should exist for "backwards compatibility" but should always fail to interpolate (with a special error message)
-      pass "use-bosh-dns.yml"
-      pass "use-bosh-dns-for-containers.yml"
-      pass "use-bosh-dns-for-windows2016-containers.yml"
-      pass "use-bosh-dns-rename-network-and-deployment.yml"
-      check_interpolation "use-log-cache.yml"
     popd > /dev/null # operations
   popd > /dev/null
   exit $exit_code

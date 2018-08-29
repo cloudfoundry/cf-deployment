@@ -55,6 +55,8 @@
         containers:
           trusted_ca_certificates:
           - ((application_ca.certificate))
+          - ((credhub_ca.certificate))
+          - ((uaa_ca.certificate))
         declarative_healthcheck_path: /var/vcap/packages/healthcheck_windows/internal
         diego:
           executor:
@@ -76,6 +78,9 @@
           ca_cert: ((service_cf_internal_ca.certificate))
           cert: ((diego_rep_agent_v2.certificate))
           key: ((diego_rep_agent_v2.private_key))
+        logging:
+          format:
+            timestamp: "rfc3339"
       release: diego
     - name: route_emitter_windows
       properties:
@@ -91,6 +96,9 @@
           cert: ((loggregator_tls_agent.certificate))
           key: ((loggregator_tls_agent.private_key))
           use_v2_api: true
+        logging:
+          format:
+            timestamp: "rfc3339"
       release: diego
     - name: loggregator_agent_windows
       properties:
@@ -116,8 +124,8 @@
   type: replace
   value:
     alias: windows2016
-    os: windows1803
-    version: "1803.1"
+    os: windows2016
+    version: "1803.0"
 - path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2016?
   type: replace
   value:
