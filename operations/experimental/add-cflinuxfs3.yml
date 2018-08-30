@@ -19,7 +19,10 @@
     release: cflinuxfs3
     properties:
       cflinuxfs3-rootfs:
-        trusted_certs: ((application_ca.certificate))
+        trusted_certs: |
+          ((application_ca.certificate))
+          ((credhub_ca.certificate))
+          ((uaa_ca.certificate))
 
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=garden/properties/garden/persistent_image_list/-
