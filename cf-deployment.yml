@@ -34,11 +34,6 @@ addons:
   - name: bpm
     release: bpm
 - name: bosh-dns-aliases
-  include:
-    stemcell:
-    - os: ubuntu-trusty
-    - os: windows2012R2
-    - os: windows2016
   jobs:
   - name: bosh-dns-aliases
     release: bosh-dns-aliases
