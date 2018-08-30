@@ -945,6 +945,9 @@ instance_groups:
     properties:
       bpm:
         enabled: true
+      logging:
+        format:
+          timestamp: "rfc3339"
       loggregator: *diego_loggregator_client_properties
   - name: routing-api
     release: routing
@@ -971,9 +974,6 @@ instance_groups:
       uaa:
         ca_cert: "((uaa_ca.certificate))"
         tls_port: 8443
-      logging:
-        format:
-          timestamp: "rfc3339"
   - name: policy-server
     release: cf-networking
     properties:
