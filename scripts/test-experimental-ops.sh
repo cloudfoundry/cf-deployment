@@ -34,6 +34,7 @@ test_experimental_ops() {
 
       check_interpolation "fast-deploy-with-downtime-and-danger.yml"
 
+      check_interpolation "infrastructure-metrics.yml"
       check_interpolation "migrate-cf-mysql-to-pxc.yml"
 
       check_interpolation "name: perm-service.yml" "enable-mysql-tls.yml" "-o perm-service.yml -v perm_uaa_clients_cc_perm_secret=perm_secret -v perm_uaa_clients_perm_monitor_secret=perm_monitor_secret"

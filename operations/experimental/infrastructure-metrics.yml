@@ -1,0 +1,134 @@
+- type: replace
+  path: /releases/-
+  value:
+    name: "node-exporter"
+    version: "4.0.1"
+    url: "https://bosh.io/d/github.com/cloudfoundry-community/node-exporter-boshrelease?v=4.0.1"
+    sha1: "ade04174f6eaf14173f204cc46a629fe6cd07c63"
+
+- type: replace
+  path: /addons/-
+  value:
+    name: node_exporter
+    jobs:
+    - name: node_exporter
+      release: node-exporter
+      properties:
+        node_exporter:
+          collector:
+            # To see a full list of available metrics and descriptions, see
+            # https://github.com/prometheus/node_exporter/tree/v0.16.0#enabled-by-default
+            #
+            # Enabled by default
+            cpu:
+              enabled: true
+            diskstats:
+              enabled: true
+            meminfo:
+              enabled: true
+            netstat:
+              enabled: true
+
+            # Disabled by default
+            arp:
+              enabled: false
+            bcache:
+              enabled: false
+            bonding:
+              enabled: false
+            buddyinfo:
+              enabled: false
+            conntrack:
+              enabled: false
+            devstat:
+              enabled: false
+            drbd:
+              enabled: false
+            edac:
+              enabled: false
+            entropy:
+              enabled: false
+            filefd:
+              enabled: false
+            filesystem:
+              enabled: false
+            hwmon:
+              enabled: false
+            infiniband:
+              enabled: false
+            interrupts:
+              enabled: false
+            ipvs:
+              enabled: false
+            ksmd:
+              enabled: false
+            loadavg:
+              enabled: false
+            logind:
+              enabled: false
+            mdadm:
+              enabled: false
+            meminfo_numa:
+              enabled: false
+            mountstats:
+              enabled: false
+            netdev:
+              enabled: false
+            nfs:
+              enabled: false
+            nfsd:
+              enabled: false
+            ntp:
+              enabled: false
+            qdisc:
+              enabled: false
+            runit:
+              enabled: false
+            sockstat:
+              enabled: false
+            stat:
+              enabled: false
+            supervisord:
+              enabled: false
+            systemd:
+              enabled: false
+            tcpstat:
+              enabled: false
+            textfile:
+              enabled: false
+            time:
+              enabled: false
+            uname:
+              enabled: false
+            vmstat:
+              enabled: false
+            wifi:
+              enabled: false
+            xfs:
+              enabled: false
+            zfs:
+              enabled: false
+            timex:
+              enabled: false
+    include:
+      stemcell:
+      - os: ubuntu-trusty
+    exclude:
+      jobs:
+      - name: smoke_tests
+        release: cf-smoke-tests
+
+- type: replace
+  path: /addons/-
+  value:
+    name: prom_scraper
+    jobs:
+    - name: prom_scraper
+      release: loggregator-agent
+    include:
+      stemcell:
+      - os: ubuntu-trusty
+    exclude:
+      jobs:
+      - name: smoke_tests
+        release: cf-smoke-tests
