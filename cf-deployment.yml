@@ -34,11 +34,6 @@ addons:
   - name: bpm
     release: bpm
 - name: bosh-dns-aliases
-  include:
-    stemcell:
-    - os: ubuntu-trusty
-    - os: windows2012R2
-    - os: windows2016
   jobs:
   - name: bosh-dns-aliases
     release: bosh-dns-aliases
@@ -2217,9 +2212,9 @@ releases:
   version: "7.0"
   sha1: 5b633a277044f78f333b68da54f804b2384d889d
 - name: cflinuxfs2
-  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.234.0
-  version: 1.234.0
-  sha1: 65fe28f5f036d4a333e6d47c6942465629b714ec
+  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.235.0
+  version: 1.235.0
+  sha1: 1ed4e65bdb8ec4ba58060705f47c157663c23cfa
 - name: consul
   url: https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=195
   version: "195"

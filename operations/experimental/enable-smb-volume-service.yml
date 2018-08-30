@@ -1,91 +1,84 @@
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/volume_services_enabled?
   value: true
-
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/volume_services_enabled?
   value: true
-
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/volume_services_enabled?
   value: true
-
 - type: replace
   path: /instance_groups/name=database/jobs/name=mysql/properties/cf_mysql/mysql/seeded_databases/-
   value:
     name: azurefile-broker
+    password: ((azurefile-broker-database-password))
     username: azurefile-broker
-    password: "((azurefile-broker-database-password))"
-
 - type: replace
   path: /instance_groups/-
   value:
-    name: azurefilebrokerpush
     azs:
     - z1
     instances: 1
-    vm_type: minimal
-    stemcell: default
-    networks:
-      - name: default
-    lifecycle: errand
     jobs:
     - name: azurefilebrokerpush
-      release: smb-volume
       properties:
-        username: admin
+        app_domain: ((system_domain))
+        app_name: azurefilebroker
+        cf_admin_password: ((cf_admin_password))
+        cf_admin_user: admin
+        create_sql_security_group: true
+        db_driver: mysql
+        db_hostname: sql-db.service.cf.internal
+        db_name: azurefile-broker
+        db_password: ((azurefile-broker-database-password))
+        db_port: 3306
+        db_username: azurefile-broker
+        domain: ((system_domain))
+        organization: system
         password: ((azurefile-broker-password))
+        register_broker: false
         service_id: azurefile-volume
         service_name: azurefile-service
-        db_driver: mysql
-        db_username: azurefile-broker
-        db_password: ((azurefile-broker-database-password))
-        db_hostname: sql-db.service.cf.internal
-        db_port: 3306
-        db_name: azurefile-broker
-        app_name: azurefilebroker
-        domain: ((system_domain))
-        app_domain: ((system_domain))
-        register_broker: false
-        create_sql_security_group: true
-        cf_admin_user: admin
-        cf_admin_password: ((cf_admin_password))
-        organization: system
+        skip_cert_verify: true
         space: azurefilebroker-space
         syslog_url: ""
-        skip_cert_verify: true
+        username: admin
+      release: smb-volume
     - name: cf-cli-6-linux
       release: cf-cli
-
+    lifecycle: errand
+    name: azurefilebrokerpush
+    networks:
+    - name: default
+    stemcell: default
+    vm_type: minimal
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/-
   value:
     name: smbdriver
-    release: smb-volume
     properties: {}
-
+    release: smb-volume
 - type: replace
   path: /variables/-
   value:
     name: azurefile-broker-password
     type: password
-
 - type: replace
   path: /variables/-
   value:
     name: azurefile-broker-database-password
     type: password
-
 - type: replace
   path: /releases/-
   value:
     name: smb-volume
-    version: latest
-
+    sha1: 6742bfc8134c633871e7fd2d50bb94682d0275f8
+    url: https://bosh.io/d/github.com/cloudfoundry/smb-volume-release?v=0.1.12
+    version: 0.1.12
 - type: replace
   path: /releases/name=cf-cli?
   value:
     name: cf-cli
-    version: 1.5.0
-    url: https://bosh.io/d/github.com/bosh-packages/cf-cli-release?v=1.5.0
-    sha1: 6749a07026e335f7744f013c9707911fb72170b5
+    sha1: c5a578bfdb8e51f479acee23356417538e5a0a36
+    url: https://bosh.io/d/github.com/bosh-packages/cf-cli-release?v=1.6.0
+    version: 1.6.0

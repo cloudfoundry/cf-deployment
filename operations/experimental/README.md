@@ -17,7 +17,7 @@ and the ops-files will be removed.
 
 | Name | Purpose | Notes |
 |:---  |:---     |:---   |
-| [`add-credhub-lb.yml`](add-credhub-lb.yml) | Use load balancer to expose external address for CredHub. | Requires `secure-service-credentials.yml`. |
+| [`add-credhub-lb.yml`](add-credhub-lb.yml) | Use load balancer to expose external address for CredHub. | |
 | [`add-cflinuxfs3.yml`](add-cflinuxfs3.yml) | Add the cflinuxfs3 [stack](https://docs.cloudfoundry.org/devguide/deploy-apps/stacks.html) and buildpacks | **CAUTION** This is an experimental feature, without full CLI support. The CF CLI does not yet expose buildpack stack associations. <br> <br> Use this opsfile for testing component and app compatibility with cflinuxfs3 in advance of changing the default rootfs. |
 | [`bits-service.yml`](bits-service.yml) | Adds the [bits-service](https://github.com/cloudfoundry-incubator/bits-service) job and enables it in the cloud-controller. | Also requires one of `bits-service-{local,webdav,s3}.yml` from the same directory. |
 | [`bits-service-local.yml`](bits-service-local.yml) | Use local storage for the [bits-service](https://github.com/cloudfoundry-incubator/bits-service). | |

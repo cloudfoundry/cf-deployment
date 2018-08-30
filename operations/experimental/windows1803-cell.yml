@@ -1,5 +1,5 @@
-- path: /instance_groups/-
-  type: replace
+- type: replace
+  path: /instance_groups/-
   value:
     azs:
     - z1
@@ -67,6 +67,9 @@
             preloaded_rootfses:
             - windows2016:oci:///C:/var/vcap/packages/windows1803fs
         enable_declarative_healthcheck: true
+        logging:
+          format:
+            timestamp: rfc3339
         loggregator:
           ca_cert: ((loggregator_ca.certificate))
           cert: ((loggregator_tls_agent.certificate))
@@ -78,9 +81,6 @@
           ca_cert: ((service_cf_internal_ca.certificate))
           cert: ((diego_rep_agent_v2.certificate))
           key: ((diego_rep_agent_v2.private_key))
-        logging:
-          format:
-            timestamp: "rfc3339"
       release: diego
     - name: route_emitter_windows
       properties:
@@ -91,14 +91,14 @@
               client_cert: ((diego_bbs_client.certificate))
               client_key: ((diego_bbs_client.private_key))
             local_mode: true
+        logging:
+          format:
+            timestamp: rfc3339
         loggregator:
           ca_cert: ((loggregator_ca.certificate))
           cert: ((loggregator_tls_agent.certificate))
           key: ((loggregator_tls_agent.private_key))
           use_v2_api: true
-        logging:
-          format:
-            timestamp: "rfc3339"
       release: diego
     - name: loggregator_agent_windows
       properties:
@@ -120,52 +120,51 @@
     vm_extensions:
     - 100GB_ephemeral_disk
     vm_type: small-highmem
-- path: /stemcells/-
-  type: replace
+- type: replace
+  path: /stemcells/-
   value:
     alias: windows2016
     os: windows2016
     version: "1803.0"
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2016?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2016?
   value:
     description: Windows Server 2016
     name: windows2016
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/name=hwc_buildpack?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/name=hwc_buildpack?
   value:
     name: hwc_buildpack
     package: hwc-buildpack
-- path: /instance_groups/name=api/jobs/name=hwc-buildpack?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=hwc-buildpack?
   value:
     name: hwc-buildpack
     release: hwc-buildpack
-- path: /releases/name=hwc-buildpack?
-  type: replace
+- type: replace
+  path: /releases/name=hwc-buildpack?
   value:
     name: hwc-buildpack
-    sha1: c57c96ebd050b632db94c6de2199bd78ee39dbd7
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=2.3.17
-    version: 2.3.17
-- path: /releases/name=winc?
-  type: replace
+    sha1: ba4a628beff026e4d1dd7e1a21eea708fbd4897f
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=2.3.19
+    version: 2.3.19
+- type: replace
+  path: /releases/name=winc?
   value:
     name: winc
-    sha1: 31233d99408e41824a7682c04cb6ab1b1424e313
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/winc-release?v=1.3.0
-    version: 1.3.0
-- path: /releases/name=windows1803fs?
-  type: replace
+    sha1: 232aff9b04266bd743208160cc27f4266214e0ee
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/winc-release?v=1.4.0
+    version: 1.4.0
+- type: replace
+  path: /releases/name=windows1803fs?
   value:
-    #TODO: hardcode version, URL, and SHA when moving from experimental
     name: windows1803fs
     url: https://github.com/cloudfoundry/windows1803fs-online-release/releases/download/v1.2.0/windows1803fs-1.2.0.tgz
     version: 1.2.0
-- path: /releases/name=windows-utilities?
-  type: replace
+- type: replace
+  path: /releases/name=windows-utilities?
   value:
     name: windows-utilities
-    sha1: 2bf15743be48e696a72236c05e8e3e137474cedd
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.10.0
-    version: 0.10.0
+    sha1: efc10ac0f4acae23637ce2c6f864d20df2e3a781
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.11.0
+    version: 0.11.0
