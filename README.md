@@ -81,7 +81,7 @@ for all components.
 Deployment instructions have become verbose,
 so we've moved them into a [dedicated deployment guide here](deployment-guide.md).
 
-There's a small section in that doc
+There's a small section in that doc.
 that tries to help operators reason about choices they can make in their deployments.
 Take a look at [Notes for operators](deployment-guide.md#notes-for-operators).
 
