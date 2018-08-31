@@ -1,0 +1,40 @@
+- type: replace
+  path: /releases/-
+  value:
+    name: backup-and-restore-sdk
+    sha1: 2f8f805d5e58f72028394af8e750b2a51a432466
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/backup-and-restore-sdk-release?v=1.9.0
+    version: 1.9.0
+- type: replace
+  path: /instance_groups/-
+  value:
+    azs:
+    - z1
+    instances: 1
+    jobs:
+    - name: database-backup-restorer
+      release: backup-and-restore-sdk
+    - name: bbr-permdb
+      release: perm
+      properties:
+        database:
+          name: perm
+          user: perm
+          password: ((perm_database_password))
+          host: sql-db.service.cf.internal
+          port: 3306
+          scheme: mysql
+        release_level_backup: true
+    name: backup-restore
+    networks:
+    - name: default
+    persistent_disk_type: 10GB
+    stemcell: default
+    vm_type: minimal
+- type: replace
+  path: /instance_groups/name=perm/jobs/-
+  value:
+    name: bbr-permlock
+    release: perm
+    properties:
+      release_level_backup: true
