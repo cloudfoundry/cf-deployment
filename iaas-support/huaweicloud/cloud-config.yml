@@ -1,0 +1,94 @@
+vm_types:
+- name: minimal
+  cloud_properties:
+    instance_type: s2.small.1
+- name: small
+  cloud_properties:
+    instance_type: s2.medium.4
+- name: small-highmem
+  cloud_properties:
+    instance_type: s2.large.2
+
+disk_types:
+- name: 5GB
+  disk_size: 5000
+- name: 10GB
+  disk_size: 10000
+- name: 100GB
+  disk_size: 100000
+
+vm_extensions:
+- name: 50GB_ephemeral_disk
+  cloud_properties:
+    disk_size: 50000
+- name: 100GB_ephemeral_disk
+  cloud_properties:
+    disk_size: 100000
+- name: cf-router-network-properties
+  cloud_properties:
+    security_groups: [cf, cf-lb-https-router]
+    loadbalancer_pools:
+      - name: cf-https-pool
+        port: 443
+- name: diego-ssh-proxy-network-properties
+  cloud_properties:
+    security_groups: [cf, cf-lb-ssh-diego-brain]
+    loadbalancer_pools:
+      - name: cf-ssh-pool
+        port: 2222
+- name: cf-tcp-router-network-properties
+  cloud_properties:
+    security_groups: [cf, cf-lb-tcp-router]
+    loadbalancer_pools:
+      - name: cf-tcp-pool-1024
+        port: 1024
+      - name: cf-tcp-pool-1025
+        port: 1025
+      - name: cf-tcp-pool-1026
+        port: 1026
+      - name: cf-tcp-pool-1027
+        port: 1027
+
+azs:
+- name: z1
+  cloud_properties:
+    availability_zone: ((availability_zone1))
+- name: z2
+  cloud_properties:
+    availability_zone: ((availability_zone2))
+- name: z3
+  cloud_properties:
+    availability_zone: ((availability_zone3))
+
+networks:
+- name: default
+  type: manual
+  subnets:
+  - az: z1
+    range: 10.0.16.0/20
+    reserved: [10.0.16.2-10.0.16.50]
+    gateway: 10.0.16.1
+    cloud_properties:
+      subnet_id: ((subnet_id1))
+      security_groups: [cf]
+  - az: z2
+    range: 10.0.32.0/20
+    reserved: [10.0.32.2-10.0.32.50]
+    gateway: 10.0.32.1
+    cloud_properties:
+      subnet_id: ((subnet_id2))
+      security_groups: [cf]
+  - az: z3
+    range: 10.0.48.0/20
+    reserved: [10.0.48.2-10.0.48.50]
+    gateway: 10.0.48.1
+    cloud_properties:
+      subnet_id: ((subnet_id3))
+      security_groups: [cf]
+
+compilation:
+  workers: 5
+  reuse_compilation_vms: true
+  vm_type: small-highmem
+  network: default
+  az: z1
