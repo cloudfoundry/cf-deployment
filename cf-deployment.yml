@@ -776,6 +776,9 @@ instance_groups:
               name: policy-server
   - name: cloud_controller_ng
     release: capi
+    consumes:
+      credhub:
+        from: cf-credhub
     provides:
       cloud_controller: {as: cloud_controller, shared: true}
     properties:
@@ -1025,6 +1028,9 @@ instance_groups:
       consul_client: {from: consul_client_link}
   - name: cloud_controller_worker
     release: capi
+    consumes:
+      credhub:
+        from: cf-credhub
     properties:
       bpm:
         enabled: true
@@ -1187,6 +1193,9 @@ instance_groups:
           timestamp: "rfc3339"
   - name: cloud_controller_clock
     release: capi
+    consumes:
+      credhub:
+        from: cf-credhub
     properties:
       bpm:
         enabled: true
@@ -1684,6 +1693,9 @@ instance_groups:
             credhub: {}
     release: consul
   - name: credhub
+    provides:
+      credhub:
+        as: cf-credhub
     properties:
       credhub:
         authentication:
