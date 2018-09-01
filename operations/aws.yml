@@ -3,3 +3,8 @@
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/doppler?/port
   value: 4443
+
+# set load balancer's healthy threshold to 60sec (bbl's default)
+- type: replace
+  path: /instance_groups/name=router/jobs/name=gorouter/properties/router/load_balancer_healthy_threshold?
+  value: 60
