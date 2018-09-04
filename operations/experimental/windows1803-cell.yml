@@ -102,17 +102,17 @@
       release: loggregator-agent
     - name: enable_ssh
       release: windows-utilities
-    name: windows2016-cell
+    name: windows1803-cell
     networks:
     - name: default
-    stemcell: windows2016
+    stemcell: windows1803
     vm_extensions:
     - 100GB_ephemeral_disk
     vm_type: small-highmem
 - path: /stemcells/-
   type: replace
   value:
-    alias: windows2016
+    alias: windows1803
     os: windows1803
     version: "1803.3"
 - path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2016?
@@ -162,3 +162,11 @@
     sha1: efc10ac0f4acae23637ce2c6f864d20df2e3a781
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.11.0
     version: 0.11.0
+- path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/domain=_.cell.service.cf.internal/targets/-
+  type: replace
+  value:
+    query: '_'
+    instance_group: windows1803-cell
+    deployment: cf
+    network: default
+    domain: bosh
