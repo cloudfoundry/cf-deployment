@@ -183,7 +183,6 @@
           port: 8443
           ca_certs:
           - ((uaa_ca.certificate))
-
         cloud_controller:
           hostname: api.((system_domain))
           port: 443
@@ -191,18 +190,9 @@
           client_secret: ((perm_uaa_clients_cloud_controller_monitor_secret))
           client_scopes:
           - cloud_controller.admin_read_only
-
         perm:
           ca_certs:
           - ((perm_tls_ca.certificate))
-        sql:
-          db:
-            driver: mysql
-            username: perm
-            password: ((perm_database_password))
-            schema: perm
-            host: sql-db.service.cf.internal
-            port: 3306
 
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/cloud_controller_monitor?
