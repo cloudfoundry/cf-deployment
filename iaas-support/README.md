@@ -21,3 +21,5 @@ See the READMEs for each IaaS:
 - [bosh-lite](bosh-lite/README.md)
 - [openstack](openstack/README.md)
 - [vsphere](vsphere/README.md)
+- [softlayer](softlayer/README.md)
+- [alicloud](alicloud/README.md)

@@ -2,9 +2,9 @@
   path: /releases/-
   value:
     name: backup-and-restore-sdk
-    sha1: 2f8f805d5e58f72028394af8e750b2a51a432466
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/backup-and-restore-sdk-release?v=1.9.0
-    version: 1.9.0
+    sha1: bde7b6f00e139177af7624b3572e20361edf3086
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/backup-and-restore-sdk-release?v=1.10.0
+    version: 1.10.0
 - type: replace
   path: /instance_groups/-
   value:
@@ -23,9 +23,9 @@
     - name: bbr-uaadb
       release: uaa
     - name: bbr-credhubdb
-      release: credhub
       properties:
         release_level_backup: true
+      release: credhub
     - consumes:
         consul_client:
           from: consul_client_link

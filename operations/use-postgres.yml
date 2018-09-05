@@ -2,9 +2,9 @@
   path: /releases/-
   value:
     name: postgres
-    sha1: 24d2e2887a45258b71bc40577c0f406180e47701
-    url: https://bosh.io/d/github.com/cloudfoundry/postgres-release?v=29
-    version: "29"
+    sha1: a798999d29b9f5aa12035cff907b26674b491200
+    url: https://bosh.io/d/github.com/cloudfoundry/postgres-release?v=30
+    version: "30"
 - type: remove
   path: /instance_groups/name=database/jobs/name=mysql
 - type: remove
@@ -70,7 +70,7 @@
           password: ((locket_database_password))
           tag: locket
         - name: credhub
-          password: "((credhub_database_password))"
+          password: ((credhub_database_password))
           tag: admin
     release: postgres
 - type: replace
@@ -167,7 +167,7 @@
   value:
     database: credhub
     host: sql-db.service.cf.internal
-    password: "((credhub_database_password))"
+    password: ((credhub_database_password))
     port: 5524
     require_tls: false
     type: postgres

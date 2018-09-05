@@ -1,6 +1,6 @@
 ---
 name: cf
-manifest_version: v4.0.0
+manifest_version: v4.1.0
 update:
   canaries: 1
   canary_watch_time: 30000-1200000
@@ -945,6 +945,9 @@ instance_groups:
     properties:
       bpm:
         enabled: true
+      logging:
+        format:
+          timestamp: "rfc3339"
       loggregator: *diego_loggregator_client_properties
   - name: routing-api
     release: routing
@@ -971,9 +974,6 @@ instance_groups:
       uaa:
         ca_cert: "((uaa_ca.certificate))"
         tls_port: 8443
-      logging:
-        format:
-          timestamp: "rfc3339"
   - name: policy-server
     release: cf-networking
     properties:
@@ -1311,10 +1311,7 @@ instance_groups:
     provides:
       doppler: {as: doppler, shared: true}
     properties:
-      doppler:
-        disable_announce: true
       loggregator:
-        disable_syslog_drains: true
         tls:
           ca_cert: "((loggregator_ca.certificate))"
           doppler:
@@ -2200,13 +2197,13 @@ releases:
   version: 36.15.0
   sha1: 0764d9d6aae7cefd10019437ed83e7715e614633
 - name: cf-networking
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-networking-release?v=2.14.0
-  version: 2.14.0
-  sha1: 71e9ea9b4c2857de006ec1ee04efbb64adae0f33
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-networking-release?v=2.15.0
+  version: 2.15.0
+  sha1: 6b0e8d572ff0696831110ba4443d32b1c80fbf93
 - name: cf-smoke-tests
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=40.0.6
-  version: 40.0.6
-  sha1: df727e63fb046c694098527845a2a0294b257635
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=40.0.8
+  version: 40.0.8
+  sha1: e431589ced2b13f8be286704b4e35cecc35c2aea
 - name: cf-syslog-drain
   url: https://bosh.io/d/github.com/cloudfoundry/cf-syslog-drain-release?v=7.0
   version: "7.0"
@@ -2216,17 +2213,17 @@ releases:
   version: 1.235.0
   sha1: 1ed4e65bdb8ec4ba58060705f47c157663c23cfa
 - name: consul
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=195
-  version: "195"
-  sha1: 53529e3a9646d82087a65f215138ae45b9ba7b6c
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=196
+  version: "196"
+  sha1: 84f149761929e59699d6ac3892b0cd806652c7b8
 - name: credhub
   url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=1.9.5
   version: 1.9.5
   sha1: 2390e855f092b0fb9c58f9cb88853ea938e87a3e
 - name: diego
-  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=2.16.0
-  version: 2.16.0
-  sha1: dec82d771afd83e1d8e85f512e6a619b371e7f19
+  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=2.17.0
+  version: 2.17.0
+  sha1: cb67d79a28a90abafc0a46bd3dfb5bcfd9433868
 - name: dotnet-core-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/dotnet-core-buildpack-release?v=2.1.4
   version: 2.1.4
@@ -2272,9 +2269,9 @@ releases:
   version: 1.7.22
   sha1: 8b2baf552d6f51933fbf37ccacbabbcbd9c7ae6d
 - name: silk
-  url: https://bosh.io/d/github.com/cloudfoundry/silk-release?v=2.14.0
-  version: 2.14.0
-  sha1: 48bce6d6bbb1123c279ce4e979a94f9535d5661a
+  url: https://bosh.io/d/github.com/cloudfoundry/silk-release?v=2.15.0
+  version: 2.15.0
+  sha1: 596995b6e92806f5693acf9e091fc5673fe00e02
 - name: staticfile-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/staticfile-buildpack-release?v=1.4.31
   version: 1.4.31
@@ -2288,9 +2285,9 @@ releases:
   version: "60.2"
   sha1: 667af417997467681fddf13c78e5a11c6f4a9d15
 - name: loggregator-agent
-  url: https://bosh.io/d/github.com/cloudfoundry/loggregator-agent-release?v=2.0
-  version: "2.0"
-  sha1: df91c31c15da68c7b2905645b20b93a930627d46
+  url: https://bosh.io/d/github.com/cloudfoundry/loggregator-agent-release?v=2.1
+  version: "2.1"
+  sha1: 40cb8299df17b2a83be2a211182dd0be0f4b1a99
 - name: log-cache
   url: https://bosh.io/d/github.com/cloudfoundry/log-cache-release?v=1.4.4
   version: 1.4.4
