@@ -36,22 +36,25 @@
     name: ssh_proxy
     release: diego
     properties:
-      loggregator: &diego_loggregator_client_properties
-        use_v2_api: true
-        ca_cert: "((loggregator_ca.certificate))"
-        cert: "((loggregator_tls_agent.certificate))"
-        key: "((loggregator_tls_agent.private_key))"
       diego:
-        ssl:
-          skip_cert_verify: true
         ssh_proxy:
-          enable_cf_auth: true
-          host_key: "((diego_ssh_proxy_host_key.private_key))"
-          uaa_secret: "((uaa_clients_ssh-proxy_secret))"
           bbs: &5
             ca_cert: "((service_cf_internal_ca.certificate))"
             client_cert: "((diego_bbs_client.certificate))"
             client_key: "((diego_bbs_client.private_key))"
+          enable_cf_auth: true
+          host_key: "((diego_ssh_proxy_host_key.private_key))"
+          uaa_secret: "((uaa_clients_ssh-proxy_secret))"
+        ssl:
+          skip_cert_verify: true
+      logging:
+        format:
+          timestamp: "rfc3339"
+      loggregator: &diego_loggregator_client_properties
+        ca_cert: "((loggregator_ca.certificate))"
+        cert: "((loggregator_tls_agent.certificate))"
+        key: "((loggregator_tls_agent.private_key))"
+        use_v2_api: true
 
 # ----- Scale Down ------
 - type: replace
@@ -104,39 +107,6 @@
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/default_app_memory?
   value: 256
-
-# ----- Improve diego log format ------
-- type: replace
-  path: /instance_groups/name=scheduler/jobs/name=auctioneer/properties?/logging/format/timestamp
-  value: "rfc3339"
-
-- type: replace
-  path: /instance_groups/name=diego-api/jobs/name=bbs/properties?/logging/format/timestamp
-  value: "rfc3339"
-
-- type: replace
-  path: /instance_groups/name=diego-api/jobs/name=locket/properties?/logging/format/timestamp
-  value: "rfc3339"
-
-- type: replace
-  path: /instance_groups/name=api/jobs/name=file_server/properties?/logging/format/timestamp
-  value: "rfc3339"
-
-- type: replace
-  path: /instance_groups/name=diego-cell/jobs/name=garden/properties?/logging/format/timestamp
-  value: "rfc3339"
-
-- type: replace
-  path: /instance_groups/name=diego-cell/jobs/name=rep/properties?/logging/format/timestamp
-  value: "rfc3339"
-
-- type: replace
-  path: /instance_groups/name=diego-cell/jobs/name=route_emitter/properties?/logging/format/timestamp
-  value: "rfc3339"
-
-- type: replace
-  path: /instance_groups/name=router/jobs/name=ssh_proxy/properties?/logging/format/timestamp
-  value: "rfc3339"
 
 # ----- Disable kernel parameter tuning ------
 - type: replace
