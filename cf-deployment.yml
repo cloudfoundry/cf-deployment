@@ -1311,10 +1311,7 @@ instance_groups:
     provides:
       doppler: {as: doppler, shared: true}
     properties:
-      doppler:
-        disable_announce: true
       loggregator:
-        disable_syslog_drains: true
         tls:
           ca_cert: "((loggregator_ca.certificate))"
           doppler:
