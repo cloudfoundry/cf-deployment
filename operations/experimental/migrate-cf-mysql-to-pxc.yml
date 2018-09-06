@@ -39,6 +39,9 @@
       - name: cloud_controller
         password: ((cc_database_password))
         username: cloud_controller
+      - name: credhub
+        password: ((credhub_database_password))
+        username: credhub
       - name: diego
         password: ((diego_database_password))
         username: diego
@@ -221,3 +224,10 @@
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/database/require_ssl?
   value: true
+
+# credhub.data_storage.require_tls is set to true by default
+- type: remove
+  path: /instance_groups/name=credhub/jobs/name=credhub/properties/credhub/data_storage/require_tls
+- type: replace
+  path: /instance_groups/name=credhub/jobs/name=credhub/properties/credhub/data_storage/tls_ca?
+  value: ((pxc_server_ca.certificate))
