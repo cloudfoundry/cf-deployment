@@ -67,6 +67,9 @@
             preloaded_rootfses:
             - windows2016:oci:///C:/var/vcap/packages/windows2016fs
         enable_declarative_healthcheck: true
+        logging:
+          format:
+            timestamp: rfc3339
         loggregator:
           ca_cert: ((loggregator_ca.certificate))
           cert: ((loggregator_tls_agent.certificate))
@@ -78,9 +81,6 @@
           ca_cert: ((service_cf_internal_ca.certificate))
           cert: ((diego_rep_agent_v2.certificate))
           key: ((diego_rep_agent_v2.private_key))
-        logging:
-          format:
-            timestamp: "rfc3339"
       release: diego
     - name: route_emitter_windows
       properties:
@@ -91,14 +91,14 @@
               client_cert: ((diego_bbs_client.certificate))
               client_key: ((diego_bbs_client.private_key))
             local_mode: true
+        logging:
+          format:
+            timestamp: rfc3339
         loggregator:
           ca_cert: ((loggregator_ca.certificate))
           cert: ((loggregator_tls_agent.certificate))
           key: ((loggregator_tls_agent.private_key))
           use_v2_api: true
-        logging:
-          format:
-            timestamp: "rfc3339"
       release: diego
     - name: loggregator_agent_windows
       properties:
@@ -159,9 +159,9 @@
   path: /releases/name=windows2016fs?
   value:
     name: windows2016fs
-    sha1: 76e6fc1096a8edf709753fd4470e393aba8275c2
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows2016fs-online-release?v=1.6.0
-    version: 1.6.0
+    sha1: 440e1525dd94bb56c3fe8b5f908d33451a4e57e5
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows2016fs-online-release?v=1.7.0
+    version: 1.7.0
 - type: replace
   path: /releases/name=windows-utilities?
   value:
