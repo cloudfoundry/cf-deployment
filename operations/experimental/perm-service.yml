@@ -190,6 +190,8 @@
           client_secret: ((perm_uaa_clients_cloud_controller_monitor_secret))
           client_scopes:
           - cloud_controller.admin_read_only
+          ca_certs:
+          - ((router_ca.ca))
         perm:
           ca_certs:
           - ((perm_tls_ca.certificate))
