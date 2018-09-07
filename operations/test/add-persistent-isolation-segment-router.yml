@@ -53,6 +53,9 @@
           routing_table_sharding_mode: segments
           ssl_skip_validation: true
           enable_ssl: true
+          ca_certs: |
+            ((application_ca.certificate))
+            ((service_cf_internal_ca.certificate))
           tls_pem:
           - cert_chain: "((router_ssl.certificate))"
             private_key: "((router_ssl.private_key))"
