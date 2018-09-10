@@ -2,9 +2,9 @@
   path: /releases/-
   value:
     name: pxc
-    sha1: 0426855b19da66c798cc7f55d5bc88cd77194368
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/pxc-release?v=0.13.0
-    version: 0.13.0
+    sha1: 517aa5ef99be020d7dd0662789d11f1238401f4c
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/pxc-release?v=0.14.0
+    version: 0.14.0
 - type: replace
   path: /instance_groups/name=database/jobs/name=mysql/properties/cf_mysql_enabled?
   value: false
@@ -224,8 +224,6 @@
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/database/require_ssl?
   value: true
-
-# credhub.data_storage.require_tls is set to true by default
 - type: remove
   path: /instance_groups/name=credhub/jobs/name=credhub/properties/credhub/data_storage/require_tls
 - type: replace
