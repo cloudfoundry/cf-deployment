@@ -45,6 +45,8 @@ test_experimental_ops() {
 
       check_interpolation "name: perm-service.yml" "enable-mysql-tls.yml" "-o perm-service.yml -v perm_uaa_clients_cc_perm_secret=perm_secret -v perm_uaa_clients_perm_monitor_secret=perm_monitor_secret"
       check_interpolation "name: perm-service-with-pxc-release.yml" "perm-service.yml" "-o use-pxc.yml" "-o perm-service-with-pxc-release.yml -v perm_uaa_clients_cc_perm_secret=perm_secret -v perm_uaa_clients_perm_monitor_secret=perm_monitor_secret"
+      check_interpolation "name: perm-service-with-tcp-routing.yml" "perm-service.yml" "-o use-pxc.yml" "-o perm-service-with-pxc-release.yml -v perm_uaa_clients_cc_perm_secret=perm_secret -v perm_uaa_clients_perm_monitor_secret=perm_monitor_secret" "-o perm-service-with-tcp-routing.yml"
+      check_interpolation "name: enable-backup-restore-perm.yml" "perm-service.yml" "-o use-pxc.yml" "-o perm-service-with-pxc-release.yml -v perm_uaa_clients_cc_perm_secret=perm_secret -v perm_uaa_clients_perm_monitor_secret=perm_monitor_secret" "-o perm-service-with-tcp-routing.yml" "-o enable-backup-restore-perm.yml"
 
       check_interpolation "rootless-containers.yml"
 

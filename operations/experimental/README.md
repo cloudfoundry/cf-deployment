@@ -46,6 +46,8 @@ and the ops-files will be removed.
 | [`enable-suspect-actual-lrp-generation.yml`](enable-suspect-actual-lrp-generation.yml) | Configures BBS to create ActualLRPs in a new "Suspect" state. You can find more in-depth information [here](https://docs.google.com/document/d/19880DjH4nJKzsDP8BT09m28jBlFfSiVx64skbvilbnA/view) | |
 | [`enable-tls-cloud-controller-postgres.yml`](enable-tls-cloud-controller-postgres.yml) | Enables the usage of TLS to secure the connection between Cloud Controller and its Postgres database | Requires capi-release >= 1.41.0 and `use-postgres.yml` |
 | [`enable-traffic-to-internal-networks.yml`](enable-traffic-to-internal-networks.yml) | Allows traffic from app containers to internal networks. Required to allow applications to communicate with the running CredHub in non-assisted mode. | |
+| [`enable-backup-restore-perm.yml`](enable-backup-restore-perm.yml) | Enables perm to execute BBR. | Requires `perm-service.yml` |
+| [`perm-service-with-tcp-routing.yml`](perm-service-with-tcp-routing.yml) | Adds a tcp route to perm in its own perm tcp router group. | Requires `perm-service.yml` |
 | [`fast-deploy-with-downtime-and-danger.yml`](fast-deploy-with-downtime-and-danger.yml) | Risky, but fast. Disable canaries, increase the max number of vms bosh will update simultaneously, and remove `serial: true` from most instance groups to enable faster, but probably downtimeful, deploys. | |
 | [`infrastructure-metrics.yml`](infrastructure-metrics.yml) | Add the Prometheus node exporter and Loggregator Prom Scraper to addons. This puts infrastructure metrics into Loggregator's metric stream. | |
 | [`migrate-cf-mysql-to-pxc.yml`](migrate-cf-mysql-to-pxc.yml) | **DEPRECATED: use `../migrate-cf-mysql-to-pxc.yml`** | |
