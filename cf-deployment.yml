@@ -1643,6 +1643,26 @@ instance_groups:
           reverse_log_proxy:
             cert: "((loggregator_tls_rlp.certificate))"
             key: "((loggregator_tls_rlp.private_key))"
+  - name: reverse_log_proxy_gateway
+    release: loggregator
+    properties:
+      http:
+        address: "0.0.0.0:8088"
+      logs_provider:
+        ca_cert: "((loggregator_rlp_gateway.ca))"
+        client_cert: "((loggregator_rlp_gateway.certificate))"
+        client_key: "((loggregator_rlp_gateway.private_key))"
+      cc:
+        capi_internal_addr: https://cloud-controller-ng.service.cf.internal:9023
+        ca_cert: ((loggregator_rlp_gateway_tls_cc.ca))
+        cert: ((loggregator_rlp_gateway_tls_cc.certificate))
+        key: ((loggregator_rlp_gateway_tls_cc.private_key))
+        common_name: cloud-controller-ng.service.cf.internal
+      uaa:
+        ca_cert: ((uaa_ca.certificate))
+        client_id: doppler
+        client_secret: ((uaa_clients_doppler_secret))
+        internal_addr: https://uaa.service.cf.internal:8443
   - name: route_registrar
     release: routing
     properties:
@@ -1659,6 +1679,12 @@ instance_groups:
           uris:
           - doppler.((system_domain))
           - "*.doppler.((system_domain))"
+        - name: rlp-gateway
+          port: 8088
+          registration_interval: 20s
+          uris:
+          - log-stream.((system_domain))
+          - "*.log-stream.((system_domain))"
 - name: credhub
   azs: [z1, z2]
   instances: 2
@@ -1988,6 +2014,13 @@ variables:
     common_name: trafficcontroller
     extended_key_usage:
     - client_auth
+- name: loggregator_rlp_gateway_tls_cc
+  type: certificate
+  options:
+    ca: service_cf_internal_ca
+    common_name: rlp-gateway
+    extended_key_usage:
+    - client_auth
 - name: loggregator_tls_rlp
   type: certificate
   options:
@@ -1996,6 +2029,13 @@ variables:
     extended_key_usage:
     - client_auth
     - server_auth
+- name: loggregator_rlp_gateway
+  type: certificate
+  options:
+    ca: loggregator_ca
+    common_name: rlp_gateway
+    extended_key_usage:
+    - client_auth
 - name: adapter_rlp_tls
   type: certificate
   options:
