@@ -1649,12 +1649,12 @@ instance_groups:
       http:
         address: "0.0.0.0:8088"
       logs_provider:
-        ca_cert: "((loggregator_rlp_gateway.ca))"
+        ca_cert: "((loggregator_ca.certificate))"
         client_cert: "((loggregator_rlp_gateway.certificate))"
         client_key: "((loggregator_rlp_gateway.private_key))"
       cc:
         capi_internal_addr: https://cloud-controller-ng.service.cf.internal:9023
-        ca_cert: ((loggregator_rlp_gateway_tls_cc.ca))
+        ca_cert: ((service_cf_internal_ca.certificate))
         cert: ((loggregator_rlp_gateway_tls_cc.certificate))
         key: ((loggregator_rlp_gateway_tls_cc.private_key))
         common_name: cloud-controller-ng.service.cf.internal
