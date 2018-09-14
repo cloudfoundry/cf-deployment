@@ -100,13 +100,17 @@ test_disable_consul() {
     fi
 }
 
-test_use_trusted_ca_cert_for_apps_includes_diego_instance_ca() {
-  local trusted_app_cas=$(bosh int cf-deployment.yml -o operations/use-trusted-ca-cert-for-apps.yml --path /instance_groups/name=diego-cell/jobs/name=cflinuxfs2-rootfs-setup/properties/cflinuxfs2-rootfs/trusted_certs)
+test_use_trusted_ca_cert_for_apps_doesnt_overwrite_existing_trusted_cas() {
+  local existing_trusted_cas
+  existing_trusted_app_cas=$(bosh int cf-deployment.yml --path /instance_groups/name=diego-cell/jobs/name=cflinuxfs2-rootfs-setup/properties/cflinuxfs2-rootfs/trusted_certs)
 
-  if [[ $trusted_app_cas != $'((application_ca.certificate))\n((trusted_cert_for_apps.ca))' ]]; then
-    fail "experimental/use-trusted-ca-cert-for-apps.yml [ $trusted_app_cas ] doesn't include diego_instance_identity_ca from cf-deployment.yml"
+  local new_trusted_app_cas
+  new_trusted_app_cas=$(bosh int cf-deployment.yml -o operations/use-trusted-ca-cert-for-apps.yml --path /instance_groups/name=diego-cell/jobs/name=cflinuxfs2-rootfs-setup/properties/cflinuxfs2-rootfs/trusted_certs)
+
+  if [[ $existing_trusted_app_cas$'\n((trusted_cert_for_apps.ca))' != $new_trusted_app_cas ]]; then
+    fail "use-trusted-ca-cert-for-apps.yml overwrites existing trusted CAs from cf-deployment.yml.\nTrusted CAs before applying the ops file:\n\n$existing_trusted_app_cas\n\nTrusted CAs after applying the ops file:\n\n$new_trusted_app_cas"
   else
-    pass "experimental/use-trusted-ca-cert-for-apps.yml"
+    pass "use-trusted-ca-cert-for-apps.yml"
   fi
 }
 
@@ -137,7 +141,7 @@ semantic_tests() {
     test_scale_to_one_az
     test_use_compiled_releases
     test_disable_consul
-    test_use_trusted_ca_cert_for_apps_includes_diego_instance_ca
+    test_use_trusted_ca_cert_for_apps_doesnt_overwrite_existing_trusted_cas
     test_add_persistent_isolation_segment_diego_cell
   popd > /dev/null
   exit $exit_code
