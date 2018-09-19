@@ -15,6 +15,8 @@ test_backup_and_restore_ops() {
       check_interpolation "name: enable-restore-azure-clone.yml"  "enable-backup-restore.yml" "-o ${home}/operations/use-external-blobstore.yml" "-o ${home}/operations/use-azure-storage-blobstore.yml" "-o enable-restore-azure-clone.yml" "-l ${home}/operations/example-vars-files/vars-use-azure-storage-blobstore.yml" "-l example-vars-files/vars-enable-restore-azure-clone.yml"
 
       check_interpolation "name: enable-backup-restore-nfs-broker.yml" "enable-backup-restore.yml -o enable-backup-restore-nfs-broker.yml -v nfs-broker-database-password=i_am_a_password"
+
+      check_interpolation "name: enable-backup-restore-smb-broker.yml" "enable-backup-restore.yml -o enable-backup-restore-smb-broker.yml -v azurefile-broker-database-password=i_am_a_password"
     popd > /dev/null
   popd > /dev/null
   exit $exit_code
