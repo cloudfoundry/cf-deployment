@@ -399,3 +399,17 @@
   value:
     os: ubuntu-trusty
     version: "3586.42"
+- type: replace
+  path: /releases/name=cf-cli/url
+  value: https://storage.googleapis.com/cf-deployment-compiled-releases/cf-cli-1.8.0-ubuntu-trusty-3586.42-20180919-200602-278859078.tgz
+- type: replace
+  path: /releases/name=cf-cli/sha1
+  value: d40ec2da83fb5402a54b59b2949af833ae99b405
+- type: replace
+  path: /releases/name=cf-cli/version
+  value: 1.8.0
+- type: replace
+  path: /releases/name=cf-cli/stemcell?
+  value:
+    os: ubuntu-trusty
+    version: "3586.42"
