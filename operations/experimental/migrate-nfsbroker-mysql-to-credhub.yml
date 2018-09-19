@@ -1,0 +1,37 @@
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: migrate-mysql-to-credhub
+    networks:
+    - name: default
+    stemcell: default
+    vm_type: minimal
+    azs: [z1]
+    lifecycle: errand
+    instances: 1
+    jobs:
+    - name: migrate_mysql_to_credhub
+      release: nfs-volume
+      properties:
+        app_name: nfs-broker
+        domain: ((system_domain))
+        cf:
+          admin_password: ((cf_admin_password))
+          admin_user: admin
+        organization: system
+        space: nfs-broker-space
+        skip_cert_verify: true
+        db:
+          driver: mysql
+          name: nfs-broker
+          password: ((nfs-broker-database-password))
+          port: 3306
+          username: nfs-broker
+        credhub:
+          url: https://credhub.service.cf.internal:8844
+          uaa_client_id: nfs-broker-credhub-client
+          uaa_client_secret: ((nfs-broker-credhub-uaa-client-secret))
+          ca_cert: |
+            ((credhub_ca.certificate))
+          uaa_ca_cert: |
+            ((uaa_ca.certificate))

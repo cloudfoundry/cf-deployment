@@ -1,0 +1,120 @@
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/volume_services_enabled?
+  value: true
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/volume_services_enabled?
+  value: true
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/volume_services_enabled?
+  value: true
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/nfs-broker-credhub-client?
+  value:
+    authorities: credhub.read,credhub.write
+    authorized-grant-types: client_credentials
+    secret: ((nfs-broker-credhub-uaa-client-secret))
+- type: replace
+  path: /instance_groups/-
+  value:
+    azs: [z1]
+    lifecycle: errand
+    instances: 1
+    jobs:
+    - name: nfsbrokerpush
+      properties:
+        nfsbrokerpush:
+          app_name: nfs-broker-credhub
+          domain: ((system_domain))
+          app_domain: ((system_domain))
+          register_broker: true
+          create_sql_security_group: false
+          create_credhub_security_group: true
+          cf:
+            admin_password: ((cf_admin_password))
+            admin_user: admin
+          organization: system
+          space: nfs-broker-space
+          password: ((nfs-broker-credhub-password))
+          username: nfs-broker
+          broker_name: nfs-credhub-broker
+          syslog_url: ""
+          skip_cert_verify: true
+          credhub:
+            url: https://credhub.service.cf.internal:8844
+            uaa_client_id: nfs-broker-credhub-client
+            uaa_client_secret: ((nfs-broker-credhub-uaa-client-secret))
+          services:
+          - id: "2b1ae04-6a97-4d6f-8979-fbe0bb3331c1"
+            name: "nfs-credhub"
+            description: "Existing NFSv3 volumes with CredHub as a store"
+            bindable: true
+            plan_updatable: false
+            tags: ["nfs"]
+            requires: ["volume_mount"]
+            plans:
+            - id: "6316d9ca-9d05-44c2-b652-b83d60cf2f93"
+              name: "Existing"
+              description: "A preexisting filesystem"
+          - id: "d8ab29a9-81d0-4e45-afcd-fb9ed858ccf4"
+            name: "nfs-credhub-experimental"
+            description: "Experimental support for NFSv3 and v4 with CredHub as a store"
+            bindable: true
+            plan_updatable: false
+            tags: ["nfs", "experimental"]
+            requires: ["volume_mount"]
+            plans:
+            - id: "2e315570-802f-44fd-886c-1a2d6676da9d"
+              name: "Existing"
+              description: "A preexisting filesystem"
+      release: nfs-volume
+    - name: cf-cli-6-linux
+      release: cf-cli
+    name: nfs-broker-credhub-push
+    networks:
+    - name: default
+    stemcell: default
+    vm_type: minimal
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=nfsv3driver?
+  value:
+    name: nfsv3driver
+    properties: {}
+    release: nfs-volume
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=mapfs?
+  value:
+    name: mapfs
+    release: mapfs
+
+- type: replace
+  path: /variables/-
+  value:
+    name: nfs-broker-credhub-password
+    type: password
+- type: replace
+  path: /variables/-
+  value:
+    name: nfs-broker-credhub-uaa-client-secret
+    type: password
+
+- type: replace
+  path: /releases/name=nfs-volume?
+  value:
+    name: nfs-volume
+    sha1: de807ffa3fc84949bb92edac6a4152245826d6da
+    url: https://bosh.io/d/github.com/cloudfoundry/nfs-volume-release?v=1.2.0
+    version: 1.2.0
+- type: replace
+  path: /releases/name=mapfs?
+  value:
+    name: "mapfs"
+    version: "1.0.1"
+    url: "https://bosh.io/d/github.com/cloudfoundry/mapfs-release?v=1.0.1"
+    sha1: "9dcea268d327caff76690229ac09f57a0c83cf65"
+- type: replace
+  path: /releases/name=cf-cli?
+  value:
+    name: cf-cli
+    url: https://bosh.io/d/github.com/bosh-packages/cf-cli-release?v=1.5.0
+    sha1: 6749a07026e335f7744f013c9707911fb72170b5
+    version: 1.5.0
