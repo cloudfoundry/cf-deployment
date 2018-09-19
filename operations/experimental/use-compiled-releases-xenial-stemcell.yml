@@ -399,3 +399,17 @@
   value:
     os: ubuntu-xenial
     version: "97.17"
+- type: replace
+  path: /releases/name=cf-cli/url
+  value: https://storage.googleapis.com/cf-deployment-compiled-releases/cf-cli-1.7.0-ubuntu-xenial-97.17-20180919-194504-064582048.tgz
+- type: replace
+  path: /releases/name=cf-cli/sha1
+  value: 495fdd35d87626902c1be00d9cb5e02451dc78d9
+- type: replace
+  path: /releases/name=cf-cli/version
+  value: 1.7.0
+- type: replace
+  path: /releases/name=cf-cli/stemcell?
+  value:
+    os: ubuntu-xenial
+    version: "97.17"
