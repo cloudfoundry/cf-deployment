@@ -234,6 +234,8 @@ instance_groups:
         space: cf_smoke_tests_space
         cf_dial_timeout_in_seconds: 300
         skip_ssl_validation: true
+  - name: cf-cli-6-linux
+    release: cf-cli
 - name: consul
   azs:
   - z1
@@ -2296,6 +2298,10 @@ releases:
   url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-aliases-release?v=0.0.3
   version: 0.0.3
   sha1: b0d0a0350ed87f1ded58b2ebb469acea0e026ccc
+- name: cf-cli
+  url: https://bosh.io/d/github.com/bosh-packages/cf-cli-release?v=1.7.0
+  version: 1.7.0
+  sha1: 97d0c5d71cafe9040cbff85a78b0fec2bfa4116e
 stemcells:
 - alias: default
   os: ubuntu-trusty
