@@ -31,6 +31,7 @@ test_experimental_ops() {
       check_interpolation "enable-suspect-actual-lrp-generation.yml"
       check_interpolation "enable-traffic-to-internal-networks.yml"
       check_interpolation "name: enable-tls-cloud-controller-postgres.yml" "${home}/operations/use-postgres.yml" "-o enable-tls-cloud-controller-postgres.yml"
+      check_interpolation "enable-create-swap-delete.yml"
 
       check_interpolation "fast-deploy-with-downtime-and-danger.yml"
 

@@ -32,6 +32,7 @@ and the ops-files will be removed.
 | [`enable-bits-service-consul.yml`](enable-bits-service-consul.yml) | Registers the bits-service [bits-service](https://github.com/cloudfoundry-incubator/bits-service) job via consul | Requires `bits-service.yml` from the same directory. |
 | [`enable-bpm.yml`](enable-bpm.yml) | **DEPRECATED**. BPM for these components is enabled in `cf-deployment.yml`. Enables the [BOSH Process Manager](https://github.com/cloudfoundry-incubator/bpm-release) for several BOSH jobs. | |
 | [`enable-bpm-garden.yml`](enable-bpm-garden.yml) | Enables the [BOSH Process Manager](https://github.com/cloudfoundry-incubator/bpm-release) for Garden. This ops file cannot be deployed in conjunction with `use-garden-containerd.yml` | |
+| [`enable-create-swap-delete.yml`](enable-create-swap-delete.yml) | Configures the default [`vm_strategy`](https://bosh.io/docs/changing-deployment-vm-strategy/) to be `create-swap-delete`. | Requires BOSH director `v267.7+` |
 | [`enable-iptables-logger.yml`](enable-iptables-logger.yml) | Enables iptables logger. | |
 | [`enable-mysql-tls.yml`](enable-mysql-tls.yml) | Enables TLS on the database job, and secures all client database connections. | |
 | [`enable-oci-phase-1.yml`](enable-oci-phase-1.yml) | Configure Garden to create OCI compatible images. | |
