@@ -1,5 +1,5 @@
-- path: /instance_groups/-
-  type: replace
+- type: replace
+  path: /instance_groups/-
   value:
     azs:
     - z1
@@ -103,50 +103,50 @@
     vm_extensions:
     - 100GB_ephemeral_disk
     vm_type: small-highmem
-- path: /releases/-
-  type: replace
+- type: replace
+  path: /releases/-
   value:
     name: garden-windows
     sha1: f678d11039d0719b100c45321057dca0788f92dd
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/garden-windows-bosh-release?v=0.14.0
     version: 0.14.0
-- path: /releases/name=windows-utilities?
-  type: replace
+- type: replace
+  path: /releases/name=windows-utilities?
   value:
     name: windows-utilities
     sha1: efc10ac0f4acae23637ce2c6f864d20df2e3a781
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.11.0
     version: 0.11.0
-- path: /stemcells/-
-  type: replace
+- type: replace
+  path: /stemcells/-
   value:
     alias: windows2012R2
     os: windows2012R2
     version: "1200.24"
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2012R2?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2012R2?
   value:
     description: Windows Server 2012 R2
     name: windows2012R2
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/name=hwc_buildpack?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/name=hwc_buildpack?
   value:
     name: hwc_buildpack
     package: hwc-buildpack
-- path: /instance_groups/name=api/jobs/name=hwc-buildpack?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=hwc-buildpack?
   value:
     name: hwc-buildpack
     release: hwc-buildpack
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
   value:
     name: binary_buildpack
     package: binary-buildpack-windows2012R2
-- path: /releases/name=hwc-buildpack?
-  type: replace
+- type: replace
+  path: /releases/name=hwc-buildpack?
   value:
     name: hwc-buildpack
-    sha1: eea9db1222ae722dece92a50f33de9a6a5181566
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=3.0.0
-    version: 3.0.0
+    sha1: 397491396861195f90c53b4126283e37f14bdb5f
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=3.0.2
+    version: 3.0.2
