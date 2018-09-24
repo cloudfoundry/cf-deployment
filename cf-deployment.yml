@@ -11,7 +11,7 @@ addons:
 - name: loggregator_agent
   include:
     stemcell:
-    - os: ubuntu-trusty
+    - os: ubuntu-xenial
   exclude:
     jobs:
     - name: smoke_tests
@@ -29,7 +29,7 @@ addons:
 - name: bpm
   include:
     stemcell:
-    - os: ubuntu-trusty
+    - os: ubuntu-xenial
   jobs:
   - name: bpm
     release: bpm

@@ -63,7 +63,7 @@ STEMCELL_VERSION=$(bosh interpolate cf-deployment/cf-deployment.yml --path /stem
 
 bosh \
   upload-stemcell \
-  https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent?v=${STEMCELL_VERSION}
+  https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-xenial-go_agent?v=${STEMCELL_VERSION}
 ```
 
 

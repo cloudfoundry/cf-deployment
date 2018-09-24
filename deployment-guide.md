@@ -167,7 +167,7 @@ export STEMCELL_VERSION=$(bosh interpolate cf-deployment.yml --path=/stemcells/a
 
 Finally, upload the stemcell:
 ```
-bosh upload-stemcell https://bosh.io/d/stemcells/bosh-${IAAS_INFO}-ubuntu-trusty-go_agent?v=${STEMCELL_VERSION}
+bosh upload-stemcell https://bosh.io/d/stemcells/bosh-${IAAS_INFO}-ubuntu-xenial-go_agent?v=${STEMCELL_VERSION}
 ```
 
 ## Deploy CF
