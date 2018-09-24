@@ -6,22 +6,6 @@
     - z2
     instances: 1
     jobs:
-    - consumes:
-        consul_client:
-          from: consul_client_link
-        consul_common:
-          from: consul_common_link
-        consul_server: nil
-      name: consul_agent_windows
-      properties:
-        consul:
-          agent:
-            dns_config:
-              service_ttl: 10s
-            node_name_includes_id: true
-        syslog_daemon_config:
-          enable: false
-      release: consul
     - name: garden-windows
       properties:
         garden:

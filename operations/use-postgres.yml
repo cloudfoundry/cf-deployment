@@ -74,11 +74,6 @@
           tag: admin
     release: postgres
 - type: replace
-  path: /instance_groups/name=database/jobs/name=consul_agent/properties?/consul/agent/services?
-  value:
-    sql_db:
-      check: {}
-- type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ccdb
   value:
     databases:
