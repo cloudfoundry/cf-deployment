@@ -22,7 +22,6 @@ test_experimental_ops() {
       check_interpolation "disable-interpolate-service-bindings.yml"
 
       check_interpolation "name: enable-bits-service-consul.yml" "bits-service.yml" "-o bits-service-local.yml" "-o enable-bits-service-consul.yml"
-      check_interpolation "enable-bpm.yml"
       check_interpolation "enable-iptables-logger.yml"
       check_interpolation "enable-mysql-tls.yml"
       check_interpolation "enable-nfs-volume-service-credhub.yml"
