@@ -236,42 +236,6 @@ instance_groups:
         skip_ssl_validation: true
   - name: cf-cli-6-linux
     release: cf-cli
-- name: consul
-  azs:
-  - z1
-  - z2
-  - z3
-  instances: 3
-  persistent_disk_type: 5GB
-  vm_type: minimal
-  stemcell: default
-  update:
-    serial: true
-  networks:
-  - name: default
-  jobs:
-  - name: consul_agent
-    release: consul
-    consumes:
-      consul_common: {from: consul_common_link}
-      consul_server: {from: consul_server_link}
-      consul_client: {from: consul_client_link}
-    provides:
-      consul_common: {as: consul_common_link, shared: true}
-      consul_server: {as: consul_server_link, shared: true}
-      consul_client: {as: consul_client_link, shared: true}
-    properties:
-      consul:
-        agent:
-          mode: server
-          domain: cf.internal
-        encrypt_keys:
-        - "((consul_encrypt_key))"
-        agent_cert: "((consul_agent.certificate))"
-        agent_key: "((consul_agent.private_key))"
-        ca_cert: "((consul_agent_ca.certificate))"
-        server_cert: "((consul_server.certificate))"
-        server_key: "((consul_server.private_key))"
 - name: nats
   azs:
   - z1
@@ -282,12 +246,6 @@ instance_groups:
   networks:
   - name: default
   jobs:
-  - name: consul_agent
-    release: consul
-    consumes:
-      consul_common: {from: consul_common_link}
-      consul_server: nil
-      consul_client: {from: consul_client_link}
   - name: nats
     release: nats
     provides:
@@ -306,12 +264,6 @@ instance_groups:
   networks:
   - name: default
   jobs:
-  - name: consul_agent
-    release: consul
-    consumes:
-      consul_common: {from: consul_common_link}
-      consul_server: nil
-      consul_client: {from: consul_client_link}
   - name: adapter
     release: cf-syslog-drain
     properties:
@@ -345,20 +297,6 @@ instance_groups:
   networks:
   - name: default
   jobs:
-  - name: consul_agent
-    release: consul
-    consumes:
-      consul_common: {from: consul_common_link}
-      consul_server: nil
-      consul_client: {from: consul_client_link}
-    properties:
-      consul:
-        agent:
-          services:
-            sql-db:
-              check:
-                http: "http://localhost:1936"
-                interval: 3s
   - name: mysql
     release: cf-mysql
     properties:
@@ -418,18 +356,6 @@ instance_groups:
   networks:
   - name: default
   jobs:
-  - name: consul_agent
-    release: consul
-    consumes:
-      consul_common: {from: consul_common_link}
-      consul_server: nil
-      consul_client: {from: consul_client_link}
-    properties:
-      consul:
-        agent:
-          services:
-            silk-controller:
-              name: silk-controller
   - name: cfdot
     release: diego
     properties:
@@ -530,17 +456,6 @@ instance_groups:
   networks:
   - name: default
   jobs:
-  - name: consul_agent
-    release: consul
-    consumes:
-      consul_common: {from: consul_common_link}
-      consul_server: nil
-      consul_client: {from: consul_client_link}
-    properties:
-      consul:
-        agent:
-          services:
-            uaa: {}
   - name: uaa
     release: uaa
     properties:
@@ -712,17 +627,6 @@ instance_groups:
   networks:
   - name: default
   jobs:
-  - name: consul_agent
-    release: consul
-    consumes:
-      consul_common: {from: consul_common_link}
-      consul_server: nil
-      consul_client: {from: consul_client_link}
-    properties:
-      consul:
-        agent:
-          services:
-            blobstore: {}
   - name: blobstore
     release: capi
     properties:
@@ -762,20 +666,6 @@ instance_groups:
   networks:
   - name: default
   jobs:
-  - name: consul_agent
-    release: consul
-    consumes:
-      consul_common: {from: consul_common_link}
-      consul_server: nil
-      consul_client: {from: consul_client_link}
-    properties:
-      consul:
-        agent:
-          services:
-            cloud_controller_ng: {}
-            routing-api: {}
-            policy-server-internal:
-              name: policy-server
   - name: cloud_controller_ng
     release: capi
     provides:
@@ -1019,12 +909,6 @@ instance_groups:
   networks:
   - name: default
   jobs:
-  - name: consul_agent
-    release: consul
-    consumes:
-      consul_common: {from: consul_common_link}
-      consul_server: nil
-      consul_client: {from: consul_client_link}
   - name: cloud_controller_worker
     release: capi
     properties:
@@ -1067,17 +951,6 @@ instance_groups:
   networks:
   - name: default
   jobs:
-  - name: consul_agent
-    release: consul
-    consumes:
-      consul_common: {from: consul_common_link}
-      consul_server: nil
-      consul_client: {from: consul_client_link}
-    properties:
-      consul:
-        agent:
-          services:
-            gorouter: {}
   - name: gorouter
     release: routing
     properties:
@@ -1120,12 +993,6 @@ instance_groups:
   networks:
   - name: default
   jobs:
-  - name: consul_agent
-    release: consul
-    consumes:
-      consul_common: {from: consul_common_link}
-      consul_server: nil
-      consul_client: {from: consul_client_link}
   - name: tcp_router
     release: routing
     properties:
@@ -1153,12 +1020,6 @@ instance_groups:
   networks:
   - name: default
   jobs:
-  - name: consul_agent
-    release: consul
-    consumes:
-      consul_common: {from: consul_common_link}
-      consul_server: nil
-      consul_client: {from: consul_client_link}
   - name: cfdot
     release: diego
     properties:
@@ -1296,18 +1157,6 @@ instance_groups:
   networks:
   - name: default
   jobs:
-  - name: consul_agent
-    release: consul
-    consumes:
-      consul_common: {from: consul_common_link}
-      consul_server: nil
-      consul_client: {from: consul_client_link}
-    properties:
-      consul:
-        agent:
-          services:
-            doppler:
-              name: doppler
   - name: doppler
     release: loggregator
     provides:
@@ -1466,16 +1315,6 @@ instance_groups:
   networks:
   - name: default
   jobs:
-  - name: consul_agent
-    release: consul
-    consumes:
-      consul_common: {from: consul_common_link}
-      consul_server: nil
-      consul_client: {from: consul_client_link}
-    properties:
-      consul:
-        agent:
-          node_name_includes_id: true
   - name: cflinuxfs2-rootfs-setup
     release: cflinuxfs2
     properties:
@@ -1591,18 +1430,6 @@ instance_groups:
   networks:
   - name: default
   jobs:
-  - name: consul_agent
-    release: consul
-    consumes:
-      consul_common: {from: consul_common_link}
-      consul_server: nil
-      consul_client: {from: consul_client_link}
-    properties:
-      consul:
-        agent:
-          services:
-            loggregator_trafficcontroller: {}
-            reverse_log_proxy: {}
   - name: loggregator_trafficcontroller
     release: loggregator
     consumes:
@@ -1691,19 +1518,6 @@ instance_groups:
   stemcell: default
   vm_type: minimal
   jobs:
-  - consumes:
-      consul_client:
-        from: consul_client_link
-      consul_common:
-        from: consul_common_link
-      consul_server: nil
-    name: consul_agent
-    properties:
-      consul:
-        agent:
-          services:
-            credhub: {}
-    release: consul
   - name: credhub
     properties:
       credhub:
@@ -1891,29 +1705,6 @@ variables:
   options:
     ca: service_cf_internal_ca
     common_name: blobstore.service.cf.internal
-- name: consul_agent_ca
-  type: certificate
-  options:
-    is_ca: true
-    common_name: consulCA
-- name: consul_agent
-  type: certificate
-  options:
-    ca: consul_agent_ca
-    common_name: consul_agent
-    extended_key_usage:
-    - client_auth
-    - server_auth
-    alternative_names:
-    - 127.0.0.1
-- name: consul_server
-  type: certificate
-  options:
-    ca: consul_agent_ca
-    common_name: server.dc1.cf.internal
-    extended_key_usage:
-    - client_auth
-    - server_auth
 - name: diego_auctioneer_client
   type: certificate
   options:
