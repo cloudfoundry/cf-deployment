@@ -378,13 +378,13 @@
   value: 311f99ef212c67acc9773d64bd7d5d5286d4ec88
 - type: replace
   path: /releases/name=log-cache/url
-  value: https://storage.googleapis.com/cf-deployment-compiled-releases/log-cache-1.4.4-ubuntu-xenial-97.17-20180921-223639-892060121.tgz
+  value: https://storage.googleapis.com/cf-deployment-compiled-releases/log-cache-1.4.4-ubuntu-xenial-97.17-20180924-210122-508886155.tgz
 - type: replace
   path: /releases/name=log-cache/version
   value: 1.4.4
 - type: replace
   path: /releases/name=log-cache/sha1
-  value: 8a4f8d79eee5a21f7ad02ce493d3a383a304d95f
+  value: 7fea8e39a2b06d379ce2274148bda3af3926adf3
 - type: replace
   path: /releases/name=credhub/url
   value: https://storage.googleapis.com/cf-deployment-compiled-releases/credhub-2.0.2-ubuntu-xenial-97.17-20180921-223508-684327768.tgz
@@ -410,6 +410,11 @@
   value: 1.8.0
 - type: replace
   path: /releases/name=cf-cli/stemcell?
+  value:
+    os: ubuntu-xenial
+    version: "97.17"
+- type: replace
+  path: /releases/name=log-cache/stemcell?
   value:
     os: ubuntu-xenial
     version: "97.17"
