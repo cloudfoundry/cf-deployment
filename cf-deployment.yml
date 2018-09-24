@@ -1234,7 +1234,6 @@ instance_groups:
             ca_cert: "((service_cf_internal_ca.certificate))"
             client_cert: "((cc_bridge_tps.certificate))"
             client_key: "((cc_bridge_tps.private_key))"
-          listener_enabled: false
   - name: ssh_proxy
     release: diego
     properties:
