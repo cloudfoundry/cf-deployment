@@ -50,7 +50,6 @@ and the ops-files will be removed.
 | [`set-cpu-weight.yml`](set-cpu-weight.yml) | CPU shares for each garden container are proportional to its memory limits. | |
 | [`use-compiled-releases-xenial-stemcell.yml`](use-compiled-releases-xenial-stemcell.yml) | **DEPRECATED: Xenial is now the default stemcell in cf-deployment**  Use releases compiled for Xenial stemcell, as opposed to Trusty | Requires `use-xenial-stemcell.yml` |
 | [`use-garden-containerd.yml`](use-garden-containerd.yml) | Configure Garden to create containers via containerd. This ops file cannot be deployed in conjunction with either `rootless-containers.yml` or `enable-bpm-garden.yml`. | |
-| [`use-grootfs.yml`](use-grootfs.yml) | Groot is enabled by default. This file is blank to avoid breaking deployment scripts. | |
 | [`use-logcache-for-cloud-controller-app-stats.yml`](use-logcache-for-cloud-controller-app-stats.yml) | Configure Cloud Controller to use Log Cache instead of Traffic Controller for app container metrics. | |
 | [`use-pxc.yml`](use-pxc.yml) | Uses the [pxc-release](https://github.com/cloudfoundry-incubator/pxc-release) instead of the [cf-mysql-release](https://github.com/cloudfoundry/cf-mysql-release/) as the internal mysql database. This ops-file is for clean-installs of cf or for redeploying cf already running pxc. It's not for migrating from cf-mysql-release. | |
 | [`use-shed.yml`](use-shed.yml) | Enable deprecated garden-shed on diego cells. | |
