@@ -104,6 +104,20 @@
     - 100GB_ephemeral_disk
     vm_type: small-highmem
 - type: replace
+  path: /releases/-
+  value:
+    name: garden-windows
+    sha1: f678d11039d0719b100c45321057dca0788f92dd
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/garden-windows-bosh-release?v=0.14.0
+    version: 0.14.0
+- type: replace
+  path: /releases/name=windows-utilities?
+  value:
+    name: windows-utilities
+    sha1: efc10ac0f4acae23637ce2c6f864d20df2e3a781
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.11.0
+    version: 0.11.0
+- type: replace
   path: /stemcells/-
   value:
     alias: windows2012R2
@@ -129,35 +143,6 @@
   value:
     name: binary_buildpack
     package: binary-buildpack-windows2012R2
-
-- type: replace
-  path: /releases/name=binary-buildpack
-  value:
-    name: binary-buildpack
-    url: https://bosh.io/d/github.com/cloudfoundry/binary-buildpack-release?v=1.0.25
-    version: 1.0.25
-    sha1: 45cb3c91ff51f84d653f7271c3deb140f2349a10
-- type: replace
-  path: /releases/name=consul
-  value:
-    name: consul
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release?v=196
-    version: "196"
-    sha1: 84f149761929e59699d6ac3892b0cd806652c7b8
-- type: replace
-  path: /releases/name=diego
-  value:
-    name: diego
-    url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=2.17.0
-    version: 2.17.0
-    sha1: cb67d79a28a90abafc0a46bd3dfb5bcfd9433868
-- type: replace
-  path: /releases/-
-  value:
-    name: garden-windows
-    sha1: f678d11039d0719b100c45321057dca0788f92dd
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/garden-windows-bosh-release?v=0.14.0
-    version: 0.14.0
 - type: replace
   path: /releases/name=hwc-buildpack?
   value:
@@ -165,17 +150,3 @@
     sha1: 397491396861195f90c53b4126283e37f14bdb5f
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=3.0.2
     version: 3.0.2
-- type: replace
-  path: /releases/name=loggregator-agent
-  value:
-    name: loggregator-agent
-    url: https://bosh.io/d/github.com/cloudfoundry/loggregator-agent-release?v=2.1
-    version: "2.1"
-    sha1: 40cb8299df17b2a83be2a211182dd0be0f4b1a99
-- type: replace
-  path: /releases/name=windows-utilities?
-  value:
-    name: windows-utilities
-    sha1: efc10ac0f4acae23637ce2c6f864d20df2e3a781
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.11.0
-    version: 0.11.0
