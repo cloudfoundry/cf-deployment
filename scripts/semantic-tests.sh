@@ -82,24 +82,6 @@ test_use_compiled_releases() {
     fi
 }
 
-test_disable_consul() {
-    local manifest_file=$(mktemp)
-
-    bosh int cf-deployment.yml \
-      -o operations/experimental/disable-consul.yml > $manifest_file
-
-    set +e
-      yq r $manifest_file -j | jq -r .instance_groups[].jobs[].name | grep 'consul_agent' > /dev/null
-      local has_consul_agent=$?
-    set -e
-
-    if [[ $has_consul_agent -eq 0 ]]; then
-      fail "experimental/disable-consul.yml: expected to find no 'consul_agent' jobs"
-    else
-      pass "experimental/disable-consul.yml"
-    fi
-}
-
 test_use_trusted_ca_cert_for_apps_doesnt_overwrite_existing_trusted_cas() {
   local existing_trusted_cas
   existing_trusted_app_cas=$(bosh int cf-deployment.yml --path /instance_groups/name=diego-cell/jobs/name=cflinuxfs2-rootfs-setup/properties/cflinuxfs2-rootfs/trusted_certs)
@@ -140,7 +122,6 @@ semantic_tests() {
     test_aws_opsfile
     test_scale_to_one_az
     test_use_compiled_releases
-    test_disable_consul
     test_use_trusted_ca_cert_for_apps_doesnt_overwrite_existing_trusted_cas
     test_add_persistent_isolation_segment_diego_cell
   popd > /dev/null
