@@ -35,7 +35,7 @@ It:
 - uses three AZs, of which two are used to provide redundancy for most instance groups.
 The third is used only for instance groups
 that should not have even instance counts,
-such as consul.
+such as clustered MySQL.
 - uses [Diego](http://docs.cloudfoundry.org/concepts/diego/diego-architecture.html) ([source code](https://github.com/cloudfoundry/diego-release)) natively,
 does not support the deprecated [DEAs](https://docs.cloudfoundry.org/concepts/architecture/execution-agent.html),
 and enables diego-specific features
