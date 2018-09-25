@@ -1,4 +1,3 @@
----
 - type: replace
   path: /addons?/-
   value:
@@ -14,16 +13,16 @@
             ((syslog_custom_rule))
             if ($programname startswith "vcap.") then stop
           fallback_servers: ((syslog_fallback_servers))
-          port: ((syslog_port))
-          transport: tcp
-          tls_enabled: true
           permitted_peer: ((syslog_permitted_peer))
+          port: ((syslog_port))
+          tls_enabled: true
+          transport: tcp
       release: syslog
     name: syslog_forwarder
 - type: replace
   path: /releases/-
   value:
     name: syslog
-    sha1: 64cf40d44746b50edffa78cb0e0dd6f072fee695
-    url: https://bosh.io/d/github.com/cloudfoundry/syslog-release?v=11.3.2
-    version: 11.3.2
+    sha1: 0937737d7c80c26a8ce28ce65b2dcc695188945d
+    url: https://bosh.io/d/github.com/cloudfoundry/syslog-release?v=11.3.3
+    version: 11.3.3
