@@ -48,7 +48,7 @@ If you're deploying a fresh environment with a new domain,
 you can generate a self-signed cert.
 **Don't forget that the common name should match your intended system domain (and app domains, if it's different)**:
 ```
-openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -nodes
+openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -nodes -days 365
 ```
 
 Alternatively, if you want to get a certificate from a trusted Certificate Authority,
