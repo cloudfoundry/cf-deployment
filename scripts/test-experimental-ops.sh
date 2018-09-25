@@ -44,6 +44,9 @@ test_experimental_ops() {
       check_interpolation "rootless-containers.yml"
 
       check_interpolation "name: use-compiled-releases-xenial-stemcell.yml" "use-xenial-stemcell.yml" "-o use-compiled-releases-xenial-stemcell.yml"
+      check_interpolation "name: use-compiled-releases-xenial-stemcell-windows-cell.yml" "use-xenial-stemcell.yml" "-o use-compiled-releases-xenial-stemcell.yml" "-o ${home}/operations/windows-cell.yml" "-o use-compiled-releases-xenial-stemcell-windows-cell.yml"
+      check_interpolation "name: use-compiled-releases-xenial-stemcell-windows1803-cell.yml" "use-xenial-stemcell.yml" "-o use-compiled-releases-xenial-stemcell.yml" "-o windows1803-cell.yml" "-o use-compiled-releases-xenial-stemcell-windows1803-cell.yml"
+      check_interpolation "name: use-compiled-releases-xenial-stemcell-windows2016-cell.yml" "use-xenial-stemcell.yml" "-o use-compiled-releases-xenial-stemcell.yml" "-o ${home}/operations/windows2016-cell.yml" "-o use-compiled-releases-xenial-stemcell-windows2016-cell.yml"
       check_interpolation "use-garden-containerd.yml"
       check_interpolation "enable-bpm-garden.yml"
       check_interpolation "use-logcache-for-cloud-controller-app-stats.yml"
