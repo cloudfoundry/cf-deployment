@@ -1,0 +1,8 @@
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties?/cc?/temporary_disable_deployments?
+  value: true
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties?/cc?/temporary_disable_deployments?
+  value: true

@@ -17,6 +17,7 @@ test_standard_ops() {
       check_interpolation "cf-syslog-skip-cert-verify.yml"
       check_interpolation "configure-confab-timeout.yml" "-v confab_timeout=60"
       check_interpolation "configure-default-router-group.yml" "-v default_router_group_reservable_ports=1234-2024"
+      check_interpolation "disable-deployments.yml"
       check_interpolation "disable-router-tls-termination.yml"
       check_interpolation "disable-log-cache.yml"
       check_interpolation "enable-cc-rate-limiting.yml" "-v cc_rate_limiter_general_limit=blah" "-v cc_rate_limiter_unauthenticated_limit=something"

@@ -110,6 +110,18 @@
       password: ((cc_database_password))
       tag: admin
 - type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties/ccdb
+  value:
+    databases:
+    - name: cloud_controller
+      tag: cc
+    db_scheme: postgres
+    port: 5524
+    roles:
+    - name: cloud_controller
+      password: ((cc_database_password))
+      tag: admin
+- type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb
   value:
     databases:
