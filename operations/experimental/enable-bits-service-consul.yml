@@ -1,9 +1,1 @@
----
-- type: replace
-  path: /instance_groups/name=bits/jobs/name=consul_agent/properties/consul/agent/services/bits?
-  value:
-    name: bits
-    check:
-      name: dns_health_check
-      script: /var/vcap/jobs/bits-service/bin/dns_health_check
-      interval: 3s
+# This file has been deprecated because Consul has been removed from cf-deployment.

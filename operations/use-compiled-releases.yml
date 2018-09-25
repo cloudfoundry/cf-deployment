@@ -71,15 +71,6 @@
   path: /releases/name=routing/sha1
   value: f0b164c62af9c657ad0b87e1b240285cc8c6d761
 - type: replace
-  path: /releases/name=consul/url
-  value: https://storage.googleapis.com/cf-deployment-compiled-releases/consul-196-ubuntu-xenial-97.18-20180925-174021-110817573.tgz
-- type: replace
-  path: /releases/name=consul/version
-  value: "196"
-- type: replace
-  path: /releases/name=consul/sha1
-  value: 9a56b12866ac49697f1bd974690989314a77ec6a
-- type: replace
   path: /releases/name=cflinuxfs2/url
   value: https://storage.googleapis.com/cf-deployment-compiled-releases/cflinuxfs2-1.238.0-ubuntu-xenial-97.18-20180925-173756-355381223.tgz
 - type: replace
@@ -269,11 +260,6 @@
     version: "97.18"
 - type: replace
   path: /releases/name=cflinuxfs2/stemcell?
-  value:
-    os: ubuntu-xenial
-    version: "97.18"
-- type: replace
-  path: /releases/name=consul/stemcell?
   value:
     os: ubuntu-xenial
     version: "97.18"

@@ -26,14 +26,6 @@
       properties:
         release_level_backup: true
       release: credhub
-    - consumes:
-        consul_client:
-          from: consul_client_link
-        consul_common:
-          from: consul_common_link
-        consul_server: nil
-      name: consul_agent
-      release: consul
     name: backup-restore
     networks:
     - name: default

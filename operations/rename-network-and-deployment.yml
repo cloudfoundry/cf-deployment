@@ -141,13 +141,6 @@
       deployment: ((deployment_name))
       network: ((network_name))
       domain: bosh
-  - domain: consul.service.cf.internal
-    targets:
-    - query: '*'
-      instance_group: consul
-      deployment: ((deployment_name))
-      network: ((network_name))
-      domain: bosh
   - domain: credhub.service.cf.internal
     targets:
     - query: '*'

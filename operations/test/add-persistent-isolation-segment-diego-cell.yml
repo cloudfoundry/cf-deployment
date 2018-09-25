@@ -13,16 +13,6 @@
     networks:
     - name: default
     jobs:
-    - name: consul_agent
-      release: consul
-      consumes:
-        consul_common: {from: consul_common_link}
-        consul_server: nil
-        consul_client: {from: consul_client_link}
-      properties:
-        consul:
-          agent:
-            node_name_includes_id: true
     - name: cflinuxfs2-rootfs-setup
       release: cflinuxfs2
     - name: garden

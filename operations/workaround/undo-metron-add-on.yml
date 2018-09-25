@@ -2,19 +2,6 @@
   path: /addons/name=loggregator_agent?
 
 - type: replace
-  path: /instance_groups/name=consul/jobs/-
-  value:
-    name: loggregator_agent
-    release: loggregator-agent
-    properties: &loggregator_agent_properties
-      loggregator:
-        tls:
-          ca_cert: "((loggregator_ca.certificate))"
-          agent:
-            cert: "((loggregator_tls_agent.certificate))"
-            key: "((loggregator_tls_agent.private_key))"
-
-- type: replace
   path: /instance_groups/name=nats/jobs/-
   value:
     name: loggregator_agent
