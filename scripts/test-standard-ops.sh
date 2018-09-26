@@ -41,18 +41,9 @@ test_standard_ops() {
       check_interpolation "use-external-dbs.yml" "-l example-vars-files/vars-use-external-dbs.yml"
       check_interpolation "use-haproxy.yml" "-v haproxy_private_ip=10.0.10.10"
       check_interpolation "name: use-haproxy-public-network.yml" "use-haproxy.yml" "-o use-haproxy-public-network.yml -v haproxy_public_network_name=public -v haproxy_public_ip=6.7.8.9"
-      version=$(bosh interpolate ${home}/cf-deployment.yml -o use-latest-stemcell.yml --path=/stemcells/alias=default/version)
-      if [ "${version}" == "latest" ]; then
-        pass "use-latest-stemcell.yml"
-      else
-        fail "use-latest-stemcell.yml, expected 'latest' but got '${version}'"
-      fi
-      version=$(bosh interpolate ${home}/cf-deployment.yml -o windows-cell.yml -o use-latest-windows-stemcell.yml --path=/stemcells/alias=windows2012R2/version)
-      if [ "${version}" == "latest" ]; then
-        pass "use-latest-windows-stemcell.yml"
-      else
-        fail "use-latest-windows-stemcell.yml, expected 'latest' but got '${version}'"
-      fi
+      check_latest        "use-latest-stemcell.yml" "default"
+      check_latest        "use-latest-windows-stemcell.yml" "windows2012R2" "-o windows2012R2-cell.yml"
+      check_latest        "use-latest-windows2012R2-stemcell.yml" "windows2012R2" "-o windows2012R2-cell.yml"
       check_interpolation "use-postgres.yml"
       check_interpolation "name: use-alicloud-oss-blobstore.yml" "use-external-blobstore.yml -o use-alicloud-oss-blobstore.yml -l example-vars-files/vars-use-alicloud-oss-blobstore.yml"
       check_interpolation "name: use-s3-blobstore.yml" "use-external-blobstore.yml -o use-s3-blobstore.yml -l example-vars-files/vars-use-s3-blobstore.yml"
@@ -62,16 +53,12 @@ test_standard_ops() {
       check_interpolation "name: use-swift-blobstore.yml" "use-external-blobstore.yml -o use-swift-blobstore.yml -l example-vars-files/vars-use-swift-blobstore.yml"
       check_interpolation "use-trusted-ca-cert-for-apps.yml" "-l example-vars-files/vars-use-trusted-ca-cert-for-apps.yml"
       check_interpolation "windows-cell.yml"
-      version=$(bosh interpolate ${home}/cf-deployment.yml -o windows2016-cell.yml -o use-latest-windows2016-stemcell.yml --path=/stemcells/alias=windows2016/version)
-      if [ "${version}" == "latest" ]; then
-        pass "use-latest-windows2016-stemcell.yml"
-      else
-        fail "use-latest-windows2016-stemcell.yml, expected 'latest' but got '${version}'"
-      fi
+      check_interpolation "windows2012R2-cell.yml"
+      check_latest        "use-latest-windows2016-stemcell.yml" "windows2016" "-o windows2016-cell.yml"
       check_interpolation "name: use-offline-windows2016fs.yml" "windows2016-cell.yml" "-o use-offline-windows2016fs.yml"
       check_interpolation "use-pxc.yml"
       check_interpolation "windows2016-cell.yml"
-      check_interpolation "name: windows-cell.yml windows2016-cell.yml" "windows-cell.yml" "-o windows2016-cell.yml"
+      check_interpolation "name: windows2012R2-cell.yml windows2016-cell.yml" "windows2012R2-cell.yml" "-o windows2016-cell.yml"
     popd > /dev/null # operations
   popd > /dev/null
   exit $exit_code
