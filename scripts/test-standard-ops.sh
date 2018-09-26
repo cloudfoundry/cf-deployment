@@ -25,6 +25,7 @@ test_standard_ops() {
       check_interpolation "enable-nfs-volume-service.yml"
       check_interpolation "enable-uniq-consul-node-name.yml"
       check_interpolation "enable-service-discovery.yml"
+      check_interpolation "migrate-cf-mysql-to-pxc.yml"
       check_interpolation "openstack.yml"
       check_interpolation "override-app-domains.yml" "-l example-vars-files/vars-override-app-domains.yml"
       check_interpolation "rename-network-and-deployment.yml" "-v deployment_name=renamed_deployment -v network_name=renamed_network"
@@ -68,6 +69,7 @@ test_standard_ops() {
         fail "use-latest-windows2016-stemcell.yml, expected 'latest' but got '${version}'"
       fi
       check_interpolation "name: use-offline-windows2016fs.yml" "windows2016-cell.yml" "-o use-offline-windows2016fs.yml"
+      check_interpolation "use-pxc.yml"
       check_interpolation "windows2016-cell.yml"
       check_interpolation "name: windows-cell.yml windows2016-cell.yml" "windows-cell.yml" "-o windows2016-cell.yml"
     popd > /dev/null # operations
