@@ -62,6 +62,22 @@ check_interpolation() {
   fi
 }
 
+check_latest() {
+  local opsfile=${1}; shift
+  local stemcell_alias=${1}; shift
+  local version=$(bosh interpolate \
+    ${home}/cf-deployment.yml \
+    $@ \
+    -o ${opsfile} \
+    --path=/stemcells/alias=${stemcell_alias}/version)
+
+  if [ "${version}" == "latest" ]; then
+    pass "${opsfile}"
+  else
+    fail "${opsfile}, expected 'latest' but got '${version}'"
+  fi
+}
+
 test_opsfile_interpolation() {
   test_standard_ops &
   test_experimental_ops &
@@ -163,7 +179,7 @@ ensure_opsfiles_in_tests() {
       #   A line starting with 'pass "'
       #   AND
       #   Followed by "$basename"
-      if [ $(grep -E "(check_interpolation\s+\"(name:\s+)?|pass\s+\")($basename)" $test -c) != "0" ]; then
+      if [ $(grep -E "((check_interpolation|check_latest)\s+\"(name:\s+)?|pass\s+\")($basename)" $test -c) != "0" ]; then
         pass "$x is tested in $test"
       else
         fail "$x is ${RED}NOT${NOCOLOR} tested in $test"
@@ -223,4 +239,4 @@ main() {
   exit $exit_code
 }
 
-main
+time main
