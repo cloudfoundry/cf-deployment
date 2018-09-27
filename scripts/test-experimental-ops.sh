@@ -12,6 +12,11 @@ test_experimental_ops() {
       check_interpolation "bits-service.yml"
       check_interpolation "name: bits-service-local.yml" "bits-service.yml" "-o bits-service-local.yml"
       check_interpolation "name: bits-service-s3.yml" "${home}/operations/use-external-blobstore.yml" "-o ${home}/operations/use-s3-blobstore.yml" "-o bits-service.yml" "-o bits-service-s3.yml" "-l ${home}/operations/example-vars-files/vars-use-s3-blobstore.yml"
+      check_interpolation "name: bits-service-alicloud-oss.yml" "${home}/operations/use-external-blobstore.yml" "-o ${home}/operations/use-alicloud-oss-blobstore.yml" "-o bits-service.yml" "-o bits-service-alicloud-oss.yml" "-l ${home}/operations/example-vars-files/vars-use-alicloud-oss-blobstore.yml"
+      check_interpolation "name: bits-service-azure-storage.yml" "${home}/operations/use-external-blobstore.yml" "-o ${home}/operations/use-azure-storage-blobstore.yml" "-o bits-service.yml" "-o bits-service-azure-storage.yml" "-l ${home}/operations/example-vars-files/vars-use-azure-storage-blobstore.yml"
+      check_interpolation "name: bits-service-gcs-service-account.yml" "${home}/operations/use-external-blobstore.yml" "-o ${home}/operations/use-gcs-blobstore-service-account.yml" "-o bits-service.yml" "-o bits-service-gcs-service-account.yml" "-l ${home}/operations/example-vars-files/vars-use-gcs-blobstore-service-account.yml"
+      check_interpolation "name: bits-service-gcs-access-key.yml" "${home}/operations/use-external-blobstore.yml" "-o ${home}/operations/use-gcs-blobstore-access-key.yml" "-o bits-service.yml" "-o bits-service-gcs-access-key.yml" "-l ${home}/operations/example-vars-files/vars-use-gcs-blobstore-access-key.yml"
+      check_interpolation "name: bits-service-swift.yml" "${home}/operations/use-external-blobstore.yml" "-o ${home}/operations/use-swift-blobstore.yml" "-o bits-service.yml" "-o bits-service-swift.yml" "-l ${home}/operations/example-vars-files/vars-use-swift-blobstore.yml"
       check_interpolation "name: bits-service-webdav.yml" "bits-service.yml" "-o bits-service-webdav.yml"
 
       check_interpolation "disable-consul.yml"
