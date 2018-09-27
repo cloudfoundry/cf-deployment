@@ -32,6 +32,9 @@ test_experimental_ops() {
       check_interpolation "enable-traffic-to-internal-networks.yml"
       check_interpolation "name: enable-tls-cloud-controller-postgres.yml" "${home}/operations/use-postgres.yml" "-o enable-tls-cloud-controller-postgres.yml"
 
+      check_interpolation "name: use-pxc-for-nfs-volume-service.yml" "${home}/operations/enable-nfs-volume-service.yml" "-o use-pxc.yml" "-o use-pxc-for-nfs-volume-service.yml"
+      check_interpolation "name: use-pxc-for-smb-volume-service.yml" "enable-smb-volume-service.yml" "-o use-pxc.yml" "-o use-pxc-for-smb-volume-service.yml"
+
       check_interpolation "fast-deploy-with-downtime-and-danger.yml"
 
       check_interpolation "infrastructure-metrics.yml"
