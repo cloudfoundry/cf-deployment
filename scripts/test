@@ -85,6 +85,7 @@ test_opsfile_interpolation() {
   test_legacy_ops &
   test_addons_ops &
   test_backup_and_restore_ops &
+  test_bits_service_ops &
 
   for job in $(jobs -p); do
     wait $job || exit_code=1
@@ -189,21 +190,28 @@ ensure_opsfiles_in_tests() {
 }
 
 main() {
+  local ops_directories
+  local ops_directories_without_test
+  local ops_directories_without_community
+
+  ops_directories=$(find operations \
+                         -type d \
+                         -not -name 'example-vars-files' \
+                         -not -name 'workaround')
+  ops_directories_without_test="$(echo "${ops_directories}" | grep -v -e test)"
+  ops_directories_without_community="$(echo "${ops_directories}" | grep -v -e community)"
+
   echo
   echo -e "${LIGHT_GREEN} ***** Begin affirmative readme operations tests ***** ${NOCOLOR}"
-  ensure_opsfiles_in_readme "operations/README.md" $(ls operations/*.yml)
-  ensure_opsfiles_in_readme "operations/legacy/README.md" $(ls operations/legacy/*.yml)
-  ensure_opsfiles_in_readme "operations/community/README.md" $(ls operations/community/*.yml)
-  ensure_opsfiles_in_readme "operations/experimental/README.md" $(ls operations/experimental/*.yml)
-  ensure_opsfiles_in_readme "operations/backup-and-restore/README.md" $(ls operations/backup-and-restore/*.yml)
+  for f in $ops_directories_without_test; do
+    ensure_opsfiles_in_readme "$f"/README.md "$(ls "$f"/*.yml)"
+  done
 
   echo
   echo -e "${LIGHT_GREEN} ***** Begin affirmative operations in readme tests ***** ${NOCOLOR}"
-  ensure_opsfiles_in_readme_exist "operations"
-  ensure_opsfiles_in_readme_exist "operations/legacy"
-  ensure_opsfiles_in_readme_exist "operations/community"
-  ensure_opsfiles_in_readme_exist "operations/experimental"
-  ensure_opsfiles_in_readme_exist "operations/backup-and-restore"
+  for f in $ops_directories_without_test; do
+    ensure_opsfiles_in_readme_exist "$f"
+  done
 
   echo
   echo -e "${LIGHT_GREEN} ***** Begin negative readme operations tests ***** ${NOCOLOR}"
@@ -211,12 +219,9 @@ main() {
 
   echo
   echo -e "${LIGHT_GREEN} ***** Begin test coverage analysis ***** ${NOCOLOR}"
-  ensure_opsfiles_in_tests "scripts/test-standard-ops.sh" $(ls operations/*.yml)
-  ensure_opsfiles_in_tests "scripts/test-legacy-ops.sh" $(ls operations/legacy/*.yml)
-  ensure_opsfiles_in_tests "scripts/test-test-ops.sh" $(ls operations/test/*.yml)
-  ensure_opsfiles_in_tests "scripts/test-experimental-ops.sh" $(ls operations/experimental/*.yml)
-  ensure_opsfiles_in_tests "scripts/test-addons-ops.sh" $(ls operations/addons/*.yml)
-  ensure_opsfiles_in_tests "scripts/test-backup-and-restore-ops.sh" $(ls operations/backup-and-restore/*.yml)
+  for f in $ops_directories_without_community; do
+    ensure_opsfiles_in_tests "scripts/test-$(basename $f).sh" $(ls $f/*.yml)
+  done
 
   echo
   echo -e "${LIGHT_GREEN} ***** Begin interpolation operations tests ***** ${NOCOLOR}"

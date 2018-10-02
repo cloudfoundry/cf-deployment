@@ -1,12 +1,13 @@
 # cf-deployment Experimental Ops-files
 
-This is the README for Experimental Ops-files. To learn more about `cf-deployment`, go to the main [README](../README.md).
+This is the README for Experimental Ops-files. To learn more about `cf-deployment`, go to the main [README](../../README.md).
 
-- For general Ops-files, check out the [Ops-file README](../README.md).
-- For Legacy Ops-files, check out the [Legacy Ops-file README](../legacy/README.md).
-- For Community Ops-files, checkout the [Community Ops-file README](../community/README.md).
+- For General Ops-files, check out the [Ops-file README](../README.md).
 - For Addons Ops-files that can be applied to manifests or runtime configs, check out the [Addons Ops-file README](../addons/README.md).
 - For Backup and Restore Ops-files (for configuring your deployment for use with [BBR](https://github.com/cloudfoundry-incubator/bosh-backup-and-restore)), checkout the [Backup and Restore Ops-files README](../backup-and-restore/README.md).
+- For Bits Service Ops-files (for configuring your deployment for use with [Bits Service](https://github.com/cloudfoundry-incubator/bits-service)), checkout the [Bits Service Ops-files README](../bits-service/README.md).
+- For Community Ops-files, check out the [Community Ops-file README](../community/README.md).
+- For Legacy Ops-files, checkout the [Legacy Ops-file README](../legacy/README.md).
 
 "Experimental" ops-files represent configurations
 that we expect to promote to blessed configuration eventually,
@@ -19,15 +20,15 @@ and the ops-files will be removed.
 |:---  |:---     |:---   |
 | [`add-credhub-lb.yml`](add-credhub-lb.yml) | Use load balancer to expose external address for CredHub. | |
 | [`add-cflinuxfs3.yml`](add-cflinuxfs3.yml) | Add the cflinuxfs3 [stack](https://docs.cloudfoundry.org/devguide/deploy-apps/stacks.html) and buildpacks | Use this opsfile for testing component and app compatibility with cflinuxfs3 in advance of changing the default rootfs. |
-| [`bits-service.yml`](bits-service.yml) | Adds the [bits-service](https://github.com/cloudfoundry-incubator/bits-service) job and enables it in the cloud-controller. | Also requires one of `bits-service-{local,webdav,s3}.yml` from the same directory. |
-| [`bits-service-local.yml`](bits-service-local.yml) | Use local storage for the [bits-service](https://github.com/cloudfoundry-incubator/bits-service). | |
-| [`bits-service-s3.yml`](bits-service-s3.yml) | Use s3 storage for the [bits-service](https://github.com/cloudfoundry-incubator/bits-service). | `use-s3-blobstore.yml` from the root `operations` directory is also required. |
+| [`bits-service.yml`](bits-service.yml) | **DEPRECATED: Promoted to `operations/bits-service/use-bits-service.yml` and will be removed in the next major release** Adds the [bits-service](https://github.com/cloudfoundry-incubator/bits-service) job and enables it in the cloud-controller. | Also requires one of `bits-service-{local,webdav,s3}.yml` from the same directory. |
+| [`bits-service-local.yml`](bits-service-local.yml) | **DEPRECATED: `cf-deployment` doesn't support local NFS storage. This file will be removed in the next major release** Use local storage for the [bits-service](https://github.com/cloudfoundry-incubator/bits-service). | |
+| [`bits-service-s3.yml`](bits-service-s3.yml) | **DEPRECATED: Promoted to `operations/bits-service/configure-bits-service-s3.yml` and will be removed in the next major release** Use s3 storage for the [bits-service](https://github.com/cloudfoundry-incubator/bits-service). | `use-s3-blobstore.yml` from the root `operations` directory is also required. |
 | [`bits-service-alicloud-oss.yml`](bits-service-alicloud-oss.yml) | Use Alicloud for the [bits-service](https://github.com/cloudfoundry-incubator/bits-service). | `use-alicloud-oss-blobstore.yml` from the root `operations` directory is also required. |
 | [`bits-service-azure-storage.yml`](bits-service-azure-storage.yml) | Use Azure Storage for the [bits-service](https://github.com/cloudfoundry-incubator/bits-service). | `use-azure-storage-blobstore.yml` from the root `operations` directory is also required. |
 | [`bits-service-gcs-service-account.yml`](bits-service-gcs-service-account.yml) | Use Google storage with a service account credentials for the [bits-service](https://github.com/cloudfoundry-incubator/bits-service). | `use-gcs-blobstore-service-account.yml` from the root `operations` directory is also required. |
 | [`bits-service-gcs-access-key.yml`](bits-service-gcs-access-key.yml) | Use Google storage with access key credentials for the [bits-service](https://github.com/cloudfoundry-incubator/bits-service). | `use-gcs-blobstore-access-key.yml` from the root `operations` directory is also required. |
 | [`bits-service-swift.yml`](bits-service-swift.yml) | Use Openstack/Swift for the [bits-service](https://github.com/cloudfoundry-incubator/bits-service). | `use-swift-blobstore.yml` from the root `operations` directory is also required. |
-| [`bits-service-webdav.yml`](bits-service-webdav.yml) | Use the `blobstore`'s webdav storage for the [bits-service](https://github.com/cloudfoundry-incubator/bits-service). | Requires the `blobstore` job. |
+| [`bits-service-webdav.yml`](bits-service-webdav.yml) | **DEPRECATED: Inlined into `operations/bits-service/use-bits-service.yml` and will be removed in the next major release** Use the `blobstore`'s webdav storage for the [bits-service](https://github.com/cloudfoundry-incubator/bits-service). | Requires the `blobstore` job. |
 | [`disable-interpolate-service-bindings.yml`](disable-interpolate-service-bindings.yml) | Disables the interpolation of CredHub service credentials by Cloud Controller. |
 | [`disable-consul.yml`](disable-consul.yml) | **DEPRECATED: Consul has been removed from cf-deployment** Removes `consul` instance group and `consul_agent` jobs and prevents the `auctioneer`, `ssh_proxy`, `file_server`, `rep`, `locket`, and `bbs` jobs from registering as a service with Consul | |
 | [`disable-consul-bosh-lite.yml`](disable-consul-bosh-lite.yml) | **DEPRECATED: Consul has been removed from cf-deployment** Consul has been removed. Compatibility shim for disabling Consul on BOSH-Lite. | Apply `disable-consul.yml`, `bosh-lite.yml`, and then `disable-consul-bosh-lite.yml`, in that order. |

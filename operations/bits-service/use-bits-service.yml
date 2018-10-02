@@ -1,0 +1,132 @@
+- type: replace
+  path: /instance_groups/name=api:before
+  value:
+    azs:
+    - z1
+    - z2
+    instances: 2
+    jobs:
+    - name: route_registrar
+      properties:
+        route_registrar:
+          routes:
+          - name: bits-service
+            registration_interval: 20s
+            server_cert_domain_san: https://bits.((system_domain))
+            tags:
+              component: bits-service
+            tls_port: 443
+            uris:
+            - bits.((system_domain))
+      release: routing
+    - name: statsd_injector
+      properties:
+        loggregator:
+          tls:
+            ca_cert: ((loggregator_ca.certificate))
+            statsd_injector:
+              cert: ((loggregator_tls_statsdinjector.certificate))
+              key: ((loggregator_tls_statsdinjector.private_key))
+      release: statsd-injector
+    - name: bits-service
+      properties:
+        bits-service:
+          app_stash:
+            blobstore_type: webdav
+            directory_key: cc-resources
+            webdav_config: &webdav-config
+              ca_cert: "((service_cf_internal_ca.certificate))"
+              password: "((blobstore_admin_users_password))"
+              private_endpoint: https://blobstore.service.cf.internal:4443
+              public_endpoint: https://blobstore.((system_domain))
+              username: blobstore-user
+          buildpacks:
+            blobstore_type: webdav
+            directory_key: cc-buildpacks
+            webdav_config: *webdav-config
+          cc_updates:
+            ca_cert: ((service_cf_internal_ca.certificate))
+            client_cert: ((cc_tls.certificate))
+            client_key: ((cc_tls.private_key))
+          droplets:
+            blobstore_type: webdav
+            directory_key: cc-droplets
+            webdav_config: *webdav-config
+          packages:
+            blobstore_type: webdav
+            directory_key: cc-packages
+            webdav_config: *webdav-config
+          private_endpoint: https://bits.service.cf.internal
+          public_endpoint: https://bits.((system_domain))
+          secret: ((bits_service_secret))
+          signing_users:
+          - password: ((bits_service_signing_password))
+            username: admin
+          tls:
+            cert: ((bits_service_ssl.certificate))
+            key: ((bits_service_ssl.private_key))
+      release: bits-service
+    name: bits
+    networks:
+    - name: default
+    stemcell: default
+    vm_extensions:
+    - 50GB_ephemeral_disk
+    vm_type: small
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/bits_service?
+  value:
+    ca_cert: ((service_cf_internal_ca.certificate))
+    enabled: true
+    password: ((bits_service_signing_password))
+    private_endpoint: https://bits.service.cf.internal
+    public_endpoint: https://bits.((system_domain))
+    username: admin
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/bits_service?
+  value:
+    ca_cert: ((service_cf_internal_ca.certificate))
+    enabled: true
+    password: ((bits_service_signing_password))
+    private_endpoint: https://bits.service.cf.internal
+    public_endpoint: https://bits.((system_domain))
+    username: admin
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/bits_service?
+  value:
+    ca_cert: ((service_cf_internal_ca.certificate))
+    enabled: true
+    password: ((bits_service_signing_password))
+    private_endpoint: https://bits.service.cf.internal
+    public_endpoint: https://bits.((system_domain))
+    username: admin
+- type: replace
+  path: /variables/-
+  value:
+    name: bits_service_secret
+    type: password
+- type: replace
+  path: /variables/-
+  value:
+    name: bits_service_signing_password
+    type: password
+- type: replace
+  path: /variables/name=bits_service_ssl?
+  value:
+    name: bits_service_ssl
+    options:
+      alternative_names:
+      - bits.service.cf.internal
+      - bits-service.service.cf.internal
+      - ((system_domain))
+      - '*.((system_domain))'
+      ca: service_cf_internal_ca
+      common_name: bits.service.cf.internal
+    type: certificate
+- type: replace
+  path: /releases/-
+  value:
+    name: bits-service
+    sha1: 4ca0bad6e7cec2fc3c1f8c308b0e68a0e13f067f
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/bits-service-release?v=2.12.0
+    version: 2.12.0

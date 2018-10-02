@@ -6,11 +6,13 @@ The opsfile in this directory are meant for testing and are **not meant for prod
 
 They may change without notice.
 
-- For general Ops-files, check out the [Ops-file README](../README.md).
-- For experimental Ops-files, check out the [Experimental Ops-file README](../experimental/README.md)
-- For Community Ops-files, check out the [Community Ops-file README](../community/README.md).
+- For General Ops-files, check out the [Ops-file README](../README.md).
 - For Addons Ops-files that can be applied to manifests or runtime configs, check out the [Addons Ops-file README](../addons/README.md).
 - For Backup and Restore Ops-files (for configuring your deployment for use with [BBR](https://github.com/cloudfoundry-incubator/bosh-backup-and-restore)), checkout the [Backup and Restore Ops-files README](../backup-and-restore/README.md).
+- For Bits Service Ops-files (for configuring your deployment for use with [Bits Service](https://github.com/cloudfoundry-incubator/bits-service)), checkout the [Bits Service Ops-files README](../bits-service/README.md).
+- For Community Ops-files, check out the [Community Ops-file README](../community/README.md).
+- For Legacy Ops-files, checkout the [Legacy Ops-file README](../legacy/README.md).
+- For Experimental Ops-files, check out the [Experimental Ops-file README](../experimental/README.md).
 
 | Name | Purpose | Notes |
 |:---  |:---     |:---   |
