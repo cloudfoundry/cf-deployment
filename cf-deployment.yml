@@ -393,6 +393,7 @@ instance_groups:
             ca_cert: "((service_cf_internal_ca.certificate))"
             client_cert: "((diego_rep_client.certificate))"
             client_key: "((diego_rep_client.private_key))"
+      enable_consul_service_registration: false
       loggregator: &diego_loggregator_client_properties
         use_v2_api: true
         ca_cert: "((loggregator_ca.certificate))"
@@ -436,6 +437,7 @@ instance_groups:
             db_username: locket
             db_password: "((locket_database_password))"
             db_driver: mysql
+      enable_consul_service_registration: false
       loggregator:
         use_v2_api: true
         ca_cert: "((loggregator_ca.certificate))"
@@ -835,6 +837,7 @@ instance_groups:
     properties:
       bpm:
         enabled: true
+      enable_consul_service_registration: false
       logging:
         format:
           timestamp: "rfc3339"
@@ -1042,6 +1045,7 @@ instance_groups:
           server_cert: "((diego_auctioneer_server.certificate))"
           server_key: "((diego_auctioneer_server.private_key))"
           skip_consul_lock: true
+      enable_consul_service_registration: false
       loggregator: *diego_loggregator_client_properties
       logging:
         format:
@@ -1107,6 +1111,7 @@ instance_groups:
           uaa:
             ca_cert: "((uaa_ca.certificate))"
           bbs: *diego_bbs_client_properties
+      enable_consul_service_registration: false
       loggregator: *diego_loggregator_client_properties
       logging:
         format:
@@ -1358,6 +1363,7 @@ instance_groups:
           - ((application_ca.certificate))
           - ((credhub_ca.certificate))
           - ((uaa_ca.certificate))
+      enable_consul_service_registration: false
       enable_declarative_healthcheck: true
       loggregator: *diego_loggregator_client_properties
       tls:
