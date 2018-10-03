@@ -14,6 +14,18 @@
     authorized-grant-types: client_credentials
     secret: ((nfs-broker-credhub-uaa-client-secret))
 - type: replace
+  path: /instance_groups/name=credhub/jobs/name=credhub/properties/credhub/authorization/permissions/-
+  value:
+    actors:
+    - uaa-client:nfs-broker-credhub-client
+    operations:
+    - read
+    - write
+    - delete
+    - read_acl
+    - write_acl
+    path: /nfsbroker/*
+- type: replace
   path: /instance_groups/-
   value:
     azs: [z1]
@@ -66,6 +78,7 @@
             - id: "2e315570-802f-44fd-886c-1a2d6676da9d"
               name: "Existing"
               description: "A preexisting filesystem"
+          store_id: nfsbroker
       release: nfs-volume
     - name: cf-cli-6-linux
       release: cf-cli
