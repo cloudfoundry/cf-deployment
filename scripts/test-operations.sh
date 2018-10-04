@@ -57,6 +57,7 @@ test_standard_ops() {
       check_latest        "use-latest-windows2016-stemcell.yml" "windows2016" "-o windows2016-cell.yml"
       check_interpolation "name: use-offline-windows2016fs.yml" "windows2016-cell.yml" "-o use-offline-windows2016fs.yml"
       check_interpolation "use-pxc.yml"
+      check_interpolation "name: use-pxc-for-nfs-volume-service.yml" "${home}/operations/enable-nfs-volume-service.yml" "-o use-pxc.yml" "-o use-pxc-for-nfs-volume-service.yml"
       check_interpolation "windows2016-cell.yml"
       check_interpolation "name: windows2012R2-cell.yml windows2016-cell.yml" "windows2012R2-cell.yml" "-o windows2016-cell.yml"
     popd > /dev/null # operations
