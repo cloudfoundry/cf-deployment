@@ -1,8 +1,5 @@
 ---
 - type: replace
-  path: /instance_groups/name=azurefilebrokerpush/jobs/name=azurefilebrokerpush/properties/db_hostname?
-  value: sql-db.service.cf.internal
-- type: replace
   path: /instance_groups/name=azurefilebrokerpush/jobs/name=azurefilebrokerpush/properties/db_ca_cert?
   value: ((pxc_server_ca.certificate))
 - type: replace
