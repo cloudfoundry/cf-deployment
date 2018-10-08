@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 )
 
-func setPath() (string, error) {
+func SetPath() (string, error) {
 	wd, err := os.Getwd()
 	if err != nil {
 		return "", err

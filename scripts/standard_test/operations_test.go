@@ -37,11 +37,16 @@ func TestOperations(t *testing.T) {
 		},
 	}
 
+	cfDeploymentHome, err := helpers.SetPath()
+	if err != nil {
+		t.Errorf("setup: %v", err)
+	}
+
 	for _, test := range opsFileTests {
 		test := test
 		t.Run(test.Name, func(t *testing.T) {
 			t.Parallel()
-			if err := helpers.CheckInterpolate(test, "operations"); err != nil {
+			if err := helpers.CheckInterpolate(test, cfDeploymentHome, "operations"); err != nil {
 				t.Error("interpolate failed:", err)
 			}
 		})

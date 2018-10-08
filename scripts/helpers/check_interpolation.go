@@ -16,12 +16,7 @@ type OpsFileTest struct {
 	VarsFiles []string
 }
 
-func CheckInterpolate(opsFileTest OpsFileTest, operationsSubDir string) error {
-	cfDeploymentHome, err := setPath()
-	if err != nil {
-		return fmt.Errorf("setup: %v", err)
-	}
-
+func CheckInterpolate(opsFileTest OpsFileTest, cfDeploymentHome string, operationsSubDir string) error {
 	manifestPath := filepath.Join(cfDeploymentHome, "cf-deployment.yml")
 	execDir := filepath.Join(cfDeploymentHome, operationsSubDir)
 	tempVarsStorePath, err := getTempVarsStore(cfDeploymentHome)
