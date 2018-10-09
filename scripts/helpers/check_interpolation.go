@@ -18,7 +18,7 @@ type OpsFileTest struct {
 func CheckInterpolate(cfDeploymentHome, operationsSubDir, opsFileName string, opsFileTest OpsFileTest) error {
 	manifestPath := filepath.Join(cfDeploymentHome, "cf-deployment.yml")
 	execDir := filepath.Join(cfDeploymentHome, operationsSubDir)
-	tempVarsStorePath, err := getTempVarsStore(cfDeploymentHome)
+	tempVarsStorePath, err := createTempVarsStore(cfDeploymentHome)
 	if err != nil {
 		return err
 	}
@@ -28,8 +28,8 @@ func CheckInterpolate(cfDeploymentHome, operationsSubDir, opsFileName string, op
 	if len(opsFileTest.Ops) == 0 {
 		args = append(args, "-o", opsFileName)
 	} else {
-		for _, arg := range opsFileTest.Ops {
-			args = append(args, "-o", arg)
+		for _, o := range opsFileTest.Ops {
+			args = append(args, "-o", o)
 		}
 	}
 
@@ -77,7 +77,7 @@ func boshInterpolate(execDir, manifestPath, varsStorePath string, args ...string
 	return nil
 }
 
-func getTempVarsStore(cfDeploymentHome string) (string, error) {
+func createTempVarsStore(cfDeploymentHome string) (string, error) {
 	varsStorePath := filepath.Join(cfDeploymentHome, "scripts", "fixtures", "unit-test-vars-store.yml")
 
 	varsStoreFile, err := os.Open(varsStorePath)
@@ -86,15 +86,15 @@ func getTempVarsStore(cfDeploymentHome string) (string, error) {
 	}
 	defer varsStoreFile.Close()
 
-	tempVarsStore, err := ioutil.TempFile("", "vars-store-")
+	tempVarsStoreFile, err := ioutil.TempFile("", "vars-store-")
 	if err != nil {
 		return "", fmt.Errorf("error creating temp vars store: %v", err)
 	}
-	defer tempVarsStore.Close()
+	defer tempVarsStoreFile.Close()
 
-	if _, err := io.Copy(tempVarsStore, varsStoreFile); err != nil {
+	if _, err := io.Copy(tempVarsStoreFile, varsStoreFile); err != nil {
 		return "", fmt.Errorf("error copying tempVarsStore: %v", err)
 	}
 
-	return tempVarsStore.Name(), nil
+	return tempVarsStoreFile.Name(), nil
 }
