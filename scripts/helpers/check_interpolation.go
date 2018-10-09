@@ -10,13 +10,12 @@ import (
 )
 
 type OpsFileTest struct {
-	Name      string
 	Ops       []string
 	Vars      []string
 	VarsFiles []string
 }
 
-func CheckInterpolate(opsFileTest OpsFileTest, cfDeploymentHome string, operationsSubDir string) error {
+func CheckInterpolate(cfDeploymentHome, operationsSubDir, opsFileName string, opsFileTest OpsFileTest) error {
 	manifestPath := filepath.Join(cfDeploymentHome, "cf-deployment.yml")
 	execDir := filepath.Join(cfDeploymentHome, operationsSubDir)
 	tempVarsStorePath, err := getTempVarsStore(cfDeploymentHome)
@@ -27,7 +26,7 @@ func CheckInterpolate(opsFileTest OpsFileTest, cfDeploymentHome string, operatio
 
 	args := []string{}
 	if len(opsFileTest.Ops) == 0 {
-		args = append(args, "-o", opsFileTest.Name)
+		args = append(args, "-o", opsFileName)
 	} else {
 		for _, arg := range opsFileTest.Ops {
 			args = append(args, "-o", arg)
@@ -43,6 +42,21 @@ func CheckInterpolate(opsFileTest OpsFileTest, cfDeploymentHome string, operatio
 	}
 
 	return boshInterpolate(execDir, manifestPath, tempVarsStorePath, args...)
+}
+
+func FindFiles(cfDeploymentHome, operationsSubDir string) ([]string, error) {
+	searchPath := filepath.Join(cfDeploymentHome, operationsSubDir, "*.yml")
+	filePaths, err := filepath.Glob(searchPath)
+	if err != nil {
+		return nil, err
+	}
+
+	var fileNames []string
+	for _, filePath := range filePaths {
+		fileNames = append(fileNames, filepath.Base(filePath))
+	}
+
+	return fileNames, nil
 }
 
 func boshInterpolate(execDir, manifestPath, varsStorePath string, args ...string) error {
