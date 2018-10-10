@@ -9,7 +9,7 @@ import (
 const testDirectory = "operations"
 
 // TODO: ensure every file in "operations" directory has an entry in the tests array
-var standardTests = map[string]helpers.OpsFileTest{
+var standardTests = map[string]helpers.OpsFileTestParams{
 	"aws.yml":                        {},
 	"azure.yml":                      {},
 	"bosh-lite.yml":                  {},
@@ -34,12 +34,16 @@ var standardTests = map[string]helpers.OpsFileTest{
 func TestStandard(t *testing.T) {
 	cfDeploymentHome, err := helpers.SetPath()
 	if err != nil {
-		t.Errorf("setup: %v", err)
+		t.Fatalf("setup: %v", err)
 	}
 
-	fileNames, _ := helpers.FindFiles(cfDeploymentHome, testDirectory)
+	fileNames, err := helpers.FindFiles(cfDeploymentHome, testDirectory)
+	if err != nil {
+		t.Fatalf("setup: %v", err)
+	}
 	for _, fileName := range fileNames {
 		t.Run(fileName+" has test", func(t *testing.T) {
+			// TODO: only skip with some sort of flag
 			t.Skip()
 			if _, hasTest := standardTests[fileName]; !hasTest {
 				t.Error("Missing test for:", fileName)

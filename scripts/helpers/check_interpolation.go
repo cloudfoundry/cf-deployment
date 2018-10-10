@@ -20,7 +20,7 @@ func (p PathValidator) HasValidator() bool {
 	return p != (PathValidator{})
 }
 
-type OpsFileTest struct {
+type OpsFileTestParams struct {
 	Ops           []string
 	Vars          []string
 	VarsFiles     []string
@@ -31,7 +31,7 @@ type boshOut struct {
 	Blocks []string `json:"Blocks"`
 }
 
-func CheckInterpolate(cfDeploymentHome, operationsSubDir, opsFileName string, opsFileTest OpsFileTest) error {
+func CheckInterpolate(cfDeploymentHome, operationsSubDir, opsFileName string, opsFileTest OpsFileTestParams) error {
 	manifestPath := filepath.Join(cfDeploymentHome, "cf-deployment.yml")
 	execDir := filepath.Join(cfDeploymentHome, operationsSubDir)
 	tempVarsStorePath, err := createTempVarsStore(cfDeploymentHome)
@@ -40,7 +40,7 @@ func CheckInterpolate(cfDeploymentHome, operationsSubDir, opsFileName string, op
 	}
 	defer os.Remove(tempVarsStorePath)
 
-	args := []string{}
+	var args []string
 	if len(opsFileTest.Ops) == 0 {
 		args = append(args, "-o", opsFileName)
 	} else {
