@@ -24,6 +24,11 @@ var standardTests = map[string]helpers.OpsFileTest{
 		Ops:       []string{"enable-nfs-volume-service.yml", "enable-nfs-ldap.yml"},
 		VarsFiles: []string{"example-vars-files/vars-enable-nfs-ldap.yml"},
 	},
+	"use-latest-stemcell.yml": {
+		PathValidator: helpers.PathValidator{
+			Path: "/stemcells/alias=default/version", ExpectedValue: "latest",
+		},
+	},
 }
 
 func TestStandard(t *testing.T) {
