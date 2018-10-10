@@ -8,7 +8,6 @@ import (
 
 const testDirectory = "operations"
 
-// TODO: ensure every file in "operations" directory has an entry in the tests array
 var standardTests = map[string]helpers.OpsFileTestParams{
 	"aws.yml":                        {},
 	"azure.yml":                      {},
@@ -17,18 +16,121 @@ var standardTests = map[string]helpers.OpsFileTestParams{
 	"configure-confab-timeout.yml": {
 		Vars: []string{"confab_timeout=60"},
 	},
-	"use-offline-windows2016fs.yml": {
-		Ops: []string{"windows2016-cell.yml", "use-offline-windows2016fs.yml"},
+	"configure-default-router-group.yml": {
+		Vars: []string{"default_router_group_reservable_ports=1234-2024"},
+	},
+	"disable-log-cache.yml":              {},
+	"disable-router-tls-termination.yml": {},
+	"enable-cc-rate-limiting.yml": {
+		Vars: []string{"cc_rate_limiter_general_limit=blah", "cc_rate_limiter_unauthenticated_limit=something"},
 	},
 	"enable-nfs-ldap.yml": {
 		Ops:       []string{"enable-nfs-volume-service.yml", "enable-nfs-ldap.yml"},
 		VarsFiles: []string{"example-vars-files/vars-enable-nfs-ldap.yml"},
+	},
+	"enable-nfs-volume-service.yml":           {},
+	"enable-privileged-container-support.yml": {},
+	"enable-service-discovery.yml":            {},
+	"enable-uniq-consul-node-name.yml":        {},
+	"migrate-cf-mysql-to-pxc.yml":             {},
+	"openstack.yml":                           {},
+	"override-app-domains.yml": {
+		VarsFiles: []string{"example-vars-files/vars-override-app-domains.yml"},
+	},
+	"rename-network-and-deployment.yml": {
+		Vars: []string{"deployment_name=renamed_deployment", "network_name=renamed_network"},
+	},
+	"scale-database-cluster.yml": {},
+	"scale-to-one-az.yml":        {},
+	"set-bbs-active-key.yml": {
+		Vars: []string{"diego_bbs_active_key_label=my_key_name"},
+	},
+	"set-router-static-ips.yml": {
+		Vars: []string{"router_static_ips=[10.0.16.4,10.0.47.5]"},
+	},
+	"stop-skipping-tls-validation.yml": {},
+	"use-alicloud-oss-blobstore.yml": {
+		Ops:       []string{"use-external-blobstore.yml", "use-alicloud-oss-blobstore.yml"},
+		VarsFiles: []string{"example-vars-files/vars-use-alicloud-oss-blobstore.yml"},
+	},
+	"use-azure-storage-blobstore.yml": {
+		Ops:       []string{"use-external-blobstore.yml", "use-azure-storage-blobstore.yml"},
+		VarsFiles: []string{"example-vars-files/vars-use-azure-storage-blobstore.yml"},
+	},
+	"use-blobstore-cdn.yml": {
+		VarsFiles: []string{"example-vars-files/vars-use-blobstore-cdn.yml"},
+	},
+	"use-compiled-releases.yml": {},
+	"use-external-blobstore.yml": {
+		VarsFiles: []string{"example-vars-files/vars-use-external-blobstore.yml"},
+	},
+	"use-external-dbs.yml": {
+		VarsFiles: []string{"example-vars-files/vars-use-external-dbs.yml"},
+	},
+	"use-gcs-blobstore-access-key.yml": {
+		Ops:       []string{"use-external-blobstore.yml", "use-gcs-blobstore-access-key.yml"},
+		Vars:      []string{"blobstore_access_key_id=TEST_ACCESS_KEY", "blobstore_secret_access_key=TEST_SECRET_ACCESS_KEY"},
+		VarsFiles: []string{"example-vars-files/vars-use-gcs-blobstore-access-key.yml"},
+	},
+	"use-gcs-blobstore-service-account.yml": {
+		Ops:       []string{"use-external-blobstore.yml", "use-gcs-blobstore-service-account.yml"},
+		VarsFiles: []string{"example-vars-files/vars-use-gcs-blobstore-service-account.yml"},
+	},
+	"use-haproxy-public-network.yml": {
+		Ops:  []string{"use-haproxy.yml", "use-haproxy-public-network.yml"},
+		Vars: []string{"haproxy_public_network_name=public", "haproxy_public_ip=6.7.8.9"},
+	},
+	"use-haproxy.yml": {
+		Vars: []string{"haproxy_private_ip=10.0.10.10"},
 	},
 	"use-latest-stemcell.yml": {
 		PathValidator: helpers.PathValidator{
 			Path: "/stemcells/alias=default/version", ExpectedValue: "latest",
 		},
 	},
+	"use-latest-windows-stemcell.yml": {
+		Ops: []string{"windows2012R2-cell.yml", "use-latest-windows-stemcell.yml"},
+		PathValidator: helpers.PathValidator{
+			Path: "/stemcells/alias=windows2012R2/version", ExpectedValue: "latest",
+		},
+	},
+	"use-latest-windows2012R2-stemcell.yml": {
+		Ops: []string{"windows2012R2-cell.yml", "use-latest-windows2012R2-stemcell.yml"},
+		PathValidator: helpers.PathValidator{
+			Path: "/stemcells/alias=windows2012R2/version", ExpectedValue: "latest",
+		},
+	},
+	"use-latest-windows2016-stemcell.yml": {
+		Ops: []string{"windows2016-cell.yml", "use-latest-windows2016-stemcell.yml"},
+		PathValidator: helpers.PathValidator{
+			Path: "/stemcells/alias=windows2016/version", ExpectedValue: "latest",
+		},
+	},
+	"use-offline-windows2016fs.yml": {
+		Ops: []string{"windows2016-cell.yml", "use-offline-windows2016fs.yml"},
+	},
+	"use-postgres.yml": {},
+	"use-pxc-for-nfs-volume-service.yml": {
+		Ops: []string{"enable-nfs-volume-service.yml", "use-pxc.yml", "use-pxc-for-nfs-volume-service.yml"},
+	},
+	"use-pxc.yml": {},
+	"use-s3-blobstore.yml": {
+		Ops:       []string{"use-external-blobstore.yml", "use-s3-blobstore.yml"},
+		VarsFiles: []string{"example-vars-files/vars-use-s3-blobstore.yml"},
+	},
+	"use-swift-blobstore.yml": {
+		Ops:       []string{"use-external-blobstore.yml", "use-swift-blobstore.yml"},
+		VarsFiles: []string{"example-vars-files/vars-use-swift-blobstore.yml"},
+	},
+	"use-trusted-ca-cert-for-apps.yml": {
+		VarsFiles: []string{"example-vars-files/vars-use-trusted-ca-cert-for-apps.yml"},
+	},
+	"windows-cell.yml": {},
+	"windows2012R2-cell.yml windows2016-cell.yml": {
+		Ops: []string{"windows2012R2-cell.yml", "windows2016-cell.yml"},
+	},
+	"windows2012R2-cell.yml": {},
+	"windows2016-cell.yml":   {},
 }
 
 func TestStandard(t *testing.T) {
@@ -44,7 +146,7 @@ func TestStandard(t *testing.T) {
 	for _, fileName := range fileNames {
 		t.Run(fileName+" has test", func(t *testing.T) {
 			// TODO: only skip with some sort of flag
-			t.Skip()
+			// t.Skip()
 			if _, hasTest := standardTests[fileName]; !hasTest {
 				t.Error("Missing test for:", fileName)
 			}
