@@ -872,6 +872,7 @@ instance_groups:
     properties:
       uaa_client_secret: ((uaa_clients_network_policy_secret))
       uaa_ca: ((uaa_ca.certificate))
+      enable_space_developer_self_service: true
       database:
         type: mysql
         username: network_policy
