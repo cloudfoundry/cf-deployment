@@ -33,7 +33,6 @@ test_experimental_ops() {
       check_interpolation "enable-nfs-volume-service-credhub.yml"
       check_interpolation "name: migrate-nfsbroker-mysql-to-credhub.yml" "${home}/operations/enable-nfs-volume-service.yml" "-o migrate-nfsbroker-mysql-to-credhub.yml" -l "${home}/operations/example-vars-files/vars-migrate-nfsbroker-mysql-to-credhub.yml"
       check_interpolation "enable-smb-volume-service.yml"
-      check_interpolation "name: use-pxc-for-smb-volume-service.yml" "enable-smb-volume-service.yml" "-o use-pxc.yml" "-o use-pxc-for-smb-volume-service.yml"
 
       check_interpolation "fast-deploy-with-downtime-and-danger.yml"
 
