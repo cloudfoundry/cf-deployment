@@ -14,13 +14,32 @@
     authorized-grant-types: client_credentials
     secret: ((nfs-broker-credhub-uaa-client-secret))
 - type: replace
+  path: /instance_groups/name=credhub/jobs/name=credhub/properties/credhub/authorization/permissions/-
+  value:
+    actors:
+    - uaa-client:nfs-broker-credhub-client
+    operations:
+    - read
+    - write
+    - delete
+    - read_acl
+    - write_acl
+    path: /nfsbroker/*
+- type: replace
   path: /instance_groups/-
   value:
+    name: nfs-broker-credhub-push
+    lifecycle: errand
     azs:
     - z1
     instances: 1
+    vm_type: minimal
+    stemcell: default
+    networks:
+    - name: default
     jobs:
     - name: nfsbrokerpush
+      release: nfs-volume
       properties:
         nfsbrokerpush:
           app_domain: ((system_domain))
@@ -71,15 +90,8 @@
           space: nfs-broker-space
           syslog_url: ""
           username: nfs-broker
-      release: nfs-volume
     - name: cf-cli-6-linux
       release: cf-cli
-    lifecycle: errand
-    name: nfs-broker-credhub-push
-    networks:
-    - name: default
-    stemcell: default
-    vm_type: minimal
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=nfsv3driver?
   value:
