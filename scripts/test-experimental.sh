@@ -54,6 +54,9 @@ test_experimental_ops() {
       check_interpolation "use-xenial-stemcell.yml"
       check_interpolation "set-cpu-weight.yml"
 
+      check_interpolation "add-deployment-updater.yml"
+      check_interpolation "name: add-deployment-updater-postgres.yml" "add-deployment-updater.yml" "-o add-deployment-updater-postgres.yml"
+
       check_interpolation "windows1803-cell.yml"
       check_interpolation "name: windows-component-syslog-ca.yml" "windows-enable-component-syslog.yml" "-o windows-component-syslog-ca.yml" "-l ${home}/operations/addons/example-vars-files/vars-enable-component-syslog.yml"
       check_interpolation "name: windows-enable-component-syslog.yml" "windows-enable-component-syslog.yml" "-l ${home}/operations/addons/example-vars-files/vars-enable-component-syslog.yml"
