@@ -2,6 +2,7 @@ package helpers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -29,6 +30,7 @@ type OpsFileTestParams struct {
 
 type boshOut struct {
 	Blocks []string `json:"Blocks"`
+	Lines  []string `json:"Lines"`
 }
 
 func CheckInterpolate(cfDeploymentHome, operationsSubDir, opsFileName string, opsFileTest OpsFileTestParams) error {
@@ -73,7 +75,7 @@ func CheckInterpolate(cfDeploymentHome, operationsSubDir, opsFileName string, op
 			return err
 		}
 
-		// "latest"
+		// TODO: see if we can remove the [0] index accessor
 		expected, got := opsFileTest.PathValidator.ExpectedValue, strings.TrimSpace(out.Blocks[0])
 		if expected != got {
 			return fmt.Errorf("path value mismatch: expected %s, got %s", expected, got)
@@ -133,8 +135,27 @@ func boshInterpolate(execDir, manifestPath, varsStorePath string, args ...string
 
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		return nil, fmt.Errorf("error running bosh interpolate: %s", string(out))
+		return nil, formatBOSHError(out)
 	}
 
 	return out, nil
+}
+
+func formatBOSHError(errJSON []byte) error {
+	var out boshOut
+	err := json.Unmarshal(errJSON, &out)
+	if err != nil {
+		return fmt.Errorf("bosh error: %s", string(errJSON))
+	}
+
+	errLines := new(strings.Builder)
+	for _, line := range out.Lines {
+		if strings.HasPrefix(line, "Exit code") {
+			continue
+		}
+		fmt.Fprintln(errLines)
+		fmt.Fprint(errLines, line)
+	}
+
+	return errors.New(errLines.String())
 }
