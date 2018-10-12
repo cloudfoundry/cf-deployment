@@ -1257,6 +1257,14 @@ instance_groups:
         source_id: log-cache
         addr: http://localhost:6060/debug/vars
         template: "{{.LogCache.AvailableSystemMemory}}"
+      - name: promql-instant-query-time
+        source_id: log-cache
+        addr: http://localhost:6060/debug/vars
+        template: "{{.LogCache.PromQLInstantQueryTime}}"
+      - name: promql-range-query-time
+        source_id: log-cache
+        addr: http://localhost:6060/debug/vars
+        template: "{{.LogCache.PromQLRangeQueryTime}}"
 
         # CF Auth Proxy
       - name: last-uaa-latency
