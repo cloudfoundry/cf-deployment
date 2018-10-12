@@ -3,7 +3,7 @@ package bitsservice_test
 import (
 	"testing"
 
-	"tests/helpers"
+	"og/helpers"
 )
 
 const testDirectory = "operations/bits-service"

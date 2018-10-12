@@ -3,7 +3,7 @@ package iaas_test
 import (
 	"testing"
 
-	"tests/helpers"
+	"og/helpers"
 )
 
 const testDirectory = "iaas-support/softlayer"

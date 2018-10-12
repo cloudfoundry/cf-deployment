@@ -3,7 +3,7 @@ package addons_test
 import (
 	"testing"
 
-	"tests/helpers"
+	"og/helpers"
 )
 
 const testDirectory = "operations/addons"
