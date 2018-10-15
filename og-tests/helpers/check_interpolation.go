@@ -33,7 +33,7 @@ type boshOut struct {
 	Lines  []string `json:"Lines"`
 }
 
-func CheckInterpolate(cfDeploymentHome, operationsSubDir, opsFileName string, opsFileTest OpsFileTestParams) error {
+func checkInterpolate(cfDeploymentHome, operationsSubDir, opsFileName string, opsFileTest OpsFileTestParams) error {
 	manifestPath := filepath.Join(cfDeploymentHome, "cf-deployment.yml")
 	execDir := filepath.Join(cfDeploymentHome, operationsSubDir)
 	tempVarsStorePath, err := createTempVarsStore(cfDeploymentHome)
@@ -83,21 +83,6 @@ func CheckInterpolate(cfDeploymentHome, operationsSubDir, opsFileName string, op
 	}
 
 	return nil
-}
-
-func FindFiles(cfDeploymentHome, operationsSubDir string) ([]string, error) {
-	searchPath := filepath.Join(cfDeploymentHome, operationsSubDir, "*.yml")
-	filePaths, err := filepath.Glob(searchPath)
-	if err != nil {
-		return nil, err
-	}
-
-	var fileNames []string
-	for _, filePath := range filePaths {
-		fileNames = append(fileNames, filepath.Base(filePath))
-	}
-
-	return fileNames, nil
 }
 
 func createTempVarsStore(cfDeploymentHome string) (string, error) {
