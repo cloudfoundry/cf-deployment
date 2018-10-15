@@ -25,7 +25,7 @@
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=garden/properties/garden/additional_bpm_volumes?
   value:
-    - "/var/vcap/data/rep/shared_data"
+    - "/var/vcap/data/rep/shared/garden"
     - "/var/vcap/data/netplugin-server/sockets"
 
 - type: replace
