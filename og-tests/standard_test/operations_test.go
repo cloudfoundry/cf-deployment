@@ -141,6 +141,6 @@ func TestStandard(t *testing.T) {
 
 	suite := helpers.NewSuiteTest(cfDeploymentHome, testDirectory, standardTests)
 	suite.EnsureTestCoverage(t)
+	suite.ReadmeTest(t)
 	suite.InterpolateTest(t)
-	suite.EnsureOpsFileInReadme(t)
 }

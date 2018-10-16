@@ -11,21 +11,9 @@ const testDirectory = "operations/experimental"
 var experimentalTests = map[string]helpers.OpsFileTestParams{
 	"add-cflinuxfs3.yml": {},
 	"add-credhub-lb.yml": {},
-	"bits-service-alicloud-oss.yml": {
-		Ops:       []string{"../use-external-blobstore.yml", "../use-alicloud-oss-blobstore.yml", "bits-service.yml", "bits-service-alicloud-oss.yml"},
-		VarsFiles: []string{"../example-vars-files/vars-use-alicloud-oss-blobstore.yml"},
-	},
-	"bits-service-azure-storage.yml": {
-		Ops:       []string{"../use-external-blobstore.yml", "../use-azure-storage-blobstore.yml", "bits-service.yml", "bits-service-azure-storage.yml"},
-		VarsFiles: []string{"../example-vars-files/vars-use-azure-storage-blobstore.yml"},
-	},
-	"bits-service-gcs-access-key.yml": {
-		Ops:       []string{"../use-external-blobstore.yml", "../use-gcs-blobstore-access-key.yml", "bits-service.yml", "bits-service-gcs-access-key.yml"},
-		VarsFiles: []string{"../example-vars-files/vars-use-gcs-blobstore-access-key.yml"},
-	},
-	"bits-service-gcs-service-account.yml": {
-		Ops:       []string{"../use-external-blobstore.yml", "../use-gcs-blobstore-service-account.yml", "bits-service.yml", "bits-service-gcs-service-account.yml"},
-		VarsFiles: []string{"../example-vars-files/vars-use-gcs-blobstore-service-account.yml"},
+	"add-deployment-updater.yml": {},
+	"add-deployment-updater-postgres.yml": {
+		Ops: []string{"add-deployment-updater.yml", "add-deployment-updater-postgres.yml"},
 	},
 	"bits-service-local.yml": {
 		Ops: []string{"bits-service.yml", "bits-service-local.yml"},
@@ -33,10 +21,6 @@ var experimentalTests = map[string]helpers.OpsFileTestParams{
 	"bits-service-s3.yml": {
 		Ops:       []string{"../use-external-blobstore.yml", "../use-s3-blobstore.yml", "bits-service.yml", "bits-service-s3.yml"},
 		VarsFiles: []string{"../example-vars-files/vars-use-s3-blobstore.yml"},
-	},
-	"bits-service-swift.yml": {
-		Ops:       []string{"../use-external-blobstore.yml", "../use-swift-blobstore.yml", "bits-service.yml", "bits-service-swift.yml"},
-		VarsFiles: []string{"../example-vars-files/vars-use-swift-blobstore.yml"},
 	},
 	"bits-service-webdav.yml": {
 		Ops: []string{"bits-service.yml", "bits-service-webdav.yml"},
@@ -120,6 +104,6 @@ func TestExperimental(t *testing.T) {
 
 	suite := helpers.NewSuiteTest(cfDeploymentHome, testDirectory, experimentalTests)
 	suite.EnsureTestCoverage(t)
+	suite.ReadmeTest(t)
 	suite.InterpolateTest(t)
-	suite.EnsureOpsFileInReadme(t)
 }

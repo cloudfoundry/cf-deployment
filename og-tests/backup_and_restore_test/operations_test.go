@@ -44,6 +44,6 @@ func TestBackupAndRestore(t *testing.T) {
 
 	suite := helpers.NewSuiteTest(cfDeploymentHome, testDirectory, backupAndRestoreTests)
 	suite.EnsureTestCoverage(t)
+	suite.ReadmeTest(t)
 	suite.InterpolateTest(t)
-	suite.EnsureOpsFileInReadme(t)
 }
