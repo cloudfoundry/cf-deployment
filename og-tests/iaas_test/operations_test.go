@@ -21,6 +21,6 @@ func TestIAAS(t *testing.T) {
 	}
 
 	suite := helpers.NewSuiteTest(cfDeploymentHome, testDirectory, iaasTests)
-	suite.EnsureHasTest(t)
+	suite.EnsureTestCoverage(t)
 	suite.InterpolateTest(t)
 }

@@ -119,6 +119,7 @@ func TestExperimental(t *testing.T) {
 	}
 
 	suite := helpers.NewSuiteTest(cfDeploymentHome, testDirectory, experimentalTests)
-	suite.EnsureHasTest(t)
+	suite.EnsureTestCoverage(t)
 	suite.InterpolateTest(t)
+	suite.EnsureOpsFileInReadme(t)
 }

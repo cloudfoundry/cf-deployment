@@ -34,6 +34,6 @@ func TestTest(t *testing.T) {
 	}
 
 	suite := helpers.NewSuiteTest(cfDeploymentHome, testDirectory, testTests)
-	suite.EnsureHasTest(t)
+	suite.EnsureTestCoverage(t)
 	suite.InterpolateTest(t)
 }

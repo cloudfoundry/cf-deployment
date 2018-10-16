@@ -43,6 +43,7 @@ func TestBitSservice(t *testing.T) {
 	}
 
 	suite := helpers.NewSuiteTest(cfDeploymentHome, testDirectory, bitsServiceTests)
-	suite.EnsureHasTest(t)
+	suite.EnsureTestCoverage(t)
 	suite.InterpolateTest(t)
+	suite.EnsureOpsFileInReadme(t)
 }

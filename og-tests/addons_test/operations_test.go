@@ -24,6 +24,7 @@ func TestAddons(t *testing.T) {
 		t.Fatalf("setup: %v", err)
 	}
 	suite := helpers.NewSuiteTest(cfDeploymentHome, testDirectory, addonsTests)
-	suite.EnsureHasTest(t)
+	suite.EnsureTestCoverage(t)
 	suite.InterpolateTest(t)
+	suite.EnsureOpsFileInReadme(t)
 }

@@ -40,6 +40,7 @@ func TestLegacy(t *testing.T) {
 	}
 
 	suite := helpers.NewSuiteTest(cfDeploymentHome, testDirectory, legacyTests)
-	suite.EnsureHasTest(t)
+	suite.EnsureTestCoverage(t)
 	suite.InterpolateTest(t)
+	suite.EnsureOpsFileInReadme(t)
 }
