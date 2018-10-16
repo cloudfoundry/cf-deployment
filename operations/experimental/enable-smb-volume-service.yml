@@ -8,29 +8,11 @@
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/volume_services_enabled?
   value: true
 - type: replace
-  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/smb-broker-client?
+  path: /instance_groups/name=database/jobs/name=mysql/properties/cf_mysql/mysql/seeded_databases/-
   value:
-    authorities: cloud_controller.admin
-    authorized-grant-types: client_credentials
-    secret: ((smb-broker-uaa-client-secret))
-- type: replace
-  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/smb-broker-credhub-client?
-  value:
-    authorities: credhub.read,credhub.write
-    authorized-grant-types: client_credentials
-    secret: ((smb-broker-credhub-uaa-client-secret))
-- type: replace
-  path: /instance_groups/name=credhub/jobs/name=credhub/properties/credhub/authorization/permissions/-
-  value:
-    actors:
-    - uaa-client:smb-broker-credhub-client
-    operations:
-    - read
-    - write
-    - delete
-    - read_acl
-    - write_acl
-    path: /smbbroker/*
+    name: azurefile-broker
+    password: ((azurefile-broker-database-password))
+    username: azurefile-broker
 - type: replace
   path: /instance_groups/-
   value:
@@ -38,35 +20,39 @@
     - z1
     instances: 1
     jobs:
-    - name: smbbrokerpush
+    - name: azurefilebrokerpush
       properties:
         app_domain: ((system_domain))
-        cf:
-          client_id: smb-broker-client
-          client_secret: ((smb-broker-uaa-client-secret))
-        credhub:
-          store_id: smbbroker
-          uaa_client_id: smb-broker-credhub-client
-          uaa_client_secret: ((smb-broker-credhub-uaa-client-secret))
-          url: https://credhub.service.cf.internal:8844
+        app_name: azurefilebroker
+        cf_admin_password: ((cf_admin_password))
+        cf_admin_user: admin
+        create_sql_security_group: true
+        db_driver: mysql
+        db_hostname: sql-db.service.cf.internal
+        db_name: azurefile-broker
+        db_password: ((azurefile-broker-database-password))
+        db_port: 3306
+        db_username: azurefile-broker
         domain: ((system_domain))
         organization: system
-        password: ((smb-broker-password))
+        password: ((azurefile-broker-password))
+        service_id: azurefile-volume
+        service_name: azurefile-service
         skip_cert_verify: true
-        space: smb-broker-space
+        space: azurefilebroker-space
         syslog_url: ""
-        username: smb-broker
+        username: admin
       release: smb-volume
     - name: cf-cli-6-linux
       release: cf-cli
     lifecycle: errand
-    name: smb-broker-push
+    name: azurefilebrokerpush
     networks:
     - name: default
     stemcell: default
     vm_type: minimal
 - type: replace
-  path: /instance_groups/name=diego-cell/jobs/name=smbdriver?
+  path: /instance_groups/name=diego-cell/jobs/-
   value:
     name: smbdriver
     properties: {}
@@ -74,22 +60,24 @@
 - type: replace
   path: /variables/-
   value:
-    name: smb-broker-password
+    name: azurefile-broker-password
     type: password
 - type: replace
   path: /variables/-
   value:
-    name: smb-broker-uaa-client-secret
+    name: azurefile-broker-database-password
     type: password
 - type: replace
-  path: /variables/-
-  value:
-    name: smb-broker-credhub-uaa-client-secret
-    type: password
-- type: replace
-  path: /releases/name=smb-volume?
+  path: /releases/-
   value:
     name: smb-volume
-    sha1: 8460b477f7ff90220666fb7811d191455ab75cf6
-    url: https://bosh.io/d/github.com/cloudfoundry/smb-volume-release?v=0.2.0
-    version: 0.2.0
+    sha1: 6742bfc8134c633871e7fd2d50bb94682d0275f8
+    url: https://bosh.io/d/github.com/cloudfoundry/smb-volume-release?v=0.1.12
+    version: 0.1.12
+- type: replace
+  path: /releases/name=cf-cli?
+  value:
+    name: cf-cli
+    sha1: 9dfcb2ffec5abb77ea9bd4561655a8444405c481
+    url: https://bosh.io/d/github.com/bosh-packages/cf-cli-release?v=1.9.0
+    version: 1.9.0
