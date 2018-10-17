@@ -10,8 +10,10 @@ import (
 )
 
 type instanceGroup struct {
-	Name     string
-	Networks []struct {
+	Name      string
+	Instances *int
+	Azs       []string
+	Networks  []struct {
 		Name string
 	}
 	Jobs []struct {
@@ -64,8 +66,6 @@ func TestSemantic(t *testing.T) {
 	})
 
 	t.Run("aws.yml", func(t *testing.T) {
-		expectedAWSDopplerPort := 4443
-
 		manifest, err := boshInterpolateAndUnmarshal(
 			operationsSubDirectory,
 			manifestPath,
@@ -80,10 +80,30 @@ func TestSemantic(t *testing.T) {
 			for _, j := range ig.Jobs {
 				portNumber := j.Properties.Doppler.Port
 
-				if portNumber != nil && *portNumber != expectedAWSDopplerPort {
-					t.Errorf("port number '%v' on instance '%s' does not match expected port number '%v'", portNumber, ig.Name, expectedAWSDopplerPort)
+				if portNumber != nil && *portNumber != 4443 {
+					t.Errorf("port number '%v' on instance '%s' does not match expected port number '%v'", portNumber, ig.Name, 4443)
 				}
+			}
+		}
+	})
 
+	t.Run("scale-to-one-az.yml", func(t *testing.T) {
+		manifest, err := boshInterpolateAndUnmarshal(
+			operationsSubDirectory,
+			manifestPath,
+			"-o", "scale-to-one-az.yml",
+		)
+
+		if err != nil {
+			t.Errorf("failed to get unmarshalled manifest: %v", err)
+		}
+
+		for _, ig := range manifest.InstanceGroups {
+			if ig.Instances != nil && *ig.Instances != 1 {
+				t.Errorf("%s has %d instances but expected to have 1", ig.Name, *ig.Instances)
+			}
+			if len(ig.Azs) != 1 || ig.Azs[0] != "z1" {
+				t.Errorf("%s should have single AZ named 'z1'", ig.Name)
 			}
 		}
 	})
