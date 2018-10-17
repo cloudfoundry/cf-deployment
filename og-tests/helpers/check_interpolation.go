@@ -12,20 +12,49 @@ import (
 	"strings"
 )
 
-type PathValidator struct {
-	Path          string
-	ExpectedValue string
-}
-
-func (p PathValidator) HasValidator() bool {
-	return p != (PathValidator{})
-}
-
 type OpsFileTestParams struct {
 	Ops           []string
 	Vars          []string
 	VarsFiles     []string
 	PathValidator PathValidator
+}
+
+type PathValidator struct {
+	Path          string
+	ExpectedValue string
+}
+
+func BoshInterpolate(execDir, manifestPath, varsStorePath string, args ...string) ([]byte, error) {
+	interpolateArgs := []string{
+		"interpolate",
+		manifestPath,
+		"--json",
+		"-v", "system_domain=foo.bar.com",
+	}
+
+	if varsStorePath != "" {
+		interpolateArgs = append(interpolateArgs,
+			"--var-errs",
+			"--vars-store", varsStorePath,
+		)
+
+	}
+
+	interpolateArgs = append(interpolateArgs, args...)
+
+	cmd := exec.Command("bosh", interpolateArgs...)
+	cmd.Dir = execDir
+
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return nil, formatBOSHError(out)
+	}
+
+	return out, nil
+}
+
+func (p PathValidator) HasValidator() bool {
+	return p != (PathValidator{})
 }
 
 type boshOut struct {
@@ -63,7 +92,7 @@ func checkInterpolate(cfDeploymentHome, operationsSubDir, opsFileName string, op
 		args = append(args, "--path", opsFileTest.PathValidator.Path)
 	}
 
-	outJSON, err := boshInterpolate(execDir, manifestPath, tempVarsStorePath, args...)
+	outJSON, err := BoshInterpolate(execDir, manifestPath, tempVarsStorePath, args...)
 	if err != nil {
 		return err
 	}
@@ -107,34 +136,6 @@ func createTempVarsStore(cfDeploymentHome string) (string, error) {
 	return tempVarsStoreFile.Name(), nil
 }
 
-func boshInterpolate(execDir, manifestPath, varsStorePath string, args ...string) ([]byte, error) {
-	interpolateArgs := []string{
-		"interpolate",
-		manifestPath,
-		"--json",
-		"-v", "system_domain=foo.bar.com",
-	}
-
-	if varsStorePath != "" {
-		interpolateArgs = append(interpolateArgs,
-			"--var-errs",
-			"--vars-store", varsStorePath,
-		)
-
-	}
-
-	interpolateArgs = append(interpolateArgs, args...)
-
-	cmd := exec.Command("bosh", interpolateArgs...)
-	cmd.Dir = execDir
-
-	out, err := cmd.CombinedOutput()
-	if err != nil {
-		return nil, formatBOSHError(out)
-	}
-
-	return out, nil
-}
 
 func formatBOSHError(errJSON []byte) error {
 	var out boshOut
