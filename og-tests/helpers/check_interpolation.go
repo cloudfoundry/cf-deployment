@@ -37,7 +37,6 @@ func BoshInterpolate(execDir, manifestPath, varsStorePath string, args ...string
 			"--var-errs",
 			"--vars-store", varsStorePath,
 		)
-
 	}
 
 	interpolateArgs = append(interpolateArgs, args...)
@@ -50,7 +49,21 @@ func BoshInterpolate(execDir, manifestPath, varsStorePath string, args ...string
 		return nil, formatBOSHError(out)
 	}
 
-	return out, nil
+	var boshOut boshOut
+	err = json.Unmarshal(out, &boshOut)
+	if err != nil {
+		return nil, err
+	}
+
+	if boshOut.Blocks == nil {
+		return nil, formatBOSHError(out)
+	}
+
+	if len(boshOut.Blocks) != 1 {
+		return nil, errors.New("unexpected bosh interpolate json output: length of Blocks is not equal to 1")
+	}
+
+	return []byte(boshOut.Blocks[0]), nil
 }
 
 func (p PathValidator) HasValidator() bool {
@@ -92,20 +105,13 @@ func checkInterpolate(cfDeploymentHome, operationsSubDir, opsFileName string, op
 		args = append(args, "--path", opsFileTest.PathValidator.Path)
 	}
 
-	outJSON, err := BoshInterpolate(execDir, manifestPath, tempVarsStorePath, args...)
+	interpolateOutput, err := BoshInterpolate(execDir, manifestPath, tempVarsStorePath, args...)
 	if err != nil {
 		return err
 	}
 
 	if opsFileTest.PathValidator.HasValidator() {
-		var out boshOut
-		err := json.Unmarshal(outJSON, &out)
-		if err != nil {
-			return err
-		}
-
-		// TODO: see if we can remove the [0] index accessor
-		expected, got := opsFileTest.PathValidator.ExpectedValue, strings.TrimSpace(out.Blocks[0])
+		expected, got := opsFileTest.PathValidator.ExpectedValue, strings.TrimSpace(string(interpolateOutput))
 		if expected != got {
 			return fmt.Errorf("path value mismatch: expected %s, got %s", expected, got)
 		}
