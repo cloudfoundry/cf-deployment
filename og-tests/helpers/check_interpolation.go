@@ -109,10 +109,20 @@ func createTempVarsStore(cfDeploymentHome string) (string, error) {
 
 func boshInterpolate(execDir, manifestPath, varsStorePath string, args ...string) ([]byte, error) {
 	interpolateArgs := []string{
-		"interpolate", manifestPath, "--json",
-		"--var-errs", "--vars-store", varsStorePath,
+		"interpolate",
+		manifestPath,
+		"--json",
 		"-v", "system_domain=foo.bar.com",
 	}
+
+	if varsStorePath != "" {
+		interpolateArgs = append(interpolateArgs,
+			"--var-errs",
+			"--vars-store", varsStorePath,
+		)
+
+	}
+
 	interpolateArgs = append(interpolateArgs, args...)
 
 	cmd := exec.Command("bosh", interpolateArgs...)
