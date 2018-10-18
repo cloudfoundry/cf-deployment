@@ -5,6 +5,7 @@ import (
 	"og/helpers"
 	"path/filepath"
 	"regexp"
+	"strings"
 	"testing"
 
 	"gopkg.in/yaml.v2"
@@ -138,6 +139,44 @@ func TestSemantic(t *testing.T) {
 			}
 		}
 	})
+
+	t.Run("use-trusted-ca-cert-for-apps.yml", func(t *testing.T) {
+		certsPath := "/instance_groups/name=diego-cell/jobs/name=cflinuxfs2-rootfs-setup/properties/cflinuxfs2-rootfs/trusted_certs"
+
+		existingCA, err := helpers.BoshInterpolate(
+			operationsSubDirectory,
+			manifestPath,
+			"",
+			"--path", certsPath,
+		)
+
+		if err != nil {
+			t.Errorf("bosh interpolate error: %v", err)
+		}
+
+		newCA, err := helpers.BoshInterpolate(
+			operationsSubDirectory,
+			manifestPath,
+			"",
+			"--path", certsPath,
+			"-o", "use-trusted-ca-cert-for-apps.yml",
+		)
+
+		if err != nil {
+			t.Errorf("bosh interpolate error: %v", err)
+		}
+
+		if existingCA, newCA := formatCAs(existingCA, newCA); strings.Contains(existingCA, newCA) {
+			t.Errorf("use-trusted-ca-cert-for-apps.yml overwrites existing trusted CAs from cf-deployment.yml.\nTrusted CAs before applying the ops file:\n\n%s\n\nTrusted CAs after applying the ops file:\n\n%s", existingCA, newCA)
+		}
+	})
+}
+
+func formatCAs(existingRaw, newRaw []byte) (string, string) {
+	existingCAFmt := strings.TrimSpace(string(existingRaw))
+	newCAFmt := strings.TrimSpace(string(newRaw))
+	return existingCAFmt, newCAFmt
+
 }
 
 func boshInterpolateAndUnmarshal(opsSubDir, manifestPath string, args ...string) (manifest, error) {
