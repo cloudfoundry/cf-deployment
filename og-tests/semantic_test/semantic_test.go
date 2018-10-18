@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"og/helpers"
 	"path/filepath"
+	"regexp"
 	"testing"
 
 	"gopkg.in/yaml.v2"
@@ -12,7 +13,7 @@ import (
 type instanceGroup struct {
 	Name      string
 	Instances *int
-	Azs       []string
+	AZs       []string
 	Networks  []struct {
 		Name string
 	}
@@ -25,8 +26,14 @@ type instanceGroup struct {
 	}
 }
 
+type releases struct {
+	Name string
+	URL  string
+}
+
 type manifest struct {
 	InstanceGroups []instanceGroup `yaml:"instance_groups"`
+	Releases       []releases
 }
 
 func TestSemantic(t *testing.T) {
@@ -102,8 +109,32 @@ func TestSemantic(t *testing.T) {
 			if ig.Instances != nil && *ig.Instances != 1 {
 				t.Errorf("%s has %d instances but expected to have 1", ig.Name, *ig.Instances)
 			}
-			if len(ig.Azs) != 1 || ig.Azs[0] != "z1" {
+			if len(ig.AZs) != 1 || ig.AZs[0] != "z1" {
 				t.Errorf("%s should have single AZ named 'z1'", ig.Name)
+			}
+		}
+	})
+
+	t.Run("use-compiled-releases.yml", func(t *testing.T) {
+		manifest, err := boshInterpolateAndUnmarshal(
+			operationsSubDirectory,
+			manifestPath,
+			"-o", "use-compiled-releases.yml",
+		)
+
+		if err != nil {
+			t.Errorf("failed to get unmarshalled manifest: %v", err)
+		}
+
+		for _, r := range manifest.Releases {
+			re, err := regexp.Compile(`github\.com|bosh\.com`)
+			if err != nil {
+				t.Errorf("regexp compile error: %v", err)
+				t.Error(err)
+			}
+
+			if re.MatchString(r.URL) {
+				t.Errorf("expected release %s to be compiled, but got the release from %s", r.Name, r.URL)
 			}
 		}
 	})
