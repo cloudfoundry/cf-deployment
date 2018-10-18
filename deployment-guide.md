@@ -20,7 +20,7 @@ If you're planning to deploy against a **local** bosh-lite,
 follow [these instructions](https://bosh.io/docs/bosh-lite.html).
 You'll also need to take the following step before continuing:
 ```
-export BOSH_CA_CERT=<PATH-TO-BOSH-LITE-REPO>/ca/certs/ca.crt
+export BOSH_CA_CERT=$( bosh interpolate ${PWD}/creds.yml --path /director_ssl/ca )
 ```
 
 #### IaaSes not supported by `bbl`
@@ -170,7 +170,77 @@ Finally, upload the stemcell:
 bosh upload-stemcell https://bosh.io/d/stemcells/bosh-${IAAS_INFO}-ubuntu-xenial-go_agent?v=${STEMCELL_VERSION}
 ```
 
-## Deploy CF
+## Deploy CF to local bosh-lite
+
+If you're using a local bosh-lite,
+remember to add the `operations/bosh-lite.yml` ops-file
+to your deploy command and use the IP address of the BOSH Director that's running inside your local VirtualBox.
+  ```
+
+  bosh -e 192.168.50.6 -d cf deploy cf-deployment.yml \
+    -o operations/bosh-lite.yml \
+    -v system_domain=bosh-lite.com
+  ```
+
+The CF Admin credentials will be stored inside BOSH CredHub.
+First you must target that instance of credhub by exporting env variables as shown below.  The new line in the CREDHUB_CA_CERT env var is critical, as the PEM format requires a new line between the CA cert and the SSL cert. Concatenating them together in the env var without the new line in-between will result in difficult-to-troubleshoot generic errors.  
+
+```
+export CREDHUB_CA_CERT="$( bosh interpolate ${PWD}/creds.yml --path=/credhub_tls/ca )"$'\n'"$( bosh interpolate ${PWD}/creds.yml --path=/uaa_ssl/ca )"
+
+export CREDHUB_SECRET=$( bosh interpolate ${PWD}/creds.yml --path=/credhub_admin_client_secret )
+```
+Then connect to the credhub server, using the BOSH Director IP as shown below:
+
+```
+credhub api --server 192.168.50.6:8844
+```
+
+Then you can set the CREDHUB_CLIENT environment var with the credhub admin username as shown below:
+
+```
+export CREDHUB_CLIENT=credhub-admin
+```
+Now you can login!
+
+```
+credhub login
+```
+
+Now let's find the CF Admin username and password. You can find them by searching CredHub for `cf_admin_password`.
+You will need to first find the credential to get the full path of the stored variable in your BOSH deployment namespace:
+
+```
+credhub find -n cf_admin_password
+```
+in the output of the above command, you'll find the full path through credhub to supply to the next and last command:
+```
+credhub get -n <FULL_CREDENTIAL_NAME>
+```
+
+## Login to CF Admin on local bosh-lite
+
+```
+cf api https://api.bosh-lite.com --skip-ssl-validation
+```
+then you can 
+```
+cf login
+```
+with the username 'admin' and the password from CredHub above.  Then you can create a space, like 'dev', or something. 
+
+```
+cf create-space <YOUR_SPACE_NAME>
+```
+
+Lastly:
+```
+cf target -s dev
+```
+
+Remember, there is no Apps Manager web UI in bosh-lite, but you're ready to cf push your apps via the CF CLI!
+
+## Deploy CF 
 To deploy to a configured BOSH director using the new `bosh` CLI:
 
 ```
@@ -180,7 +250,6 @@ bosh -e my-env -d cf deploy cf-deployment/cf-deployment.yml \
   [ -o operations/CUSTOMIZATION1 ] \
   [ -o operations/CUSTOMIZATION2 (etc.) ]
 ```
-
 The CF Admin credentials will be stored in CredHub
 You can find them by searching CredHub for `cf_admin_password`.
 You will need to first find the credential to get the full path
@@ -201,19 +270,6 @@ bosh -e my-env -d cf deploy cf-deployment/cf-deployment.yml \
   -o operations/scale-to-one-az.yml \
   -o operations/use-compiled-releases.yml
 ```
-
-**bosh-lite**
-
-If you're using a local bosh-lite,
-remember to add the `operations/bosh-lite.yml` ops-file
-to your deploy command:
-  ```
-
-  bosh -e 192.168.50.6 -d cf deploy cf-deployment.yml \
-    -o operations/bosh-lite.yml \
-    -v system_domain=bosh-lite.com
-  ```
-
 
 ## Notes for operators
 `cf-deployment` includes tooling
