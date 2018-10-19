@@ -5,10 +5,10 @@ import (
 	"og/helpers"
 	"path/filepath"
 	"regexp"
-	"strings"
 	"testing"
 
-	"gopkg.in/yaml.v2"
+	"github.com/sergi/go-diff/diffmatchpatch"
+	yaml "gopkg.in/yaml.v2"
 )
 
 type instanceGroup struct {
@@ -161,22 +161,58 @@ func TestSemantic(t *testing.T) {
 			"--path", certsPath,
 			"-o", "use-trusted-ca-cert-for-apps.yml",
 		)
+		if err != nil {
+			t.Errorf("bosh interpolate error: %v", err)
+		}
+
+		if diff, ok := diffLeft(string(existingCA), string(newCA)); !ok {
+			t.Errorf("use-trusted-ca-cert-for-apps.yml overwrites existing trusted CAs from cf-deployment.yml.\n%s", diff)
+		}
+	})
+
+	t.Run("add-persistent-isolation-segment-diego-cell.yml", func(t *testing.T) {
+		diegoCellRepProperties, err := helpers.BoshInterpolate(
+			operationsSubDirectory,
+			manifestPath,
+			"",
+			"--path", "/instance_groups/name=diego-cell/jobs/name=rep/properties",
+		)
+		if err != nil {
+			t.Errorf("bosh interpolate error: %v", err)
+		}
+
+		isoSegDiegoCellRepProperties, err := helpers.BoshInterpolate(
+			operationsSubDirectory,
+			manifestPath,
+			"",
+			"--path", "/instance_groups/name=isolated-diego-cell/jobs/name=rep/properties",
+			"-o", "test/add-persistent-isolation-segment-diego-cell.yml",
+		)
 
 		if err != nil {
 			t.Errorf("bosh interpolate error: %v", err)
 		}
 
-		if existingCA, newCA := formatCAs(existingCA, newCA); strings.Contains(existingCA, newCA) {
-			t.Errorf("use-trusted-ca-cert-for-apps.yml overwrites existing trusted CAs from cf-deployment.yml.\nTrusted CAs before applying the ops file:\n\n%s\n\nTrusted CAs after applying the ops file:\n\n%s", existingCA, newCA)
+		if diff, ok := diffLeft(string(diegoCellRepProperties), string(isoSegDiegoCellRepProperties)); !ok {
+			t.Errorf("rep properties on diego-cell have diverged between cf-deployment.yml and test/add-persistent-isolation-segment-diego-cell.yml.\n%s", diff)
 		}
 	})
 }
 
-func formatCAs(existingRaw, newRaw []byte) (string, string) {
-	existingCAFmt := strings.TrimSpace(string(existingRaw))
-	newCAFmt := strings.TrimSpace(string(newRaw))
-	return existingCAFmt, newCAFmt
+func diffLeft(before, after string) (string, bool) {
+	dmp := diffmatchpatch.New()
+	beforeDiff, afterDiff, lines := dmp.DiffLinesToChars(before, after)
+	diffs := dmp.DiffMain(beforeDiff, afterDiff, true)
+	lineDiffs := dmp.DiffCharsToLines(diffs, lines)
 
+	var leftDiffs []diffmatchpatch.Diff
+	for _, diff := range diffs {
+		if diff.Type == diffmatchpatch.DiffDelete {
+			leftDiffs = append(leftDiffs, diff)
+		}
+	}
+
+	return dmp.DiffPrettyText(lineDiffs), len(leftDiffs) == 0
 }
 
 func boshInterpolateAndUnmarshal(opsSubDir, manifestPath string, args ...string) (manifest, error) {
