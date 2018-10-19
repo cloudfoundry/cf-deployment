@@ -1,0 +1,17 @@
+# Trusty is going to go out of support in the near-ish future. We’ve switched the default well in advance of the support requirements of commercial CR distributions and cf-deployment’s role as the test manifest for CF.
+# This manifest is just used to support existing ubuntu trusty released. It is not recommend. Please use ubuntu xenial.
+
+# Light Stemcells
+- type: replace
+  path: /addons/name=loggregator_agent/include/stemcell
+  value: 
+    - os: ubuntu-trusty
+
+- type: replace
+  path: /addons/name=bpm/include/stemcell
+  value:
+    - os: ubuntu-trusty
+
+- type: replace
+  path: /stemcells/alias=default/os?
+  value: ubuntu-trusty
