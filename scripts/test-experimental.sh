@@ -29,6 +29,7 @@ test_experimental_ops() {
       check_interpolation "enable-suspect-actual-lrp-generation.yml"
       check_interpolation "enable-traffic-to-internal-networks.yml"
       check_interpolation "name: enable-tls-cloud-controller-postgres.yml" "${home}/operations/use-postgres.yml" "-o enable-tls-cloud-controller-postgres.yml"
+      check_interpolation "use-create-swap-delete-vm-strategy.yml"
 
       check_interpolation "enable-nfs-volume-service-credhub.yml"
       check_interpolation "name: migrate-nfsbroker-mysql-to-credhub.yml" "${home}/operations/enable-nfs-volume-service.yml" "-o migrate-nfsbroker-mysql-to-credhub.yml" -l "${home}/operations/example-vars-files/vars-migrate-nfsbroker-mysql-to-credhub.yml"
