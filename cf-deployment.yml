@@ -1178,7 +1178,7 @@ instance_groups:
       egress_port: 8080
       health_addr: localhost:6060
       tls:
-        ca_cert: ((log_cache.ca))
+        ca_cert: ((log_cache_ca.certificate))
         cert: ((log_cache.certificate))
         key: ((log_cache.private_key))
     release: log-cache
@@ -1192,7 +1192,7 @@ instance_groups:
     properties:
       logs_provider:
         tls:
-          ca_cert: ((logs_provider.ca))
+          ca_cert: ((loggregator_ca.certificate))
           cert: ((logs_provider.certificate))
           key: ((logs_provider.private_key))
     release: log-cache
@@ -1302,7 +1302,7 @@ instance_groups:
   - name: log-cache-cf-auth-proxy
     properties:
       cc:
-        ca_cert: ((log_cache_tls_cc_auth_proxy.ca))
+        ca_cert: ((service_cf_internal_ca.certificate))
         capi_internal_addr: https://cloud-controller-ng.service.cf.internal:9023
         cert: ((log_cache_tls_cc_auth_proxy.certificate))
         common_name: cloud-controller-ng.service.cf.internal
