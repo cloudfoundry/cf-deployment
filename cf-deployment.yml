@@ -30,7 +30,7 @@ addons:
     release: loggregator-agent
     properties:
       log_agent:
-        ca_cert: "((expvar_forwarder.ca))"
+        ca_cert: "((loggregator_ca.certificate))"
         client_cert: "((expvar_forwarder.certificate))"
         client_key: "((expvar_forwarder.private_key))"
       default_source_id: metron
