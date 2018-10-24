@@ -558,7 +558,7 @@ instance_groups:
             autoapprove: true
             override: true
             redirect-uri: "https://uaa.((system_domain))/login"
-            scope: openid,cloud_controller.read,cloud_controller.write
+            scope: openid,cloud_controller.read,cloud_controller.write,cloud_controller.admin
             secret: "((uaa_clients_ssh-proxy_secret))"
           routing_api_client:
             authorities: routing.routes.write,routing.routes.read,routing.router_groups.read
