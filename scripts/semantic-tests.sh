@@ -129,6 +129,21 @@ test_all_cas_references_from_ca_variables() {
   fi
 }
 
+test_ops_files_dont_have_double_question_marks() {
+  local invalid_question_marks
+  local exit_code
+
+  set +e
+    invalid_question_marks=$(grep -rE '.*\?.*\?.*' operations)
+    exit_code=$?
+  set -e
+
+  if [[ $exit_code == 0 ]]; then
+    fail "Ops files should not contain double '?' in paths: $invalid_question_marks"
+  else
+    pass "Ops files don't have double '?' in paths"
+  fi
+}
 
 semantic_tests() {
   # padded for pretty output
@@ -142,6 +157,7 @@ semantic_tests() {
     test_use_trusted_ca_cert_for_apps_doesnt_overwrite_existing_trusted_cas
     test_add_persistent_isolation_segment_diego_cell
     test_all_cas_references_from_ca_variables
+    test_ops_files_dont_have_double_question_marks
   popd > /dev/null
   exit $exit_code
 }

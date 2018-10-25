@@ -558,7 +558,7 @@ instance_groups:
             autoapprove: true
             override: true
             redirect-uri: "https://uaa.((system_domain))/login"
-            scope: openid,cloud_controller.read,cloud_controller.write
+            scope: openid,cloud_controller.read,cloud_controller.write,cloud_controller.admin
             secret: "((uaa_clients_ssh-proxy_secret))"
           routing_api_client:
             authorities: routing.routes.write,routing.routes.read,routing.router_groups.read
@@ -2056,9 +2056,9 @@ releases:
   version: 2.1.1
   sha1: dd0b607d855a8d23e6fd52b990573570e68bbbf6
 - name: diego
-  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=2.19.0
-  version: 2.19.0
-  sha1: d71a7977786c8266ab5e31a13366d5b949a24f09
+  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=2.20.0
+  version: 2.20.0
+  sha1: 493e365cbd24f7bb480ea5eca4906d258575617b
 - name: dotnet-core-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/dotnet-core-buildpack-release?v=2.1.5
   version: 2.1.5
@@ -2124,9 +2124,9 @@ releases:
   version: "2.3"
   sha1: 7532818b5d518b87b57cf36ddc2bf81758f606f9
 - name: log-cache
-  url: https://bosh.io/d/github.com/cloudfoundry/log-cache-release?v=2.0.0
-  version: 2.0.0
-  sha1: 86ab47dbb61633e116c5a60cacf4160683d6a632
+  url: https://bosh.io/d/github.com/cloudfoundry/log-cache-release?v=2.0.1
+  version: 2.0.1
+  sha1: 23f9c4767109293b5f8b8a6a07ca31f065bcf88b
 - name: bosh-dns-aliases
   url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-aliases-release?v=0.0.3
   version: 0.0.3
