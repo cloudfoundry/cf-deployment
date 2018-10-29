@@ -17,4 +17,5 @@ They may change without notice.
 | Name | Purpose | Notes |
 |:---  |:---     |:---   |
 | [`add-oidc-provider.yml `](add-oidc-provider.yml) | Allows testing of UAA with users authenticated via an OIDC provider | Creates a second UAA instance group that acts as the OIDC provider |
-
+| [`enable-nfs-test-server.yml`](enable-nfs-test-server.yml) | adds an NFS server to the deployment | nfstestserver can be reached at nfstestserver.service.cf.internal for acceptance testing purposes |
+| [`enable-smb-test-server.yml`](enable-smb-test-server.yml) | adds an SMB server to the deployment | smbtestserver can be reached at smbtestserver.service.cf.internal for acceptance testing purposes |
