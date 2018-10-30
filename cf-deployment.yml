@@ -1344,8 +1344,6 @@ instance_groups:
         destroy_containers_on_start: true
         deny_networks:
         - 0.0.0.0/0
-        persistent_image_list:
-        - "/var/vcap/packages/cflinuxfs2/rootfs.tar"
         network_plugin: /var/vcap/packages/runc-cni/bin/garden-external-networker
         network_plugin_extra_args:
         - --configFile=/var/vcap/jobs/garden-cni/config/adapter.json
