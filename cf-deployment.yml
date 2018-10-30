@@ -701,7 +701,9 @@ instance_groups:
       cc:
         stacks:
         - name: cflinuxfs2
-          description: Cloud Foundry Linux-based filesystem
+          description: Cloud Foundry Linux-based filesystem (Ubuntu 14.04)
+        - name: cflinuxfs3
+          description: Cloud Foundry Linux-based filesystem (Ubuntu 18.04)
         default_running_security_groups:
         - public_networks
         - dns
@@ -749,6 +751,24 @@ instance_groups:
           package: php-buildpack-cflinuxfs2
         - name: binary_buildpack
           package: binary-buildpack-cflinuxfs2
+        - name: staticfile_buildpack
+          package: staticfile-buildpack-cflinuxfs3
+        - name: java_buildpack
+          package: java-buildpack-cflinuxfs3
+        - name: ruby_buildpack
+          package: ruby-buildpack-cflinuxfs3
+        - name: dotnet_core_buildpack
+          package: dotnet-core-buildpack-cflinuxfs3
+        - name: nodejs_buildpack
+          package: nodejs-buildpack-cflinuxfs3
+        - name: go_buildpack
+          package: go-buildpack-cflinuxfs3
+        - name: python_buildpack
+          package: python-buildpack-cflinuxfs3
+        - name: php_buildpack
+          package: php-buildpack-cflinuxfs3
+        - name: binary_buildpack
+          package: binary-buildpack-cflinuxfs3
         db_encryption_key: "((cc_db_encryption_key))"
         database_encryption: &cc-database-encryption
           current_key_label: "encryption_key_0"
@@ -1334,6 +1354,14 @@ instance_groups:
           ((application_ca.certificate))
           ((credhub_ca.certificate))
           ((uaa_ca.certificate))
+  - name: cflinuxfs3-rootfs-setup
+    release: cflinuxfs3
+    properties:
+      cflinuxfs3-rootfs:
+        trusted_certs: |
+          ((application_ca.certificate))
+          ((credhub_ca.certificate))
+          ((uaa_ca.certificate))
   - name: garden
     release: garden-runc
     properties:
@@ -1345,7 +1373,8 @@ instance_groups:
         deny_networks:
         - 0.0.0.0/0
         persistent_image_list:
-        - "/var/vcap/packages/cflinuxfs2/rootfs.tar"
+        - /var/vcap/packages/cflinuxfs2/rootfs.tar
+        - /var/vcap/packages/cflinuxfs3/rootfs.tar
         network_plugin: /var/vcap/packages/runc-cni/bin/garden-external-networker
         network_plugin_extra_args:
         - --configFile=/var/vcap/jobs/garden-cni/config/adapter.json
@@ -1366,6 +1395,7 @@ instance_groups:
         rep:
           preloaded_rootfses:
           - cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs.tar
+          - cflinuxfs3:/var/vcap/packages/cflinuxfs3/rootfs.tar
       containers:
         trusted_ca_certificates:
           - ((application_ca.certificate))
@@ -2051,6 +2081,10 @@ releases:
   url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.244.0
   version: 1.244.0
   sha1: 67f473bb1296b1faf598bceef2a36e9584b510f0
+- name: cflinuxfs3
+  sha1: 465d7ac4314557f13d06c64bf34a01ceea7fb635
+  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs3-release?v=0.33.0
+  version: 0.33.0
 - name: credhub
   url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=2.1.1
   version: 2.1.1

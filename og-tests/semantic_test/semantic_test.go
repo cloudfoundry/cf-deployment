@@ -141,32 +141,34 @@ func TestSemantic(t *testing.T) {
 	})
 
 	t.Run("use-trusted-ca-cert-for-apps.yml", func(t *testing.T) {
-		certsPath := "/instance_groups/name=diego-cell/jobs/name=cflinuxfs2-rootfs-setup/properties/cflinuxfs2-rootfs/trusted_certs"
+		certPaths := []string{"/instance_groups/name=diego-cell/jobs/name=cflinuxfs2-rootfs-setup/properties/cflinuxfs2-rootfs/trusted_certs",
+			"/instance_groups/name=diego-cell/jobs/name=cflinuxfs3-rootfs-setup/properties/cflinuxfs3-rootfs/trusted_certs"}
 
-		existingCA, err := helpers.BoshInterpolate(
-			operationsSubDirectory,
-			manifestPath,
-			"",
-			"--path", certsPath,
-		)
+		for _, certPath := range certPaths {
+			existingCA, err := helpers.BoshInterpolate(
+				operationsSubDirectory,
+				manifestPath,
+				"",
+				"--path", certPath,
+			)
+			if err != nil {
+				t.Errorf("bosh interpolate error: %v", err)
+			}
 
-		if err != nil {
-			t.Errorf("bosh interpolate error: %v", err)
-		}
+			newCA, err := helpers.BoshInterpolate(
+				operationsSubDirectory,
+				manifestPath,
+				"",
+				"--path", certPath,
+				"-o", "use-trusted-ca-cert-for-apps.yml",
+			)
+			if err != nil {
+				t.Errorf("bosh interpolate error: %v", err)
+			}
 
-		newCA, err := helpers.BoshInterpolate(
-			operationsSubDirectory,
-			manifestPath,
-			"",
-			"--path", certsPath,
-			"-o", "use-trusted-ca-cert-for-apps.yml",
-		)
-		if err != nil {
-			t.Errorf("bosh interpolate error: %v", err)
-		}
-
-		if diff, ok := diffLeft(string(existingCA), string(newCA)); !ok {
-			t.Errorf("use-trusted-ca-cert-for-apps.yml overwrites existing trusted CAs from cf-deployment.yml.\n%s", diff)
+			if diff, ok := diffLeft(string(existingCA), string(newCA)); !ok {
+				t.Errorf("use-trusted-ca-cert-for-apps.yml overwrites existing trusted CAs from cf-deployment.yml.\n%s", diff)
+			}
 		}
 	})
 
