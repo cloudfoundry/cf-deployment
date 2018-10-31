@@ -1,11 +1,6 @@
 - type: replace
-  path: /variables/-
-  value:
-    name: capi_internal_ca
-    type: certificate
-    options:
-      is_ca: true
-      common_name: internalCA
+  path: /addons/name=loggregator_agent/jobs/name=loggregator_agent/properties/grpc_port?
+  value: 3459
 
 - type: replace
   path: /variables/-
@@ -13,20 +8,11 @@
     name: forwarder_api_tls
     type: certificate
     options:
-      ca: capi_internal_ca
+      ca: service_cf_internal_ca
       common_name: forwarder
-			extended_key_usage:
-			- client_auth
-			- server_auth
-
-- type: replace
-  path: /variables/-
-  value:
-    name: forwarder_ca
-    type: certificate
-    options:
-      common_name: forwarderCA
-			is_ca: true
+      extended_key_usage:
+      - client_auth
+      - server_auth
 
 - type: replace
   path: /variables/-
@@ -34,11 +20,11 @@
     name: forwarder_agent
     type: certificate
     options:
-      ca: forwarder_ca
-      common_name: forwarder_agent
-			extended_key_usage:
-			- client_auth
-			- server_auth
+      ca: loggregator_ca
+      common_name: metron
+      extended_key_usage:
+      - client_auth
+      - server_auth
 
 - type: replace
   path: /addons/-
@@ -52,15 +38,15 @@
       release: loggregator-agent
       properties:
         tls:
-          ca_cert: "((forwarder_agent.ca))"
+          ca_cert: "((loggregator_ca.certificate))"
           cert: "((forwarder_agent.certificate))"
           key: "((forwarder_agent.private_key))"
         api:
           tls:
-            ca_cert: "((capi_internal_ca.certificate))"
+            ca_cert: "((service_cf_internal_ca.certificate))"
             cert: "((forwarder_api_tls.certificate))"
             key: "((forwarder_api_tls.private_key))"
-            cn: "internalCA"
+            cn: "cloud-controller-ng.service.cf.internal"
 
 - type: replace
   path: /addons/-
@@ -74,8 +60,12 @@
       release: loggregator-agent
       properties:
         loggregator:
+          ingress_port: 3459
           tls:
             ca: "((loggregator_ca.certificate))"
-            cert: "(loggregator_tls_agent.certificate))"
+            cert: "((loggregator_tls_agent.certificate))"
             key: "((loggregator_tls_agent.private_key))"
 
+- type: replace
+  path: /addons/name=loggregator_agent/jobs/name=loggregator_agent/properties/disable_udp?
+  value: true

@@ -12,6 +12,8 @@ test_experimental_ops() {
       check_interpolation "name: add-deployment-updater-postgres.yml" "add-deployment-updater.yml" "-o add-deployment-updater-postgres.yml"
       check_interpolation "name: add-deployment-updater-external-db.yml" "${home}/operations/use-external-dbs.yml" "-o add-deployment-updater.yml" "-o add-deployment-updater-external-db.yml" "-l ${home}/operations/example-vars-files/vars-use-external-dbs.yml"
 
+      check_interpolation "deploy-forwarder-agent.yml" "-v system_domain=something"
+
       check_interpolation "disable-interpolate-service-bindings.yml"
 
       check_interpolation "enable-bpm-garden.yml"
