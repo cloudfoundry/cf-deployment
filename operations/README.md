@@ -42,6 +42,7 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 | [`enable-nfs-ldap.yml`](enable-nfs-ldap.yml) | Enables LDAP authentication for NFS volume services | Requires `enable-nfs-volume-service.yml`. Introduces [new variables](example-vars-files/vars-enable-nfs-ldap.yml) |
 | [`enable-nfs-volume-service.yml`](enable-nfs-volume-service.yml) | Enables volume support and deploys an NFS broker and volume driver | As of cf-deployment v2, you must use the `nfsbrokerpush` errand to cf push the nfs broker after `bosh deploy` completes. |
 | [`enable-privileged-container-support.yml`](enable-privileged-container-support.yml) | Enables Diego privileged container support. | |
+| [`enable-routing-integrity.yml`](enable-routing-integrity.yml) |Enables container proxy on the Diego Cell `rep` and configures gorouter to opt into TLS-enabled connections to the backend. | |
 | [`enable-service-discovery.yml`](enable-service-discovery.yml) | Enables application service discovery | |
 | [`enable-uniq-consul-node-name.yml`](enable-uniq-consul-node-name.yml) | **DEPRECATED: Consul has been removed from cf-deployment** Configure Diego cell `consul_agent` jobs to have a unique id per instance. |  |
 | [`migrate-cf-mysql-to-pxc.yml`](migrate-cf-mysql-to-pxc.yml) | [Migrates](https://github.com/cloudfoundry-incubator/pxc-release#migrating-from-cf-mysql-release) from an existing cf-mysql database to pxc-release. After the migration is complete, switch to the `use-pxc.yml` operations file. | |
