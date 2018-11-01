@@ -1,11 +1,10 @@
----
 - type: replace
   path: /releases/-
   value:
     name: backup-and-restore-sdk
-    sha1: bde7b6f00e139177af7624b3572e20361edf3086
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/backup-and-restore-sdk-release?v=1.10.0
-    version: 1.10.0
+    sha1: 4eb7d7fdd4ca9ce1f0250bd4ddb8af4415d6d694
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/backup-and-restore-sdk-release?v=1.11.0
+    version: 1.11.0
 - type: replace
   path: /instance_groups/-
   value:
@@ -16,9 +15,9 @@
     - name: database-backup-restorer
       release: backup-and-restore-sdk
     - name: bbr-cfnetworkingdb
-      release: cf-networking
       properties:
         release_level_backup: true
+      release: cf-networking
     - name: bbr-cloudcontrollerdb
       release: capi
     - name: bbr-routingdb
