@@ -185,7 +185,7 @@ export BOSH_CA_CERT="$(bosh interpolate <PATH_TO_DIRECTOR_VARS_STORE>/creds.yml 
 export CREDHUB_SERVER=https://192.168.50.6:8844
 export CREDHUB_CLIENT=credhub-admin
 export CREDHUB_SECRET=$(bosh interpolate <PATH_TO_DIRECTOR_VARS_STORE>/creds.yml --path=/credhub_admin_client_secret)
-export CREDHUB_CA_CERT="$(bosh interpolate <PATH_TO_DIRECTOR_VARS_STORE>/creds.yml --path=/credhub_tls/ca )"$'\n'"$( bosh interpolate ${PWD}/creds.yml --path=/uaa_ssl/ca)"
+export CREDHUB_CA_CERT="$(bosh interpolate <PATH_TO_DIRECTOR_VARS_STORE>/creds.yml --path=/credhub_tls/ca )"$'\n'"$( bosh interpolate <PATH_TO_DIRECTOR_VARS_STORE>/creds.yml --path=/uaa_ssl/ca)"
 ```
 The new line in the `CREDHUB_CA_CERT` env var is critical, as the PEM format requires a new line between the two CA certs CredHub requires.
 Concatenating them together in the env var without the new line in-between will result in difficult-to-troubleshoot generic errors.
