@@ -19,6 +19,7 @@ test_experimental_ops() {
       check_interpolation "enable-mysql-tls.yml"
       check_interpolation "enable-nfs-volume-service-credhub.yml"
       check_interpolation "enable-oci-phase-1.yml"
+      check_interpolation "enable-routing-integrity.yml"
       check_interpolation "name: use-pxc-for-smb-volume-service.yml" "enable-smb-volume-service.yml" "-o ${home}/operations/use-pxc.yml" "-o use-pxc-for-smb-volume-service.yml"
       check_interpolation "enable-smb-volume-service.yml"
       check_interpolation "enable-suspect-actual-lrp-generation.yml"
