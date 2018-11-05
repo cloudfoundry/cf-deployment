@@ -1845,16 +1845,8 @@ variables:
   options:
     ca: loggregator_ca
     common_name: expvar_forwarder
-    alternative_names:
-    - metron
-    - agent
-    - localhost
-    - 127.0.0.1
-    - ip6-localhost
-    - ::1
     extended_key_usage:
     - client_auth
-    - server_auth
 - name: loggregator_tls_statsdinjector
   type: certificate
   options:
