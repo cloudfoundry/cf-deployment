@@ -625,8 +625,6 @@ instance_groups:
   - name: blobstore
     release: capi
     properties:
-      bpm:
-        enabled: true
       system_domain: "((system_domain))"
       blobstore:
         admin_users:
@@ -666,8 +664,6 @@ instance_groups:
     provides:
       cloud_controller: {as: cloud_controller, shared: true}
     properties:
-      bpm:
-        enabled: true
       router:
         route_services_secret: "((router_route_services_secret))"
       system_domain: "((system_domain))"
@@ -904,8 +900,6 @@ instance_groups:
   - name: cc_uploader
     release: capi
     properties:
-      bpm:
-        enabled: true
       capi:
         cc_uploader:
           cc:
@@ -929,8 +923,6 @@ instance_groups:
   - name: cloud_controller_worker
     release: capi
     properties:
-      bpm:
-        enabled: true
       cc:
         db_encryption_key: "((cc_db_encryption_key))"
         database_encryption: *cc-database-encryption
@@ -1069,8 +1061,6 @@ instance_groups:
   - name: cloud_controller_clock
     release: capi
     properties:
-      bpm:
-        enabled: true
       cc:
         db_encryption_key: "((cc_db_encryption_key))"
         database_encryption: *cc-database-encryption
@@ -1100,8 +1090,6 @@ instance_groups:
   - name: tps
     release: capi
     properties:
-      bpm:
-        enabled: true
       capi:
         tps:
           bbs: *diego_bbs_client_properties
