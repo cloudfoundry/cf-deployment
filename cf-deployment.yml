@@ -625,8 +625,6 @@ instance_groups:
   - name: blobstore
     release: capi
     properties:
-      bpm:
-        enabled: true
       system_domain: "((system_domain))"
       blobstore:
         admin_users:
@@ -666,8 +664,6 @@ instance_groups:
     provides:
       cloud_controller: {as: cloud_controller, shared: true}
     properties:
-      bpm:
-        enabled: true
       router:
         route_services_secret: "((router_route_services_secret))"
       system_domain: "((system_domain))"
@@ -904,8 +900,6 @@ instance_groups:
   - name: cc_uploader
     release: capi
     properties:
-      bpm:
-        enabled: true
       capi:
         cc_uploader:
           cc:
@@ -929,8 +923,6 @@ instance_groups:
   - name: cloud_controller_worker
     release: capi
     properties:
-      bpm:
-        enabled: true
       cc:
         db_encryption_key: "((cc_db_encryption_key))"
         database_encryption: *cc-database-encryption
@@ -1069,8 +1061,6 @@ instance_groups:
   - name: cloud_controller_clock
     release: capi
     properties:
-      bpm:
-        enabled: true
       cc:
         db_encryption_key: "((cc_db_encryption_key))"
         database_encryption: *cc-database-encryption
@@ -1100,8 +1090,6 @@ instance_groups:
   - name: tps
     release: capi
     properties:
-      bpm:
-        enabled: true
       capi:
         tps:
           bbs: *diego_bbs_client_properties
@@ -2065,17 +2053,17 @@ releases:
   version: 2.18.0
   sha1: 2109a02d8ab56f748261eb63d276b24230068757
 - name: cf-smoke-tests
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=40.0.14
-  version: 40.0.14
-  sha1: 88dd9c1b469d86a6dc2c83ac4e574657e6c146d3
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=40.0.15
+  version: 40.0.15
+  sha1: 3aeade40a6c0044050e455345d93286a0ddfadda
 - name: cf-syslog-drain
   url: https://bosh.io/d/github.com/cloudfoundry/cf-syslog-drain-release?v=8.0
   version: "8.0"
   sha1: 5b5a2ea2f7a75755e19620eea0672a21704b0660
 - name: cflinuxfs2
-  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.245.0
-  version: 1.245.0
-  sha1: ebb66de1e0ceba46542d5a32318060368f72ee03
+  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.246.0
+  version: 1.246.0
+  sha1: 2f423b4fe75ff653a62875d9a2f821e1c9071fa0
 - name: cflinuxfs3
   url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs3-release?v=0.34.0
   version: 0.34.0
