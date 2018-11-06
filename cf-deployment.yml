@@ -218,6 +218,8 @@ instance_groups:
   - name: smoke_tests
     release: cf-smoke-tests
     properties:
+      bpm:
+        enabled: true
       smoke_tests:
         api: "https://api.((system_domain))"
         apps_domain: "((system_domain))"
