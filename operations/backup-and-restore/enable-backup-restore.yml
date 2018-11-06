@@ -2,9 +2,9 @@
   path: /releases/-
   value:
     name: backup-and-restore-sdk
-    sha1: bde7b6f00e139177af7624b3572e20361edf3086
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/backup-and-restore-sdk-release?v=1.10.0
-    version: 1.10.0
+    sha1: 4eb7d7fdd4ca9ce1f0250bd4ddb8af4415d6d694
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/backup-and-restore-sdk-release?v=1.11.0
+    version: 1.11.0
 - type: replace
   path: /instance_groups/-
   value:
@@ -15,6 +15,8 @@
     - name: database-backup-restorer
       release: backup-and-restore-sdk
     - name: bbr-cfnetworkingdb
+      properties:
+        release_level_backup: true
       release: cf-networking
     - name: bbr-cloudcontrollerdb
       release: capi
@@ -33,29 +35,8 @@
     stemcell: default
     vm_type: minimal
 - type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties?/cloud_controller/release_level_backup?
+  path: /instance_groups/name=api/jobs/name=routing-api/properties/release_level_backup?
   value: true
 - type: replace
-  path: /instance_groups/name=api/jobs/name=routing-api/properties?/release_level_backup?
-  value: true
-- type: replace
-  path: /instance_groups/name=backup-restore/jobs/name=bbr-cfnetworkingdb/properties?/release_level_backup?
-  value: true
-- type: replace
-  path: /instance_groups/name=backup-restore/jobs/name=bbr-cloudcontrollerdb/properties?/cloud_controller/release_level_backup?
-  value: true
-- type: replace
-  path: /instance_groups/name=singleton-blobstore/jobs/name=blobstore/properties?/blobstore/release_level_backup?
-  value: true
-- type: replace
-  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties?/cloud_controller/release_level_backup?
-  value: true
-- type: replace
-  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties?/cloud_controller/release_level_backup?
-  value: true
-- type: replace
-  path: /instance_groups/name=scheduler/jobs/name=tps/properties?/cloud_controller/release_level_backup?
-  value: true
-- type: replace
-  path: /instance_groups/name=uaa/jobs/name=uaa/properties?/release_level_backup?
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/release_level_backup?
   value: true

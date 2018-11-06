@@ -35,7 +35,14 @@ bbl up
 The path to the plan patch should be something like
 `~/workspace/bosh-bootloader/plan-patches/bosh-lite-gcp/`
 
-## 2. Targeting
+## 2. Set up DNS
+To make sure your system and app domains resolve, you will need to set up DNS to
+point at your BOSH Director. For this, you will need to
+1. Find the value of `director__external_ip` by running `bbl outputs`
+1. Create a wildcard `A` record `*.<SYSTEM_DOMAIN>` and point it
+   at the external IP of the BOSH director from step 1
+
+## 3. Targeting
 
 There a several ways to target a bosh director.
 This doc will use environment variables.
@@ -44,7 +51,7 @@ This doc will use environment variables.
 eval "$(bbl print-env)"
 ```
 
-## 3. Upload a `runtime-config`
+## 4. Upload a `runtime-config`
 
 `cf-deployment` requires that you have uploaded a [runtime-config](https://bosh.io/docs/runtime-config/) for [BOSH DNS](https://bosh.io/docs/dns/).
 
@@ -54,8 +61,7 @@ We recommended that you use the one provided by the [bosh-deployment](https://gi
 bosh update-runtime-config bosh-deployment/runtime-configs/dns.yml --name dns
 ```
 
-
-## 4. Upload a stemcell
+## 5. Upload a stemcell
 
 With your bosh director targeted:
 ```
@@ -67,14 +73,14 @@ bosh \
 ```
 
 
-## 5. Deploy CF
+## 6. Deploy CF
 
 With your bosh director targeted:
 ```
 bosh \
--d cf \
-deploy \
-cf-deployment/cf-deployment.yml \
--o cf-deployment/operations/bosh-lite.yml \
--v system_domain=<SYSTEM_DOMAIN>
+  -d cf \
+  deploy \
+  cf-deployment/cf-deployment.yml \
+  -o cf-deployment/operations/bosh-lite.yml \
+  -v system_domain=<SYSTEM_DOMAIN>
 ```

@@ -7,7 +7,6 @@
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/volume_services_enabled?
   value: true
-
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/smb-broker-client?
   value:
@@ -32,48 +31,46 @@
     - read_acl
     - write_acl
     path: /smbbroker/*
-
 - type: replace
   path: /instance_groups/-
   value:
-    azs: [z1]
-    lifecycle: errand
+    azs:
+    - z1
     instances: 1
     jobs:
     - name: smbbrokerpush
       properties:
         app_domain: ((system_domain))
-        domain: ((system_domain))
         cf:
           client_id: smb-broker-client
           client_secret: ((smb-broker-uaa-client-secret))
         credhub:
-          url: https://credhub.service.cf.internal:8844
+          store_id: smbbroker
           uaa_client_id: smb-broker-credhub-client
           uaa_client_secret: ((smb-broker-credhub-uaa-client-secret))
-          store_id: smbbroker
+          url: https://credhub.service.cf.internal:8844
+        domain: ((system_domain))
         organization: system
-        space: smb-broker-space
-        username: smb-broker
         password: ((smb-broker-password))
         skip_cert_verify: true
+        space: smb-broker-space
         syslog_url: ""
+        username: smb-broker
       release: smb-volume
     - name: cf-cli-6-linux
       release: cf-cli
+    lifecycle: errand
     name: smb-broker-push
     networks:
     - name: default
     stemcell: default
     vm_type: minimal
-
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=smbdriver?
   value:
     name: smbdriver
     properties: {}
     release: smb-volume
-
 - type: replace
   path: /variables/-
   value:
@@ -89,11 +86,10 @@
   value:
     name: smb-broker-credhub-uaa-client-secret
     type: password
-
 - type: replace
-  path: /releases/name=smb-volume?
+  path: /releases/-
   value:
     name: smb-volume
-    sha1: 6742bfc8134c633871e7fd2d50bb94682d0275f8
-    url: https://bosh.io/d/github.com/cloudfoundry/smb-volume-release?v=0.1.12
-    version: 0.1.12
+    sha1: 1cf4edc52d0b086933df7a289b4c4cb6e261e586
+    url: https://bosh.io/d/github.com/cloudfoundry/smb-volume-release?v=0.2.3
+    version: 0.2.3

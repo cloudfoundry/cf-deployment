@@ -12,15 +12,6 @@ import (
 	"strings"
 )
 
-type PathValidator struct {
-	Path          string
-	ExpectedValue string
-}
-
-func (p PathValidator) HasValidator() bool {
-	return p != (PathValidator{})
-}
-
 type OpsFileTestParams struct {
 	Ops           []string
 	Vars          []string
@@ -28,12 +19,63 @@ type OpsFileTestParams struct {
 	PathValidator PathValidator
 }
 
+type PathValidator struct {
+	Path          string
+	ExpectedValue string
+}
+
+func BoshInterpolate(execDir, manifestPath, varsStorePath string, args ...string) ([]byte, error) {
+	interpolateArgs := []string{
+		"interpolate",
+		manifestPath,
+		"--json",
+		"-v", "system_domain=foo.bar.com",
+	}
+
+	if varsStorePath != "" {
+		interpolateArgs = append(interpolateArgs,
+			"--var-errs",
+			"--vars-store", varsStorePath,
+		)
+	}
+
+	interpolateArgs = append(interpolateArgs, args...)
+
+	cmd := exec.Command("bosh", interpolateArgs...)
+	cmd.Dir = execDir
+
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return nil, formatBOSHError(out)
+	}
+
+	var boshOut boshOut
+	err = json.Unmarshal(out, &boshOut)
+	if err != nil {
+		return nil, err
+	}
+
+	if boshOut.Blocks == nil {
+		return nil, formatBOSHError(out)
+	}
+
+	if len(boshOut.Blocks) != 1 {
+		return nil, errors.New("unexpected bosh interpolate json output: length of Blocks is not equal to 1")
+	}
+
+	return []byte(boshOut.Blocks[0]), nil
+}
+
+func (p PathValidator) HasValidator() bool {
+	return p != (PathValidator{})
+}
+
 type boshOut struct {
 	Blocks []string `json:"Blocks"`
 	Lines  []string `json:"Lines"`
 }
 
-func CheckInterpolate(cfDeploymentHome, operationsSubDir, opsFileName string, opsFileTest OpsFileTestParams) error {
+func checkInterpolate(cfDeploymentHome, operationsSubDir, opsFileName string, opsFileTest OpsFileTestParams) error {
 	manifestPath := filepath.Join(cfDeploymentHome, "cf-deployment.yml")
 	execDir := filepath.Join(cfDeploymentHome, operationsSubDir)
 	tempVarsStorePath, err := createTempVarsStore(cfDeploymentHome)
@@ -63,41 +105,19 @@ func CheckInterpolate(cfDeploymentHome, operationsSubDir, opsFileName string, op
 		args = append(args, "--path", opsFileTest.PathValidator.Path)
 	}
 
-	outJSON, err := boshInterpolate(execDir, manifestPath, tempVarsStorePath, args...)
+	interpolateOutput, err := BoshInterpolate(execDir, manifestPath, tempVarsStorePath, args...)
 	if err != nil {
 		return err
 	}
 
 	if opsFileTest.PathValidator.HasValidator() {
-		var out boshOut
-		err := json.Unmarshal(outJSON, &out)
-		if err != nil {
-			return err
-		}
-
-		// TODO: see if we can remove the [0] index accessor
-		expected, got := opsFileTest.PathValidator.ExpectedValue, strings.TrimSpace(out.Blocks[0])
+		expected, got := opsFileTest.PathValidator.ExpectedValue, strings.TrimSpace(string(interpolateOutput))
 		if expected != got {
 			return fmt.Errorf("path value mismatch: expected %s, got %s", expected, got)
 		}
 	}
 
 	return nil
-}
-
-func FindFiles(cfDeploymentHome, operationsSubDir string) ([]string, error) {
-	searchPath := filepath.Join(cfDeploymentHome, operationsSubDir, "*.yml")
-	filePaths, err := filepath.Glob(searchPath)
-	if err != nil {
-		return nil, err
-	}
-
-	var fileNames []string
-	for _, filePath := range filePaths {
-		fileNames = append(fileNames, filepath.Base(filePath))
-	}
-
-	return fileNames, nil
 }
 
 func createTempVarsStore(cfDeploymentHome string) (string, error) {
@@ -122,24 +142,6 @@ func createTempVarsStore(cfDeploymentHome string) (string, error) {
 	return tempVarsStoreFile.Name(), nil
 }
 
-func boshInterpolate(execDir, manifestPath, varsStorePath string, args ...string) ([]byte, error) {
-	interpolateArgs := []string{
-		"interpolate", manifestPath, "--json",
-		"--var-errs", "--vars-store", varsStorePath,
-		"-v", "system_domain=foo.bar.com",
-	}
-	interpolateArgs = append(interpolateArgs, args...)
-
-	cmd := exec.Command("bosh", interpolateArgs...)
-	cmd.Dir = execDir
-
-	out, err := cmd.CombinedOutput()
-	if err != nil {
-		return nil, formatBOSHError(out)
-	}
-
-	return out, nil
-}
 
 func formatBOSHError(errJSON []byte) error {
 	var out boshOut

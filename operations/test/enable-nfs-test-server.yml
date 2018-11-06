@@ -1,0 +1,25 @@
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: nfstestserver
+    azs: [z1]
+    instances: 1
+    stemcell: default
+    vm_type: medium
+    networks: [ name: default ]
+    jobs:
+    - name: nfstestserver
+      release: nfs-volume
+      properties:
+        nfstestserver: {}
+
+- type: replace
+  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/domain=nfstestserver.service.cf.internal?
+  value:
+    domain: nfstestserver.service.cf.internal
+    targets:
+    - query: '*'
+      instance_group: nfstestserver
+      deployment: cf
+      network: default
+      domain: bosh

@@ -1,12 +1,12 @@
 ---
 - type: replace
-  path: /instance_groups/name=database?/jobs/name=mysql/properties/cf_mysql/mysql/tls?/ca_certificate
+  path: /instance_groups/name=database/jobs/name=mysql/properties/cf_mysql/mysql/tls?/ca_certificate
   value: ((pxc_server_ca.certificate))
 - type: replace
-  path: /instance_groups/name=database?/jobs/name=mysql/properties/cf_mysql/mysql/tls?/server_certificate
+  path: /instance_groups/name=database/jobs/name=mysql/properties/cf_mysql/mysql/tls?/server_certificate
   value: ((mysql_server_certificate.certificate))
 - type: replace
-  path: /instance_groups/name=database?/jobs/name=mysql/properties/cf_mysql/mysql/tls?/server_key
+  path: /instance_groups/name=database/jobs/name=mysql/properties/cf_mysql/mysql/tls?/server_key
   value: ((mysql_server_certificate.private_key))
 
 - type: replace
@@ -46,7 +46,7 @@
   path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql/require_ssl?
   value: true
 - type: replace
-  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa?/ca_certs/-
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/ca_certs?/-
   value: ((pxc_server_ca.certificate))
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/tls_enabled?

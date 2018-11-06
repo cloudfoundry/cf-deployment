@@ -25,7 +25,7 @@
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=garden/properties/garden/additional_bpm_volumes?
   value:
-    - "/var/vcap/data/rep/shared_data"
+    - "/var/vcap/data/rep/shared/garden"
     - "/var/vcap/data/netplugin-server/sockets"
 
 - type: replace
@@ -39,3 +39,13 @@
         plugin_extra_args:
           - "--configFile"
           - "/var/vcap/jobs/garden-cni/config/adapter.json"
+
+# Rootless configuration
+# Requires grootfs 0.27.0 or later, and garden-runc 1.9.5 or later.
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=garden/properties/garden/experimental_rootless_mode?
+  value: true
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=garden/properties?/grootfs/skip_mount
+  value: true
