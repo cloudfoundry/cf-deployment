@@ -12,6 +12,8 @@ test_test_ops() {
       check_interpolation "name: add-persistent-isolation-segment-diego-cell-bosh-lite.yml" "add-persistent-isolation-segment-diego-cell.yml" "-o add-persistent-isolation-segment-diego-cell-bosh-lite.yml"
       check_interpolation "add-persistent-isolation-segment-router.yml"
       check_interpolation "alter-ssh-proxy-redirect-uri.yml"
+      check_interpolation "enable-nfs-test-server.yml"
+      check_interpolation "enable-smb-test-server.yml" "-v smb-password=FOO.PASS" "-v smb-username=BAR.USER"
     popd > /dev/null # operations/test
   popd > /dev/null
   exit $exit_code
