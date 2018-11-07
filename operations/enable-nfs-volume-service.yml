@@ -14,6 +14,12 @@
     password: ((nfs-broker-database-password))
     username: nfs-broker
 - type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/nfs-broker-push-client?
+  value:
+    authorities: cloud_controller.read,cloud_controller.write
+    authorized-grant-types: client_credentials
+    secret: ((nfs-broker-push-uaa-client-secret))
+- type: replace
   path: /instance_groups/-
   value:
     azs:
@@ -26,8 +32,8 @@
           app_domain: ((system_domain))
           app_name: nfs-broker
           cf:
-            admin_password: ((cf_admin_password))
-            admin_user: admin
+            client_id: nfs-broker-push-client
+            client_secret: ((nfs-broker-push-uaa-client-secret))
           db:
             driver: mysql
             name: nfs-broker
@@ -70,6 +76,11 @@
   path: /variables/-
   value:
     name: nfs-broker-database-password
+    type: password
+- type: replace
+  path: /variables/-
+  value:
+    name: nfs-broker-push-uaa-client-secret
     type: password
 - type: replace
   path: /releases/-
