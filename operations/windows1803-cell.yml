@@ -1,5 +1,5 @@
-- path: /instance_groups/-
-  type: replace
+- type: replace
+  path: /instance_groups/-
   value:
     azs:
     - z1
@@ -110,65 +110,65 @@
     vm_extensions:
     - 100GB_ephemeral_disk
     vm_type: small-highmem
-- path: /stemcells/-
-  type: replace
+- type: replace
+  path: /stemcells/-
   value:
     alias: windows1803
     os: windows1803
     version: "1803.3"
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2016?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2016?
   value:
     description: Windows Server 2016
     name: windows2016
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/name=hwc_buildpack?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/name=hwc_buildpack?
   value:
     name: hwc_buildpack
     package: hwc-buildpack
-- path: /instance_groups/name=api/jobs/name=hwc-buildpack?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=hwc-buildpack?
   value:
     name: hwc-buildpack
     release: hwc-buildpack
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=binary-buildpack-windows2016?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=binary-buildpack-windows2016?
   value:
     name: binary_buildpack
     package: binary-buildpack-windows2016
-- path: /releases/name=hwc-buildpack?
-  type: replace
+- type: replace
+  path: /releases/name=hwc-buildpack?
   value:
     name: hwc-buildpack
     sha1: 4c91ca22f267a46916509d97c81d18ccc2e5c82e
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=3.0.3
     version: 3.0.3
-- path: /releases/name=winc?
-  type: replace
+- type: replace
+  path: /releases/name=winc?
   value:
     name: winc
     sha1: 333d9de95485167dea7ec892fdf47a100c0c1a1e
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/winc-release?v=1.7.0
     version: 1.7.0
-- path: /releases/name=windows1803fs?
-  type: replace
+- type: replace
+  path: /releases/name=windows1803fs?
   value:
     name: windows1803fs
     sha1: 44c295f02afc638d2620838f2c675e8820e59b38
     url: https://bosh.io/d/github.com/cloudfoundry/windows1803fs-online-release?v=1.5.0
     version: 1.5.0
-- path: /releases/name=windows-utilities?
-  type: replace
+- type: replace
+  path: /releases/name=windows-utilities?
   value:
     name: windows-utilities
     sha1: efc10ac0f4acae23637ce2c6f864d20df2e3a781
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.11.0
     version: 0.11.0
-- path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/domain=_.cell.service.cf.internal/targets/-
-  type: replace
+- type: replace
+  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/domain=_.cell.service.cf.internal/targets/-
   value:
-    query: '_'
-    instance_group: windows1803-cell
     deployment: cf
-    network: default
     domain: bosh
+    instance_group: windows1803-cell
+    network: default
+    query: _
