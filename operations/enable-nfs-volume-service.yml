@@ -16,7 +16,7 @@
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/nfs-broker-push-client?
   value:
-    authorities: cloud_controller.read,cloud_controller.write
+    authorities: cloud_controller.admin
     authorized-grant-types: client_credentials
     secret: ((nfs-broker-push-uaa-client-secret))
 - type: replace
