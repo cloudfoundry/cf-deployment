@@ -1347,10 +1347,13 @@ instance_groups:
           ((application_ca.certificate))
           ((credhub_ca.certificate))
           ((uaa_ca.certificate))
+  - name: containerd
+    release: garden-runc
   - name: garden
     release: garden-runc
     properties:
       garden:
+        experimental_containerd_mode: true
         cleanup_process_dirs_on_wait: true
         debug_listen_address: 127.0.0.1:17019
         default_container_grace_time: 0
