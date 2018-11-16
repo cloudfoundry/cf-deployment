@@ -44,7 +44,8 @@ and the ops-files will be removed.
 | [`rootless-containers.yml`](rootless-containers.yml) | Enable rootless garden-runc containers. | Requires garden-runc 1.9.5 or later and grootfs 0.27.0 or later. This ops file cannot be deployed in conjunction with `use-garden-containerd.yml` |
 | [`set-cpu-weight.yml`](set-cpu-weight.yml) | CPU shares for each garden container are proportional to its memory limits. | |
 | [`use-compiled-releases-windows.yml`](use-compiled-releases-windows.yml) | Reverts to source version of releases required for Windows cells | Intended for use with `use-compiled-releases.yml` and any of `windows*-cell.yml` |
-| [`use-garden-containerd.yml`](use-garden-containerd.yml) | Configure Garden to create containers via containerd. This ops file cannot be deployed in conjunction with either `rootless-containers.yml` or `enable-bpm-garden.yml`. | |
+| [`use-garden-containerd.yml`](use-garden-containerd.yml) | **DEPRECATED:** Containerd is now enabled by default in `cf-deployment.yml`.
+| [`use-native-garden-runc-runner.yml`](use-native-garden-runc-runner.yml) | Configure Garden to **not** create containers via containerd, using the native runner instead.
 | [`use-latest-windows1803-stemcell.yml`](use-latest-windows1803-stemcell.yml) | **DEPRECATED: use `../use-latest-windows1803-cell.yml`**| Requires `windows1803-cell.yml` |
 | [`use-logcache-for-cloud-controller-app-stats.yml`](use-logcache-for-cloud-controller-app-stats.yml) | Configure Cloud Controller to use Log Cache instead of Traffic Controller for app container metrics. | |
 | [`use-pxc-for-smb-volume-service.yml`](use-pxc-for-smb-volume-service.yml) | **DEPRECATED: Pxc has been removed from smb-volume-service** | |
