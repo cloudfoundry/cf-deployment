@@ -56,6 +56,8 @@ test_experimental_ops() {
       check_interpolation "name: windows-component-syslog-ca.yml" "windows-enable-component-syslog.yml" "-o windows-component-syslog-ca.yml" "-l ${home}/operations/addons/example-vars-files/vars-enable-component-syslog.yml"
       check_interpolation "name: windows-enable-component-syslog.yml" "windows-enable-component-syslog.yml" "-l ${home}/operations/addons/example-vars-files/vars-enable-component-syslog.yml"
       check_interpolation "windows1803-cell.yml"
+      check_interpolation "name: enable-routing-integrity-windows1803.yml" "windows1803-cell.yml" "-o enable-routing-integrity-windows1803.yml"
+      check_interpolation "name: enable-routing-integrity-windows2016.yml" "../windows2016-cell.yml" "-o enable-routing-integrity-windows2016.yml"
     popd > /dev/null # operations/experimental
   popd > /dev/null
   exit $exit_code
