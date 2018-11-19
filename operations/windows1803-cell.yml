@@ -122,10 +122,10 @@
     description: Windows Server 2016
     name: windows2016
 - type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/name=hwc_buildpack?
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=hwc-buildpack-windows2016?
   value:
     name: hwc_buildpack
-    package: hwc-buildpack
+    package: hwc-buildpack-windows2016
 - type: replace
   path: /instance_groups/name=api/jobs/name=hwc-buildpack?
   value:
