@@ -1209,6 +1209,11 @@ instance_groups:
   - name: log-cache-expvar-forwarder
     release: log-cache
     properties:
+      loggregator_agent:
+        tls:
+          ca_cert: "((loggregator_ca.certificate))"
+          cert: "((log_cache_to_loggregator_agent.certificate))"
+          key: "((log_cache_to_loggregator_agent.private_key))"
       counters: []
       gauges: []
       maps:
@@ -1268,6 +1273,11 @@ instance_groups:
     release: log-cache
   - name: log-cache-expvar-forwarder
     properties:
+      loggregator_agent:
+        tls:
+          ca_cert: "((loggregator_ca.certificate))"
+          cert: "((log_cache_to_loggregator_agent.certificate))"
+          key: "((log_cache_to_loggregator_agent.private_key))"
       maps: []
       counters:
         # Log Cache
@@ -1373,10 +1383,7 @@ instance_groups:
     properties:
       cc:
         ca_cert: ((service_cf_internal_ca.certificate))
-        capi_internal_addr: https://cloud-controller-ng.service.cf.internal:9023
-        cert: ((log_cache_tls_cc_auth_proxy.certificate))
         common_name: cloud-controller-ng.service.cf.internal
-        key: ((log_cache_tls_cc_auth_proxy.private_key))
       proxy_port: 8083
       uaa:
         ca_cert: ((uaa_ca.certificate))
@@ -1978,9 +1985,9 @@ variables:
     - client_auth
     - server_auth
   type: certificate
-- name: log_cache_tls_cc_auth_proxy
+- name: log_cache_to_loggregator_agent
   options:
-    ca: service_cf_internal_ca
+    ca: loggregator_ca
     common_name: log-cache
     extended_key_usage:
     - client_auth
@@ -2215,9 +2222,9 @@ releases:
   version: "3.1"
   sha1: c915a59373e986ae1d98cfb96b09c805664e2550
 - name: log-cache
-  url: https://bosh.io/d/github.com/cloudfoundry/log-cache-release?v=2.0.1
-  version: 2.0.1
-  sha1: 23f9c4767109293b5f8b8a6a07ca31f065bcf88b
+  url: https://bosh.io/d/github.com/cloudfoundry/log-cache-release?v=2.0.2
+  version: 2.0.2
+  sha1: 1f52248096ce2263405f3c82278e4f2aaddf1599
 - name: bosh-dns-aliases
   url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-aliases-release?v=0.0.3
   version: 0.0.3
