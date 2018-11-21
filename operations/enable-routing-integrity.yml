@@ -13,36 +13,6 @@
   - ((service_cf_internal_ca.certificate))
 
 - type: replace
-  path: /instance_groups/name=scheduler/jobs/name=ssh_proxy/properties/backends?/tls/enabled
-  value: true
-
-- type: replace
-  path: /instance_groups/name=scheduler/jobs/name=ssh_proxy/properties/backends?/tls/ca_certificates
-  value:
-  - ((application_ca.certificate))
-
-- type: replace
-  path: /variables/-
-  value:
-    name: ssh_proxy_backends_tls
-    type: certificate
-    options:
-      ca: service_cf_internal_ca
-      extended_key_usage:
-      - client_auth
-      common_name: ssh_proxy_backends_tls
-      alternative_names:
-      - ssh-proxy.service.cf.internal
-
-- type: replace
-  path: /instance_groups/name=scheduler/jobs/name=ssh_proxy/properties/backends?/tls/client_certificate
-  value: ((ssh_proxy_backends_tls.certificate))
-
-- type: replace
-  path: /instance_groups/name=scheduler/jobs/name=ssh_proxy/properties/backends?/tls/client_private_key
-  value: ((ssh_proxy_backends_tls.private_key))
-
-- type: replace
   path: /instance_groups/name=diego-cell/jobs/name=rep/properties/containers?/proxy/verify_subject_alt_name
   value:
   - gorouter.service.cf.internal
