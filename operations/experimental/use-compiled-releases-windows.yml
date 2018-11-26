@@ -1,17 +1,10 @@
 - type: replace
-  path: /releases/name=binary-buildpack
-  value:
-    name: binary-buildpack
-    sha1: f0022e0632d31d5bbb0e0a5e424244bad83158a1
-    url: https://bosh.io/d/github.com/cloudfoundry/binary-buildpack-release?v=1.0.27
-    version: 1.0.27
-- type: replace
   path: /releases/name=diego
   value:
     name: diego
-    sha1: 0cd26089729d4e526dd27c47191cc3b9cb3189c6
-    url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=2.22.0
-    version: 2.22.0
+    sha1: 4eae4d2f03574faffd6cb6fd4d3a874d0ee980a9
+    url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=2.23.0
+    version: 2.23.0
 - type: replace
   path: /releases/name=garden-runc
   value:
@@ -23,6 +16,6 @@
   path: /releases/name=loggregator-agent
   value:
     name: loggregator-agent
-    sha1: 7532818b5d518b87b57cf36ddc2bf81758f606f9
-    url: https://bosh.io/d/github.com/cloudfoundry/loggregator-agent-release?v=2.3
-    version: "2.3"
+    sha1: c915a59373e986ae1d98cfb96b09c805664e2550
+    url: https://bosh.io/d/github.com/cloudfoundry/loggregator-agent-release?v=3.1
+    version: "3.1"

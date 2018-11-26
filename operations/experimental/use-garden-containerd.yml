@@ -1,14 +1,2 @@
 ---
-# use-garden-containerd.yml cannot be deployed with either rootless-containerd.yml or enable-bpm-garden.yml
-- type: replace
-  path: /instance_groups/name=diego-cell/jobs/-
-  value:
-    name: containerd
-    release: garden-runc
-    properties:
-      garden:
-        experimental_containerd_mode: true
-
-- type: replace
-  path: /instance_groups/name=diego-cell/jobs/name=garden/properties/garden/experimental_containerd_mode?
-  value: true
+# Deprecated. experimental_containerd_mode is now enabled by default in Garden.

@@ -1,5 +1,5 @@
-- path: /instance_groups/-
-  type: replace
+- type: replace
+  path: /instance_groups/-
   value:
     azs:
     - z1
@@ -110,55 +110,55 @@
     vm_extensions:
     - 100GB_ephemeral_disk
     vm_type: small-highmem
-- path: /stemcells/-
-  type: replace
+- type: replace
+  path: /stemcells/-
   value:
     alias: windows2016
     os: windows2016
-    version: "1709.14"
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2016?
-  type: replace
+    version: "1709.15"
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2016?
   value:
     description: Windows Server 2016
     name: windows2016
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/name=hwc_buildpack?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/name=hwc_buildpack?
   value:
     name: hwc_buildpack
     package: hwc-buildpack
-- path: /instance_groups/name=api/jobs/name=hwc-buildpack?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=hwc-buildpack?
   value:
     name: hwc-buildpack
     release: hwc-buildpack
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
   value:
     name: binary_buildpack
     package: binary-buildpack-windows2016
-- path: /releases/name=hwc-buildpack?
-  type: replace
+- type: replace
+  path: /releases/name=hwc-buildpack?
   value:
     name: hwc-buildpack
-    sha1: 4c91ca22f267a46916509d97c81d18ccc2e5c82e
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=3.0.3
-    version: 3.0.3
-- path: /releases/name=winc?
-  type: replace
+    sha1: 76925a493f20a1a637db1a117825f185913d515c
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=3.1.1
+    version: 3.1.1
+- type: replace
+  path: /releases/name=winc?
   value:
     name: winc
     sha1: 333d9de95485167dea7ec892fdf47a100c0c1a1e
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/winc-release?v=1.7.0
     version: 1.7.0
-- path: /releases/name=windows2016fs?
-  type: replace
+- type: replace
+  path: /releases/name=windows2016fs?
   value:
     name: windows2016fs
-    sha1: a9ce6c752b79396e4c82f3f3b27d6b045ad220f7
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows2016fs-online-release?v=1.8.0
-    version: 1.8.0
-- path: /releases/name=windows-utilities?
-  type: replace
+    sha1: 73941eb0e1c5a2511e511610d1b3a9cd09a44ecf
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows2016fs-online-release?v=1.10.0
+    version: 1.10.0
+- type: replace
+  path: /releases/name=windows-utilities?
   value:
     name: windows-utilities
     sha1: efc10ac0f4acae23637ce2c6f864d20df2e3a781

@@ -1,6 +1,6 @@
 ---
 name: cf
-manifest_version: v6.1.0
+manifest_version: v6.2.0
 update:
   canaries: 1
   canary_watch_time: 30000-1200000
@@ -26,6 +26,71 @@ addons:
           agent:
             cert: "((loggregator_tls_agent.certificate))"
             key: "((loggregator_tls_agent.private_key))"
+  - name: loggr-expvar-forwarder
+    release: loggregator-agent
+    properties:
+      log_agent:
+        ca_cert: "((loggregator_ca.certificate))"
+        client_cert: "((expvar_forwarder.certificate))"
+        client_key: "((expvar_forwarder.private_key))"
+      default_source_id: metron
+      counters:
+      - addr: http://127.0.0.1:14824/debug/vars
+        name: dropped
+        template: "{{.Agent.Dropped}}"
+      - addr: http://127.0.0.1:14824/debug/vars
+        name: dropped
+        template: "{{.Agent.DroppedEgressV2}}"
+        tags:
+          direction: egress
+          metric_version: "2.0"
+      - addr: http://127.0.0.1:14824/debug/vars
+        name: dropped
+        template: "{{.Agent.DroppedIngressV2}}"
+        tags:
+          direction: ingress
+          metric_version: "2.0"
+
+      - addr: http://127.0.0.1:14824/debug/vars
+        name: egress
+        template: "{{.Agent.Egress}}"
+      - addr: http://127.0.0.1:14824/debug/vars
+        name: egress
+        template: "{{.Agent.EgressV2}}"
+        tags:
+          metric_version: "2.0"
+
+      - addr: http://127.0.0.1:14824/debug/vars
+        name: ingress
+        template: "{{.Agent.Ingress}}"
+      - addr: http://127.0.0.1:14824/debug/vars
+        name: ingress
+        template: "{{.Agent.IngressV2}}"
+        tags:
+          metric_version: "2.0"
+
+      gauges:
+      - addr: http://127.0.0.1:14824/debug/vars
+        name: average_envelopes
+        unit: bytes/minute
+        template: "{{.Agent.AverageEnvelope}}"
+        tags:
+          loggregator: v1
+      - addr: http://127.0.0.1:14824/debug/vars
+        name: average_envelopes
+        unit: bytes/minute
+        template: "{{.Agent.AverageEnvelopeV2}}"
+        tags:
+          metric_version: "2.0"
+          loggregator: v2
+
+      - addr: http://127.0.0.1:14824/debug/vars
+        name: origin_mappings
+        unit: bytes/minute
+        template: "{{.Agent.OriginMappingsV2}}"
+        tags:
+          metric_version: "2.0"
+
 - name: bpm
   include:
     stemcell:
@@ -1116,6 +1181,13 @@ instance_groups:
           uaa:
             ca_cert: "((uaa_ca.certificate))"
           bbs: *diego_bbs_client_properties
+      backends:
+        tls:
+          enabled: true
+          ca_certificates:
+          - ((application_ca.certificate))
+          client_certificate: ((ssh_proxy_backends_tls.certificate))
+          client_private_key: ((ssh_proxy_backends_tls.private_key))
       enable_consul_service_registration: false
       loggregator: *diego_loggregator_client_properties
       logging:
@@ -1347,10 +1419,13 @@ instance_groups:
           ((application_ca.certificate))
           ((credhub_ca.certificate))
           ((uaa_ca.certificate))
+  - name: containerd
+    release: garden-runc
   - name: garden
     release: garden-runc
     properties:
       garden:
+        experimental_containerd_mode: true
         cleanup_process_dirs_on_wait: true
         debug_listen_address: 127.0.0.1:17019
         default_container_grace_time: 0
@@ -1787,6 +1862,13 @@ variables:
   options:
     is_ca: true
     common_name: loggregatorCA
+- name: expvar_forwarder
+  type: certificate
+  options:
+    ca: loggregator_ca
+    common_name: expvar_forwarder
+    extended_key_usage:
+    - client_auth
 - name: loggregator_tls_statsdinjector
   type: certificate
   options:
@@ -2029,6 +2111,15 @@ variables:
     alternative_names:
     - credhub.service.cf.internal
     - credhub.((system_domain))
+- name: ssh_proxy_backends_tls
+  type: certificate
+  options:
+    ca: service_cf_internal_ca
+    extended_key_usage:
+    - client_auth
+    common_name: ssh_proxy_backends_tls
+    alternative_names:
+    - ssh-proxy.service.cf.internal
 
 releases:
 - name: binary-buildpack
@@ -2036,97 +2127,97 @@ releases:
   version: 1.0.27
   sha1: f0022e0632d31d5bbb0e0a5e424244bad83158a1
 - name: bpm
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/bpm-release?v=0.13.0
-  version: 0.13.0
-  sha1: 4b6ebfdaa467c04855528172b099e565d679e0f5
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/bpm-release?v=1.0.0
+  version: 1.0.0
+  sha1: 42b95d4a0d6d15dd0b0ead62418ffb56208e2307
 - name: capi
-  url: https://bosh.io/d/github.com/cloudfoundry/capi-release?v=1.72.0
-  version: 1.72.0
-  sha1: 5756c91740b6cf99f228a2a1120b9234a8dbc9b9
+  url: https://bosh.io/d/github.com/cloudfoundry/capi-release?v=1.74.0
+  version: 1.74.0
+  sha1: 7973426f876d2b43f4491c6baa99a37e5db5ed87
 - name: cf-mysql
   url: https://bosh.io/d/github.com/cloudfoundry/cf-mysql-release?v=36.16.0
   version: 36.16.0
   sha1: eb028b258599e465f9fabb395b87e0093c46aa98
 - name: cf-networking
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-networking-release?v=2.18.0
-  version: 2.18.0
-  sha1: 2109a02d8ab56f748261eb63d276b24230068757
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-networking-release?v=2.19.0
+  version: 2.19.0
+  sha1: 37dd89d83d24274b11684da2a980bb289e476f7c
 - name: cf-smoke-tests
   url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=40.0.17
   version: 40.0.17
   sha1: c4fbdefdd3b04242eb53da89396f5f587e20d282
 - name: cf-syslog-drain
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-syslog-drain-release?v=8.0
-  version: "8.0"
-  sha1: 5b5a2ea2f7a75755e19620eea0672a21704b0660
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-syslog-drain-release?v=8.1
+  version: "8.1"
+  sha1: 1a4de5962d9f0d472271da7daf277c35b0969635
 - name: cflinuxfs2
-  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.247.0
-  version: 1.247.0
-  sha1: cd40b5e9f220f07ce174cc4bb1257870530234b7
+  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.250.0
+  version: 1.250.0
+  sha1: d9484a900462e650f00cc43711db897029fe3266
 - name: cflinuxfs3
-  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs3-release?v=0.37.0
-  version: 0.37.0
-  sha1: f206cd6d9072371a0ccecc17515a01c5fb58937c
+  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs3-release?v=0.41.0
+  version: 0.41.0
+  sha1: ec94d57728440a0b23950a4f7f552245bcb941dc
 - name: credhub
-  url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=2.1.1
-  version: 2.1.1
-  sha1: dd0b607d855a8d23e6fd52b990573570e68bbbf6
+  url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=2.1.2
+  version: 2.1.2
+  sha1: 754a24dbffe8bc5efce7e698d935b5f4df541f38
 - name: diego
-  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=2.22.0
-  version: 2.22.0
-  sha1: 0cd26089729d4e526dd27c47191cc3b9cb3189c6
+  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=2.23.0
+  version: 2.23.0
+  sha1: 4eae4d2f03574faffd6cb6fd4d3a874d0ee980a9
 - name: dotnet-core-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/dotnet-core-buildpack-release?v=2.1.5
-  version: 2.1.5
-  sha1: 188dace870c94749a3abc21cb538c08e0f4f3d8c
+  url: https://bosh.io/d/github.com/cloudfoundry/dotnet-core-buildpack-release?v=2.2.0
+  version: 2.2.0
+  sha1: f42007be8ac97a12cf082e1447599ab6e1a8d6d2
 - name: garden-runc
   url: https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.17.0
   version: 1.17.0
   sha1: 989da8ac06999071d66deb7f957be4dfd49ecdf2
 - name: go-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/go-buildpack-release?v=1.8.28
-  version: 1.8.28
-  sha1: cde33a1eda5392dd5c887d4d72568aabefb1f20a
+  url: https://bosh.io/d/github.com/cloudfoundry/go-buildpack-release?v=1.8.29
+  version: 1.8.29
+  sha1: 9b9a08ee59918c5b737eec695ac8b2d164b07044
 - name: java-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/java-buildpack-release?v=4.16.1
   version: 4.16.1
   sha1: 2e24d3da499fc62fd3f012f13188e7e7e7857c2a
 - name: loggregator
-  url: https://bosh.io/d/github.com/cloudfoundry/loggregator-release?v=104.2
-  version: "104.2"
-  sha1: 16de255a3d6e0e683668f9d413f41169b6f3666c
+  url: https://bosh.io/d/github.com/cloudfoundry/loggregator-release?v=104.1
+  version: "104.1"
+  sha1: 4493664a05e553e43f8b12cc8956bc8ac5f4f6b0
 - name: nats
   url: https://bosh.io/d/github.com/cloudfoundry/nats-release?v=26
   version: "26"
   sha1: 2f2c27acdfff81f3519968921686522518ab5783
 - name: nodejs-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/nodejs-buildpack-release?v=1.6.32
-  version: 1.6.32
-  sha1: 69c02ed7bfcc145447222b7366d6ad41c07d86e5
+  url: https://bosh.io/d/github.com/cloudfoundry/nodejs-buildpack-release?v=1.6.34
+  version: 1.6.34
+  sha1: 8fa43dabde22135cfa9c09321d815303251d1186
 - name: php-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/php-buildpack-release?v=4.3.61
-  version: 4.3.61
-  sha1: 9c5f9f040135fda81da44c6e1b0a1da878b04bfb
+  url: https://bosh.io/d/github.com/cloudfoundry/php-buildpack-release?v=4.3.64
+  version: 4.3.64
+  sha1: 3b46707410192c0317f18abd82132bc2224ace56
 - name: python-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/python-buildpack-release?v=1.6.21
-  version: 1.6.21
-  sha1: 03b8618c5940889529e0aa6c129436e17c2a28d3
+  url: https://bosh.io/d/github.com/cloudfoundry/python-buildpack-release?v=1.6.23
+  version: 1.6.23
+  sha1: c2372758b1faf9c84af7c63e25b19a5dc1de04c2
 - name: routing
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.182.0
-  version: 0.182.0
-  sha1: 6e341a527a0dd2c920b54dea82156ae9bc0b29eb
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.183.0
+  version: 0.183.0
+  sha1: 92d7a81cddab5d26764c51d9dbb2baece1fbe3e6
 - name: ruby-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/ruby-buildpack-release?v=1.7.24
-  version: 1.7.24
-  sha1: d696be61e29dd0ea60129df148747831feece51f
+  url: https://bosh.io/d/github.com/cloudfoundry/ruby-buildpack-release?v=1.7.27
+  version: 1.7.27
+  sha1: 74f4f17da983aaf5ee890d26bae948358363da6b
 - name: silk
-  url: https://bosh.io/d/github.com/cloudfoundry/silk-release?v=2.18.0
-  version: 2.18.0
-  sha1: 19de0a4097c937ea50df6db0b8b0110703b307f4
+  url: https://bosh.io/d/github.com/cloudfoundry/silk-release?v=2.19.0
+  version: 2.19.0
+  sha1: cb51a882cd7ce8b65f2d2a0775cfe9f8d804a164
 - name: staticfile-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/staticfile-buildpack-release?v=1.4.32
-  version: 1.4.32
-  sha1: 5851241b881f3315383fe4d2a50ca89fe2a5d331
+  url: https://bosh.io/d/github.com/cloudfoundry/staticfile-buildpack-release?v=1.4.35
+  version: 1.4.35
+  sha1: 28bfe41ea712cba78de7717ceb5f37d3b844d707
 - name: statsd-injector
   url: https://bosh.io/d/github.com/cloudfoundry/statsd-injector-release?v=1.5.0
   version: 1.5.0
@@ -2136,9 +2227,9 @@ releases:
   version: "66.0"
   sha1: 2848d9fb65d2d556a918e8045359cf469c241123
 - name: loggregator-agent
-  url: https://bosh.io/d/github.com/cloudfoundry/loggregator-agent-release?v=2.3
-  version: "2.3"
-  sha1: 7532818b5d518b87b57cf36ddc2bf81758f606f9
+  url: https://bosh.io/d/github.com/cloudfoundry/loggregator-agent-release?v=3.1
+  version: "3.1"
+  sha1: c915a59373e986ae1d98cfb96b09c805664e2550
 - name: log-cache
   url: https://bosh.io/d/github.com/cloudfoundry/log-cache-release?v=2.0.1
   version: 2.0.1
@@ -2154,4 +2245,4 @@ releases:
 stemcells:
 - alias: default
   os: ubuntu-xenial
-  version: "170.5"
+  version: "170.9"

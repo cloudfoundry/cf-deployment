@@ -44,6 +44,7 @@ test_experimental_ops() {
       check_interpolation "name: use-compiled-releases-windows.yml" "${home}/operations/use-compiled-releases.yml" "-o ${home}/operations/windows2012R2-cell.yml" "-o use-compiled-releases-windows.yml"
       check_interpolation "use-create-swap-delete-vm-strategy.yml"
       check_interpolation "use-garden-containerd.yml"
+      check_interpolation "use-native-garden-runc-runner.yml"
       version=$(bosh interpolate ${home}/cf-deployment.yml -o windows1803-cell.yml -o use-latest-windows1803-stemcell.yml --path=/stemcells/alias=windows1803/version)
       if [ "${version}" == "latest" ]; then
         pass "use-latest-windows1803-stemcell.yml"
@@ -55,6 +56,8 @@ test_experimental_ops() {
       check_interpolation "name: windows-component-syslog-ca.yml" "windows-enable-component-syslog.yml" "-o windows-component-syslog-ca.yml" "-l ${home}/operations/addons/example-vars-files/vars-enable-component-syslog.yml"
       check_interpolation "name: windows-enable-component-syslog.yml" "windows-enable-component-syslog.yml" "-l ${home}/operations/addons/example-vars-files/vars-enable-component-syslog.yml"
       check_interpolation "windows1803-cell.yml"
+      check_interpolation "name: enable-routing-integrity-windows1803.yml" "windows1803-cell.yml" "-o enable-routing-integrity-windows1803.yml"
+      check_interpolation "name: enable-routing-integrity-windows2016.yml" "../windows2016-cell.yml" "-o enable-routing-integrity-windows2016.yml"
     popd > /dev/null # operations/experimental
   popd > /dev/null
   exit $exit_code
