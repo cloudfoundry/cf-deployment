@@ -1,0 +1,498 @@
+---
+- type: replace
+  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/-
+  value:
+    domain: "isolated-doppler.service.cf.internal"
+    targets:
+    - query: "*"
+      instance_group: isolated-doppler
+      deployment: cf
+      network: default
+      domain: bosh
+
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: isolated-doppler
+    azs:
+    - z1
+    instances: 1
+    vm_type: minimal
+    stemcell: default
+    networks:
+    - name: default
+    jobs:
+    - name: doppler
+      release: loggregator
+      provides:
+        doppler: {as: isolated_doppler, shared: true}
+        loggregator: {as: isolated_loggregator, shared: true}
+      properties:
+        loggregator:
+          tls:
+            ca_cert: "((isolated_loggregator_ca.certificate))"
+            doppler:
+              cert: "((isolated_loggregator_tls_doppler.certificate))"
+              key: "((isolated_loggregator_tls_doppler.private_key))"
+    - name: log-cache
+      release: log-cache
+      provides:
+        log-cache: {as: isolated_log_cache, shared: true}
+      consumes:
+        log-cache: {from: isolated_log_cache}
+      properties:
+        egress_port: 8080
+        health_addr: "localhost:6060"
+        tls:
+          ca_cert: "((isolated_log_cache.ca))"
+          cert: "((isolated_log_cache.certificate))"
+          key: "((isolated_log_cache.private_key))"
+    - name: log-cache-cf-auth-proxy
+      consumes:
+        log-cache: {from: isolated_log_cache}
+        log-cache-gateway: {from: isolated_log_cache_gateway}
+      properties:
+        cc:
+          ca_cert: ((isolated_log_cache_tls_cc_auth_proxy.ca))
+          capi_internal_addr: https://cloud-controller-ng.service.cf.internal:9023
+          cert: ((isolated_log_cache_tls_cc_auth_proxy.certificate))
+          common_name: cloud-controller-ng.service.cf.internal
+          key: ((isolated_log_cache_tls_cc_auth_proxy.private_key))
+        proxy_port: 8083
+        uaa:
+          ca_cert: ((uaa_ca.certificate))
+          client_id: doppler
+          client_secret: ((uaa_clients_doppler_secret))
+          internal_addr: https://uaa.service.cf.internal:8443
+      release: log-cache
+    - name: log-cache-expvar-forwarder
+      release: log-cache
+      consumes:
+        log-cache: {from: isolated_log_cache}
+      properties:
+        maps: []
+        counters:
+        - {name: egress,         source_id: isolated-log-cache,        addr: "http://localhost:6060/debug/vars", template: "{{.LogCache.Egress}}"}
+        - {name: ingress,        source_id: isolated-log-cache,        addr: "http://localhost:6060/debug/vars", template: "{{.LogCache.Ingress}}"}
+        - {name: expired,        source_id: isolated-log-cache,        addr: "http://localhost:6060/debug/vars", template: "{{.LogCache.Expired}}"}
+        - {name: dropped,        source_id: isolated-log-cache,        addr: "http://localhost:6060/debug/vars", template: "{{.LogCache.Dropped}}"}
+        - {name: promql-timeout, source_id: isolated-log-cache,        addr: "http://localhost:6060/debug/vars", template: "{{.LogCache.PromQLTimeout}}"}
+        - {name: egress,         source_id: isolated-log-cache-nozzle, addr: "http://localhost:6061/debug/vars", template: "{{.Nozzle.Egress}}"}
+        - {name: ingress,        source_id: isolated-log-cache-nozzle, addr: "http://localhost:6061/debug/vars", template: "{{.Nozzle.Ingress}}"}
+        - {name: err,            source_id: isolated-log-cache-nozzle, addr: "http://localhost:6061/debug/vars", template: "{{.Nozzle.Err}}"}
+        - {name: dropped,        source_id: isolated-log-cache-nozzle, addr: "http://localhost:6061/debug/vars", template: "{{.Nozzle.Dropped}}"}
+        gauges:
+        - {name: cache-period,                                source_id: isolated-log-cache,               addr: "http://localhost:6060/debug/vars", template: "{{.LogCache.CachePeriod}}"}
+        - {name: store-size,                                  source_id: isolated-log-cache,               addr: "http://localhost:6060/debug/vars", template: "{{.LogCache.StoreSize}}"}
+        - {name: total-system-memory,                         source_id: isolated-log-cache,               addr: "http://localhost:6060/debug/vars", template: "{{.LogCache.TotalSystemMemory}}"}
+        - {name: available-system-memory,                     source_id: isolated-log-cache,               addr: "http://localhost:6060/debug/vars", template: "{{.LogCache.AvailableSystemMemory}}"}
+        - {name: promql-instant-query-time,                   source_id: isolated-log-cache,               addr: "http://localhost:6060/debug/vars", template: "{{.LogCache.PromQLInstantQueryTime}}"}
+        - {name: promql-range-query-time,                     source_id: isolated-log-cache,               addr: "http://localhost:6060/debug/vars", template: "{{.LogCache.PromQLRangeQueryTime}}"}
+        - {name: last-uaa-latency,                            source_id: isolated-log-cache-cf-auth-proxy, addr: "http://localhost:6065/debug/vars", template: "{{.CFAuthProxy.LastUAALatency}}"}
+        - {name: last-capi-v3-apps-latency,                   source_id: isolated-log-cache-cf-auth-proxy, addr: "http://localhost:6065/debug/vars", template: "{{.CFAuthProxy.LastCAPIV3AppsLatency}}"}
+        - {name: last-capi-v2-list-service-instances-latency, source_id: isolated-log-cache-cf-auth-proxy, addr: "http://localhost:6065/debug/vars", template: "{{.CFAuthProxy.LastCAPIV2ListServiceInstancesLatency}}"}
+        - {name: last-capi-v4-log-access-latency,             source_id: isolated-log-cache-cf-auth-proxy, addr: "http://localhost:6065/debug/vars", template: "{{.CFAuthProxy.LastCAPIV4LogAccessLatency}}"}
+        - {name: last-capi-v2-service-instances-latency,      source_id: isolated-log-cache-cf-auth-proxy, addr: "http://localhost:6065/debug/vars", template: "{{.CFAuthProxy.LastCAPIV2ServiceInstancesLatency}}"}
+    - name: log-cache-gateway
+      release: log-cache
+      consumes:
+        log-cache: {from: isolated_log_cache}
+      provides:
+        log-cache-gateway: {as: isolated_log_cache_gateway, shared: true}
+    - name: log-cache-nozzle
+      release: log-cache
+      consumes:
+        reverse_log_proxy: {from: isolated_reverse_log_proxy}
+        log-cache: {from: isolated_log_cache}
+      properties:
+        logs_provider:
+          tls:
+            ca_cert: "((isolated_logs_provider.ca))"
+            cert: "((isolated_logs_provider.certificate))"
+            key: "((isolated_logs_provider.private_key))"
+    - name: route_registrar
+      release: routing
+      properties:
+        route_registrar:
+          routes:
+          - name: isolated-log-cache-reverse-log-proxy
+            port: 8083
+            registration_interval: 20s
+            uris:
+            - iso-log-cache.((system_domain))
+            - "*.iso-log-cache.((system_domain))"
+
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: isolated-log-api
+    azs:
+    - z1
+    instances: 1
+    vm_type: minimal
+    stemcell: default
+    networks:
+    - name: default
+    jobs:
+    - name: loggregator_trafficcontroller
+      release: loggregator
+      consumes:
+        doppler: {from: isolated_doppler}
+      provides:
+        trafficcontroller: {as: isolated_trafficcontroller}
+      properties:
+        uaa:
+          internal_url: https://uaa.service.cf.internal:8443
+          ca_cert: "((uaa_ca.certificate))"
+        loggregator:
+          tls:
+            cc_trafficcontroller:
+              cert: "((isolated_loggregator_tls_cc_tc.certificate))"
+              key: "((isolated_loggregator_tls_cc_tc.private_key))"
+            ca_cert: "((isolated_loggregator_ca.certificate))"
+            trafficcontroller:
+              cert: "((isolated_loggregator_tls_tc.certificate))"
+              key: "((isolated_loggregator_tls_tc.private_key))"
+          uaa:
+            client_secret: "((uaa_clients_isolated_doppler_secret))"
+            client: isolated-doppler
+        system_domain: "((system_domain))"
+        ssl:
+          skip_cert_verify: true
+        cc:
+          internal_service_hostname: "cloud-controller-ng.service.cf.internal"
+          tls_port: 9023
+          mutual_tls:
+            ca_cert: "((service_cf_internal_ca.certificate))"
+    - name: reverse_log_proxy
+      release: loggregator
+      consumes:
+        doppler: {from: isolated_doppler}
+      provides:
+        reverse_log_proxy: {as: isolated_reverse_log_proxy, shared: true}
+      properties:
+        loggregator:
+          tls:
+            ca_cert: "((isolated_loggregator_ca.certificate))"
+            reverse_log_proxy:
+              cert: "((isolated_loggregator_tls_rlp.certificate))"
+              key: "((isolated_loggregator_tls_rlp.private_key))"
+    - name: route_registrar
+      release: routing
+      properties:
+        route_registrar:
+          routes:
+          - name: isolated-loggregator
+            port: 8080
+            registration_interval: 20s
+            uris:
+            - iso-loggregator.((system_domain))
+          - name: isolated-doppler
+            port: 8081
+            registration_interval: 20s
+            uris:
+            - iso-doppler.((system_domain))
+            - "*.iso-doppler.((system_domain))"
+
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/isolated-doppler?
+  value:
+    authorities: uaa.resource
+    override: true
+    authorized-grant-types: client_credentials
+    secret: "((uaa_clients_isolated_doppler_secret))"
+
+- type: replace
+  path: /instance_groups/name=adapter/jobs/name=adapter/consumes?
+  value:
+    reverse_log_proxy: {from: reverse_log_proxy}
+
+- type: replace
+  path: /instance_groups/name=log-api/jobs/name=reverse_log_proxy/consumes?
+  value:
+    doppler: {from: doppler}
+
+- type: replace
+  path: /instance_groups/name=log-api/jobs/name=reverse_log_proxy_gateway/consumes?
+  value:
+    reverse_log_proxy: {from: reverse_log_proxy}
+
+- type: replace
+  path: /instance_groups/name=log-api/jobs/name=loggregator_trafficcontroller/consumes?
+  value:
+    doppler: {from: doppler}
+
+- type: replace
+  path: /addons/name=loggregator_agent/exclude?
+  value: 
+    instance_groups:
+    - isolated-diego-cell
+    - isolated-doppler
+    - isolated-log-api
+
+- type: replace
+  path: /addons/name=loggregator_agent/jobs/name=loggregator_agent
+  value:
+    name: loggregator_agent
+    release: loggregator-agent
+    consumes:
+      doppler:
+        from: doppler
+    properties:
+      loggregator:
+        tls:
+          ca_cert: "((loggregator_ca.certificate))"
+          agent:
+            cert: "((loggregator_tls_agent.certificate))"
+            key: "((loggregator_tls_agent.private_key))"
+
+- type: replace
+  path:  /addons/-
+  value:
+    name: isolated_loggregator_agent
+    include:
+      instance_groups:
+      - isolated-diego-cell
+      - isolated-doppler
+      - isolated-log-api
+    jobs:
+    - name: loggregator_agent
+      release: loggregator-agent
+      consumes:
+        doppler:
+          from: isolated_doppler
+      properties:
+        loggregator:
+          tls:
+            ca_cert: "((isolated_loggregator_ca.certificate))"
+            agent:
+              cert: "((isolated_loggregator_tls_agent.certificate))"
+              key: "((isolated_loggregator_tls_agent.private_key))"
+
+- type: replace
+  path: /instance_groups/name=isolated-diego-cell/jobs/name=rep/properties/loggregator?
+  value:
+    use_v2_api: true
+    ca_cert: "((isolated_loggregator_ca.certificate))"
+    cert: "((isolated_loggregator_tls_agent.certificate))"
+    key: "((isolated_loggregator_tls_agent.private_key))"
+
+- type: replace
+  path: /instance_groups/name=isolated-diego-cell/jobs/name=route_emitter/properties/loggregator?
+  value:
+    use_v2_api: true
+    ca_cert: "((isolated_loggregator_ca.certificate))"
+    cert: "((isolated_loggregator_tls_agent.certificate))"
+    key: "((isolated_loggregator_tls_agent.private_key))"
+
+- type: replace
+  path: /variables/-
+  value:
+    name: isolated_loggregator_ca
+    type: certificate
+    options:
+      is_ca: true
+      common_name: isolated-loggregatorCA
+
+- type: replace
+  path: /variables/-
+  value:
+    name: isolated_loggregator_tls_doppler
+    type: certificate
+    options:
+      ca: isolated_loggregator_ca
+      common_name: doppler
+      extended_key_usage:
+      - client_auth
+      - server_auth
+- type: replace
+  path: /variables/-
+  value:
+    name: isolated_loggregator_tls_agent
+    type: certificate
+    options:
+      ca: isolated_loggregator_ca
+      common_name: metron
+      extended_key_usage:
+      - client_auth
+      - server_auth
+- type: replace
+  path: /variables/-
+  value:
+    name: isolated_loggregator_tls_tc
+    type: certificate
+    options:
+      ca: isolated_loggregator_ca
+      common_name: trafficcontroller
+      extended_key_usage:
+      - client_auth
+      - server_auth
+- type: replace
+  path: /variables/-
+  value:
+    name: isolated_loggregator_tls_rlp
+    type: certificate
+    options:
+      ca: isolated_loggregator_ca
+      common_name: reverselogproxy
+      extended_key_usage:
+      - client_auth
+      - server_auth
+- type: replace
+  path: /variables/-
+  value:
+    name: isolated_loggregator_tls_cc_tc
+    type: certificate
+    options:
+      ca: service_cf_internal_ca
+      common_name: trafficcontroller
+      extended_key_usage:
+      - client_auth
+- type: replace
+  path: /variables/-
+  value:
+    name: uaa_clients_isolated_doppler_secret
+    type: password
+
+
+
+- type: replace
+  path: /instance_groups/name=isolated-scheduler?
+  value:
+    name: isolated-scheduler
+    azs:
+    - z1
+    instances: 1
+    vm_type: minimal
+    stemcell: default
+    networks:
+    - name: default
+    jobs:
+    - name: log-cache-scheduler
+      release: log-cache
+      consumes:
+        log-cache: {from: isolated_log_cache}
+    - name: log-cache-expvar-forwarder
+      release: log-cache
+      consumes:
+        log-cache: {from: isolated_log_cache}
+      properties:
+        counters: []
+        gauges: []
+        maps:
+        - {name: worker-assignments, source_id: isolated-log-cache-scheduler, addr: "http://localhost:6064/debug/vars", template: "{{.WorkerAssignments | jsonMap}}"}
+        - {name: worker-health,      source_id: isolated-log-cache-scheduler, addr: "http://localhost:6064/debug/vars", template: "{{.WorkerHealth | jsonMap}}"}
+
+- type: replace
+  path: /variables/name=isolated_logs_provider?
+  value:
+    name: isolated_logs_provider
+    type: certificate
+    options:
+      ca: isolated_loggregator_ca
+      common_name: isolated-log-cache
+      extended_key_usage:
+      - client_auth
+      - server_auth
+
+- type: replace
+  path: /variables/name=isolated_log_cache_ca?
+  value:
+    name: isolated_log_cache_ca
+    type: certificate
+    options:
+      is_ca: true
+      common_name: isolated-log-cache
+
+- type: replace
+  path: /variables/name=isolated_log_cache?
+  value:
+    name: isolated_log_cache
+    type: certificate
+    options:
+      ca: isolated_log_cache_ca
+      common_name: log-cache
+      alternative_names:
+      - log_cache
+      - log-cache
+      extended_key_usage:
+      - client_auth
+      - server_auth
+
+- type: replace
+  path: /variables/name=isolated_log_cache_tls_cc_auth_proxy?
+  value:
+    name: isolated_log_cache_tls_cc_auth_proxy
+    options:
+      ca: service_cf_internal_ca
+      common_name: isolated-log-cache
+      extended_key_usage:
+      - client_auth
+    type: certificate
+
+- type: replace
+  path: /instance_groups/name=isolated-log-api/jobs/name=loggregator_trafficcontroller/consumes/log-cache?
+  value:
+    from: isolated_log_cache
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/consumes?
+  value:
+    log-cache: {from: log_cache}
+
+- type: replace
+  path: /instance_groups/name=doppler/jobs/name=log-cache/consumes?
+  value:
+    log-cache: {from: log_cache}
+
+- type: replace
+  path: /instance_groups/name=doppler/jobs/name=log-cache/provides/log-cache?
+  value:
+    as: log_cache
+    shared: true
+
+- type: replace
+  path: /instance_groups/name=doppler/jobs/name=log-cache-cf-auth-proxy/consumes?
+  value:
+    log-cache: {from: log_cache}
+
+- type: replace
+  path: /instance_groups/name=doppler/jobs/name=log-cache-cf-auth-proxy/consumes/log-cache-gateway?
+  value:
+    from: log_cache_gateway
+
+- type: replace
+  path: /instance_groups/name=doppler/jobs/name=log-cache-expvar-forwarder/consumes?
+  value:
+    log-cache: {from: log_cache}
+
+- type: replace
+  path: /instance_groups/name=doppler/jobs/name=log-cache-gateway/consumes?
+  value:
+    log-cache: {from: log_cache}
+
+- type: replace
+  path: /instance_groups/name=doppler/jobs/name=log-cache-gateway/provides?/log-cache-gateway
+  value:
+    as: log_cache_gateway
+    shared: true
+
+- type: replace
+  path: /instance_groups/name=doppler/jobs/name=log-cache-nozzle/consumes/log-cache?
+  value:
+    from: log_cache
+
+- type: replace
+  path: /instance_groups/name=log-api/jobs/name=loggregator_trafficcontroller/consumes/log-cache?
+  value:
+    from: log_cache
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=log-cache-expvar-forwarder/consumes?
+  value:
+    log-cache: {from: log_cache}
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=log-cache-scheduler/consumes?
+  value:
+    log-cache: {from: log_cache}
