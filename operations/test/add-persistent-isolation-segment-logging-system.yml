@@ -472,7 +472,7 @@
     log-cache: {from: log_cache}
 
 - type: replace
-  path: /instance_groups/name=doppler/jobs/name=log-cache-gateway/provides?/log-cache-gateway?
+  path: /instance_groups/name=doppler/jobs/name=log-cache-gateway/provides?/log-cache-gateway
   value:
     as: log_cache_gateway
     shared: true
