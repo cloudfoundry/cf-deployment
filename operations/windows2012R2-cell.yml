@@ -114,7 +114,7 @@
     description: Windows Server 2012 R2
     name: windows2012R2
 - type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=hwc-buildpack-windows2012R2?
   value:
     name: hwc_buildpack
     package: hwc-buildpack-windows2012R2
