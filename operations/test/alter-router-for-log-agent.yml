@@ -2,36 +2,6 @@
 - type: replace
   path: /instance_groups/name=router/jobs/-
   value:
-    name: loggregator_agent
-    release: loggregator-agent
-    consumes:
-      doppler:
-        from: doppler
-    properties:
-      loggregator:
-        tls:
-          ca_cert: "((loggregator_ca.certificate))"
-          agent:
-            cert: "((loggregator_tls_agent.certificate))"
-            key: "((loggregator_tls_agent.private_key))"
-- type: replace
-  path: /instance_groups/name=tcp-router/jobs/-
-  value:
-    name: loggregator_agent
-    release: loggregator-agent
-    consumes:
-      doppler:
-        from: doppler
-    properties:
-      loggregator:
-        tls:
-          ca_cert: "((loggregator_ca.certificate))"
-          agent:
-            cert: "((loggregator_tls_agent.certificate))"
-            key: "((loggregator_tls_agent.private_key))"
-- type: replace
-  path: /instance_groups/name=router/jobs/-
-  value:
     name: prom_scraper
     release: loggregator-agent
     consumes:
@@ -45,21 +15,6 @@
     consumes:
       loggregator:
         from: loggregator
-- type: replace
-  path: /instance_groups/name=iso-seg-router/jobs/-
-  value:
-    name: loggregator_agent
-    release: loggregator-agent
-    consumes:
-      doppler:
-        from: isolated_doppler
-    properties:
-      loggregator:
-        tls:
-          ca_cert: "((isolated_loggregator_ca.certificate))"
-          agent:
-            cert: "((isolated_loggregator_tls_agent.certificate))"
-            key: "((isolated_loggregator_tls_agent.private_key))"
 - type: replace
   path: /instance_groups/name=iso-seg-router/jobs/-
   value:

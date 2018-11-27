@@ -224,11 +224,12 @@
 
 - type: replace
   path: /addons/name=loggregator_agent/exclude?
-  value: 
+  value:
     instance_groups:
     - isolated-diego-cell
     - isolated-doppler
     - isolated-log-api
+    - iso-seg-router
 
 - type: replace
   path: /addons/name=loggregator_agent/jobs/name=loggregator_agent
@@ -247,7 +248,7 @@
             key: "((loggregator_tls_agent.private_key))"
 
 - type: replace
-  path:  /addons/-
+  path: /addons/-
   value:
     name: isolated_loggregator_agent
     include:
@@ -255,6 +256,7 @@
       - isolated-diego-cell
       - isolated-doppler
       - isolated-log-api
+      - iso-seg-router
     jobs:
     - name: loggregator_agent
       release: loggregator-agent
