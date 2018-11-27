@@ -5,18 +5,6 @@
 - type: replace
   path: /variables/-
   value:
-    name: forwarder_api_tls
-    type: certificate
-    options:
-      ca: service_cf_internal_ca
-      common_name: forwarder
-      extended_key_usage:
-      - client_auth
-      - server_auth
-
-- type: replace
-  path: /variables/-
-  value:
     name: forwarder_agent
     type: certificate
     options:
@@ -41,12 +29,6 @@
           ca_cert: "((loggregator_ca.certificate))"
           cert: "((forwarder_agent.certificate))"
           key: "((forwarder_agent.private_key))"
-        api:
-          tls:
-            ca_cert: "((service_cf_internal_ca.certificate))"
-            cert: "((forwarder_api_tls.certificate))"
-            key: "((forwarder_api_tls.private_key))"
-            cn: "cloud-controller-ng.service.cf.internal"
 
 - type: replace
   path: /addons/-
