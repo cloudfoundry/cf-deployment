@@ -55,7 +55,6 @@
             open_bindmounts_acl: true
             preloaded_rootfses:
             - windows2016:oci:///C:/var/vcap/packages/windows2016fs
-            - windows:oci:///C:/var/vcap/packages/windows2016fs
         enable_consul_service_registration: false
         enable_declarative_healthcheck: true
         logging:
@@ -122,11 +121,6 @@
   value:
     description: Windows Server 2016
     name: windows2016
-- type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows?
-  value:
-    description: Windows Server
-    name: windows
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=hwc-buildpack-windows2016?
   value:
