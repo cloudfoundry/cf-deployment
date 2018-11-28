@@ -18,7 +18,10 @@ var testTests = map[string]helpers.OpsFileTestParams{
 	},
 	"add-persistent-isolation-segment-diego-cell.yml": {},
 	"add-persistent-isolation-segment-router.yml":     {},
-	"alter-ssh-proxy-redirect-uri.yml":                {},
+	"add-persistent-isolation-segment-logging-system.yml": {
+		Ops: []string{"add-persistent-isolation-segment-diego-cell.yml", "add-persistent-isolation-segment-logging-system.yml"},
+	},
+	"alter-ssh-proxy-redirect-uri.yml": {},
 	"disable_windows_consul_agent_nameserver_overwriting.yml": {
 		Ops: []string{"../windows2012R2-cell.yml", "disable_windows_consul_agent_nameserver_overwriting.yml"},
 	},
