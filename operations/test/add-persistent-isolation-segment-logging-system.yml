@@ -467,7 +467,7 @@
   path: /instance_groups/name=doppler/jobs/name=log-cache-expvar-forwarder/consumes?
   value:
     log-cache: {from: log_cache}
-    loggregator: {from: loggregator}
+    loggregator: {from: doppler}
 
 - type: replace
   path: /instance_groups/name=doppler/jobs/name=log-cache-gateway/consumes?
