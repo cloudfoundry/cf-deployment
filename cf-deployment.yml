@@ -1039,7 +1039,6 @@ instance_groups:
           ((application_ca.certificate))
           ((service_cf_internal_ca.certificate))
         backends:
-          enable_tls: true
           cert_chain: ((gorouter_backend_tls.certificate))
           private_key: ((gorouter_backend_tls.private_key))
         status:
