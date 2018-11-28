@@ -51,3 +51,13 @@
 - type: replace
   path: /addons/name=loggregator_agent/jobs/name=loggregator_agent/properties/disable_udp?
   value: true
+
+- type: replace
+  path: /addons/name=loggregator_agent/jobs/name=loggr-expvar-forwarder/properties/counters/-
+  value:
+    addr: http://127.0.0.1:14823/debug/vars
+    name: ingress
+    source_id: forwarder_agent
+    template: "{{.ForwarderAgent.IngressV2}}"
+    tags:
+      metric_version: "2.0"
