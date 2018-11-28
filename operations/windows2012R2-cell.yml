@@ -114,10 +114,10 @@
     description: Windows Server 2012 R2
     name: windows2012R2
 - type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/name=hwc_buildpack?
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=hwc-buildpack-windows2012R2?
   value:
     name: hwc_buildpack
-    package: hwc-buildpack
+    package: hwc-buildpack-windows2012R2
 - type: replace
   path: /instance_groups/name=api/jobs/name=hwc-buildpack?
   value:
@@ -132,6 +132,6 @@
   path: /releases/name=hwc-buildpack?
   value:
     name: hwc-buildpack
-    sha1: 4c91ca22f267a46916509d97c81d18ccc2e5c82e
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=3.0.3
-    version: 3.0.3
+    sha1: 76925a493f20a1a637db1a117825f185913d515c
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=3.1.1
+    version: 3.1.1

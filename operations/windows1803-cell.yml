@@ -116,7 +116,7 @@
   value:
     alias: windows1803
     os: windows1803
-    version: "1803.3"
+    version: "1803.4"
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2016?
   value:
@@ -128,10 +128,10 @@
     description: Windows Server
     name: windows
 - type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/name=hwc_buildpack?
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=hwc-buildpack-windows2016?
   value:
     name: hwc_buildpack
-    package: hwc-buildpack
+    package: hwc-buildpack-windows2016
 - type: replace
   path: /instance_groups/name=api/jobs/name=hwc-buildpack?
   value:
@@ -146,9 +146,9 @@
   path: /releases/name=hwc-buildpack?
   value:
     name: hwc-buildpack
-    sha1: 4c91ca22f267a46916509d97c81d18ccc2e5c82e
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=3.0.3
-    version: 3.0.3
+    sha1: 76925a493f20a1a637db1a117825f185913d515c
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=3.1.1
+    version: 3.1.1
 - type: replace
   path: /releases/name=winc?
   value:
@@ -160,9 +160,9 @@
   path: /releases/name=windows1803fs?
   value:
     name: windows1803fs
-    sha1: 44c295f02afc638d2620838f2c675e8820e59b38
-    url: https://bosh.io/d/github.com/cloudfoundry/windows1803fs-online-release?v=1.5.0
-    version: 1.5.0
+    sha1: 905ff55e82bb69ba657d419fbfab0b41a648f702
+    url: https://bosh.io/d/github.com/cloudfoundry/windows1803fs-online-release?v=1.6.0
+    version: 1.6.0
 - type: replace
   path: /releases/name=windows-utilities?
   value:
