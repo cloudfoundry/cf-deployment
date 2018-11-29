@@ -71,6 +71,11 @@
         log-cache: {from: isolated_log_cache}
         loggregator: {from: isolated_loggregator}
       properties:
+        loggregator_agent:
+          tls:
+            ca_cert: "((loggregator_ca.certificate))"
+            cert: "((log_cache_to_loggregator_agent.certificate))"
+            key: "((log_cache_to_loggregator_agent.private_key))"
         maps: []
         counters:
         - {name: egress,         source_id: isolated-log-cache,        addr: "http://localhost:6060/debug/vars", template: "{{.LogCache.Egress}}"}
@@ -357,8 +362,6 @@
     name: uaa_clients_isolated_doppler_secret
     type: password
 
-
-
 - type: replace
   path: /instance_groups/name=isolated-scheduler?
   value:
@@ -381,6 +384,11 @@
         log-cache: {from: isolated_log_cache}
         loggregator: {from: isolated_loggregator}
       properties:
+        loggregator_agent:
+          tls:
+            ca_cert: "((loggregator_ca.certificate))"
+            cert: "((log_cache_to_loggregator_agent.certificate))"
+            key: "((log_cache_to_loggregator_agent.private_key))"
         counters: []
         gauges: []
         maps:
