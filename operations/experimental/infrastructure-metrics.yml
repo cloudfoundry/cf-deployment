@@ -1,25 +1,25 @@
 - type: replace
   path: /releases/-
   value:
-    name: "node-exporter"
-    version: "4.0.1"
-    url: "https://bosh.io/d/github.com/cloudfoundry-community/node-exporter-boshrelease?v=4.0.1"
-    sha1: "ade04174f6eaf14173f204cc46a629fe6cd07c63"
-
+    name: node-exporter
+    sha1: 9c91394cdaa38e5da503523bc1b5b801b317de3e
+    url: https://bosh.io/d/github.com/cloudfoundry-community/node-exporter-boshrelease?v=4.1.0
+    version: 4.1.0
 - type: replace
   path: /addons/-
   value:
-    name: node_exporter
+    exclude:
+      jobs:
+      - name: smoke_tests
+        release: cf-smoke-tests
+    include:
+      stemcell:
+      - os: ubuntu-xenial
     jobs:
     - name: node_exporter
-      release: node-exporter
       properties:
         node_exporter:
           collector:
-            # To see a full list of available metrics and descriptions, see
-            # https://github.com/prometheus/node_exporter/tree/v0.16.0#enabled-by-default
-            #
-            # Disabled by default
             arp:
               enabled: false
             bcache:
@@ -60,6 +60,8 @@
               enabled: false
             time:
               enabled: false
+            timex:
+              enabled: false
             uname:
               enabled: false
             vmstat:
@@ -70,27 +72,19 @@
               enabled: false
             zfs:
               enabled: false
-            timex:
-              enabled: false
-    include:
-      stemcell:
-      - os: ubuntu-xenial
-    exclude:
-      jobs:
-      - name: smoke_tests
-        release: cf-smoke-tests
-
+      release: node-exporter
+    name: node_exporter
 - type: replace
   path: /addons/-
   value:
-    name: prom_scraper
-    jobs:
-    - name: prom_scraper
-      release: loggregator-agent
-    include:
-      stemcell:
-      - os: ubuntu-xenial
     exclude:
       jobs:
       - name: smoke_tests
         release: cf-smoke-tests
+    include:
+      stemcell:
+      - os: ubuntu-xenial
+    jobs:
+    - name: prom_scraper
+      release: loggregator-agent
+    name: prom_scraper
