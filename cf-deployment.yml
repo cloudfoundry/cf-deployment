@@ -38,35 +38,45 @@ addons:
       - addr: http://127.0.0.1:14824/debug/vars
         name: dropped
         template: "{{.Agent.Dropped}}"
+        tags:
+          origin: loggregator.metron
       - addr: http://127.0.0.1:14824/debug/vars
         name: dropped
         template: "{{.Agent.DroppedEgressV2}}"
         tags:
+          origin: loggregator.metron
           direction: egress
           metric_version: "2.0"
       - addr: http://127.0.0.1:14824/debug/vars
         name: dropped
         template: "{{.Agent.DroppedIngressV2}}"
         tags:
+          origin: loggregator.metron
           direction: ingress
           metric_version: "2.0"
 
       - addr: http://127.0.0.1:14824/debug/vars
         name: egress
         template: "{{.Agent.Egress}}"
+        tags:
+          origin: loggregator.metron
       - addr: http://127.0.0.1:14824/debug/vars
         name: egress
         template: "{{.Agent.EgressV2}}"
         tags:
+          origin: loggregator.metron
           metric_version: "2.0"
 
       - addr: http://127.0.0.1:14824/debug/vars
         name: ingress
         template: "{{.Agent.Ingress}}"
+        tags:
+          origin: loggregator.metron
       - addr: http://127.0.0.1:14824/debug/vars
         name: ingress
         template: "{{.Agent.IngressV2}}"
         tags:
+          origin: loggregator.metron
           metric_version: "2.0"
 
       gauges:
@@ -75,12 +85,14 @@ addons:
         unit: bytes/minute
         template: "{{.Agent.AverageEnvelope}}"
         tags:
+          origin: loggregator.metron
           loggregator: v1
       - addr: http://127.0.0.1:14824/debug/vars
         name: average_envelopes
         unit: bytes/minute
         template: "{{.Agent.AverageEnvelopeV2}}"
         tags:
+          origin: loggregator.metron
           metric_version: "2.0"
           loggregator: v2
 
@@ -89,6 +101,7 @@ addons:
         unit: bytes/minute
         template: "{{.Agent.OriginMappingsV2}}"
         tags:
+          origin: loggregator.metron
           metric_version: "2.0"
 
 - name: bpm
