@@ -301,8 +301,8 @@ instance_groups:
       smoke_tests:
         api: "https://api.((system_domain))"
         apps_domain: "((system_domain))"
-        user: bosh
-        password: "((cf_bosh_password))"
+        client: cf_smoke_tests
+        client_secret: "((uaa_clients_cf_smoke_tests_secret))"
         org: cf_smoke_tests_org
         space: cf_smoke_tests_space
         cf_dial_timeout_in_seconds: 300
@@ -611,6 +611,10 @@ instance_groups:
             refresh-token-validity: 2592000
             scope: network.admin,network.write,cloud_controller.read,cloud_controller.write,openid,password.write,cloud_controller.admin,scim.read,scim.write,doppler.firehose,uaa.user,routing.router_groups.read,routing.router_groups.write,cloud_controller.admin_read_only,cloud_controller.global_auditor,perm.admin
             secret: ''
+          cf_smoke_tests:
+            authorities: cloud_controller.admin
+            authorized-grant-types: client_credentials
+            secret: "((uaa_clients_cf_smoke_tests_secret))"
           cloud_controller_username_lookup:
             authorities: scim.userids
             authorized-grant-types: client_credentials
@@ -1788,6 +1792,8 @@ variables:
 - name: uaa_clients_cc-service-dashboards_secret
   type: password
 - name: uaa_clients_cc_service_key_client_secret
+  type: password
+- name: uaa_clients_cf_smoke_tests_secret
   type: password
 - name: uaa_clients_cloud_controller_username_lookup_secret
   type: password
