@@ -35,6 +35,7 @@ _Does this introduce changes that would require operators to take action in orde
 - moves a job to a different instance group
 - deletes a job or instance group
 - changes the name of a credential
+- requires out-of-band manual intervention on the part of the operator
 
 
 
