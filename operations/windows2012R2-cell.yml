@@ -27,6 +27,7 @@
           rep:
             preloaded_rootfses:
             - windows2012R2:/tmp/windows2012R2
+        enable_consul_service_registration: false
         enable_declarative_healthcheck: true
         logging:
           format:
@@ -106,17 +107,17 @@
   value:
     alias: windows2012R2
     os: windows2012R2
-    version: "1200.24"
+    version: "1200.25"
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2012R2?
   value:
     description: Windows Server 2012 R2
     name: windows2012R2
 - type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/name=hwc_buildpack?
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=hwc-buildpack-windows2012R2?
   value:
     name: hwc_buildpack
-    package: hwc-buildpack
+    package: hwc-buildpack-windows2012R2
 - type: replace
   path: /instance_groups/name=api/jobs/name=hwc-buildpack?
   value:
@@ -131,6 +132,6 @@
   path: /releases/name=hwc-buildpack?
   value:
     name: hwc-buildpack
-    sha1: 397491396861195f90c53b4126283e37f14bdb5f
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=3.0.2
-    version: 3.0.2
+    sha1: 76925a493f20a1a637db1a117825f185913d515c
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=3.1.1
+    version: 3.1.1

@@ -10,14 +10,14 @@
         syslog:
           address: ((syslog_address))
           port: ((syslog_port))
-          transport: tcp
           tls_enabled: true
+          transport: tcp
       release: windows-syslog
     name: syslog_forwarder_windows
 - type: replace
   path: /releases/-
   value:
     name: windows-syslog
-    sha1: 52784a6b9f9e67be86dd606617c797a7b2aae774
-    url: https://bosh.io/d/github.com/cloudfoundry/windows-syslog-release?v=1.0.0
-    version: 1.0.0
+    sha1: 58b46eb21b1e4cc26f384f19229598f7ff6cf59b
+    url: https://bosh.io/d/github.com/cloudfoundry/windows-syslog-release?v=1.0.1
+    version: 1.0.1

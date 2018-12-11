@@ -15,18 +15,33 @@
     jobs:
     - name: cflinuxfs2-rootfs-setup
       release: cflinuxfs2
+      properties:
+        cflinuxfs2-rootfs:
+          trusted_certs: |
+            ((application_ca.certificate))
+            ((credhub_ca.certificate))
+            ((uaa_ca.certificate))
+    - name: cflinuxfs3-rootfs-setup
+      release: cflinuxfs3
+      properties:
+        cflinuxfs3-rootfs:
+          trusted_certs: |
+            ((application_ca.certificate))
+            ((credhub_ca.certificate))
+            ((uaa_ca.certificate))
+    - name: containerd
+      release: garden-runc
     - name: garden
       release: garden-runc
       properties:
         garden:
+          experimental_containerd_mode: true
           cleanup_process_dirs_on_wait: true
           default_container_grace_time: 0
           destroy_containers_on_start: true
           graph_cleanup_threshold_in_mb: 0
           deny_networks:
           - 0.0.0.0/0
-          persistent_image_list:
-          - "/var/vcap/packages/cflinuxfs2/rootfs.tar"
         logging:
           format:
             timestamp: "rfc3339"
@@ -42,6 +57,7 @@
           rep:
             preloaded_rootfses:
             - cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs.tar
+            - cflinuxfs3:/var/vcap/packages/cflinuxfs3/rootfs.tar
             placement_tags:
             - persistent_isolation_segment
         containers:
@@ -49,6 +65,7 @@
             - ((application_ca.certificate))
             - ((credhub_ca.certificate))
             - ((uaa_ca.certificate))
+        enable_consul_service_registration: false
         enable_declarative_healthcheck: true
         loggregator:
           use_v2_api: true

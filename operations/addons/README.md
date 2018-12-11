@@ -4,10 +4,12 @@ can be applied to both
 [runtime configs][runtime-config-docs] and
 manifests.
 
-- For general Ops-files, check out the [Ops-file README](../README.md).
-- For experimental Ops-files, check out the [Experimental Ops-file README](../experimental/README.md).
-- For Legacy Ops-files, check out the [Legacy Ops-file README](../legacy/README.md).
-- For Community Ops-files, checkout the [Community Ops-file README](../community/README.md).
+- For General Ops-files, check out the [Ops-file README](../README.md).
+- For Backup and Restore Ops-files (for configuring your deployment for use with [BBR](https://github.com/cloudfoundry-incubator/bosh-backup-and-restore)), checkout the [Backup and Restore Ops-files README](../backup-and-restore/README.md).
+- For Bits Service Ops-files (for configuring your deployment for use with [Bits Service](https://github.com/cloudfoundry-incubator/bits-service)), checkout the [Bits Service Ops-files README](../bits-service/README.md).
+- For Community Ops-files, check out the [Community Ops-file README](../community/README.md).
+- For Legacy Ops-files, checkout the [Legacy Ops-file README](../legacy/README.md).
+- For Experimental Ops-files, check out the [Experimental Ops-file README](../experimental/README.md).
 
 We recommend the use
 of runtime configs
@@ -25,7 +27,7 @@ to VMs via the use of [addons][addons-docs].
 
 | Name | Purpose | Notes |
 |:---  |:---     |:---   |
-| [`component-syslog-custom-ca.yml`](component-syslog-custom-ca.yml) | The syslog_forwarder job will only trust certs signed by the provided cert chain. | Requires `enable-component-syslog.yml. Not necessary if syslog target has a cert signed by a public CA. |
+| [`component-syslog-custom-ca.yml`](component-syslog-custom-ca.yml) | The syslog_forwarder job will only trust certs signed by the provided cert chain. | Requires `enable-component-syslog.yml`. Not necessary if syslog target has a cert signed by a public CA. |
 | [`enable-component-syslog.yml`](enable-component-syslog.yml) | This collocates a job from [syslog release][syslog-release-repo] to forward local syslog events in RFC5424 format to a remote syslog endpoint. | Uses rsyslog, which is available on the stemcell. Further documentation of the `custom_rule` property can be found [here][syslog-custom-rule-examples]. For the windows equivalent, see `operations/experimental/windows-enable-component-syslog.yml`. Requires that target have a valid cert. To configure a custom CA, use `component-syslog-custom-ca.yml`. |
 
 ## Adding a Runtime Config

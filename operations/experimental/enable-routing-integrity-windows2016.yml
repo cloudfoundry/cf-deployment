@@ -1,0 +1,29 @@
+---
+- type: replace
+  path: /instance_groups/name=windows2016-cell/jobs/name=rep_windows/properties/containers?/proxy/enabled
+  value: true
+- type: replace
+  path: /instance_groups/name=windows2016-cell/jobs/name=rep_windows/properties/containers?/proxy/require_and_verify_client_certificates
+  value: true
+- type: replace
+  path: /instance_groups/name=windows2016-cell/jobs/name=rep_windows/properties/containers?/proxy/trusted_ca_certificates
+  value:
+  - ((service_cf_internal_ca.certificate))
+- type: replace
+  path: /instance_groups/name=windows2016-cell/jobs/name=rep_windows/properties/containers?/proxy/verify_subject_alt_name
+  value:
+  - gorouter.service.cf.internal
+
+- type: replace
+  path: /instance_groups/name=windows2016-cell/jobs/-
+  value:
+    name: envoy_windows
+    release: envoy
+
+- path: /releases/name=envoy?
+  type: replace
+  value:
+    name: envoy
+    version: 0.1.0
+    url: https://github.com/cloudfoundry/envoy-release/releases/download/v0.1.0/envoy-0.1.0.tgz
+    sha1: dfff5adbc2696c25cd385a73bc39fff820a2df6c

@@ -1,5 +1,6 @@
+---
 - type: replace
-  path: /instance_groups/name=database/jobs/name=postgres/properties?/databases/tls
+  path: /instance_groups/name=database/jobs/name=postgres/properties/databases/tls?
   value:
     ca: "((postgres_ca.certificate))"
     certificate: "((postgres_tls.certificate))"
@@ -38,7 +39,7 @@
   value: true
 
 - type: replace
-  path: /variables?/name=postgres_ca?
+  path: /variables/name=postgres_ca?
   value:
     name: postgres_ca
     type: certificate
@@ -47,7 +48,7 @@
       common_name: postgres_ca
 
 - type: replace
-  path: /variables?/name=postgres_tls?
+  path: /variables/name=postgres_tls?
   value:
     name: postgres_tls
     type: certificate

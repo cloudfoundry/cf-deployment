@@ -1,6 +1,5 @@
 ---
 # Requires grootfs 0.27.0 or later, and garden-runc 1.9.5 or later.
-# rootless-containers.yml cannot be deployed with use-garden-containerd.yml
 
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=garden/properties/garden/experimental_rootless_mode?
@@ -9,3 +8,10 @@
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=garden/properties?/grootfs/skip_mount
   value: true
+
+# Disable containerd
+- type: remove
+  path: /instance_groups/name=diego-cell/jobs/name=containerd?
+
+- type: remove
+  path: /instance_groups/name=diego-cell/jobs/name=garden/properties/garden/experimental_containerd_mode?

@@ -47,6 +47,14 @@
           uaa_secret: "((uaa_clients_ssh-proxy_secret))"
         ssl:
           skip_cert_verify: true
+      backends:
+        tls:
+          enabled: true
+          ca_certificates:
+          - ((application_ca.certificate))
+          client_certificate: ((ssh_proxy_backends_tls.certificate))
+          client_private_key: ((ssh_proxy_backends_tls.private_key))
+      enable_consul_service_registration: false
       logging:
         format:
           timestamp: "rfc3339"
