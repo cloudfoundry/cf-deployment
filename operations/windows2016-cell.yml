@@ -133,6 +133,11 @@
     name: hwc_buildpack
     package: hwc-buildpack-windows2016
 - type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=hwc-buildpack-windows?
+  value:
+    name: hwc_buildpack
+    package: hwc-buildpack-windows
+- type: replace
   path: /instance_groups/name=api/jobs/name=hwc-buildpack?
   value:
     name: hwc-buildpack
@@ -142,6 +147,11 @@
   value:
     name: binary_buildpack
     package: binary-buildpack-windows2016
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=binary-buildpack-windows?
+  value:
+    name: binary_buildpack
+    package: binary-buildpack-windows
 - type: replace
   path: /releases/name=hwc-buildpack?
   value:
