@@ -180,11 +180,3 @@
     sha1: efc10ac0f4acae23637ce2c6f864d20df2e3a781
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.11.0
     version: 0.11.0
-- type: replace
-  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/domain=_.cell.service.cf.internal/targets/-
-  value:
-    deployment: cf
-    domain: bosh
-    instance_group: windows1803-cell
-    network: default
-    query: _
