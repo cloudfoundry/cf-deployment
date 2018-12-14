@@ -1,0 +1,13 @@
+---
+- type: remove
+  path: /instance_groups/name=backup-restore/jobs/name=azure-blobstore-backup-restorer?/properties/containers/droplets
+
+- type: remove
+  path: /instance_groups/name=backup-restore/jobs/name=gcs-blobstore-backup-restorer?/properties/buckets/droplets
+
+- type: remove
+  path: /instance_groups/name=backup-restore/jobs/name=s3-unversioned-blobstore-backup-restorer?/properties/buckets/droplets
+
+- type: remove
+  path: /instance_groups/name=backup-restore/jobs/name=s3-versioned-blobstore-backup-restorer?/properties/buckets/droplets
+
