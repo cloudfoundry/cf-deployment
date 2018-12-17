@@ -20,12 +20,31 @@ addons:
   - name: loggregator_agent
     release: loggregator-agent
     properties:
+      grpc_port: 3459
+      disable_udp: true
       loggregator:
         tls:
           ca_cert: "((loggregator_ca.certificate))"
           agent:
             cert: "((loggregator_tls_agent.certificate))"
             key: "((loggregator_tls_agent.private_key))"
+  - name: loggr-forwarder-agent
+    release: loggregator-agent
+    properties:
+      tls:
+        ca_cert: "((loggregator_ca.certificate))"
+        cert: "((loggregator_tls_agent.certificate))"
+        key: "((loggregator_tls_agent.private_key))"
+  - name: loggr-udp-forwarder
+    release: loggregator-agent
+    properties:
+      loggregator:
+        ingress_port: 3459
+        tls:
+          ca: "((loggregator_ca.certificate))"
+          cert: "((loggregator_tls_agent.certificate))"
+          key: "((loggregator_tls_agent.private_key))"
+
   - name: loggr-expvar-forwarder
     release: loggregator-agent
     properties:
@@ -78,6 +97,20 @@ addons:
         tags:
           origin: loggregator.metron
           metric_version: "2.0"
+
+      - addr: http://127.0.0.1:14823/debug/vars
+        name: ingress
+        source_id: forwarder_agent
+        template: "{{.ForwarderAgent.IngressV2}}"
+        tags:
+          origin: loggregator.forwarder_agent
+      - addr: http://127.0.0.1:14823/debug/vars
+        name: dropped
+        source_id: forwarder_agent
+        template: "{{.ForwarderAgent.IngressDropped}}"
+        tags:
+          origin: loggregator.forwarder_agent
+          direction: ingress
 
       gauges:
       - addr: http://127.0.0.1:14824/debug/vars
