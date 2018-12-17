@@ -12,6 +12,10 @@
   value: *temporary_oci_buildpack_mode
 
 - type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=rep/properties/containers/layering_mode?
+  value: "two-layer"
+
+- type: replace
   path: /instance_groups/name=diego-cell/jobs/name=garden/properties/grootfs/tls?
   value:
     cert: ((grootfs_remote_layer_tls.certificate))
