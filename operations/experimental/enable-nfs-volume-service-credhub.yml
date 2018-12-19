@@ -1,13 +1,4 @@
 - type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/volume_services_enabled?
-  value: true
-- type: replace
-  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/volume_services_enabled?
-  value: true
-- type: replace
-  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/volume_services_enabled?
-  value: true
-- type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/nfs-broker-credhub-client?
   value:
     authorities: credhub.read,credhub.write
@@ -93,17 +84,6 @@
     stemcell: default
     vm_type: minimal
 - type: replace
-  path: /instance_groups/name=diego-cell/jobs/name=nfsv3driver?
-  value:
-    name: nfsv3driver
-    properties: {}
-    release: nfs-volume
-- type: replace
-  path: /instance_groups/name=diego-cell/jobs/name=mapfs?
-  value:
-    name: mapfs
-    release: mapfs
-- type: replace
   path: /variables/-
   value:
     name: nfs-broker-credhub-password
@@ -113,17 +93,3 @@
   value:
     name: nfs-broker-credhub-uaa-client-secret
     type: password
-- type: replace
-  path: /releases/name=nfs-volume?
-  value:
-    name: nfs-volume
-    sha1: 8e92355c8f83f2c3ff1496f55fb7e04294e03baa
-    url: https://bosh.io/d/github.com/cloudfoundry/nfs-volume-release?v=1.7.5
-    version: 1.7.5
-- type: replace
-  path: /releases/name=mapfs?
-  value:
-    name: mapfs
-    sha1: 604b646eb6de8448dc3d7124702537e13ecf31f1
-    url: https://bosh.io/d/github.com/cloudfoundry/mapfs-release?v=1.1.2
-    version: 1.1.2

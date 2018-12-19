@@ -69,7 +69,13 @@
   path: /instance_groups/name=diego-cell/jobs/name=smbdriver?
   value:
     name: smbdriver
-    properties: {}
+    properties: 
+      tls:
+        ca_cert: ((smb_ca.certificate))
+        server_cert: ((smbdriver_cert.certificate))
+        server_key: ((smbdriver_cert.private_key))
+        client_cert: ((smbdriver_client_cert.certificate))
+        client_key: ((smbdriver_client_cert.private_key))
     release: smb-volume
 - type: replace
   path: /variables/-
@@ -86,6 +92,36 @@
   value:
     name: smb-broker-credhub-uaa-client-secret
     type: password
+- type: replace
+  path: /variables/-
+  value:
+    name: smb_ca
+    options:
+      common_name: smb-ca
+      is_ca: true
+    type: certificate
+- type: replace
+  path: /variables/-
+  value:
+    name: smbdriver_cert
+    options:
+      ca: smb_ca
+      common_name: 127.0.0.1
+      alternative_names:
+      - 127.0.0.1
+      extended_key_usage:
+      - server_auth
+    type: certificate
+- type: replace
+  path: /variables/-
+  value:
+    name: smbdriver_client_cert
+    options:
+      ca: smb_ca
+      common_name: smb-client
+      extended_key_usage:
+      - client_auth
+    type: certificate
 - type: replace
   path: /releases/-
   value:

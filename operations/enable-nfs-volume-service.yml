@@ -60,7 +60,14 @@
   path: /instance_groups/name=diego-cell/jobs/-
   value:
     name: nfsv3driver
-    properties: {}
+    properties:
+      nfsv3driver:
+        tls:
+          ca_cert: ((nfs_ca.certificate))
+          server_cert: ((nfsv3driver_cert.certificate))
+          server_key: ((nfsv3driver_cert.private_key))
+          client_cert: ((nfsv3driver_client_cert.certificate))
+          client_key: ((nfsv3driver_client_cert.private_key))
     release: nfs-volume
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=mapfs?
@@ -82,6 +89,36 @@
   value:
     name: nfs-broker-push-uaa-client-secret
     type: password
+- type: replace
+  path: /variables/-
+  value:
+    name: nfs_ca
+    options:
+      common_name: nfs-ca
+      is_ca: true
+    type: certificate
+- type: replace
+  path: /variables/-
+  value:
+    name: nfsv3driver_cert
+    options:
+      ca: nfs_ca
+      common_name: 127.0.0.1
+      alternative_names:
+      - 127.0.0.1
+      extended_key_usage:
+      - server_auth
+    type: certificate
+- type: replace
+  path: /variables/-
+  value:
+    name: nfsv3driver_client_cert
+    options:
+      ca: nfs_ca
+      common_name: nfs-client
+      extended_key_usage:
+      - client_auth
+    type: certificate
 - type: replace
   path: /releases/-
   value:
