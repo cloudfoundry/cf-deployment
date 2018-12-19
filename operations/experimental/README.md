@@ -25,12 +25,12 @@ and the ops-files will be removed.
 | [`add-cflinuxfs3.yml`](add-cflinuxfs3.yml) | **DEPRECATED: cflinuxfs3 is now inlined in cf-deployment.** | |
 | [`deploy-forwarder-agent.yml`](deploy-forwarder-agent.yml) | Addons for forwarder agent, UDP forwarder, and configuration/certs. | |
 | [`disable-interpolate-service-bindings.yml`](disable-interpolate-service-bindings.yml) | Disables the interpolation of CredHub service credentials by Cloud Controller. |
-| [`enable-bpm-garden.yml`](enable-bpm-garden.yml) | Enables the [BOSH Process Manager](https://github.com/cloudfoundry-incubator/bpm-release) for Garden. This ops file cannot be deployed in conjunction with `use-garden-containerd.yml` | |
+| [`enable-bpm-garden.yml`](enable-bpm-garden.yml) | Enables the [BOSH Process Manager](https://github.com/cloudfoundry-incubator/bpm-release) for Garden. | This ops file **cannot** be deployed in conjunction with `enable-oci-phase-1.yml` or `use-garden-containerd.yml`. |
 | [`use-create-swap-delete-vm-strategy.yml`](use-create-swap-delete-vm-strategy.yml) | Configures the default [`vm_strategy`](https://bosh.io/docs/changing-deployment-vm-strategy/) to be `create-swap-delete`. | Requires BOSH director `v267.7+` |
 | [`enable-iptables-logger.yml`](enable-iptables-logger.yml) | Enables iptables logger. | |
 | [`enable-mysql-tls.yml`](enable-mysql-tls.yml) | Enables TLS on the database job, and secures all client database connections. | |
 | [`enable-nfs-volume-service-credhub.yml`](enable-nfs-volume-service-credhub.yml) | Enables credhub integration for NFS volume services | Requires `enable-nfs-volume-service.yml` |
-| [`enable-oci-phase-1.yml`](enable-oci-phase-1.yml) | Configure Garden to create OCI compatible images. | |
+| [`enable-oci-phase-1.yml`](enable-oci-phase-1.yml) | Configure CC, Diego, and Garden to create app and task containers more efficiently via OCI image specs. | This ops file **cannot** be deployed in conjunction with `enable-bpm-garden.yml` or `rootless-containers.yml`. |
 | [`enable-routing-integrity.yml`](enable-routing-integrity.yml) | **DEPRECATED: use `../enable-routing-integrity.yml`** | |
 | [`enable-routing-integrity-windows1803.yml`](enable-routing-integrity-windows1803.yml) | Enables container proxy on the Windows 1803 Diego Cell `rep` and configures gorouter to opt into TLS-enabled connections to the backend. | **Warning: this is very experimental** Requires `../windows1803-cell.yml` |
 | [`enable-routing-integrity-windows2016.yml`](enable-routing-integrity-windows2016.yml) | Enables container proxy on the Windows 2016 Diego Cell `rep` and configures gorouter to opt into TLS-enabled connections to the backend. | **Warning: this is very experimental** Requires `../windows2016-cell.yml` |
@@ -44,7 +44,7 @@ and the ops-files will be removed.
 | [`migrate-nfsbroker-mysql-to-credhub.yml`](migrate-nfsbroker-mysql-to-credhub.yml) | Migrates existing NFS volume services state storage from MySQL to Credhub | Requires `enable-nfs-volume-service-credhub.yml` |
 | [`perm-service.yml`](perm-service.yml) | Deploy CF with [Perm Service](https://github.com/cloudfoundry-incubator/perm) | Requires `enable-mysql-tls.yml`. See the [deployment section of perm-release's README file](https://github.com/cloudfoundry-incubator/perm-release/blob/master/README.md#deploying-perm-with-cf-deployment) for more information|
 | [`perm-service-with-pxc-release.yml`](perm-service-with-pxc-release.yml) | Use [pxc-release](https://github.com/cloudfoundry-incubator/pxc-release) as data store for Perm Service. | Requires `perm-service.yml` and `use-pxc.yml`. |
-| [`rootless-containers.yml`](rootless-containers.yml) | Enable rootless garden-runc containers. | Requires garden-runc 1.9.5 or later and grootfs 0.27.0 or later. This ops file cannot be deployed in conjunction with `use-garden-containerd.yml` |
+| [`rootless-containers.yml`](rootless-containers.yml) | Enable rootless garden-runc containers. | Requires garden-runc 1.9.5 or later and grootfs 0.27.0 or later. This ops file **cannot** be deployed in conjunction with `enable-oci-phase-1.yml` or `use-garden-containerd.yml`. |
 | [`set-cpu-weight.yml`](set-cpu-weight.yml) | CPU shares for each garden container are proportional to its memory limits. | |
 | [`use-compiled-releases-windows.yml`](use-compiled-releases-windows.yml) | Reverts to source version of releases required for Windows cells | Intended for use with `use-compiled-releases.yml` and any of `windows*-cell.yml` |
 | [`use-garden-containerd.yml`](use-garden-containerd.yml) | **DEPRECATED:** Containerd is now enabled by default in `cf-deployment.yml`.
