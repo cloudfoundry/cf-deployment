@@ -13,6 +13,10 @@ var backupAndRestoreTests = map[string]helpers.OpsFileTestParams{
 		Ops:       []string{"enable-backup-restore.yml", "../use-external-blobstore.yml", "../use-azure-storage-blobstore.yml", "enable-backup-restore-azure.yml"},
 		VarsFiles: []string{"../example-vars-files/vars-use-azure-storage-blobstore.yml"},
 	},
+	"enable-backup-restore-gcs.yml": {
+		Ops:       []string{"enable-backup-restore.yml", "../use-external-blobstore.yml", "../use-gcs-blobstore-service-account.yml", "enable-backup-restore-gcs.yml"},
+		VarsFiles: []string{"../example-vars-files/vars-use-gcs-blobstore-service-account.yml", "example-vars-files/vars-enable-backup-restore-gcs.yml"},
+	},
 	"enable-backup-restore-nfs-broker.yml": {
 		Ops:  []string{"enable-backup-restore.yml", "enable-backup-restore-nfs-broker.yml"},
 		Vars: []string{"nfs-broker-database-password=i_am_a_password"},
@@ -33,6 +37,12 @@ var backupAndRestoreTests = map[string]helpers.OpsFileTestParams{
 	"enable-restore-azure-clone.yml": {
 		Ops:       []string{"enable-backup-restore.yml", "../use-external-blobstore.yml", "../use-azure-storage-blobstore.yml", "enable-restore-azure-clone.yml"},
 		VarsFiles: []string{"../example-vars-files/vars-use-azure-storage-blobstore.yml", "example-vars-files/vars-enable-restore-azure-clone.yml"},
+	},
+	"skip-backup-restore-droplets.yml": {
+		Ops: []string{"enable-backup-restore.yml", "skip-backup-restore-droplets.yml"},
+	},
+	"skip-backup-restore-droplets-and-packages.yml": {
+		Ops: []string{"enable-backup-restore.yml", "skip-backup-restore-droplets-and-packages.yml"},
 	},
 }
 
