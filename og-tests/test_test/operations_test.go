@@ -17,16 +17,26 @@ var testTests = map[string]helpers.OpsFileTestParams{
 		Ops: []string{"add-persistent-isolation-segment-diego-cell.yml", "add-persistent-isolation-segment-diego-cell-bosh-lite.yml"},
 	},
 	"add-persistent-isolation-segment-diego-cell.yml": {},
-	"add-persistent-isolation-segment-router.yml":     {},
+	"add-persistent-isolation-segment-infrastructure-metrics.yml": {
+		Ops: []string{"../experimental/infrastructure-metrics.yml", "add-persistent-isolation-segment-diego-cell.yml", "add-persistent-isolation-segment-logging-system.yml", "add-persistent-isolation-segment-infrastructure-metrics.yml"},
+	},
+	"add-persistent-isolation-segment-router.yml": {},
 	"add-persistent-isolation-segment-logging-system.yml": {
 		Ops: []string{"add-persistent-isolation-segment-diego-cell.yml", "add-persistent-isolation-segment-logging-system.yml"},
 	},
-	"alter-ssh-proxy-redirect-uri.yml": {},
-	"disable_windows_consul_agent_nameserver_overwriting.yml": {
-		Ops: []string{"../windows2012R2-cell.yml", "disable_windows_consul_agent_nameserver_overwriting.yml"},
+	"add-persistent-isolation-segment-syslog-drain.yml": {
+		Ops: []string{"add-persistent-isolation-segment-diego-cell.yml", "add-persistent-isolation-segment-logging-system.yml", "add-persistent-isolation-segment-syslog-drain.yml"},
 	},
-	"windows2016-debug.yml": {
-		Ops: []string{"../windows2012R2-cell.yml"},
+	"alter-router-for-log-agent.yml": {
+		Ops: []string{"add-persistent-isolation-segment-router.yml", "add-persistent-isolation-segment-diego-cell.yml", "add-persistent-isolation-segment-logging-system.yml", "alter-router-for-log-agent.yml"},
+	},
+	"alter-ssh-proxy-redirect-uri.yml": {},
+	"enable-nfs-test-server.yml":       {},
+	"enable-smb-test-server.yml": {
+		Vars: []string{"smb-password=FOO.PASS", "smb-username=BAR.USER"},
+	},
+	"isolated-logging-system-with-windows-cells.yml": {
+		Ops: []string{"add-persistent-isolation-segment-diego-cell.yml", "add-persistent-isolation-segment-logging-system.yml", "../windows2012R2-cell.yml", "../windows1803-cell.yml", "isolated-logging-system-with-windows-cells.yml"},
 	},
 }
 
