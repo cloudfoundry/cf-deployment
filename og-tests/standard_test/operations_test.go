@@ -13,13 +13,9 @@ var standardTests = map[string]helpers.OpsFileTestParams{
 	"azure.yml":                      {},
 	"bosh-lite.yml":                  {},
 	"cf-syslog-skip-cert-verify.yml": {},
-	"configure-confab-timeout.yml": {
-		Vars: []string{"confab_timeout=60"},
-	},
 	"configure-default-router-group.yml": {
 		Vars: []string{"default_router_group_reservable_ports=1234-2024"},
 	},
-	"disable-log-cache.yml":              {},
 	"disable-router-tls-termination.yml": {},
 	"enable-cc-rate-limiting.yml": {
 		Vars: []string{"cc_rate_limiter_general_limit=blah", "cc_rate_limiter_unauthenticated_limit=something"},
@@ -30,8 +26,8 @@ var standardTests = map[string]helpers.OpsFileTestParams{
 	},
 	"enable-nfs-volume-service.yml":           {},
 	"enable-privileged-container-support.yml": {},
+	"enable-routing-integrity.yml":            {},
 	"enable-service-discovery.yml":            {},
-	"enable-uniq-consul-node-name.yml":        {},
 	"migrate-cf-mysql-to-pxc.yml":             {},
 	"openstack.yml":                           {},
 	"override-app-domains.yml": {
@@ -88,12 +84,6 @@ var standardTests = map[string]helpers.OpsFileTestParams{
 			Path: "/stemcells/alias=default/version", ExpectedValue: "latest",
 		},
 	},
-	"use-latest-windows-stemcell.yml": {
-		Ops: []string{"windows2012R2-cell.yml", "use-latest-windows-stemcell.yml"},
-		PathValidator: helpers.PathValidator{
-			Path: "/stemcells/alias=windows2012R2/version", ExpectedValue: "latest",
-		},
-	},
 	"use-latest-windows2012R2-stemcell.yml": {
 		Ops: []string{"windows2012R2-cell.yml", "use-latest-windows2012R2-stemcell.yml"},
 		PathValidator: helpers.PathValidator{
@@ -104,6 +94,12 @@ var standardTests = map[string]helpers.OpsFileTestParams{
 		Ops: []string{"windows2016-cell.yml", "use-latest-windows2016-stemcell.yml"},
 		PathValidator: helpers.PathValidator{
 			Path: "/stemcells/alias=windows2016/version", ExpectedValue: "latest",
+		},
+	},
+	"use-latest-windows1803-stemcell.yml": {
+		Ops: []string{"windows1803-cell.yml", "use-latest-windows1803-stemcell.yml"},
+		PathValidator: helpers.PathValidator{
+			Path: "/stemcells/alias=windows1803/version", ExpectedValue: "latest",
 		},
 	},
 	"use-offline-windows2016fs.yml": {
@@ -125,12 +121,12 @@ var standardTests = map[string]helpers.OpsFileTestParams{
 	"use-trusted-ca-cert-for-apps.yml": {
 		VarsFiles: []string{"example-vars-files/vars-use-trusted-ca-cert-for-apps.yml"},
 	},
-	"windows-cell.yml": {},
 	"windows2012R2-cell.yml windows2016-cell.yml": {
 		Ops: []string{"windows2012R2-cell.yml", "windows2016-cell.yml"},
 	},
 	"windows2012R2-cell.yml": {},
 	"windows2016-cell.yml":   {},
+	"windows1803-cell.yml":   {},
 }
 
 func TestStandard(t *testing.T) {
