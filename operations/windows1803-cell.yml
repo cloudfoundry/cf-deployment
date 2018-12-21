@@ -1,5 +1,5 @@
-- type: replace
-  path: /instance_groups/-
+- path: /instance_groups/-
+  type: replace
   value:
     azs:
     - z1
@@ -111,70 +111,70 @@
     vm_extensions:
     - 100GB_ephemeral_disk
     vm_type: small-highmem
-- type: replace
-  path: /stemcells/-
+- path: /stemcells/-
+  type: replace
   value:
     alias: windows1803
     os: windows1803
-    version: "1803.4"
-- type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2016?
+    version: "1803.5"
+- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2016?
+  type: replace
   value:
     description: Windows Server 2016
     name: windows2016
-- type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows?
+- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows?
+  type: replace
   value:
     description: Windows Server
     name: windows
-- type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=hwc-buildpack-windows2016?
+- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=hwc-buildpack-windows2016?
+  type: replace
   value:
     name: hwc_buildpack
     package: hwc-buildpack-windows2016
-- type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=hwc-buildpack-windows?
+- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=hwc-buildpack-windows?
+  type: replace
   value:
     name: hwc_buildpack
     package: hwc-buildpack-windows
-- type: replace
-  path: /instance_groups/name=api/jobs/name=hwc-buildpack?
+- path: /instance_groups/name=api/jobs/name=hwc-buildpack?
+  type: replace
   value:
     name: hwc-buildpack
     release: hwc-buildpack
-- type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=binary-buildpack-windows2016?
+- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=binary-buildpack-windows2016?
+  type: replace
   value:
     name: binary_buildpack
     package: binary-buildpack-windows2016
-- type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=binary-buildpack-windows?
+- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=binary-buildpack-windows?
+  type: replace
   value:
     name: binary_buildpack
     package: binary-buildpack-windows
-- type: replace
-  path: /releases/name=hwc-buildpack?
+- path: /releases/name=hwc-buildpack?
+  type: replace
   value:
     name: hwc-buildpack
     sha1: 9a7c99a0148f4cf1b77436747ebce5fccb36b4c8
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=3.1.2
     version: 3.1.2
-- type: replace
-  path: /releases/name=winc?
+- path: /releases/name=winc?
+  type: replace
   value:
     name: winc
     sha1: 333d9de95485167dea7ec892fdf47a100c0c1a1e
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/winc-release?v=1.7.0
     version: 1.7.0
-- type: replace
-  path: /releases/name=windows1803fs?
+- path: /releases/name=windows1803fs?
+  type: replace
   value:
     name: windows1803fs
     sha1: 12ac8a0ce368c7aec5a07ab24232dd19f6fb863b
     url: https://bosh.io/d/github.com/cloudfoundry/windows1803fs-online-release?v=1.8.0
     version: 1.8.0
-- type: replace
-  path: /releases/name=windows-utilities?
+- path: /releases/name=windows-utilities?
+  type: replace
   value:
     name: windows-utilities
     sha1: efc10ac0f4acae23637ce2c6f864d20df2e3a781
