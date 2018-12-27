@@ -847,6 +847,8 @@ instance_groups:
           package: python-buildpack-cflinuxfs3
         - name: php_buildpack
           package: php-buildpack-cflinuxfs3
+        - name: nginx_buildpack
+          package: nginx-buildpack-cflinuxfs3
         - name: binary_buildpack
           package: binary-buildpack-cflinuxfs3
         db_encryption_key: "((cc_db_encryption_key))"
@@ -898,6 +900,8 @@ instance_groups:
     release: java-buildpack
   - name: nodejs-buildpack
     release: nodejs-buildpack
+  - name: nginx-buildpack
+    release: nginx-buildpack
   - name: php-buildpack
     release: php-buildpack
   - name: python-buildpack
@@ -2224,6 +2228,10 @@ releases:
   url: https://bosh.io/d/github.com/cloudfoundry/nodejs-buildpack-release?v=1.6.34
   version: 1.6.34
   sha1: 8fa43dabde22135cfa9c09321d815303251d1186
+- name: nginx-buildpack
+  url: https://bosh.io/d/github.com/cloudfoundry/nginx-buildpack?v=1.0.4
+  version: 1.0.4
+  sha1: "TBD"
 - name: php-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/php-buildpack-release?v=4.3.64
   version: 4.3.64
