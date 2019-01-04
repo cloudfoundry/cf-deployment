@@ -12,10 +12,10 @@ addons:
   include:
     stemcell:
     - os: ubuntu-xenial
-  exclude:
-    jobs:
-    - name: smoke_tests
-      release: cf-smoke-tests
+#  exclude:
+#    jobs:
+#    - name: smoke_tests
+#      release: cf-smoke-tests
   jobs:
   - name: loggregator_agent
     release: loggregator-agent
