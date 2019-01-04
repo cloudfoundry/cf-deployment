@@ -64,10 +64,10 @@
       nfsv3driver:
         tls:
           ca_cert: ((nfs_ca.certificate))
-          server_cert: ((nfsv3driver_cert.certificate))
-          server_key: ((nfsv3driver_cert.private_key))
           client_cert: ((nfsv3driver_client_cert.certificate))
           client_key: ((nfsv3driver_client_cert.private_key))
+          server_cert: ((nfsv3driver_cert.certificate))
+          server_key: ((nfsv3driver_cert.private_key))
     release: nfs-volume
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=mapfs?
@@ -102,10 +102,10 @@
   value:
     name: nfsv3driver_cert
     options:
-      ca: nfs_ca
-      common_name: 127.0.0.1
       alternative_names:
       - 127.0.0.1
+      ca: nfs_ca
+      common_name: 127.0.0.1
       extended_key_usage:
       - server_auth
     type: certificate
@@ -123,9 +123,9 @@
   path: /releases/-
   value:
     name: nfs-volume
-    sha1: 8e92355c8f83f2c3ff1496f55fb7e04294e03baa
-    url: https://bosh.io/d/github.com/cloudfoundry/nfs-volume-release?v=1.7.5
-    version: 1.7.5
+    sha1: 73426f29d8a71bcce3e5933ae570ebb0b590d047
+    url: https://bosh.io/d/github.com/cloudfoundry/nfs-volume-release?v=1.7.6
+    version: 1.7.6
 - type: replace
   path: /releases/name=mapfs?
   value:

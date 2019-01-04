@@ -2,7 +2,9 @@ package standard_test
 
 import (
 	"fmt"
+	"io/ioutil"
 	"og/helpers"
+	"os"
 	"path/filepath"
 	"regexp"
 	"testing"
@@ -198,6 +200,42 @@ func TestSemantic(t *testing.T) {
 		if diff, ok := diffLeft(string(diegoCellRepProperties), string(isoSegDiegoCellRepProperties)); !ok {
 			t.Errorf("rep properties on diego-cell have diverged between cf-deployment.yml and test/add-persistent-isolation-segment-diego-cell.yml.\n%s", diff)
 		}
+	})
+
+	t.Run("all-cas-referenced-from-ca-variables", func(t *testing.T) {
+		caRegexp := regexp.MustCompile(`\(\(.*\.ca\)\)`)
+		manifestFile, err := ioutil.ReadFile(manifestPath)
+		if err != nil {
+			t.Errorf("file read error: %v", err)
+		}
+
+		badCAs := caRegexp.FindAllString(string(manifestFile), -1)
+		for _, ca := range badCAs {
+			t.Errorf("CAs should be referenced from their CA variables: %s", ca)
+		}
+	})
+
+	t.Run("ops-files-don't-have-double-question-marks", func(t *testing.T) {
+		invalid_question_marks := regexp.MustCompile(`path: .*\?.*\?.*`)
+
+		filepath.Walk(operationsSubDirectory, func(path string, info os.FileInfo, err error) error {
+			if info.IsDir() {
+				return nil
+			}
+
+			contents, err := ioutil.ReadFile(path)
+			if err != nil {
+				t.Errorf("file read error: %v", err)
+				return nil
+			}
+
+			badPaths := invalid_question_marks.FindAllString(string(contents), -1)
+			for _, badPath := range badPaths {
+				t.Errorf("%s: Ops files should not contain double '?' in paths: %s", info.Name(), badPath)
+			}
+
+			return nil
+		})
 	})
 }
 
