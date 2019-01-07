@@ -12,10 +12,10 @@ addons:
   include:
     stemcell:
     - os: ubuntu-xenial
-#  exclude:
-#    jobs:
-#    - name: smoke_tests
-#      release: cf-smoke-tests
+  exclude:
+    jobs:
+    - name: smoke_tests
+      release: cf-smoke-tests
   jobs:
   - name: loggregator_agent
     release: loggregator-agent
@@ -286,7 +286,34 @@ addons:
           domain: bosh
 
 instance_groups:
-#removed smoke_tests from here
+- name: smoke-tests
+  lifecycle: errand
+  azs:
+  - z1
+  instances: 1
+  vm_type: minimal
+  stemcell: default
+  update:
+    serial: true
+  networks:
+  - name: default
+  jobs:
+  - name: smoke_tests
+    release: cf-smoke-tests
+    properties:
+      bpm:
+        enabled: true
+      smoke_tests:
+        api: "https://api.((system_domain))"
+        apps_domain: "((system_domain))"
+        client: cf_smoke_tests
+        client_secret: "((uaa_clients_cf_smoke_tests_secret))"
+        org: cf_smoke_tests_org
+        space: cf_smoke_tests_space
+        cf_dial_timeout_in_seconds: 300
+        skip_ssl_validation: true
+  - name: cf-cli-6-linux
+    release: cf-cli
 - name: nats
   azs:
   - z1
@@ -1136,40 +1163,6 @@ instance_groups:
   networks:
   - name: default
   jobs:
-###########################
-# adding smoke_tests
-###########################
-  #- name: smoke-tests
-  #  lifecycle: errand
-  #  azs:
-  #  - z1
-  #  instances: 1
-  #  vm_type: minimal
-  #  stemcell: default
-  #  update:
-  #    serial: true
-  #  networks:
-  #  - name: default
-  #  jobs:
-  - name: smoke_tests
-    release: cf-smoke-tests
-    properties:
-      bpm:
-        enabled: true
-      smoke_tests:
-        api: "https://api.((system_domain))"
-        apps_domain: "((system_domain))"
-        client: cf_smoke_tests
-        client_secret: "((uaa_clients_cf_smoke_tests_secret))"
-        org: cf_smoke_tests_org
-        space: cf_smoke_tests_space
-        cf_dial_timeout_in_seconds: 300
-        skip_ssl_validation: true
-  - name: cf-cli-6-linux
-    release: cf-cli
-###########################
-# end adding smoke_tests
-###########################
   - name: cfdot
     release: diego
     properties:
