@@ -39,6 +39,8 @@ test_experimental_ops() {
       check_interpolation "name: perm-service-with-pxc-release.yml" "perm-service.yml" "-o ${home}/operations/use-pxc.yml" "-o perm-service-with-pxc-release.yml -v perm_uaa_clients_cc_perm_secret=perm_secret -v perm_uaa_clients_perm_monitor_secret=perm_monitor_secret"
       check_interpolation "name: perm-service-with-tcp-routing.yml" "perm-service.yml" "-o ${home}/operations/use-pxc.yml" "-o perm-service-with-pxc-release.yml -v perm_uaa_clients_cc_perm_secret=perm_secret -v perm_uaa_clients_perm_monitor_secret=perm_monitor_secret" "-o perm-service-with-tcp-routing.yml"
 
+      check_interpolation "remove-tcp-router.yml"
+
       check_interpolation "rootless-containers.yml"
 
       check_interpolation "set-cpu-weight.yml"
