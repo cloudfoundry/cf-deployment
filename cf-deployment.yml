@@ -578,16 +578,6 @@ instance_groups:
             - routing.router_groups.write
             - scim.read
             - scim.write
-          - name: bosh
-            password: "((cf_bosh_password))"
-            groups:
-            - cloud_controller.admin
-            - doppler.firehose
-            - openid
-            - routing.router_groups.read
-            - routing.router_groups.write
-            - scim.read
-            - scim.write
         jwt:
           policy:
             active_key_id: key-1
