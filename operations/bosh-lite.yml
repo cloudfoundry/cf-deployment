@@ -45,8 +45,8 @@
           enable_cf_auth: true
           host_key: "((diego_ssh_proxy_host_key.private_key))"
           uaa_secret: "((uaa_clients_ssh-proxy_secret))"
-        ssl:
-          skip_cert_verify: true
+          uaa:
+            ca_cert: "((uaa_ca.certificate))"
       backends:
         tls:
           enabled: true
