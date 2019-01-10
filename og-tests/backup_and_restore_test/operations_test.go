@@ -29,10 +29,6 @@ var backupAndRestoreTests = map[string]helpers.OpsFileTestParams{
 		Ops:       []string{"enable-backup-restore.yml", "../use-external-blobstore.yml", "../use-s3-blobstore.yml", "enable-backup-restore-s3-versioned.yml"},
 		VarsFiles: []string{"../example-vars-files/vars-use-s3-blobstore.yml"},
 	},
-	"enable-backup-restore-smb-broker.yml": {
-		Ops:  []string{"enable-backup-restore.yml", "enable-backup-restore-smb-broker.yml"},
-		Vars: []string{"azurefile-broker-database-password=i_am_a_password"},
-	},
 	"enable-backup-restore.yml": {},
 	"enable-restore-azure-clone.yml": {
 		Ops:       []string{"enable-backup-restore.yml", "../use-external-blobstore.yml", "../use-azure-storage-blobstore.yml", "enable-restore-azure-clone.yml"},

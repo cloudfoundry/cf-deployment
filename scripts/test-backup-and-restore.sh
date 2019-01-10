@@ -40,9 +40,6 @@ test_backup_and_restore_ops() {
       # nfs
       check_interpolation "name: enable-backup-restore-nfs-broker.yml" "enable-backup-restore.yml" "-o enable-backup-restore-nfs-broker.yml" "-v nfs-broker-database-password=i_am_a_password"
       check_interpolation "name: enable-backup-restore-nfs-broker.yml" "enable-backup-restore.yml -o enable-backup-restore-nfs-broker.yml -v nfs-broker-database-password=i_am_a_password"
-
-      # smb
-      check_interpolation "name: enable-backup-restore-smb-broker.yml" "enable-backup-restore.yml -o enable-backup-restore-smb-broker.yml -v azurefile-broker-database-password=i_am_a_password"
     popd > /dev/null
   popd > /dev/null
   exit $exit_code

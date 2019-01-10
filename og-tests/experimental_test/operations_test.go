@@ -9,7 +9,6 @@ import (
 const testDirectory = "operations/experimental"
 
 var experimentalTests = map[string]helpers.OpsFileTestParams{
-	"add-cflinuxfs3.yml":         {},
 	"add-credhub-lb.yml":         {},
 	"add-deployment-updater.yml": {},
 	"add-deployment-updater-external-db.yml": {
@@ -26,7 +25,6 @@ var experimentalTests = map[string]helpers.OpsFileTestParams{
 	"enable-mysql-tls.yml":                     {},
 	"enable-nfs-volume-service-credhub.yml":    {},
 	"enable-oci-phase-1.yml":                   {},
-	"enable-routing-integrity.yml":             {},
 	"enable-routing-integrity-windows1803.yml": {
 		Ops: []string{"../windows1803-cell.yml", "enable-routing-integrity-windows1803.yml"},
 	},
@@ -62,19 +60,10 @@ var experimentalTests = map[string]helpers.OpsFileTestParams{
 	"use-compiled-releases-windows.yml": {
 		Ops: []string{"../use-compiled-releases.yml", "../windows2012R2-cell.yml", "use-compiled-releases-windows.yml"},
 	},
-	"use-create-swap-delete-vm-strategy.yml": {},
-	"use-garden-containerd.yml":              {},
-	"use-latest-windows1803-stemcell.yml": {
-		Ops: []string{"windows1803-cell.yml", "use-latest-windows1803-stemcell.yml"},
-		PathValidator: helpers.PathValidator{
-			Path: "/stemcells/alias=windows1803/version", ExpectedValue: "latest",
-		},
-	},
+	"use-create-swap-delete-vm-strategy.yml":          {},
+	"use-garden-containerd.yml":                       {},
 	"use-logcache-for-cloud-controller-app-stats.yml": {},
 	"use-native-garden-runc-runner.yml":               {},
-	"use-pxc-for-smb-volume-service.yml": {
-		Ops: []string{"enable-smb-volume-service.yml", "../use-pxc.yml", "use-pxc-for-smb-volume-service.yml"},
-	},
 	"windows-component-syslog-ca.yml": {
 		Ops:       []string{"windows-enable-component-syslog.yml", "windows-component-syslog-ca.yml"},
 		VarsFiles: []string{"../addons/example-vars-files/vars-enable-component-syslog.yml"},
@@ -83,7 +72,6 @@ var experimentalTests = map[string]helpers.OpsFileTestParams{
 		Ops:       []string{"windows-enable-component-syslog.yml"},
 		VarsFiles: []string{"../addons/example-vars-files/vars-enable-component-syslog.yml"},
 	},
-	"windows1803-cell.yml": {},
 }
 
 func TestExperimental(t *testing.T) {

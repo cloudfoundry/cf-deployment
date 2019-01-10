@@ -18,7 +18,6 @@ and the ops-files will be removed.
 
 | Name | Purpose | Notes |
 |:---  |:---     |:---   |
-| [`add-cflinuxfs3.yml`](add-cflinuxfs3.yml) | **DEPRECATED: cflinuxfs3 is now inlined in cf-deployment.** | |
 | [`add-credhub-lb.yml`](add-credhub-lb.yml) |  **[DEPRECATED]** Use load balancer to expose external address for CredHub. | |
 | [`add-deployment-updater-external-db.yml`](add-deployment-updater-external-db.yml) | Use an external database for the `cc_deployment_updater` job. | Requires `add-deployment-updater.yml` and `use-external-dbs.yml` |
 | [`add-deployment-updater-postgres.yml`](add-deployment-updater-postgres.yml) | Use a postgres database for the `cc_deployment_updater` job. | Requires `add-deployment-updater.yml` |
@@ -32,7 +31,6 @@ and the ops-files will be removed.
 | [`enable-oci-phase-1.yml`](enable-oci-phase-1.yml) | Configure CC, Diego, and Garden to create app and task containers more efficiently via OCI image specs. | This ops file **cannot** be deployed in conjunction with `enable-bpm-garden.yml` or `rootless-containers.yml`. |
 | [`enable-routing-integrity-windows1803.yml`](enable-routing-integrity-windows1803.yml) | Enables container proxy on the Windows 1803 Diego Cell `rep` and configures gorouter to opt into TLS-enabled connections to the backend. | **Warning: this is very experimental** Requires `../windows1803-cell.yml` |
 | [`enable-routing-integrity-windows2016.yml`](enable-routing-integrity-windows2016.yml) | Enables container proxy on the Windows 2016 Diego Cell `rep` and configures gorouter to opt into TLS-enabled connections to the backend. | **Warning: this is very experimental** Requires `../windows2016-cell.yml` |
-| [`enable-routing-integrity.yml`](enable-routing-integrity.yml) | **DEPRECATED: use `../enable-routing-integrity.yml`** | |
 | [`enable-smb-volume-service.yml`](enable-smb-volume-service.yml) | Enables volume support and deploys an SMB broker and volume driver | As of cf-deployment v2, you must use the `smbbrokerpush` errand to cf push the smb broker after `bosh deploy` completes. |
 | [`enable-suspect-actual-lrp-generation.yml`](enable-suspect-actual-lrp-generation.yml) | Configures BBS to create ActualLRPs in a new "Suspect" state. You can find more in-depth information [here](https://docs.google.com/document/d/19880DjH4nJKzsDP8BT09m28jBlFfSiVx64skbvilbnA/view) | |
 | [`enable-tls-cloud-controller-postgres.yml`](enable-tls-cloud-controller-postgres.yml) | Enables the usage of TLS to secure the connection between Cloud Controller and its Postgres database | Requires capi-release >= 1.41.0 and `use-postgres.yml` |
@@ -48,10 +46,7 @@ and the ops-files will be removed.
 | [`use-compiled-releases-windows.yml`](use-compiled-releases-windows.yml) | Reverts to source version of releases required for Windows cells | Intended for use with `use-compiled-releases.yml` and any of `windows*-cell.yml` |
 | [`use-create-swap-delete-vm-strategy.yml`](use-create-swap-delete-vm-strategy.yml) | Configures the default [`vm_strategy`](https://bosh.io/docs/changing-deployment-vm-strategy/) to be `create-swap-delete`. | Requires BOSH director `v267.7+` |
 | [`use-garden-containerd.yml`](use-garden-containerd.yml) | **DEPRECATED:** Containerd is now enabled by default in `cf-deployment.yml`.
-| [`use-latest-windows1803-stemcell.yml`](use-latest-windows1803-stemcell.yml) | **DEPRECATED: use `../use-latest-windows1803-cell.yml`**| Requires `windows1803-cell.yml` |
 | [`use-logcache-for-cloud-controller-app-stats.yml`](use-logcache-for-cloud-controller-app-stats.yml) | Configure Cloud Controller to use Log Cache instead of Traffic Controller for app container metrics. | |
 | [`use-native-garden-runc-runner.yml`](use-native-garden-runc-runner.yml) | Configure Garden to **not** create containers via containerd, using the native runner instead.
-| [`use-pxc-for-smb-volume-service.yml`](use-pxc-for-smb-volume-service.yml) | **DEPRECATED: Pxc has been removed from smb-volume-service** | |
 | [`windows-component-syslog-ca.yml`](windows-component-syslog-ca.yml) | Forces windows component syslog to respect only the provided CA for cert validation. | Requires `windows-enable-component-syslog.yml`. Can also be applied to runtime config, in the manner of the `component-syslog-custom-ca.yml` addon. The operations in this file are intended to be merged into that one when they graduate from experimental status. This ops file gets all its variables from the same place as that one, though not all are used. |
 | [`windows-enable-component-syslog.yml`](windows-enable-component-syslog.yml) | Collocates a job from windows-syslog-release on all windows-based instances to forward job logs in syslog format. | Compatible with both `windows2016` and `windows2012R2` instances, even at the same time. Can also be applied to runtime config, in the manner of the `enable-component-syslog.yml` addon. The operations in this file are intended to be merged into that one when they graduate from experimental status. This ops file gets all its variables from the same place as that one, though not all are used. |
-| [`windows1803-cell.yml`](windows1803-cell.yml) | **DEPRECATED: use `../windows1803-cell.yml`** | |
