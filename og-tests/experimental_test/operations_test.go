@@ -61,7 +61,6 @@ var experimentalTests = map[string]helpers.OpsFileTestParams{
 		Ops: []string{"../use-compiled-releases.yml", "../windows2012R2-cell.yml", "use-compiled-releases-windows.yml"},
 	},
 	"use-create-swap-delete-vm-strategy.yml":          {},
-	"use-garden-containerd.yml":                       {},
 	"use-logcache-for-cloud-controller-app-stats.yml": {},
 	"use-native-garden-runc-runner.yml":               {},
 	"windows-component-syslog-ca.yml": {

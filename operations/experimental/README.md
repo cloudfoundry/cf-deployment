@@ -24,7 +24,7 @@ and the ops-files will be removed.
 | [`add-deployment-updater.yml`](add-deployment-updater.yml) | Add `cc_deployment_updater` job to `scheduler` vm, which enables zero downtime app deployments. | |
 | [`deploy-forwarder-agent.yml`](deploy-forwarder-agent.yml) | Addons for forwarder agent, UDP forwarder, and configuration/certs. | |
 | [`disable-interpolate-service-bindings.yml`](disable-interpolate-service-bindings.yml) | Disables the interpolation of CredHub service credentials by Cloud Controller. |
-| [`enable-bpm-garden.yml`](enable-bpm-garden.yml) | Enables the [BOSH Process Manager](https://github.com/cloudfoundry-incubator/bpm-release) for Garden. | This ops file **cannot** be deployed in conjunction with `enable-oci-phase-1.yml` or `use-garden-containerd.yml`. |
+| [`enable-bpm-garden.yml`](enable-bpm-garden.yml) | Enables the [BOSH Process Manager](https://github.com/cloudfoundry-incubator/bpm-release) for Garden. | This ops file **cannot** be deployed in conjunction with `enable-oci-phase-1.yml`. |
 | [`enable-iptables-logger.yml`](enable-iptables-logger.yml) | Enables iptables logger. | |
 | [`enable-mysql-tls.yml`](enable-mysql-tls.yml) | Enables TLS on the database job, and secures all client database connections. | |
 | [`enable-nfs-volume-service-credhub.yml`](enable-nfs-volume-service-credhub.yml) | Enables credhub integration for NFS volume services | Requires `enable-nfs-volume-service.yml` |
@@ -41,11 +41,10 @@ and the ops-files will be removed.
 | [`perm-service-with-pxc-release.yml`](perm-service-with-pxc-release.yml) | **"DEPRECATED because the perm-service is incompatible with [PXC](https://github.com/cloudfoundry-incubator/pxc-release)."** | |
 | [`perm-service-with-tcp-routing.yml`](perm-service-with-tcp-routing.yml) | **"DEPRECATED because the perm-service is incompatible with [PXC](https://github.com/cloudfoundry-incubator/pxc-release)."** | |
 | [`perm-service.yml`](perm-service.yml) | **"DEPRECATED because the perm-service is incompatible with [PXC](https://github.com/cloudfoundry-incubator/pxc-release)."** | |
-| [`rootless-containers.yml`](rootless-containers.yml) | Enable rootless garden-runc containers. | Requires garden-runc 1.9.5 or later and grootfs 0.27.0 or later. This ops file **cannot** be deployed in conjunction with `enable-oci-phase-1.yml` or `use-garden-containerd.yml`. |
+| [`rootless-containers.yml`](rootless-containers.yml) | Enable rootless garden-runc containers. | Requires garden-runc 1.9.5 or later and grootfs 0.27.0 or later. This ops file **cannot** be deployed in conjunction with `enable-oci-phase-1.yml`. |
 | [`set-cpu-weight.yml`](set-cpu-weight.yml) | CPU shares for each garden container are proportional to its memory limits. | |
 | [`use-compiled-releases-windows.yml`](use-compiled-releases-windows.yml) | Reverts to source version of releases required for Windows cells | Intended for use with `use-compiled-releases.yml` and any of `windows*-cell.yml` |
 | [`use-create-swap-delete-vm-strategy.yml`](use-create-swap-delete-vm-strategy.yml) | Configures the default [`vm_strategy`](https://bosh.io/docs/changing-deployment-vm-strategy/) to be `create-swap-delete`. | Requires BOSH director `v267.7+` |
-| [`use-garden-containerd.yml`](use-garden-containerd.yml) | **DEPRECATED:** Containerd is now enabled by default in `cf-deployment.yml`.
 | [`use-logcache-for-cloud-controller-app-stats.yml`](use-logcache-for-cloud-controller-app-stats.yml) | Configure Cloud Controller to use Log Cache instead of Traffic Controller for app container metrics. | |
 | [`use-native-garden-runc-runner.yml`](use-native-garden-runc-runner.yml) | Configure Garden to **not** create containers via containerd, using the native runner instead.
 | [`windows-component-syslog-ca.yml`](windows-component-syslog-ca.yml) | Forces windows component syslog to respect only the provided CA for cert validation. | Requires `windows-enable-component-syslog.yml`. Can also be applied to runtime config, in the manner of the `component-syslog-custom-ca.yml` addon. The operations in this file are intended to be merged into that one when they graduate from experimental status. This ops file gets all its variables from the same place as that one, though not all are used. |
