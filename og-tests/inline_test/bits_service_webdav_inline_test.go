@@ -13,8 +13,6 @@ import (
 )
 
 func TestInline(t *testing.T) {
-	t.Skipf("skipping for now")
-
 	wd, err := os.Getwd()
 	if err != nil {
 		t.Error("get working dir:", err)
@@ -25,13 +23,13 @@ func TestInline(t *testing.T) {
 		t.Error("cf-deployment home setup:", err)
 	}
 
-	temp, err := ioutil.TempDir("", "cf-deployment-")
+	beforeDir, err := ioutil.TempDir("", "cf-deployment-")
 	if err != nil {
 		t.Error("setup: temp dir:", err)
 	}
-	defer os.Remove(temp)
+	defer os.Remove(beforeDir)
 
-	err = gitSetup(temp)
+	err = gitSetup(beforeDir)
 	if err != nil {
 		t.Error("git setup:", err)
 	}
@@ -39,13 +37,13 @@ func TestInline(t *testing.T) {
 	cfDeploymentManifestPath := filepath.Join(cfDeploymentHome, "cf-deployment.yml")
 
 	// before inline
-	beforeManifest, err := boshInterpolate(temp, cfDeploymentManifestPath, "operations/experimental/bits-service.yml", "operations/experimental/bits-service-webdav.yml")
+	beforeManifest, err := boshInterpolate(beforeDir, cfDeploymentManifestPath, "operations/use-pxc.yml")
 	if err != nil {
 		t.Error("before inline manifest interpolation failed:", err)
 	}
 
 	// after inline
-	afterManifest, err := boshInterpolate(cfDeploymentHome, cfDeploymentManifestPath, "operations/bits-service/use-bits-service.yml")
+	afterManifest, err := boshInterpolate(cfDeploymentHome, cfDeploymentManifestPath)
 	if err != nil {
 		t.Error("after inline manifest interpolation failed:", err)
 	}
@@ -86,7 +84,7 @@ func gitSetup(tempDir string) error {
 		return err
 	}
 
-	err = runCommandInDirectory(tempDir, "git", "checkout", "FETCH_HEAD", "--", "operations/experimental/bits-service.yml", "operations/experimental/bits-service-webdav.yml")
+	err = runCommandInDirectory(tempDir, "git", "checkout", "FETCH_HEAD", "--", "operations/use-pxc.yml", "cf-deployment.yml")
 	if err != nil {
 		return err
 	}
