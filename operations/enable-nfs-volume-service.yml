@@ -8,7 +8,7 @@
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/volume_services_enabled?
   value: true
 - type: replace
-  path: /instance_groups/name=database/jobs/name=mysql/properties/cf_mysql/mysql/seeded_databases/-
+  path: /instance_groups/name=database/jobs/name=pxc-mysql/properties/seeded_databases/-
   value:
     name: nfs-broker
     password: ((nfs-broker-database-password))
@@ -40,6 +40,8 @@
             password: ((nfs-broker-database-password))
             port: 3306
             username: nfs-broker
+            host: sql-db.service.cf.internal
+            ca_cert: ((pxc_server_ca.certificate))
           domain: ((system_domain))
           organization: system
           password: ((nfs-broker-password))

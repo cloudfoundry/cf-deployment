@@ -1,13 +1,4 @@
 - type: replace
-  path: /releases/name=cf-mysql/url
-  value: https://storage.googleapis.com/cf-deployment-compiled-releases/cf-mysql-36.17.0-ubuntu-xenial-170.16-20190102-191901-81394448.tgz
-- type: replace
-  path: /releases/name=cf-mysql/version
-  value: 36.17.0
-- type: replace
-  path: /releases/name=cf-mysql/sha1
-  value: 7a48360d2d7a59570851cea8b55169ea218b43ce
-- type: replace
   path: /releases/name=capi/url
   value: https://storage.googleapis.com/cf-deployment-compiled-releases/capi-1.74.0-ubuntu-xenial-170.16-20190102-185836-265004223.tgz
 - type: replace
@@ -234,11 +225,6 @@
     os: ubuntu-xenial
     version: "170.16"
 - type: replace
-  path: /releases/name=cf-mysql/stemcell?
-  value:
-    os: ubuntu-xenial
-    version: "170.16"
-- type: replace
   path: /releases/name=binary-buildpack/stemcell?
   value:
     os: ubuntu-xenial
@@ -325,11 +311,6 @@
     version: "170.16"
 - type: replace
   path: /releases/name=ruby-buildpack/stemcell?
-  value:
-    os: ubuntu-xenial
-    version: "170.16"
-- type: replace
-  path: /releases/name=cf-mysql/stemcell?
   value:
     os: ubuntu-xenial
     version: "170.16"

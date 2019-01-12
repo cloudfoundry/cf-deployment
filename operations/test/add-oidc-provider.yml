@@ -41,6 +41,7 @@
             - label: 'key-1'
               passphrase: "((uaa_oidc_encryption_key_passphrase))"
         uaadb:
+          address: sql-db.service.cf.internal
           databases:
           - name: uaa_oidc
             tag: uaa
@@ -50,7 +51,10 @@
           - name: uaa-oidc
             password: "((uaa_oidc_database_password))"
             tag: admin
+          tls_enabled: true
         uaa:
+          ca_certs:
+          - "((pxc_server_ca.certificate))"
           url: https://uaa-oidc.service.cf.internal:8443
           jwt:
             policy:
@@ -97,50 +101,50 @@
       domain: bosh
 
 - type: replace
-  path: /instance_groups/name=database/jobs/name=mysql/properties/cf_mysql/mysql/seeded_databases?/-
+  path: /instance_groups/name=database/jobs/name=pxc-mysql/properties/seeded_databases/-
   value:
     name: uaa_oidc
     username: uaa-oidc
     password: "((uaa_oidc_database_password))"
 
 - type: replace
-  path: /variables?/-
+  path: /variables/-
   value:
     name: uaa_oidc_admin_password
     type: password
 
 - type: replace
-  path: /variables?/-
+  path: /variables/-
   value:
     name: uaa_oidc_database_password
     type: password
 
 - type: replace
-  path: /variables?/-
+  path: /variables/-
   value:
     name: uaa_oidc_encryption_key_passphrase
     type: password
 
 - type: replace
-  path: /variables?/-
+  path: /variables/-
   value:
     name: rp_oidc_provider_admin_secret
     type: password
 
 - type: replace
-  path: /variables?/-
+  path: /variables/-
   value:
     name: saml_oidc_key1_passphrase
     type: password
 
 - type: replace
-  path: /variables?/-
+  path: /variables/-
   value:
     name: uaa-oidc-key1
     type: rsa
 
 - type: replace
-  path: /variables?/-
+  path: /variables/-
   value:
     name: uaa-oidc_ca
     type: certificate
@@ -152,7 +156,7 @@
       - server_auth
 
 - type: replace
-  path: /variables?/-
+  path: /variables/-
   value:
     name: saml_oidc-key1
     type: certificate
@@ -161,7 +165,7 @@
       common_name: saml_oidc
 
 - type: replace
-  path: /variables?/-
+  path: /variables/-
   value:
     name: uaa-oidc_tls
     type: certificate

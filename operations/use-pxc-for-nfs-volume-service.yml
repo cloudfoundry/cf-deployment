@@ -1,13 +1,2 @@
 ---
-- type: replace
-  path: /instance_groups/name=nfs-broker-push/jobs/name=nfsbrokerpush/properties/nfsbrokerpush/db/host?
-  value: sql-db.service.cf.internal
-- type: replace
-  path: /instance_groups/name=nfs-broker-push/jobs/name=nfsbrokerpush/properties/nfsbrokerpush/db/ca_cert?
-  value: ((pxc_server_ca.certificate))
-- type: replace
-  path: /instance_groups/name=database/jobs/name=pxc-mysql/properties/seeded_databases/-
-  value:
-    name: nfs-broker
-    username: nfs-broker
-    password: "((nfs-broker-database-password))"
+# DEPRECATED: inlined into enable-nfs-volume-service.yml

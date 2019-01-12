@@ -6,9 +6,17 @@
     url: https://bosh.io/d/github.com/cloudfoundry/postgres-release?v=33
     version: "33"
 - type: remove
-  path: /instance_groups/name=database/jobs/name=mysql
+  path: /instance_groups/name=database/jobs/name=pxc-mysql
 - type: remove
   path: /instance_groups/name=database/jobs/name=proxy
+- type: remove
+  path: /instance_groups/name=database/jobs/name=galera-agent
+- type: remove
+  path: /instance_groups/name=database/jobs/name=gra-log-purger
+- type: remove
+  path: /instance_groups/name=database/jobs/name=cluster-health-logger
+- type: remove
+  path: /instance_groups/name=database/jobs/name=bootstrap
 - type: replace
   path: /instance_groups/name=database/migrated_from?
   value:
@@ -183,3 +191,11 @@
   path: /variables/name=cf_mysql_mysql_galera_healthcheck_endpoint_password?
 - type: remove
   path: /variables/name=cf_mysql_mysql_galera_healthcheck_password?
+- type: remove
+  path: /variables/name=pxc_galera_ca?
+- type: remove
+  path: /variables/name=pxc_server_ca?
+- type: remove
+  path: /variables/name=galera_server_certificate?
+- type: remove
+  path: /variables/name=mysql_server_certificate?

@@ -3,7 +3,7 @@
 - type: remove
   path: /instance_groups/name=database
 - type: remove
-  path: /releases/name=cf-mysql
+  path: /releases/name=pxc
 
 # Remove MySQL variables
 - type: remove
@@ -32,6 +32,14 @@
   path: /variables/name=diego_database_password
 - type: remove
   path: /variables/name=uaa_database_password
+- type: remove
+  path: /variables/name=pxc_galera_ca
+- type: remove
+  path: /variables/name=pxc_server_ca
+- type: remove
+  path: /variables/name=galera_server_certificate
+- type: remove
+  path: /variables/name=mysql_server_certificate
 
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/db_scheme

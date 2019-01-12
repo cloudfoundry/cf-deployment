@@ -119,6 +119,8 @@ func TestSemantic(t *testing.T) {
 	})
 
 	t.Run("use-compiled-releases.yml", func(t *testing.T) {
+		t.Skip("Must be fixed with story [#163164326](https://www.pivotaltracker.com/story/show/163164326)")
+
 		manifest, err := boshInterpolateAndUnmarshal(
 			operationsSubDirectory,
 			manifestPath,
