@@ -13,6 +13,8 @@ import (
 )
 
 func TestInline(t *testing.T) {
+	t.Skip("Skipping until generalized")
+
 	wd, err := os.Getwd()
 	if err != nil {
 		t.Error("get working dir:", err)
