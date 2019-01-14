@@ -59,6 +59,10 @@
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/roles/name=uaa/name
   value: ((external_uaa_database_username))
+- type: remove
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa?/ca_certs/-
+- type: remove
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/tls_enabled?
 
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ccdb/db_scheme
@@ -78,6 +82,8 @@
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ccdb/roles/name=cloud_controller/name
   value: &external_cc_database_username "((external_cc_database_username))"
+- type: remove
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ccdb/ca_cert?
 
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/ccdb/db_scheme
@@ -97,6 +103,8 @@
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/ccdb/roles/name=cloud_controller/name
   value: *external_cc_database_username
+- type: remove
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/ccdb/ca_cert?
 
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb/db_scheme
@@ -116,6 +124,8 @@
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb/roles/name=cloud_controller/name
   value: *external_cc_database_username
+- type: remove
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb/ca_cert?
 
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=bbs/properties/diego/bbs/sql/db_driver
@@ -135,6 +145,10 @@
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=bbs/properties/diego/bbs/sql/db_username
   value: ((external_bbs_database_username))
+- type: remove
+  path: /instance_groups/name=diego-api/jobs/name=bbs/properties/diego/bbs/sql/ca_cert?
+- type: remove
+  path: /instance_groups/name=diego-api/jobs/name=bbs/properties/diego/bbs/sql/require_ssl?
 
 - type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/type
@@ -154,6 +168,8 @@
 - type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/username
   value: ((external_routing_api_database_username))
+- type: remove
+  path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/ca_cert?
 
 - type: replace
   path: /instance_groups/name=api/jobs/name=policy-server/properties/database/type
@@ -173,6 +189,10 @@
 - type: replace
   path: /instance_groups/name=api/jobs/name=policy-server/properties/database/name
   value: ((external_policy_server_database_name))
+- type: remove
+  path: /instance_groups/name=api/jobs/name=policy-server/properties/database/ca_cert?
+- type: remove
+  path: /instance_groups/name=api/jobs/name=policy-server/properties/database/require_ssl?
 
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/database/type
@@ -192,6 +212,10 @@
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/database/name
   value: ((external_silk_controller_database_name))
+- type: remove
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/database/ca_cert?
+- type: remove
+  path: /instance_groups/name=diego-api/jobs/name=silk-controller/properties/database/require_ssl?
 
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql/db_driver
@@ -211,6 +235,10 @@
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql/db_username
   value: ((external_locket_database_username))
+- type: remove
+  path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql/ca_cert?
+- type: remove
+  path: /instance_groups/name=diego-api/jobs/name=locket/properties/diego/locket/sql/require_ssl?
 
 - type: replace
   path: /instance_groups/name=credhub/jobs/name=credhub/properties/credhub/data_storage/type
@@ -230,6 +258,11 @@
 - type: replace
   path: /instance_groups/name=credhub/jobs/name=credhub/properties/credhub/data_storage/database
   value: ((external_credhub_database_name))
+- type: remove
+  path: /instance_groups/name=credhub/jobs/name=credhub/properties/credhub/data_storage/tls_ca?
+- type: replace
+  path: /instance_groups/name=credhub/jobs/name=credhub/properties/credhub/data_storage/require_tls
+  value: false
 
 # nil out database links
 - type: replace
