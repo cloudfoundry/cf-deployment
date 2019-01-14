@@ -1,4 +1,4 @@
-# Deploying CF
+/# Deploying CF
 
 ## Pave your IaaS and get a BOSH Director
 
@@ -71,9 +71,9 @@ the your system domain should resolve to your load balancer.
 
 ### (For `bbl` users) Save bbl state directory
 However you run `bbl` (command line or with Concourse),
-the side-effect of a successful bbl command is the creation/update of the directory 
+the side-effect of a successful bbl command is the creation/update of the directory
 containing `bbl-state.json`.
-(This is either the directory that you ran `bbl` from, the directory provided as a 
+(This is either the directory that you ran `bbl` from, the directory provided as a
 `--state-dir` argument to `bbl`, or the `$BBL_STATE_DIR` variable in your environment.)
 As a deployer, **you must persist this directory somehow.**
 
@@ -264,34 +264,19 @@ that allow operators to make choices about their deployment configuration.
 However, some decisions are necessarily left to the operator
 because tooling can be hard to make generic.
 In this section,
-we want to outline some of the decisions operators,
-especially production operators,
-will need to make about their deployments without tooling from cf-deployment,
-as well give some advice about how to approach those decisions.
-Our hope is that, over time,
-we can replace some of this discussion with better tooling,
-so please leave any feedback in GitHub issues.
-We'd love to hear from you.
+we want to outline some of the decisions operators
+will need to make about their deployments without tooling from cf-deployment.
 
 ### Databases
 By default,
 `cf-deployment` includes
-`mysql` or `postgres` databases
-that are singletons
-and cannot be scaled out<sup>[1](#mysql-footnote)</sup>.
-Production deployers
-may want to deploy
-a database with better availability guarantees,
-such as BOSH-managed [cf-mysql-deployment](https://github.com/cloudfoundry/cf-mysql-deployment)
-or IaaS-managed database systems
+MySQL Galera databases
+that are singletons. The MySQL databases can be scaled by applying `operations/scale-database-cluster.yml` during the bosh deployment.
+Some may want to deploy IaaS-managed database systems
 such as [Amazon RDS](https://aws.amazon.com/rds/) or [Google Cloud SQL](https://cloud.google.com/sql/).
 External databases
 will require the use of the [`use-external-dbs.yml`](operations/use-external-dbs.yml) opsfile.
 
-<a name="mysql-footnote">1.</a> The team that maintains cf-mysql-release is in the process of vetting
-the colocation strategy we use in cf-deployment.
-Once they've verified its scalability,
-we'll rename the instance group to `database` and provide ways to scale the cluster to three nodes.
 
 ### Blobstore
 By default,
@@ -315,9 +300,7 @@ controls the way BOSH rolls out updates to instance groups.
 cf-deployment configures these very conservatively,
 and assumes the default scale as defined in the base manifest
 (typically two instances of each instance group).
-Operators with larger scale
-(so, the vast majority of them)
-will almost certainly need to reconfigure the `update` section to suit their needs.
+Operators with larger scale may need to reconfigure the `update` section to suit their needs.
 
 The most straightfoward way
 to reconfigure those sections
@@ -344,7 +327,7 @@ would be with a custom ops-file, such as:
 `cf-deployment` deploys with a "default HA" scale --
 two instances, distributed across two AZs
 (with the exception of some jobs that require three instances).
-While it's easy for us to prove an ops-file
+While it's easy for us to provide an ops-file
 [to scale instance groups _down_](operations/scale-to-one-az.yml),
 production operators will need to provide their own ops-file
 to scale instances _up_.
