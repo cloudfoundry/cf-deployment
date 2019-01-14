@@ -41,7 +41,7 @@ does not support the deprecated [DEAs](https://docs.cloudfoundry.org/concepts/ar
 and enables diego-specific features
 such as ssh access to apps by default.
 - deploys jobs to handle platform data persistence
-using singleton versions of the cf-mysql release for databases
+using singleton versions of the `PXC` release for databases
 and the CAPI release's singleton WebDAV job for blob storage.
 See the  [database](deployment-guide.md#databases) and [blobstore](deployment-guide.md#blobstore) sections
 of the deployment guide
@@ -156,14 +156,14 @@ bosh update-runtime-config bosh-deployment/runtime-configs/dns.yml --name dns
 to provide environment-specific or sensitive configuration
 such as the system domain and various credentials.
 To do this in the default configuration,
-we use [CredHub](https://github.com/pivotal-cf/credhub-release), 
+we use [CredHub](https://github.com/pivotal-cf/credhub-release),
 which is deployed on your BOSH director by default if you are using `bbl`.
 Where necessary credential values are not present,
 CredHub will generate new values
 based on the type information stored in `cf-deployment.yml`.
 
-**Note:** BOSH `vars-store` is no longer the default way to store 
-and generate credentials and will be deprecated in 
+**Note:** BOSH `vars-store` is no longer the default way to store
+and generate credentials and will be deprecated in
 `cf-deployment` 3.0.
 
 Necessary variables that BOSH can't ask CredHub to generate
