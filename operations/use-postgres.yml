@@ -182,15 +182,9 @@
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/port
   value: 5524
 - type: remove
-  path: /releases/name=cf-mysql?
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/ca_certs?
 - type: remove
-  path: /variables/name=cf_mysql_mysql_admin_password?
-- type: remove
-  path: /variables/name=cf_mysql_mysql_cluster_health_password?
-- type: remove
-  path: /variables/name=cf_mysql_mysql_galera_healthcheck_endpoint_password?
-- type: remove
-  path: /variables/name=cf_mysql_mysql_galera_healthcheck_password?
+  path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/sqldb/ca_cert?
 - type: remove
   path: /variables/name=pxc_galera_ca?
 - type: remove
