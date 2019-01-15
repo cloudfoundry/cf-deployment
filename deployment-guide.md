@@ -1,4 +1,4 @@
-/# Deploying CF
+# Deploying CF
 
 ## Pave your IaaS and get a BOSH Director
 
