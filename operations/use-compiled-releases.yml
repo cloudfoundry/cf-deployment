@@ -432,3 +432,17 @@
   value:
     os: ubuntu-xenial
     version: "170.21"
+- type: replace
+  path: /releases/name=nginx-buildpack/url
+  value: https://storage.googleapis.com/cf-deployment-compiled-releases/nginx-buildpack-1.0.4-ubuntu-xenial-170.21-20190116-200534-708552199.tgz
+- type: replace
+  path: /releases/name=nginx-buildpack/sha1
+  value: ebd368d983deb9544f4e2da4bdbfbb06f29a4013
+- type: replace
+  path: /releases/name=nginx-buildpack/version
+  value: 1.0.4
+- type: replace
+  path: /releases/name=nginx-buildpack/stemcell?
+  value:
+    os: ubuntu-xenial
+    version: "170.21"
