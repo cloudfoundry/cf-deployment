@@ -418,3 +418,17 @@
   value:
     os: ubuntu-xenial
     version: "170.21"
+- type: replace
+  path: /releases/name=r-buildpack/url
+  value: https://storage.googleapis.com/cf-deployment-compiled-releases/r-buildpack-1.0.3-ubuntu-xenial-170.21-20190116-195855-557313937.tgz
+- type: replace
+  path: /releases/name=r-buildpack/sha1
+  value: 4cfbd4201e9fa470ed7037bf268d442efed69372
+- type: replace
+  path: /releases/name=r-buildpack/version
+  value: 1.0.3
+- type: replace
+  path: /releases/name=r-buildpack/stemcell?
+  value:
+    os: ubuntu-xenial
+    version: "170.21"
