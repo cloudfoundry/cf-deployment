@@ -1,56 +1,58 @@
----
 - type: replace
   path: /releases/-
   value:
     name: haproxy
-    version: 8.1.1
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/haproxy-boshrelease?v=8.1.1
-    sha1: 98ec4d0571b5fccb975eab3ed5e40842e35b8daa
+    sha1: 8ef03a5317a2ae17947cd69dbc8d5a012b8acbee
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/haproxy-boshrelease?v=9.4.0
+    version: 9.4.0
 - type: replace
   path: /instance_groups/name=smoke-tests
   value:
-    name: haproxy
-    azs: [z1, z2]
+    azs:
+    - z1
+    - z2
     instances: 2
-    stemcell: default
-    vm_type: minimal
-    networks: [name: default]
     jobs:
     - name: keepalived
-      release: haproxy
       properties:
         keepalived:
           vip: ((haproxy_static_vip))
-    - name: haproxy
       release: haproxy
+    - name: haproxy
       properties:
         ha_proxy:
-          ssl_pem: "((router_ssl.certificate))((router_ssl.private_key))"
+          ssl_pem: ((router_ssl.certificate))((router_ssl.private_key))
           tcp_link_port: 2222
+      release: haproxy
+    name: haproxy
+    networks:
+    - name: default
+    stemcell: default
+    vm_type: minimal
 - type: replace
   path: /instance_groups/-
   value:
-    name: smoke-tests
-    lifecycle: errand
     azs:
     - z1
     instances: 1
-    vm_type: minimal
+    jobs:
+    - name: smoke_tests
+      properties:
+        smoke_tests:
+          api: https://api.((system_domain))
+          apps_domain: ((system_domain))
+          cf_dial_timeout_in_seconds: 300
+          org: cf_smoke_tests_org
+          password: ((cf_admin_password))
+          skip_ssl_validation: true
+          space: cf_smoke_tests_space
+          user: admin
+      release: cf-smoke-tests
+    lifecycle: errand
+    name: smoke-tests
+    networks:
+    - name: default
     stemcell: default
     update:
       serial: true
-    networks:
-    - name: default
-    jobs:
-    - name: smoke_tests
-      release: cf-smoke-tests
-      properties:
-        smoke_tests:
-          api: "https://api.((system_domain))"
-          apps_domain: "((system_domain))"
-          user: admin
-          password: "((cf_admin_password))"
-          org: cf_smoke_tests_org
-          space: cf_smoke_tests_space
-          cf_dial_timeout_in_seconds: 300
-          skip_ssl_validation: true
+    vm_type: minimal
