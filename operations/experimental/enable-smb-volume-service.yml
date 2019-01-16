@@ -69,13 +69,13 @@
   path: /instance_groups/name=diego-cell/jobs/name=smbdriver?
   value:
     name: smbdriver
-    properties: 
+    properties:
       tls:
         ca_cert: ((smb_ca.certificate))
-        server_cert: ((smbdriver_cert.certificate))
-        server_key: ((smbdriver_cert.private_key))
         client_cert: ((smbdriver_client_cert.certificate))
         client_key: ((smbdriver_client_cert.private_key))
+        server_cert: ((smbdriver_cert.certificate))
+        server_key: ((smbdriver_cert.private_key))
     release: smb-volume
 - type: replace
   path: /variables/-
@@ -105,10 +105,10 @@
   value:
     name: smbdriver_cert
     options:
-      ca: smb_ca
-      common_name: 127.0.0.1
       alternative_names:
       - 127.0.0.1
+      ca: smb_ca
+      common_name: 127.0.0.1
       extended_key_usage:
       - server_auth
     type: certificate
@@ -126,6 +126,6 @@
   path: /releases/-
   value:
     name: smb-volume
-    sha1: 06b6b9a988062e53963077b05fefea90ab609a94
-    url: https://bosh.io/d/github.com/cloudfoundry/smb-volume-release?v=0.2.6
-    version: 0.2.6
+    sha1: c0be18f17aa1c0c19e8649e14b1eae256cb78c03
+    url: https://bosh.io/d/github.com/cloudfoundry/smb-volume-release?v=1.0.0
+    version: 1.0.0
