@@ -201,7 +201,7 @@ bosh -e 192.168.50.6 -d cf deploy \
 To retrieve CF Admin credentials,
 1. Login to CredHub
     ```
-    credhub login
+    credhub login -u admin
     ```
 2. Find the password for the CF Admin user. You will need to first find the credential to get the full path of the stored variable in your BOSH deployment namespace:
 
