@@ -1948,6 +1948,10 @@ variables:
     common_name: statsdinjector
     extended_key_usage:
     - client_auth
+    alternative_names:
+    - uaa.service.cf.internal
+    - api.service.cf.internal
+    - scheduler.service.cf.internal
 - name: loggregator_tls_agent
   type: certificate
   options:
@@ -1964,6 +1968,8 @@ variables:
     extended_key_usage:
     - client_auth
     - server_auth
+    alternative_names:
+    - doppler.service.cf.internal
 - name: loggregator_tls_tc
   type: certificate
   options:
@@ -1972,6 +1978,8 @@ variables:
     extended_key_usage:
     - client_auth
     - server_auth
+    alternative_names:
+    - log-api.service.cf.internal
 - name: loggregator_tls_cc_tc
   type: certificate
   options:
@@ -1979,6 +1987,8 @@ variables:
     common_name: trafficcontroller
     extended_key_usage:
     - client_auth
+    alternative_names:
+    - log-api.service.cf.internal
 - name: loggregator_rlp_gateway_tls_cc
   type: certificate
   options:
@@ -1986,6 +1996,8 @@ variables:
     common_name: rlp-gateway
     extended_key_usage:
     - client_auth
+    alternative_names:
+    - log-api.service.cf.internal
 - name: loggregator_tls_rlp
   type: certificate
   options:
@@ -1994,6 +2006,8 @@ variables:
     extended_key_usage:
     - client_auth
     - server_auth
+    alternative_names:
+    - log-api.service.cf.internal
 - name: loggregator_rlp_gateway
   type: certificate
   options:
@@ -2001,6 +2015,8 @@ variables:
     common_name: rlp_gateway
     extended_key_usage:
     - client_auth
+    alternative_names:
+    - log-api.service.cf.internal
 - name: adapter_rlp_tls
   type: certificate
   options:
@@ -2009,6 +2025,8 @@ variables:
     extended_key_usage:
     - client_auth
     - server_auth
+    alternative_names:
+    - adapter.service.cf.internal
 - name: scheduler_api_tls
   type: certificate
   options:
@@ -2017,6 +2035,8 @@ variables:
     extended_key_usage:
     - client_auth
     - server_auth
+    alternative_names:
+    - scheduler.service.cf.internal
 - name: adapter_tls
   type: certificate
   options:
@@ -2025,6 +2045,8 @@ variables:
     extended_key_usage:
     - server_auth
     - client_auth
+    alternative_names:
+    - adapter.service.cf.internal
 - name: scheduler_client_tls
   type: certificate
   options:
@@ -2032,14 +2054,18 @@ variables:
     common_name: ss-scheduler
     extended_key_usage:
     - client_auth
+    alternative_names:
+    - scheduler.service.cf.internal
 - name: logs_provider
+  type: certificate
   options:
     ca: loggregator_ca
     common_name: log-cache
     extended_key_usage:
     - client_auth
     - server_auth
-  type: certificate
+    alternative_names:
+    - doppler.service.cf.internal
 - name: log_cache_ca
   options:
     common_name: log-cache
