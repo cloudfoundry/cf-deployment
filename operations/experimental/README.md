@@ -22,6 +22,8 @@ and the ops-files will be removed.
 | [`add-deployment-updater-external-db.yml`](add-deployment-updater-external-db.yml) | Use an external database for the `cc_deployment_updater` job. | Requires `add-deployment-updater.yml` and `use-external-dbs.yml` |
 | [`add-deployment-updater-postgres.yml`](add-deployment-updater-postgres.yml) | Use a postgres database for the `cc_deployment_updater` job. | Requires `add-deployment-updater.yml` |
 | [`add-deployment-updater.yml`](add-deployment-updater.yml) | Add `cc_deployment_updater` job to `scheduler` vm, which enables zero downtime app deployments. | |
+| [`add-system-metrics-agent.yml`](add-system-metrics-agent.yml) | Add agent to all vms with the purpose of egressing system metrics | |
+| [`add-system-metrics-agent-windows1803.yml`](add-system-metrics-agent-windows1803.yml) | Add agent to windows1803 Diego cells for the purpose of egressing system metrics | |
 | [`deploy-forwarder-agent.yml`](deploy-forwarder-agent.yml) | Addons for forwarder agent, UDP forwarder, and configuration/certs. | |
 | [`disable-interpolate-service-bindings.yml`](disable-interpolate-service-bindings.yml) | Disables the interpolation of CredHub service credentials by Cloud Controller. |
 | [`enable-bpm-garden.yml`](enable-bpm-garden.yml) | Enables the [BOSH Process Manager](https://github.com/cloudfoundry-incubator/bpm-release) for Garden. | This ops file **cannot** be deployed in conjunction with `enable-oci-phase-1.yml`. |
