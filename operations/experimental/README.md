@@ -19,9 +19,6 @@ and the ops-files will be removed.
 | Name | Purpose | Notes |
 |:---  |:---     |:---   |
 | [`add-credhub-lb.yml`](add-credhub-lb.yml) |  **[DEPRECATED]** Use load balancer to expose external address for CredHub. | |
-| [`add-deployment-updater-external-db.yml`](add-deployment-updater-external-db.yml) | Use an external database for the `cc_deployment_updater` job. | Requires `add-deployment-updater.yml` and `use-external-dbs.yml` |
-| [`add-deployment-updater-postgres.yml`](add-deployment-updater-postgres.yml) | Use a postgres database for the `cc_deployment_updater` job. | Requires `add-deployment-updater.yml` |
-| [`add-deployment-updater.yml`](add-deployment-updater.yml) | Add `cc_deployment_updater` job to `scheduler` vm, which enables zero downtime app deployments. | |
 | [`deploy-forwarder-agent.yml`](deploy-forwarder-agent.yml) | Addons for forwarder agent, UDP forwarder, and configuration/certs. | |
 | [`disable-interpolate-service-bindings.yml`](disable-interpolate-service-bindings.yml) | Disables the interpolation of CredHub service credentials by Cloud Controller. |
 | [`enable-bpm-garden.yml`](enable-bpm-garden.yml) | Enables the [BOSH Process Manager](https://github.com/cloudfoundry-incubator/bpm-release) for Garden. | This ops file **cannot** be deployed in conjunction with `enable-oci-phase-1.yml`. |
