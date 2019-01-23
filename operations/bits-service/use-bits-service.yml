@@ -73,7 +73,9 @@
               username: blobstore-user
           private_endpoint: https://bits.service.cf.internal
           public_endpoint: https://bits.((system_domain))
-          secret: ((bits_service_secret))
+          active_signing_key:
+            key_id: key1
+            secret: ((bits_service_secret))
           signing_users:
           - password: ((bits_service_signing_password))
             username: admin
