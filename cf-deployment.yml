@@ -891,6 +891,10 @@ instance_groups:
         internal_api_password: "((cc_internal_api_password))"
         staging_upload_user: staging_user
         staging_upload_password: "((cc_staging_upload_password))"
+        temporary_use_logcache: true
+        logcache_tls:
+          private_key: "((cc_logcache_tls.private_key))"
+          certificate: "((cc_logcache_tls.certificate))"
         buildpacks: &blobstore-properties
           blobstore_type: webdav
           webdav_config:
@@ -2062,6 +2066,14 @@ variables:
     extended_key_usage:
     - client_auth
   type: certificate
+- name: cc_logcache_tls
+  type: certificate
+  options:
+    ca: log_cache_ca
+    common_name: "api.((system_domain))"
+    alternative_names:
+    - "api.((system_domain))"
+    - cloud-controller-ng.service.cf.internal
 - name: router_ca
   type: certificate
   options:
