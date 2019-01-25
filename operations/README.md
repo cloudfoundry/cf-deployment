@@ -15,7 +15,7 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 | **Alibaba Cloud** | | |
 | [`use-alicloud-oss-blobstore.yml`](use-alicloud-oss-blobstore.yml) | Configures external blobstore to use Alibaba Cloud OSS blobstore. | Requires `use-external-blobstore.yml`. Introduces [new variables](example-vars-files/vars-use-alicloud-oss-blobstore.yml) for oss credentials and bucket names. |
 | **AWS** | | |
-| [`aws.yml`](aws.yml) | Overrides the loggregator endpoint port to 4443. | It is required to have a separate port from the standard HTTPS port (443) for loggregator traffic in order to use "classic" AWS ELBs. Newer Application Load Balancers should not require this port override, so no need to use this ops-file if you're using the newer load balancer. |
+| [`aws.yml`](aws.yml) | Overrides the loggregator endpoint port to 4443. | It is required to have a separate port from the standard HTTPS port (443) for loggregator traffic in order to use "classic" AWS ELBs. Newer "Application Load Balancers" and "Network Load Balancers" (as setup by [bbl](https://github.com/cloudfoundry/bosh-bootloader) >= v7.0.0) should not require this port override, so no need to use this ops-file if you're using the newer load balancer. |
 | [`use-s3-blobstore.yml`](use-s3-blobstore.yml) | Configures external blobstore to use Amazon S3. | Requires `use-external-blobstore.yml`. Introduces [new variables](example-vars-files/vars-use-s3-blobstore.yml) for s3 credentials and bucket names. |
 | **Azure** | | |
 | [`azure.yml`](azure.yml) | Sets gorouter's `frontend_idle_timeout` to value appropriate for Azure load balancers. | Any value below 240 should work. |
