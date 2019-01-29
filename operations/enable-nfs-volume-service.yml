@@ -35,13 +35,13 @@
             client_id: nfs-broker-push-client
             client_secret: ((nfs-broker-push-uaa-client-secret))
           db:
+            ca_cert: ((pxc_server_ca.certificate))
             driver: mysql
+            host: sql-db.service.cf.internal
             name: nfs-broker
             password: ((nfs-broker-database-password))
             port: 3306
             username: nfs-broker
-            host: sql-db.service.cf.internal
-            ca_cert: ((pxc_server_ca.certificate))
           domain: ((system_domain))
           organization: system
           password: ((nfs-broker-password))
@@ -125,9 +125,9 @@
   path: /releases/-
   value:
     name: nfs-volume
-    sha1: 73426f29d8a71bcce3e5933ae570ebb0b590d047
-    url: https://bosh.io/d/github.com/cloudfoundry/nfs-volume-release?v=1.7.6
-    version: 1.7.6
+    sha1: f4d472551f37fcd898e99ef93070b261b2d21d71
+    url: https://bosh.io/d/github.com/cloudfoundry/nfs-volume-release?v=1.7.7
+    version: 1.7.7
 - type: replace
   path: /releases/name=mapfs?
   value:
