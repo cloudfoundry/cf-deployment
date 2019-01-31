@@ -12,20 +12,20 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 
 | Name | Purpose | Notes |
 |:---  |:---     |:---   |
-| **Alibaba Cloud** | | |
-| [`use-alicloud-oss-blobstore.yml`](use-alicloud-oss-blobstore.yml) | Configures external blobstore to use Alibaba Cloud OSS blobstore. | Requires `use-external-blobstore.yml`. Introduces [new variables](example-vars-files/vars-use-alicloud-oss-blobstore.yml) for oss credentials and bucket names. |
-| **AWS** | | |
-| [`aws.yml`](aws.yml) | Overrides the loggregator endpoint port to 4443. | It is required to have a separate port from the standard HTTPS port (443) for loggregator traffic in order to use "classic" AWS ELBs. Newer "Application Load Balancers" and "Network Load Balancers" (as setup by [bbl](https://github.com/cloudfoundry/bosh-bootloader) >= v7.0.0) should not require this port override, so no need to use this ops-file if you're using the newer load balancer. |
-| [`use-s3-blobstore.yml`](use-s3-blobstore.yml) | Configures external blobstore to use Amazon S3. | Requires `use-external-blobstore.yml`. Introduces [new variables](example-vars-files/vars-use-s3-blobstore.yml) for s3 credentials and bucket names. |
-| **Azure** | | |
-| [`azure.yml`](azure.yml) | Sets gorouter's `frontend_idle_timeout` to value appropriate for Azure load balancers. | Any value below 240 should work. |
-| [`use-azure-storage-blobstore.yml`](use-azure-storage-blobstore.yml) | Configures external blobstore to use Azure Storage. | Requires `use-external-blobstore.yml`. Introduces [new variables](example-vars-files/vars-use-azure-storage-blobstore.yml) for Azure credentials and container names. |
 | **GCP** | | |
 | [`use-gcs-blobstore-service-account.yml`](use-gcs-blobstore-service-account.yml) | Enables service account credentials for Google blobstore. | Requires `use-external-blobstore.yml`. Introduces [new variables](example-vars-files/vars-use-gcs-blobstore-service-account.yml) for gcp service account email/json-key and bucket names. |
 | [`use-gcs-blobstore-access-key.yml`](use-gcs-blobstore-access-key.yml) | Enables access key credentials for Google blobstore. | Requires `use-external-blobstore.yml`. Introduces [new variables](example-vars-files/vars-use-gcs-blobstore-access-key.yml) for access key/secret and bucket names. |
-| **Openstack** | | |
+| **AWS** | | |
+| [`aws.yml`](aws.yml) | Overrides the loggregator endpoint port to 4443. | It is required to have a separate port from the standard HTTPS port (443) for loggregator traffic in order to use "classic" AWS ELBs. Newer "Application Load Balancers" and "Network Load Balancers" (as setup by [bbl](https://github.com/cloudfoundry/bosh-bootloader) >= v7.0.0) should not require this port override, so no need to use this ops-file if you're using the newer load balancer. |
+| [`use-s3-blobstore.yml`](use-s3-blobstore.yml) | Configures external blobstore to use Amazon S3. | Requires `use-external-blobstore.yml`. Introduces [new variables](example-vars-files/vars-use-s3-blobstore.yml) for s3 credentials and bucket names. |
+| **Azure** | | **\* Not validated or supported by the Release Integration team** |
+| [`azure.yml`](azure.yml) | Sets gorouter's `frontend_idle_timeout` to value appropriate for Azure load balancers. | Any value below 240 should work. |
+| [`use-azure-storage-blobstore.yml`](use-azure-storage-blobstore.yml) | Configures external blobstore to use Azure Storage. | Requires `use-external-blobstore.yml`. Introduces [new variables](example-vars-files/vars-use-azure-storage-blobstore.yml) for Azure credentials and container names. |
+| **Openstack** | | **\* Not validated or supported by the Release Integration team** |
 | [`openstack.yml`](openstack.yml) | Used for deploying Cloud Foundry on OpenStack with BOSH | See [OpenStack](../iaas-support/openstack/README.md) documentation. |
 | [`use-swift-blobstore.yml`](use-swift-blobstore.yml) | Replaces local WebDAV blobstore with OpenStack swift blobstore. Used for deploying Cloud Foundry on OpenStack with BOSH | Requires `use-external-blobstore.yml`. Introduces [new variables](example-vars-files/vars-use-swift-blobstore.yml) for OpenStack credentials and directory names. If you plan using the [Swift ops file](use-swift-blobstore.yml) to enable Swift as blobstore for the Cloud Controller, you should also run the [Swift extension](https://github.com/cloudfoundry-incubator/cf-openstack-validator/tree/master/extensions/object_storage). |
+| **Alibaba Cloud** | | **\* Not validated or supported by the Release Integration team** |
+| [`use-alicloud-oss-blobstore.yml`](use-alicloud-oss-blobstore.yml) | Configures external blobstore to use Alibaba Cloud OSS blobstore. | Requires `use-external-blobstore.yml`. Introduces [new variables](example-vars-files/vars-use-alicloud-oss-blobstore.yml) for oss credentials and bucket names.|
 
 
 ## Feature-based Ops-files
