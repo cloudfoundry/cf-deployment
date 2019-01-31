@@ -2,20 +2,18 @@
 
 ### Table of Contents
 * <a href='#purpose'>Purpose</a>
-* <a href='#migrating'>Migrating from cf-release to cf-deployment</a>
 * <a href='#tls'>TLS validation</a>
 * <a href='#deploying-cf'>Deploying CF</a>
 * <a href='#contributing'>Contributing</a>
 * <a href='#setup'>Setup and Prerequisites</a>
 * <a href='#ops-files'>Ops Files</a>
 * <a href='#ci'>CI</a>
+* <a href='#vars-store'></a>Migrating from Vars-Store to CredHub
+* <a href='#migrating'>Migrating from cf-release to cf-deployment</a>
 
 ## <a name='purpose'></a>Purpose
 This repo contains a canonical [BOSH](http://bosh.io/docs) deployment manifest
-for deploying the CF Application Runtime without the use of `cf-release`,
-relying instead on individual component releases.
-It replaces the [manifest generation scripts in cf-release][cf-release-url]
-which have finally been deprecated.
+for deploying the Cloud Foundry Application Runtime by relying individual component releases.
 It uses several newer features
 of the BOSH director and CLI.
 Older directors may need to be upgraded
@@ -27,50 +25,32 @@ about the CF Application Runtime.
 It:
 - prioritizes readability and meaning to a human operator.
   For instance, only necessary configuration is included.
-- emphasizes security and production-readiness by default.
-  - CredHub is used by default
-  to generate strong passwords, certs, and keys.
+- emphasizes security by default.
+  - CredHub is used to generate strong passwords, certs, and keys.
   There are no default credentials, even in bosh-lite.
   - TLS/SSL features are enabled on every job which supports TLS.
-- uses three AZs, of which two are used to provide redundancy for most instance groups.
-The third is used only for instance groups
-that should not have even instance counts,
-such as clustered MySQL.
-- uses [Diego](http://docs.cloudfoundry.org/concepts/diego/diego-architecture.html) ([source code](https://github.com/cloudfoundry/diego-release)) natively,
-does not support the deprecated [DEAs](https://docs.cloudfoundry.org/concepts/architecture/execution-agent.html),
-and enables diego-specific features
-such as ssh access to apps by default.
+- uses two AZs to provide redundancy for most instance groups.
+- uses [Diego](http://docs.cloudfoundry.org/concepts/diego/diego-architecture.html) ([source code](https://github.com/cloudfoundry/diego-release)) by default.
 - deploys jobs to handle platform data persistence
 using singleton versions of the `PXC` release for databases
 and the CAPI release's singleton WebDAV job for blob storage.
 See the  [database](deployment-guide.md#databases) and [blobstore](deployment-guide.md#blobstore) sections
 of the deployment guide
-for more resilient options.
+for more information.
 - assumes load-balancing will be handled by the IaaS
 or an external deployment.
-
-## <a name='migrating'></a>Can I Transition from `cf-release`?
-The Release Integration team
-supports a transition path from `cf-release`.
-You can find tooling and documentation for performing the migration
-in our [cf-deployment-transition repo](https://github.com/cloudfoundry/cf-deployment-transition).
 
 ## <a name='tls'></a> TLS validation
 
 Many test, development, and "getting started" environments
 do not have valid `TLS` certificates
-installed in their load balancers.
+installed in their load balancers. For ease of use in such environments,
 `cf-deployment` skips `TLS` validation
 on some components
 that access each other via the "front door"
-of the Cloud Foundry load balancer
-for ease of use
-in such environments.
-This is a temporary solution
-that will be addressed soon
-by the [BOSH Trusted Certificates](https://bosh.io/docs/trusted-certs.html) workflow.
+of the Cloud Foundry load balancer.
 
-Production deployers who have valid
+Deployers who have valid
 or otherwise trusted
 load balancer certificates should use the
 [stop-skipping-tls-validation.yml](operations/stop-skipping-tls-validation.yml) opsfile
@@ -78,20 +58,16 @@ to force the validation of `TLS` certificates
 for all components.
 
 ## <a name='deploying-cf'></a>Deploying CF
-Deployment instructions have become verbose,
-so we've moved them into a [dedicated deployment guide here](deployment-guide.md).
-
-There's a small section in that doc
-that tries to help operators reason about choices they can make in their deployments.
-Take a look at [Notes for operators](deployment-guide.md#notes-for-operators).
+Deployment instructions are verbose so we've moved them into a [dedicated deployment guide here](deployment-guide.md).
 
 See the rest of this document for more on the new CLI, deployment vars, and configuring your BOSH director.
 
-## <a name='contributing'></a>Contributing
-Although the default branch for the repository is `master`,
+## <a name='contributing'></a>Contributing to CF-Deployment
+Although the default branch for the repository is [`master`](https://github.com/cloudfoundry/cf-deployment/tree/master),
 we ask that all pull requests be made against
-the `develop` branch.
-Please also take a look at the ["style guide"](texts/style-guide.md),
+the [`develop`](https://github.com/cloudfoundry/cf-deployment/tree/develop) branch. 
+- **Please fill out the [PR Template](https://github.com/cloudfoundry/cf-deployment/blob/master/PULL_REQUEST_TEMPLATE.md)** when submitting pull requests. The information requested in the PR form provides important context for the team responsible for evaluating your submission.
+- Please also take a look at the ["style guide"](texts/style-guide.md),
 which lays out some guidelines for adding properties or jobs
 to the deployment manifest.
 
@@ -111,39 +87,39 @@ set `RUN_SEMANTIC=true` in your environment.
 **Note:** it is necessary to run the tests
 from the root of the repo.
 
-If you add an Ops-file,
-you will need to document it in its corresponding README
-and add it to the ops file tests in `scripts/test`.
+If you add an Ops-file, you will need to 
+1. document it in its corresponding README.
+1. add it to the ops file tests in `scripts/test`.
 
-We ask that pull requests and other changes be successfully deployed,
-and tested with the latest sha of CATs.
+We ask that all changes be successfully deployed and tested with the latest version of [CAT's](https://github.com/cloudfoundry/cf-acceptance-tests/releases) against the [latest release of cf-deployment](https://github.com/cloudfoundry/cf-deployment/releases) before they are submitted to develop.
 
 ## <a name='setup'></a>Setup and Prerequisites
-`cf-deployment` relies on newer BOSH features,
-and requires a bosh director with a valid cloud-config that has been configured with a certificate authority.
-It also requires the new `bosh` CLI,
+`cf-deployment` requires a bosh director with a valid cloud-config that has been configured with a certificate authority.
+It also requires the `bosh` CLI,
 which it relies on to generate and fill-in needed variables.
 
 ### BOSH director and stemcells
-`cf-deployment` requires BOSH v262+ and 3468+ Linux stemcells.
+`cf-deployment` requires both [BOSH](https://github.com/cloudfoundry/bosh/releases) and [Linux stemcells](https://bosh.io/stemcells/).
 
 ### BOSH CLI
-`cf-deployment` requires the new [BOSH CLI](https://github.com/cloudfoundry/bosh-cli).
+`cf-deployment` requires the [BOSH CLI](https://github.com/cloudfoundry/bosh-cli).
 
 ### BOSH `cloud-config`
 `cf-deployment` assumes that
-you've uploaded a compatible [cloud-config](http://bosh.io/docs/cloud-config.html) to the BOSH director.
-The cloud-config produced by `bbl` is compatible by default,
-which covers GCP, AWS, and Azure.
-The `iaas-support` directory includes tools and templates for building cloud-configs for other IaaSes,
+you've uploaded a compatible [cloud-config](http://bosh.io/docs/cloud-config.html) to the BOSH director prior to running your deployment.
+
+The cloud-config produced by `bbl` covers GCP, AWS, and Azure, and is compatible by default.
+
+The [`iaas-support`](https://github.com/cloudfoundry/cf-deployment/tree/master/iaas-support) directory includes tools and templates for building cloud-configs for other IaaSes,
 including bosh-lite, vSphere, Openstack, and Alibaba Cloud.
+
 For other IaaSes,
 you may need to do some engineering work to figure out the right cloud config (and possibly ops files)
 to get it working for `cf-deployment`.
 
 ### BOSH `runtime-config`
 `cf-deployment` requires that you have uploaded
-a [runtime-config](https://bosh.io/docs/runtime-config/) for [BOSH DNS](https://bosh.io/docs/dns/).
+a [runtime-config](https://bosh.io/docs/runtime-config/) for [BOSH DNS](https://bosh.io/docs/dns/) prior to running your deployment.
 We recommended that you use the one provided by the
 [bosh-deployment](https://github.com/cloudfoundry/bosh-deployment/blob/master/runtime-configs/dns.yml) repo:
 
@@ -151,31 +127,35 @@ We recommended that you use the one provided by the
 bosh update-runtime-config bosh-deployment/runtime-configs/dns.yml --name dns
 ```
 
+[BBL v6.10.0](https://github.com/cloudfoundry/bosh-bootloader/releases/tag/v6.10.0) or later will set a runtime config including BOSH DNS when `bbl up` is run.
+
 ### Deployment variables and CredHub
 `cf-deployment.yml` requires additional information
 to provide environment-specific or sensitive configuration
 such as the system domain and various credentials.
+
 To do this in the default configuration,
 we use [CredHub](https://github.com/pivotal-cf/credhub-release),
 which is deployed on your BOSH director by default if you are using `bbl`.
+
 Where necessary credential values are not present,
 CredHub will generate new values
 based on the type information stored in `cf-deployment.yml`.
 
 **Note:** BOSH `vars-store` is no longer the default way to store
-and generate credentials and will be deprecated in
-`cf-deployment` 3.0.
+and generate credentials and has been deprecated since
+[`cf-deployment` v3.0](https://github.com/cloudfoundry/cf-deployment/releases/tag/v3.0.0).
 
 Necessary variables that BOSH can't ask CredHub to generate
 need to be supplied as well.
-In the default case
-this is just the system domain,
+
+In the default case, this is just the system domain,
 but some ops files introduce additional variables.
 See the summary for the particular ops files you're using
 for any additional necessary variables.
 
 There are three ways to supply
-such additional variables.
+such additional variables:
 
 1. They can be provided by passing individual `-v` arguments.
    The syntax for `-v` arguments is
@@ -192,12 +172,6 @@ such additional variables.
    If you do this, then you need follow variable namespacing
    rules respected by BOSH described [here](https://github.com/cloudfoundry-incubator/credhub/blob/master/docs/operator-quick-start.md#variable-namespacing).
 
-#### Migrating from Vars Store to CredHub
-
-Before using CredHub for cf-deployment,
-you will need to migrate your credentials from `vars-store` to CredHub.
-We have a [utility](https://github.com/ishustava/migrator) to help you migrate.
-
 ## <a name='ops-files'></a>Ops Files
 The configuration of CF represented by `cf-deployment.yml` is intended to be a workable, secure, fully-featured default.
 When the need arises to make different configuration choices,
@@ -209,7 +183,7 @@ More details can be found in the [Ops-file README](operations/README.md).
 
 ### A note on `community`, `experimental`, and `test` ops-files
 The `operations` directory includes subdirectories
-for "community", "experimental", and "test" ops-files.
+for "community", "experimental", "backup and restore", "bits-service" and "test" ops-files.
 
 #### Addons
 These ops-files make changes to
@@ -228,9 +202,8 @@ for details.
 
 #### Experimental
 "Experimental" ops-files represent configurations
-that we expect to promote to blessed configuration eventually,
-meaning that,
-once the configurations have been sufficiently validated,
+that are in the process of being developed and/or validated.
+Once the configurations have been sufficiently validated,
 they will become part of cf-deployment.yml
 and the ops-files will be removed.
 For details, see the [Experimental Ops-file README](operations/experimental/README.md).
@@ -267,3 +240,12 @@ The configuration for our pipeline can be found [here](https://github.com/cloudf
 
 [cf-deployment-concourse-url]: https://release-integration.ci.cf-app.com/teams/main/pipelines/cf-deployment
 [cf-release-url]: https://github.com/cloudfoundry/cf-release/tree/master/templates
+
+## <a name='vars-store'></a>Migrating from Vars Store to CredHub
+CredHub is default as of cf-deployment release v
+If you've got a long running foundation running a release of cf-deployment that relies on `vars-store` and want to upgrade to a version that's backed by CredHub, you will need to migrate your credentials from `vars-store` to CredHub.
+We have a [utility](https://github.com/ishustava/migrator) to help you migrate.
+
+## <a name='migrating'></a>Can I Transition from `cf-release`?
+CF-Deployment replaces the [manifest generation scripts in cf-release][cf-release-url] which have been deprecated and are no longer supported by the Release Integration team.
+Although the team is no longer working on or supporting migrations from `cf-release` to `cf-deployment`, you can still find the tooling and documentation in the [cf-deployment-transition repo](https://github.com/cloudfoundry/cf-deployment-transition).
