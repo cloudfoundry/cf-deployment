@@ -8,7 +8,7 @@
 * <a href='#setup'>Setup and Prerequisites</a>
 * <a href='#ops-files'>Ops Files</a>
 * <a href='#ci'>CI</a>
-* <a href='#vars-store'></a>Migrating from Vars-Store to CredHub
+* <a href='#vars-store'>Migrating from Vars-Store to CredHub</a>
 * <a href='#migrating'>Migrating from cf-release to cf-deployment</a>
 
 ## <a name='purpose'></a>Purpose
@@ -60,8 +60,6 @@ for all components.
 ## <a name='deploying-cf'></a>Deploying CF
 Deployment instructions are verbose so we've moved them into a [dedicated deployment guide here](deployment-guide.md).
 
-See the rest of this document for more on the new CLI, deployment vars, and configuring your BOSH director.
-
 ## <a name='contributing'></a>Contributing to CF-Deployment
 Although the default branch for the repository is [`master`](https://github.com/cloudfoundry/cf-deployment/tree/master),
 we ask that all pull requests be made against
@@ -71,27 +69,27 @@ the [`develop`](https://github.com/cloudfoundry/cf-deployment/tree/develop) bran
 which lays out some guidelines for adding properties or jobs
 to the deployment manifest.
 
-Before submitting a pull request
-or pushing to develop,
-please run `./scripts/test`
-which interpolates all of our ops files
-with the `bosh` cli.
-
-By default, the test suite omits `semantic` tests,
+**Before submitting a pull request
+or pushing to the develop branch of cf-deployment, please:**
+1. run `./scripts/test`
+   which interpolates all of our ops files
+   with the `bosh` cli.
+    - By default, the test suite omits `semantic` tests,
 which require both [jq](https://stedolan.github.io/jq/)
 and [yq](https://github.com/mikefarah/yq) installed.
-If you wish to run them,
+    - If you wish to run them,
 please install these requirements and
 set `RUN_SEMANTIC=true` in your environment.
-
-**Note:** it is necessary to run the tests
+    - **Note:** it is necessary to run the tests
 from the root of the repo.
+2. confirm your changes can be successfully deployed with 
+   the [latest release of cf-deployment](https://github.com/cloudfoundry/cf-deployment/releases) 
+   and tested with the latest version of [CAT's](https://github.com/cloudfoundry/cf-acceptance-tests/releases).
 
-If you add an Ops-file, you will need to 
+**If you add an Ops-file, you will need to:** 
 1. document it in its corresponding README.
 1. add it to the ops file tests in `scripts/test`.
 
-We ask that all changes be successfully deployed and tested with the latest version of [CAT's](https://github.com/cloudfoundry/cf-acceptance-tests/releases) against the [latest release of cf-deployment](https://github.com/cloudfoundry/cf-deployment/releases) before they are submitted to develop.
 
 ## <a name='setup'></a>Setup and Prerequisites
 `cf-deployment` requires a bosh director with a valid cloud-config that has been configured with a certificate authority.
@@ -106,7 +104,7 @@ which it relies on to generate and fill-in needed variables.
 
 ### BOSH `cloud-config`
 `cf-deployment` assumes that
-you've uploaded a compatible [cloud-config](http://bosh.io/docs/cloud-config.html) to the BOSH director prior to running your deployment.
+you've uploaded a compatible [cloud-config](http://bosh.io/docs/cloud-config.html) to the BOSH director prior to deploying your foundation.
 
 The cloud-config produced by `bbl` covers GCP, AWS, and Azure, and is compatible by default.
 
@@ -119,7 +117,7 @@ to get it working for `cf-deployment`.
 
 ### BOSH `runtime-config`
 `cf-deployment` requires that you have uploaded
-a [runtime-config](https://bosh.io/docs/runtime-config/) for [BOSH DNS](https://bosh.io/docs/dns/) prior to running your deployment.
+a [runtime-config](https://bosh.io/docs/runtime-config/) for [BOSH DNS](https://bosh.io/docs/dns/) prior to deploying your foundation.
 We recommended that you use the one provided by the
 [bosh-deployment](https://github.com/cloudfoundry/bosh-deployment/blob/master/runtime-configs/dns.yml) repo:
 
@@ -127,7 +125,7 @@ We recommended that you use the one provided by the
 bosh update-runtime-config bosh-deployment/runtime-configs/dns.yml --name dns
 ```
 
-[BBL v6.10.0](https://github.com/cloudfoundry/bosh-bootloader/releases/tag/v6.10.0) or later will set a runtime config including BOSH DNS when `bbl up` is run.
+**Note:** [BBL v6.10.0](https://github.com/cloudfoundry/bosh-bootloader/releases/tag/v6.10.0) or later will set a runtime config including BOSH DNS when you `bbl up`.
 
 ### Deployment variables and CredHub
 `cf-deployment.yml` requires additional information
@@ -142,16 +140,15 @@ Where necessary credential values are not present,
 CredHub will generate new values
 based on the type information stored in `cf-deployment.yml`.
 
-**Note:** BOSH `vars-store` is no longer the default way to store
-and generate credentials and has been deprecated since
-[`cf-deployment` v3.0](https://github.com/cloudfoundry/cf-deployment/releases/tag/v3.0.0).
+**Note:** Since [`cf-deployment` v3.0](https://github.com/cloudfoundry/cf-deployment/releases/tag/v3.0.0), CredHub has replaced the now deprecated BOSH `vars-store` as the default way to store
+and generate credentials.
 
 Necessary variables that BOSH can't ask CredHub to generate
 need to be supplied as well.
 
-In the default case, this is just the system domain,
-but some ops files introduce additional variables.
-See the summary for the particular ops files you're using
+If the deployment includes only the base manifest (cf-deployment.yml), this is just the system domain.
+However, some ops files introduce additional variables.
+See the README summary for the particular ops files you're using
 for any additional necessary variables.
 
 There are three ways to supply
@@ -173,19 +170,17 @@ such additional variables:
    rules respected by BOSH described [here](https://github.com/cloudfoundry-incubator/credhub/blob/master/docs/operator-quick-start.md#variable-namespacing).
 
 ## <a name='ops-files'></a>Ops Files
-The configuration of CF represented by `cf-deployment.yml` is intended to be a workable, secure, fully-featured default.
-When the need arises to make different configuration choices,
-we accomplish this with the `-o`/`--ops-file` flags.
+The configuration of CF represented by `cf-deployment.yml` is a workable, secure, fully-featured default.
+When the need arises to make different configuration choices for your foundation,
+you can accomplish this with the `-o`/`--ops-file` flags.
 These flags read a single `.yml` file that details operations to be performed on the manifest
 before variables are generated and filled.
 We've supplied some common manifest modifications in the `operations` directory.
 More details can be found in the [Ops-file README](operations/README.md).
 
-### A note on `community`, `experimental`, and `test` ops-files
-The `operations` directory includes subdirectories
-for "community", "experimental", "backup and restore", "bits-service" and "test" ops-files.
+### The `operations` subdirectories
 
-#### Addons
+#### [Addons](operations/addons)
 These ops-files make changes to
 most or all instance groups.
 They can be applied to the BOSH Director's
@@ -197,10 +192,10 @@ with rsyslog is such an add-on.
 Please see the [Addon Ops-file README](operations/addons/README.md)
 for details.
 
-#### Community
+#### [Community](operations/community)
 "Community" ops-files are contributed by the Cloud Foundry community. They are not maintained or supported by the Release Integration team. For details, see the [Community Ops-file README](operations/community/README.md)
 
-#### Experimental
+#### [Experimental](operations/experimental)
 "Experimental" ops-files represent configurations
 that are in the process of being developed and/or validated.
 Once the configurations have been sufficiently validated,
@@ -208,7 +203,7 @@ they will become part of cf-deployment.yml
 and the ops-files will be removed.
 For details, see the [Experimental Ops-file README](operations/experimental/README.md).
 
-#### Test
+#### [Test](operations/test)
 "Test" ops-files are configurations
 that we run in our testing pipeline
 to enable certain features.
@@ -225,6 +220,14 @@ For example,
 but the ops-file is hard to apply repeatably.
 In this case, the ops-file is an example.
 
+#### [Backup and Restore](operations/backup-and-restore)
+Contains all the ops files utilized to enable and configure [BOSH Backup and Restore](https://github.com/cloudfoundry-incubator/bosh-backup-and-restore) (BBR).
+BBR is a CLI utility for orchestrating the backup and restore of [BOSH](https://bosh.io/) deployments and BOSH directors. It orchestrates triggering the backup or restore process on the deployment or director, and transfers the backup artifact to and from the deployment or director.
+
+#### [Bits Service](operations/bits-service)
+Contains all the ops files utilized to enable and configure the [Bits-Service](https://github.com/cloudfoundry-incubator/bits-service).
+The bits-service is an extraction from existing functionality of the [cloud controller](https://github.com/cloudfoundry/cloud_controller_ng). It encapsulates all "bits operations" into its own, separately scalable service.
+
 ## <a name='ci'></a>CI
 The [ci](https://release-integration.ci.cf-app.com/teams/main/pipelines/cf-deployment) for `cf-deployment`
 automatically bumps to the latest versions of its component releases on the `develop` branch.
@@ -233,13 +236,12 @@ and tested with CATs before being merged to master if CATs goes green.
 
 Each version of cf-deployment is given a corresponding branch in the CATs repo,
 so that users can discover which version of CATs to run against their deployments.
-For example, if you've deployed cf-deployment v0.35.0,
-check out the `cf0.35` branch in cf-acceptance-tests to run CATs.
+For example, if you've deployed cf-deployment v6.10.0,
+check out the `cf6.10` branch in cf-acceptance-tests to run CATs.
 
 The configuration for our pipeline can be found [here](https://github.com/cloudfoundry/runtime-ci/blob/master/pipelines/cf-deployment.yml).
 
 [cf-deployment-concourse-url]: https://release-integration.ci.cf-app.com/teams/main/pipelines/cf-deployment
-[cf-release-url]: https://github.com/cloudfoundry/cf-release/tree/master/templates
 
 ## <a name='vars-store'></a>Migrating from Vars Store to CredHub
 CredHub is default as of cf-deployment release v
