@@ -4,6 +4,7 @@
 * <a href='#purpose'>Purpose</a>
 * <a href='#tls'>TLS validation</a>
 * <a href='#deploying-cf'>Deploying CF</a>
+* <a href='#versioning'>Release Versioning</a>
 * <a href='#contributing'>Contributing</a>
 * <a href='#setup'>Setup and Prerequisites</a>
 * <a href='#ops-files'>Ops Files</a>
@@ -59,6 +60,10 @@ for all components.
 
 ## <a name='deploying-cf'></a>Deploying CF
 Deployment instructions are verbose so we've moved them into a [dedicated deployment guide here](deployment-guide.md).
+
+## <a name='versioning'></a>Release Versioning
+The Semantic Versioning scheme has been adopted by cf-deployment.
+A detailed description of how [Semantic Versioning is applied to CF-Deployment can be found here](texts/versioning.md).
 
 ## <a name='contributing'></a>Contributing to CF-Deployment
 Although the default branch for the repository is [`master`](https://github.com/cloudfoundry/cf-deployment/tree/master),
