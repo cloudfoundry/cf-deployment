@@ -1,3 +1,7 @@
+### Is this a PR to [the develop branch](https://github.com/cloudfoundry/cf-deployment/tree/develop) of cf-deployment?
+
+_Only PR's to develop are accepted._
+
 ### WHAT is this change about?
 
 _Describe the change._

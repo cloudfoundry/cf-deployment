@@ -29,13 +29,11 @@
             ((application_ca.certificate))
             ((credhub_ca.certificate))
             ((uaa_ca.certificate))
-    - name: containerd
-      release: garden-runc
     - name: garden
       release: garden-runc
       properties:
         garden:
-          experimental_containerd_mode: true
+          containerd_mode: true
           cleanup_process_dirs_on_wait: true
           default_container_grace_time: 0
           destroy_containers_on_start: true

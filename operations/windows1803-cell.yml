@@ -116,7 +116,7 @@
   value:
     alias: windows1803
     os: windows1803
-    version: "1803.5"
+    version: "1803.6"
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2016?
   value:
@@ -163,16 +163,16 @@
   path: /releases/name=winc?
   value:
     name: winc
-    sha1: 333d9de95485167dea7ec892fdf47a100c0c1a1e
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/winc-release?v=1.7.0
-    version: 1.7.0
+    sha1: a63da4a7c29855f2796b09979b60b4a2838c5809
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/winc-release?v=1.8.0
+    version: 1.8.0
 - type: replace
   path: /releases/name=windows1803fs?
   value:
     name: windows1803fs
-    sha1: 51ef779ed82a0c76d10ed1987436aa8cb6596906
-    url: https://bosh.io/d/github.com/cloudfoundry/windows1803fs-online-release?v=1.9.0
-    version: 1.9.0
+    sha1: c56ccbda02888b06e8d96a46c34ae9d51f031ba8
+    url: https://bosh.io/d/github.com/cloudfoundry/windows1803fs-online-release?v=2.0.0
+    version: 2.0.0
 - type: replace
   path: /releases/name=windows-utilities?
   value:

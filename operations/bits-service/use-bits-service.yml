@@ -31,6 +31,9 @@
     - name: bits-service
       properties:
         bits-service:
+          active_signing_key:
+            key_id: key1
+            secret: ((bits_service_secret))
           app_stash:
             blobstore_type: webdav
             directory_key: cc-resources
@@ -73,7 +76,6 @@
               username: blobstore-user
           private_endpoint: https://bits.service.cf.internal
           public_endpoint: https://bits.((system_domain))
-          secret: ((bits_service_secret))
           signing_users:
           - password: ((bits_service_signing_password))
             username: admin
@@ -142,6 +144,6 @@
   path: /releases/-
   value:
     name: bits-service
-    sha1: 0ef7d34f2081dd42e22e4c861fde427bcf728ba8
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/bits-service-release?v=2.21.0
-    version: 2.21.0
+    sha1: 7d2c7b38fd40e1d0e2d00bd2151d6f8b8e85152d
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/bits-service-release?v=2.24.0
+    version: 2.24.0

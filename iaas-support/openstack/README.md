@@ -1,5 +1,5 @@
 # Deploying Cloud Foundry on OpenStack with BOSH
-
+**Note about support:** The Release Integration team does not maintain nor validate OpenStack deployments and OpenStack deployers must rely on the general CF community for support.
 ## Prerequisites
 
 You'll need to following to proceed:
