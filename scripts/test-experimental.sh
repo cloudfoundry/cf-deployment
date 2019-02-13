@@ -50,8 +50,8 @@ test_experimental_ops() {
       check_interpolation "name: enable-routing-integrity-windows1803.yml" "../windows1803-cell.yml" "-o enable-routing-integrity-windows1803.yml"
       check_interpolation "name: enable-routing-integrity-windows2016.yml" "../windows2016-cell.yml" "-o enable-routing-integrity-windows2016.yml"
 
-      check_interpolation "add-syslog-agent.yml"
-      check_interpolation "name: add-syslog-agent-windows1803.yml" "../windows1803-cell.yml" "-o add-syslog-agent.yml" "-o add-syslog-agent-windows1803.yml"
+      check_interpolation "name: add-syslog-agent.yml" "deploy-forwarder-agent.yml" "-o add-syslog-agent.yml"
+      check_interpolation "name: add-syslog-agent-windows1803.yml" "../windows1803-cell.yml" "-o deploy-forwarder-agent.yml" "-o add-syslog-agent.yml" "-o add-syslog-agent-windows1803.yml"
     popd > /dev/null # operations/experimental
   popd > /dev/null
   exit $exit_code
