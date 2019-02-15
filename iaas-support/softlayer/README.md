@@ -1,4 +1,5 @@
 # Deploy Cloud Foundry on a Softlayer Bosh-Lite Director
+**Note about support:** The Release Integration team does not maintain nor validate Softlayer deployments and Softlayer deployers must rely on the general CF community for support.
 
 To deploy Cloud Foundry on a Softlayer VM with a Bosh-Lite director,
 you will need to follow

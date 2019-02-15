@@ -3,19 +3,7 @@
   value: 3459
 
 - type: replace
-  path: /variables/-
-  value:
-    name: forwarder_agent
-    type: certificate
-    options:
-      ca: loggregator_ca
-      common_name: metron
-      extended_key_usage:
-      - client_auth
-      - server_auth
-
-- type: replace
-  path: /addons/-
+  path: /addons/name=forwarder_agent?
   value:
     name: forwarder_agent
     include:
@@ -27,30 +15,21 @@
       properties:
         tls:
           ca_cert: "((loggregator_ca.certificate))"
-          cert: "((forwarder_agent.certificate))"
-          key: "((forwarder_agent.private_key))"
+          cert: "((loggregator_tls_agent.certificate))"
+          key: "((loggregator_tls_agent.private_key))"
 
 - type: replace
-  path: /addons/-
+  path: /instance_groups/name=api/jobs/-
   value:
-    name: udp_forwarder
-    include:
-      stemcell:
-      - os: ubuntu-xenial
-    jobs:
-    - name: loggr-udp-forwarder
-      release: loggregator-agent
-      properties:
-        loggregator:
-          ingress_port: 3459
-          tls:
-            ca: "((loggregator_ca.certificate))"
-            cert: "((loggregator_tls_agent.certificate))"
-            key: "((loggregator_tls_agent.private_key))"
-
-- type: replace
-  path: /addons/name=loggregator_agent/jobs/name=loggregator_agent/properties/disable_udp?
-  value: true
+    name: loggr-udp-forwarder
+    release: loggregator-agent
+    properties:
+      loggregator:
+        tls:
+          ca: "((loggregator_ca.certificate))"
+          cert: "((loggregator_tls_agent.certificate))"
+          key: "((loggregator_tls_agent.private_key))"
+          cn: "cloud-controller-ng.service.cf.internal"
 
 - type: replace
   path: /addons/name=loggregator_agent/jobs/name=loggr-expvar-forwarder/properties/counters/-
