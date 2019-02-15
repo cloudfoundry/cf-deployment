@@ -18,7 +18,6 @@ test_experimental_ops() {
       check_interpolation "enable-bpm-garden.yml"
       check_interpolation "enable-iptables-logger.yml"
       check_interpolation "enable-mysql-tls.yml"
-      check_interpolation "enable-nfs-volume-service-credhub.yml"
       check_interpolation "enable-oci-phase-1.yml"
       check_interpolation "enable-smb-volume-service.yml"
       check_interpolation "enable-suspect-actual-lrp-generation.yml"
@@ -29,7 +28,6 @@ test_experimental_ops() {
 
       check_interpolation "infrastructure-metrics.yml"
 
-      check_interpolation "name: migrate-nfsbroker-mysql-to-credhub.yml" "${home}/operations/enable-nfs-volume-service.yml" "-o enable-nfs-volume-service-credhub.yml" "-o migrate-nfsbroker-mysql-to-credhub.yml" -l "${home}/operations/example-vars-files/vars-migrate-nfsbroker-mysql-to-credhub.yml"
       check_interpolation "name: migrate-nfsbroker-mysql-to-credhub.yml" "${home}/operations/enable-nfs-volume-service.yml" "-o migrate-nfsbroker-mysql-to-credhub.yml" -l "${home}/operations/example-vars-files/vars-migrate-nfsbroker-mysql-to-credhub.yml"
 
       check_interpolation "name: perm-service.yml" "enable-mysql-tls.yml" "-o perm-service.yml -v perm_uaa_clients_cc_perm_secret=perm_secret -v perm_uaa_clients_perm_monitor_secret=perm_monitor_secret"
