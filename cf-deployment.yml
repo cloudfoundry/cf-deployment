@@ -1209,6 +1209,8 @@ instance_groups:
       ccdb: *ccdb
       system_domain: "((system_domain))"
       routing_api: *routing_api
+      ssl:
+        skip_cert_verify: true
       uaa:
         ca_cert: "((uaa_ca.certificate))"
         clients:
