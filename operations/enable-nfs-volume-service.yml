@@ -20,6 +20,24 @@
     authorized-grant-types: client_credentials
     secret: ((nfs-broker-push-uaa-client-secret))
 - type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/nfs-broker-credhub-client?
+  value:
+    authorities: credhub.read,credhub.write
+    authorized-grant-types: client_credentials
+    secret: ((nfs-broker-credhub-uaa-client-secret))
+- type: replace
+  path: /instance_groups/name=credhub/jobs/name=credhub/properties/credhub/authorization/permissions/-
+  value:
+    actors:
+    - uaa-client:nfs-broker-credhub-client
+    operations:
+    - read
+    - write
+    - delete
+    - read_acl
+    - write_acl
+    path: /nfsbroker/*
+- type: replace
   path: /instance_groups/-
   value:
     azs:
@@ -34,6 +52,12 @@
           cf:
             client_id: nfs-broker-push-client
             client_secret: ((nfs-broker-push-uaa-client-secret))
+          create_credhub_security_group: true
+          create_sql_security_group: false
+          credhub:
+            uaa_ca_cert: ((uaa_ca.certificate))
+            uaa_client_id: nfs-broker-credhub-client
+            uaa_client_secret: ((nfs-broker-credhub-uaa-client-secret))
           db:
             ca_cert: ((pxc_server_ca.certificate))
             driver: mysql
@@ -47,6 +71,7 @@
           password: ((nfs-broker-password))
           skip_cert_verify: true
           space: nfs-broker-space
+          store_id: nfsbroker
           syslog_url: ""
           username: nfs-broker
       release: nfs-volume
