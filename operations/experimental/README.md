@@ -24,6 +24,8 @@ and the ops-files will be removed.
 | [`add-deployment-updater.yml`](add-deployment-updater.yml) | Add `cc_deployment_updater` job to `scheduler` vm, which enables zero downtime app deployments. | | **NO** |
 | [`add-syslog-agent.yml`](add-syslog-agent.yml) |  Add agent to all vms for the purpose of egressing application logs to syslog | Requires `deploy-forwarder-agent.yml` | **YES** |
 | [`add-syslog-agent-windows1803.yml`](add-syslog-agent-windows1803.yml) |  Add agent to windows1803 Diego cells for the purpose of egressing application logs to syslog | Requires `../windows1803-cell.yml`, `add-syslog-agent.yml` and `deploy-forwarder-agent.yml` | **NO** |
+| [`add-system-metrics-agent.yml`](add-system-metrics-agent.yml) | Add agent to all vms with the purpose of egressing system metrics | | **NO** |
+| [`add-system-metrics-agent-windows1803.yml`](add-system-metrics-agent-windows1803.yml) | Add agent to windows1803 Diego cells for the purpose of egressing system metrics | | **NO** |
 | [`deploy-forwarder-agent.yml`](deploy-forwarder-agent.yml) | Addons for forwarder and UDP forwarder agents, and configuration/certs. | | **YES** |
 | [`disable-interpolate-service-bindings.yml`](disable-interpolate-service-bindings.yml) | Disables the interpolation of CredHub service credentials by Cloud Controller. | | **NO** |
 | [`enable-bpm-garden.yml`](enable-bpm-garden.yml) | Enables the [BOSH Process Manager](https://github.com/cloudfoundry-incubator/bpm-release) for Garden. | This ops file **cannot** be deployed in conjunction with `enable-oci-phase-1.yml`. | **NO** |

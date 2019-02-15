@@ -1,0 +1,11 @@
+- type: replace
+  path: /instance_groups/name=windows1803-cell/jobs/name=loggr-system-metrics-agent-windows?
+  value:
+    name: loggr-system-metrics-agent-windows
+    release: loggregator-agent
+    properties:
+      system_metrics:
+          tls:
+            ca_cert: "((system_metrics.ca))"
+            cert: "((system_metrics.certificate))"
+            key: "((system_metrics.private_key))"
