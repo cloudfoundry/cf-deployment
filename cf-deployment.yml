@@ -1713,7 +1713,6 @@ instance_groups:
             operations: [read]
         ca_certificate: |
           ((credhub_ca.certificate))
-          ((uaa_ca.certificate))
         data_storage:
           database: credhub
           host: sql-db.service.cf.internal
