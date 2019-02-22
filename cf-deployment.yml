@@ -1713,6 +1713,8 @@ instance_groups:
           - path: /*
             actors: ["uaa-client:cc_service_key_client"]
             operations: [read]
+        ca_certificate: |
+          ((credhub_ca.certificate))
         data_storage:
           database: credhub
           host: sql-db.service.cf.internal
@@ -1730,6 +1732,7 @@ instance_groups:
           providers:
           - name: internal-provider
             type: internal
+        internal_url: https://credhub.service.cf.internal
         tls: ((credhub_tls))
     release: credhub
 - name: rotate-cc-database-key
