@@ -1,0 +1,51 @@
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: nfstestldapserver
+    azs: [z1]
+    instances: 1
+    stemcell: default
+    vm_type: small
+    networks: [ name: default ]
+    jobs:
+    - name: nfstestldapserver
+      release: nfs-volume
+      properties:
+        ldap:
+          ssl:
+            active: true
+            ca_cert: ((ldap_test_server_ca.certificate))
+            server_cert: ((ldap_test_server_ssl.certificate))
+            server_key: ((ldap_test_server_ssl.private_key))
+
+- type: replace
+  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/domain=nfstestldapserver.service.cf.internal?
+  value:
+    domain: nfstestldapserver.service.cf.internal
+    targets:
+    - query: '*'
+      instance_group: nfstestldapserver
+      deployment: cf
+      network: default
+      domain: bosh
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=nfsv3driver/properties/nfsv3driver?/ldap_ca_cert?
+  value: ((ldap_test_server_ca.certificate))
+
+- type: replace
+  path: /variables/-
+  value:
+    name: ldap_test_server_ca
+    type: certificate
+    options:
+      is_ca: true
+      common_name: ldap_test_server_ca
+- type: replace
+  path: /variables/-
+  value:
+    name: ldap_test_server_ssl
+    type: certificate
+    options:
+      ca: ldap_test_server_ca
+      common_name: nfstestldapserver.service.cf.internal
