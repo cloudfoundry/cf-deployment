@@ -13,7 +13,7 @@ test_test_ops() {
       check_interpolation "add-persistent-isolation-segment-router.yml"
       check_interpolation "alter-ssh-proxy-redirect-uri.yml"
       check_interpolation "enable-nfs-test-server.yml"
-      check_interpolation "name: enable-nfs-test-ldapserver.yml" "${home}/operations/enable-nfs-volume-service.yml" "-o enable-nfs-test-ldapserver.yml"
+      check_interpolation "name: enable-nfs-test-ldapserver.yml" "${home}/operations/enable-nfs-volume-service.yml" "-o enable-nfs-test-server.yml" "-o enable-nfs-test-ldapserver.yml"
       check_interpolation "enable-smb-test-server.yml" "-v smb-password=FOO.PASS" "-v smb-username=BAR.USER"
       check_interpolation "name: add-persistent-isolation-segment-logging-system.yml" "add-persistent-isolation-segment-diego-cell.yml" "-o add-persistent-isolation-segment-logging-system.yml"
       check_interpolation "name: add-persistent-isolation-segment-syslog-drain.yml" "add-persistent-isolation-segment-diego-cell.yml" "-o add-persistent-isolation-segment-logging-system.yml" "-o add-persistent-isolation-segment-syslog-drain.yml"
