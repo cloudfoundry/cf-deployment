@@ -1612,6 +1612,8 @@ instance_groups:
         internal_url: https://uaa.service.cf.internal:8443
         ca_cert: "((uaa_ca.certificate))"
       loggregator:
+        outgoing_cert: "((loggregator_trafficcontroller_tls.certificate))"
+        outgoing_key: "((loggregator_trafficcontroller_tls.private_key))"
         tls:
           cc_trafficcontroller:
             cert: "((loggregator_tls_cc_tc.certificate))"
@@ -1646,6 +1648,8 @@ instance_groups:
     properties:
       http:
         address: "0.0.0.0:8088"
+        cert: "((loggregator_rlp_gateway_tls.certificate))"
+        key: "((loggregator_rlp_gateway_tls.private_key))"
       logs_provider:
         ca_cert: "((loggregator_ca.certificate))"
         client_cert: "((loggregator_rlp_gateway.certificate))"
@@ -1672,13 +1676,15 @@ instance_groups:
           uris:
           - loggregator.((system_domain))
         - name: doppler
-          port: 8081
+          tls_port: 8081
           registration_interval: 20s
+          server_cert_domain_san: doppler.((system_domain))
           uris:
           - doppler.((system_domain))
           - "*.doppler.((system_domain))"
         - name: rlp-gateway
-          port: 8088
+          tls_port: 8088
+          server_cert_domain_san: log-stream.((system_domain))
           registration_interval: 20s
           uris:
           - log-stream.((system_domain))
@@ -2230,6 +2236,24 @@ variables:
   options:
     ca: pxc_server_ca
     common_name: sql-db.service.cf.internal
+
+- name: loggregator_rlp_gateway_tls
+  type: certificate
+  options:
+    alternative_names:
+    - log-stream.((system_domain))
+    - log-api.service.cf.internal
+    ca: service_cf_internal_ca
+    common_name: log-stream.((system_domain))
+
+- name: loggregator_trafficcontroller_tls
+  type: certificate
+  options:
+    alternative_names:
+    - doppler.((system_domain))
+    - log-api.service.cf.internal
+    ca: service_cf_internal_ca
+    common_name: doppler.((system_domain))
 
 releases:
 - name: binary-buildpack
