@@ -33,7 +33,6 @@
           ca: "((loggregator_ca.certificate))"
           cert: "((loggregator_tls_agent.certificate))"
           key: "((loggregator_tls_agent.private_key))"
-          cn: "cloud-controller-ng.service.cf.internal"
 
 - type: replace
   path: /instance_groups/name=tcp-router/jobs/-
@@ -46,7 +45,6 @@
           ca: "((loggregator_ca.certificate))"
           cert: "((loggregator_tls_agent.certificate))"
           key: "((loggregator_tls_agent.private_key))"
-          cn: "cloud-controller-ng.service.cf.internal"
 
 - type: replace
   path: /instance_groups/name=router/jobs/-
@@ -59,7 +57,6 @@
           ca: "((loggregator_ca.certificate))"
           cert: "((loggregator_tls_agent.certificate))"
           key: "((loggregator_tls_agent.private_key))"
-          cn: "cloud-controller-ng.service.cf.internal"
 
 - type: replace
   path: /addons/name=loggregator_agent/jobs/name=loggr-expvar-forwarder/properties/counters/-
