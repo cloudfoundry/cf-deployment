@@ -3,6 +3,10 @@
   value: 3459
 
 - type: replace
+  path: /addons/name=loggregator_agent/jobs/name=loggregator_agent/properties/disable_udp?
+  value: true
+
+- type: replace
   path: /addons/name=forwarder_agent?
   value:
     name: forwarder_agent
@@ -20,6 +24,32 @@
 
 - type: replace
   path: /instance_groups/name=api/jobs/-
+  value:
+    name: loggr-udp-forwarder
+    release: loggregator-agent
+    properties:
+      loggregator:
+        tls:
+          ca: "((loggregator_ca.certificate))"
+          cert: "((loggregator_tls_agent.certificate))"
+          key: "((loggregator_tls_agent.private_key))"
+          cn: "cloud-controller-ng.service.cf.internal"
+
+- type: replace
+  path: /instance_groups/name=tcp-router/jobs/-
+  value:
+    name: loggr-udp-forwarder
+    release: loggregator-agent
+    properties:
+      loggregator:
+        tls:
+          ca: "((loggregator_ca.certificate))"
+          cert: "((loggregator_tls_agent.certificate))"
+          key: "((loggregator_tls_agent.private_key))"
+          cn: "cloud-controller-ng.service.cf.internal"
+
+- type: replace
+  path: /instance_groups/name=router/jobs/-
   value:
     name: loggr-udp-forwarder
     release: loggregator-agent
