@@ -89,7 +89,7 @@ test_use_trusted_ca_cert_for_apps_doesnt_overwrite_existing_trusted_cas() {
   local new_trusted_app_cas
   new_trusted_app_cas=$(bosh int cf-deployment.yml -o operations/use-trusted-ca-cert-for-apps.yml --path /instance_groups/name=diego-cell/jobs/name=cflinuxfs2-rootfs-setup/properties/cflinuxfs2-rootfs/trusted_certs)
 
-  if [[ $existing_trusted_app_cas$'\n- ((trusted_cert_for_apps.ca))' != $new_trusted_app_cas ]]; then
+  if [[ $existing_trusted_app_cas$'\n((trusted_cert_for_apps.ca))' != $new_trusted_app_cas ]]; then
     fail "use-trusted-ca-cert-for-apps.yml overwrites existing trusted CAs from cf-deployment.yml.\nTrusted CAs before applying the ops file:\n\n$existing_trusted_app_cas\n\nTrusted CAs after applying the ops file:\n\n$new_trusted_app_cas"
   else
     pass "use-trusted-ca-cert-for-apps.yml"
