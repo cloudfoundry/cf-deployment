@@ -18,6 +18,7 @@ test_experimental_ops() {
       check_interpolation "enable-bpm-garden.yml"
       check_interpolation "enable-iptables-logger.yml"
       check_interpolation "enable-mysql-tls.yml"
+      check_interpolation "enable-nfs-volume-service-credhub.yml"
       check_interpolation "enable-oci-phase-1.yml"
       check_interpolation "enable-smb-volume-service.yml"
       check_interpolation "enable-suspect-actual-lrp-generation.yml"
