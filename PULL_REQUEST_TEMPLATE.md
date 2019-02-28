@@ -32,7 +32,7 @@ See [previous release notes](https://github.com/cloudfoundry/cf-deployment/relea
 
 ### Does this PR introduce a breaking change? 
 
-_Does this introduce changes that would require operators to take action in order to deploy without a failure?_
+_Does this introduce changes that would require operators to take action in order to deploy without a failure? Please see below for few examples._
 
 **Examples of breaking changes:**
 - changes the name of a job or instance group
@@ -40,6 +40,7 @@ _Does this introduce changes that would require operators to take action in orde
 - deletes a job or instance group
 - changes the name of a credential
 - requires out-of-band manual intervention on the part of the operator
+- removes experimental ops file from `./operations/` or `./operations/experimental` folders
 
 
 

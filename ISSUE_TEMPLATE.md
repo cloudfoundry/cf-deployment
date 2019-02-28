@@ -9,7 +9,7 @@ _What steps/actions led to the issue?_
 [cf-deployment vX.Y.Z here]
 
 
-### Please include the `bosh deploy...` command, including all the operations files:
+### Please include the `bosh deploy...` command, including all the operations files (plus any experimental operation files you're using):
 
 [bosh deploy command here]
 
