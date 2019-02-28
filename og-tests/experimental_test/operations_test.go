@@ -10,21 +10,12 @@ const testDirectory = "operations/experimental"
 
 var experimentalTests = map[string]helpers.OpsFileTestParams{
 	"add-credhub-lb.yml":         {},
-	"add-deployment-updater.yml": {},
-	"add-deployment-updater-external-db.yml": {
-		Ops:       []string{"add-deployment-updater.yml", "../use-external-dbs.yml", "add-deployment-updater-external-db.yml"},
-		VarsFiles: []string{"../example-vars-files/vars-use-external-dbs.yml"},
-	},
-	"add-deployment-updater-postgres.yml": {
-		Ops: []string{"add-deployment-updater.yml", "../use-postgres.yml", "add-deployment-updater-postgres.yml"},
-	},
 	"add-syslog-agent.yml": {
 		Ops: []string{"deploy-forwarder-agent.yml"},
 	},
 	"add-syslog-agent-windows1803.yml": {
 		Ops: []string{"../windows1803-cell.yml", "deploy-forwarder-agent.yml", "add-syslog-agent.yml", "add-syslog-agent-windows1803.yml"},
 	},
-
 	"add-system-metrics-agent.yml": {},
 	"add-system-metrics-agent-windows1803.yml": {
 		Ops: []string{"../windows1803-cell.yml", "add-system-metrics-agent.yml", "add-system-metrics-agent-windows1803.yml"},

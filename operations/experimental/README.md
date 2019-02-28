@@ -19,9 +19,6 @@ and the ops-files will be removed.
 | Name | Purpose | Notes | Currently validated in Release Integration CI pipelines? |
 |:---  |:---     |:---   |:---   |
 | [`add-credhub-lb.yml`](add-credhub-lb.yml) |  **[DEPRECATED]** Use load balancer to expose external address for CredHub. | | **NO** |
-| [`add-deployment-updater-external-db.yml`](add-deployment-updater-external-db.yml) | Use an external database for the `cc_deployment_updater` job. | Requires `add-deployment-updater.yml` and `use-external-dbs.yml` | **NO** |
-| [`add-deployment-updater-postgres.yml`](add-deployment-updater-postgres.yml) | Use a postgres database for the `cc_deployment_updater` job. | Requires `add-deployment-updater.yml` | **NO** |
-| [`add-deployment-updater.yml`](add-deployment-updater.yml) | Add `cc_deployment_updater` job to `scheduler` vm, which enables zero downtime app deployments. | | **NO** |
 | [`add-syslog-agent.yml`](add-syslog-agent.yml) |  Add agent to all vms for the purpose of egressing application logs to syslog | Requires `deploy-forwarder-agent.yml` | **YES** |
 | [`add-syslog-agent-windows1803.yml`](add-syslog-agent-windows1803.yml) |  Add agent to windows1803 Diego cells for the purpose of egressing application logs to syslog | Requires `../windows1803-cell.yml`, `add-syslog-agent.yml` and `deploy-forwarder-agent.yml` | **NO** |
 | [`add-system-metrics-agent.yml`](add-system-metrics-agent.yml) | Add agent to all vms with the purpose of egressing system metrics | | **NO** |

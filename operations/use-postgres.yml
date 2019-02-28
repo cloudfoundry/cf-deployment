@@ -193,3 +193,9 @@
   path: /variables/name=galera_server_certificate?
 - type: remove
   path: /variables/name=mysql_server_certificate?
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties/ccdb/db_scheme
+  value: postgres
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties/ccdb/port
+  value: 5524
