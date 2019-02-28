@@ -1,4 +1,5 @@
 # Deploying Cloud Foundry on Alibaba Cloud with BOSH
+**Note about support:** The Release Integration team does not maintain nor validate Alibaba Cloud deployments and Alibaba Cloud deployers must rely on the general CF community for support.
 
 In this directory, we provide an example `cloud-config.yml` for Alibaba Cloud.
 

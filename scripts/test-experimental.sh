@@ -26,9 +26,6 @@ test_experimental_ops() {
 
       check_interpolation "infrastructure-metrics.yml"
 
-      check_interpolation "name: migrate-nfsbroker-mysql-to-credhub.yml" "${home}/operations/enable-nfs-volume-service.yml" "-o enable-nfs-volume-service-credhub.yml" "-o migrate-nfsbroker-mysql-to-credhub.yml" -l "${home}/operations/example-vars-files/vars-migrate-nfsbroker-mysql-to-credhub.yml"
-      check_interpolation "name: migrate-nfsbroker-mysql-to-credhub.yml" "${home}/operations/enable-nfs-volume-service.yml" "-o migrate-nfsbroker-mysql-to-credhub.yml" -l "${home}/operations/example-vars-files/vars-migrate-nfsbroker-mysql-to-credhub.yml"
-
       check_interpolation "name: perm-service.yml" "enable-mysql-tls.yml" "-o perm-service.yml -v perm_uaa_clients_cc_perm_secret=perm_secret -v perm_uaa_clients_perm_monitor_secret=perm_monitor_secret"
       check_interpolation "name: perm-service-with-pxc-release.yml" "perm-service.yml" "-o ${home}/operations/use-pxc.yml" "-o perm-service-with-pxc-release.yml -v perm_uaa_clients_cc_perm_secret=perm_secret -v perm_uaa_clients_perm_monitor_secret=perm_monitor_secret"
       check_interpolation "name: perm-service-with-tcp-routing.yml" "perm-service.yml" "-o ${home}/operations/use-pxc.yml" "-o perm-service-with-pxc-release.yml -v perm_uaa_clients_cc_perm_secret=perm_secret -v perm_uaa_clients_perm_monitor_secret=perm_monitor_secret" "-o perm-service-with-tcp-routing.yml"
@@ -46,6 +43,13 @@ test_experimental_ops() {
       check_interpolation "name: windows-enable-component-syslog.yml" "windows-enable-component-syslog.yml" "-l ${home}/operations/addons/example-vars-files/vars-enable-component-syslog.yml"
       check_interpolation "name: enable-routing-integrity-windows1803.yml" "../windows1803-cell.yml" "-o enable-routing-integrity-windows1803.yml"
       check_interpolation "name: enable-routing-integrity-windows2016.yml" "../windows2016-cell.yml" "-o enable-routing-integrity-windows2016.yml"
+
+      check_interpolation "name: add-syslog-agent.yml" "deploy-forwarder-agent.yml" "-o add-syslog-agent.yml"
+      check_interpolation "name: add-syslog-agent-windows1803.yml" "../windows1803-cell.yml" "-o deploy-forwarder-agent.yml" "-o add-syslog-agent.yml" "-o add-syslog-agent-windows1803.yml"
+
+      check_interpolation "add-system-metrics-agent.yml"
+      check_interpolation "name: add-system-metrics-agent-windows1803.yml" "../windows1803-cell.yml" "-o add-system-metrics-agent.yml" "-o add-system-metrics-agent-windows1803.yml"
+
     popd > /dev/null # operations/experimental
   popd > /dev/null
   exit $exit_code

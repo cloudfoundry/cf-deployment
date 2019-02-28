@@ -1,0 +1,44 @@
+- type: replace
+  path: /addons/name=loggr-system-metrics-agent?
+  value:
+    name: loggr-system-metrics-agent
+    include:
+      stemcell:
+      - os: ubuntu-xenial
+    exclude:
+      jobs:
+      - name: smoke_tests
+        release: cf-smoke-tests
+    jobs:
+    - name: loggr-system-metrics-agent
+      release: loggregator-agent
+      properties:
+        system_metrics:
+          tls:
+            ca_cert: "((system_metrics.ca))"
+            cert: "((system_metrics.certificate))"
+            key: "((system_metrics.private_key))"
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=loggr-metric-scraper?
+  value:
+    name: loggr-metric-scraper
+    release: loggregator-agent
+    properties:
+      system_metrics:
+        tls:
+          ca_cert: "((system_metrics.ca))"
+          cert: "((system_metrics.certificate))"
+          key: "((system_metrics.private_key))"
+
+- type: replace
+  path: /variables/name=system_metrics?
+  value:
+    name: system_metrics
+    type: certificate
+    options:
+      ca: loggregator_ca
+      common_name: system-metrics
+      extended_key_usage:
+      - client_auth
+      - server_auth

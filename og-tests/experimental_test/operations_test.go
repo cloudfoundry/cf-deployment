@@ -10,6 +10,16 @@ const testDirectory = "operations/experimental"
 
 var experimentalTests = map[string]helpers.OpsFileTestParams{
 	"add-credhub-lb.yml":         {},
+	"add-syslog-agent.yml": {
+		Ops: []string{"deploy-forwarder-agent.yml"},
+	},
+	"add-syslog-agent-windows1803.yml": {
+		Ops: []string{"../windows1803-cell.yml", "deploy-forwarder-agent.yml", "add-syslog-agent.yml", "add-syslog-agent-windows1803.yml"},
+	},
+	"add-system-metrics-agent.yml": {},
+	"add-system-metrics-agent-windows1803.yml": {
+		Ops: []string{"../windows1803-cell.yml", "add-system-metrics-agent.yml", "add-system-metrics-agent-windows1803.yml"},
+	},
 	"deploy-forwarder-agent.yml":               {},
 	"disable-interpolate-service-bindings.yml": {},
 	"enable-bpm-garden.yml":                    {},
@@ -31,10 +41,6 @@ var experimentalTests = map[string]helpers.OpsFileTestParams{
 	"enable-traffic-to-internal-networks.yml":  {},
 	"fast-deploy-with-downtime-and-danger.yml": {},
 	"infrastructure-metrics.yml":               {},
-	"migrate-nfsbroker-mysql-to-credhub.yml": {
-		Ops:       []string{"../enable-nfs-volume-service.yml", "migrate-nfsbroker-mysql-to-credhub.yml"},
-		VarsFiles: []string{"../example-vars-files/vars-migrate-nfsbroker-mysql-to-credhub.yml"},
-	},
 	"perm-service.yml": {
 		Ops:  []string{"enable-mysql-tls.yml", "perm-service.yml"},
 		Vars: []string{"perm_uaa_clients_cc_perm_secret=perm_secret", "perm_uaa_clients_perm_monitor_secret=perm_monitor_secret"},

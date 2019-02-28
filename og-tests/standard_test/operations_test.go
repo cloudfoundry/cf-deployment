@@ -105,6 +105,9 @@ var standardTests = map[string]helpers.OpsFileTestParams{
 	"use-offline-windows2016fs.yml": {
 		Ops: []string{"windows2016-cell.yml", "use-offline-windows2016fs.yml"},
 	},
+	"use-operator-provided-router-tls-certificates.yml": {
+		VarsFiles: []string{"example-vars-files/vars-use-operator-provided-router-tls-certificates.yml"},
+	},
 	"use-postgres.yml": {},
 	"use-pxc-for-nfs-volume-service.yml": {
 		Ops: []string{"enable-nfs-volume-service.yml", "use-pxc.yml", "use-pxc-for-nfs-volume-service.yml"},

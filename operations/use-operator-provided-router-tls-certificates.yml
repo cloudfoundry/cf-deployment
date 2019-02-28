@@ -1,0 +1,8 @@
+---
+- type: replace
+  path: /instance_groups/name=router/jobs/name=gorouter/properties/router/tls_pem
+  value: ((router_tls_pem))
+- type: remove
+  path: /variables/name=router_ssl
+- type: remove
+  path: /variables/name=router_ca

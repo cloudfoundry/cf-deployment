@@ -4,16 +4,6 @@ One of the goals for cf-deployment
 is to provide a meaningful versioning scheme
 for Cloud Foundry operators.
 
-In the past,
-[cf-release](https://github.com/cloudfoundry/cf-release)
-was versioned with a single number
-that didn't provide the operator with any meaningful information.
-For example,
-the cf-release versions did not indicate
-the size or nature of the delta between cf-release versions,
-that an upgrade could be done without concerns about backwards compatibility,
-or whether a deployer could automatically update to the new version.
-
 ## Version Scheme
 cf-deployment uses [semantic versioning](https://server.org),
 insofar as that scheme makes sense for a deployment manifest.
@@ -34,7 +24,7 @@ semantic versioning plays a crucial role.
 
 ### Major versions
 As the semantic versioning specific states, one should increment:
-> MAJOR version when you when you make incompatible API changes.
+> MAJOR version when there are incompatible API changes
 
 For cf-deployment,
 the "API" we consider
@@ -48,19 +38,12 @@ then we will bump the major version.
 As noted earlier,
 the Cloud Foundry team values the ability
 to deploy continuously.
-As a result,
-we intend not to make backwards-incompatible changes
-without plenty of consideration
-or without good reason.
 Still,
-we don't want to treat major version bumps
-as something precious,
-and we'll allow them when they're necessary.
-We'll strive to make sure
-that we provide detailed documentation with major version bumps.
+we don't treat major version bumps
+as something precious and allow them as needed to support the continued development of the platform.
 
 ### Minor versions
-> MINOR version when you add functionality in a backwards-compatible manner,
+> MINOR version when changes are made in a backwards-compatible manner
 
 This will be the most common change to cf-deployment.
 Minor bumps will include new or updated functionality
@@ -71,56 +54,23 @@ Changes of this sort would include:
 - New or updated ops-files
 
 These updates can be deployed automatically,
-without manual intervention of any kind,
-including updates to the operators deploy command.
+without manual intervention.
 
 ### Patch versions
-> PATCH version when you make backwards-compatible bug fixes.
+> PATCH version when there are backwards-compatible bug fixes
 
-Based on the way our testing pipeline works,
-it's typically likely that bug fixes will be wrapped up
-with changes that add functionality.
-As such, bug fixes will often be made in minor,
-rather than patch,
-bumps.
-Still, we may use patch versions
-to encode small fixes that don't include new functionality.
-One possible use for patch version updates
-might be backported security fixes for older versions of cf-deployment.
+Because there are a large number of teams contributing to cf-deployment independently and asynchronously,
+most bug fixes will likely be included with changes that add functionality.
+As such, bug fixes will often be published in minor releases rather than patch releases.
+Although we may use patch versions
+to encode small fixes that don't include new functionality, so far our precedent is to include in minor version bumps.
 
 
 ### Versioning and Ops-files
-Maintaining a stable interface for user-defined ops-files will be very difficult.
-Essentially, we have to ensure that _nothing_ changes with regards to
+Maintaining a stable interface for user-defined, custom, ops-files is not a realistic contract to uphold.
+Essentially, we'd have to ensure that _nothing_ changes with regards to
 the visible manifest structure
 or
 even with the structure of properties as defined by releases.
 
-We can start with the following guarantee:
-moving jobs into new instance groups will prompt a major version bump.
-
-## On the language of versioning
-While cf-release is still king,
-it's common to hear people refer to version of cf-release as the "Cloud Foundry version"
--- for example, someone might ask,
-"What version of Cloud Foundry are you running?"
-A well-understood response would be,
-"I'm running v264."
-
-It may seem odd to suddenly "downgrade" to version `v1.0.0`
-when cf-deployment is promoted to the preferred manifest.
-During the twilight where both cf-release and cf-deployment
-are viable deployment mechanisms,
-we'd simply suggest that people be specific:
-
-> "I'm running cf-release v264."
->
-> "Oh, I'm running cf-deployment v1.2.0"
-
-Once cf-release is left on the ash heap of history,
-it seems reasonable that people might refer to cf-deployment versions
-as their "Cloud Foundry version."
-(Of course, everyone should remember
-  that we're likely to iterate.
-  In some years' time,
-  cf-deployment could be replaced as well.)
+We do consider the movement of existing jobs into new instance groups, or the renaming existing jobs, worthy of a major version bump.
