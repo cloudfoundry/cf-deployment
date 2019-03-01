@@ -113,6 +113,16 @@
 - type: replace
   path: /variables/-
   value:
+    name: nfs-broker-credhub-password
+    type: password
+- type: replace
+  path: /variables/-
+  value:
+    name: nfs-broker-credhub-uaa-client-secret
+    type: password
+- type: replace
+  path: /variables/-
+  value:
     name: nfs_ca
     options:
       common_name: nfs-ca
