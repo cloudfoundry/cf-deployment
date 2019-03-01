@@ -32,6 +32,9 @@ var testTests = map[string]helpers.OpsFileTestParams{
 	},
 	"alter-ssh-proxy-redirect-uri.yml": {},
 	"enable-nfs-test-server.yml":       {},
+	"enable-nfs-test-ldapserver.yml": {
+		Ops: []string{"../enable-nfs-volume-service.yml", "enable-nfs-test-server.yml", "enable-nfs-test-ldapserver.yml"},
+	},
 	"enable-smb-test-server.yml": {
 		Vars: []string{"smb-password=FOO.PASS", "smb-username=BAR.USER"},
 	},
