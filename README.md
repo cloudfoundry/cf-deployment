@@ -91,9 +91,11 @@ from the root of the repo.
    the [latest release of cf-deployment](https://github.com/cloudfoundry/cf-deployment/releases) 
    and tested with the latest version of [CAT's](https://github.com/cloudfoundry/cf-acceptance-tests/releases).
 
-**If you add an Ops-file, you will need to:** 
+**If you're adding an Ops-file, you will need to:** 
 1. document it in its corresponding README.
 1. add it to the ops file tests in `scripts/test`.
+
+**If you're promoting or deprecating Ops-file, please follow [Ops-file workflows](https://github.com/cloudfoundry/cf-deployment/blob/master/ops-file-promotion-workflow.md)** 
 
 
 ## <a name='setup'></a>Setup and Prerequisites
