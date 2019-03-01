@@ -237,6 +237,14 @@ main() {
     semantic_tests
   fi
 
+  echo
+
+  if [[ ${exit_code} = 0 ]]; then
+    echo -e "${GREEN}All tests passed.${NOCOLOR}"
+  else
+    echo -e "${RED}At least one test failed.${NOCOLOR}"
+  fi
+
   exit $exit_code
 }
 
