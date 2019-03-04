@@ -13,8 +13,6 @@
           dns_servers:
           - 172.30.0.1
       release: winc
-    - name: windows2019fs
-      release: windowsfs
     - name: groot
       properties:
         groot:
@@ -165,13 +163,6 @@
     sha1: b786fe4e67a85551ec5bb9bce4d8aed013b7b2cd
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/winc-release?v=1.9.0
     version: 1.9.0
-- type: replace
-  path: /releases/name=windowsfs?
-  value:
-    name: windowsfs
-    sha1: 5d93b7b20cbcbafc415b75a4d248d6c58cf1de82
-    url: https://bosh.io/d/github.com/cloudfoundry/windowsfs-online-release?v=1.0.0
-    version: 1.0.0
 - type: replace
   path: /releases/name=windows-utilities?
   value:
