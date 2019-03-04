@@ -28,6 +28,7 @@ var standardTests = map[string]helpers.OpsFileTestParams{
 	"enable-privileged-container-support.yml": {},
 	"enable-routing-integrity.yml":            {},
 	"enable-service-discovery.yml":            {},
+	"enable-smb-volume-service.yml":           {},
 	"migrate-cf-mysql-to-pxc.yml":             {},
 	"openstack.yml":                           {},
 	"override-app-domains.yml": {
