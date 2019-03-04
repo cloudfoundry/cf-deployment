@@ -32,6 +32,14 @@
           key: "((system_metrics.private_key))"
 
 - type: replace
+  path: /instance_groups/name=scheduler/jobs/name=leadership-election?
+  value:
+    name: leadership-election
+    release: leadership-election
+    properties:
+      port: 7100
+
+- type: replace
   path: /variables/name=system_metrics?
   value:
     name: system_metrics
@@ -42,3 +50,11 @@
       extended_key_usage:
       - client_auth
       - server_auth
+
+- type: replace
+  path: /releases/name=leadership-election?
+  value:
+    name: "leadership-election"
+    version: "1.0"
+    url: "https://bosh.io/d/github.com/cloudfoundry/leadership-election-release?v=1.0"
+    sha1: "b486a91e3ca2d43befd74bf3e647e719913844f8"
