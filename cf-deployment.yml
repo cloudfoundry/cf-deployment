@@ -1432,6 +1432,10 @@ instance_groups:
         source_id: log-cache
         addr: http://localhost:6060/debug/vars
         template: "{{.LogCache.AvailableSystemMemory}}"
+      - name: uptime
+        source_id: log-cache
+        addr: http://localhost:6060/debug/vars
+        template: "{{.LogCache.Uptime}}"
       - name: promql-instant-query-time
         source_id: log-cache
         addr: http://localhost:6060/debug/vars
