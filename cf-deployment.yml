@@ -1301,25 +1301,6 @@ instance_groups:
               cn: "cloud-controller-ng.service.cf.internal"
   - name: log-cache-scheduler
     release: log-cache
-  - name: log-cache-expvar-forwarder
-    release: log-cache
-    properties:
-      loggregator_agent:
-        tls:
-          ca_cert: "((loggregator_ca.certificate))"
-          cert: "((log_cache_to_loggregator_agent.certificate))"
-          key: "((log_cache_to_loggregator_agent.private_key))"
-      counters: []
-      gauges: []
-      maps:
-      - name: worker-assignments
-        source_id: log-cache-scheduler
-        addr: http://localhost:6064/debug/vars
-        template: "{{.WorkerAssignments | jsonMap}}"
-      - name: worker-health
-        source_id: log-cache-scheduler
-        addr: http://localhost:6064/debug/vars
-        template: "{{.WorkerHealth | jsonMap}}"
 - name: doppler
   azs:
   - z1
@@ -1366,107 +1347,12 @@ instance_groups:
           cert: ((logs_provider.certificate))
           key: ((logs_provider.private_key))
     release: log-cache
-  - name: log-cache-expvar-forwarder
+  - name: prom_scraper
+    consumes:
+      loggregator: {from: loggregator}
     properties:
-      loggregator_agent:
-        tls:
-          ca_cert: "((loggregator_ca.certificate))"
-          cert: "((log_cache_to_loggregator_agent.certificate))"
-          key: "((log_cache_to_loggregator_agent.private_key))"
-      maps: []
-      counters:
-        # Log Cache
-      - name: egress
-        source_id: log-cache
-        addr: http://localhost:6060/debug/vars
-        template: "{{.LogCache.Egress}}"
-      - name: ingress
-        source_id: log-cache
-        addr: http://localhost:6060/debug/vars
-        template: "{{.LogCache.Ingress}}"
-      - name: expired
-        source_id: log-cache
-        addr: http://localhost:6060/debug/vars
-        template: "{{.LogCache.Expired}}"
-      - name: dropped
-        source_id: log-cache
-        addr: http://localhost:6060/debug/vars
-        template: "{{.LogCache.Dropped}}"
-      - name: promql-timeout
-        source_id: log-cache
-        addr: http://localhost:6060/debug/vars
-        template: "{{.LogCache.PromQLTimeout}}"
-
-        # Nozzle
-      - name: egress
-        source_id: log-cache-nozzle
-        addr: http://localhost:6061/debug/vars
-        template: "{{.Nozzle.Egress}}"
-      - name: ingress
-        source_id: log-cache-nozzle
-        addr: http://localhost:6061/debug/vars
-        template: "{{.Nozzle.Ingress}}"
-      - name: err
-        source_id: log-cache-nozzle
-        addr: http://localhost:6061/debug/vars
-        template: "{{.Nozzle.Err}}"
-      - name: dropped
-        source_id: log-cache-nozzle
-        addr: http://localhost:6061/debug/vars
-        template: "{{.Nozzle.Dropped}}"
-      gauges:
-        # Log Cache
-      - name: cache-period
-        source_id: log-cache
-        addr: http://localhost:6060/debug/vars
-        template: "{{.LogCache.CachePeriod}}"
-      - name: store-size
-        source_id: log-cache
-        addr: http://localhost:6060/debug/vars
-        template: "{{.LogCache.StoreSize}}"
-      - name: total-system-memory
-        source_id: log-cache
-        addr: http://localhost:6060/debug/vars
-        template: "{{.LogCache.TotalSystemMemory}}"
-      - name: available-system-memory
-        source_id: log-cache
-        addr: http://localhost:6060/debug/vars
-        template: "{{.LogCache.AvailableSystemMemory}}"
-      - name: uptime
-        source_id: log-cache
-        addr: http://localhost:6060/debug/vars
-        template: "{{.LogCache.Uptime}}"
-      - name: promql-instant-query-time
-        source_id: log-cache
-        addr: http://localhost:6060/debug/vars
-        template: "{{.LogCache.PromQLInstantQueryTime}}"
-      - name: promql-range-query-time
-        source_id: log-cache
-        addr: http://localhost:6060/debug/vars
-        template: "{{.LogCache.PromQLRangeQueryTime}}"
-
-        # CF Auth Proxy
-      - name: last-uaa-latency
-        source_id: log-cache-cf-auth-proxy
-        addr: http://localhost:6065/debug/vars
-        template: "{{.CFAuthProxy.LastUAALatency}}"
-      - name: last-capi-v3-apps-latency
-        source_id: log-cache-cf-auth-proxy
-        addr: http://localhost:6065/debug/vars
-        template: "{{.CFAuthProxy.LastCAPIV3AppsLatency}}"
-      - name: last-capi-v2-list-service-instances-latency
-        source_id: log-cache-cf-auth-proxy
-        addr: http://localhost:6065/debug/vars
-        template: "{{.CFAuthProxy.LastCAPIV2ListServiceInstancesLatency}}"
-      - name: last-capi-v4-log-access-latency
-        source_id: log-cache-cf-auth-proxy
-        addr: http://localhost:6065/debug/vars
-        template: "{{.CFAuthProxy.LastCAPIV4LogAccessLatency}}"
-      - name: last-capi-v2-service-instances-latency
-        source_id: log-cache-cf-auth-proxy
-        addr: http://localhost:6065/debug/vars
-        template: "{{.CFAuthProxy.LastCAPIV2ServiceInstancesLatency}}"
-    release: log-cache
+      metrics_urls: "http://localhost:6060/metrics,http://localhost:6061/metrics,http://localhost:6065/metrics"
+    release: loggregator-agent
   - name: route_registrar
     properties:
       route_registrar:
