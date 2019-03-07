@@ -10,7 +10,7 @@ LIGHT_RED='\033[1;31m'
 YELLOW='\033[0;93m'
 NOCOLOR='\033[0m'
 
-: "${RUN_SEMANTIC:="false"}"
+: "${RUN_SEMANTIC:="true"}"
 
 script_home="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 home="$( cd "${script_home}/.." && pwd )"

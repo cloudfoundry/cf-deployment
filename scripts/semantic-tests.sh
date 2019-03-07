@@ -159,5 +159,5 @@ semantic_tests() {
     test_all_cas_references_from_ca_variables
     test_ops_files_dont_have_double_question_marks
   popd > /dev/null
-  exit $exit_code
 }
+
