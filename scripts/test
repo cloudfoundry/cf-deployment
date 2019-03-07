@@ -238,11 +238,10 @@ main() {
   fi
 
   echo
-
-  if [[ ${exit_code} = 0 ]]; then
-    echo -e "${GREEN}All tests passed.${NOCOLOR}"
+  if [ "$exit_code" == "0" ]; then
+    echo -e "${LIGHT_GREEN}All tests passed. ${NOCOLOR}"
   else
-    echo -e "${RED}At least one test failed.${NOCOLOR}"
+    echo -e "${RED}At least one test failed. ${NOCOLOR}"
   fi
 
   exit $exit_code
