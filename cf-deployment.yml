@@ -1,6 +1,6 @@
 ---
 name: cf
-manifest_version: v7.5.0
+manifest_version: v7.6.0
 update:
   canaries: 1
   canary_watch_time: 30000-1200000
@@ -1220,6 +1220,25 @@ instance_groups:
             secret: "((uaa_clients_cc-routing_secret))"
         ssl:
           port: 8443
+  - name: cc_deployment_updater
+    release: capi
+    properties:
+      cc:
+        db_encryption_key: ((cc_db_encryption_key))
+        mutual_tls:
+          ca_cert: "((service_cf_internal_ca.certificate))"
+          private_key: "((cc_tls.private_key))"
+          public_cert: "((cc_tls.certificate))"
+      ccdb:
+        databases:
+        - name: cloud_controller
+          tag: cc
+        db_scheme: mysql
+        port: 3306
+        roles:
+        - name: cloud_controller
+          password: ((cc_database_password))
+          tag: admin
   - name: statsd_injector
     release: statsd-injector
     properties: *statsd_injector_properties
@@ -1413,6 +1432,10 @@ instance_groups:
         source_id: log-cache
         addr: http://localhost:6060/debug/vars
         template: "{{.LogCache.AvailableSystemMemory}}"
+      - name: uptime
+        source_id: log-cache
+        addr: http://localhost:6060/debug/vars
+        template: "{{.LogCache.Uptime}}"
       - name: promql-instant-query-time
         source_id: log-cache
         addr: http://localhost:6060/debug/vars
@@ -2273,21 +2296,21 @@ releases:
   version: 2.22.0
   sha1: 2a485788cb41a2500844acf901ca32912ada495f
 - name: cf-smoke-tests
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=40.0.45
-  version: 40.0.45
-  sha1: 2f43541c64d843184913765560aba8e82c7133d3
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=40.0.46
+  version: 40.0.46
+  sha1: f1614779126730c88e0400a9e9482e6202aaff71
 - name: cf-syslog-drain
   url: https://bosh.io/d/github.com/cloudfoundry/cf-syslog-drain-release?v=9.1
   version: "9.1"
   sha1: 9dd7916e3855a4f9c26bf8a6a610db37addc546c
 - name: cflinuxfs2
-  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.268.0
-  version: 1.268.0
-  sha1: 076bb3345559095dfb779344ca84094ee69e3184
+  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.273.0
+  version: 1.273.0
+  sha1: fdd2e8cd44ca619f5400c7ed3237633ddfa85e96
 - name: cflinuxfs3
-  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs3-release?v=0.64.0
-  version: 0.64.0
-  sha1: dcc37efefa194aa269a76eacfcec63f82ab44eb6
+  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs3-release?v=0.69.0
+  version: 0.69.0
+  sha1: 2fad36ae20c7aa5c2d8b77c7b92b1ba52e73a5c7
 - name: credhub
   url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=2.1.2
   version: 2.1.2

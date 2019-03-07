@@ -18,4 +18,5 @@ They may change without notice.
 |:---  |:---     |:---   |
 | [`add-oidc-provider.yml `](add-oidc-provider.yml) | Allows testing of UAA with users authenticated via an OIDC provider | Creates a second UAA instance group that acts as the OIDC provider |
 | [`enable-nfs-test-server.yml`](enable-nfs-test-server.yml) | adds an NFS server to the deployment | nfstestserver can be reached at nfstestserver.service.cf.internal for acceptance testing purposes |
+| [`enable-nfs-test-ldapserver.yml`](enable-nfs-test-ldapserver.yml) | Adds an LDAP server to the deployment to allow testing of NFS volume services configured with LDAP authentication | Requires enable-nfs-volume-service.yml and enable-nfs-test-server.yml. nfstestldapserver can be reached at nfstestldapserver.service.cf.internal |
 | [`enable-smb-test-server.yml`](enable-smb-test-server.yml) | adds an SMB server to the deployment | smbtestserver can be reached at smbtestserver.service.cf.internal for acceptance testing purposes |

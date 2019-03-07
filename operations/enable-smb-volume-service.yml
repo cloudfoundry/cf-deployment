@@ -1,0 +1,131 @@
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/volume_services_enabled?
+  value: true
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/volume_services_enabled?
+  value: true
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/volume_services_enabled?
+  value: true
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/smb-broker-client?
+  value:
+    authorities: cloud_controller.admin
+    authorized-grant-types: client_credentials
+    secret: ((smb-broker-uaa-client-secret))
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/smb-broker-credhub-client?
+  value:
+    authorities: credhub.read,credhub.write
+    authorized-grant-types: client_credentials
+    secret: ((smb-broker-credhub-uaa-client-secret))
+- type: replace
+  path: /instance_groups/name=credhub/jobs/name=credhub/properties/credhub/authorization/permissions/-
+  value:
+    actors:
+    - uaa-client:smb-broker-credhub-client
+    operations:
+    - read
+    - write
+    - delete
+    - read_acl
+    - write_acl
+    path: /smbbroker/*
+- type: replace
+  path: /instance_groups/-
+  value:
+    azs:
+    - z1
+    instances: 1
+    jobs:
+    - name: smbbrokerpush
+      properties:
+        app_domain: ((system_domain))
+        cf:
+          client_id: smb-broker-client
+          client_secret: ((smb-broker-uaa-client-secret))
+        credhub:
+          store_id: smbbroker
+          uaa_client_id: smb-broker-credhub-client
+          uaa_client_secret: ((smb-broker-credhub-uaa-client-secret))
+          url: https://credhub.service.cf.internal:8844
+        domain: ((system_domain))
+        organization: system
+        password: ((smb-broker-password))
+        skip_cert_verify: true
+        space: smb-broker-space
+        syslog_url: ""
+        username: smb-broker
+      release: smb-volume
+    - name: cf-cli-6-linux
+      release: cf-cli
+    lifecycle: errand
+    name: smb-broker-push
+    networks:
+    - name: default
+    stemcell: default
+    vm_type: minimal
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=smbdriver?
+  value:
+    name: smbdriver
+    properties:
+      tls:
+        ca_cert: ((smb_ca.certificate))
+        client_cert: ((smbdriver_client_cert.certificate))
+        client_key: ((smbdriver_client_cert.private_key))
+        server_cert: ((smbdriver_cert.certificate))
+        server_key: ((smbdriver_cert.private_key))
+    release: smb-volume
+- type: replace
+  path: /variables/-
+  value:
+    name: smb-broker-password
+    type: password
+- type: replace
+  path: /variables/-
+  value:
+    name: smb-broker-uaa-client-secret
+    type: password
+- type: replace
+  path: /variables/-
+  value:
+    name: smb-broker-credhub-uaa-client-secret
+    type: password
+- type: replace
+  path: /variables/-
+  value:
+    name: smb_ca
+    options:
+      common_name: smb-ca
+      is_ca: true
+    type: certificate
+- type: replace
+  path: /variables/-
+  value:
+    name: smbdriver_cert
+    options:
+      alternative_names:
+      - 127.0.0.1
+      ca: smb_ca
+      common_name: 127.0.0.1
+      extended_key_usage:
+      - server_auth
+    type: certificate
+- type: replace
+  path: /variables/-
+  value:
+    name: smbdriver_client_cert
+    options:
+      ca: smb_ca
+      common_name: smb-client
+      extended_key_usage:
+      - client_auth
+    type: certificate
+- type: replace
+  path: /releases/-
+  value:
+    name: smb-volume
+    sha1: c0be18f17aa1c0c19e8649e14b1eae256cb78c03
+    url: https://bosh.io/d/github.com/cloudfoundry/smb-volume-release?v=1.0.0
+    version: 1.0.0

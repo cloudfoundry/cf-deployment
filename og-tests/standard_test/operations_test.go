@@ -28,6 +28,7 @@ var standardTests = map[string]helpers.OpsFileTestParams{
 	"enable-privileged-container-support.yml": {},
 	"enable-routing-integrity.yml":            {},
 	"enable-service-discovery.yml":            {},
+	"enable-smb-volume-service.yml":           {},
 	"migrate-cf-mysql-to-pxc.yml":             {},
 	"openstack.yml":                           {},
 	"override-app-domains.yml": {
@@ -104,6 +105,9 @@ var standardTests = map[string]helpers.OpsFileTestParams{
 	},
 	"use-offline-windows2016fs.yml": {
 		Ops: []string{"windows2016-cell.yml", "use-offline-windows2016fs.yml"},
+	},
+	"use-operator-provided-router-tls-certificates.yml": {
+		VarsFiles: []string{"example-vars-files/vars-use-operator-provided-router-tls-certificates.yml"},
 	},
 	"use-postgres.yml": {},
 	"use-pxc-for-nfs-volume-service.yml": {

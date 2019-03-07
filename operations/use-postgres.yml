@@ -2,9 +2,9 @@
   path: /releases/-
   value:
     name: postgres
-    sha1: 8a30528f55a1add20562eff4bd9c11a3f970865e
-    url: https://bosh.io/d/github.com/cloudfoundry/postgres-release?v=35
-    version: "35"
+    sha1: 3dd10b417b21cfa3257f1cc891e9e46f02fefe16
+    url: https://bosh.io/d/github.com/cloudfoundry/postgres-release?v=36
+    version: "36"
 - type: remove
   path: /instance_groups/name=database/jobs/name=pxc-mysql
 - type: remove
@@ -193,3 +193,9 @@
   path: /variables/name=galera_server_certificate?
 - type: remove
   path: /variables/name=mysql_server_certificate?
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties/ccdb/db_scheme
+  value: postgres
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties/ccdb/port
+  value: 5524
