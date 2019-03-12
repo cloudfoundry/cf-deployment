@@ -59,7 +59,7 @@ test_standard_ops() {
       check_latest        "use-latest-windows2012R2-stemcell.yml" "windows2012R2" "-o windows2012R2-cell.yml"
       check_latest        "use-latest-windows2016-stemcell.yml" "windows2016" "-o windows2016-cell.yml"
       check_interpolation "name: use-offline-windows2016fs.yml" "windows2016-cell.yml" "-o use-offline-windows2016fs.yml"
-      check_interpolation "name: use-windows2019fs-online.yml" "windows2019-cell.yml" "-o use-windows2019fs-online.yml"
+      check_interpolation "name: use-online-windows2019fs.yml" "windows2019-cell.yml" "-o use-online-windows2019fs.yml"
       check_interpolation "name: use-operator-provided-router-tls-certificates.yml" "use-operator-provided-router-tls-certificates.yml" "-l example-vars-files/vars-use-operator-provided-router-tls-certificates.yml"
       check_interpolation "use-postgres.yml"
       check_interpolation "use-pxc.yml"
