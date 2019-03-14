@@ -8,7 +8,7 @@
     jobs:
     - name: winc
       release: winc
-    - name: winc-network-1803
+    - name: winc-network-hns-acls
       properties:
         winc_network:
           dns_servers:
@@ -32,10 +32,10 @@
           - --driver-store=/var/vcap/data/groot
           - --config=/var/vcap/jobs/groot/config/groot.yml
           listen_address: 127.0.0.1:9241
-          network_plugin: /var/vcap/packages/winc-network-1803/winc-network.exe
+          network_plugin: /var/vcap/packages/winc-network-hns-acls/winc-network.exe
           network_plugin_extra_args:
-          - --configFile=/var/vcap/jobs/winc-network-1803/config/interface.json
-          - --log=/var/vcap/sys/log/winc-network-1803/winc-network.log
+          - --configFile=/var/vcap/jobs/winc-network-hns-acls/config/interface.json
+          - --log=/var/vcap/sys/log/winc-network-hns-acls/winc-network.log
           nstar_bin: /var/vcap/packages/nstar/nstar.exe
           runtime_plugin: /var/vcap/packages/winc/winc.exe
       release: garden-runc
