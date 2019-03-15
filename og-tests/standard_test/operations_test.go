@@ -104,7 +104,7 @@ var standardTests = map[string]helpers.OpsFileTestParams{
 		},
 	},
 	"use-latest-windows2019-stemcell.yml": {
-		Ops: []string{"windows2019-stemcell.yml", "use-latest-windows2019-stemcell.yml"},
+		Ops: []string{"windows2019-cell.yml", "use-latest-windows2019-stemcell.yml"},
 		PathValidator: helpers.PathValidator{
 			Path: "/stemcells/alias=windows2019/version", ExpectedValue: "latest",
 		},
@@ -113,7 +113,7 @@ var standardTests = map[string]helpers.OpsFileTestParams{
 		Ops: []string{"windows2016-cell.yml", "use-offline-windows2016fs.yml"},
 	},
 	"use-online-windows2019fs.yml": {
-		Ops: []string{"use-online-windows2019fs.yml", "use-online-windows2019fs.yml"},
+		Ops: []string{"windows2019-stemcell.yml", "use-online-windows2019fs.yml"},
 	},
 	"use-operator-provided-router-tls-certificates.yml": {
 		VarsFiles: []string{"example-vars-files/vars-use-operator-provided-router-tls-certificates.yml"},
