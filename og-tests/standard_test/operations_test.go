@@ -106,7 +106,7 @@ var standardTests = map[string]helpers.OpsFileTestParams{
 	"use-latest-windows2019-stemcell.yml": {
 		Ops: []string{"windows2019-stemcell.yml", "use-latest-windows2019-stemcell.yml"},
 		PathValidator: helpers.PathValidator{
-			Path: "/stemcells/alias=windows1803/version", ExpectedValue: "latest",
+			Path: "/stemcells/alias=windows2019/version", ExpectedValue: "latest",
 		},
 	},
 	"use-offline-windows2016fs.yml": {
