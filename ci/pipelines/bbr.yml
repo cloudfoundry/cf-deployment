@@ -1,0 +1,177 @@
+---
+groups:
+- name: bbr
+  jobs:
+  - acquire-pool
+  - release-pool-manual
+  - deploy
+  - run-drats
+
+resources:
+- name: runtime-ci
+  type: git
+  source:
+    branch: master
+    uri: https://github.com/cloudfoundry/runtime-ci.git
+- name: bbr-pool
+  type: pool
+  source:
+    uri: git@github.com:cloudfoundry/relint-ci-pools
+    branch: master
+    pool: bbr
+    private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
+- name: baba-yaga-env-director-state
+  type: git
+  source:
+    branch: master
+    uri: git@github.com:cloudfoundry/baba-yaga-env.git
+    private_key: ((baba_yaga_env_readwrite_deploy_key.private_key))
+    paths:
+    - bbl-state
+- name: baba-yaga-env-integration-configs
+  type: git
+  source:
+    branch: master
+    uri: git@github.com:cloudfoundry/baba-yaga-env.git
+    private_key: ((baba_yaga_env_readwrite_deploy_key.private_key))
+    paths:
+    - integration_config.json
+- name: cf-deployment-concourse-tasks
+  type: git
+  source:
+    branch: master
+    uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
+- name: cf-deployment-rc
+  type: git
+  source:
+    branch: release-candidate
+    uri: https://github.com/cloudfoundry/cf-deployment.git
+    ignore_paths:
+    - ci/**
+    - .envrc
+- name: drats-master
+  type: git
+  source:
+    branch: master
+    uri: https://github.com/cloudfoundry-incubator/disaster-recovery-acceptance-tests.git
+- name: persi-ci
+  type: git
+  source:
+    branch: master
+    uri: https://github.com/cloudfoundry/persi-ci.git
+- name: bbr-github-release
+  type: github-release
+  source:
+    owner: cloudfoundry-incubator
+    repository: bosh-backup-and-restore
+
+jobs:
+- name: acquire-pool
+  public: true
+  serial: true
+  plan:
+  - timeout: 4h
+    aggregate:
+    - get: cf-deployment-rc
+      trigger: true
+    - put: bbr-pool
+      params: {acquire: true}
+
+- name: release-pool-manual
+  public: true
+  plan:
+  - get: bbr-pool
+  ensure:
+    try:
+      put: bbr-pool
+      params: {release: bbr-pool}
+
+- name: deploy
+  public: true
+  build_logs_to_retain: 100
+  plan:
+  - on_failure:
+      put: bbr-pool
+      params: {release: bbr-pool}
+    do:
+    - get: bbr-pool
+      trigger: true
+      passed: [ acquire-pool ]
+    - aggregate:
+      - get: runtime-ci
+      - get: cf-deployment-concourse-tasks
+      - get: cf-deployment-rc
+      - get: baba-yaga-env-director-state
+      - get: baba-yaga-env-integration-configs
+      - get: persi-ci
+    - task: bosh-deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: baba-yaga-env-director-state
+        cf-deployment: cf-deployment-rc
+        ops-files: cf-deployment-rc
+        vars-files: baba-yaga-env-director-state
+      params:
+        SYSTEM_DOMAIN: baba-yaga.cf-app.com
+        OPS_FILES: |
+          operations/use-compiled-releases.yml
+          operations/backup-and-restore/enable-backup-restore.yml
+          operations/enable-nfs-volume-service.yml
+          operations/backup-and-restore/enable-backup-restore-nfs-broker.yml
+    - task: open-asgs-for-credhub
+      file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
+      input_mapping:
+        bbl-state: baba-yaga-env-director-state
+      params:
+        INSTANCE_GROUP_NAME: credhub
+        SYSTEM_DOMAIN: baba-yaga.cf-app.com
+        SECURITY_GROUP_NAME: credhub
+    - task: open-asgs-for-uaa
+      file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
+      input_mapping:
+        bbl-state: baba-yaga-env-director-state
+      params:
+        INSTANCE_GROUP_NAME: uaa
+        SYSTEM_DOMAIN: baba-yaga.cf-app.com
+        SECURITY_GROUP_NAME: uaa
+    - task: run-nfs-broker-push-errand
+      file: cf-deployment-concourse-tasks/run-errand/task.yml
+      input_mapping:
+        bbl-state: baba-yaga-env-director-state
+      params:
+        ERRAND_NAME: nfs-broker-push
+    - task: run-bosh-cleanup
+      file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
+      input_mapping:
+        bbl-state: baba-yaga-env-director-state
+
+- name: run-drats
+  public: true
+  build_logs_to_retain: 100
+  plan:
+  - on_success:
+      put: bbr-pool
+      params: {release: bbr-pool}
+    do:
+    - get: bbr-pool
+      trigger: true
+      passed: [ deploy ]
+    - aggregate:
+      - get: bbr-github-release
+      - get: baba-yaga-env-director-state
+      - get: cf-deployment-concourse-tasks
+      - get: drats-master
+      - get: runtime-ci
+    - task: generate-drats-config
+      file: runtime-ci/tasks/generate-drats-config/task.yml
+      input_mapping:
+        bbl-state: baba-yaga-env-director-state
+      params:
+        SYSTEM_DOMAIN: baba-yaga.cf-app.com
+    - task: run-drats
+      privileged: true
+      file: drats-master/ci/drats-with-integration-config/task.yml
+      input_mapping:
+        disaster-recovery-acceptance-tests: drats-master
+        bbr-binary-release: bbr-github-release
+        drats-integration-config: drats-config
