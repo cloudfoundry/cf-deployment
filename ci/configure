@@ -1,0 +1,25 @@
+#!/bin/bash
+
+main() {
+  local CF_D_PIPELINES=(cf-deployment update-releases pull-requests)
+  local PIPELINE=${1?"Valid input ${CF_D_PIPELINES[@]}"}
+
+  if [[ "${PIPELINE}" == "update-releases" ]]; then
+    cat > "${PROJECT_DIR}/ci/pipelines/${PIPELINE}.yml" <<EOF
+## ======================================================================
+## GENERATED FILE. DO NOT EDIT
+## ======================================================================
+
+EOF
+
+    texplate execute \
+                 "${PROJECT_DIR}/ci/template/${PIPELINE}.yml" \
+                 --input-file "${PROJECT_DIR}/ci/input/${PIPELINE}.yml" \
+                 >> "${PROJECT_DIR}/ci/pipelines/${PIPELINE}.yml"
+  fi
+
+  set -ex
+  fly -t relint-ci sp -p "${PIPELINE}" -c "${PROJECT_DIR}/ci/pipelines/${PIPELINE}.yml"
+}
+
+main "$@"
