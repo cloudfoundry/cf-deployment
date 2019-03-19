@@ -235,6 +235,7 @@ resources:
     ignore_paths:
     - og-tests
     - ci/**
+    - .envrc
 - name: cf-deployment-release-candidate
   type: git
   source:
@@ -243,6 +244,7 @@ resources:
     private_key: ((cf_deployment_readwrite_deploy_key.private_key))
     ignore_paths:
     - ci/**
+    - .envrc
 - name: cf-deployment-all-branches
   type: git
   source:
@@ -250,6 +252,7 @@ resources:
     uri: https://github.com/cloudfoundry/cf-deployment.git
     ignore_paths:
     - ci/**
+    - .envrc
 - name: cf-acceptance-tests-rc
   type: git
   source:
@@ -270,6 +273,7 @@ resources:
     private_key: ((cf_deployment_readwrite_deploy_key.private_key))
     ignore_paths:
     - ci/**
+    - .envrc
 - name: snitch-env-integration-configs
   type: git
   source:
