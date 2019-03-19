@@ -111,6 +111,7 @@ resources:
     private_key: ((cf_deployment_readwrite_deploy_key.private_key))
     ignore_paths:
     - ci/**
+    - .envrc
 - name: cf-deployment-concourse-tasks
   type: git
   source:
