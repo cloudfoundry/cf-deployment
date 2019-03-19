@@ -8,6 +8,12 @@
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/volume_services_enabled?
   value: true
 - type: replace
+  path: /instance_groups/name=database/jobs/name=pxc-mysql/properties/seeded_databases/-
+  value:
+    name: nfs-broker
+    password: ((nfs-broker-database-password))
+    username: nfs-broker
+- type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/nfs-broker-push-client?
   value:
     authorities: cloud_controller.admin
