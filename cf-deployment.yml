@@ -1536,6 +1536,8 @@ instance_groups:
         network_plugin: /var/vcap/packages/runc-cni/bin/garden-external-networker
         network_plugin_extra_args:
         - --configFile=/var/vcap/jobs/garden-cni/config/adapter.json
+      grootfs:
+        reserved_space_for_other_jobs_in_mb: 15360
       logging:
         format:
           timestamp: "rfc3339"
