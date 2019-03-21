@@ -16,7 +16,7 @@
   value: "two-layer"
 
 - type: replace
-  path: /instance_groups/name=diego-cell/jobs/name=garden/properties/grootfs/tls?
+  path: /instance_groups/name=diego-cell/jobs/name=garden/properties/grootfs?/tls
   value:
     cert: ((grootfs_remote_layer_tls.certificate))
     key: ((grootfs_remote_layer_tls.private_key))
