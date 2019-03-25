@@ -9,7 +9,7 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 - For Community Ops-files, check out the [Community Ops-file README](../community/README.md).
 - For Legacy Ops-files, checkout the [Legacy Ops-file README](../legacy/README.md).
 
-"Experimental" Ops-file represent configurations that we expect to promote to blessed configuration eventually, meaning that, once the configurations have been sufficiently validated, they will either become default (inlined into the base manifest, cf-deployment.yml), or GA'd as an optional feature (promoted from experimental to operations directory). Please follow the [ops file workflows](https://github.com/cloudfoundry/cf-deployment/blob/master/ops-file-promotion-workflow.md)
+"Experimental" Ops-file represent configurations that we expect to promote to blessed configuration eventually, meaning that, once the configurations have been sufficiently validated, they will either become default (inlined into the base manifest), or GA'd as an optional feature (promoted from experimental to operations directory). Please follow the [ops file workflows](https://github.com/cloudfoundry/cf-deployment/blob/master/ops-file-promotion-workflow.md)
 
 # Expiremental ops files
 
