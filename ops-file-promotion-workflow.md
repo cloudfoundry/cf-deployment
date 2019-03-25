@@ -1,6 +1,6 @@
 # Promoting/Deprecating ops files
 
-Quick note on "Experimental" Ops-file: Expirmental Ops-file represent configurations that we expect to promote to blessed configuration eventually, meaning that, once the configurations have been sufficiently validated, they will either become default (inlined into the base manifest, cf-deployment.yml), or GA'd as an optional feature (promoted from experimental to operations directory). The following workflow illustrates the sequence of events to promote an experimental Ops-file.
+Quick note on "Experimental" Ops-file: Expirmental Ops-file represent configurations that we expect to promote to blessed configuration eventually, meaning that, once the configurations have been sufficiently validated, they will either become default (inlined into the base manifest), or GA'd as an optional feature (promoted from experimental to operations directory). The following workflow illustrates the sequence of events to promote an experimental Ops-file.
 
 *_PR process is excluded for brevity._*
 
