@@ -1,0 +1,27 @@
+#! /bin/bash -eu
+
+suites() {
+  local suites
+  suites="
+    ./addons_test
+    ./backup_and_restore_test
+    ./bits_service_test
+    ./experimental_test
+    ./iaas_test
+    ./inline_test
+    ./legacy_test
+    ./standard_test
+    ./test_test
+    ./semantic_test
+    "
+
+  # : "${RUN_SEMANTIC:="false"}"
+  # if [ ${RUN_SEMANTIC} = true ]; then
+  #   suites="${suites} ./semantic_test"
+  # fi
+
+  echo "${suites}"
+}
+
+go test "$@" $(suites)
+
