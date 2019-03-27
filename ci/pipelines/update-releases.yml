@@ -4535,6 +4535,7 @@ jobs:
 - name: update-stemcell-and-recompile-releases
   public: true
   serial_groups:
+  - stemcell
   - update-binary-buildpack
   - update-bosh-dns-aliases
   - update-bpm

@@ -363,6 +363,7 @@ jobs:
 - name: update-stemcell-and-recompile-releases
   public: true
   serial_groups:
+  - stemcell
 {{- range .baseReleases}}
   - update-{{.name}}
 {{- end}}
