@@ -11,6 +11,7 @@ groups:
 - name: update-base-stemcells-and-releases
   jobs:
   - update-stemcell-and-recompile-releases
+  - upload-stemcell
 {{- range .baseReleases}}
   - update-{{.name}}
 {{- end}}
@@ -133,9 +134,38 @@ resources:
 ## ======================================================================
 
 jobs:
+- name: upload-stemcell
+  public: true
+  serial_groups:
+  - stemcell
+  build_logs_to_retain: 100
+  plan:
+  - aggregate:
+    - get: runtime-ci
+    - get: greengrass-env-director-state
+    - get: cf-deployment-develop
+    - get: cf-deployment-concourse-tasks
+{{- range .baseReleases}}
+    - get: {{.name}}-release
+      params:
+        tarball: false
+      trigger: true
+{{- end}}
+    - get: stemcell
+      params:
+        tarball: false
+  - task: upload-stemcell
+    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
+    input_mapping:
+      bbl-state: greengrass-env-director-state
+      cf-deployment: cf-deployment-develop
+    params:
+      INFRASTRUCTURE: google
+
 {{- range .baseReleases}}
 - name: update-{{.name}}
   serial_groups:
+  - stemcell
   - update-{{.name}}
   public: true
   build_logs_to_retain: 100
@@ -149,10 +179,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-{{.name}}
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -160,13 +187,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: {{.name}}
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
 {{- if not (contains "buildpack" .name)}}
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml

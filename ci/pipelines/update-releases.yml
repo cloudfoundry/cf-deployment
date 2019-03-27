@@ -15,6 +15,7 @@ groups:
 - name: update-base-stemcells-and-releases
   jobs:
   - update-stemcell-and-recompile-releases
+  - upload-stemcell
   - update-binary-buildpack
   - update-bosh-dns-aliases
   - update-bpm
@@ -559,8 +560,158 @@ resources:
 ## ======================================================================
 
 jobs:
+- name: upload-stemcell
+  public: true
+  serial_groups:
+  - stemcell
+  build_logs_to_retain: 100
+  plan:
+  - aggregate:
+    - get: runtime-ci
+    - get: greengrass-env-director-state
+    - get: cf-deployment-develop
+    - get: cf-deployment-concourse-tasks
+    - get: binary-buildpack-release
+      params:
+        tarball: false
+      trigger: true
+    - get: bosh-dns-aliases-release
+      params:
+        tarball: false
+      trigger: true
+    - get: bpm-release
+      params:
+        tarball: false
+      trigger: true
+    - get: capi-release
+      params:
+        tarball: false
+      trigger: true
+    - get: cf-networking-release
+      params:
+        tarball: false
+      trigger: true
+    - get: cf-smoke-tests-release
+      params:
+        tarball: false
+      trigger: true
+    - get: cf-syslog-drain-release
+      params:
+        tarball: false
+      trigger: true
+    - get: cflinuxfs2-release
+      params:
+        tarball: false
+      trigger: true
+    - get: cflinuxfs3-release
+      params:
+        tarball: false
+      trigger: true
+    - get: diego-release
+      params:
+        tarball: false
+      trigger: true
+    - get: dotnet-core-buildpack-release
+      params:
+        tarball: false
+      trigger: true
+    - get: garden-runc-release
+      params:
+        tarball: false
+      trigger: true
+    - get: go-buildpack-release
+      params:
+        tarball: false
+      trigger: true
+    - get: java-buildpack-release
+      params:
+        tarball: false
+      trigger: true
+    - get: log-cache-release
+      params:
+        tarball: false
+      trigger: true
+    - get: loggregator-release
+      params:
+        tarball: false
+      trigger: true
+    - get: loggregator-agent-release
+      params:
+        tarball: false
+      trigger: true
+    - get: nats-release
+      params:
+        tarball: false
+      trigger: true
+    - get: nginx-buildpack-release
+      params:
+        tarball: false
+      trigger: true
+    - get: nodejs-buildpack-release
+      params:
+        tarball: false
+      trigger: true
+    - get: php-buildpack-release
+      params:
+        tarball: false
+      trigger: true
+    - get: python-buildpack-release
+      params:
+        tarball: false
+      trigger: true
+    - get: pxc-release
+      params:
+        tarball: false
+      trigger: true
+    - get: r-buildpack-release
+      params:
+        tarball: false
+      trigger: true
+    - get: routing-release
+      params:
+        tarball: false
+      trigger: true
+    - get: ruby-buildpack-release
+      params:
+        tarball: false
+      trigger: true
+    - get: silk-release
+      params:
+        tarball: false
+      trigger: true
+    - get: staticfile-buildpack-release
+      params:
+        tarball: false
+      trigger: true
+    - get: statsd-injector-release
+      params:
+        tarball: false
+      trigger: true
+    - get: uaa-release
+      params:
+        tarball: false
+      trigger: true
+    - get: credhub-release
+      params:
+        tarball: false
+      trigger: true
+    - get: cf-cli-release
+      params:
+        tarball: false
+      trigger: true
+    - get: stemcell
+      params:
+        tarball: false
+  - task: upload-stemcell
+    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
+    input_mapping:
+      bbl-state: greengrass-env-director-state
+      cf-deployment: cf-deployment-develop
+    params:
+      INFRASTRUCTURE: google
 - name: update-binary-buildpack
   serial_groups:
+  - stemcell
   - update-binary-buildpack
   public: true
   build_logs_to_retain: 100
@@ -574,10 +725,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-binary-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -585,13 +733,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: binary-buildpack
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
@@ -642,6 +783,7 @@ jobs:
       repository: updated-repo
 - name: update-bosh-dns-aliases
   serial_groups:
+  - stemcell
   - update-bosh-dns-aliases
   public: true
   build_logs_to_retain: 100
@@ -655,10 +797,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-bosh-dns-aliases
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -666,13 +805,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: bosh-dns-aliases
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
@@ -739,6 +871,7 @@ jobs:
       repository: updated-repo
 - name: update-bpm
   serial_groups:
+  - stemcell
   - update-bpm
   public: true
   build_logs_to_retain: 100
@@ -752,10 +885,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-bpm
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -763,13 +893,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: bpm
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
@@ -836,6 +959,7 @@ jobs:
       repository: updated-repo
 - name: update-capi
   serial_groups:
+  - stemcell
   - update-capi
   public: true
   build_logs_to_retain: 100
@@ -849,10 +973,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-capi
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -860,13 +981,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: capi
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
@@ -933,6 +1047,7 @@ jobs:
       repository: updated-repo
 - name: update-cf-networking
   serial_groups:
+  - stemcell
   - update-cf-networking
   public: true
   build_logs_to_retain: 100
@@ -946,10 +1061,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-cf-networking
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -957,13 +1069,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: cf-networking
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
@@ -1030,6 +1135,7 @@ jobs:
       repository: updated-repo
 - name: update-cf-smoke-tests
   serial_groups:
+  - stemcell
   - update-cf-smoke-tests
   public: true
   build_logs_to_retain: 100
@@ -1043,10 +1149,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-cf-smoke-tests
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1054,13 +1157,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: cf-smoke-tests
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
@@ -1127,6 +1223,7 @@ jobs:
       repository: updated-repo
 - name: update-cf-syslog-drain
   serial_groups:
+  - stemcell
   - update-cf-syslog-drain
   public: true
   build_logs_to_retain: 100
@@ -1140,10 +1237,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-cf-syslog-drain
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1151,13 +1245,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: cf-syslog-drain
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
@@ -1224,6 +1311,7 @@ jobs:
       repository: updated-repo
 - name: update-cflinuxfs2
   serial_groups:
+  - stemcell
   - update-cflinuxfs2
   public: true
   build_logs_to_retain: 100
@@ -1237,10 +1325,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-cflinuxfs2
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1248,13 +1333,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: cflinuxfs2
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
@@ -1321,6 +1399,7 @@ jobs:
       repository: updated-repo
 - name: update-cflinuxfs3
   serial_groups:
+  - stemcell
   - update-cflinuxfs3
   public: true
   build_logs_to_retain: 100
@@ -1334,10 +1413,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-cflinuxfs3
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1345,13 +1421,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: cflinuxfs3
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
@@ -1418,6 +1487,7 @@ jobs:
       repository: updated-repo
 - name: update-diego
   serial_groups:
+  - stemcell
   - update-diego
   public: true
   build_logs_to_retain: 100
@@ -1431,10 +1501,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-diego
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1442,13 +1509,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: diego
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
@@ -1515,6 +1575,7 @@ jobs:
       repository: updated-repo
 - name: update-dotnet-core-buildpack
   serial_groups:
+  - stemcell
   - update-dotnet-core-buildpack
   public: true
   build_logs_to_retain: 100
@@ -1528,10 +1589,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-dotnet-core-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1539,13 +1597,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: dotnet-core-buildpack
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
@@ -1596,6 +1647,7 @@ jobs:
       repository: updated-repo
 - name: update-garden-runc
   serial_groups:
+  - stemcell
   - update-garden-runc
   public: true
   build_logs_to_retain: 100
@@ -1609,10 +1661,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-garden-runc
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1620,13 +1669,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: garden-runc
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
@@ -1693,6 +1735,7 @@ jobs:
       repository: updated-repo
 - name: update-go-buildpack
   serial_groups:
+  - stemcell
   - update-go-buildpack
   public: true
   build_logs_to_retain: 100
@@ -1706,10 +1749,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-go-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1717,13 +1757,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: go-buildpack
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
@@ -1774,6 +1807,7 @@ jobs:
       repository: updated-repo
 - name: update-java-buildpack
   serial_groups:
+  - stemcell
   - update-java-buildpack
   public: true
   build_logs_to_retain: 100
@@ -1787,10 +1821,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-java-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1798,13 +1829,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: java-buildpack
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
@@ -1855,6 +1879,7 @@ jobs:
       repository: updated-repo
 - name: update-log-cache
   serial_groups:
+  - stemcell
   - update-log-cache
   public: true
   build_logs_to_retain: 100
@@ -1868,10 +1893,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-log-cache
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1879,13 +1901,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: log-cache
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
@@ -1952,6 +1967,7 @@ jobs:
       repository: updated-repo
 - name: update-loggregator
   serial_groups:
+  - stemcell
   - update-loggregator
   public: true
   build_logs_to_retain: 100
@@ -1965,10 +1981,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-loggregator
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1976,13 +1989,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: loggregator
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
@@ -2049,6 +2055,7 @@ jobs:
       repository: updated-repo
 - name: update-loggregator-agent
   serial_groups:
+  - stemcell
   - update-loggregator-agent
   public: true
   build_logs_to_retain: 100
@@ -2062,10 +2069,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-loggregator-agent
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2073,13 +2077,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: loggregator-agent
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
@@ -2146,6 +2143,7 @@ jobs:
       repository: updated-repo
 - name: update-nats
   serial_groups:
+  - stemcell
   - update-nats
   public: true
   build_logs_to_retain: 100
@@ -2159,10 +2157,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-nats
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2170,13 +2165,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: nats
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
@@ -2243,6 +2231,7 @@ jobs:
       repository: updated-repo
 - name: update-nginx-buildpack
   serial_groups:
+  - stemcell
   - update-nginx-buildpack
   public: true
   build_logs_to_retain: 100
@@ -2256,10 +2245,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-nginx-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2267,13 +2253,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: nginx-buildpack
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
@@ -2324,6 +2303,7 @@ jobs:
       repository: updated-repo
 - name: update-nodejs-buildpack
   serial_groups:
+  - stemcell
   - update-nodejs-buildpack
   public: true
   build_logs_to_retain: 100
@@ -2337,10 +2317,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-nodejs-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2348,13 +2325,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: nodejs-buildpack
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
@@ -2405,6 +2375,7 @@ jobs:
       repository: updated-repo
 - name: update-php-buildpack
   serial_groups:
+  - stemcell
   - update-php-buildpack
   public: true
   build_logs_to_retain: 100
@@ -2418,10 +2389,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-php-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2429,13 +2397,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: php-buildpack
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
@@ -2486,6 +2447,7 @@ jobs:
       repository: updated-repo
 - name: update-python-buildpack
   serial_groups:
+  - stemcell
   - update-python-buildpack
   public: true
   build_logs_to_retain: 100
@@ -2499,10 +2461,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-python-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2510,13 +2469,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: python-buildpack
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
@@ -2567,6 +2519,7 @@ jobs:
       repository: updated-repo
 - name: update-pxc
   serial_groups:
+  - stemcell
   - update-pxc
   public: true
   build_logs_to_retain: 100
@@ -2580,10 +2533,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-pxc
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2591,13 +2541,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: pxc
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
@@ -2664,6 +2607,7 @@ jobs:
       repository: updated-repo
 - name: update-r-buildpack
   serial_groups:
+  - stemcell
   - update-r-buildpack
   public: true
   build_logs_to_retain: 100
@@ -2677,10 +2621,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-r-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2688,13 +2629,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: r-buildpack
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
@@ -2745,6 +2679,7 @@ jobs:
       repository: updated-repo
 - name: update-routing
   serial_groups:
+  - stemcell
   - update-routing
   public: true
   build_logs_to_retain: 100
@@ -2758,10 +2693,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-routing
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2769,13 +2701,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: routing
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
@@ -2842,6 +2767,7 @@ jobs:
       repository: updated-repo
 - name: update-ruby-buildpack
   serial_groups:
+  - stemcell
   - update-ruby-buildpack
   public: true
   build_logs_to_retain: 100
@@ -2855,10 +2781,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-ruby-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2866,13 +2789,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: ruby-buildpack
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
@@ -2923,6 +2839,7 @@ jobs:
       repository: updated-repo
 - name: update-silk
   serial_groups:
+  - stemcell
   - update-silk
   public: true
   build_logs_to_retain: 100
@@ -2936,10 +2853,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-silk
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2947,13 +2861,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: silk
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
@@ -3020,6 +2927,7 @@ jobs:
       repository: updated-repo
 - name: update-staticfile-buildpack
   serial_groups:
+  - stemcell
   - update-staticfile-buildpack
   public: true
   build_logs_to_retain: 100
@@ -3033,10 +2941,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-staticfile-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -3044,13 +2949,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: staticfile-buildpack
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
@@ -3101,6 +2999,7 @@ jobs:
       repository: updated-repo
 - name: update-statsd-injector
   serial_groups:
+  - stemcell
   - update-statsd-injector
   public: true
   build_logs_to_retain: 100
@@ -3114,10 +3013,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-statsd-injector
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -3125,13 +3021,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: statsd-injector
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
@@ -3198,6 +3087,7 @@ jobs:
       repository: updated-repo
 - name: update-uaa
   serial_groups:
+  - stemcell
   - update-uaa
   public: true
   build_logs_to_retain: 100
@@ -3211,10 +3101,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-uaa
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -3222,13 +3109,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: uaa
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
@@ -3295,6 +3175,7 @@ jobs:
       repository: updated-repo
 - name: update-credhub
   serial_groups:
+  - stemcell
   - update-credhub
   public: true
   build_logs_to_retain: 100
@@ -3308,10 +3189,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-credhub
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -3319,13 +3197,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: credhub
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
@@ -3392,6 +3263,7 @@ jobs:
       repository: updated-repo
 - name: update-cf-cli
   serial_groups:
+  - stemcell
   - update-cf-cli
   public: true
   build_logs_to_retain: 100
@@ -3405,10 +3277,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ update-stemcell-and-recompile-releases ]
+      passed: [ upload-stemcell ]
   - task: update-release-cf-cli
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -3416,13 +3285,6 @@ jobs:
       deployment-configuration: cf-deployment-develop
     params:
       RELEASE_NAME: cf-cli
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
-    input_mapping:
-      bbl-state: greengrass-env-director-state
-      cf-deployment: cf-deployment-develop
-    params:
-      INFRASTRUCTURE: google
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
