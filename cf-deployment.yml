@@ -1643,6 +1643,8 @@ instance_groups:
         internal_url: https://uaa.service.cf.internal:8443
         ca_cert: "((uaa_ca.certificate))"
       loggregator:
+        outgoing_cert: "((loggregator_trafficcontroller_tls.certificate))"
+        outgoing_key: "((loggregator_trafficcontroller_tls.private_key))"
         tls:
           cc_trafficcontroller:
             cert: "((loggregator_tls_cc_tc.certificate))"
@@ -1677,6 +1679,8 @@ instance_groups:
     properties:
       http:
         address: "0.0.0.0:8088"
+        cert: "((loggregator_rlp_gateway_tls.certificate))"
+        key: "((loggregator_rlp_gateway_tls.private_key))"
       logs_provider:
         ca_cert: "((loggregator_ca.certificate))"
         client_cert: "((loggregator_rlp_gateway.certificate))"
@@ -1698,13 +1702,15 @@ instance_groups:
       route_registrar:
         routes:
         - name: doppler
-          port: 8081
+          tls_port: 8081
           registration_interval: 20s
+          server_cert_domain_san: doppler.((system_domain))
           uris:
           - doppler.((system_domain))
           - "*.doppler.((system_domain))"
         - name: rlp-gateway
-          port: 8088
+          tls_port: 8088
+          server_cert_domain_san: log-stream.((system_domain))
           registration_interval: 20s
           uris:
           - log-stream.((system_domain))
@@ -2265,6 +2271,24 @@ variables:
     ca: pxc_server_ca
     common_name: sql-db.service.cf.internal
 
+- name: loggregator_rlp_gateway_tls
+  type: certificate
+  options:
+    alternative_names:
+    - log-stream.((system_domain))
+    - log-api.service.cf.internal
+    ca: service_cf_internal_ca
+    common_name: log-stream.((system_domain))
+
+- name: loggregator_trafficcontroller_tls
+  type: certificate
+  options:
+    alternative_names:
+    - doppler.((system_domain))
+    - log-api.service.cf.internal
+    ca: service_cf_internal_ca
+    common_name: doppler.((system_domain))
+
 releases:
 - name: binary-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/binary-buildpack-release?v=1.0.31
@@ -2323,9 +2347,9 @@ releases:
   version: "4.18"
   sha1: 4a06685b71066848e756beda164310a7bbc57165
 - name: loggregator
-  url: https://bosh.io/d/github.com/cloudfoundry/loggregator-release?v=105.0
-  version: "105.0"
-  sha1: d0bed91335aaac418eb6e8b2be13c6ecf4ce7b90
+  url: https://bosh.io/d/github.com/cloudfoundry/loggregator-release?v=105.2
+  version: "105.2"
+  sha1: a1e3258786cb4826080d819c91dd049a06cd3476
 - name: nats
   url: https://bosh.io/d/github.com/cloudfoundry/nats-release?v=26
   version: "26"
