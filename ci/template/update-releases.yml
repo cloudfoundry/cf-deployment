@@ -180,6 +180,10 @@ jobs:
       params:
         tarball: false
       passed: [ upload-stemcell ]
+    - get: stemcell
+      params:
+        tarball: false
+      passed: [ upload-stemcell ]
   - task: update-release-{{.name}}
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
