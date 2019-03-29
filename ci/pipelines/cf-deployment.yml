@@ -818,12 +818,21 @@ jobs:
         bbl-state: hermione-env-director-state
       params:
         SYSTEM_DOMAIN: hermione.cf-app.com
+    - task: collect-ops-files
+      file: cf-deployment-concourse-tasks/collect-ops-files/task.yml
+      input_mapping:
+        base-ops-files: cf-deployment-develop
+        new-ops-files: hermione-env-director-state
+      params:
+        BASE_OPS_FILE_DIR: operations
+        NEW_OPS_FILES: |
+          increase-doppler-vm-type-from-minimal-to-small.yml
     - task: bosh-deploy-cf
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: hermione-env-director-state
         cf-deployment: cf-deployment-develop
-        ops-files: cf-deployment-develop
+        ops-files: collected-ops-files
         vars-files: hermione-env-director-state
       params:
         SYSTEM_DOMAIN: hermione.cf-app.com
@@ -841,6 +850,7 @@ jobs:
           operations/experimental/deploy-forwarder-agent.yml
           operations/experimental/use-logcache-for-cloud-controller-app-stats.yml
           operations/experimental/add-syslog-agent.yml
+          operations/increase-doppler-vm-type-from-minimal-to-small.yml
         VARS_FILES: |
           bbl-state/vars/director-vars-file.yml
           vars-use-operator-provided-router-tls-certificates.yml
