@@ -233,7 +233,6 @@ resources:
     uri: git@github.com:cloudfoundry/cf-deployment.git
     private_key: ((cf_deployment_readwrite_deploy_key.private_key))
     ignore_paths:
-    - og-tests
     - ci/**
     - .envrc
 - name: cf-deployment-release-candidate
@@ -406,7 +405,7 @@ jobs:
       #   RUN_SEMANTIC: true
       run:
         dir: cf-deployment-develop/units
-        path: test
+        path: ./test
 
 - name: unit-test-ops-files
   serial: true
