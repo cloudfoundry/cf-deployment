@@ -713,7 +713,8 @@ instance_groups:
             name: uaa-healthcheck
             script_path: "/var/vcap/jobs/uaa/bin/health_check"
           name: uaa
-          port: 8080
+          tls_port: 8443
+          server_cert_domain_san: "uaa.service.cf.internal"
           registration_interval: 10s
           tags:
             component: uaa
@@ -1112,6 +1113,7 @@ instance_groups:
         ca_certs: |
           ((application_ca.certificate))
           ((service_cf_internal_ca.certificate))
+          ((uaa_ca.certificate))
         backends:
           cert_chain: ((gorouter_backend_tls.certificate))
           private_key: ((gorouter_backend_tls.private_key))
