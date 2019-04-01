@@ -1,60 +1,56 @@
 - type: replace
   path: /addons/name=loggr-system-metrics-agent?
   value:
-    name: loggr-system-metrics-agent
-    include:
-      stemcell:
-      - os: ubuntu-xenial
     exclude:
       jobs:
       - name: smoke_tests
         release: cf-smoke-tests
+    include:
+      stemcell:
+      - os: ubuntu-xenial
     jobs:
     - name: loggr-system-metrics-agent
-      release: loggregator-agent
       properties:
         system_metrics:
           tls:
-            ca_cert: "((system_metrics.ca))"
-            cert: "((system_metrics.certificate))"
-            key: "((system_metrics.private_key))"
-
+            ca_cert: ((system_metrics.ca))
+            cert: ((system_metrics.certificate))
+            key: ((system_metrics.private_key))
+      release: loggregator-agent
+    name: loggr-system-metrics-agent
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=loggr-metric-scraper?
   value:
     name: loggr-metric-scraper
-    release: loggregator-agent
     properties:
       system_metrics:
         tls:
-          ca_cert: "((system_metrics.ca))"
-          cert: "((system_metrics.certificate))"
-          key: "((system_metrics.private_key))"
-
+          ca_cert: ((system_metrics.ca))
+          cert: ((system_metrics.certificate))
+          key: ((system_metrics.private_key))
+    release: loggregator-agent
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=leadership-election?
   value:
     name: leadership-election
-    release: leadership-election
     properties:
       port: 7100
-
+    release: leadership-election
 - type: replace
   path: /variables/name=system_metrics?
   value:
     name: system_metrics
-    type: certificate
     options:
       ca: loggregator_ca
       common_name: system-metrics
       extended_key_usage:
       - client_auth
       - server_auth
-
+    type: certificate
 - type: replace
   path: /releases/name=leadership-election?
   value:
-    name: "leadership-election"
-    version: "1.1"
-    url: "https://bosh.io/d/github.com/cloudfoundry/leadership-election-release?v=1.1"
-    sha1: "fba1b71b7a3def3ac4d91ba345f68708d763dad0"
+    name: leadership-election
+    sha1: 2c8ce398848d4e4aed9964ff429dbbe72ee70e5a
+    url: https://bosh.io/d/github.com/cloudfoundry/leadership-election-release?v=1.2
+    version: "1.2"
