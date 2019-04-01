@@ -1,0 +1,16 @@
+---
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=rep/properties/containers?/proxy/enabled
+  value: false
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=rep/properties/containers?/proxy/require_and_verify_client_certificates
+  value: false
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=rep/properties/containers?/proxy/trusted_ca_certificates
+  value: []
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=rep/properties/containers?/proxy/verify_subject_alt_name
+  value: []
