@@ -41,7 +41,6 @@
       consumes:
         log-cache: {from: isolated_log_cache}
       properties:
-        egress_port: 8080
         health_addr: "localhost:6060"
         tls:
           ca_cert: "((isolated_log_cache.ca))"

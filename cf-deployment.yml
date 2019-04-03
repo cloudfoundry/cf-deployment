@@ -1351,7 +1351,6 @@ instance_groups:
     provides:
       log-cache: {shared: true}
     properties:
-      egress_port: 8080
       health_addr: localhost:6060
       tls:
         ca_cert: ((log_cache_ca.certificate))
