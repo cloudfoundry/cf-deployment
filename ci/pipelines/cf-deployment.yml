@@ -141,23 +141,6 @@ resources:
     pool: cf-deployment/stable
     private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
 
-- name: bellatrix-env-director-state
-  type: git
-  source:
-    branch: master
-    uri: git@github.com:cloudfoundry/bellatrix-env.git
-    private_key: ((bellatrix_env_readwrite_deploy_key.private_key))
-
-- name: bellatrix-env-integration-configs
-  type: git
-  source:
-    branch: master
-    uri: git@github.com:cloudfoundry/bellatrix-env.git
-    private_key: ((bellatrix_env_readwrite_deploy_key.private_key))
-    paths:
-    - integration_config.json
-    - reporter_config.json
-
 - name: relint-envs
   type: git
   source:
@@ -921,25 +904,25 @@ jobs:
       - get: runtime-ci
       - get: cf-deployment-concourse-tasks
       - get: cf-deployment-master
-      - get: bellatrix-env-director-state
-      - get: bellatrix-env-integration-configs
+      - get: relint-envs
     - task: collect-ops-files
       file: cf-deployment-concourse-tasks/collect-ops-files/task.yml
       input_mapping:
         base-ops-files: cf-deployment-master
-        new-ops-files: bellatrix-env-director-state
+        new-ops-files: relint-envs
       params:
         BASE_OPS_FILE_DIR: "operations"
         NEW_OPS_FILES: |
-          decrease-cc-event-retention.yml
+          environments/test/bellatrix/decrease-cc-event-retention.yml
     - task: bosh-deploy-cf
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
-        bbl-state: bellatrix-env-director-state
+        bbl-state: relint-envs
         cf-deployment: cf-deployment-master
         ops-files: collected-ops-files
-        vars-files: bellatrix-env-director-state
+        vars-files: relint-envs
       params:
+        BBL_STATE_DIR: environments/test/bellatrix/bbl-state
         SYSTEM_DOMAIN: bellatrix.cf-app.com
         OPS_FILES: |
           operations/scale-database-cluster.yml
@@ -948,32 +931,37 @@ jobs:
     - task: run-bosh-cleanup
       file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
       input_mapping:
-        bbl-state: bellatrix-env-director-state
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/bellatrix/bbl-state
     - task: update-integration-configs
       file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
       params:
-        CATS_INTEGRATION_CONFIG_FILE: integration_config.json
+        BBL_STATE_DIR: environments/test/bellatrix/bbl-state
+        CATS_INTEGRATION_CONFIG_FILE: environments/test/bellatrix/integration_config.json
       input_mapping:
-        bbl-state: bellatrix-env-director-state
-        integration-configs: bellatrix-env-integration-configs
+        bbl-state: relint-envs
+        integration-configs: relint-envs
       ensure:
-        put: bellatrix-env-integration-configs
+        put: relint-envs
         params:
           repository: updated-integration-configs
           rebase: true
     - task: open-asgs-for-credhub
       file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
       input_mapping:
-        bbl-state: bellatrix-env-director-state
+        bbl-state: relint-envs
       params:
+        BBL_STATE_DIR: environments/test/bellatrix/bbl-state
         INSTANCE_GROUP_NAME: credhub
         SYSTEM_DOMAIN: bellatrix.cf-app.com
         SECURITY_GROUP_NAME: credhub
     - task: open-asgs-for-uaa
       file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
       input_mapping:
-        bbl-state: bellatrix-env-director-state
+        bbl-state: relint-envs
       params:
+        BBL_STATE_DIR: environments/test/bellatrix/bbl-state
         INSTANCE_GROUP_NAME: uaa
         SYSTEM_DOMAIN: bellatrix.cf-app.com
         SECURITY_GROUP_NAME: uaa
@@ -1157,7 +1145,7 @@ jobs:
       trigger: true
       passed: [stable-deploy]
     - aggregate:
-      - get: bellatrix-env-director-state
+      - get: relint-envs
         passed: [stable-deploy]
       - get: cf-deployment-master
         passed: [stable-deploy]
@@ -1165,8 +1153,9 @@ jobs:
   - task: bosh-run-errand-smoke-tests
     file: cf-deployment-concourse-tasks/run-errand/task.yml
     input_mapping:
-      bbl-state: bellatrix-env-director-state
+      bbl-state: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/bellatrix/bbl-state
       ERRAND_NAME: smoke-tests
     on_failure:
       put: stable-pool
@@ -1200,15 +1189,15 @@ jobs:
     - aggregate:
       - get: cf-deployment-concourse-tasks
       - get: cf-acceptance-tests
-      - get: bellatrix-env-integration-configs
-      - get: bellatrix-env-director-state
+      - get: relint-envs
       - get: cf-deployment-master
         passed: [ stable-deploy ]
     - task: enable-docker-and-tasks
       file: cf-deployment-concourse-tasks/set-feature-flags/task.yml
       input_mapping:
-        bbl-state: bellatrix-env-director-state
+        bbl-state: relint-envs
       params:
+        BBL_STATE_DIR: environments/test/bellatrix/bbl-state
         SYSTEM_DOMAIN: bellatrix.cf-app.com
         ENABLED_FEATURE_FLAGS: |
           diego_docker
@@ -1217,8 +1206,10 @@ jobs:
     - task: run-cats
       file: cf-deployment-concourse-tasks/run-cats/task.yml
       input_mapping:
-        integration-config: bellatrix-env-integration-configs
+        integration-config: relint-envs
       params:
+        CONFIG_FILE_PATH: environments/test/bellatrix/integration_config.json
+        REPORTER_CONFIG_FILE_PATH: environments/test/bellatrix/reporter_config.json
         FLAKE_ATTEMPTS: 0
         RELINT_VERBOSE_AUTH: "true"
 
@@ -1234,11 +1225,13 @@ jobs:
       passed: [ stable-periodic-cats ]
     - aggregate:
       - get: runtime-ci
-      - get: bellatrix-env-integration-configs
+      - get: relint-envs
     - task: cleanup-stable-periodic-cats
       file: runtime-ci/tasks/cleanup-after-cats/task.yml
       input_mapping:
-        integration-config: bellatrix-env-integration-configs
+        integration-config: relint-envs
+      params:
+        CONFIG_FILE_PATH: environments/test/bellatrix/integration_config.json
 
 - name: stable-update-cats-cfd-branch
   public: true
