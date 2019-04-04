@@ -20,22 +20,12 @@ resources:
     branch: master
     pool: bbr
     private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
-- name: baba-yaga-env-director-state
+- name: relint-envs
   type: git
   source:
     branch: master
-    uri: git@github.com:cloudfoundry/baba-yaga-env.git
-    private_key: ((baba_yaga_env_readwrite_deploy_key.private_key))
-    paths:
-    - bbl-state
-- name: baba-yaga-env-integration-configs
-  type: git
-  source:
-    branch: master
-    uri: git@github.com:cloudfoundry/baba-yaga-env.git
-    private_key: ((baba_yaga_env_readwrite_deploy_key.private_key))
-    paths:
-    - integration_config.json
+    uri: git@github.com:cloudfoundry/relint-envs.git
+    private_key: ((hagrid_env_readwrite_deploy_key.private_key))
 - name: cf-deployment-concourse-tasks
   type: git
   source:
@@ -101,17 +91,17 @@ jobs:
       - get: runtime-ci
       - get: cf-deployment-concourse-tasks
       - get: cf-deployment-rc
-      - get: baba-yaga-env-director-state
-      - get: baba-yaga-env-integration-configs
+      - get: relint-envs
       - get: persi-ci
     - task: bosh-deploy-cf
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
-        bbl-state: baba-yaga-env-director-state
+        bbl-state: relint-envs
         cf-deployment: cf-deployment-rc
         ops-files: cf-deployment-rc
-        vars-files: baba-yaga-env-director-state
+        vars-files: relint-envs
       params:
+        BBL_STATE_DIR: environments/test/bbr/bbl-state
         SYSTEM_DOMAIN: baba-yaga.cf-app.com
         OPS_FILES: |
           operations/use-compiled-releases.yml
@@ -121,29 +111,34 @@ jobs:
     - task: open-asgs-for-credhub
       file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
       input_mapping:
-        bbl-state: baba-yaga-env-director-state
+        bbl-state: relint-envs
       params:
+        BBL_STATE_DIR: environments/test/bbr/bbl-state
         INSTANCE_GROUP_NAME: credhub
         SYSTEM_DOMAIN: baba-yaga.cf-app.com
         SECURITY_GROUP_NAME: credhub
     - task: open-asgs-for-uaa
       file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
       input_mapping:
-        bbl-state: baba-yaga-env-director-state
+        bbl-state: relint-envs
       params:
+        BBL_STATE_DIR: environments/test/bbr/bbl-state
         INSTANCE_GROUP_NAME: uaa
         SYSTEM_DOMAIN: baba-yaga.cf-app.com
         SECURITY_GROUP_NAME: uaa
     - task: run-nfs-broker-push-errand
       file: cf-deployment-concourse-tasks/run-errand/task.yml
       input_mapping:
-        bbl-state: baba-yaga-env-director-state
+        bbl-state: relint-envs
       params:
+        BBL_STATE_DIR: environments/test/bbr/bbl-state
         ERRAND_NAME: nfs-broker-push
     - task: run-bosh-cleanup
       file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
       input_mapping:
-        bbl-state: baba-yaga-env-director-state
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/bbr/bbl-state
 
 - name: run-drats
   public: true
@@ -158,15 +153,16 @@ jobs:
       passed: [ deploy ]
     - aggregate:
       - get: bbr-github-release
-      - get: baba-yaga-env-director-state
+      - get: relint-envs
       - get: cf-deployment-concourse-tasks
       - get: drats-master
       - get: runtime-ci
     - task: generate-drats-config
       file: runtime-ci/tasks/generate-drats-config/task.yml
       input_mapping:
-        bbl-state: baba-yaga-env-director-state
+        bbl-state: relint-envs
       params:
+        BBL_STATE_DIR: environments/test/bbr/bbl-state
         SYSTEM_DOMAIN: baba-yaga.cf-app.com
     - task: run-drats
       privileged: true
