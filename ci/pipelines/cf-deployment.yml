@@ -183,10 +183,6 @@ resources:
   type: time
   source:
     interval: 30m
-- name: hourly
-  type: time
-  source:
-    interval: 60m
 - name: cf-deployment-concourse-tasks
   type: git
   source:
@@ -328,8 +324,6 @@ jobs:
       - get: cf-deployment-develop
         trigger: true
         passed: [unit-test-ops-files, unit-test-golang-tests, unit-test-update-releases-coverage]
-      - get: hourly
-        trigger: true
     - put: lite-pool
       params: {acquire: true}
 
@@ -1015,7 +1009,7 @@ jobs:
         NEW_OPS_FILES: |
           environments/test/snitch/use-default-route-registrar-timeout-for-api.yml
           environments/test/snitch/use-debug-level-logging.yml
-    - task: bosh-deploy-cf-deployment
+    - task: bosh-deploy-cf
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
@@ -1031,11 +1025,9 @@ jobs:
           operations/use-compiled-releases.yml
           operations/bosh-lite.yml
           operations/use-debug-level-logging.yml
-          operations/use-external-dbs.yml
         VARS_FILES: |
           environments/test/snitch/ddog.yml
-          environments/test/snitch/external-db-vars.yml
-        REGENERATE_CREDENTIALS: false
+        REGENERATE_CREDENTIALS: true
         BOSH_LITE: true
     - task: run-bosh-cleanup
       file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
