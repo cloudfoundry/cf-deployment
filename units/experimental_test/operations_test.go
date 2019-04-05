@@ -27,6 +27,7 @@ var experimentalTests = map[string]helpers.OpsFileTestParams{
 	"add-system-metrics-agent-windows1803.yml": {
 		Ops: []string{"../windows1803-cell.yml", "add-system-metrics-agent.yml", "add-system-metrics-agent-windows1803.yml"},
 	},
+	"deploy-forwarder-agent.yml":               {},
 	"disable-interpolate-service-bindings.yml": {},
 	"enable-bpm-garden.yml":                    {},
 	"enable-iptables-logger.yml":               {},
