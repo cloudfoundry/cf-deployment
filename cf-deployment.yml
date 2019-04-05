@@ -20,6 +20,8 @@ addons:
   - name: loggregator_agent
     release: loggregator-agent
     properties:
+      grpc_port: 3459
+      disable_udp: true
       loggregator:
         tls:
           ca_cert: "((loggregator_ca.certificate))"
@@ -35,6 +37,12 @@ addons:
         client_key: "((expvar_forwarder.private_key))"
       default_source_id: metron
       counters:
+      - addr: http://127.0.0.1:14823/debug/vars
+        name: ingress
+        source_id: forwarder_agent
+        template: "{{.ForwarderAgent.IngressV2}}"
+        tags:
+          metric_version: "2.0"
       - addr: http://127.0.0.1:14824/debug/vars
         name: dropped
         template: "{{.Agent.Dropped}}"
@@ -103,6 +111,19 @@ addons:
         tags:
           origin: loggregator.metron
           metric_version: "2.0"
+
+- name: forwarder_agent
+  include:
+    stemcell:
+    - os: ubuntu-xenial
+  jobs:
+  - name: loggr-forwarder-agent
+    release: loggregator-agent
+    properties:
+      tls:
+        ca_cert: "((loggregator_ca.certificate))"
+        cert: "((loggregator_tls_agent.certificate))"
+        key: "((loggregator_tls_agent.private_key))"
 
 - name: bpm
   include:
@@ -583,8 +604,8 @@ instance_groups:
       encryption:
         active_key_label: default_key
         encryption_keys:
-          - label: default_key
-            passphrase: ((uaa_default_encryption_passphrase))
+        - label: default_key
+          passphrase: ((uaa_default_encryption_passphrase))
       login:
         saml:
           activeKeyId: key-1
@@ -1051,6 +1072,14 @@ instance_groups:
             ca_cert: "((service_cf_internal_ca.certificate))"
             server_cert: "((cc_bridge_cc_uploader_server.certificate))"
             server_key: "((cc_bridge_cc_uploader_server.private_key))"
+  - name: loggr-udp-forwarder
+    release: loggregator-agent
+    properties:
+      loggregator:
+        tls:
+          ca: "((loggregator_ca.certificate))"
+          cert: "((loggregator_tls_agent.certificate))"
+          key: "((loggregator_tls_agent.private_key))"
 - name: cc-worker
   azs:
   - z1
@@ -1305,6 +1334,14 @@ instance_groups:
         ca_cert: "((uaa_ca.certificate))"
         ssl:
           port: 8443
+  - name: loggr-udp-forwarder
+    release: loggregator-agent
+    properties:
+      loggregator:
+        tls:
+          ca: "((loggregator_ca.certificate))"
+          cert: "((loggregator_tls_agent.certificate))"
+          key: "((loggregator_tls_agent.private_key))"
 - name: tcp-router
   azs:
   - z1
@@ -1326,6 +1363,14 @@ instance_groups:
       uaa:
         ca_cert: "((uaa_ca.certificate))"
         tls_port: 8443
+  - name: loggr-udp-forwarder
+    release: loggregator-agent
+    properties:
+      loggregator:
+        tls:
+          ca: "((loggregator_ca.certificate))"
+          cert: "((loggregator_tls_agent.certificate))"
+          key: "((loggregator_tls_agent.private_key))"
 - name: doppler
   azs:
   - z1
@@ -1380,7 +1425,7 @@ instance_groups:
           key: "((log_cache_to_loggregator_agent.private_key))"
       maps: []
       counters:
-        # Log Cache
+      # Log Cache
       - name: egress
         source_id: log-cache
         addr: http://localhost:6060/debug/vars
@@ -1420,7 +1465,7 @@ instance_groups:
         addr: http://localhost:6061/debug/vars
         template: "{{.Nozzle.Dropped}}"
       gauges:
-        # Log Cache
+      # Log Cache
       - name: cache-period
         source_id: log-cache
         addr: http://localhost:6060/debug/vars
@@ -1516,17 +1561,17 @@ instance_groups:
     properties:
       cflinuxfs2-rootfs:
         trusted_certs:
-          - ((application_ca.certificate))
-          - ((credhub_ca.certificate))
-          - ((uaa_ca.certificate))
+        - ((application_ca.certificate))
+        - ((credhub_ca.certificate))
+        - ((uaa_ca.certificate))
   - name: cflinuxfs3-rootfs-setup
     release: cflinuxfs3
     properties:
       cflinuxfs3-rootfs:
         trusted_certs:
-          - ((application_ca.certificate))
-          - ((credhub_ca.certificate))
-          - ((uaa_ca.certificate))
+        - ((application_ca.certificate))
+        - ((credhub_ca.certificate))
+        - ((uaa_ca.certificate))
   - name: garden
     release: garden-runc
     properties:
@@ -1559,9 +1604,9 @@ instance_groups:
           - cflinuxfs3:/var/vcap/packages/cflinuxfs3/rootfs.tar
       containers:
         trusted_ca_certificates:
-          - ((application_ca.certificate))
-          - ((credhub_ca.certificate))
-          - ((uaa_ca.certificate))
+        - ((application_ca.certificate))
+        - ((credhub_ca.certificate))
+        - ((uaa_ca.certificate))
       enable_consul_service_registration: false
       enable_declarative_healthcheck: true
       loggregator: *diego_loggregator_client_properties
@@ -2262,8 +2307,8 @@ variables:
     ca: pxc_galera_ca
     common_name: galera_server_certificate
     extended_key_usage:
-      - server_auth
-      - client_auth
+    - server_auth
+    - client_auth
 - name: mysql_server_certificate
   type: certificate
   options:
