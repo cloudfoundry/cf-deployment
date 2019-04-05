@@ -4,6 +4,12 @@ main() {
   local CF_D_PIPELINES=(cf-deployment update-releases pull-requests bbr)
   local PIPELINE=${1?"Valid input ${CF_D_PIPELINES[@]}"}
 
+  if [[ "${PIPELINE}" == "bbr" ]]; then
+    echo "BBR pipeline is DEPRECATED. It should be paused during evaluation period."
+    fly -t relint-ci pause-pipeline -p bbr
+    exit 1
+  fi
+
   if [[ "${PIPELINE}" == "update-releases" ]]; then
     cat > "${PROJECT_DIR}/ci/pipelines/${PIPELINE}.yml" <<EOF
 ## ======================================================================
