@@ -121,7 +121,6 @@ resources:
     branch: master
     pool: cf-deployment/fresh
     private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
-
 - name: upgrade-pool
   type: pool
   source:
@@ -129,7 +128,6 @@ resources:
     branch: master
     pool: cf-deployment/upgrade
     private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
-
 - name: lite-pool
   type: pool
   source:
@@ -137,7 +135,6 @@ resources:
     branch: master
     pool: cf-deployment/lite
     private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
-
 - name: experimental-pool
   type: pool
   source:
@@ -145,7 +142,6 @@ resources:
     branch: master
     pool: cf-deployment/experimental
     private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
-
 - name: stable-pool
   type: pool
   source:
@@ -153,7 +149,6 @@ resources:
     branch: master
     pool: cf-deployment/stable
     private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
-
 - name: bbr-pool
   type: pool
   source:
@@ -168,7 +163,6 @@ resources:
     branch: master
     uri: git@github.com:cloudfoundry/relint-envs.git
     private_key: ((hagrid_env_readwrite_deploy_key.private_key))
-
 - name: trelawney-env-director-state
   type: git
   source:
@@ -251,21 +245,6 @@ resources:
     ignore_paths:
     - ci/**
     - .envrc
-- name: snitch-env-integration-configs
-  type: git
-  source:
-    branch: master
-    uri: git@github.com:cloudfoundry/snitch-env.git
-    private_key: ((snitch_env_readwrite_deploy_key.private_key))
-    paths:
-    - integration_config.json
-    - rats_integration_config.json
-- name: snitch-env-director-state
-  type: git
-  source:
-    branch: master
-    uri: git@github.com:cloudfoundry/snitch-env.git
-    private_key: ((snitch_env_readwrite_deploy_key.private_key))
 - name: bosh-deployment
   type: git
   source:
@@ -281,14 +260,12 @@ resources:
     private_key: ((cf_relint_ci_semver_readwrite_deploy_key.private_key))
     git_user: "CF MEGA BOT <cf-mega@pivotal.io>"
     file: cf-deployment-version
-
 - name: deliver-tracker-story
   type: tracker
   source:
     token: ((cf_relint_tracker_api_token))
     project_id: "1382120"
     tracker_url: https://www.pivotaltracker.com
-
 - name: drats-master
   type: git
   source:
@@ -1020,32 +997,33 @@ jobs:
       - get: cf-deployment-develop
         passed: [lite-acquire-pool]
       - get: bosh-deployment
-      - get: snitch-env-director-state
-      - get: snitch-env-integration-configs
+      - get: relint-envs
     - task: guarantee-no-existing-cf-deployment
       file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
       input_mapping:
-        bbl-state: snitch-env-director-state
+        bbl-state: relint-envs
       params:
         IGNORE_ERRORS: true
+        BBL_STATE_DIR: environments/test/snitch/bbl-state
     - task: collect-ops-files
       file: cf-deployment-concourse-tasks/collect-ops-files/task.yml
       input_mapping:
         base-ops-files: cf-deployment-develop
-        new-ops-files: snitch-env-director-state
+        new-ops-files: relint-envs
       params:
         BASE_OPS_FILE_DIR: operations
         NEW_OPS_FILES: |
-          use-default-route-registrar-timeout-for-api.yml
-          use-debug-level-logging.yml
+          environments/test/snitch/use-default-route-registrar-timeout-for-api.yml
+          environments/test/snitch/use-debug-level-logging.yml
     - task: bosh-deploy-cf-deployment
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
-        bbl-state: snitch-env-director-state
+        bbl-state: relint-envs
         cf-deployment: cf-deployment-develop
         ops-files: collected-ops-files
-        vars-files: snitch-env-director-state
+        vars-files: relint-envs
       params:
+        BBL_STATE_DIR: environments/test/snitch/bbl-state
         SYSTEM_DOMAIN: snitch.cf-app.com
         OPS_FILES: |
           operations/use-default-route-registrar-timeout-for-api.yml
@@ -1055,23 +1033,26 @@ jobs:
           operations/use-debug-level-logging.yml
           operations/use-external-dbs.yml
         VARS_FILES: |
-          ddog.yml
-          external-db-vars.yml
+          environments/test/snitch/ddog.yml
+          environments/test/snitch/external-db-vars.yml
         REGENERATE_CREDENTIALS: false
         BOSH_LITE: true
     - task: run-bosh-cleanup
       file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
       input_mapping:
-        bbl-state: snitch-env-director-state
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/snitch/bbl-state
     - task: update-integration-configs
       file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
       params:
-        CATS_INTEGRATION_CONFIG_FILE: integration_config.json
+        BBL_STATE_DIR: environments/test/snitch/bbl-state
+        CATS_INTEGRATION_CONFIG_FILE: environments/test/snitch/integration_config.json
       input_mapping:
-        bbl-state: snitch-env-director-state
-        integration-configs: snitch-env-integration-configs
+        bbl-state: relint-envs
+        integration-configs: relint-envs
       ensure:
-        put: snitch-env-integration-configs
+        put: relint-envs
         params:
           repository: updated-integration-configs
           rebase: true
@@ -1079,24 +1060,27 @@ jobs:
       - task: open-asgs-for-credhub
         file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
         input_mapping:
-          bbl-state: snitch-env-director-state
+          bbl-state: relint-envs
         params:
+          BBL_STATE_DIR: environments/test/snitch/bbl-state
           INSTANCE_GROUP_NAME: credhub
           SYSTEM_DOMAIN: snitch.cf-app.com
           SECURITY_GROUP_NAME: credhub
       - task: open-asgs-for-uaa
         file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
         input_mapping:
-          bbl-state: snitch-env-director-state
+          bbl-state: relint-envs
         params:
+          BBL_STATE_DIR: environments/test/snitch/bbl-state
           INSTANCE_GROUP_NAME: uaa
           SYSTEM_DOMAIN: snitch.cf-app.com
           SECURITY_GROUP_NAME: uaa
       - task: enable-docker-and-tasks
         file: cf-deployment-concourse-tasks/set-feature-flags/task.yml
         input_mapping:
-          bbl-state: snitch-env-director-state
+          bbl-state: relint-envs
         params:
+          BBL_STATE_DIR: environments/test/snitch/bbl-state
           SYSTEM_DOMAIN: snitch.cf-app.com
           ENABLED_FEATURE_FLAGS: |
             diego_docker
@@ -1489,20 +1473,21 @@ jobs:
       - get: cf-acceptance-tests-rc
       - get: cf-deployment-develop
         passed: [ lite-deploy ]
-      - get: snitch-env-integration-configs
+      - get: relint-envs
       - get: cf-deployment-concourse-tasks
     - task: run-cats
       file: cf-deployment-concourse-tasks/run-cats/task.yml
       input_mapping:
-        integration-config: snitch-env-integration-configs
+        integration-config: relint-envs
         cf-acceptance-tests: cf-acceptance-tests-rc
       params:
+        CONFIG_FILE_PATH: environments/test/snitch/integration_config.json
+        REPORTER_CONFIG_FILE_PATH: environments/test/snitch/reporter_config.json
         NODES: 4
         RELINT_VERBOSE_AUTH: "true"
       ensure:
         put: lite-pool
         params: {release: lite-pool}
-
 
 - name: fresh-delete-deployment
   serial: true
