@@ -118,12 +118,12 @@ resources:
   source:
     branch: master
     uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
-- name: greengrass-env-director-state
+- name: relint-envs
   type: git
   source:
     branch: master
-    uri: git@github.com:cloudfoundry/greengrass-env.git
-    private_key: ((greengrass_env_readwrite_deploy_key.private_key))
+    uri: git@github.com:cloudfoundry/relint-envs.git
+    private_key: ((hagrid_env_readwrite_deploy_key.private_key))
 - name: runtime-ci
   type: git
   source:
@@ -568,7 +568,7 @@ jobs:
   plan:
   - aggregate:
     - get: runtime-ci
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
     - get: binary-buildpack-release
@@ -703,11 +703,12 @@ jobs:
       params:
         tarball: false
   - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
+    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       INFRASTRUCTURE: google
 - name: update-binary-buildpack
   serial_groups:
@@ -720,7 +721,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: binary-buildpack-release
       trigger: true
       params:
@@ -740,9 +741,10 @@ jobs:
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: binary-buildpack
   - task: update-additional-ops-files-binary-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -796,7 +798,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: bosh-dns-aliases-release
       trigger: true
       params:
@@ -816,25 +818,28 @@ jobs:
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: updated-deployment-manifest
       ops-files: cf-deployment-develop
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: bosh-dns-aliases
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: bosh-delete-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME: cf-dry-run-bosh-dns-aliases
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: bosh-dns-aliases
   - task: update-additional-ops-files-bosh-dns-aliases
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -888,7 +893,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: bpm-release
       trigger: true
       params:
@@ -908,25 +913,28 @@ jobs:
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: updated-deployment-manifest
       ops-files: cf-deployment-develop
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: bpm
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: bosh-delete-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME: cf-dry-run-bpm
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: bpm
   - task: update-additional-ops-files-bpm
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -980,7 +988,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: capi-release
       trigger: true
       params:
@@ -1000,25 +1008,28 @@ jobs:
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: updated-deployment-manifest
       ops-files: cf-deployment-develop
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: capi
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: bosh-delete-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME: cf-dry-run-capi
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: capi
   - task: update-additional-ops-files-capi
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -1072,7 +1083,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: cf-networking-release
       trigger: true
       params:
@@ -1092,25 +1103,28 @@ jobs:
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: updated-deployment-manifest
       ops-files: cf-deployment-develop
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: cf-networking
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: bosh-delete-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME: cf-dry-run-cf-networking
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: cf-networking
   - task: update-additional-ops-files-cf-networking
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -1164,7 +1178,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: cf-smoke-tests-release
       trigger: true
       params:
@@ -1184,25 +1198,28 @@ jobs:
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: updated-deployment-manifest
       ops-files: cf-deployment-develop
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: cf-smoke-tests
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: bosh-delete-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME: cf-dry-run-cf-smoke-tests
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: cf-smoke-tests
   - task: update-additional-ops-files-cf-smoke-tests
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -1256,7 +1273,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: cf-syslog-drain-release
       trigger: true
       params:
@@ -1276,25 +1293,28 @@ jobs:
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: updated-deployment-manifest
       ops-files: cf-deployment-develop
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: cf-syslog-drain
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: bosh-delete-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME: cf-dry-run-cf-syslog-drain
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: cf-syslog-drain
   - task: update-additional-ops-files-cf-syslog-drain
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -1348,7 +1368,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: cflinuxfs2-release
       trigger: true
       params:
@@ -1368,25 +1388,28 @@ jobs:
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: updated-deployment-manifest
       ops-files: cf-deployment-develop
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: cflinuxfs2
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: bosh-delete-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME: cf-dry-run-cflinuxfs2
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: cflinuxfs2
   - task: update-additional-ops-files-cflinuxfs2
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -1440,7 +1463,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: cflinuxfs3-release
       trigger: true
       params:
@@ -1460,25 +1483,28 @@ jobs:
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: updated-deployment-manifest
       ops-files: cf-deployment-develop
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: cflinuxfs3
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: bosh-delete-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME: cf-dry-run-cflinuxfs3
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: cflinuxfs3
   - task: update-additional-ops-files-cflinuxfs3
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -1532,7 +1558,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: diego-release
       trigger: true
       params:
@@ -1552,25 +1578,28 @@ jobs:
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: updated-deployment-manifest
       ops-files: cf-deployment-develop
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: diego
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: bosh-delete-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME: cf-dry-run-diego
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: diego
   - task: update-additional-ops-files-diego
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -1624,7 +1653,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: dotnet-core-buildpack-release
       trigger: true
       params:
@@ -1644,9 +1673,10 @@ jobs:
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: dotnet-core-buildpack
   - task: update-additional-ops-files-dotnet-core-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -1700,7 +1730,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: garden-runc-release
       trigger: true
       params:
@@ -1720,25 +1750,28 @@ jobs:
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: updated-deployment-manifest
       ops-files: cf-deployment-develop
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: garden-runc
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: bosh-delete-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME: cf-dry-run-garden-runc
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: garden-runc
   - task: update-additional-ops-files-garden-runc
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -1792,7 +1825,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: go-buildpack-release
       trigger: true
       params:
@@ -1812,9 +1845,10 @@ jobs:
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: go-buildpack
   - task: update-additional-ops-files-go-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -1868,7 +1902,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: java-buildpack-release
       trigger: true
       params:
@@ -1888,9 +1922,10 @@ jobs:
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: java-buildpack
   - task: update-additional-ops-files-java-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -1944,7 +1979,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: log-cache-release
       trigger: true
       params:
@@ -1964,25 +1999,28 @@ jobs:
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: updated-deployment-manifest
       ops-files: cf-deployment-develop
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: log-cache
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: bosh-delete-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME: cf-dry-run-log-cache
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: log-cache
   - task: update-additional-ops-files-log-cache
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -2036,7 +2074,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: loggregator-release
       trigger: true
       params:
@@ -2056,25 +2094,28 @@ jobs:
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: updated-deployment-manifest
       ops-files: cf-deployment-develop
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: loggregator
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: bosh-delete-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME: cf-dry-run-loggregator
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: loggregator
   - task: update-additional-ops-files-loggregator
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -2128,7 +2169,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: loggregator-agent-release
       trigger: true
       params:
@@ -2148,25 +2189,28 @@ jobs:
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: updated-deployment-manifest
       ops-files: cf-deployment-develop
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: loggregator-agent
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: bosh-delete-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME: cf-dry-run-loggregator-agent
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: loggregator-agent
   - task: update-additional-ops-files-loggregator-agent
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -2220,7 +2264,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: nats-release
       trigger: true
       params:
@@ -2240,25 +2284,28 @@ jobs:
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: updated-deployment-manifest
       ops-files: cf-deployment-develop
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: nats
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: bosh-delete-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME: cf-dry-run-nats
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: nats
   - task: update-additional-ops-files-nats
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -2312,7 +2359,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: nginx-buildpack-release
       trigger: true
       params:
@@ -2332,9 +2379,10 @@ jobs:
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: nginx-buildpack
   - task: update-additional-ops-files-nginx-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -2388,7 +2436,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: nodejs-buildpack-release
       trigger: true
       params:
@@ -2408,9 +2456,10 @@ jobs:
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: nodejs-buildpack
   - task: update-additional-ops-files-nodejs-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -2464,7 +2513,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: php-buildpack-release
       trigger: true
       params:
@@ -2484,9 +2533,10 @@ jobs:
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: php-buildpack
   - task: update-additional-ops-files-php-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -2540,7 +2590,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: python-buildpack-release
       trigger: true
       params:
@@ -2560,9 +2610,10 @@ jobs:
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: python-buildpack
   - task: update-additional-ops-files-python-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -2616,7 +2667,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: pxc-release
       trigger: true
       params:
@@ -2636,25 +2687,28 @@ jobs:
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: updated-deployment-manifest
       ops-files: cf-deployment-develop
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: pxc
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: bosh-delete-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME: cf-dry-run-pxc
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: pxc
   - task: update-additional-ops-files-pxc
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -2708,7 +2762,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: r-buildpack-release
       trigger: true
       params:
@@ -2728,9 +2782,10 @@ jobs:
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: r-buildpack
   - task: update-additional-ops-files-r-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -2784,7 +2839,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: routing-release
       trigger: true
       params:
@@ -2804,25 +2859,28 @@ jobs:
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: updated-deployment-manifest
       ops-files: cf-deployment-develop
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: routing
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: bosh-delete-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME: cf-dry-run-routing
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: routing
   - task: update-additional-ops-files-routing
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -2876,7 +2934,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: ruby-buildpack-release
       trigger: true
       params:
@@ -2896,9 +2954,10 @@ jobs:
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: ruby-buildpack
   - task: update-additional-ops-files-ruby-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -2952,7 +3011,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: silk-release
       trigger: true
       params:
@@ -2972,25 +3031,28 @@ jobs:
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: updated-deployment-manifest
       ops-files: cf-deployment-develop
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: silk
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: bosh-delete-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME: cf-dry-run-silk
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: silk
   - task: update-additional-ops-files-silk
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -3044,7 +3106,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: staticfile-buildpack-release
       trigger: true
       params:
@@ -3064,9 +3126,10 @@ jobs:
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: staticfile-buildpack
   - task: update-additional-ops-files-staticfile-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -3120,7 +3183,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: statsd-injector-release
       trigger: true
       params:
@@ -3140,25 +3203,28 @@ jobs:
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: updated-deployment-manifest
       ops-files: cf-deployment-develop
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: statsd-injector
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: bosh-delete-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME: cf-dry-run-statsd-injector
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: statsd-injector
   - task: update-additional-ops-files-statsd-injector
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -3212,7 +3278,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: uaa-release
       trigger: true
       params:
@@ -3232,25 +3298,28 @@ jobs:
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: updated-deployment-manifest
       ops-files: cf-deployment-develop
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: uaa
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: bosh-delete-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME: cf-dry-run-uaa
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: uaa
   - task: update-additional-ops-files-uaa
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -3304,7 +3373,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: credhub-release
       trigger: true
       params:
@@ -3324,25 +3393,28 @@ jobs:
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: updated-deployment-manifest
       ops-files: cf-deployment-develop
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: credhub
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: bosh-delete-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME: cf-dry-run-credhub
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: credhub
   - task: update-additional-ops-files-credhub
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -3396,7 +3468,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: cf-cli-release
       trigger: true
       params:
@@ -3416,25 +3488,28 @@ jobs:
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: updated-deployment-manifest
       ops-files: cf-deployment-develop
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: cf-cli
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: bosh-delete-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME: cf-dry-run-cf-cli
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       manifest: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: cf-cli
   - task: update-additional-ops-files-cf-cli
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
@@ -3486,7 +3561,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: backup-and-restore-sdk-release
       trigger: true
       params:
@@ -3503,12 +3578,13 @@ jobs:
     params:
       RELEASE_NAME: backup-and-restore-sdk
   - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
+    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: cf-deployment-develop
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       INFRASTRUCTURE: google
       OPS_FILES: |
         operations/windows2012R2-cell.yml
@@ -3518,11 +3594,12 @@ jobs:
   - task: bosh-dry-run-backup-and-restore-sdk
     file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: updated-ops-file
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: backup-and-restore-sdk
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: commit-generated-manifest-and-ops-backup-and-restore-sdk
@@ -3546,7 +3623,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: bits-service-release
       trigger: true
       params:
@@ -3563,12 +3640,13 @@ jobs:
     params:
       RELEASE_NAME: bits-service
   - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
+    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: cf-deployment-develop
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       INFRASTRUCTURE: google
       OPS_FILES: |
         operations/windows2012R2-cell.yml
@@ -3578,11 +3656,12 @@ jobs:
   - task: bosh-dry-run-bits-service
     file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: updated-ops-file
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: bits-service
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: commit-generated-manifest-and-ops-bits-service
@@ -3606,7 +3685,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: cf-app-sd-release
       trigger: true
       params:
@@ -3623,12 +3702,13 @@ jobs:
     params:
       RELEASE_NAME: cf-app-sd
   - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
+    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: cf-deployment-develop
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       INFRASTRUCTURE: google
       OPS_FILES: |
         operations/windows2012R2-cell.yml
@@ -3638,11 +3718,12 @@ jobs:
   - task: bosh-dry-run-cf-app-sd
     file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: updated-ops-file
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: cf-app-sd
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: commit-generated-manifest-and-ops-cf-app-sd
@@ -3666,7 +3747,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: haproxy-release
       trigger: true
       params:
@@ -3683,12 +3764,13 @@ jobs:
     params:
       RELEASE_NAME: haproxy
   - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
+    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: cf-deployment-develop
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       INFRASTRUCTURE: google
       OPS_FILES: |
         operations/windows2012R2-cell.yml
@@ -3698,15 +3780,16 @@ jobs:
   - task: bosh-dry-run-haproxy
     file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: updated-ops-file
       vars-files: greengrass-env-director-state
 
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: haproxy
       SYSTEM_DOMAIN: greengrass.cf-app.com
-      VARS_FILES: vars-files/haproxy-vars.yml
+      VARS_FILES: environments/test/greengrass/vars-files/haproxy-vars.yml
   - task: commit-generated-manifest-and-ops-haproxy
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
@@ -3728,7 +3811,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: mapfs-release
       trigger: true
       params:
@@ -3745,12 +3828,13 @@ jobs:
     params:
       RELEASE_NAME: mapfs
   - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
+    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: cf-deployment-develop
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       INFRASTRUCTURE: google
       OPS_FILES: |
         operations/windows2012R2-cell.yml
@@ -3760,11 +3844,12 @@ jobs:
   - task: bosh-dry-run-mapfs
     file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: updated-ops-file
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: mapfs
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: commit-generated-manifest-and-ops-mapfs
@@ -3788,7 +3873,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: nfs-volume-release
       trigger: true
       params:
@@ -3805,12 +3890,13 @@ jobs:
     params:
       RELEASE_NAME: nfs-volume
   - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
+    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: cf-deployment-develop
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       INFRASTRUCTURE: google
       OPS_FILES: |
         operations/windows2012R2-cell.yml
@@ -3820,11 +3906,12 @@ jobs:
   - task: bosh-dry-run-nfs-volume
     file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: updated-ops-file
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: nfs-volume
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: commit-generated-manifest-and-ops-nfs-volume
@@ -3848,7 +3935,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: smb-volume-release
       trigger: true
       params:
@@ -3865,12 +3952,13 @@ jobs:
     params:
       RELEASE_NAME: smb-volume
   - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
+    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: cf-deployment-develop
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       INFRASTRUCTURE: google
       OPS_FILES: |
         operations/windows2012R2-cell.yml
@@ -3880,11 +3968,12 @@ jobs:
   - task: bosh-dry-run-smb-volume
     file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: updated-ops-file
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: smb-volume
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: commit-generated-manifest-and-ops-smb-volume
@@ -3908,7 +3997,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: postgres-release
       trigger: true
       params:
@@ -3925,12 +4014,13 @@ jobs:
     params:
       RELEASE_NAME: postgres
   - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
+    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: cf-deployment-develop
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       INFRASTRUCTURE: google
       OPS_FILES: |
         operations/windows2012R2-cell.yml
@@ -3940,11 +4030,12 @@ jobs:
   - task: bosh-dry-run-postgres
     file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: updated-ops-file
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: postgres
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: commit-generated-manifest-and-ops-postgres
@@ -3968,7 +4059,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: syslog-release
       trigger: true
       params:
@@ -3985,12 +4076,13 @@ jobs:
     params:
       RELEASE_NAME: syslog
   - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
+    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: cf-deployment-develop
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       INFRASTRUCTURE: google
       OPS_FILES: |
         operations/windows2012R2-cell.yml
@@ -4000,12 +4092,13 @@ jobs:
   - task: bosh-dry-run-syslog
     file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: updated-ops-file
       vars-files: cf-deployment-develop
 
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: syslog
       SYSTEM_DOMAIN: greengrass.cf-app.com
       VARS_FILES: operations/addons/example-vars-files/vars-enable-component-syslog.yml
@@ -4030,7 +4123,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: windows-syslog-release
       trigger: true
       params:
@@ -4047,12 +4140,13 @@ jobs:
     params:
       RELEASE_NAME: windows-syslog
   - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
+    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: cf-deployment-develop
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       INFRASTRUCTURE: google
       OPS_FILES: |
         operations/windows2012R2-cell.yml
@@ -4062,15 +4156,16 @@ jobs:
   - task: bosh-dry-run-windows-syslog
     file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: updated-ops-file
       vars-files: greengrass-env-director-state
 
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: windows-syslog
       SYSTEM_DOMAIN: greengrass.cf-app.com
-      VARS_FILES: vars-files/windows-enable-component-syslog-vars.yml
+      VARS_FILES: environments/test/greengrass/vars-files/windows-enable-component-syslog-vars.yml
   - task: commit-generated-manifest-and-ops-windows-syslog
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
@@ -4092,7 +4187,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: hwc-buildpack-release
       trigger: true
       params:
@@ -4109,12 +4204,13 @@ jobs:
     params:
       RELEASE_NAME: hwc-buildpack
   - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
+    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: cf-deployment-develop
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       INFRASTRUCTURE: google
       OPS_FILES: |
         operations/windows2012R2-cell.yml
@@ -4124,11 +4220,12 @@ jobs:
   - task: bosh-dry-run-hwc-buildpack
     file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: updated-ops-file
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: hwc-buildpack
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: commit-generated-manifest-and-ops-hwc-buildpack
@@ -4152,7 +4249,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: windows-utilities-release
       trigger: true
       params:
@@ -4169,12 +4266,13 @@ jobs:
     params:
       RELEASE_NAME: windows-utilities
   - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
+    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: cf-deployment-develop
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       INFRASTRUCTURE: google
       OPS_FILES: |
         operations/windows2012R2-cell.yml
@@ -4184,11 +4282,12 @@ jobs:
   - task: bosh-dry-run-windows-utilities
     file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: updated-ops-file
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: windows-utilities
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: commit-generated-manifest-and-ops-windows-utilities
@@ -4212,7 +4311,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: garden-windows-release
       trigger: true
       params:
@@ -4229,12 +4328,13 @@ jobs:
     params:
       RELEASE_NAME: garden-windows
   - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
+    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: cf-deployment-develop
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       INFRASTRUCTURE: google
       OPS_FILES: |
         operations/windows2012R2-cell.yml
@@ -4244,11 +4344,12 @@ jobs:
   - task: bosh-dry-run-garden-windows
     file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: updated-ops-file
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: garden-windows
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: commit-generated-manifest-and-ops-garden-windows
@@ -4272,7 +4373,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: winc-release
       trigger: true
       params:
@@ -4289,12 +4390,13 @@ jobs:
     params:
       RELEASE_NAME: winc
   - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
+    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: cf-deployment-develop
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       INFRASTRUCTURE: google
       OPS_FILES: |
         operations/windows2012R2-cell.yml
@@ -4304,11 +4406,12 @@ jobs:
   - task: bosh-dry-run-winc
     file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: updated-ops-file
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: winc
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: commit-generated-manifest-and-ops-winc
@@ -4332,7 +4435,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: windows1803fs-release
       trigger: true
       params:
@@ -4349,12 +4452,13 @@ jobs:
     params:
       RELEASE_NAME: windows1803fs
   - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
+    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: cf-deployment-develop
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       INFRASTRUCTURE: google
       OPS_FILES: |
         operations/windows2012R2-cell.yml
@@ -4364,11 +4468,12 @@ jobs:
   - task: bosh-dry-run-windows1803fs
     file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: updated-ops-file
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: windows1803fs
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: commit-generated-manifest-and-ops-windows1803fs
@@ -4392,7 +4497,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: windows2016fs-release
       trigger: true
       params:
@@ -4409,12 +4514,13 @@ jobs:
     params:
       RELEASE_NAME: windows2016fs
   - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
+    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: cf-deployment-develop
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       INFRASTRUCTURE: google
       OPS_FILES: |
         operations/windows2012R2-cell.yml
@@ -4424,11 +4530,12 @@ jobs:
   - task: bosh-dry-run-windows2016fs
     file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: updated-ops-file
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: windows2016fs
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: commit-generated-manifest-and-ops-windows2016fs
@@ -4452,7 +4559,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: node-exporter-release
       trigger: true
       params:
@@ -4469,12 +4576,13 @@ jobs:
     params:
       RELEASE_NAME: node-exporter
   - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
+    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: cf-deployment-develop
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       INFRASTRUCTURE: google
       OPS_FILES: |
         operations/windows2012R2-cell.yml
@@ -4484,11 +4592,12 @@ jobs:
   - task: bosh-dry-run-node-exporter
     file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: updated-ops-file
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: node-exporter
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: commit-generated-manifest-and-ops-node-exporter
@@ -4512,7 +4621,7 @@ jobs:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: leadership-election-release
       trigger: true
       params:
@@ -4529,12 +4638,13 @@ jobs:
     params:
       RELEASE_NAME: leadership-election
   - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
+    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: cf-deployment-develop
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       INFRASTRUCTURE: google
       OPS_FILES: |
         operations/windows2012R2-cell.yml
@@ -4544,11 +4654,12 @@ jobs:
   - task: bosh-dry-run-leadership-election
     file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: updated-ops-file
-      vars-files: greengrass-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: leadership-election
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: commit-generated-manifest-and-ops-leadership-election
@@ -4700,7 +4811,7 @@ jobs:
   plan:
   - aggregate:
     - get: runtime-ci
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
     - get: binary-buildpack-release
@@ -4808,300 +4919,333 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-develop
   - task: upload-updated-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcell-from-cf-deployment/task.yml
+    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
       cf-deployment: updated-deployment-manifest
     params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
       INFRASTRUCTURE: google
   - aggregate:
     - task: compile-release-binary-buildpack
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-binary-buildpack
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: binary-buildpack
     - task: compile-release-bosh-dns-aliases
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-bosh-dns-aliases
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: bosh-dns-aliases
     - task: compile-release-bpm
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-bpm
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: bpm
     - task: compile-release-capi
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-capi
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: capi
     - task: compile-release-cf-networking
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-cf-networking
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: cf-networking
     - task: compile-release-cf-smoke-tests
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-cf-smoke-tests
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: cf-smoke-tests
     - task: compile-release-cf-syslog-drain
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-cf-syslog-drain
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: cf-syslog-drain
     - task: compile-release-cflinuxfs2
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-cflinuxfs2
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: cflinuxfs2
     - task: compile-release-cflinuxfs3
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-cflinuxfs3
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: cflinuxfs3
     - task: compile-release-diego
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-diego
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: diego
     - task: compile-release-dotnet-core-buildpack
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-dotnet-core-buildpack
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: dotnet-core-buildpack
     - task: compile-release-garden-runc
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-garden-runc
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: garden-runc
     - task: compile-release-go-buildpack
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-go-buildpack
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: go-buildpack
     - task: compile-release-java-buildpack
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-java-buildpack
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: java-buildpack
     - task: compile-release-log-cache
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-log-cache
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: log-cache
     - task: compile-release-loggregator
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-loggregator
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: loggregator
     - task: compile-release-loggregator-agent
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-loggregator-agent
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: loggregator-agent
     - task: compile-release-nats
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-nats
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: nats
     - task: compile-release-nginx-buildpack
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-nginx-buildpack
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: nginx-buildpack
     - task: compile-release-nodejs-buildpack
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-nodejs-buildpack
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: nodejs-buildpack
     - task: compile-release-php-buildpack
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-php-buildpack
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: php-buildpack
     - task: compile-release-python-buildpack
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-python-buildpack
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: python-buildpack
     - task: compile-release-pxc
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-pxc
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: pxc
     - task: compile-release-r-buildpack
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-r-buildpack
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: r-buildpack
     - task: compile-release-routing
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-routing
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: routing
     - task: compile-release-ruby-buildpack
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-ruby-buildpack
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: ruby-buildpack
     - task: compile-release-silk
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-silk
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: silk
     - task: compile-release-staticfile-buildpack
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-staticfile-buildpack
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: staticfile-buildpack
     - task: compile-release-statsd-injector
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-statsd-injector
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: statsd-injector
     - task: compile-release-uaa
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-uaa
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: uaa
     - task: compile-release-credhub
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-credhub
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: credhub
     - task: compile-release-cf-cli
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
         manifest: updated-deployment-manifest
       output_mapping:
         exported-release: exported-release-cf-cli
       params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: cf-cli
   - task: update-compiled-releases-ops-binary-buildpack
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
@@ -5607,7 +5751,7 @@ jobs:
   plan:
   - aggregate:
     - get: runtime-ci
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
       params:
@@ -5648,33 +5792,35 @@ jobs:
   - aggregate:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
-    - get: greengrass-env-director-state
+    - get: relint-envs
   - task: setup-infrastructure
     file: cf-deployment-concourse-tasks/bbl-up/task.yml
     params:
-      BBL_CONFIG_DIR: bbl-config
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      BBL_CONFIG_DIR: environments/test/greengrass/bbl-config
       BBL_IAAS: gcp
-      BBL_GCP_SERVICE_ACCOUNT_KEY: google_account_creds.json
+      BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/greengrass/google_account_creds.json
       BBL_GCP_REGION: us-central1
       BBL_LB_CERT: ((greengrass_cf_lb_cert.certificate))
       BBL_LB_KEY: ((greengrass_cf_lb_cert.private_key))
       LB_DOMAIN: greengrass.cf-app.com
       BBL_ENV_NAME: greengrass-compile
     input_mapping:
-      bbl-state: greengrass-env-director-state
-      bbl-config: greengrass-env-director-state
+      bbl-state: relint-envs
+      bbl-config: relint-envs
     ensure:
-      put: greengrass-env-director-state
+      put: relint-envs
       params:
         repository: updated-bbl-state
         rebase: true
   - task: extend-cloud-config-for-credhub-dry-run
     file: runtime-ci/tasks/bosh-extend-cloud-config/task.yml
     input_mapping:
-      ops-file: greengrass-env-director-state
-      bbl-state: greengrass-env-director-state
+      ops-file: relint-envs
+      bbl-state: relint-envs
     params:
-      OPS_FILE_PATH: add-credhub-lb.yml
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      OPS_FILE_PATH: environments/test/greengrass/add-credhub-lb.yml
 
 - name: destroy-infrastructure-compilation
   serial: true
@@ -5682,21 +5828,24 @@ jobs:
   build_logs_to_retain: 100
   plan:
   - aggregate:
-    - get: greengrass-env-director-state
+    - get: relint-envs
     - get: runtime-ci
     - get: cf-deployment-concourse-tasks
   - task: guarantee-no-existing-cf-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
   - task: destroy-infrastructure
     file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
     input_mapping:
-      bbl-state: greengrass-env-director-state
+      bbl-state: relint-envs
     params:
-      BBL_GCP_SERVICE_ACCOUNT_KEY: google_account_creds.json
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/greengrass/google_account_creds.json
     ensure:
-      put: greengrass-env-director-state
+      put: relint-envs
       params:
         repository: updated-bbl-state
         rebase: true
@@ -5710,10 +5859,12 @@ jobs:
     do:
     - aggregate:
       - get: cf-deployment-concourse-tasks
-      - get: greengrass-env-director-state
+      - get: relint-envs
       - get: daily
         trigger: true
     - task: run-bosh-cleanup
       file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
       input_mapping:
-        bbl-state: greengrass-env-director-state
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
