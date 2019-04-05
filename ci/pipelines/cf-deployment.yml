@@ -183,32 +183,6 @@ resources:
     branch: master
     uri: https://github.com/cloudfoundry/runtime-ci.git
 
-- name: hermione-env-director-state
-  type: git
-  source:
-    branch: master
-    uri: git@github.com:cloudfoundry/hermione-env.git
-    private_key: ((hermione_env_readwrite_deploy_key.private_key))
-
-- name: hermione-env-integration-configs
-  type: git
-  source:
-    branch: master
-    uri: git@github.com:cloudfoundry/hermione-env.git
-    private_key: ((hermione_env_readwrite_deploy_key.private_key))
-    paths:
-    - integration_config.json
-    - reporter_config.json
-
-- name: hermione-env-turbulence-manifest
-  type: git
-  source:
-    branch: master
-    uri: git@github.com:cloudfoundry/hermione-env.git
-    private_key: ((hermione_env_readwrite_deploy_key.private_key))
-    paths:
-    - turbulence.yml
-
 - name: cf-deployment-develop
   type: git
   source:
@@ -789,32 +763,32 @@ jobs:
       - get: cf-deployment-concourse-tasks
       - get: cf-deployment-develop
         passed: [ experimental-acquire-pool ]
-      - get: hermione-env-turbulence-manifest
-      - get: hermione-env-director-state
-      - get: hermione-env-integration-configs
+      - get: relint-envs
     - task: add-tcp-domain
       file: runtime-ci/tasks/add-tcp-domain/task.yml
       input_mapping:
-        bbl-state: hermione-env-director-state
+        bbl-state: relint-envs
       params:
+        BBL_STATE_DIR: environments/test/hermione/bbl-state
         SYSTEM_DOMAIN: hermione.cf-app.com
     - task: collect-ops-files
       file: cf-deployment-concourse-tasks/collect-ops-files/task.yml
       input_mapping:
         base-ops-files: cf-deployment-develop
-        new-ops-files: hermione-env-director-state
+        new-ops-files: relint-envs
       params:
         BASE_OPS_FILE_DIR: operations
         NEW_OPS_FILES: |
-          increase-doppler-vm-type-from-minimal-to-small.yml
+          environments/test/hermione/increase-doppler-vm-type-from-minimal-to-small.yml
     - task: bosh-deploy-cf
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
-        bbl-state: hermione-env-director-state
+        bbl-state: relint-envs
         cf-deployment: cf-deployment-develop
         ops-files: collected-ops-files
-        vars-files: hermione-env-director-state
+        vars-files: relint-envs
       params:
+        BBL_STATE_DIR: environments/test/hermione/bbl-state
         SYSTEM_DOMAIN: hermione.cf-app.com
         OPS_FILES: |
           operations/use-compiled-releases.yml
@@ -832,8 +806,8 @@ jobs:
           operations/experimental/add-syslog-agent.yml
           operations/increase-doppler-vm-type-from-minimal-to-small.yml
         VARS_FILES: |
-          bbl-state/vars/director-vars-file.yml
-          vars-use-operator-provided-router-tls-certificates.yml
+          environments/test/hermione/bbl-state/vars/director-vars-file.yml
+          environments/test/hermione/vars-use-operator-provided-router-tls-certificates.yml
         DEPLOY_WITH_UPTIME_MEASUREMENTS: true
         MEASURE_SYSLOG_AVAILABILITY: true
         TCP_DOMAIN: tcp.hermione.cf-app.com
@@ -847,16 +821,19 @@ jobs:
     - task: run-bosh-cleanup
       file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
       input_mapping:
-        bbl-state: hermione-env-director-state
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/hermione/bbl-state
     - task: update-integration-configs
       file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
       params:
-        CATS_INTEGRATION_CONFIG_FILE: integration_config.json
+        BBL_STATE_DIR: environments/test/hermione/bbl-state
+        CATS_INTEGRATION_CONFIG_FILE: environments/test/hermione/integration_config.json
       input_mapping:
-        bbl-state: hermione-env-director-state
-        integration-configs: hermione-env-integration-configs
+        bbl-state: relint-envs
+        integration-configs: relint-envs
       ensure:
-        put: hermione-env-integration-configs
+        put: relint-envs
         params:
           repository: updated-integration-configs
           rebase: true
@@ -864,24 +841,27 @@ jobs:
       - task: open-asgs-for-credhub
         file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
         input_mapping:
-          bbl-state: hermione-env-director-state
+          bbl-state: relint-envs
         params:
+          BBL_STATE_DIR: environments/test/hermione/bbl-state
           INSTANCE_GROUP_NAME: credhub
           SYSTEM_DOMAIN: hermione.cf-app.com
           SECURITY_GROUP_NAME: credhub
       - task: open-asgs-for-uaa
         file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
         input_mapping:
-          bbl-state: hermione-env-director-state
+          bbl-state: relint-envs
         params:
+          BBL_STATE_DIR: environments/test/hermione/bbl-state
           INSTANCE_GROUP_NAME: uaa
           SYSTEM_DOMAIN: hermione.cf-app.com
           SECURITY_GROUP_NAME: uaa
       - task: set-feature-flags
         file: cf-deployment-concourse-tasks/set-feature-flags/task.yml
         input_mapping:
-          bbl-state: hermione-env-director-state
+          bbl-state: relint-envs
         params:
+          BBL_STATE_DIR: environments/test/hermione/bbl-state
           SYSTEM_DOMAIN: hermione.cf-app.com
           ENABLED_FEATURE_FLAGS: |
             diego_docker
@@ -1076,16 +1056,18 @@ jobs:
       passed: [ experimental-deploy ]
     - aggregate:
       - get: cf-acceptance-tests-rc
-      - get: hermione-env-integration-configs
+      - get: relint-envs
       - get: cf-deployment-develop
         passed: [ experimental-deploy ]
       - get: cf-deployment-concourse-tasks
     - task: run-cats
       input_mapping:
-        integration-config: hermione-env-integration-configs
+        integration-config: relint-envs
         cf-acceptance-tests: cf-acceptance-tests-rc
       file: cf-deployment-concourse-tasks/run-cats/task.yml
       params:
+        CONFIG_FILE_PATH: environments/test/hermione/integration_config.json
+        REPORTER_CONFIG_FILE_PATH: environments/test/hermione/reporter_config.json
         RELINT_VERBOSE_AUTH: "true"
 
 - name: experimental-smoke-tests
@@ -1098,7 +1080,7 @@ jobs:
       passed: [ experimental-deploy ]
       trigger: true
     - aggregate:
-      - get: hermione-env-director-state
+      - get: relint-envs
       - get: cf-deployment-develop
         passed: [ experimental-deploy ]
       - get: cf-deployment-concourse-tasks
@@ -1106,9 +1088,10 @@ jobs:
   - task: bosh-run-errand-smoke-tests
     file: cf-deployment-concourse-tasks/run-errand/task.yml
     params:
+      BBL_STATE_DIR: environments/test/hermione/bbl-state
       ERRAND_NAME: smoke-tests
     input_mapping:
-      bbl-state: hermione-env-director-state
+      bbl-state: relint-envs
 
 - name: fresh-smoke-tests
   public: true
