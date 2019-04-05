@@ -1087,70 +1087,6 @@ instance_groups:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
           cc_routing:
             secret: "((uaa_clients_cc-routing_secret))"
-- name: router
-  azs:
-  - z1
-  - z2
-  instances: 2
-  vm_type: minimal
-  vm_extensions:
-  - cf-router-network-properties
-  stemcell: default
-  update:
-    serial: true
-  networks:
-  - name: default
-  jobs:
-  - name: gorouter
-    release: routing
-    properties:
-      router:
-        enable_ssl: true
-        tls_pem:
-        - cert_chain: "((router_ssl.certificate))"
-          private_key: "((router_ssl.private_key))"
-        ca_certs: |
-          ((application_ca.certificate))
-          ((service_cf_internal_ca.certificate))
-        backends:
-          cert_chain: ((gorouter_backend_tls.certificate))
-          private_key: ((gorouter_backend_tls.private_key))
-        status:
-          password: "((router_status_password))"
-          user: router-status
-        route_services_secret: "((router_route_services_secret))"
-        tracing:
-          enable_zipkin: true
-      routing_api:
-        enabled: true
-      uaa:
-        clients:
-          gorouter:
-            secret: "((uaa_clients_gorouter_secret))"
-        ca_cert: "((uaa_ca.certificate))"
-        ssl:
-          port: 8443
-- name: tcp-router
-  azs:
-  - z1
-  - z2
-  instances: 2
-  vm_type: minimal
-  stemcell: default
-  vm_extensions:
-  - cf-tcp-router-network-properties
-  networks:
-  - name: default
-  jobs:
-  - name: tcp_router
-    release: routing
-    properties:
-      tcp_router:
-        oauth_secret: "((uaa_clients_tcp_router_secret))"
-        router_group: default-tcp
-      uaa:
-        ca_cert: "((uaa_ca.certificate))"
-        tls_port: 8443
 - name: scheduler
   azs:
   - z1
@@ -1326,6 +1262,70 @@ instance_groups:
         source_id: log-cache-scheduler
         addr: http://localhost:6064/debug/vars
         template: "{{.WorkerHealth | jsonMap}}"
+- name: router
+  azs:
+  - z1
+  - z2
+  instances: 2
+  vm_type: minimal
+  vm_extensions:
+  - cf-router-network-properties
+  stemcell: default
+  update:
+    serial: true
+  networks:
+  - name: default
+  jobs:
+  - name: gorouter
+    release: routing
+    properties:
+      router:
+        enable_ssl: true
+        tls_pem:
+        - cert_chain: "((router_ssl.certificate))"
+          private_key: "((router_ssl.private_key))"
+        ca_certs: |
+          ((application_ca.certificate))
+          ((service_cf_internal_ca.certificate))
+        backends:
+          cert_chain: ((gorouter_backend_tls.certificate))
+          private_key: ((gorouter_backend_tls.private_key))
+        status:
+          password: "((router_status_password))"
+          user: router-status
+        route_services_secret: "((router_route_services_secret))"
+        tracing:
+          enable_zipkin: true
+      routing_api:
+        enabled: true
+      uaa:
+        clients:
+          gorouter:
+            secret: "((uaa_clients_gorouter_secret))"
+        ca_cert: "((uaa_ca.certificate))"
+        ssl:
+          port: 8443
+- name: tcp-router
+  azs:
+  - z1
+  - z2
+  instances: 2
+  vm_type: minimal
+  stemcell: default
+  vm_extensions:
+  - cf-tcp-router-network-properties
+  networks:
+  - name: default
+  jobs:
+  - name: tcp_router
+    release: routing
+    properties:
+      tcp_router:
+        oauth_secret: "((uaa_clients_tcp_router_secret))"
+        router_group: default-tcp
+      uaa:
+        ca_cert: "((uaa_ca.certificate))"
+        tls_port: 8443
 - name: doppler
   azs:
   - z1
