@@ -18,6 +18,7 @@ var experimentalTests = map[string]helpers.OpsFileTestParams{
 	"add-deployment-updater-postgres.yml": {
 		Ops: []string{"add-deployment-updater.yml", "../use-postgres.yml", "add-deployment-updater-postgres.yml"},
 	},
+	"add-metric-store.yml": {},
 	"add-syslog-agent.yml": {
 		Ops: []string{"deploy-forwarder-agent.yml"},
 	},
