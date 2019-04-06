@@ -169,6 +169,10 @@ resources:
   type: time
   source:
     interval: 30m
+- name: every-other-hour
+  type: time
+  source:
+    interval: 120m
 - name: cf-deployment-concourse-tasks
   type: git
   source:
@@ -312,6 +316,8 @@ jobs:
   - timeout: 4h
     do:
     - aggregate:
+      - get: every-other-hour
+        trigger: true
       - get: cf-deployment-develop
         trigger: true
         passed: [unit-test-ops-files, unit-test-golang-tests, unit-test-update-releases-coverage]
