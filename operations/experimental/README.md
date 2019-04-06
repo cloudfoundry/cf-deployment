@@ -19,6 +19,7 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 | [`add-deployment-updater-external-db.yml`](add-deployment-updater-external-db.yml) |  **"DEPRECATED because it is inlined in to `cf-deployment.yml`"** | Requires `add-deployment-updater.yml` and `use-external-dbs.yml` | **NO** |
 | [`add-deployment-updater-postgres.yml`](add-deployment-updater-postgres.yml) |  **"DEPRECATED because it is inlined in to `cf-deployment.yml`"** | Requires `add-deployment-updater.yml` | **NO** |
 | [`add-deployment-updater.yml`](add-deployment-updater.yml) |  **"DEPRECATED because it is inlined in to `cf-deployment.yml`"** | | **NO** |
+| [`add-metric-store.yml`](add-metric-store.yml) |  *Add Metric Store node for persistence of metrics from Loggregator** | | **NO** |
 | [`add-syslog-agent.yml`](add-syslog-agent.yml) |  Add agent to all vms for the purpose of egressing application logs to syslog | Requires `deploy-forwarder-agent.yml` | **YES** |
 | [`add-syslog-agent-windows1803.yml`](add-syslog-agent-windows1803.yml) |  Add agent to windows1803 Diego cells for the purpose of egressing application logs to syslog | Requires `../windows1803-cell.yml`, `add-syslog-agent.yml` and `deploy-forwarder-agent.yml` | **NO** |
 | [`add-system-metrics-agent.yml`](add-system-metrics-agent.yml) | Add agent to all vms with the purpose of egressing system metrics | | **NO** |

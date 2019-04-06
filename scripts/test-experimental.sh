@@ -57,6 +57,8 @@ test_experimental_ops() {
       check_interpolation "add-system-metrics-agent.yml"
       check_interpolation "name: add-system-metrics-agent-windows1803.yml" "../windows1803-cell.yml" "-o add-system-metrics-agent.yml" "-o add-system-metrics-agent-windows1803.yml"
 
+      check_interpolation "add-metric-store.yml"
+
     popd > /dev/null # operations/experimental
   popd > /dev/null
   exit $exit_code
