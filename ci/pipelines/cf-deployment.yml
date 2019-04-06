@@ -165,22 +165,6 @@ resources:
     branch: master
     uri: git@github.com:cloudfoundry/relint-envs.git
     private_key: ((hagrid_env_readwrite_deploy_key.private_key))
-- name: trelawney-env-director-state
-  type: git
-  source:
-    branch: master
-    uri: git@github.com:cloudfoundry/trelawney-env.git
-    private_key: ((trelawney_env_readwrite_deploy_key.private_key))
-- name: trelawney-env-integration-configs
-  type: git
-  source:
-    branch: master
-    uri: git@github.com:cloudfoundry/trelawney-env.git
-    private_key: ((trelawney_env_readwrite_deploy_key.private_key))
-    paths:
-    - integration_config.json
-    - rats_integration_config.json
-    - cats_windows2016_integration_config.json
 - name: half-hourly
   type: time
   source:
@@ -572,32 +556,33 @@ jobs:
       passed: [upgrade-acquire-pool]
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
-    - get: trelawney-env-integration-configs
-    - get: trelawney-env-director-state
+    - get: relint-envs
   - task: add-tcp-domain
     file: runtime-ci/tasks/add-tcp-domain/task.yml
     input_mapping:
-      bbl-state: trelawney-env-director-state
+      bbl-state: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/trelawney/bbl-state
       SYSTEM_DOMAIN: trelawney.cf-app.com
   - task: collect-ops-files
     file: cf-deployment-concourse-tasks/collect-ops-files/task.yml
     input_mapping:
       base-ops-files: cf-deployment-develop
-      new-ops-files: trelawney-env-director-state
+      new-ops-files: relint-envs
     params:
       BASE_OPS_FILE_DIR: operations
       NEW_OPS_FILES: |
-        add-external-ips-for-cloud-sql-db.yml
-        increase-doppler-vm-type-from-minimal-to-small.yml
+        environments/test/trelawney/add-external-ips-for-cloud-sql-db.yml
+        environments/test/trelawney/increase-doppler-vm-type-from-minimal-to-small.yml
   - task: bosh-deploy-cf
     file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
     input_mapping:
-      bbl-state: trelawney-env-director-state
+      bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: collected-ops-files
-      vars-files: trelawney-env-director-state
+      vars-files: relint-envs
     params:
+      BBL_STATE_DIR: environments/test/trelawney/bbl-state
       SYSTEM_DOMAIN: trelawney.cf-app.com
       OPS_FILES: |
         operations/use-compiled-releases.yml
@@ -614,8 +599,8 @@ jobs:
         operations/test/add-persistent-isolation-segment-diego-cell.yml
         operations/increase-doppler-vm-type-from-minimal-to-small.yml
       VARS_FILES: |
-        external-db-vars.yml
-        gcs-vars.yml
+        environments/test/trelawney/external-db-vars.yml
+        environments/test/trelawney/gcs-vars.yml
       DEPLOY_WITH_UPTIME_MEASUREMENTS: true
       MEASURE_SYSLOG_AVAILABILITY: true
       FAIL_ON_DOWNTIME: true
@@ -629,17 +614,19 @@ jobs:
   - task: run-bosh-cleanup
     file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
     input_mapping:
-      bbl-state: trelawney-env-director-state
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/trelawney/bbl-state
   - task: update-integration-configs
     file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     params:
-      CATS_INTEGRATION_CONFIG_FILE: integration_config.json
-      WATS_INTEGRATION_CONFIG_FILE: cats_windows2016_integration_config.json
+      BBL_STATE_DIR: environments/test/trelawney/bbl-state
+      CATS_INTEGRATION_CONFIG_FILE: environments/test/trelawney/integration_config.json
     input_mapping:
-      bbl-state: trelawney-env-director-state
-      integration-configs: trelawney-env-integration-configs
+      bbl-state: relint-envs
+      integration-configs: relint-envs
     ensure:
-      put: trelawney-env-integration-configs
+      put: relint-envs
       params:
         repository: updated-integration-configs
         rebase: true
@@ -647,24 +634,27 @@ jobs:
     - task: open-asgs-for-credhub
       file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
       input_mapping:
-        bbl-state: trelawney-env-director-state
+        bbl-state: relint-envs
       params:
+        BBL_STATE_DIR: environments/test/trelawney/bbl-state
         INSTANCE_GROUP_NAME: credhub
         SYSTEM_DOMAIN: trelawney.cf-app.com
         SECURITY_GROUP_NAME: credhub
     - task: open-asgs-for-uaa
       file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
       input_mapping:
-        bbl-state: trelawney-env-director-state
+        bbl-state: relint-envs
       params:
+        BBL_STATE_DIR: environments/test/trelawney/bbl-state
         INSTANCE_GROUP_NAME: uaa
         SYSTEM_DOMAIN: trelawney.cf-app.com
         SECURITY_GROUP_NAME: uaa
     - task: enable-docker-and-tasks
       file: cf-deployment-concourse-tasks/set-feature-flags/task.yml
       input_mapping:
-        bbl-state: trelawney-env-director-state
+        bbl-state: relint-envs
       params:
+        BBL_STATE_DIR: environments/test/trelawney/bbl-state
         SYSTEM_DOMAIN: trelawney.cf-app.com
         ENABLED_FEATURE_FLAGS: |
           diego_docker
@@ -1419,15 +1409,17 @@ jobs:
     - aggregate:
       - get: cf-deployment-concourse-tasks
       - get: cf-acceptance-tests-rc
-      - get: trelawney-env-integration-configs
+      - get: relint-envs
       - get: cf-deployment-develop
         passed: [upgrade-deploy]
     - task: run-cats
       file: cf-deployment-concourse-tasks/run-cats/task.yml
       input_mapping:
-        integration-config: trelawney-env-integration-configs
+        integration-config: relint-envs
         cf-acceptance-tests: cf-acceptance-tests-rc
       params:
+        CONFIG_FILE_PATH: environments/test/trelawney/integration_config.json
+        REPORTER_CONFIG_FILE_PATH: environments/test/trelawney/reporter_config.json
         CAPTURE_LOGS: true
         RELINT_VERBOSE_AUTH: "true"
 
@@ -1444,17 +1436,18 @@ jobs:
     - aggregate:
       - get: cf-deployment-concourse-tasks
       - get: cf-acceptance-tests-rc
-      - get: trelawney-env-integration-configs
+      - get: relint-envs
       - get: cf-deployment-develop
         passed: [upgrade-deploy]
     - task: run-cats
       file: cf-deployment-concourse-tasks/run-cats/task.yml
       input_mapping:
-        integration-config: trelawney-env-integration-configs
+        integration-config: relint-envs
         cf-acceptance-tests: cf-acceptance-tests-rc
       params:
         CAPTURE_LOGS: true
-        CONFIG_FILE_PATH: cats_windows2016_integration_config.json
+        CONFIG_FILE_PATH: environments/test/trelawney/cats_windows2016_integration_config.json
+        REPORTER_CONFIG_FILE_PATH: environments/test/trelawney/reporter_config.json
         NODES: 8
         RELINT_VERBOSE_AUTH: "true"
 
