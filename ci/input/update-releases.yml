@@ -75,7 +75,6 @@ opsReleases:
   repository: cloudfoundry/cf-app-sd-release
 - name: haproxy
   repository: cloudfoundry-incubator/haproxy-boshrelease
-  varsFilesInput: greengrass-env-director-state
   varsFiles: "environments/test/greengrass/vars-files/haproxy-vars.yml"
 - name: mapfs
   repository: cloudfoundry/mapfs-release
@@ -91,7 +90,6 @@ opsReleases:
   varsFiles: "operations/addons/example-vars-files/vars-enable-component-syslog.yml"
 - name: windows-syslog
   repository: cloudfoundry/windows-syslog-release
-  varsFilesInput: greengrass-env-director-state
   varsFiles: "environments/test/greengrass/vars-files/windows-enable-component-syslog-vars.yml"
 - name: hwc-buildpack
   repository: cloudfoundry-incubator/hwc-buildpack-release

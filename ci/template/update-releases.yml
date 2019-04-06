@@ -309,7 +309,7 @@ jobs:
       bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: updated-ops-file
-{{- if hasKey . "varsFiles"}}
+{{- if hasKey . "varsFilesInput"}}
       vars-files: {{.varsFilesInput}}
 {{else}}
       vars-files: relint-envs
