@@ -183,20 +183,33 @@ jobs:
                     exit 1
                   fi
                 popd
-        - task: unit-test-ops-files
-          config:
-            platform: linux
-            image_resource:
-              type: docker-image
-              source:
-                repository: relintdockerhubpushbot/bosh-cli
-            inputs:
-            - name: cf-deployment-all-branches
-            params:
-              RUN_SEMANTIC: false
-            run:
-              dir: cf-deployment-all-branches
-              path: scripts/test
+        - aggregate:
+          - task: unit-test-ops-files
+            config:
+              platform: linux
+              image_resource:
+                type: docker-image
+                source:
+                  repository: relintdockerhubpushbot/bosh-cli
+              inputs:
+              - name: cf-deployment-all-branches
+              params:
+                RUN_SEMANTIC: false
+              run:
+                dir: cf-deployment-all-branches
+                path: scripts/test
+          - task: unit-test-golang-ops-files
+            config:
+              platform: linux
+              image_resource:
+                type: docker-image
+                source:
+                  repository: relintdockerhubpushbot/bosh-cli
+              inputs:
+              - name: cf-deployment-develop
+              run:
+                dir: cf-deployment-develop/units
+                path: ./test
         on_failure:
           do:
           - task: write-pr-check-failure-comment
