@@ -512,10 +512,16 @@ jobs:
       GCP_PROJECT_ID: ((luna_gcp_project))
       GCP_BACKEND_SERVICE: ((luna_router_backend_service))
       GOOGLE_ACCOUNT_CREDS_PATH: environments/test/luna/google_account_creds.json
-  - task: ensure-api-healthy
-    file: runtime-ci/tasks/ensure-api-healthy/task.yml
-    params:
-      SYSTEM_DOMAIN: luna.cf-app.com
+  - aggregate:
+    - task: ensure-api-healthy
+      file: runtime-ci/tasks/ensure-api-healthy/task.yml
+      params:
+        CONFIG_FILE_PATH: environments/test/luna/integration_config.json
+    - task: ensure-isolation-segment-healthy
+      file: runtime-ci/tasks/ensure-api-healthy/task.yml
+      params:
+        CHECK_ISOLATION_SEGMENT: true
+        CONFIG_FILE_PATH: environments/test/luna/integration_config.json
   - aggregate:
     - task: open-asgs-for-credhub
       file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
