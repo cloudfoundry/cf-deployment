@@ -200,15 +200,16 @@ jobs:
                 path: scripts/test
           - task: unit-test-golang-ops-files
             config:
+
               platform: linux
               image_resource:
                 type: docker-image
                 source:
                   repository: relintdockerhubpushbot/bosh-cli
               inputs:
-              - name: cf-deployment-develop
+              - name: cf-deployment-all-branches
               run:
-                dir: cf-deployment-develop/units
+                dir: cf-deployment-all-branches/units
                 path: ./test
         on_failure:
           do:
