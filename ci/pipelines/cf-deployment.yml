@@ -227,6 +227,11 @@ resources:
     branch: master
     uri: git@github.com:cloudfoundry/cf-acceptance-tests.git
     private_key: ((cf_acceptance_tests_readwrite_deploy_key.private_key))
+- name: cf-smoke-tests
+  type: git
+  source:
+    branch: master
+    uri: https://github.com/cloudfoundry/cf-smoke-tests
 - name: cf-deployment-master
   type: git
   source:
@@ -439,6 +444,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: cf-smoke-tests
   - task: guarantee-no-existing-cf-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
@@ -515,10 +521,14 @@ jobs:
   - aggregate:
     - task: ensure-api-healthy
       file: runtime-ci/tasks/ensure-api-healthy/task.yml
+      input_mapping:
+        cats-integration-config: relint-envs
       params:
         CONFIG_FILE_PATH: environments/test/luna/integration_config.json
     - task: ensure-isolation-segment-healthy
       file: runtime-ci/tasks/ensure-api-healthy/task.yml
+      input_mapping:
+        cats-integration-config: relint-envs
       params:
         CHECK_ISOLATION_SEGMENT: true
         CONFIG_FILE_PATH: environments/test/luna/integration_config.json
