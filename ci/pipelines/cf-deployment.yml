@@ -169,10 +169,10 @@ resources:
   type: time
   source:
     interval: 30m
-- name: every-other-hour
+- name: every-4-hours
   type: time
   source:
-    interval: 120m
+    interval: 4h
 - name: cf-deployment-concourse-tasks
   type: git
   source:
@@ -316,7 +316,7 @@ jobs:
   - timeout: 4h
     do:
     - aggregate:
-      - get: every-other-hour
+      - get: every-4-hours
         trigger: true
       - get: cf-deployment-develop
         trigger: true
@@ -1475,13 +1475,14 @@ jobs:
       - get: cf-deployment-concourse-tasks
     - task: run-cats
       file: cf-deployment-concourse-tasks/run-cats/task.yml
+      attempts: 2
       input_mapping:
         integration-config: relint-envs
         cf-acceptance-tests: cf-acceptance-tests-rc
       params:
         CONFIG_FILE_PATH: environments/test/snitch/integration_config.json
         REPORTER_CONFIG_FILE_PATH: environments/test/snitch/reporter_config.json
-        NODES: 4
+        NODES: 2
         RELINT_VERBOSE_AUTH: "true"
 
 - name: lite-recreate-director
