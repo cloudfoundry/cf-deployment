@@ -1209,9 +1209,10 @@ jobs:
       trigger: true
       passed: [ bbr-acquire-pool ]
     - aggregate:
-      - get: runtime-ci
-      - get: cf-deployment-concourse-tasks
       - get: cf-deployment-develop
+        passed: [bbr-acquire-pool]
+      - get: cf-deployment-concourse-tasks
+      - get: runtime-ci
       - get: relint-envs
       - get: persi-ci
     - task: bosh-deploy-cf
@@ -1274,6 +1275,7 @@ jobs:
       passed: [ bbr-deploy ]
     - aggregate:
       - get: cf-deployment-develop
+        passed: [ bbr-deploy ]
       - get: bbr-github-release
       - get: relint-envs
       - get: cf-deployment-concourse-tasks
