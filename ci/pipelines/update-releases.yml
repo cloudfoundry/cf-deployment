@@ -68,6 +68,7 @@ groups:
   - update-windows2016fs
   - update-node-exporter
   - update-leadership-election
+  - update-metric-store
 - name: update-windows-stemcells-and-releases
   jobs:
   - update-windows2012R2-stemcell
@@ -339,6 +340,10 @@ resources:
   type: bosh-io-release
   source:
     repository: cloudfoundry/leadership-election-release
+- name: metric-store-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/metric-store-release
 - name: binary-buildpack-release-gcs
   type: gcs-resource
   source:
@@ -4661,6 +4666,68 @@ jobs:
       DEPLOYMENT_NAME_SUFFIX: leadership-election
       SYSTEM_DOMAIN: greengrass.cf-app.com
   - task: commit-generated-manifest-and-ops-leadership-election
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-develop
+      ops-file: updated-ops-file
+      manifest: cf-deployment-develop
+    params:
+      COMMIT_ALL_OPS_FILES: true
+  - put: cf-deployment-develop
+    params:
+      rebase: true
+      repository: updated-repo
+- name: update-metric-store
+  serial: true
+  public: true
+  build_logs_to_retain: 100
+  plan:
+  - aggregate:
+    - get: runtime-ci
+    - get: cf-deployment-develop
+    - get: cf-deployment-concourse-tasks
+    - get: relint-envs
+    - get: metric-store-release
+      trigger: true
+      params:
+        tarball: false
+    - get: stemcell
+      params:
+        tarball: false
+      passed: [ update-stemcell-and-recompile-releases ]
+  - task: update-release-metric-store
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      release: metric-store-release
+      original-ops-file: cf-deployment-develop
+    params:
+      RELEASE_NAME: metric-store
+  - task: bosh-upload-stemcell
+    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+      cf-deployment: cf-deployment-develop
+      ops-files: cf-deployment-develop
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      INFRASTRUCTURE: google
+      OPS_FILES: |
+        operations/windows2012R2-cell.yml
+        operations/windows2016-cell.yml
+        operations/windows1803-cell.yml
+        operations/windows2019-cell.yml
+  - task: bosh-dry-run-metric-store
+    file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+      cf-deployment: cf-deployment-develop
+      ops-files: updated-ops-file
+      vars-files: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME_SUFFIX: metric-store
+      SYSTEM_DOMAIN: greengrass.cf-app.com
+  - task: commit-generated-manifest-and-ops-metric-store
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
       repo: cf-deployment-develop
