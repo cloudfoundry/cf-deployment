@@ -198,8 +198,12 @@ resources:
     uri: git@github.com:cloudfoundry/cf-deployment.git
     private_key: ((cf_deployment_readwrite_deploy_key.private_key))
     ignore_paths:
-    - ci/**
     - .envrc
+    - .overcommit.yml
+    - ISSUE_TEMPLATE.md
+    - PULL_REQUEST_TEMPLATE.md
+    - ci/**
+    - texts/**
 - name: cf-deployment-release-candidate
   type: git
   source:
@@ -207,16 +211,24 @@ resources:
     uri: git@github.com:cloudfoundry/cf-deployment.git
     private_key: ((cf_deployment_readwrite_deploy_key.private_key))
     ignore_paths:
-    - ci/**
     - .envrc
+    - .overcommit.yml
+    - ISSUE_TEMPLATE.md
+    - PULL_REQUEST_TEMPLATE.md
+    - ci/**
+    - texts/**
 - name: cf-deployment-all-branches
   type: git
   source:
     branch: develop
     uri: https://github.com/cloudfoundry/cf-deployment.git
     ignore_paths:
-    - ci/**
     - .envrc
+    - .overcommit.yml
+    - ISSUE_TEMPLATE.md
+    - PULL_REQUEST_TEMPLATE.md
+    - ci/**
+    - texts/**
 - name: cf-acceptance-tests-rc
   type: git
   source:
@@ -241,8 +253,12 @@ resources:
     uri: git@github.com:cloudfoundry/cf-deployment.git
     private_key: ((cf_deployment_readwrite_deploy_key.private_key))
     ignore_paths:
-    - ci/**
     - .envrc
+    - .overcommit.yml
+    - ISSUE_TEMPLATE.md
+    - PULL_REQUEST_TEMPLATE.md
+    - ci/**
+    - texts/**
 - name: bosh-deployment
   type: git
   source:
