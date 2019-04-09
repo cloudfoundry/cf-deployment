@@ -8,6 +8,7 @@ groups:
   - bbr-acquire-pool
   - bbr-deploy
   - bbr-run-drats
+  - bbr-release-pool
   - upgrade-deploy
   - upgrade-acquire-pool
   - upgrade-release-pool
@@ -92,6 +93,7 @@ groups:
   - bbr-acquire-pool
   - bbr-deploy
   - bbr-run-drats
+  - bbr-release-pool
   - bbr-release-pool-manual
   - bless-manifest
 - name: st
@@ -758,6 +760,15 @@ jobs:
   - put: upgrade-pool
     params: {release: upgrade-pool}
 
+- name: bbr-release-pool
+  public: true
+  plan:
+  - get: bbr-pool
+    passed: [ bbr-run-drats ]
+    trigger: true
+  - put: bbr-pool
+    params: {release: bbr-pool}
+
 - name: lite-release-pool-manual
   public: true
   plan:
@@ -1201,100 +1212,92 @@ jobs:
   public: true
   build_logs_to_retain: 100
   plan:
-  - on_failure:
-      put: bbr-pool
-      params: {release: bbr-pool}
-    do:
-    - get: bbr-pool
-      trigger: true
-      passed: [ bbr-acquire-pool ]
-    - aggregate:
-      - get: cf-deployment-develop
-        passed: [bbr-acquire-pool]
-      - get: cf-deployment-concourse-tasks
-      - get: runtime-ci
-      - get: relint-envs
-      - get: persi-ci
-    - task: bosh-deploy-cf
-      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        cf-deployment: cf-deployment-develop
-        ops-files: cf-deployment-develop
-        vars-files: relint-envs
-      params:
-        BBL_STATE_DIR: environments/test/bbr/bbl-state
-        SYSTEM_DOMAIN: baba-yaga.cf-app.com
-        OPS_FILES: |
-          operations/use-compiled-releases.yml
-          operations/backup-and-restore/enable-backup-restore.yml
-          operations/enable-nfs-volume-service.yml
-          operations/backup-and-restore/enable-backup-restore-nfs-broker.yml
-    - task: open-asgs-for-credhub
-      file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-      params:
-        BBL_STATE_DIR: environments/test/bbr/bbl-state
-        INSTANCE_GROUP_NAME: credhub
-        SYSTEM_DOMAIN: baba-yaga.cf-app.com
-        SECURITY_GROUP_NAME: credhub
-    - task: open-asgs-for-uaa
-      file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-      params:
-        BBL_STATE_DIR: environments/test/bbr/bbl-state
-        INSTANCE_GROUP_NAME: uaa
-        SYSTEM_DOMAIN: baba-yaga.cf-app.com
-        SECURITY_GROUP_NAME: uaa
-    - task: run-nfs-broker-push-errand
-      file: cf-deployment-concourse-tasks/run-errand/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-      params:
-        BBL_STATE_DIR: environments/test/bbr/bbl-state
-        ERRAND_NAME: nfs-broker-push
-    - task: run-bosh-cleanup
-      file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-      params:
-        BBL_STATE_DIR: environments/test/bbr/bbl-state
+  - get: bbr-pool
+    trigger: true
+    passed: [ bbr-acquire-pool ]
+  - aggregate:
+    - get: cf-deployment-develop
+      passed: [bbr-acquire-pool]
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+    - get: persi-ci
+  - task: bosh-deploy-cf
+    file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+      cf-deployment: cf-deployment-develop
+      ops-files: cf-deployment-develop
+      vars-files: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/bbr/bbl-state
+      SYSTEM_DOMAIN: baba-yaga.cf-app.com
+      OPS_FILES: |
+        operations/use-compiled-releases.yml
+        operations/backup-and-restore/enable-backup-restore.yml
+        operations/enable-nfs-volume-service.yml
+        operations/backup-and-restore/enable-backup-restore-nfs-broker.yml
+  - task: open-asgs-for-credhub
+    file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/bbr/bbl-state
+      INSTANCE_GROUP_NAME: credhub
+      SYSTEM_DOMAIN: baba-yaga.cf-app.com
+      SECURITY_GROUP_NAME: credhub
+  - task: open-asgs-for-uaa
+    file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/bbr/bbl-state
+      INSTANCE_GROUP_NAME: uaa
+      SYSTEM_DOMAIN: baba-yaga.cf-app.com
+      SECURITY_GROUP_NAME: uaa
+  - task: run-nfs-broker-push-errand
+    file: cf-deployment-concourse-tasks/run-errand/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/bbr/bbl-state
+      ERRAND_NAME: nfs-broker-push
+  - task: run-bosh-cleanup
+    file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/bbr/bbl-state
 
 - name: bbr-run-drats
   public: true
   build_logs_to_retain: 100
   plan:
-  - on_success:
-      put: bbr-pool
-      params: {release: bbr-pool}
-    do:
-    - get: bbr-pool
-      trigger: true
+  - get: bbr-pool
+    trigger: true
+    passed: [ bbr-deploy ]
+  - aggregate:
+    - get: cf-deployment-develop
       passed: [ bbr-deploy ]
-    - aggregate:
-      - get: cf-deployment-develop
-        passed: [ bbr-deploy ]
-      - get: bbr-github-release
-      - get: relint-envs
-      - get: cf-deployment-concourse-tasks
-      - get: drats-master
-      - get: runtime-ci
-    - task: generate-drats-config
-      file: runtime-ci/tasks/generate-drats-config/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-      params:
-        BBL_STATE_DIR: environments/test/bbr/bbl-state
-        SYSTEM_DOMAIN: baba-yaga.cf-app.com
-    - task: run-drats
-      privileged: true
-      file: drats-master/ci/drats-with-integration-config/task.yml
-      input_mapping:
-        disaster-recovery-acceptance-tests: drats-master
-        bbr-binary-release: bbr-github-release
-        drats-integration-config: drats-config
+    - get: bbr-github-release
+    - get: relint-envs
+    - get: cf-deployment-concourse-tasks
+    - get: drats-master
+    - get: runtime-ci
+  - task: generate-drats-config
+    file: runtime-ci/tasks/generate-drats-config/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/bbr/bbl-state
+      SYSTEM_DOMAIN: baba-yaga.cf-app.com
+  - task: run-drats
+    privileged: true
+    file: drats-master/ci/drats-with-integration-config/task.yml
+    input_mapping:
+      disaster-recovery-acceptance-tests: drats-master
+      bbr-binary-release: bbr-github-release
+      drats-integration-config: drats-config
 
 - name: stable-semihourly-pool-acquisition
   serial: true
