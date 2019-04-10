@@ -38,7 +38,7 @@ If you're promoting an experimental Ops-file (or removing one), Please follow th
 - requires out-of-band manual intervention on the part of the operator
 - removes Ops-file (e.g. from `./operations/` or `./operations/experimental` folders)
 
-### Does this PR introduce a new release?
+### Does this PR introduce a new BOSH release into the base cf-deployment.yml manifest or any ops-files?
 
 - [ ] YES - please specify
 - [ ] NO
