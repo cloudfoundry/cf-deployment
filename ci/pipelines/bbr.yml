@@ -64,7 +64,6 @@ jobs:
   - timeout: 4h
     aggregate:
     - get: cf-deployment-rc
-      trigger: true
     - put: bbr-pool
       params: {acquire: true}
 
@@ -86,7 +85,6 @@ jobs:
       params: {release: bbr-pool}
     do:
     - get: bbr-pool
-      trigger: true
       passed: [ acquire-pool ]
     - aggregate:
       - get: runtime-ci
@@ -150,7 +148,6 @@ jobs:
       params: {release: bbr-pool}
     do:
     - get: bbr-pool
-      trigger: true
       passed: [ deploy ]
     - aggregate:
       - get: bbr-github-release
