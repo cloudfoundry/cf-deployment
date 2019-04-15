@@ -835,8 +835,6 @@ instance_groups:
         url: https://uaa.((system_domain))
       cc:
         stacks:
-        - name: cflinuxfs2
-          description: Cloud Foundry Linux-based filesystem (Ubuntu 14.04)
         - name: cflinuxfs3
           description: Cloud Foundry Linux-based filesystem (Ubuntu 18.04)
         default_stack: "cflinuxfs3"
@@ -869,24 +867,6 @@ instance_groups:
             protocol: udp
         install_buildpacks:
         ## Order is important here
-        - name: staticfile_buildpack
-          package: staticfile-buildpack-cflinuxfs2
-        - name: java_buildpack
-          package: java-buildpack-cflinuxfs2
-        - name: ruby_buildpack
-          package: ruby-buildpack-cflinuxfs2
-        - name: dotnet_core_buildpack
-          package: dotnet-core-buildpack-cflinuxfs2
-        - name: nodejs_buildpack
-          package: nodejs-buildpack-cflinuxfs2
-        - name: go_buildpack
-          package: go-buildpack-cflinuxfs2
-        - name: python_buildpack
-          package: python-buildpack-cflinuxfs2
-        - name: php_buildpack
-          package: php-buildpack-cflinuxfs2
-        - name: binary_buildpack
-          package: binary-buildpack-cflinuxfs2
         - name: staticfile_buildpack
           package: staticfile-buildpack-cflinuxfs3
         - name: java_buildpack
@@ -1556,14 +1536,6 @@ instance_groups:
   networks:
   - name: default
   jobs:
-  - name: cflinuxfs2-rootfs-setup
-    release: cflinuxfs2
-    properties:
-      cflinuxfs2-rootfs:
-        trusted_certs:
-        - ((application_ca.certificate))
-        - ((credhub_ca.certificate))
-        - ((uaa_ca.certificate))
   - name: cflinuxfs3-rootfs-setup
     release: cflinuxfs3
     properties:
@@ -1600,7 +1572,6 @@ instance_groups:
           instance_identity_key: ((diego_instance_identity_ca.private_key))
         rep:
           preloaded_rootfses:
-          - cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs.tar
           - cflinuxfs3:/var/vcap/packages/cflinuxfs3/rootfs.tar
       containers:
         trusted_ca_certificates:
@@ -2358,10 +2329,6 @@ releases:
   url: https://bosh.io/d/github.com/cloudfoundry/cf-syslog-drain-release?v=10.0
   version: "10.0"
   sha1: 6b5154a3709cf2d7ac29211b0b4584e4b21db562
-- name: cflinuxfs2
-  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-release?v=1.280.0
-  version: 1.280.0
-  sha1: 5269266bfc431ec6c4b965d79d9292ba424827ad
 - name: cflinuxfs3
   url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs3-release?v=0.80.0
   version: 0.80.0
