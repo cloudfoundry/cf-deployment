@@ -1405,6 +1405,8 @@ instance_groups:
   - name: log-cache-gateway
     properties:
       gateway_addr: localhost:8081
+      proxy_cert: "((log_cache_proxy_tls.certificate))"
+      proxy_key: "((log_cache_proxy_tls.private_key))"
     release: log-cache
   - consumes:
       reverse_log_proxy: {from: reverse_log_proxy}
@@ -1535,6 +1537,7 @@ instance_groups:
       cc:
         ca_cert: ((service_cf_internal_ca.certificate))
         common_name: cloud-controller-ng.service.cf.internal
+      proxy_ca_cert: "((log_cache_ca.certificate))"
       proxy_port: 8083
       external_cert: ((logcache_ssl.certificate))
       external_key: ((logcache_ssl.private_key))
@@ -2163,6 +2166,11 @@ variables:
     alternative_names:
     - log-cache.((system_domain))
     - "*.log-cache.((system_domain))"
+- name: log_cache_proxy_tls
+  type: certificate
+  options:
+    ca: log_cache_ca
+    common_name: localhost
 - name: router_ca
   type: certificate
   options:
