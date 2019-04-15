@@ -7,7 +7,6 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 - For Backup and Restore Ops-files (for configuring your deployment for use with [BBR](https://github.com/cloudfoundry-incubator/bosh-backup-and-restore)), checkout the [Backup and Restore Ops-files README](../backup-and-restore/README.md).
 - For Bits Service Ops-files (for configuring your deployment for use with [Bits Service](https://github.com/cloudfoundry-incubator/bits-service)), checkout the [Bits Service Ops-files README](../bits-service/README.md).
 - For Community Ops-files, check out the [Community Ops-file README](../community/README.md).
-- For Legacy Ops-files, checkout the [Legacy Ops-file README](../legacy/README.md).
 
 "Experimental" Ops-file represent configurations that we expect to promote to blessed configuration eventually, meaning that, once the configurations have been sufficiently validated, they will either become default (inlined into the base manifest), or GA'd as an optional feature (promoted from experimental to operations directory). Please follow the [ops file workflows](https://github.com/cloudfoundry/cf-deployment/blob/master/ops-file-promotion-workflow.md)
 

@@ -62,15 +62,6 @@
   path: /releases/name=routing/sha1
   value: 499a5b8427487ffa90b9e9d253fa00a0d5a0cb86
 - type: replace
-  path: /releases/name=cflinuxfs2/url
-  value: https://storage.googleapis.com/cf-deployment-compiled-releases/cflinuxfs2-1.280.0-ubuntu-xenial-250.29-20190409-165827-353596289.tgz
-- type: replace
-  path: /releases/name=cflinuxfs2/version
-  value: 1.280.0
-- type: replace
-  path: /releases/name=cflinuxfs2/sha1
-  value: 7be00ae56dcc90e160b46103f1c20ea5bda27787
-- type: replace
   path: /releases/name=garden-runc/url
   value: https://storage.googleapis.com/cf-deployment-compiled-releases/garden-runc-1.19.1-ubuntu-xenial-250.29-20190409-170426-767570724.tgz
 - type: replace
@@ -241,11 +232,6 @@
     version: "250.29"
 - type: replace
   path: /releases/name=cf-syslog-drain/stemcell?
-  value:
-    os: ubuntu-xenial
-    version: "250.29"
-- type: replace
-  path: /releases/name=cflinuxfs2/stemcell?
   value:
     os: ubuntu-xenial
     version: "250.29"

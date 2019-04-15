@@ -23,7 +23,6 @@ groups:
   - update-cf-networking
   - update-cf-smoke-tests
   - update-cf-syslog-drain
-  - update-cflinuxfs2
   - update-cflinuxfs3
   - update-diego
   - update-dotnet-core-buildpack
@@ -168,10 +167,6 @@ resources:
   type: bosh-io-release
   source:
     repository: cloudfoundry/cf-syslog-drain-release
-- name: cflinuxfs2-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/cflinuxfs2-release
 - name: cflinuxfs3-release
   type: bosh-io-release
   source:
@@ -386,12 +381,6 @@ resources:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: cf-syslog-drain-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: cflinuxfs2-release-gcs
-  type: gcs-resource
-  source:
-    bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
-    regexp: cflinuxfs2-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: cflinuxfs3-release-gcs
   type: gcs-resource
   source:
@@ -601,10 +590,6 @@ jobs:
         tarball: false
       trigger: true
     - get: cf-syslog-drain-release
-      params:
-        tarball: false
-      trigger: true
-    - get: cflinuxfs2-release
       params:
         tarball: false
       trigger: true
@@ -1345,101 +1330,6 @@ jobs:
       first-input: updated-compiled-releases-ops-file
       second-input: updated-ops-file
   - put: cf-syslog-drain-release-gcs
-    params:
-      file: exported-release/*.tgz
-      predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
-  - put: cf-deployment-develop
-    params:
-      rebase: true
-      repository: updated-repo
-- name: update-cflinuxfs2
-  serial_groups:
-  - stemcell
-  - update-cflinuxfs2
-  public: true
-  build_logs_to_retain: 100
-  plan:
-  - aggregate:
-    - get: runtime-ci
-    - get: cf-deployment-develop
-    - get: cf-deployment-concourse-tasks
-    - get: relint-envs
-    - get: cflinuxfs2-release
-      trigger: true
-      params:
-        tarball: false
-      passed: [ upload-stemcell ]
-    - get: stemcell
-      params:
-        tarball: false
-      passed: [ upload-stemcell ]
-  - task: update-release-cflinuxfs2
-    file: runtime-ci/tasks/update-single-manifest-release/task.yml
-    input_mapping:
-      release: cflinuxfs2-release
-      deployment-configuration: cf-deployment-develop
-    params:
-      RELEASE_NAME: cflinuxfs2
-  - task: bosh-dry-run
-    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
-      ops-files: cf-deployment-develop
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: cflinuxfs2
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: bosh-delete-deployment
-    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME: cf-dry-run-cflinuxfs2
-  - task: compile-release
-    file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      manifest: updated-deployment-manifest
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      RELEASE_NAME: cflinuxfs2
-  - task: update-additional-ops-files-cflinuxfs2
-    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-    input_mapping:
-      release: cflinuxfs2-release
-      original-ops-file: cf-deployment-develop
-    params:
-      RELEASE_NAME: cflinuxfs2
-  - task: update-compiled-release-ops
-    file: runtime-ci/tasks/update-single-compiled-release/task.yml
-    input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: cflinuxfs2-release
-      compiled-release-tarball: exported-release
-      current-commit-message: commit-message
-    params:
-      RELEASE_NAME: cflinuxfs2
-      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
-  - put: cflinuxfs2-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
@@ -4847,7 +4737,6 @@ jobs:
   - update-cf-networking
   - update-cf-smoke-tests
   - update-cf-syslog-drain
-  - update-cflinuxfs2
   - update-cflinuxfs3
   - update-diego
   - update-dotnet-core-buildpack
@@ -4898,9 +4787,6 @@ jobs:
       params:
         tarball: false
     - get: cf-syslog-drain-release
-      params:
-        tarball: false
-    - get: cflinuxfs2-release
       params:
         tarball: false
     - get: cflinuxfs3-release
@@ -5062,16 +4948,6 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: cf-syslog-drain
-    - task: compile-release-cflinuxfs2
-      file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        manifest: updated-deployment-manifest
-      output_mapping:
-        exported-release: exported-release-cflinuxfs2
-      params:
-        BBL_STATE_DIR: environments/test/greengrass/bbl-state
-        RELEASE_NAME: cflinuxfs2
     - task: compile-release-cflinuxfs3
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -5389,17 +5265,6 @@ jobs:
       RELEASE_NAME: cf-syslog-drain
       ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
-  - task: update-compiled-releases-ops-cflinuxfs2
-    file: runtime-ci/tasks/update-single-compiled-release/task.yml
-    input_mapping:
-      original-compiled-releases-ops-file: updated-compiled-releases-ops-file
-      release: cflinuxfs2-release
-      compiled-release-tarball: exported-release-cflinuxfs2
-      current-commit-message: commit-message
-    params:
-      RELEASE_NAME: cflinuxfs2
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
   - task: update-compiled-releases-ops-cflinuxfs3
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
@@ -5692,10 +5557,6 @@ jobs:
     - put: cf-syslog-drain-release-gcs
       params:
         file: exported-release-cf-syslog-drain/*.tgz
-        predefined_acl: publicRead
-    - put: cflinuxfs2-release-gcs
-      params:
-        file: exported-release-cflinuxfs2/*.tgz
         predefined_acl: publicRead
     - put: cflinuxfs3-release-gcs
       params:

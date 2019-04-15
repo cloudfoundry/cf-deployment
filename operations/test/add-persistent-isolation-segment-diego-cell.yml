@@ -13,14 +13,6 @@
     networks:
     - name: default
     jobs:
-    - name: cflinuxfs2-rootfs-setup
-      release: cflinuxfs2
-      properties:
-        cflinuxfs2-rootfs:
-          trusted_certs:
-            - ((application_ca.certificate))
-            - ((credhub_ca.certificate))
-            - ((uaa_ca.certificate))
     - name: cflinuxfs3-rootfs-setup
       release: cflinuxfs3
       properties:
@@ -54,7 +46,6 @@
             instance_identity_key: ((diego_instance_identity_ca.private_key))
           rep:
             preloaded_rootfses:
-            - cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs.tar
             - cflinuxfs3:/var/vcap/packages/cflinuxfs3/rootfs.tar
             placement_tags:
             - persistent_isolation_segment
