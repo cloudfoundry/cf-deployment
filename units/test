@@ -9,7 +9,6 @@ suites() {
     ./experimental_test
     ./iaas_test
     ./inline_test
-    ./legacy_test
     ./standard_test
     ./test_test
     ./semantic_test
@@ -24,4 +23,3 @@ suites() {
 }
 
 go test "$@" $(suites)
-
