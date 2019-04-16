@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 main() {
   local CF_D_PIPELINES=(cf-deployment update-releases pull-requests bbr)
@@ -18,10 +18,10 @@ main() {
 
 EOF
 
-    texplate execute \
-                 "${PROJECT_DIR}/ci/template/${PIPELINE}.yml" \
-                 --input-file "${PROJECT_DIR}/ci/input/${PIPELINE}.yml" \
-                 >> "${PROJECT_DIR}/ci/pipelines/${PIPELINE}.yml"
+    ytt template \
+      -f "${PROJECT_DIR}/ci/template/${PIPELINE}.yml" \
+      -f "${PROJECT_DIR}/ci/input/${PIPELINE}.yml" \
+      >> "${PROJECT_DIR}/ci/pipelines/${PIPELINE}.yml"
   fi
 
   set -ex
