@@ -5,7 +5,6 @@ groups:
 - name: update-base-stemcells-and-releases
   jobs:
   - update-stemcell-and-recompile-releases
-  - upload-stemcell
   #@ for r in data.values.baseReleases:
   - #@ "update-" + r.name
   #@ end
@@ -103,35 +102,6 @@ resources:
     interval: 24h
 
 jobs:
-- name: upload-stemcell
-  public: true
-  serial_groups:
-  - stemcell
-  build_logs_to_retain: 100
-  plan:
-  - aggregate:
-    - get: runtime-ci
-    - get: relint-envs
-    - get: cf-deployment-develop
-    - get: cf-deployment-concourse-tasks
-    #@ for r in data.values.baseReleases:
-    - get: #@ r.name + "-release"
-      params:
-        tarball: false
-      trigger: true
-    #@ end
-    - get: stemcell
-      params:
-        tarball: false
-  - task: upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      INFRASTRUCTURE: google
-
 #@ for r in data.values.baseReleases:
 - name: #@ "update-" + r.name
   serial_groups:
@@ -149,11 +119,9 @@ jobs:
       trigger: true
       params:
         tarball: false
-      passed: [ upload-stemcell ]
     - get: stemcell
       params:
         tarball: false
-      passed: [ upload-stemcell ]
   - task: #@ "update-release-" + r.name
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -549,6 +517,7 @@ jobs:
     do:
     - aggregate:
       - get: cf-deployment-concourse-tasks
+      - get: cf-deployment-develop
       - get: relint-envs
       - get: daily
         trigger: true
@@ -558,6 +527,20 @@ jobs:
         bbl-state: relint-envs
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
+    - task: upload-stemcell
+      file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: cf-deployment-develop
+        ops-files: cf-deployment-develop
+      params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
+        INFRASTRUCTURE: google
+        OPS_FILES: |
+          operations/windows2012R2-cell.yml
+          operations/windows2016-cell.yml
+          operations/windows1803-cell.yml
+          operations/windows2019-cell.yml
     - task: upload-bosh-dns-release
       config:
         platform: linux
