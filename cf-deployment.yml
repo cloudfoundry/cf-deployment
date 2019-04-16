@@ -834,6 +834,8 @@ instance_groups:
             secret: "((uaa_clients_cc_service_key_client_secret))"
         url: https://uaa.((system_domain))
       cc:
+        diego:
+          docker_staging_stack: cflinuxfs3
         stacks:
         - name: cflinuxfs3
           description: Cloud Foundry Linux-based filesystem (Ubuntu 18.04)
