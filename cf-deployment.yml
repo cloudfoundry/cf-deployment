@@ -836,6 +836,9 @@ instance_groups:
       cc:
         diego:
           docker_staging_stack: cflinuxfs3
+        stacks:
+        - name: cflinuxfs3
+          description: Cloud Foundry Linux-based filesystem (Ubuntu 18.04)
         default_running_security_groups:
         - public_networks
         - dns
