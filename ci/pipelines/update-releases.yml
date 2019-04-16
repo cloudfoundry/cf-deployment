@@ -63,6 +63,7 @@ groups:
   - update-windows2012R2-stemcell
   - update-windows2016-stemcell
   - update-windows1803-stemcell
+  - update-windows2019-stemcell
   - update-windows-2016-offline-releases
 - name: infrastructure
   jobs:
@@ -508,6 +509,10 @@ resources:
   type: bosh-io-stemcell
   source:
     name: bosh-google-kvm-windows1803-go_agent
+- name: windows2019-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-google-kvm-windows2019-go_agent
 - name: daily
   type: time
   source:
@@ -4492,6 +4497,38 @@ jobs:
     params:
       OPS_FILE_NAME: windows1803-cell.yml
       OPS_FILE_DESTINATION: operations/windows1803-cell.yml
+  - put: cf-deployment-develop
+    params:
+      rebase: true
+      repository: updated-repo
+- name: update-windows2019-stemcell
+  public: true
+  build_logs_to_retain: 100
+  plan:
+  - aggregate:
+    - get: runtime-ci
+    - get: cf-deployment-develop
+    - get: windows2019-stemcell
+      trigger: true
+      params:
+        tarball: false
+  - task: update-windows-stemcell-ops
+    file: runtime-ci/tasks/update-windows-stemcell-ops/task.yml
+    input_mapping:
+      ops-files: cf-deployment-develop
+      windows-stemcell: windows2019-stemcell
+    params:
+      ORIGINAL_WINDOWS_OPS_FILE_PATH: operations/windows2019-cell.yml
+      UPDATED_WINDOWS_OPS_FILE_PATH: windows2019-cell.yml
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-develop
+      ops-file: updated-stemcell-ops-file
+      manifest: cf-deployment-develop
+    params:
+      OPS_FILE_NAME: windows2019-cell.yml
+      OPS_FILE_DESTINATION: operations/windows2019-cell.yml
   - put: cf-deployment-develop
     params:
       rebase: true
