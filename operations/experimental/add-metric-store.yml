@@ -34,6 +34,8 @@
       name: metric-store-gateway
       properties:
         gateway_addr: localhost:8081
+        proxy_cert: "((metric_store_proxy_tls.certificate))"
+        proxy_key: "((metric_store_proxy_tls.private_key))"
       provides:
         metric-store-gateway:
           as: metric-store-gateway
@@ -91,6 +93,7 @@
         cc:
           ca_cert: ((service_cf_internal_ca.certificate))
           common_name: cloud-controller-ng.service.cf.internal
+        proxy_ca_cert: "((metric_store_ca.certificate))"
         external_cert: ((metricstore_ssl.certificate))
         external_key: ((metricstore_ssl.private_key))
         proxy_port: 8083
@@ -154,3 +157,12 @@
       ca: service_cf_internal_ca
       common_name: metric-store
     type: certificate
+
+- type: replace
+  path: /variables/-
+  value:
+    name: metric_store_proxy_tls
+    type: certificate
+    options:
+      ca: metric_store_ca
+      common_name: localhost
