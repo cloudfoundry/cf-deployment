@@ -46,6 +46,10 @@ addons:
   include:
     stemcell:
       - os: ubuntu-xenial
+  exclude:
+    jobs:
+    - name: smoke_tests
+      release: cf-smoke-tests
   jobs:
     - name: prom_scraper
       release: loggregator-agent
