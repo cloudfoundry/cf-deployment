@@ -1,31 +1,21 @@
----
 - type: replace
   path: /releases/-
   value:
     name: metric-store
-    url: https://bosh.io/d/github.com/cloudfoundry/metric-store-release?v=1.0.0
-    version: "1.0.0"
-    sha1: fca1a466746c82dca2c8d43041b45fbf3dd1e5c2
-
+    sha1: 47668bf88cef00c2f40b892ee5f93a66d1aeb4ac
+    url: https://bosh.io/d/github.com/cloudfoundry/metric-store-release?v=1.1.0
+    version: 1.1.0
 - type: replace
   path: /instance_groups/-
   value:
-    name: metric-store
     azs:
     - z1
     instances: 1
-    persistent_disk_type: 10GB
-    vm_type: minimal
-    stemcell: default
-    networks:
-    - name: default
     jobs:
-    - name: metric-store
-      release: metric-store
-      provides:
-        metric-store: {shared: true, as: metric-store}
-      consumes:
-        metric-store: {from: metric-store}
+    - consumes:
+        metric-store:
+          from: metric-store
+      name: metric-store
       properties:
         egress_port: 8080
         health_addr: localhost:6060
@@ -33,115 +23,134 @@
           ca_cert: ((metric_store.ca))
           cert: ((metric_store.certificate))
           key: ((metric_store.private_key))
-    - name: metric-store-gateway
-      release: metric-store
       provides:
-        metric-store-gateway: {as: metric-store-gateway}
-      consumes:
-        metric-store: {from: metric-store}
+        metric-store:
+          as: metric-store
+          shared: true
+      release: metric-store
+    - consumes:
+        metric-store:
+          from: metric-store
+      name: metric-store-gateway
       properties:
         gateway_addr: localhost:8081
-    - name: metric-store-nozzle
-      release: metric-store
       provides:
-        metric-store-nozzle: {as: metric-store-nozzle}
-      consumes:
-        reverse_log_proxy: {from: reverse_log_proxy}
-        metric-store-nozzle: {from: metric-store-nozzle}
-        metric-store: {from: metric-store}
+        metric-store-gateway:
+          as: metric-store-gateway
+      release: metric-store
+    - consumes:
+        metric-store:
+          from: metric-store
+        metric-store-nozzle:
+          from: metric-store-nozzle
+        reverse_log_proxy:
+          from: reverse_log_proxy
+      name: metric-store-nozzle
       properties:
-        shard_id: metric-store
         logs_provider:
           tls:
             ca_cert: ((metric_store_to_logs_provider.ca))
             cert: ((metric_store_to_logs_provider.certificate))
             key: ((metric_store_to_logs_provider.private_key))
+        shard_id: metric-store
+      provides:
+        metric-store-nozzle:
+          as: metric-store-nozzle
+      release: metric-store
     - name: route_registrar
-      release: routing
       properties:
         route_registrar:
           routes:
           - name: metric-store-reverse-proxy
             port: 8083
-            tls_port: 8083
             registration_interval: 20s
             server_cert_domain_san: metric-store.((system_domain))
+            tls_port: 8083
             uris:
             - metric-store.((system_domain))
-            - "*.metric-store.((system_domain))"
-    - name: prom_scraper
-      release: loggregator-agent
-      consumes:
-        loggregator: {from: loggregator}
+            - '*.metric-store.((system_domain))'
+      release: routing
+    - consumes:
+        loggregator:
+          from: loggregator
+      name: prom_scraper
       properties:
-        metrics_urls: "http://localhost:6060/metrics,http://localhost:6061/metrics,http://localhost:6065/metrics"
-    - name: metric-store-cf-auth-proxy
-      release: metric-store
-      provides:
-        metric-store-cf-auth-proxy: {as: metric-store-cf-auth-proxy}
-      consumes:
-        cloud_controller: {from: cloud_controller}
-        metric-store-nozzle: {from: metric-store-nozzle}
-        metric-store-gateway: {from: metric-store-gateway}
-        metric-store: {from: metric-store}
+        metrics_urls: http://localhost:6060/metrics,http://localhost:6061/metrics,http://localhost:6065/metrics
+      release: loggregator-agent
+    - consumes:
+        cloud_controller:
+          from: cloud_controller
+        metric-store:
+          from: metric-store
+        metric-store-gateway:
+          from: metric-store-gateway
+        metric-store-nozzle:
+          from: metric-store-nozzle
+      name: metric-store-cf-auth-proxy
       properties:
         cc:
           ca_cert: ((service_cf_internal_ca.certificate))
           common_name: cloud-controller-ng.service.cf.internal
-        proxy_port: 8083
         external_cert: ((metricstore_ssl.certificate))
         external_key: ((metricstore_ssl.private_key))
+        proxy_port: 8083
         uaa:
           ca_cert: ((uaa_ca.certificate))
           client_id: doppler
           client_secret: ((uaa_clients_doppler_secret))
           internal_addr: https://uaa.service.cf.internal:8443
-
+      provides:
+        metric-store-cf-auth-proxy:
+          as: metric-store-cf-auth-proxy
+      release: metric-store
+    name: metric-store
+    networks:
+    - name: default
+    persistent_disk_type: 10GB
+    stemcell: default
+    vm_type: minimal
 - type: replace
   path: /variables/-
   value:
     name: metric_store_to_logs_provider
-    type: certificate
     options:
       ca: loggregator_ca
       common_name: metric-store
       extended_key_usage:
       - client_auth
       - server_auth
-
+    type: certificate
 - type: replace
   path: /variables/-
   value:
     name: metric_store_ca
-    type: certificate
     options:
-      is_ca: true
       common_name: metric-store
-
+      is_ca: true
+    type: certificate
 - type: replace
   path: /variables/-
   value:
     name: metric_store
-    type: certificate
     options:
-      ca: metric_store_ca
-      common_name: metric-store
       alternative_names:
       - ms
       - metric-store
       - metric-store
+      ca: metric_store_ca
+      common_name: metric-store
       extended_key_usage:
       - client_auth
       - server_auth
-
+    type: certificate
 - type: replace
   path: /variables/-
   value:
     name: metricstore_ssl
-    type: certificate
     options:
-      ca: service_cf_internal_ca
-      common_name: metric-store
       alternative_names:
       - metric-store.((system_domain))
-      - "*.metric-store.((system_domain))"
+      - '*.metric-store.((system_domain))'
+      ca: service_cf_internal_ca
+      common_name: metric-store
+    type: certificate
