@@ -1,0 +1,970 @@
+## ======================================================================
+## GENERATED FILE. DO NOT EDIT
+## ======================================================================
+
+groups:
+- name: update-releases
+  jobs:
+  - update-binary-buildpack
+  - update-bosh-dns-aliases
+  - update-bpm
+  - update-capi
+  - update-cf-networking
+  - update-cf-smoke-tests
+  - update-cf-syslog-drain
+  - update-cflinuxfs3
+  - update-diego
+  - update-dotnet-core-buildpack
+  - update-garden-runc
+  - update-go-buildpack
+  - update-java-buildpack
+  - update-log-cache
+  - update-loggregator
+  - update-loggregator-agent
+  - update-nats
+  - update-nginx-buildpack
+  - update-nodejs-buildpack
+  - update-php-buildpack
+  - update-python-buildpack
+  - update-pxc
+  - update-r-buildpack
+  - update-routing
+  - update-ruby-buildpack
+  - update-silk
+  - update-staticfile-buildpack
+  - update-statsd-injector
+  - update-uaa
+  - update-credhub
+  - update-cf-cli
+resources:
+- name: binary-buildpack-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/binary-buildpack-release
+- name: bosh-dns-aliases-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/bosh-dns-aliases-release
+- name: bpm-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry-incubator/bpm-release
+- name: capi-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/capi-release
+- name: cf-networking-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/cf-networking-release
+- name: cf-smoke-tests-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/cf-smoke-tests-release
+- name: cf-syslog-drain-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/cf-syslog-drain-release
+- name: cflinuxfs3-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/cflinuxfs3-release
+- name: diego-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/diego-release
+- name: dotnet-core-buildpack-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/dotnet-core-buildpack-release
+- name: garden-runc-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/garden-runc-release
+- name: go-buildpack-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/go-buildpack-release
+- name: java-buildpack-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/java-buildpack-release
+- name: log-cache-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/log-cache-release
+- name: loggregator-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/loggregator-release
+- name: loggregator-agent-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/loggregator-agent-release
+- name: nats-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/nats-release
+- name: nginx-buildpack-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/nginx-buildpack-release
+- name: nodejs-buildpack-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/nodejs-buildpack-release
+- name: php-buildpack-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/php-buildpack-release
+- name: python-buildpack-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/python-buildpack-release
+- name: pxc-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry-incubator/pxc-release
+- name: r-buildpack-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/r-buildpack-release
+- name: routing-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry-incubator/cf-routing-release
+- name: ruby-buildpack-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/ruby-buildpack-release
+- name: silk-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/silk-release
+- name: staticfile-buildpack-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/staticfile-buildpack-release
+- name: statsd-injector-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/statsd-injector-release
+- name: uaa-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/uaa-release
+- name: credhub-release
+  type: bosh-io-release
+  source:
+    repository: pivotal-cf/credhub-release
+- name: cf-cli-release
+  type: bosh-io-release
+  source:
+    repository: bosh-packages/cf-cli-release
+jobs:
+- name: update-binary-buildpack
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: binary-buildpack-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-binary-buildpack-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-bosh-dns-aliases
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: bosh-dns-aliases-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-bosh-dns-aliases-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-bpm
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: bpm-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-bpm-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-capi
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: capi-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-capi-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-cf-networking
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: cf-networking-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-cf-networking-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-cf-smoke-tests
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: cf-smoke-tests-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-cf-smoke-tests-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-cf-syslog-drain
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: cf-syslog-drain-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-cf-syslog-drain-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-cflinuxfs3
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: cflinuxfs3-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-cflinuxfs3-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-diego
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: diego-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-diego-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-dotnet-core-buildpack
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: dotnet-core-buildpack-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-dotnet-core-buildpack-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-garden-runc
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: garden-runc-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-garden-runc-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-go-buildpack
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: go-buildpack-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-go-buildpack-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-java-buildpack
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: java-buildpack-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-java-buildpack-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-log-cache
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: log-cache-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-log-cache-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-loggregator
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: loggregator-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-loggregator-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-loggregator-agent
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: loggregator-agent-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-loggregator-agent-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-nats
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: nats-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-nats-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-nginx-buildpack
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: nginx-buildpack-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-nginx-buildpack-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-nodejs-buildpack
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: nodejs-buildpack-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-nodejs-buildpack-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-php-buildpack
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: php-buildpack-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-php-buildpack-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-python-buildpack
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: python-buildpack-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-python-buildpack-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-pxc
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: pxc-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-pxc-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-r-buildpack
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: r-buildpack-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-r-buildpack-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-routing
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: routing-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-routing-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-ruby-buildpack
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: ruby-buildpack-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-ruby-buildpack-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-silk
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: silk-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-silk-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-staticfile-buildpack
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: staticfile-buildpack-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-staticfile-buildpack-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-statsd-injector
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: statsd-injector-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-statsd-injector-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-uaa
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: uaa-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-uaa-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-credhub
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: credhub-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-credhub-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+- name: update-cf-cli
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: cf-cli-release
+      trigger: true
+      params:
+        tarball: false
+  - task: update-cf-cli-release
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""

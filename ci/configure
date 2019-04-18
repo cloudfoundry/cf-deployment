@@ -1,10 +1,10 @@
 #!/bin/bash -e
 
 main() {
-  local CF_D_PIPELINES=(cf-deployment update-releases pull-requests)
+  local CF_D_PIPELINES=(cf-deployment update-releases pull-requests pre-dev)
   local PIPELINE=${1?"Valid input ${CF_D_PIPELINES[@]}"}
 
-  if [[ "${PIPELINE}" == "update-releases" ]]; then
+  if [[ "${PIPELINE}" == "update-releases" || "${PIPELINE}" == "pre-dev" ]]; then
     cat > "${PROJECT_DIR}/ci/pipelines/${PIPELINE}.yml" <<EOF
 ## ======================================================================
 ## GENERATED FILE. DO NOT EDIT
@@ -14,7 +14,7 @@ EOF
 
     ytt template \
       -f "${PROJECT_DIR}/ci/template/${PIPELINE}.yml" \
-      -f "${PROJECT_DIR}/ci/input/${PIPELINE}.yml" \
+      -f "${PROJECT_DIR}/ci/input/inputs.yml" \
       >> "${PROJECT_DIR}/ci/pipelines/${PIPELINE}.yml"
   fi
 

@@ -1,0 +1,47 @@
+#@ load("@ytt:data", "data")
+
+---
+groups:
+- name: update-releases
+  jobs:
+  #@ for r in data.values.baseReleases:
+  - #@ "update-" + r.name
+  #@ end
+
+resources:
+#@ for r in data.values.baseReleases:
+- name: #@ r.name + "-release"
+  type: bosh-io-release
+  source:
+    repository: #@ r.repository
+#@ end
+
+jobs:
+#@ for r in data.values.baseReleases:
+- name: #@ "update-" + r.name
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: #@ r.name + "-release"
+      trigger: true
+      params:
+        tarball: false
+  - task:  #@ "update-" + r.name + "-release"
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          echo Release Integration
+        dir: ""
+#@ end
