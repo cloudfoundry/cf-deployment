@@ -108,7 +108,6 @@ jobs:
   - stemcell
   - #@ "update-" + r.name
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -208,7 +207,6 @@ jobs:
 - name: #@ "update-" + r.name
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -278,7 +276,6 @@ jobs:
 #@ for s in data.values.windowsVersSupported:
 - name: #@ "update-" + s.name + "-stemcell"
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -317,7 +314,6 @@ jobs:
   #@ for r in data.values.baseReleases:
   - #@ "update-" + r.name
   #@ end
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -405,7 +401,6 @@ jobs:
 - name: update-windows-2016-offline-releases
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -445,7 +440,6 @@ jobs:
 - name: setup-infrastructure-compilation
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: cf-deployment-concourse-tasks
@@ -483,7 +477,6 @@ jobs:
 - name: destroy-infrastructure-compilation
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: relint-envs
@@ -511,7 +504,6 @@ jobs:
 - name: run-bosh-cleanup-compilation
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - timeout: 4h
     do:

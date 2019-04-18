@@ -294,7 +294,6 @@ resources:
 jobs:
 - name: branch-freshness
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: cf-deployment-all-branches
@@ -357,7 +356,6 @@ jobs:
 - name: lint-cf-deployment-manifest
   serial: false
   public: true
-  build_logs_to_retain: 100
   plan:
   - get: cf-deployment-develop
     trigger: true
@@ -380,7 +378,6 @@ jobs:
 - name: unit-test-golang-tests
   serial: true
   public: true
-  # build_logs_to_retain: 100
   plan:
   - get: cf-deployment-develop
     trigger: true
@@ -402,7 +399,6 @@ jobs:
 - name: unit-test-ops-files
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - get: cf-deployment-develop
     trigger: true
@@ -424,7 +420,6 @@ jobs:
 - name: unit-test-update-releases-coverage
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - get: cf-deployment-develop
     trigger: true
@@ -446,7 +441,6 @@ jobs:
 - name: fresh-deploy
   serial_groups: [ luna-smokes ]
   public: true
-  build_logs_to_retain: 100
   plan:
   - get: fresh-pool
     trigger: true
@@ -581,7 +575,6 @@ jobs:
 - name: upgrade-deploy
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - get: upgrade-pool
     trigger: true
@@ -809,7 +802,6 @@ jobs:
 
 - name: experimental-ops-files
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: experimental-pool
@@ -822,7 +814,6 @@ jobs:
 - name: experimental-deploy
   serial_groups: [ hermione-wats, hermione-cats, hermione-smokes ]
   public: true
-  build_logs_to_retain: 100
   plan:
   - do:
     - get: experimental-pool
@@ -941,7 +932,6 @@ jobs:
 - name: stable-deploy
   serial_groups: [ bellatrix-smokes ]
   public: true
-  build_logs_to_retain: 100
   plan:
   - on_success:
       put: stable-pool
@@ -1019,7 +1009,6 @@ jobs:
 - name: lite-deploy
   public: true
   serial_groups: [ snitch-cats ]
-  build_logs_to_retain: 100
   plan:
   - timeout: 4h
     do:
@@ -1122,7 +1111,6 @@ jobs:
 - name: experimental-cats
   serial_groups: [ hermione-cats ]
   public: true
-  build_logs_to_retain: 100
   plan:
   - timeout: 4h
     do:
@@ -1148,7 +1136,6 @@ jobs:
 - name: experimental-smoke-tests
   public: true
   serial_groups: [ hermione-smokes ]
-  build_logs_to_retain: 100
   plan:
   - do:
     - get: experimental-pool
@@ -1171,7 +1158,6 @@ jobs:
 - name: fresh-smoke-tests
   public: true
   serial_groups: [ luna-smokes ]
-  build_logs_to_retain: 100
   plan:
   - do:
     - get: fresh-pool
@@ -1195,7 +1181,6 @@ jobs:
 - name: stable-smoke-tests
   serial_groups: [bellatrix-smokes]
   public: true
-  build_logs_to_retain: 100
   plan:
   - timeout: 1h
     do:
@@ -1221,7 +1206,6 @@ jobs:
 
 - name: bbr-deploy
   public: true
-  build_logs_to_retain: 100
   plan:
   - get: bbr-pool
     trigger: true
@@ -1281,7 +1265,6 @@ jobs:
 
 - name: bbr-run-drats
   public: true
-  build_logs_to_retain: 100
   plan:
   - get: bbr-pool
     trigger: true
@@ -1312,7 +1295,6 @@ jobs:
 - name: stable-semihourly-pool-acquisition
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - timeout: 4h
     do:
@@ -1324,7 +1306,6 @@ jobs:
 - name: stable-periodic-cats
   serial: true
   public: true
-  build_logs_to_retain: 2000
   plan:
   - timeout: 4h
     on_failure:
@@ -1364,7 +1345,6 @@ jobs:
 - name: cleanup-stable-periodic-cats
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - timeout: 4h
     do:
@@ -1383,7 +1363,6 @@ jobs:
 
 - name: stable-update-cats-cfd-branch
   public: true
-  build_logs_to_retain: 100
   plan:
   - timeout: 4h
     ensure:
@@ -1409,7 +1388,6 @@ jobs:
 - name: fresh-cats
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - timeout: 4h
     do:
@@ -1436,7 +1414,6 @@ jobs:
 - name: upgrade-cats
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - timeout: 4h
     do:
@@ -1463,7 +1440,6 @@ jobs:
 - name: upgrade-cats-windows2016
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - timeout: 4h
     do:
@@ -1491,7 +1467,6 @@ jobs:
 - name: lite-cats
   serial_groups: [ snitch-cats ]
   public: true
-  build_logs_to_retain: 100
   plan:
   - timeout: 4h
     do:
@@ -1519,7 +1494,6 @@ jobs:
 - name: lite-recreate-director
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - timeout: 4h
     do:
@@ -1572,7 +1546,6 @@ jobs:
 - name: fresh-delete-deployment
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - timeout: 4h
     do:
@@ -1598,7 +1571,6 @@ jobs:
 - name: bless-manifest
   public: true
   serial: true
-  build_logs_to_retain: 100
   plan:
   - get: cf-deployment-develop
     trigger: true
@@ -1620,7 +1592,6 @@ jobs:
 
 - name: release-notes-template
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -1634,7 +1605,6 @@ jobs:
 
 - name: ship-it-patch
   public: true
-  build_logs_to_retain: 100
   plan:
     - do:
       - get: runtime-ci
@@ -1659,7 +1629,6 @@ jobs:
 
 - name: ship-it-minor
   public: true
-  build_logs_to_retain: 100
   plan:
     - do:
       - get: runtime-ci
@@ -1684,7 +1653,6 @@ jobs:
 
 - name: ship-it-major
   public: true
-  build_logs_to_retain: 100
   plan:
     - do:
       - get: runtime-ci

@@ -71,7 +71,6 @@ resources:
 jobs:
   - name: fail-prs-to-cf-deployment-master
     public: true
-    build_logs_to_retain: 100
     plan:
       - get: runtime-ci
       - get: cf-deployment-master
@@ -93,7 +92,6 @@ jobs:
           comment: pull-request-comment/comment
   - name: fail-prs-to-cf-deployment-release-candidate
     public: true
-    build_logs_to_retain: 100
     plan:
       - get: runtime-ci
       - get: cf-deployment-rc
@@ -115,7 +113,6 @@ jobs:
           comment: pull-request-comment/comment
   - name: pass-prs-to-cf-deployment-develop
     public: true
-    build_logs_to_retain: 100
     plan:
       - get: cf-deployment-develop
         trigger: true
@@ -132,7 +129,6 @@ jobs:
 
   - name: run-unit-tests-on-all-cf-deployment-prs
     public: true
-    build_logs_to_retain: 100
     plan:
     - timeout: 4h
       do:
@@ -233,7 +229,6 @@ jobs:
 
   - name: fail-prs-to-cats-master
     public: true
-    build_logs_to_retain: 100
     plan:
       - get: runtime-ci
       - get: cats-master
@@ -255,7 +250,6 @@ jobs:
           comment: pull-request-comment/comment
   - name: pass-prs-to-cats-develop
     public: true
-    build_logs_to_retain: 100
     plan:
       - get: cats-develop
         trigger: true
@@ -272,7 +266,6 @@ jobs:
 
   - name: run-unit-tests-on-all-cats-prs
     public: true
-    build_logs_to_retain: 100
     plan:
     - timeout: 4h
       do:

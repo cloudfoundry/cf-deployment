@@ -78,7 +78,6 @@ jobs:
 
 - name: deploy
   public: true
-  build_logs_to_retain: 100
   plan:
   - on_failure:
       put: bbr-pool
@@ -141,7 +140,6 @@ jobs:
 
 - name: run-drats
   public: true
-  build_logs_to_retain: 100
   plan:
   - on_success:
       put: bbr-pool

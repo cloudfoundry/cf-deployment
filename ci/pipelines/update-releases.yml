@@ -525,7 +525,6 @@ jobs:
   - stemcell
   - update-binary-buildpack
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -600,7 +599,6 @@ jobs:
   - stemcell
   - update-bosh-dns-aliases
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -693,7 +691,6 @@ jobs:
   - stemcell
   - update-bpm
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -786,7 +783,6 @@ jobs:
   - stemcell
   - update-capi
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -879,7 +875,6 @@ jobs:
   - stemcell
   - update-cf-networking
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -972,7 +967,6 @@ jobs:
   - stemcell
   - update-cf-smoke-tests
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -1065,7 +1059,6 @@ jobs:
   - stemcell
   - update-cf-syslog-drain
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -1158,7 +1151,6 @@ jobs:
   - stemcell
   - update-cflinuxfs3
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -1251,7 +1243,6 @@ jobs:
   - stemcell
   - update-diego
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -1344,7 +1335,6 @@ jobs:
   - stemcell
   - update-dotnet-core-buildpack
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -1419,7 +1409,6 @@ jobs:
   - stemcell
   - update-garden-runc
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -1512,7 +1501,6 @@ jobs:
   - stemcell
   - update-go-buildpack
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -1587,7 +1575,6 @@ jobs:
   - stemcell
   - update-java-buildpack
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -1662,7 +1649,6 @@ jobs:
   - stemcell
   - update-log-cache
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -1755,7 +1741,6 @@ jobs:
   - stemcell
   - update-loggregator
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -1848,7 +1833,6 @@ jobs:
   - stemcell
   - update-loggregator-agent
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -1941,7 +1925,6 @@ jobs:
   - stemcell
   - update-nats
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -2034,7 +2017,6 @@ jobs:
   - stemcell
   - update-nginx-buildpack
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -2109,7 +2091,6 @@ jobs:
   - stemcell
   - update-nodejs-buildpack
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -2184,7 +2165,6 @@ jobs:
   - stemcell
   - update-php-buildpack
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -2259,7 +2239,6 @@ jobs:
   - stemcell
   - update-python-buildpack
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -2334,7 +2313,6 @@ jobs:
   - stemcell
   - update-pxc
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -2427,7 +2405,6 @@ jobs:
   - stemcell
   - update-r-buildpack
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -2502,7 +2479,6 @@ jobs:
   - stemcell
   - update-routing
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -2595,7 +2571,6 @@ jobs:
   - stemcell
   - update-ruby-buildpack
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -2670,7 +2645,6 @@ jobs:
   - stemcell
   - update-silk
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -2763,7 +2737,6 @@ jobs:
   - stemcell
   - update-staticfile-buildpack
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -2838,7 +2811,6 @@ jobs:
   - stemcell
   - update-statsd-injector
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -2931,7 +2903,6 @@ jobs:
   - stemcell
   - update-uaa
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -3024,7 +2995,6 @@ jobs:
   - stemcell
   - update-credhub
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -3117,7 +3087,6 @@ jobs:
   - stemcell
   - update-cf-cli
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -3208,7 +3177,6 @@ jobs:
 - name: update-backup-and-restore-sdk
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -3271,7 +3239,6 @@ jobs:
 - name: update-bits-service
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -3334,7 +3301,6 @@ jobs:
 - name: update-cf-app-sd
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -3397,7 +3363,6 @@ jobs:
 - name: update-haproxy
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -3461,7 +3426,6 @@ jobs:
 - name: update-mapfs
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -3524,7 +3488,6 @@ jobs:
 - name: update-nfs-volume
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -3587,7 +3550,6 @@ jobs:
 - name: update-smb-volume
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -3650,7 +3612,6 @@ jobs:
 - name: update-postgres
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -3713,7 +3674,6 @@ jobs:
 - name: update-syslog
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -3777,7 +3737,6 @@ jobs:
 - name: update-windows-syslog
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -3841,7 +3800,6 @@ jobs:
 - name: update-hwc-buildpack
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -3904,7 +3862,6 @@ jobs:
 - name: update-windows-utilities
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -3967,7 +3924,6 @@ jobs:
 - name: update-garden-windows
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -4030,7 +3986,6 @@ jobs:
 - name: update-winc
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -4093,7 +4048,6 @@ jobs:
 - name: update-windows1803fs
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -4156,7 +4110,6 @@ jobs:
 - name: update-windows2016fs
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -4219,7 +4172,6 @@ jobs:
 - name: update-node-exporter
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -4282,7 +4234,6 @@ jobs:
 - name: update-leadership-election
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -4345,7 +4296,6 @@ jobs:
 - name: update-metric-store
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -4407,7 +4357,6 @@ jobs:
       repository: updated-repo
 - name: update-windows2012R2-stemcell
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -4439,7 +4388,6 @@ jobs:
       repository: updated-repo
 - name: update-windows2016-stemcell
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -4471,7 +4419,6 @@ jobs:
       repository: updated-repo
 - name: update-windows1803-stemcell
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -4503,7 +4450,6 @@ jobs:
       repository: updated-repo
 - name: update-windows2019-stemcell
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -4568,7 +4514,6 @@ jobs:
   - update-uaa
   - update-credhub
   - update-cf-cli
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -5479,7 +5424,6 @@ jobs:
 - name: update-windows-2016-offline-releases
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: runtime-ci
@@ -5518,7 +5462,6 @@ jobs:
 - name: setup-infrastructure-compilation
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: cf-deployment-concourse-tasks
@@ -5555,7 +5498,6 @@ jobs:
 - name: destroy-infrastructure-compilation
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - aggregate:
     - get: relint-envs
@@ -5582,7 +5524,6 @@ jobs:
 - name: run-bosh-cleanup-compilation
   serial: true
   public: true
-  build_logs_to_retain: 100
   plan:
   - timeout: 4h
     do:
