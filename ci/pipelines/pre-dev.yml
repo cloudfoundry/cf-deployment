@@ -171,11 +171,22 @@ resources:
   type: bosh-io-stemcell
   source:
     name: bosh-google-kvm-ubuntu-xenial-go_agent
+- name: cf-deployment-concourse-tasks
+  type: git
+  source:
+    branch: master
+    uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
 - name: runtime-ci
   type: git
   source:
     branch: master
     uri: https://github.com/cloudfoundry/runtime-ci.git
+- name: relint-envs
+  type: git
+  source:
+    branch: master
+    uri: git@github.com:cloudfoundry/relint-envs.git
+    private_key: ((hagrid_env_readwrite_deploy_key.private_key))
 jobs:
 - name: update-binary-buildpack
   serial_groups:
@@ -188,10 +199,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-binary-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -219,10 +232,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-bosh-dns-aliases
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -230,6 +245,24 @@ jobs:
       deployment-configuration: cf-deployment-release-candidate
     params:
       RELEASE_NAME: bosh-dns-aliases
+  - task: bosh-dry-run
+    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+      cf-deployment: updated-deployment-manifest
+      ops-files: cf-deployment-release-candidate
+      vars-files: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME_SUFFIX: bosh-dns-aliases-pre-dev
+      SYSTEM_DOMAIN: greengrass.cf-app.com
+  - task: bosh-delete-deployment
+    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME: cf-dry-run-bosh-dns-aliases-pre-dev
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
@@ -250,10 +283,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-bpm
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -261,6 +296,24 @@ jobs:
       deployment-configuration: cf-deployment-release-candidate
     params:
       RELEASE_NAME: bpm
+  - task: bosh-dry-run
+    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+      cf-deployment: updated-deployment-manifest
+      ops-files: cf-deployment-release-candidate
+      vars-files: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME_SUFFIX: bpm-pre-dev
+      SYSTEM_DOMAIN: greengrass.cf-app.com
+  - task: bosh-delete-deployment
+    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME: cf-dry-run-bpm-pre-dev
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
@@ -281,10 +334,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-capi
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -292,6 +347,24 @@ jobs:
       deployment-configuration: cf-deployment-release-candidate
     params:
       RELEASE_NAME: capi
+  - task: bosh-dry-run
+    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+      cf-deployment: updated-deployment-manifest
+      ops-files: cf-deployment-release-candidate
+      vars-files: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME_SUFFIX: capi-pre-dev
+      SYSTEM_DOMAIN: greengrass.cf-app.com
+  - task: bosh-delete-deployment
+    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME: cf-dry-run-capi-pre-dev
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
@@ -312,10 +385,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-cf-networking
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -323,6 +398,24 @@ jobs:
       deployment-configuration: cf-deployment-release-candidate
     params:
       RELEASE_NAME: cf-networking
+  - task: bosh-dry-run
+    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+      cf-deployment: updated-deployment-manifest
+      ops-files: cf-deployment-release-candidate
+      vars-files: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME_SUFFIX: cf-networking-pre-dev
+      SYSTEM_DOMAIN: greengrass.cf-app.com
+  - task: bosh-delete-deployment
+    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME: cf-dry-run-cf-networking-pre-dev
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
@@ -343,10 +436,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-cf-smoke-tests
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -354,6 +449,24 @@ jobs:
       deployment-configuration: cf-deployment-release-candidate
     params:
       RELEASE_NAME: cf-smoke-tests
+  - task: bosh-dry-run
+    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+      cf-deployment: updated-deployment-manifest
+      ops-files: cf-deployment-release-candidate
+      vars-files: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME_SUFFIX: cf-smoke-tests-pre-dev
+      SYSTEM_DOMAIN: greengrass.cf-app.com
+  - task: bosh-delete-deployment
+    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME: cf-dry-run-cf-smoke-tests-pre-dev
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
@@ -374,10 +487,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-cf-syslog-drain
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -385,6 +500,24 @@ jobs:
       deployment-configuration: cf-deployment-release-candidate
     params:
       RELEASE_NAME: cf-syslog-drain
+  - task: bosh-dry-run
+    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+      cf-deployment: updated-deployment-manifest
+      ops-files: cf-deployment-release-candidate
+      vars-files: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME_SUFFIX: cf-syslog-drain-pre-dev
+      SYSTEM_DOMAIN: greengrass.cf-app.com
+  - task: bosh-delete-deployment
+    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME: cf-dry-run-cf-syslog-drain-pre-dev
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
@@ -405,10 +538,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-cflinuxfs3
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -416,6 +551,24 @@ jobs:
       deployment-configuration: cf-deployment-release-candidate
     params:
       RELEASE_NAME: cflinuxfs3
+  - task: bosh-dry-run
+    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+      cf-deployment: updated-deployment-manifest
+      ops-files: cf-deployment-release-candidate
+      vars-files: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME_SUFFIX: cflinuxfs3-pre-dev
+      SYSTEM_DOMAIN: greengrass.cf-app.com
+  - task: bosh-delete-deployment
+    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME: cf-dry-run-cflinuxfs3-pre-dev
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
@@ -436,10 +589,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-diego
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -447,6 +602,24 @@ jobs:
       deployment-configuration: cf-deployment-release-candidate
     params:
       RELEASE_NAME: diego
+  - task: bosh-dry-run
+    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+      cf-deployment: updated-deployment-manifest
+      ops-files: cf-deployment-release-candidate
+      vars-files: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME_SUFFIX: diego-pre-dev
+      SYSTEM_DOMAIN: greengrass.cf-app.com
+  - task: bosh-delete-deployment
+    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME: cf-dry-run-diego-pre-dev
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
@@ -467,10 +640,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-dotnet-core-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -498,10 +673,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-garden-runc
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -509,6 +686,24 @@ jobs:
       deployment-configuration: cf-deployment-release-candidate
     params:
       RELEASE_NAME: garden-runc
+  - task: bosh-dry-run
+    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+      cf-deployment: updated-deployment-manifest
+      ops-files: cf-deployment-release-candidate
+      vars-files: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME_SUFFIX: garden-runc-pre-dev
+      SYSTEM_DOMAIN: greengrass.cf-app.com
+  - task: bosh-delete-deployment
+    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME: cf-dry-run-garden-runc-pre-dev
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
@@ -529,10 +724,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-go-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -560,10 +757,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-java-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -591,10 +790,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-log-cache
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -602,6 +803,24 @@ jobs:
       deployment-configuration: cf-deployment-release-candidate
     params:
       RELEASE_NAME: log-cache
+  - task: bosh-dry-run
+    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+      cf-deployment: updated-deployment-manifest
+      ops-files: cf-deployment-release-candidate
+      vars-files: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME_SUFFIX: log-cache-pre-dev
+      SYSTEM_DOMAIN: greengrass.cf-app.com
+  - task: bosh-delete-deployment
+    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME: cf-dry-run-log-cache-pre-dev
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
@@ -622,10 +841,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-loggregator
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -633,6 +854,24 @@ jobs:
       deployment-configuration: cf-deployment-release-candidate
     params:
       RELEASE_NAME: loggregator
+  - task: bosh-dry-run
+    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+      cf-deployment: updated-deployment-manifest
+      ops-files: cf-deployment-release-candidate
+      vars-files: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME_SUFFIX: loggregator-pre-dev
+      SYSTEM_DOMAIN: greengrass.cf-app.com
+  - task: bosh-delete-deployment
+    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME: cf-dry-run-loggregator-pre-dev
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
@@ -653,10 +892,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-loggregator-agent
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -664,6 +905,24 @@ jobs:
       deployment-configuration: cf-deployment-release-candidate
     params:
       RELEASE_NAME: loggregator-agent
+  - task: bosh-dry-run
+    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+      cf-deployment: updated-deployment-manifest
+      ops-files: cf-deployment-release-candidate
+      vars-files: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME_SUFFIX: loggregator-agent-pre-dev
+      SYSTEM_DOMAIN: greengrass.cf-app.com
+  - task: bosh-delete-deployment
+    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME: cf-dry-run-loggregator-agent-pre-dev
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
@@ -684,10 +943,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-nats
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -695,6 +956,24 @@ jobs:
       deployment-configuration: cf-deployment-release-candidate
     params:
       RELEASE_NAME: nats
+  - task: bosh-dry-run
+    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+      cf-deployment: updated-deployment-manifest
+      ops-files: cf-deployment-release-candidate
+      vars-files: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME_SUFFIX: nats-pre-dev
+      SYSTEM_DOMAIN: greengrass.cf-app.com
+  - task: bosh-delete-deployment
+    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME: cf-dry-run-nats-pre-dev
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
@@ -715,10 +994,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-nginx-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -746,10 +1027,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-nodejs-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -777,10 +1060,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-php-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -808,10 +1093,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-python-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -839,10 +1126,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-pxc
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -850,6 +1139,24 @@ jobs:
       deployment-configuration: cf-deployment-release-candidate
     params:
       RELEASE_NAME: pxc
+  - task: bosh-dry-run
+    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+      cf-deployment: updated-deployment-manifest
+      ops-files: cf-deployment-release-candidate
+      vars-files: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME_SUFFIX: pxc-pre-dev
+      SYSTEM_DOMAIN: greengrass.cf-app.com
+  - task: bosh-delete-deployment
+    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME: cf-dry-run-pxc-pre-dev
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
@@ -870,10 +1177,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-r-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -901,10 +1210,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-routing
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -912,6 +1223,24 @@ jobs:
       deployment-configuration: cf-deployment-release-candidate
     params:
       RELEASE_NAME: routing
+  - task: bosh-dry-run
+    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+      cf-deployment: updated-deployment-manifest
+      ops-files: cf-deployment-release-candidate
+      vars-files: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME_SUFFIX: routing-pre-dev
+      SYSTEM_DOMAIN: greengrass.cf-app.com
+  - task: bosh-delete-deployment
+    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME: cf-dry-run-routing-pre-dev
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
@@ -932,10 +1261,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-ruby-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -963,10 +1294,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-silk
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -974,6 +1307,24 @@ jobs:
       deployment-configuration: cf-deployment-release-candidate
     params:
       RELEASE_NAME: silk
+  - task: bosh-dry-run
+    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+      cf-deployment: updated-deployment-manifest
+      ops-files: cf-deployment-release-candidate
+      vars-files: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME_SUFFIX: silk-pre-dev
+      SYSTEM_DOMAIN: greengrass.cf-app.com
+  - task: bosh-delete-deployment
+    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME: cf-dry-run-silk-pre-dev
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
@@ -994,10 +1345,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-staticfile-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1025,10 +1378,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-statsd-injector
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1036,6 +1391,24 @@ jobs:
       deployment-configuration: cf-deployment-release-candidate
     params:
       RELEASE_NAME: statsd-injector
+  - task: bosh-dry-run
+    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+      cf-deployment: updated-deployment-manifest
+      ops-files: cf-deployment-release-candidate
+      vars-files: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME_SUFFIX: statsd-injector-pre-dev
+      SYSTEM_DOMAIN: greengrass.cf-app.com
+  - task: bosh-delete-deployment
+    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME: cf-dry-run-statsd-injector-pre-dev
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
@@ -1056,10 +1429,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-uaa
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1067,6 +1442,24 @@ jobs:
       deployment-configuration: cf-deployment-release-candidate
     params:
       RELEASE_NAME: uaa
+  - task: bosh-dry-run
+    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+      cf-deployment: updated-deployment-manifest
+      ops-files: cf-deployment-release-candidate
+      vars-files: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME_SUFFIX: uaa-pre-dev
+      SYSTEM_DOMAIN: greengrass.cf-app.com
+  - task: bosh-delete-deployment
+    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME: cf-dry-run-uaa-pre-dev
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
@@ -1087,10 +1480,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-credhub
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1098,6 +1493,24 @@ jobs:
       deployment-configuration: cf-deployment-release-candidate
     params:
       RELEASE_NAME: credhub
+  - task: bosh-dry-run
+    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+      cf-deployment: updated-deployment-manifest
+      ops-files: cf-deployment-release-candidate
+      vars-files: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME_SUFFIX: credhub-pre-dev
+      SYSTEM_DOMAIN: greengrass.cf-app.com
+  - task: bosh-delete-deployment
+    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME: cf-dry-run-credhub-pre-dev
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
@@ -1118,10 +1531,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: update-release-cf-cli
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1129,6 +1544,24 @@ jobs:
       deployment-configuration: cf-deployment-release-candidate
     params:
       RELEASE_NAME: cf-cli
+  - task: bosh-dry-run
+    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+      cf-deployment: updated-deployment-manifest
+      ops-files: cf-deployment-release-candidate
+      vars-files: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME_SUFFIX: cf-cli-pre-dev
+      SYSTEM_DOMAIN: greengrass.cf-app.com
+  - task: bosh-delete-deployment
+    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME: cf-dry-run-cf-cli-pre-dev
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:

@@ -22,17 +22,26 @@ resources:
     branch: release-candidate
     uri: git@github.com:cloudfoundry/cf-deployment.git
     private_key: ((cf_deployment_readwrite_deploy_key.private_key))
-
 - name: stemcell
   type: bosh-io-stemcell
   source:
     name: bosh-google-kvm-ubuntu-xenial-go_agent
-
+- name: cf-deployment-concourse-tasks
+  type: git
+  source:
+    branch: master
+    uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
 - name: runtime-ci
   type: git
   source:
     branch: master
     uri: https://github.com/cloudfoundry/runtime-ci.git
+- name: relint-envs
+  type: git
+  source:
+    branch: master
+    uri: git@github.com:cloudfoundry/relint-envs.git
+    private_key: ((hagrid_env_readwrite_deploy_key.private_key))
 
 jobs:
 #@ for r in data.values.baseReleases:
@@ -47,10 +56,12 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
-    - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
   - task: #@ "update-release-" + r.name
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -58,6 +69,30 @@ jobs:
       deployment-configuration: cf-deployment-release-candidate
     params:
       RELEASE_NAME: #@ r.name
+  #@ if r.name.count("buildpack")==0:
+  - task: bosh-dry-run
+    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+      cf-deployment: updated-deployment-manifest
+      ops-files: cf-deployment-release-candidate
+      #@ if hasattr(r, "varsFilesInput"):
+      vars-files: #@ r.varsFilesInput
+      #@ else:
+      vars-files: relint-envs
+      #@ end
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME_SUFFIX: #@ r.name + "-pre-dev"
+      SYSTEM_DOMAIN: greengrass.cf-app.com
+  - task: bosh-delete-deployment
+    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      DEPLOYMENT_NAME: #@ "cf-dry-run-" + r.name + "-pre-dev"
+  #@ end
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
