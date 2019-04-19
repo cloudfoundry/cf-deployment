@@ -171,10 +171,6 @@ resources:
   type: time
   source:
     interval: 30m
-- name: every-4-hours
-  type: time
-  source:
-    interval: 4h
 - name: cf-deployment-concourse-tasks
   type: git
   source:
@@ -333,8 +329,6 @@ jobs:
   - timeout: 4h
     do:
     - aggregate:
-      - get: every-4-hours
-        trigger: true
       - get: cf-deployment-develop
         trigger: true
         passed: [unit-test-ops-files, unit-test-golang-tests, unit-test-update-releases-coverage]
@@ -1582,6 +1576,7 @@ jobs:
     - upgrade-cats
     - upgrade-cats-windows2016
     - bbr-run-drats
+    - lite-cats
   - put: cf-deployment-release-candidate
     params:
       repository: cf-deployment-develop
