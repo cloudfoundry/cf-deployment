@@ -1,8 +1,4 @@
 - type: replace
-  path: /addons/name=prom_scraper/exclude?/instance_groups/-
-  value: metric-store
-
-- type: replace
   path: /releases/-
   value:
     name: metric-store
@@ -81,7 +77,7 @@
           from: loggregator
       name: prom_scraper
       properties:
-        metrics_urls: "http://localhost:14822/metrics,http://localhost:14823/metrics,http://localhost:14824/metrics,http://localhost:6060/metrics,http://localhost:6061/metrics,http://localhost:6065/metrics"
+        metrics_urls: http://localhost:6060/metrics,http://localhost:6061/metrics,http://localhost:6065/metrics
       release: loggregator-agent
     - consumes:
         cloud_controller:
