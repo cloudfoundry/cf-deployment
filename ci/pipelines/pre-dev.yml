@@ -161,6 +161,21 @@ resources:
   type: bosh-io-release
   source:
     repository: bosh-packages/cf-cli-release
+- name: cf-deployment-release-candidate
+  type: git
+  source:
+    branch: release-candidate
+    uri: git@github.com:cloudfoundry/cf-deployment.git
+    private_key: ((cf_deployment_readwrite_deploy_key.private_key))
+- name: stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-google-kvm-ubuntu-xenial-go_agent
+- name: runtime-ci
+  type: git
+  source:
+    branch: master
+    uri: https://github.com/cloudfoundry/runtime-ci.git
 jobs:
 - name: update-binary-buildpack
   serial_groups:
@@ -172,22 +187,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-binary-buildpack-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-binary-buildpack
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: binary-buildpack-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: binary-buildpack
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-bosh-dns-aliases
   serial_groups:
   - update-release
@@ -198,22 +218,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-bosh-dns-aliases-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-bosh-dns-aliases
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: bosh-dns-aliases-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: bosh-dns-aliases
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-bpm
   serial_groups:
   - update-release
@@ -224,22 +249,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-bpm-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-bpm
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: bpm-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: bpm
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-capi
   serial_groups:
   - update-release
@@ -250,22 +280,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-capi-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-capi
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: capi-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: capi
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-cf-networking
   serial_groups:
   - update-release
@@ -276,22 +311,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-cf-networking-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-cf-networking
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: cf-networking-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: cf-networking
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-cf-smoke-tests
   serial_groups:
   - update-release
@@ -302,22 +342,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-cf-smoke-tests-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-cf-smoke-tests
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: cf-smoke-tests-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: cf-smoke-tests
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-cf-syslog-drain
   serial_groups:
   - update-release
@@ -328,22 +373,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-cf-syslog-drain-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-cf-syslog-drain
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: cf-syslog-drain-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: cf-syslog-drain
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-cflinuxfs3
   serial_groups:
   - update-release
@@ -354,22 +404,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-cflinuxfs3-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-cflinuxfs3
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: cflinuxfs3-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: cflinuxfs3
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-diego
   serial_groups:
   - update-release
@@ -380,22 +435,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-diego-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-diego
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: diego-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: diego
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-dotnet-core-buildpack
   serial_groups:
   - update-release
@@ -406,22 +466,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-dotnet-core-buildpack-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-dotnet-core-buildpack
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: dotnet-core-buildpack-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: dotnet-core-buildpack
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-garden-runc
   serial_groups:
   - update-release
@@ -432,22 +497,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-garden-runc-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-garden-runc
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: garden-runc-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: garden-runc
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-go-buildpack
   serial_groups:
   - update-release
@@ -458,22 +528,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-go-buildpack-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-go-buildpack
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: go-buildpack-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: go-buildpack
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-java-buildpack
   serial_groups:
   - update-release
@@ -484,22 +559,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-java-buildpack-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-java-buildpack
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: java-buildpack-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: java-buildpack
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-log-cache
   serial_groups:
   - update-release
@@ -510,22 +590,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-log-cache-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-log-cache
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: log-cache-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: log-cache
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-loggregator
   serial_groups:
   - update-release
@@ -536,22 +621,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-loggregator-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-loggregator
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: loggregator-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: loggregator
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-loggregator-agent
   serial_groups:
   - update-release
@@ -562,22 +652,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-loggregator-agent-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-loggregator-agent
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: loggregator-agent-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: loggregator-agent
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-nats
   serial_groups:
   - update-release
@@ -588,22 +683,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-nats-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-nats
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: nats-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: nats
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-nginx-buildpack
   serial_groups:
   - update-release
@@ -614,22 +714,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-nginx-buildpack-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-nginx-buildpack
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: nginx-buildpack-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: nginx-buildpack
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-nodejs-buildpack
   serial_groups:
   - update-release
@@ -640,22 +745,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-nodejs-buildpack-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-nodejs-buildpack
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: nodejs-buildpack-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: nodejs-buildpack
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-php-buildpack
   serial_groups:
   - update-release
@@ -666,22 +776,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-php-buildpack-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-php-buildpack
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: php-buildpack-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: php-buildpack
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-python-buildpack
   serial_groups:
   - update-release
@@ -692,22 +807,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-python-buildpack-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-python-buildpack
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: python-buildpack-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: python-buildpack
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-pxc
   serial_groups:
   - update-release
@@ -718,22 +838,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-pxc-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-pxc
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: pxc-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: pxc
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-r-buildpack
   serial_groups:
   - update-release
@@ -744,22 +869,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-r-buildpack-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-r-buildpack
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: r-buildpack-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: r-buildpack
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-routing
   serial_groups:
   - update-release
@@ -770,22 +900,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-routing-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-routing
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: routing-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: routing
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-ruby-buildpack
   serial_groups:
   - update-release
@@ -796,22 +931,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-ruby-buildpack-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-ruby-buildpack
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: ruby-buildpack-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: ruby-buildpack
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-silk
   serial_groups:
   - update-release
@@ -822,22 +962,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-silk-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-silk
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: silk-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: silk
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-staticfile-buildpack
   serial_groups:
   - update-release
@@ -848,22 +993,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-staticfile-buildpack-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-staticfile-buildpack
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: staticfile-buildpack-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: staticfile-buildpack
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-statsd-injector
   serial_groups:
   - update-release
@@ -874,22 +1024,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-statsd-injector-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-statsd-injector
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: statsd-injector-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: statsd-injector
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-uaa
   serial_groups:
   - update-release
@@ -900,22 +1055,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-uaa-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-uaa
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: uaa-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: uaa
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-credhub
   serial_groups:
   - update-release
@@ -926,22 +1086,27 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-credhub-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-credhub
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: credhub-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: credhub
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 - name: update-cf-cli
   serial_groups:
   - update-release
@@ -952,19 +1117,24 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task: update-cf-cli-release
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-release-cf-cli
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: cf-cli-release
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: cf-cli
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml

@@ -16,6 +16,24 @@ resources:
     repository: #@ r.repository
 #@ end
 
+- name: cf-deployment-release-candidate
+  type: git
+  source:
+    branch: release-candidate
+    uri: git@github.com:cloudfoundry/cf-deployment.git
+    private_key: ((cf_deployment_readwrite_deploy_key.private_key))
+
+- name: stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-google-kvm-ubuntu-xenial-go_agent
+
+- name: runtime-ci
+  type: git
+  source:
+    branch: master
+    uri: https://github.com/cloudfoundry/runtime-ci.git
+
 jobs:
 #@ for r in data.values.baseReleases:
 - name: #@ "update-" + r.name
@@ -28,20 +46,25 @@ jobs:
       trigger: true
       params:
         tarball: false
-  - task:  #@ "update-" + r.name + "-release"
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          echo Release Integration
-        dir: ""
+    - get: cf-deployment-release-candidate
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: #@ "update-release-" + r.name
+    file: runtime-ci/tasks/update-single-manifest-release/task.yml
+    input_mapping:
+      release: #@ r.name + "-release"
+      deployment-configuration: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: #@ r.name
+  - task: commit-generated-manifest-and-ops
+    file: runtime-ci/tasks/commit-generated-manifest/task.yml
+    input_mapping:
+      repo: cf-deployment-release-candidate
+      manifest: updated-deployment-manifest
+      ops-file: cf-deployment-release-candidate
+    params:
+      MANIFEST_NAME: cf-deployment.yml
+      MANIFEST_DESTINATION: cf-deployment.yml
 #@ end
