@@ -28,6 +28,89 @@ addons:
           agent:
             cert: "((loggregator_tls_agent.certificate))"
             key: "((loggregator_tls_agent.private_key))"
+  - name: loggr-expvar-forwarder
+    release: loggregator-agent
+    properties:
+      log_agent:
+        ca_cert: "((loggregator_ca.certificate))"
+        client_cert: "((expvar_forwarder.certificate))"
+        client_key: "((expvar_forwarder.private_key))"
+      default_source_id: metron
+      counters:
+      - addr: http://127.0.0.1:14823/debug/vars
+        name: ingress
+        source_id: forwarder_agent
+        template: "{{.ForwarderAgent.IngressV2}}"
+        tags:
+          metric_version: "2.0"
+      - addr: http://127.0.0.1:14824/debug/vars
+        name: dropped
+        template: "{{.Agent.Dropped}}"
+        tags:
+          origin: loggregator.metron
+      - addr: http://127.0.0.1:14824/debug/vars
+        name: dropped
+        template: "{{.Agent.DroppedEgressV2}}"
+        tags:
+          origin: loggregator.metron
+          direction: egress
+          metric_version: "2.0"
+      - addr: http://127.0.0.1:14824/debug/vars
+        name: dropped
+        template: "{{.Agent.DroppedIngressV2}}"
+        tags:
+          origin: loggregator.metron
+          direction: ingress
+          metric_version: "2.0"
+
+      - addr: http://127.0.0.1:14824/debug/vars
+        name: egress
+        template: "{{.Agent.Egress}}"
+        tags:
+          origin: loggregator.metron
+      - addr: http://127.0.0.1:14824/debug/vars
+        name: egress
+        template: "{{.Agent.EgressV2}}"
+        tags:
+          origin: loggregator.metron
+          metric_version: "2.0"
+
+      - addr: http://127.0.0.1:14824/debug/vars
+        name: ingress
+        template: "{{.Agent.Ingress}}"
+        tags:
+          origin: loggregator.metron
+      - addr: http://127.0.0.1:14824/debug/vars
+        name: ingress
+        template: "{{.Agent.IngressV2}}"
+        tags:
+          origin: loggregator.metron
+          metric_version: "2.0"
+
+      gauges:
+      - addr: http://127.0.0.1:14824/debug/vars
+        name: average_envelopes
+        unit: bytes/minute
+        template: "{{.Agent.AverageEnvelope}}"
+        tags:
+          origin: loggregator.metron
+          loggregator: v1
+      - addr: http://127.0.0.1:14824/debug/vars
+        name: average_envelopes
+        unit: bytes/minute
+        template: "{{.Agent.AverageEnvelopeV2}}"
+        tags:
+          origin: loggregator.metron
+          metric_version: "2.0"
+          loggregator: v2
+
+      - addr: http://127.0.0.1:14824/debug/vars
+        name: origin_mappings
+        unit: bytes/minute
+        template: "{{.Agent.OriginMappingsV2}}"
+        tags:
+          origin: loggregator.metron
+          metric_version: "2.0"
 
 - name: forwarder_agent
   include:
@@ -41,20 +124,6 @@ addons:
         ca_cert: "((loggregator_ca.certificate))"
         cert: "((loggregator_tls_agent.certificate))"
         key: "((loggregator_tls_agent.private_key))"
-
-- name: prom_scraper
-  include:
-    stemcell:
-      - os: ubuntu-xenial
-  exclude:
-    jobs:
-    - name: smoke_tests
-      release: cf-smoke-tests
-  jobs:
-    - name: prom_scraper
-      release: loggregator-agent
-      properties:
-        metrics_urls: http://localhost:14822/metrics,http://localhost:14823/metrics,http://localhost:14824/metrics
 
 - name: bpm
   include:
@@ -1921,6 +1990,13 @@ variables:
   options:
     is_ca: true
     common_name: loggregatorCA
+- name: expvar_forwarder
+  type: certificate
+  options:
+    ca: loggregator_ca
+    common_name: expvar_forwarder
+    extended_key_usage:
+    - client_auth
 - name: loggregator_tls_statsdinjector
   type: certificate
   options:

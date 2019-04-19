@@ -74,3 +74,17 @@
               enabled: false
       release: node-exporter
     name: node_exporter
+- type: replace
+  path: /addons/-
+  value:
+    exclude:
+      jobs:
+      - name: smoke_tests
+        release: cf-smoke-tests
+    include:
+      stemcell:
+      - os: ubuntu-xenial
+    jobs:
+    - name: prom_scraper
+      release: loggregator-agent
+    name: prom_scraper
