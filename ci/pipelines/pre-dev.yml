@@ -208,19 +208,28 @@ jobs:
   - task: update-release-binary-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: binary-buildpack-release
       deployment-configuration: cf-deployment-release-candidate
+      release: binary-buildpack-release
+    params:
+      RELEASE_NAME: binary-buildpack
+  - task: update-additional-ops-files-binary-buildpack
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: binary-buildpack-release
     params:
       RELEASE_NAME: binary-buildpack
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-bosh-dns-aliases
   serial_groups:
   - update-release
@@ -241,8 +250,16 @@ jobs:
   - task: update-release-bosh-dns-aliases
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: bosh-dns-aliases-release
       deployment-configuration: cf-deployment-release-candidate
+      release: bosh-dns-aliases-release
+    params:
+      RELEASE_NAME: bosh-dns-aliases
+  - task: update-additional-ops-files-bosh-dns-aliases
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: bosh-dns-aliases-release
     params:
       RELEASE_NAME: bosh-dns-aliases
   - task: bosh-dry-run
@@ -266,12 +283,13 @@ jobs:
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-bpm
   serial_groups:
   - update-release
@@ -292,8 +310,16 @@ jobs:
   - task: update-release-bpm
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: bpm-release
       deployment-configuration: cf-deployment-release-candidate
+      release: bpm-release
+    params:
+      RELEASE_NAME: bpm
+  - task: update-additional-ops-files-bpm
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: bpm-release
     params:
       RELEASE_NAME: bpm
   - task: bosh-dry-run
@@ -317,12 +343,13 @@ jobs:
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-capi
   serial_groups:
   - update-release
@@ -343,8 +370,16 @@ jobs:
   - task: update-release-capi
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: capi-release
       deployment-configuration: cf-deployment-release-candidate
+      release: capi-release
+    params:
+      RELEASE_NAME: capi
+  - task: update-additional-ops-files-capi
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: capi-release
     params:
       RELEASE_NAME: capi
   - task: bosh-dry-run
@@ -368,12 +403,13 @@ jobs:
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-cf-networking
   serial_groups:
   - update-release
@@ -394,8 +430,16 @@ jobs:
   - task: update-release-cf-networking
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: cf-networking-release
       deployment-configuration: cf-deployment-release-candidate
+      release: cf-networking-release
+    params:
+      RELEASE_NAME: cf-networking
+  - task: update-additional-ops-files-cf-networking
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: cf-networking-release
     params:
       RELEASE_NAME: cf-networking
   - task: bosh-dry-run
@@ -419,12 +463,13 @@ jobs:
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-cf-smoke-tests
   serial_groups:
   - update-release
@@ -445,8 +490,16 @@ jobs:
   - task: update-release-cf-smoke-tests
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: cf-smoke-tests-release
       deployment-configuration: cf-deployment-release-candidate
+      release: cf-smoke-tests-release
+    params:
+      RELEASE_NAME: cf-smoke-tests
+  - task: update-additional-ops-files-cf-smoke-tests
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: cf-smoke-tests-release
     params:
       RELEASE_NAME: cf-smoke-tests
   - task: bosh-dry-run
@@ -470,12 +523,13 @@ jobs:
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-cf-syslog-drain
   serial_groups:
   - update-release
@@ -496,8 +550,16 @@ jobs:
   - task: update-release-cf-syslog-drain
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: cf-syslog-drain-release
       deployment-configuration: cf-deployment-release-candidate
+      release: cf-syslog-drain-release
+    params:
+      RELEASE_NAME: cf-syslog-drain
+  - task: update-additional-ops-files-cf-syslog-drain
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: cf-syslog-drain-release
     params:
       RELEASE_NAME: cf-syslog-drain
   - task: bosh-dry-run
@@ -521,12 +583,13 @@ jobs:
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-cflinuxfs3
   serial_groups:
   - update-release
@@ -547,8 +610,16 @@ jobs:
   - task: update-release-cflinuxfs3
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: cflinuxfs3-release
       deployment-configuration: cf-deployment-release-candidate
+      release: cflinuxfs3-release
+    params:
+      RELEASE_NAME: cflinuxfs3
+  - task: update-additional-ops-files-cflinuxfs3
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: cflinuxfs3-release
     params:
       RELEASE_NAME: cflinuxfs3
   - task: bosh-dry-run
@@ -572,12 +643,13 @@ jobs:
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-diego
   serial_groups:
   - update-release
@@ -598,8 +670,16 @@ jobs:
   - task: update-release-diego
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: diego-release
       deployment-configuration: cf-deployment-release-candidate
+      release: diego-release
+    params:
+      RELEASE_NAME: diego
+  - task: update-additional-ops-files-diego
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: diego-release
     params:
       RELEASE_NAME: diego
   - task: bosh-dry-run
@@ -623,12 +703,13 @@ jobs:
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-dotnet-core-buildpack
   serial_groups:
   - update-release
@@ -649,19 +730,28 @@ jobs:
   - task: update-release-dotnet-core-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: dotnet-core-buildpack-release
       deployment-configuration: cf-deployment-release-candidate
+      release: dotnet-core-buildpack-release
+    params:
+      RELEASE_NAME: dotnet-core-buildpack
+  - task: update-additional-ops-files-dotnet-core-buildpack
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: dotnet-core-buildpack-release
     params:
       RELEASE_NAME: dotnet-core-buildpack
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-garden-runc
   serial_groups:
   - update-release
@@ -682,8 +772,16 @@ jobs:
   - task: update-release-garden-runc
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: garden-runc-release
       deployment-configuration: cf-deployment-release-candidate
+      release: garden-runc-release
+    params:
+      RELEASE_NAME: garden-runc
+  - task: update-additional-ops-files-garden-runc
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: garden-runc-release
     params:
       RELEASE_NAME: garden-runc
   - task: bosh-dry-run
@@ -707,12 +805,13 @@ jobs:
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-go-buildpack
   serial_groups:
   - update-release
@@ -733,19 +832,28 @@ jobs:
   - task: update-release-go-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: go-buildpack-release
       deployment-configuration: cf-deployment-release-candidate
+      release: go-buildpack-release
+    params:
+      RELEASE_NAME: go-buildpack
+  - task: update-additional-ops-files-go-buildpack
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: go-buildpack-release
     params:
       RELEASE_NAME: go-buildpack
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-java-buildpack
   serial_groups:
   - update-release
@@ -766,19 +874,28 @@ jobs:
   - task: update-release-java-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: java-buildpack-release
       deployment-configuration: cf-deployment-release-candidate
+      release: java-buildpack-release
+    params:
+      RELEASE_NAME: java-buildpack
+  - task: update-additional-ops-files-java-buildpack
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: java-buildpack-release
     params:
       RELEASE_NAME: java-buildpack
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-log-cache
   serial_groups:
   - update-release
@@ -799,8 +916,16 @@ jobs:
   - task: update-release-log-cache
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: log-cache-release
       deployment-configuration: cf-deployment-release-candidate
+      release: log-cache-release
+    params:
+      RELEASE_NAME: log-cache
+  - task: update-additional-ops-files-log-cache
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: log-cache-release
     params:
       RELEASE_NAME: log-cache
   - task: bosh-dry-run
@@ -824,12 +949,13 @@ jobs:
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-loggregator
   serial_groups:
   - update-release
@@ -850,8 +976,16 @@ jobs:
   - task: update-release-loggregator
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: loggregator-release
       deployment-configuration: cf-deployment-release-candidate
+      release: loggregator-release
+    params:
+      RELEASE_NAME: loggregator
+  - task: update-additional-ops-files-loggregator
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: loggregator-release
     params:
       RELEASE_NAME: loggregator
   - task: bosh-dry-run
@@ -875,12 +1009,13 @@ jobs:
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-loggregator-agent
   serial_groups:
   - update-release
@@ -901,8 +1036,16 @@ jobs:
   - task: update-release-loggregator-agent
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: loggregator-agent-release
       deployment-configuration: cf-deployment-release-candidate
+      release: loggregator-agent-release
+    params:
+      RELEASE_NAME: loggregator-agent
+  - task: update-additional-ops-files-loggregator-agent
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: loggregator-agent-release
     params:
       RELEASE_NAME: loggregator-agent
   - task: bosh-dry-run
@@ -926,12 +1069,13 @@ jobs:
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-nats
   serial_groups:
   - update-release
@@ -952,8 +1096,16 @@ jobs:
   - task: update-release-nats
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: nats-release
       deployment-configuration: cf-deployment-release-candidate
+      release: nats-release
+    params:
+      RELEASE_NAME: nats
+  - task: update-additional-ops-files-nats
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: nats-release
     params:
       RELEASE_NAME: nats
   - task: bosh-dry-run
@@ -977,12 +1129,13 @@ jobs:
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-nginx-buildpack
   serial_groups:
   - update-release
@@ -1003,19 +1156,28 @@ jobs:
   - task: update-release-nginx-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: nginx-buildpack-release
       deployment-configuration: cf-deployment-release-candidate
+      release: nginx-buildpack-release
+    params:
+      RELEASE_NAME: nginx-buildpack
+  - task: update-additional-ops-files-nginx-buildpack
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: nginx-buildpack-release
     params:
       RELEASE_NAME: nginx-buildpack
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-nodejs-buildpack
   serial_groups:
   - update-release
@@ -1036,19 +1198,28 @@ jobs:
   - task: update-release-nodejs-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: nodejs-buildpack-release
       deployment-configuration: cf-deployment-release-candidate
+      release: nodejs-buildpack-release
+    params:
+      RELEASE_NAME: nodejs-buildpack
+  - task: update-additional-ops-files-nodejs-buildpack
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: nodejs-buildpack-release
     params:
       RELEASE_NAME: nodejs-buildpack
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-php-buildpack
   serial_groups:
   - update-release
@@ -1069,19 +1240,28 @@ jobs:
   - task: update-release-php-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: php-buildpack-release
       deployment-configuration: cf-deployment-release-candidate
+      release: php-buildpack-release
+    params:
+      RELEASE_NAME: php-buildpack
+  - task: update-additional-ops-files-php-buildpack
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: php-buildpack-release
     params:
       RELEASE_NAME: php-buildpack
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-python-buildpack
   serial_groups:
   - update-release
@@ -1102,19 +1282,28 @@ jobs:
   - task: update-release-python-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: python-buildpack-release
       deployment-configuration: cf-deployment-release-candidate
+      release: python-buildpack-release
+    params:
+      RELEASE_NAME: python-buildpack
+  - task: update-additional-ops-files-python-buildpack
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: python-buildpack-release
     params:
       RELEASE_NAME: python-buildpack
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-pxc
   serial_groups:
   - update-release
@@ -1135,8 +1324,16 @@ jobs:
   - task: update-release-pxc
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: pxc-release
       deployment-configuration: cf-deployment-release-candidate
+      release: pxc-release
+    params:
+      RELEASE_NAME: pxc
+  - task: update-additional-ops-files-pxc
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: pxc-release
     params:
       RELEASE_NAME: pxc
   - task: bosh-dry-run
@@ -1160,12 +1357,13 @@ jobs:
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-r-buildpack
   serial_groups:
   - update-release
@@ -1186,19 +1384,28 @@ jobs:
   - task: update-release-r-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: r-buildpack-release
       deployment-configuration: cf-deployment-release-candidate
+      release: r-buildpack-release
+    params:
+      RELEASE_NAME: r-buildpack
+  - task: update-additional-ops-files-r-buildpack
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: r-buildpack-release
     params:
       RELEASE_NAME: r-buildpack
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-routing
   serial_groups:
   - update-release
@@ -1219,8 +1426,16 @@ jobs:
   - task: update-release-routing
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: routing-release
       deployment-configuration: cf-deployment-release-candidate
+      release: routing-release
+    params:
+      RELEASE_NAME: routing
+  - task: update-additional-ops-files-routing
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: routing-release
     params:
       RELEASE_NAME: routing
   - task: bosh-dry-run
@@ -1244,12 +1459,13 @@ jobs:
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-ruby-buildpack
   serial_groups:
   - update-release
@@ -1270,19 +1486,28 @@ jobs:
   - task: update-release-ruby-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: ruby-buildpack-release
       deployment-configuration: cf-deployment-release-candidate
+      release: ruby-buildpack-release
+    params:
+      RELEASE_NAME: ruby-buildpack
+  - task: update-additional-ops-files-ruby-buildpack
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: ruby-buildpack-release
     params:
       RELEASE_NAME: ruby-buildpack
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-silk
   serial_groups:
   - update-release
@@ -1303,8 +1528,16 @@ jobs:
   - task: update-release-silk
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: silk-release
       deployment-configuration: cf-deployment-release-candidate
+      release: silk-release
+    params:
+      RELEASE_NAME: silk
+  - task: update-additional-ops-files-silk
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: silk-release
     params:
       RELEASE_NAME: silk
   - task: bosh-dry-run
@@ -1328,12 +1561,13 @@ jobs:
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-staticfile-buildpack
   serial_groups:
   - update-release
@@ -1354,19 +1588,28 @@ jobs:
   - task: update-release-staticfile-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: staticfile-buildpack-release
       deployment-configuration: cf-deployment-release-candidate
+      release: staticfile-buildpack-release
+    params:
+      RELEASE_NAME: staticfile-buildpack
+  - task: update-additional-ops-files-staticfile-buildpack
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: staticfile-buildpack-release
     params:
       RELEASE_NAME: staticfile-buildpack
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-statsd-injector
   serial_groups:
   - update-release
@@ -1387,8 +1630,16 @@ jobs:
   - task: update-release-statsd-injector
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: statsd-injector-release
       deployment-configuration: cf-deployment-release-candidate
+      release: statsd-injector-release
+    params:
+      RELEASE_NAME: statsd-injector
+  - task: update-additional-ops-files-statsd-injector
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: statsd-injector-release
     params:
       RELEASE_NAME: statsd-injector
   - task: bosh-dry-run
@@ -1412,12 +1663,13 @@ jobs:
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-uaa
   serial_groups:
   - update-release
@@ -1438,8 +1690,16 @@ jobs:
   - task: update-release-uaa
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: uaa-release
       deployment-configuration: cf-deployment-release-candidate
+      release: uaa-release
+    params:
+      RELEASE_NAME: uaa
+  - task: update-additional-ops-files-uaa
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: uaa-release
     params:
       RELEASE_NAME: uaa
   - task: bosh-dry-run
@@ -1463,12 +1723,13 @@ jobs:
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-credhub
   serial_groups:
   - update-release
@@ -1489,8 +1750,16 @@ jobs:
   - task: update-release-credhub
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: credhub-release
       deployment-configuration: cf-deployment-release-candidate
+      release: credhub-release
+    params:
+      RELEASE_NAME: credhub
+  - task: update-additional-ops-files-credhub
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: credhub-release
     params:
       RELEASE_NAME: credhub
   - task: bosh-dry-run
@@ -1514,12 +1783,13 @@ jobs:
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 - name: update-cf-cli
   serial_groups:
   - update-release
@@ -1540,8 +1810,16 @@ jobs:
   - task: update-release-cf-cli
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: cf-cli-release
       deployment-configuration: cf-deployment-release-candidate
+      release: cf-cli-release
+    params:
+      RELEASE_NAME: cf-cli
+  - task: update-additional-ops-files-cf-cli
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: cf-cli-release
     params:
       RELEASE_NAME: cf-cli
   - task: bosh-dry-run
@@ -1565,9 +1843,10 @@ jobs:
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
