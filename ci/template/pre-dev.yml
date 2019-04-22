@@ -65,8 +65,16 @@ jobs:
   - task: #@ "update-release-" + r.name
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: #@ r.name + "-release"
       deployment-configuration: cf-deployment-release-candidate
+      release: #@ r.name + "-release"
+    params:
+      RELEASE_NAME: #@ r.name
+  - task: #@ "update-additional-ops-files-" + r.name
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      current-commit-message: commit-message
+      original-ops-file: cf-deployment-release-candidate
+      release: #@ r.name + "-release"
     params:
       RELEASE_NAME: #@ r.name
   #@ if r.name.count("buildpack")==0:
@@ -96,10 +104,11 @@ jobs:
   - task: commit-generated-manifest-and-ops
     file: runtime-ci/tasks/commit-generated-manifest/task.yml
     input_mapping:
-      repo: cf-deployment-release-candidate
       manifest: updated-deployment-manifest
-      ops-file: cf-deployment-release-candidate
+      ops-file: updated-ops-file
+      repo: cf-deployment-release-candidate
     params:
-      MANIFEST_NAME: cf-deployment.yml
+      COMMIT_ALL_OPS_FILES: true
       MANIFEST_DESTINATION: cf-deployment.yml
+      MANIFEST_NAME: cf-deployment.yml
 #@ end
