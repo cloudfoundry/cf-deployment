@@ -1475,7 +1475,6 @@ jobs:
       - get: cf-deployment-concourse-tasks
     - task: run-cats
       file: cf-deployment-concourse-tasks/run-cats/task.yml
-      attempts: 2
       input_mapping:
         integration-config: relint-envs
         cf-acceptance-tests: cf-acceptance-tests-rc
