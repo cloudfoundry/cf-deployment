@@ -1032,7 +1032,6 @@ jobs:
         BASE_OPS_FILE_DIR: operations
         NEW_OPS_FILES: |
           environments/test/snitch/use-default-route-registrar-timeout-for-api.yml
-          environments/test/snitch/use-debug-level-logging.yml
     - task: bosh-deploy-cf
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
@@ -1049,8 +1048,6 @@ jobs:
           operations/use-compiled-releases.yml
           operations/bosh-lite.yml
           operations/use-debug-level-logging.yml
-        VARS_FILES: |
-          environments/test/snitch/ddog.yml
         REGENERATE_CREDENTIALS: true
         BOSH_LITE: true
     - task: run-bosh-cleanup
