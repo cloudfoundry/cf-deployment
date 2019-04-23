@@ -1032,6 +1032,7 @@ jobs:
         BASE_OPS_FILE_DIR: operations
         NEW_OPS_FILES: |
           environments/test/snitch/use-default-route-registrar-timeout-for-api.yml
+          environments/test/snitch/use-debug-level-logging.yml
     - task: bosh-deploy-cf
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
