@@ -3,11 +3,12 @@ package standard_test
 import (
 	"fmt"
 	"io/ioutil"
-	"github.com/cf-deployment/units/helpers"
 	"os"
 	"path/filepath"
 	"regexp"
 	"testing"
+
+	"github.com/cf-deployment/units/helpers"
 
 	"github.com/sergi/go-diff/diffmatchpatch"
 	yaml "gopkg.in/yaml.v2"
@@ -238,6 +239,29 @@ func TestSemantic(t *testing.T) {
 
 			return nil
 		})
+	})
+}
+
+func TestReleaseVersions(t *testing.T) {
+	t.Run("verify relase versions", func(t *testing.T) {
+		// Instantiate checker
+		// .Check
+
+		// releaseMap := make(map[string]map[string][]string)
+		// // releaseMap
+		// // Loop through file, extract release versions
+		// newRelease := "myrelease"
+		// newVersion := "thisversion"
+
+		// if version, ok := releaseMap[newRelease]; ok {
+		// 	version != newVersion {
+		// 		t.Error()
+		// 	}
+		// }
+		// // If RV in map; validate version
+		// t.Error()
+		// // Else add to map
+
 	})
 }
 

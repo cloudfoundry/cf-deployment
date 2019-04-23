@@ -142,7 +142,6 @@ func createTempVarsStore(cfDeploymentHome string) (string, error) {
 	return tempVarsStoreFile.Name(), nil
 }
 
-
 func formatBOSHError(errJSON []byte) error {
 	var out boshOut
 	err := json.Unmarshal(errJSON, &out)
