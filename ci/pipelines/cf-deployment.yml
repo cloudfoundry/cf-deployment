@@ -596,6 +596,7 @@ jobs:
       NEW_OPS_FILES: |
         environments/test/trelawney/add-external-ips-for-cloud-sql-db.yml
         environments/test/trelawney/increase-doppler-vm-type-from-minimal-to-small.yml
+        environments/test/trelawney/scale-diego-cell-to-3.yml
   - task: bosh-deploy-cf
     file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
     input_mapping:
@@ -620,6 +621,7 @@ jobs:
         operations/enable-service-discovery.yml
         operations/test/add-persistent-isolation-segment-diego-cell.yml
         operations/increase-doppler-vm-type-from-minimal-to-small.yml
+        operations/scale-diego-cell-to-3.yml
       VARS_FILES: |
         environments/test/trelawney/external-db-vars.yml
         environments/test/trelawney/gcs-vars.yml
