@@ -378,8 +378,6 @@ instance_groups:
             cert: "((adapter_tls.certificate))"
             key: "((adapter_tls.private_key))"
             cn: ss-adapter
-          logs:
-            addr: reverse-log-proxy.service.cf.internal:8082
         adapter_rlp:
           tls:
             ca: "((loggregator_ca.certificate))"
