@@ -195,7 +195,7 @@ jobs:
   plan:
   - aggregate:
     - get: binary-buildpack-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -220,16 +220,90 @@ jobs:
       release: binary-buildpack-release
     params:
       RELEASE_NAME: binary-buildpack
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-bosh-dns-aliases
   serial_groups:
   - update-release
@@ -237,7 +311,7 @@ jobs:
   plan:
   - aggregate:
     - get: bosh-dns-aliases-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -262,34 +336,90 @@ jobs:
       release: bosh-dns-aliases-release
     params:
       RELEASE_NAME: bosh-dns-aliases
-  - task: bosh-dry-run
-    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
-      ops-files: cf-deployment-release-candidate
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: bosh-dns-aliases-pre-dev
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: bosh-delete-deployment
-    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME: cf-dry-run-bosh-dns-aliases-pre-dev
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-bpm
   serial_groups:
   - update-release
@@ -297,7 +427,7 @@ jobs:
   plan:
   - aggregate:
     - get: bpm-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -322,34 +452,90 @@ jobs:
       release: bpm-release
     params:
       RELEASE_NAME: bpm
-  - task: bosh-dry-run
-    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
-      ops-files: cf-deployment-release-candidate
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: bpm-pre-dev
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: bosh-delete-deployment
-    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME: cf-dry-run-bpm-pre-dev
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-capi
   serial_groups:
   - update-release
@@ -357,7 +543,7 @@ jobs:
   plan:
   - aggregate:
     - get: capi-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -382,34 +568,90 @@ jobs:
       release: capi-release
     params:
       RELEASE_NAME: capi
-  - task: bosh-dry-run
-    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
-      ops-files: cf-deployment-release-candidate
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: capi-pre-dev
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: bosh-delete-deployment
-    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME: cf-dry-run-capi-pre-dev
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-cf-networking
   serial_groups:
   - update-release
@@ -417,7 +659,7 @@ jobs:
   plan:
   - aggregate:
     - get: cf-networking-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -442,34 +684,90 @@ jobs:
       release: cf-networking-release
     params:
       RELEASE_NAME: cf-networking
-  - task: bosh-dry-run
-    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
-      ops-files: cf-deployment-release-candidate
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: cf-networking-pre-dev
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: bosh-delete-deployment
-    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME: cf-dry-run-cf-networking-pre-dev
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-cf-smoke-tests
   serial_groups:
   - update-release
@@ -477,7 +775,7 @@ jobs:
   plan:
   - aggregate:
     - get: cf-smoke-tests-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -502,34 +800,90 @@ jobs:
       release: cf-smoke-tests-release
     params:
       RELEASE_NAME: cf-smoke-tests
-  - task: bosh-dry-run
-    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
-      ops-files: cf-deployment-release-candidate
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: cf-smoke-tests-pre-dev
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: bosh-delete-deployment
-    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME: cf-dry-run-cf-smoke-tests-pre-dev
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-cf-syslog-drain
   serial_groups:
   - update-release
@@ -537,7 +891,7 @@ jobs:
   plan:
   - aggregate:
     - get: cf-syslog-drain-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -562,34 +916,90 @@ jobs:
       release: cf-syslog-drain-release
     params:
       RELEASE_NAME: cf-syslog-drain
-  - task: bosh-dry-run
-    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
-      ops-files: cf-deployment-release-candidate
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: cf-syslog-drain-pre-dev
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: bosh-delete-deployment
-    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME: cf-dry-run-cf-syslog-drain-pre-dev
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-cflinuxfs3
   serial_groups:
   - update-release
@@ -597,7 +1007,7 @@ jobs:
   plan:
   - aggregate:
     - get: cflinuxfs3-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -622,34 +1032,90 @@ jobs:
       release: cflinuxfs3-release
     params:
       RELEASE_NAME: cflinuxfs3
-  - task: bosh-dry-run
-    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
-      ops-files: cf-deployment-release-candidate
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: cflinuxfs3-pre-dev
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: bosh-delete-deployment
-    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME: cf-dry-run-cflinuxfs3-pre-dev
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-diego
   serial_groups:
   - update-release
@@ -657,7 +1123,7 @@ jobs:
   plan:
   - aggregate:
     - get: diego-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -682,34 +1148,90 @@ jobs:
       release: diego-release
     params:
       RELEASE_NAME: diego
-  - task: bosh-dry-run
-    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
-      ops-files: cf-deployment-release-candidate
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: diego-pre-dev
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: bosh-delete-deployment
-    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME: cf-dry-run-diego-pre-dev
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-dotnet-core-buildpack
   serial_groups:
   - update-release
@@ -717,7 +1239,7 @@ jobs:
   plan:
   - aggregate:
     - get: dotnet-core-buildpack-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -742,16 +1264,90 @@ jobs:
       release: dotnet-core-buildpack-release
     params:
       RELEASE_NAME: dotnet-core-buildpack
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-garden-runc
   serial_groups:
   - update-release
@@ -759,7 +1355,7 @@ jobs:
   plan:
   - aggregate:
     - get: garden-runc-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -784,34 +1380,90 @@ jobs:
       release: garden-runc-release
     params:
       RELEASE_NAME: garden-runc
-  - task: bosh-dry-run
-    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
-      ops-files: cf-deployment-release-candidate
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: garden-runc-pre-dev
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: bosh-delete-deployment
-    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME: cf-dry-run-garden-runc-pre-dev
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-go-buildpack
   serial_groups:
   - update-release
@@ -819,7 +1471,7 @@ jobs:
   plan:
   - aggregate:
     - get: go-buildpack-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -844,16 +1496,90 @@ jobs:
       release: go-buildpack-release
     params:
       RELEASE_NAME: go-buildpack
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-java-buildpack
   serial_groups:
   - update-release
@@ -861,7 +1587,7 @@ jobs:
   plan:
   - aggregate:
     - get: java-buildpack-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -886,16 +1612,90 @@ jobs:
       release: java-buildpack-release
     params:
       RELEASE_NAME: java-buildpack
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-log-cache
   serial_groups:
   - update-release
@@ -903,7 +1703,7 @@ jobs:
   plan:
   - aggregate:
     - get: log-cache-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -928,34 +1728,90 @@ jobs:
       release: log-cache-release
     params:
       RELEASE_NAME: log-cache
-  - task: bosh-dry-run
-    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
-      ops-files: cf-deployment-release-candidate
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: log-cache-pre-dev
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: bosh-delete-deployment
-    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME: cf-dry-run-log-cache-pre-dev
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-loggregator
   serial_groups:
   - update-release
@@ -963,7 +1819,7 @@ jobs:
   plan:
   - aggregate:
     - get: loggregator-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -988,34 +1844,90 @@ jobs:
       release: loggregator-release
     params:
       RELEASE_NAME: loggregator
-  - task: bosh-dry-run
-    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
-      ops-files: cf-deployment-release-candidate
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: loggregator-pre-dev
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: bosh-delete-deployment
-    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME: cf-dry-run-loggregator-pre-dev
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-loggregator-agent
   serial_groups:
   - update-release
@@ -1023,7 +1935,7 @@ jobs:
   plan:
   - aggregate:
     - get: loggregator-agent-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -1048,34 +1960,90 @@ jobs:
       release: loggregator-agent-release
     params:
       RELEASE_NAME: loggregator-agent
-  - task: bosh-dry-run
-    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
-      ops-files: cf-deployment-release-candidate
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: loggregator-agent-pre-dev
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: bosh-delete-deployment
-    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME: cf-dry-run-loggregator-agent-pre-dev
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-nats
   serial_groups:
   - update-release
@@ -1083,7 +2051,7 @@ jobs:
   plan:
   - aggregate:
     - get: nats-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -1108,34 +2076,90 @@ jobs:
       release: nats-release
     params:
       RELEASE_NAME: nats
-  - task: bosh-dry-run
-    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
-      ops-files: cf-deployment-release-candidate
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: nats-pre-dev
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: bosh-delete-deployment
-    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME: cf-dry-run-nats-pre-dev
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-nginx-buildpack
   serial_groups:
   - update-release
@@ -1143,7 +2167,7 @@ jobs:
   plan:
   - aggregate:
     - get: nginx-buildpack-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -1168,16 +2192,90 @@ jobs:
       release: nginx-buildpack-release
     params:
       RELEASE_NAME: nginx-buildpack
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-nodejs-buildpack
   serial_groups:
   - update-release
@@ -1185,7 +2283,7 @@ jobs:
   plan:
   - aggregate:
     - get: nodejs-buildpack-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -1210,16 +2308,90 @@ jobs:
       release: nodejs-buildpack-release
     params:
       RELEASE_NAME: nodejs-buildpack
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-php-buildpack
   serial_groups:
   - update-release
@@ -1227,7 +2399,7 @@ jobs:
   plan:
   - aggregate:
     - get: php-buildpack-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -1252,16 +2424,90 @@ jobs:
       release: php-buildpack-release
     params:
       RELEASE_NAME: php-buildpack
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-python-buildpack
   serial_groups:
   - update-release
@@ -1269,7 +2515,7 @@ jobs:
   plan:
   - aggregate:
     - get: python-buildpack-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -1294,16 +2540,90 @@ jobs:
       release: python-buildpack-release
     params:
       RELEASE_NAME: python-buildpack
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-pxc
   serial_groups:
   - update-release
@@ -1311,7 +2631,7 @@ jobs:
   plan:
   - aggregate:
     - get: pxc-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -1336,34 +2656,90 @@ jobs:
       release: pxc-release
     params:
       RELEASE_NAME: pxc
-  - task: bosh-dry-run
-    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
-      ops-files: cf-deployment-release-candidate
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: pxc-pre-dev
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: bosh-delete-deployment
-    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME: cf-dry-run-pxc-pre-dev
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-r-buildpack
   serial_groups:
   - update-release
@@ -1371,7 +2747,7 @@ jobs:
   plan:
   - aggregate:
     - get: r-buildpack-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -1396,16 +2772,90 @@ jobs:
       release: r-buildpack-release
     params:
       RELEASE_NAME: r-buildpack
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-routing
   serial_groups:
   - update-release
@@ -1413,7 +2863,7 @@ jobs:
   plan:
   - aggregate:
     - get: routing-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -1438,34 +2888,90 @@ jobs:
       release: routing-release
     params:
       RELEASE_NAME: routing
-  - task: bosh-dry-run
-    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
-      ops-files: cf-deployment-release-candidate
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: routing-pre-dev
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: bosh-delete-deployment
-    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME: cf-dry-run-routing-pre-dev
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-ruby-buildpack
   serial_groups:
   - update-release
@@ -1473,7 +2979,7 @@ jobs:
   plan:
   - aggregate:
     - get: ruby-buildpack-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -1498,16 +3004,90 @@ jobs:
       release: ruby-buildpack-release
     params:
       RELEASE_NAME: ruby-buildpack
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-silk
   serial_groups:
   - update-release
@@ -1515,7 +3095,7 @@ jobs:
   plan:
   - aggregate:
     - get: silk-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -1540,34 +3120,90 @@ jobs:
       release: silk-release
     params:
       RELEASE_NAME: silk
-  - task: bosh-dry-run
-    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
-      ops-files: cf-deployment-release-candidate
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: silk-pre-dev
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: bosh-delete-deployment
-    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME: cf-dry-run-silk-pre-dev
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-staticfile-buildpack
   serial_groups:
   - update-release
@@ -1575,7 +3211,7 @@ jobs:
   plan:
   - aggregate:
     - get: staticfile-buildpack-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -1600,16 +3236,90 @@ jobs:
       release: staticfile-buildpack-release
     params:
       RELEASE_NAME: staticfile-buildpack
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-statsd-injector
   serial_groups:
   - update-release
@@ -1617,7 +3327,7 @@ jobs:
   plan:
   - aggregate:
     - get: statsd-injector-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -1642,34 +3352,90 @@ jobs:
       release: statsd-injector-release
     params:
       RELEASE_NAME: statsd-injector
-  - task: bosh-dry-run
-    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
-      ops-files: cf-deployment-release-candidate
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: statsd-injector-pre-dev
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: bosh-delete-deployment
-    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME: cf-dry-run-statsd-injector-pre-dev
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-uaa
   serial_groups:
   - update-release
@@ -1677,7 +3443,7 @@ jobs:
   plan:
   - aggregate:
     - get: uaa-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -1702,34 +3468,90 @@ jobs:
       release: uaa-release
     params:
       RELEASE_NAME: uaa
-  - task: bosh-dry-run
-    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
-      ops-files: cf-deployment-release-candidate
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: uaa-pre-dev
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: bosh-delete-deployment
-    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME: cf-dry-run-uaa-pre-dev
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-credhub
   serial_groups:
   - update-release
@@ -1737,7 +3559,7 @@ jobs:
   plan:
   - aggregate:
     - get: credhub-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -1762,34 +3584,90 @@ jobs:
       release: credhub-release
     params:
       RELEASE_NAME: credhub
-  - task: bosh-dry-run
-    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
-      ops-files: cf-deployment-release-candidate
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: credhub-pre-dev
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: bosh-delete-deployment
-    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME: cf-dry-run-credhub-pre-dev
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-cf-cli
   serial_groups:
   - update-release
@@ -1797,7 +3675,7 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli-release
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -1822,31 +3700,87 @@ jobs:
       release: cf-cli-release
     params:
       RELEASE_NAME: cf-cli
-  - task: bosh-dry-run
-    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
-      ops-files: cf-deployment-release-candidate
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: cf-cli-pre-dev
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: bosh-delete-deployment
-    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME: cf-dry-run-cf-cli-pre-dev
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true

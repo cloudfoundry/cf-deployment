@@ -1,5 +1,27 @@
 #@ load("@ytt:data", "data")
 
+#@ def delete_deployment(env):
+task: delete-deployment
+file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+input_mapping:
+  bbl-state: relint-envs
+params:
+  BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
+#@ end
+
+#@ def manage_gcp_dns(action):
+task: #@ action + "-gcp-dns"
+file: runtime-ci/tasks/manage-gcp-dns/task.yml
+input_mapping:
+  bbl-state: relint-envs
+params:
+  BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+  GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+  GCP_DNS_ZONE_NAME: test-relint-rocks
+  GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+  ACTION: #@ action
+#@ end
+
 ---
 groups:
 - name: update-releases
@@ -77,38 +99,66 @@ jobs:
       release: #@ r.name + "-release"
     params:
       RELEASE_NAME: #@ r.name
-  #@ if r.name.count("buildpack")==0:
-  - task: bosh-dry-run
-    file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
-      ops-files: cf-deployment-release-candidate
-      #@ if hasattr(r, "varsFilesInput"):
-      vars-files: #@ r.varsFilesInput
-      #@ else:
-      vars-files: relint-envs
-      #@ end
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: #@ r.name + "-pre-dev"
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: bosh-delete-deployment
-    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME: #@ "cf-dry-run-" + r.name + "-pre-dev"
-  #@ end
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      manifest: updated-deployment-manifest
-      ops-file: updated-ops-file
-      repo: cf-deployment-release-candidate
-    params:
-      COMMIT_ALL_OPS_FILES: true
-      MANIFEST_DESTINATION: cf-deployment.yml
-      MANIFEST_NAME: cf-deployment.yml
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - #@ manage_gcp_dns("add")
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-deployment-manifest
+        ops-files: cf-deployment-release-candidate
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: "--parallel 50"
+    - task: commit-generated-manifest-and-ops
+      file: runtime-ci/tasks/commit-generated-manifest/task.yml
+      input_mapping:
+        manifest: updated-deployment-manifest
+        ops-file: updated-ops-file
+        repo: cf-deployment-release-candidate
+      params:
+        COMMIT_ALL_OPS_FILES: true
+        MANIFEST_DESTINATION: cf-deployment.yml
+        MANIFEST_NAME: cf-deployment.yml
+    ensure:
+      do:
+      - #@ delete_deployment("pre-dev")
+      - #@ manage_gcp_dns("remove")
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
+
 #@ end
