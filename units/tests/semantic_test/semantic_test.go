@@ -244,24 +244,24 @@ func TestSemantic(t *testing.T) {
 
 func TestReleaseVersions(t *testing.T) {
 	t.Run("verify relase versions", func(t *testing.T) {
-		// Instantiate checker
-		// .Check
+		cfDeploymentHome, err := helpers.SetPath()
+		if err != nil {
+			t.Fatalf("setup: %v", err)
+		}
 
-		// releaseMap := make(map[string]map[string][]string)
-		// // releaseMap
-		// // Loop through file, extract release versions
-		// newRelease := "myrelease"
-		// newVersion := "thisversion"
+		operationsSubDirectory := filepath.Join(cfDeploymentHome, "operations")
+		manifestPath := filepath.Join(cfDeploymentHome, "cf-deployment.yml")
 
-		// if version, ok := releaseMap[newRelease]; ok {
-		// 	version != newVersion {
-		// 		t.Error()
-		// 	}
-		// }
-		// // If RV in map; validate version
-		// t.Error()
-		// // Else add to map
+		releases, err := helpers.ExtractReleaseVersions(manifestPath, operationsSubDirectory)
+		if err != nil {
+			t.Fatal("setup:", err)
+		}
 
+		for release, versionSet := range releases {
+			if len(versionSet.Values()) > 1 {
+				t.Errorf("too many releases for release %q: found %s", release, versionSet)
+			}
+		}
 	})
 }
 
