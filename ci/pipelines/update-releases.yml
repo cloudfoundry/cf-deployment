@@ -316,187 +316,187 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: binary-buildpack-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: binary-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: bosh-dns-aliases-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: bosh-dns-aliases-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: bosh-dns-aliases-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: bpm-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: bpm-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: bpm-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: capi-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: capi-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: capi-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: cf-networking-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: cf-networking-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: cf-networking-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: cf-smoke-tests-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: cf-smoke-tests-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: cf-smoke-tests-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: cf-syslog-drain-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: cf-syslog-drain-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: cf-syslog-drain-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: cflinuxfs3-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: cflinuxfs3-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: cflinuxfs3-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: diego-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: diego-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: diego-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: dotnet-core-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: dotnet-core-buildpack-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: dotnet-core-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: garden-runc-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: garden-runc-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: garden-runc-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: go-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: go-buildpack-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: go-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: java-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: java-buildpack-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: java-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: log-cache-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: log-cache-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: log-cache-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: loggregator-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: loggregator-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: loggregator-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: loggregator-agent-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: loggregator-agent-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: loggregator-agent-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: nats-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: nats-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: nats-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: nginx-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: nginx-buildpack-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: nginx-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: nodejs-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: nodejs-buildpack-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: nodejs-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: php-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: php-buildpack-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: php-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: python-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: python-buildpack-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: python-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: pxc-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: pxc-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: pxc-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: r-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: r-buildpack-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: r-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: routing-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: routing-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: routing-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: ruby-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: ruby-buildpack-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: ruby-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: silk-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: silk-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: silk-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: staticfile-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: staticfile-buildpack-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: staticfile-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: statsd-injector-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: statsd-injector-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: statsd-injector-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: uaa-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: uaa-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: uaa-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: credhub-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: credhub-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: credhub-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: cf-cli-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: cf-cli-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: cf-cli-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: windows2012R2-stemcell
   type: bosh-io-stemcell
   source:
@@ -538,6 +538,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-binary-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -612,6 +614,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-bosh-dns-aliases
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -704,6 +708,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-bpm
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -796,6 +802,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-capi
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -888,6 +896,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-cf-networking
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -980,6 +990,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-cf-smoke-tests
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1072,6 +1084,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-cf-syslog-drain
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1164,6 +1178,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-cflinuxfs3
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1256,6 +1272,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-diego
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1348,6 +1366,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-dotnet-core-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1422,6 +1442,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-garden-runc
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1514,6 +1536,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-go-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1588,6 +1612,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-java-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1662,6 +1688,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-log-cache
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1754,6 +1782,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-loggregator
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1846,6 +1876,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-loggregator-agent
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1938,6 +1970,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-nats
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2030,6 +2064,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-nginx-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2104,6 +2140,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-nodejs-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2178,6 +2216,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-php-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2252,6 +2292,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-python-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2326,6 +2368,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-pxc
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2418,6 +2462,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-r-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2492,6 +2538,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-routing
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2584,6 +2632,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-ruby-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2658,6 +2708,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-silk
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2750,6 +2802,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-staticfile-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2824,6 +2878,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-statsd-injector
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2916,6 +2972,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-uaa
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -3008,6 +3066,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-credhub
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -3100,6 +3160,8 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed:
+      - update-stemcell-and-recompile-releases
   - task: update-release-cf-cli
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:

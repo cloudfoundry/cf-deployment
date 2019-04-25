@@ -30,20 +30,34 @@ groups:
   - #@ "update-" + r.name
   #@ end
 
+resource_types:
+- name: gcs-resource
+  type: docker-image
+  source:
+    repository: frodenas/gcs-resource
+
 resources:
 #@ for r in data.values.baseReleases:
 - name: #@ r.name + "-release"
   type: bosh-io-release
   source:
     repository: #@ r.repository
-#@ end
 
+#@ end
 - name: cf-deployment-release-candidate
   type: git
   source:
     branch: release-candidate
     uri: git@github.com:cloudfoundry/cf-deployment.git
     private_key: ((cf_deployment_readwrite_deploy_key.private_key))
+
+- name: cf-deployment-develop
+  type: git
+  source:
+    branch: pre-dev-test
+    uri: git@github.com:cloudfoundry/cf-deployment.git
+    private_key: ((cf_deployment_readwrite_deploy_key.private_key))
+
 - name: stemcell
   type: bosh-io-stemcell
   source:
@@ -53,11 +67,13 @@ resources:
   source:
     branch: master
     uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
+
 - name: runtime-ci
   type: git
   source:
     branch: master
     uri: https://github.com/cloudfoundry/runtime-ci.git
+
 - name: relint-envs
   type: git
   source:
@@ -65,6 +81,15 @@ resources:
     uri: git@github.com:cloudfoundry/relint-envs.git
     private_key: ((hagrid_env_readwrite_deploy_key.private_key))
 
+#@ for r in data.values.baseReleases:
+- name: #@ r.name + "-release-gcs"
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: #@ r.name + "-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz"
+
+#@ end
 jobs:
 #@ for r in data.values.baseReleases:
 - name: #@ "update-" + r.name
@@ -74,24 +99,25 @@ jobs:
   plan:
   - aggregate:
     - get: #@ r.name + "-release"
-      trigger: true
+      trigger: false
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: #@ "update-release-" + r.name
+  - task: #@ "update-release-{}-release-candidate".format(r.name)
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: #@ r.name + "-release"
     params:
       RELEASE_NAME: #@ r.name
-  - task: #@ "update-additional-ops-files-" + r.name
+  - task: #@ "update-additional-ops-files-{}-release-candidate".format(r.name)
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -134,16 +160,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: "--parallel 50"
+    - task: #@ "export-compiled-release-" + r.name
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: #@ r.name
+    - task: #@ "update-release-{}-develop".format(r.name)
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: #@ r.name + "-release"
+      params:
+        RELEASE_NAME: #@ r.name
+    - task: #@ "update-additional-ops-files-{}-develop".format(r.name)
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: #@ r.name + "-release"
+      params:
+        RELEASE_NAME: #@ r.name
+    - task: #@ "update-compiled-releases-ops-" + r.name
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: #@ r.name + "-release"
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: #@ r.name
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: #@ r.name + "-release-gcs"
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - #@ delete_deployment("pre-dev")

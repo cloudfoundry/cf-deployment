@@ -31,7 +31,6 @@ resource_types:
   type: docker-image
   source:
     repository: frodenas/gcs-resource
-    tag: v0.4.1
 
 resources:
 - name: cf-deployment-develop
@@ -87,7 +86,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: #@ r.name + "-[^-]+-ubuntu-trusty-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz"
+    regexp: #@ r.name + "-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz"
 #@ end
 #@ for s in data.values.windowsVersSupported:
 - name: #@ s.name + "-stemcell"

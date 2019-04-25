@@ -36,6 +36,11 @@ groups:
   - update-uaa
   - update-credhub
   - update-cf-cli
+resource_types:
+- name: gcs-resource
+  type: docker-image
+  source:
+    repository: frodenas/gcs-resource
 resources:
 - name: binary-buildpack-release
   type: bosh-io-release
@@ -167,6 +172,12 @@ resources:
     branch: release-candidate
     uri: git@github.com:cloudfoundry/cf-deployment.git
     private_key: ((cf_deployment_readwrite_deploy_key.private_key))
+- name: cf-deployment-develop
+  type: git
+  source:
+    branch: pre-dev-test
+    uri: git@github.com:cloudfoundry/cf-deployment.git
+    private_key: ((cf_deployment_readwrite_deploy_key.private_key))
 - name: stemcell
   type: bosh-io-stemcell
   source:
@@ -187,6 +198,192 @@ resources:
     branch: master
     uri: git@github.com:cloudfoundry/relint-envs.git
     private_key: ((hagrid_env_readwrite_deploy_key.private_key))
+- name: binary-buildpack-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: binary-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: bosh-dns-aliases-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: bosh-dns-aliases-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: bpm-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: bpm-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: capi-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: capi-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: cf-networking-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: cf-networking-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: cf-smoke-tests-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: cf-smoke-tests-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: cf-syslog-drain-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: cf-syslog-drain-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: cflinuxfs3-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: cflinuxfs3-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: diego-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: diego-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: dotnet-core-buildpack-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: dotnet-core-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: garden-runc-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: garden-runc-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: go-buildpack-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: go-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: java-buildpack-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: java-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: log-cache-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: log-cache-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: loggregator-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: loggregator-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: loggregator-agent-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: loggregator-agent-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: nats-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: nats-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: nginx-buildpack-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: nginx-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: nodejs-buildpack-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: nodejs-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: php-buildpack-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: php-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: python-buildpack-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: python-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: pxc-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: pxc-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: r-buildpack-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: r-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: routing-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: routing-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: ruby-buildpack-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: ruby-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: silk-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: silk-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: staticfile-buildpack-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: staticfile-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: statsd-injector-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: statsd-injector-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: uaa-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: uaa-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: credhub-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: credhub-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: cf-cli-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: cf-cli-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 jobs:
 - name: update-binary-buildpack
   serial_groups:
@@ -199,20 +396,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-binary-buildpack
+  - task: update-release-binary-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: binary-buildpack-release
     params:
       RELEASE_NAME: binary-buildpack
-  - task: update-additional-ops-files-binary-buildpack
+  - task: update-additional-ops-files-binary-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -264,16 +462,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-binary-buildpack
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: binary-buildpack
+    - task: update-release-binary-buildpack-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: binary-buildpack-release
+      params:
+        RELEASE_NAME: binary-buildpack
+    - task: update-additional-ops-files-binary-buildpack-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: binary-buildpack-release
+      params:
+        RELEASE_NAME: binary-buildpack
+    - task: update-compiled-releases-ops-binary-buildpack
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: binary-buildpack-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: binary-buildpack
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: binary-buildpack-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -315,20 +559,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-bosh-dns-aliases
+  - task: update-release-bosh-dns-aliases-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: bosh-dns-aliases-release
     params:
       RELEASE_NAME: bosh-dns-aliases
-  - task: update-additional-ops-files-bosh-dns-aliases
+  - task: update-additional-ops-files-bosh-dns-aliases-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -380,16 +625,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-bosh-dns-aliases
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: bosh-dns-aliases
+    - task: update-release-bosh-dns-aliases-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: bosh-dns-aliases-release
+      params:
+        RELEASE_NAME: bosh-dns-aliases
+    - task: update-additional-ops-files-bosh-dns-aliases-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: bosh-dns-aliases-release
+      params:
+        RELEASE_NAME: bosh-dns-aliases
+    - task: update-compiled-releases-ops-bosh-dns-aliases
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: bosh-dns-aliases-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: bosh-dns-aliases
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: bosh-dns-aliases-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -431,20 +722,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-bpm
+  - task: update-release-bpm-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: bpm-release
     params:
       RELEASE_NAME: bpm
-  - task: update-additional-ops-files-bpm
+  - task: update-additional-ops-files-bpm-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -496,16 +788,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-bpm
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: bpm
+    - task: update-release-bpm-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: bpm-release
+      params:
+        RELEASE_NAME: bpm
+    - task: update-additional-ops-files-bpm-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: bpm-release
+      params:
+        RELEASE_NAME: bpm
+    - task: update-compiled-releases-ops-bpm
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: bpm-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: bpm
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: bpm-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -547,20 +885,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-capi
+  - task: update-release-capi-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: capi-release
     params:
       RELEASE_NAME: capi
-  - task: update-additional-ops-files-capi
+  - task: update-additional-ops-files-capi-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -612,16 +951,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-capi
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: capi
+    - task: update-release-capi-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: capi-release
+      params:
+        RELEASE_NAME: capi
+    - task: update-additional-ops-files-capi-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: capi-release
+      params:
+        RELEASE_NAME: capi
+    - task: update-compiled-releases-ops-capi
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: capi-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: capi
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: capi-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -663,20 +1048,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-cf-networking
+  - task: update-release-cf-networking-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: cf-networking-release
     params:
       RELEASE_NAME: cf-networking
-  - task: update-additional-ops-files-cf-networking
+  - task: update-additional-ops-files-cf-networking-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -728,16 +1114,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-cf-networking
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: cf-networking
+    - task: update-release-cf-networking-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: cf-networking-release
+      params:
+        RELEASE_NAME: cf-networking
+    - task: update-additional-ops-files-cf-networking-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: cf-networking-release
+      params:
+        RELEASE_NAME: cf-networking
+    - task: update-compiled-releases-ops-cf-networking
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: cf-networking-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: cf-networking
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: cf-networking-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -779,20 +1211,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-cf-smoke-tests
+  - task: update-release-cf-smoke-tests-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: cf-smoke-tests-release
     params:
       RELEASE_NAME: cf-smoke-tests
-  - task: update-additional-ops-files-cf-smoke-tests
+  - task: update-additional-ops-files-cf-smoke-tests-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -844,16 +1277,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-cf-smoke-tests
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: cf-smoke-tests
+    - task: update-release-cf-smoke-tests-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: cf-smoke-tests-release
+      params:
+        RELEASE_NAME: cf-smoke-tests
+    - task: update-additional-ops-files-cf-smoke-tests-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: cf-smoke-tests-release
+      params:
+        RELEASE_NAME: cf-smoke-tests
+    - task: update-compiled-releases-ops-cf-smoke-tests
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: cf-smoke-tests-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: cf-smoke-tests
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: cf-smoke-tests-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -895,20 +1374,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-cf-syslog-drain
+  - task: update-release-cf-syslog-drain-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: cf-syslog-drain-release
     params:
       RELEASE_NAME: cf-syslog-drain
-  - task: update-additional-ops-files-cf-syslog-drain
+  - task: update-additional-ops-files-cf-syslog-drain-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -960,16 +1440,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-cf-syslog-drain
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: cf-syslog-drain
+    - task: update-release-cf-syslog-drain-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: cf-syslog-drain-release
+      params:
+        RELEASE_NAME: cf-syslog-drain
+    - task: update-additional-ops-files-cf-syslog-drain-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: cf-syslog-drain-release
+      params:
+        RELEASE_NAME: cf-syslog-drain
+    - task: update-compiled-releases-ops-cf-syslog-drain
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: cf-syslog-drain-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: cf-syslog-drain
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: cf-syslog-drain-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -1011,20 +1537,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-cflinuxfs3
+  - task: update-release-cflinuxfs3-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: cflinuxfs3-release
     params:
       RELEASE_NAME: cflinuxfs3
-  - task: update-additional-ops-files-cflinuxfs3
+  - task: update-additional-ops-files-cflinuxfs3-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -1076,16 +1603,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-cflinuxfs3
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: cflinuxfs3
+    - task: update-release-cflinuxfs3-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: cflinuxfs3-release
+      params:
+        RELEASE_NAME: cflinuxfs3
+    - task: update-additional-ops-files-cflinuxfs3-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: cflinuxfs3-release
+      params:
+        RELEASE_NAME: cflinuxfs3
+    - task: update-compiled-releases-ops-cflinuxfs3
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: cflinuxfs3-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: cflinuxfs3
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: cflinuxfs3-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -1127,20 +1700,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-diego
+  - task: update-release-diego-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: diego-release
     params:
       RELEASE_NAME: diego
-  - task: update-additional-ops-files-diego
+  - task: update-additional-ops-files-diego-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -1192,16 +1766,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-diego
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: diego
+    - task: update-release-diego-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: diego-release
+      params:
+        RELEASE_NAME: diego
+    - task: update-additional-ops-files-diego-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: diego-release
+      params:
+        RELEASE_NAME: diego
+    - task: update-compiled-releases-ops-diego
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: diego-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: diego
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: diego-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -1243,20 +1863,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-dotnet-core-buildpack
+  - task: update-release-dotnet-core-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: dotnet-core-buildpack-release
     params:
       RELEASE_NAME: dotnet-core-buildpack
-  - task: update-additional-ops-files-dotnet-core-buildpack
+  - task: update-additional-ops-files-dotnet-core-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -1308,16 +1929,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-dotnet-core-buildpack
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: dotnet-core-buildpack
+    - task: update-release-dotnet-core-buildpack-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: dotnet-core-buildpack-release
+      params:
+        RELEASE_NAME: dotnet-core-buildpack
+    - task: update-additional-ops-files-dotnet-core-buildpack-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: dotnet-core-buildpack-release
+      params:
+        RELEASE_NAME: dotnet-core-buildpack
+    - task: update-compiled-releases-ops-dotnet-core-buildpack
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: dotnet-core-buildpack-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: dotnet-core-buildpack
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: dotnet-core-buildpack-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -1359,20 +2026,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-garden-runc
+  - task: update-release-garden-runc-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: garden-runc-release
     params:
       RELEASE_NAME: garden-runc
-  - task: update-additional-ops-files-garden-runc
+  - task: update-additional-ops-files-garden-runc-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -1424,16 +2092,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-garden-runc
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: garden-runc
+    - task: update-release-garden-runc-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: garden-runc-release
+      params:
+        RELEASE_NAME: garden-runc
+    - task: update-additional-ops-files-garden-runc-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: garden-runc-release
+      params:
+        RELEASE_NAME: garden-runc
+    - task: update-compiled-releases-ops-garden-runc
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: garden-runc-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: garden-runc
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: garden-runc-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -1475,20 +2189,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-go-buildpack
+  - task: update-release-go-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: go-buildpack-release
     params:
       RELEASE_NAME: go-buildpack
-  - task: update-additional-ops-files-go-buildpack
+  - task: update-additional-ops-files-go-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -1540,16 +2255,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-go-buildpack
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: go-buildpack
+    - task: update-release-go-buildpack-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: go-buildpack-release
+      params:
+        RELEASE_NAME: go-buildpack
+    - task: update-additional-ops-files-go-buildpack-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: go-buildpack-release
+      params:
+        RELEASE_NAME: go-buildpack
+    - task: update-compiled-releases-ops-go-buildpack
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: go-buildpack-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: go-buildpack
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: go-buildpack-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -1591,20 +2352,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-java-buildpack
+  - task: update-release-java-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: java-buildpack-release
     params:
       RELEASE_NAME: java-buildpack
-  - task: update-additional-ops-files-java-buildpack
+  - task: update-additional-ops-files-java-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -1656,16 +2418,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-java-buildpack
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: java-buildpack
+    - task: update-release-java-buildpack-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: java-buildpack-release
+      params:
+        RELEASE_NAME: java-buildpack
+    - task: update-additional-ops-files-java-buildpack-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: java-buildpack-release
+      params:
+        RELEASE_NAME: java-buildpack
+    - task: update-compiled-releases-ops-java-buildpack
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: java-buildpack-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: java-buildpack
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: java-buildpack-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -1707,20 +2515,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-log-cache
+  - task: update-release-log-cache-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: log-cache-release
     params:
       RELEASE_NAME: log-cache
-  - task: update-additional-ops-files-log-cache
+  - task: update-additional-ops-files-log-cache-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -1772,16 +2581,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-log-cache
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: log-cache
+    - task: update-release-log-cache-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: log-cache-release
+      params:
+        RELEASE_NAME: log-cache
+    - task: update-additional-ops-files-log-cache-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: log-cache-release
+      params:
+        RELEASE_NAME: log-cache
+    - task: update-compiled-releases-ops-log-cache
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: log-cache-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: log-cache
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: log-cache-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -1823,20 +2678,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-loggregator
+  - task: update-release-loggregator-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: loggregator-release
     params:
       RELEASE_NAME: loggregator
-  - task: update-additional-ops-files-loggregator
+  - task: update-additional-ops-files-loggregator-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -1888,16 +2744,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-loggregator
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: loggregator
+    - task: update-release-loggregator-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: loggregator-release
+      params:
+        RELEASE_NAME: loggregator
+    - task: update-additional-ops-files-loggregator-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: loggregator-release
+      params:
+        RELEASE_NAME: loggregator
+    - task: update-compiled-releases-ops-loggregator
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: loggregator-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: loggregator
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: loggregator-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -1939,20 +2841,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-loggregator-agent
+  - task: update-release-loggregator-agent-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: loggregator-agent-release
     params:
       RELEASE_NAME: loggregator-agent
-  - task: update-additional-ops-files-loggregator-agent
+  - task: update-additional-ops-files-loggregator-agent-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -2004,16 +2907,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-loggregator-agent
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: loggregator-agent
+    - task: update-release-loggregator-agent-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: loggregator-agent-release
+      params:
+        RELEASE_NAME: loggregator-agent
+    - task: update-additional-ops-files-loggregator-agent-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: loggregator-agent-release
+      params:
+        RELEASE_NAME: loggregator-agent
+    - task: update-compiled-releases-ops-loggregator-agent
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: loggregator-agent-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: loggregator-agent
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: loggregator-agent-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -2055,20 +3004,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-nats
+  - task: update-release-nats-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: nats-release
     params:
       RELEASE_NAME: nats
-  - task: update-additional-ops-files-nats
+  - task: update-additional-ops-files-nats-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -2120,16 +3070,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-nats
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: nats
+    - task: update-release-nats-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: nats-release
+      params:
+        RELEASE_NAME: nats
+    - task: update-additional-ops-files-nats-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: nats-release
+      params:
+        RELEASE_NAME: nats
+    - task: update-compiled-releases-ops-nats
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: nats-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: nats
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: nats-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -2171,20 +3167,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-nginx-buildpack
+  - task: update-release-nginx-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: nginx-buildpack-release
     params:
       RELEASE_NAME: nginx-buildpack
-  - task: update-additional-ops-files-nginx-buildpack
+  - task: update-additional-ops-files-nginx-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -2236,16 +3233,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-nginx-buildpack
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: nginx-buildpack
+    - task: update-release-nginx-buildpack-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: nginx-buildpack-release
+      params:
+        RELEASE_NAME: nginx-buildpack
+    - task: update-additional-ops-files-nginx-buildpack-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: nginx-buildpack-release
+      params:
+        RELEASE_NAME: nginx-buildpack
+    - task: update-compiled-releases-ops-nginx-buildpack
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: nginx-buildpack-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: nginx-buildpack
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: nginx-buildpack-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -2287,20 +3330,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-nodejs-buildpack
+  - task: update-release-nodejs-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: nodejs-buildpack-release
     params:
       RELEASE_NAME: nodejs-buildpack
-  - task: update-additional-ops-files-nodejs-buildpack
+  - task: update-additional-ops-files-nodejs-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -2352,16 +3396,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-nodejs-buildpack
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: nodejs-buildpack
+    - task: update-release-nodejs-buildpack-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: nodejs-buildpack-release
+      params:
+        RELEASE_NAME: nodejs-buildpack
+    - task: update-additional-ops-files-nodejs-buildpack-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: nodejs-buildpack-release
+      params:
+        RELEASE_NAME: nodejs-buildpack
+    - task: update-compiled-releases-ops-nodejs-buildpack
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: nodejs-buildpack-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: nodejs-buildpack
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: nodejs-buildpack-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -2403,20 +3493,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-php-buildpack
+  - task: update-release-php-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: php-buildpack-release
     params:
       RELEASE_NAME: php-buildpack
-  - task: update-additional-ops-files-php-buildpack
+  - task: update-additional-ops-files-php-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -2468,16 +3559,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-php-buildpack
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: php-buildpack
+    - task: update-release-php-buildpack-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: php-buildpack-release
+      params:
+        RELEASE_NAME: php-buildpack
+    - task: update-additional-ops-files-php-buildpack-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: php-buildpack-release
+      params:
+        RELEASE_NAME: php-buildpack
+    - task: update-compiled-releases-ops-php-buildpack
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: php-buildpack-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: php-buildpack
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: php-buildpack-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -2519,20 +3656,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-python-buildpack
+  - task: update-release-python-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: python-buildpack-release
     params:
       RELEASE_NAME: python-buildpack
-  - task: update-additional-ops-files-python-buildpack
+  - task: update-additional-ops-files-python-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -2584,16 +3722,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-python-buildpack
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: python-buildpack
+    - task: update-release-python-buildpack-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: python-buildpack-release
+      params:
+        RELEASE_NAME: python-buildpack
+    - task: update-additional-ops-files-python-buildpack-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: python-buildpack-release
+      params:
+        RELEASE_NAME: python-buildpack
+    - task: update-compiled-releases-ops-python-buildpack
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: python-buildpack-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: python-buildpack
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: python-buildpack-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -2635,20 +3819,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-pxc
+  - task: update-release-pxc-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: pxc-release
     params:
       RELEASE_NAME: pxc
-  - task: update-additional-ops-files-pxc
+  - task: update-additional-ops-files-pxc-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -2700,16 +3885,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-pxc
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: pxc
+    - task: update-release-pxc-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: pxc-release
+      params:
+        RELEASE_NAME: pxc
+    - task: update-additional-ops-files-pxc-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: pxc-release
+      params:
+        RELEASE_NAME: pxc
+    - task: update-compiled-releases-ops-pxc
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: pxc-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: pxc
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: pxc-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -2751,20 +3982,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-r-buildpack
+  - task: update-release-r-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: r-buildpack-release
     params:
       RELEASE_NAME: r-buildpack
-  - task: update-additional-ops-files-r-buildpack
+  - task: update-additional-ops-files-r-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -2816,16 +4048,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-r-buildpack
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: r-buildpack
+    - task: update-release-r-buildpack-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: r-buildpack-release
+      params:
+        RELEASE_NAME: r-buildpack
+    - task: update-additional-ops-files-r-buildpack-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: r-buildpack-release
+      params:
+        RELEASE_NAME: r-buildpack
+    - task: update-compiled-releases-ops-r-buildpack
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: r-buildpack-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: r-buildpack
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: r-buildpack-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -2867,20 +4145,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-routing
+  - task: update-release-routing-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: routing-release
     params:
       RELEASE_NAME: routing
-  - task: update-additional-ops-files-routing
+  - task: update-additional-ops-files-routing-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -2932,16 +4211,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-routing
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: routing
+    - task: update-release-routing-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: routing-release
+      params:
+        RELEASE_NAME: routing
+    - task: update-additional-ops-files-routing-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: routing-release
+      params:
+        RELEASE_NAME: routing
+    - task: update-compiled-releases-ops-routing
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: routing-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: routing
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: routing-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -2983,20 +4308,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-ruby-buildpack
+  - task: update-release-ruby-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: ruby-buildpack-release
     params:
       RELEASE_NAME: ruby-buildpack
-  - task: update-additional-ops-files-ruby-buildpack
+  - task: update-additional-ops-files-ruby-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -3048,16 +4374,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-ruby-buildpack
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: ruby-buildpack
+    - task: update-release-ruby-buildpack-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: ruby-buildpack-release
+      params:
+        RELEASE_NAME: ruby-buildpack
+    - task: update-additional-ops-files-ruby-buildpack-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: ruby-buildpack-release
+      params:
+        RELEASE_NAME: ruby-buildpack
+    - task: update-compiled-releases-ops-ruby-buildpack
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: ruby-buildpack-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: ruby-buildpack
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: ruby-buildpack-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -3099,20 +4471,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-silk
+  - task: update-release-silk-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: silk-release
     params:
       RELEASE_NAME: silk
-  - task: update-additional-ops-files-silk
+  - task: update-additional-ops-files-silk-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -3164,16 +4537,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-silk
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: silk
+    - task: update-release-silk-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: silk-release
+      params:
+        RELEASE_NAME: silk
+    - task: update-additional-ops-files-silk-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: silk-release
+      params:
+        RELEASE_NAME: silk
+    - task: update-compiled-releases-ops-silk
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: silk-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: silk
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: silk-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -3215,20 +4634,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-staticfile-buildpack
+  - task: update-release-staticfile-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: staticfile-buildpack-release
     params:
       RELEASE_NAME: staticfile-buildpack
-  - task: update-additional-ops-files-staticfile-buildpack
+  - task: update-additional-ops-files-staticfile-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -3280,16 +4700,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-staticfile-buildpack
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: staticfile-buildpack
+    - task: update-release-staticfile-buildpack-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: staticfile-buildpack-release
+      params:
+        RELEASE_NAME: staticfile-buildpack
+    - task: update-additional-ops-files-staticfile-buildpack-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: staticfile-buildpack-release
+      params:
+        RELEASE_NAME: staticfile-buildpack
+    - task: update-compiled-releases-ops-staticfile-buildpack
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: staticfile-buildpack-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: staticfile-buildpack
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: staticfile-buildpack-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -3331,20 +4797,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-statsd-injector
+  - task: update-release-statsd-injector-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: statsd-injector-release
     params:
       RELEASE_NAME: statsd-injector
-  - task: update-additional-ops-files-statsd-injector
+  - task: update-additional-ops-files-statsd-injector-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -3396,16 +4863,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-statsd-injector
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: statsd-injector
+    - task: update-release-statsd-injector-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: statsd-injector-release
+      params:
+        RELEASE_NAME: statsd-injector
+    - task: update-additional-ops-files-statsd-injector-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: statsd-injector-release
+      params:
+        RELEASE_NAME: statsd-injector
+    - task: update-compiled-releases-ops-statsd-injector
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: statsd-injector-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: statsd-injector
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: statsd-injector-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -3447,20 +4960,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-uaa
+  - task: update-release-uaa-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: uaa-release
     params:
       RELEASE_NAME: uaa
-  - task: update-additional-ops-files-uaa
+  - task: update-additional-ops-files-uaa-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -3512,16 +5026,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-uaa
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: uaa
+    - task: update-release-uaa-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: uaa-release
+      params:
+        RELEASE_NAME: uaa
+    - task: update-additional-ops-files-uaa-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: uaa-release
+      params:
+        RELEASE_NAME: uaa
+    - task: update-compiled-releases-ops-uaa
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: uaa-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: uaa
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: uaa-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -3563,20 +5123,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-credhub
+  - task: update-release-credhub-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: credhub-release
     params:
       RELEASE_NAME: credhub
-  - task: update-additional-ops-files-credhub
+  - task: update-additional-ops-files-credhub-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -3628,16 +5189,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-credhub
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: credhub
+    - task: update-release-credhub-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: credhub-release
+      params:
+        RELEASE_NAME: credhub
+    - task: update-additional-ops-files-credhub-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: credhub-release
+      params:
+        RELEASE_NAME: credhub
+    - task: update-compiled-releases-ops-credhub
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: credhub-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: credhub
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: credhub-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
@@ -3679,20 +5286,21 @@ jobs:
       params:
         tarball: false
     - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-cf-cli
+  - task: update-release-cf-cli-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: cf-cli-release
     params:
       RELEASE_NAME: cf-cli
-  - task: update-additional-ops-files-cf-cli
+  - task: update-additional-ops-files-cf-cli-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       current-commit-message: commit-message
@@ -3744,16 +5352,62 @@ jobs:
           operations/experimental/fast-deploy-with-downtime-and-danger.yml
         REGENERATE_CREDENTIALS: false
         BOSH_DEPLOY_ARGS: --parallel 50
+    - task: export-compiled-release-cf-cli
+      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        manifest: updated-deployment-manifest
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        RELEASE_NAME: cf-cli
+    - task: update-release-cf-cli-develop
+      file: runtime-ci/tasks/update-single-manifest-release/task.yml
+      input_mapping:
+        deployment-configuration: cf-deployment-develop
+        release: cf-cli-release
+      params:
+        RELEASE_NAME: cf-cli
+    - task: update-additional-ops-files-cf-cli-develop
+      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+      input_mapping:
+        current-commit-message: commit-message
+        original-ops-file: cf-deployment-develop
+        release: cf-cli-release
+      params:
+        RELEASE_NAME: cf-cli
+    - task: update-compiled-releases-ops-cf-cli
+      file: runtime-ci/tasks/update-single-compiled-release/task.yml
+      input_mapping:
+        original-compiled-releases-ops-file: cf-deployment-develop
+        release: cf-cli-release
+        current-commit-message: commit-message
+      params:
+        RELEASE_NAME: cf-cli
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+    - task: combine-inputs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: updated-compiled-releases-ops-file
+        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
         manifest: updated-deployment-manifest
-        ops-file: updated-ops-file
-        repo: cf-deployment-release-candidate
+        ops-file: combined-inputs
+        repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
         MANIFEST_DESTINATION: cf-deployment.yml
         MANIFEST_NAME: cf-deployment.yml
+    - put: cf-cli-release-gcs
+      params:
+        file: compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-repo
     ensure:
       do:
       - task: delete-deployment
