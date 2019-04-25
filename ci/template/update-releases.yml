@@ -31,6 +31,7 @@ resource_types:
   type: docker-image
   source:
     repository: frodenas/gcs-resource
+    tag: v0.4.1
 
 resources:
 - name: cf-deployment-develop
@@ -121,6 +122,7 @@ jobs:
     - get: stemcell
       params:
         tarball: false
+      passed: [ update-stemcell-and-recompile-releases ]
   - task: #@ "update-release-" + r.name
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:

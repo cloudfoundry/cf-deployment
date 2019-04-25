@@ -17,7 +17,6 @@ resource_types:
     type: docker-image
     source:
       repository: jtarchie/pr
-      tag: v25
 
 resources:
   - name: runtime-ci
@@ -129,6 +128,7 @@ jobs:
 
   - name: run-unit-tests-on-all-cf-deployment-prs
     public: true
+    serial: true
     plan:
     - timeout: 4h
       do:
