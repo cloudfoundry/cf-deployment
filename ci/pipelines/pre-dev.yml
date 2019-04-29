@@ -475,36 +475,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: binary-buildpack-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-binary-buildpack-develop
       params:
         RELEASE_NAME: binary-buildpack
     - task: update-additional-ops-files-binary-buildpack-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-binary-buildpack-develop
         release: binary-buildpack-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-binary-buildpack-develop
       params:
         RELEASE_NAME: binary-buildpack
-    - task: update-compiled-releases-ops-binary-buildpack
+    - task: update-compiled-releases-ops-file-binary-buildpack-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: binary-buildpack-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-binary-buildpack-develop
+        release: binary-buildpack-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-binary-buildpack-develop
       params:
         RELEASE_NAME: binary-buildpack
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-binary-buildpack-develop
+        ops-file: updated-cf-deployment-binary-buildpack-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -638,36 +639,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: bosh-dns-aliases-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-bosh-dns-aliases-develop
       params:
         RELEASE_NAME: bosh-dns-aliases
     - task: update-additional-ops-files-bosh-dns-aliases-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-bosh-dns-aliases-develop
         release: bosh-dns-aliases-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-bosh-dns-aliases-develop
       params:
         RELEASE_NAME: bosh-dns-aliases
-    - task: update-compiled-releases-ops-bosh-dns-aliases
+    - task: update-compiled-releases-ops-file-bosh-dns-aliases-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: bosh-dns-aliases-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-bosh-dns-aliases-develop
+        release: bosh-dns-aliases-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-bosh-dns-aliases-develop
       params:
         RELEASE_NAME: bosh-dns-aliases
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-bosh-dns-aliases-develop
+        ops-file: updated-cf-deployment-bosh-dns-aliases-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -801,36 +803,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: bpm-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-bpm-develop
       params:
         RELEASE_NAME: bpm
     - task: update-additional-ops-files-bpm-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-bpm-develop
         release: bpm-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-bpm-develop
       params:
         RELEASE_NAME: bpm
-    - task: update-compiled-releases-ops-bpm
+    - task: update-compiled-releases-ops-file-bpm-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: bpm-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-bpm-develop
+        release: bpm-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-bpm-develop
       params:
         RELEASE_NAME: bpm
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-bpm-develop
+        ops-file: updated-cf-deployment-bpm-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -964,36 +967,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: capi-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-capi-develop
       params:
         RELEASE_NAME: capi
     - task: update-additional-ops-files-capi-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-capi-develop
         release: capi-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-capi-develop
       params:
         RELEASE_NAME: capi
-    - task: update-compiled-releases-ops-capi
+    - task: update-compiled-releases-ops-file-capi-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: capi-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-capi-develop
+        release: capi-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-capi-develop
       params:
         RELEASE_NAME: capi
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-capi-develop
+        ops-file: updated-cf-deployment-capi-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -1127,36 +1131,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: cf-networking-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-cf-networking-develop
       params:
         RELEASE_NAME: cf-networking
     - task: update-additional-ops-files-cf-networking-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-cf-networking-develop
         release: cf-networking-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-cf-networking-develop
       params:
         RELEASE_NAME: cf-networking
-    - task: update-compiled-releases-ops-cf-networking
+    - task: update-compiled-releases-ops-file-cf-networking-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: cf-networking-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-cf-networking-develop
+        release: cf-networking-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-cf-networking-develop
       params:
         RELEASE_NAME: cf-networking
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-cf-networking-develop
+        ops-file: updated-cf-deployment-cf-networking-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -1290,36 +1295,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: cf-smoke-tests-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-cf-smoke-tests-develop
       params:
         RELEASE_NAME: cf-smoke-tests
     - task: update-additional-ops-files-cf-smoke-tests-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-cf-smoke-tests-develop
         release: cf-smoke-tests-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-cf-smoke-tests-develop
       params:
         RELEASE_NAME: cf-smoke-tests
-    - task: update-compiled-releases-ops-cf-smoke-tests
+    - task: update-compiled-releases-ops-file-cf-smoke-tests-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: cf-smoke-tests-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-cf-smoke-tests-develop
+        release: cf-smoke-tests-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-cf-smoke-tests-develop
       params:
         RELEASE_NAME: cf-smoke-tests
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-cf-smoke-tests-develop
+        ops-file: updated-cf-deployment-cf-smoke-tests-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -1453,36 +1459,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: cf-syslog-drain-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-cf-syslog-drain-develop
       params:
         RELEASE_NAME: cf-syslog-drain
     - task: update-additional-ops-files-cf-syslog-drain-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-cf-syslog-drain-develop
         release: cf-syslog-drain-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-cf-syslog-drain-develop
       params:
         RELEASE_NAME: cf-syslog-drain
-    - task: update-compiled-releases-ops-cf-syslog-drain
+    - task: update-compiled-releases-ops-file-cf-syslog-drain-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: cf-syslog-drain-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-cf-syslog-drain-develop
+        release: cf-syslog-drain-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-cf-syslog-drain-develop
       params:
         RELEASE_NAME: cf-syslog-drain
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-cf-syslog-drain-develop
+        ops-file: updated-cf-deployment-cf-syslog-drain-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -1616,36 +1623,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: cflinuxfs3-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-cflinuxfs3-develop
       params:
         RELEASE_NAME: cflinuxfs3
     - task: update-additional-ops-files-cflinuxfs3-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-cflinuxfs3-develop
         release: cflinuxfs3-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-cflinuxfs3-develop
       params:
         RELEASE_NAME: cflinuxfs3
-    - task: update-compiled-releases-ops-cflinuxfs3
+    - task: update-compiled-releases-ops-file-cflinuxfs3-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: cflinuxfs3-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-cflinuxfs3-develop
+        release: cflinuxfs3-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-cflinuxfs3-develop
       params:
         RELEASE_NAME: cflinuxfs3
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-cflinuxfs3-develop
+        ops-file: updated-cf-deployment-cflinuxfs3-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -1779,36 +1787,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: diego-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-diego-develop
       params:
         RELEASE_NAME: diego
     - task: update-additional-ops-files-diego-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-diego-develop
         release: diego-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-diego-develop
       params:
         RELEASE_NAME: diego
-    - task: update-compiled-releases-ops-diego
+    - task: update-compiled-releases-ops-file-diego-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: diego-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-diego-develop
+        release: diego-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-diego-develop
       params:
         RELEASE_NAME: diego
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-diego-develop
+        ops-file: updated-cf-deployment-diego-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -1942,36 +1951,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: dotnet-core-buildpack-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-dotnet-core-buildpack-develop
       params:
         RELEASE_NAME: dotnet-core-buildpack
     - task: update-additional-ops-files-dotnet-core-buildpack-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-dotnet-core-buildpack-develop
         release: dotnet-core-buildpack-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-dotnet-core-buildpack-develop
       params:
         RELEASE_NAME: dotnet-core-buildpack
-    - task: update-compiled-releases-ops-dotnet-core-buildpack
+    - task: update-compiled-releases-ops-file-dotnet-core-buildpack-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: dotnet-core-buildpack-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-dotnet-core-buildpack-develop
+        release: dotnet-core-buildpack-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-dotnet-core-buildpack-develop
       params:
         RELEASE_NAME: dotnet-core-buildpack
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-dotnet-core-buildpack-develop
+        ops-file: updated-cf-deployment-dotnet-core-buildpack-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -2105,36 +2115,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: garden-runc-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-garden-runc-develop
       params:
         RELEASE_NAME: garden-runc
     - task: update-additional-ops-files-garden-runc-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-garden-runc-develop
         release: garden-runc-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-garden-runc-develop
       params:
         RELEASE_NAME: garden-runc
-    - task: update-compiled-releases-ops-garden-runc
+    - task: update-compiled-releases-ops-file-garden-runc-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: garden-runc-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-garden-runc-develop
+        release: garden-runc-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-garden-runc-develop
       params:
         RELEASE_NAME: garden-runc
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-garden-runc-develop
+        ops-file: updated-cf-deployment-garden-runc-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -2268,36 +2279,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: go-buildpack-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-go-buildpack-develop
       params:
         RELEASE_NAME: go-buildpack
     - task: update-additional-ops-files-go-buildpack-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-go-buildpack-develop
         release: go-buildpack-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-go-buildpack-develop
       params:
         RELEASE_NAME: go-buildpack
-    - task: update-compiled-releases-ops-go-buildpack
+    - task: update-compiled-releases-ops-file-go-buildpack-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: go-buildpack-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-go-buildpack-develop
+        release: go-buildpack-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-go-buildpack-develop
       params:
         RELEASE_NAME: go-buildpack
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-go-buildpack-develop
+        ops-file: updated-cf-deployment-go-buildpack-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -2431,36 +2443,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: java-buildpack-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-java-buildpack-develop
       params:
         RELEASE_NAME: java-buildpack
     - task: update-additional-ops-files-java-buildpack-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-java-buildpack-develop
         release: java-buildpack-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-java-buildpack-develop
       params:
         RELEASE_NAME: java-buildpack
-    - task: update-compiled-releases-ops-java-buildpack
+    - task: update-compiled-releases-ops-file-java-buildpack-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: java-buildpack-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-java-buildpack-develop
+        release: java-buildpack-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-java-buildpack-develop
       params:
         RELEASE_NAME: java-buildpack
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-java-buildpack-develop
+        ops-file: updated-cf-deployment-java-buildpack-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -2594,36 +2607,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: log-cache-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-log-cache-develop
       params:
         RELEASE_NAME: log-cache
     - task: update-additional-ops-files-log-cache-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-log-cache-develop
         release: log-cache-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-log-cache-develop
       params:
         RELEASE_NAME: log-cache
-    - task: update-compiled-releases-ops-log-cache
+    - task: update-compiled-releases-ops-file-log-cache-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: log-cache-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-log-cache-develop
+        release: log-cache-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-log-cache-develop
       params:
         RELEASE_NAME: log-cache
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-log-cache-develop
+        ops-file: updated-cf-deployment-log-cache-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -2757,36 +2771,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: loggregator-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-loggregator-develop
       params:
         RELEASE_NAME: loggregator
     - task: update-additional-ops-files-loggregator-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-loggregator-develop
         release: loggregator-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-loggregator-develop
       params:
         RELEASE_NAME: loggregator
-    - task: update-compiled-releases-ops-loggregator
+    - task: update-compiled-releases-ops-file-loggregator-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: loggregator-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-loggregator-develop
+        release: loggregator-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-loggregator-develop
       params:
         RELEASE_NAME: loggregator
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-loggregator-develop
+        ops-file: updated-cf-deployment-loggregator-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -2920,36 +2935,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: loggregator-agent-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-loggregator-agent-develop
       params:
         RELEASE_NAME: loggregator-agent
     - task: update-additional-ops-files-loggregator-agent-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-loggregator-agent-develop
         release: loggregator-agent-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-loggregator-agent-develop
       params:
         RELEASE_NAME: loggregator-agent
-    - task: update-compiled-releases-ops-loggregator-agent
+    - task: update-compiled-releases-ops-file-loggregator-agent-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: loggregator-agent-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-loggregator-agent-develop
+        release: loggregator-agent-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-loggregator-agent-develop
       params:
         RELEASE_NAME: loggregator-agent
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-loggregator-agent-develop
+        ops-file: updated-cf-deployment-loggregator-agent-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -3083,36 +3099,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: nats-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-nats-develop
       params:
         RELEASE_NAME: nats
     - task: update-additional-ops-files-nats-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-nats-develop
         release: nats-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-nats-develop
       params:
         RELEASE_NAME: nats
-    - task: update-compiled-releases-ops-nats
+    - task: update-compiled-releases-ops-file-nats-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: nats-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-nats-develop
+        release: nats-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-nats-develop
       params:
         RELEASE_NAME: nats
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-nats-develop
+        ops-file: updated-cf-deployment-nats-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -3246,36 +3263,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: nginx-buildpack-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-nginx-buildpack-develop
       params:
         RELEASE_NAME: nginx-buildpack
     - task: update-additional-ops-files-nginx-buildpack-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-nginx-buildpack-develop
         release: nginx-buildpack-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-nginx-buildpack-develop
       params:
         RELEASE_NAME: nginx-buildpack
-    - task: update-compiled-releases-ops-nginx-buildpack
+    - task: update-compiled-releases-ops-file-nginx-buildpack-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: nginx-buildpack-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-nginx-buildpack-develop
+        release: nginx-buildpack-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-nginx-buildpack-develop
       params:
         RELEASE_NAME: nginx-buildpack
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-nginx-buildpack-develop
+        ops-file: updated-cf-deployment-nginx-buildpack-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -3409,36 +3427,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: nodejs-buildpack-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-nodejs-buildpack-develop
       params:
         RELEASE_NAME: nodejs-buildpack
     - task: update-additional-ops-files-nodejs-buildpack-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-nodejs-buildpack-develop
         release: nodejs-buildpack-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-nodejs-buildpack-develop
       params:
         RELEASE_NAME: nodejs-buildpack
-    - task: update-compiled-releases-ops-nodejs-buildpack
+    - task: update-compiled-releases-ops-file-nodejs-buildpack-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: nodejs-buildpack-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-nodejs-buildpack-develop
+        release: nodejs-buildpack-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-nodejs-buildpack-develop
       params:
         RELEASE_NAME: nodejs-buildpack
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-nodejs-buildpack-develop
+        ops-file: updated-cf-deployment-nodejs-buildpack-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -3572,36 +3591,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: php-buildpack-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-php-buildpack-develop
       params:
         RELEASE_NAME: php-buildpack
     - task: update-additional-ops-files-php-buildpack-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-php-buildpack-develop
         release: php-buildpack-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-php-buildpack-develop
       params:
         RELEASE_NAME: php-buildpack
-    - task: update-compiled-releases-ops-php-buildpack
+    - task: update-compiled-releases-ops-file-php-buildpack-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: php-buildpack-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-php-buildpack-develop
+        release: php-buildpack-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-php-buildpack-develop
       params:
         RELEASE_NAME: php-buildpack
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-php-buildpack-develop
+        ops-file: updated-cf-deployment-php-buildpack-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -3735,36 +3755,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: python-buildpack-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-python-buildpack-develop
       params:
         RELEASE_NAME: python-buildpack
     - task: update-additional-ops-files-python-buildpack-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-python-buildpack-develop
         release: python-buildpack-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-python-buildpack-develop
       params:
         RELEASE_NAME: python-buildpack
-    - task: update-compiled-releases-ops-python-buildpack
+    - task: update-compiled-releases-ops-file-python-buildpack-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: python-buildpack-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-python-buildpack-develop
+        release: python-buildpack-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-python-buildpack-develop
       params:
         RELEASE_NAME: python-buildpack
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-python-buildpack-develop
+        ops-file: updated-cf-deployment-python-buildpack-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -3898,36 +3919,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: pxc-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-pxc-develop
       params:
         RELEASE_NAME: pxc
     - task: update-additional-ops-files-pxc-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-pxc-develop
         release: pxc-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-pxc-develop
       params:
         RELEASE_NAME: pxc
-    - task: update-compiled-releases-ops-pxc
+    - task: update-compiled-releases-ops-file-pxc-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: pxc-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-pxc-develop
+        release: pxc-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-pxc-develop
       params:
         RELEASE_NAME: pxc
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-pxc-develop
+        ops-file: updated-cf-deployment-pxc-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -4061,36 +4083,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: r-buildpack-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-r-buildpack-develop
       params:
         RELEASE_NAME: r-buildpack
     - task: update-additional-ops-files-r-buildpack-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-r-buildpack-develop
         release: r-buildpack-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-r-buildpack-develop
       params:
         RELEASE_NAME: r-buildpack
-    - task: update-compiled-releases-ops-r-buildpack
+    - task: update-compiled-releases-ops-file-r-buildpack-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: r-buildpack-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-r-buildpack-develop
+        release: r-buildpack-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-r-buildpack-develop
       params:
         RELEASE_NAME: r-buildpack
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-r-buildpack-develop
+        ops-file: updated-cf-deployment-r-buildpack-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -4224,36 +4247,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: routing-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-routing-develop
       params:
         RELEASE_NAME: routing
     - task: update-additional-ops-files-routing-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-routing-develop
         release: routing-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-routing-develop
       params:
         RELEASE_NAME: routing
-    - task: update-compiled-releases-ops-routing
+    - task: update-compiled-releases-ops-file-routing-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: routing-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-routing-develop
+        release: routing-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-routing-develop
       params:
         RELEASE_NAME: routing
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-routing-develop
+        ops-file: updated-cf-deployment-routing-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -4387,36 +4411,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: ruby-buildpack-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-ruby-buildpack-develop
       params:
         RELEASE_NAME: ruby-buildpack
     - task: update-additional-ops-files-ruby-buildpack-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-ruby-buildpack-develop
         release: ruby-buildpack-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-ruby-buildpack-develop
       params:
         RELEASE_NAME: ruby-buildpack
-    - task: update-compiled-releases-ops-ruby-buildpack
+    - task: update-compiled-releases-ops-file-ruby-buildpack-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: ruby-buildpack-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-ruby-buildpack-develop
+        release: ruby-buildpack-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-ruby-buildpack-develop
       params:
         RELEASE_NAME: ruby-buildpack
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-ruby-buildpack-develop
+        ops-file: updated-cf-deployment-ruby-buildpack-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -4550,36 +4575,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: silk-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-silk-develop
       params:
         RELEASE_NAME: silk
     - task: update-additional-ops-files-silk-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-silk-develop
         release: silk-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-silk-develop
       params:
         RELEASE_NAME: silk
-    - task: update-compiled-releases-ops-silk
+    - task: update-compiled-releases-ops-file-silk-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: silk-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-silk-develop
+        release: silk-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-silk-develop
       params:
         RELEASE_NAME: silk
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-silk-develop
+        ops-file: updated-cf-deployment-silk-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -4713,36 +4739,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: staticfile-buildpack-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-staticfile-buildpack-develop
       params:
         RELEASE_NAME: staticfile-buildpack
     - task: update-additional-ops-files-staticfile-buildpack-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-staticfile-buildpack-develop
         release: staticfile-buildpack-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-staticfile-buildpack-develop
       params:
         RELEASE_NAME: staticfile-buildpack
-    - task: update-compiled-releases-ops-staticfile-buildpack
+    - task: update-compiled-releases-ops-file-staticfile-buildpack-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: staticfile-buildpack-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-staticfile-buildpack-develop
+        release: staticfile-buildpack-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-staticfile-buildpack-develop
       params:
         RELEASE_NAME: staticfile-buildpack
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-staticfile-buildpack-develop
+        ops-file: updated-cf-deployment-staticfile-buildpack-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -4876,36 +4903,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: statsd-injector-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-statsd-injector-develop
       params:
         RELEASE_NAME: statsd-injector
     - task: update-additional-ops-files-statsd-injector-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-statsd-injector-develop
         release: statsd-injector-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-statsd-injector-develop
       params:
         RELEASE_NAME: statsd-injector
-    - task: update-compiled-releases-ops-statsd-injector
+    - task: update-compiled-releases-ops-file-statsd-injector-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: statsd-injector-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-statsd-injector-develop
+        release: statsd-injector-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-statsd-injector-develop
       params:
         RELEASE_NAME: statsd-injector
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-statsd-injector-develop
+        ops-file: updated-cf-deployment-statsd-injector-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -5039,36 +5067,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: uaa-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-uaa-develop
       params:
         RELEASE_NAME: uaa
     - task: update-additional-ops-files-uaa-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-uaa-develop
         release: uaa-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-uaa-develop
       params:
         RELEASE_NAME: uaa
-    - task: update-compiled-releases-ops-uaa
+    - task: update-compiled-releases-ops-file-uaa-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: uaa-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-uaa-develop
+        release: uaa-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-uaa-develop
       params:
         RELEASE_NAME: uaa
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-uaa-develop
+        ops-file: updated-cf-deployment-uaa-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -5202,36 +5231,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: credhub-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-credhub-develop
       params:
         RELEASE_NAME: credhub
     - task: update-additional-ops-files-credhub-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-credhub-develop
         release: credhub-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-credhub-develop
       params:
         RELEASE_NAME: credhub
-    - task: update-compiled-releases-ops-credhub
+    - task: update-compiled-releases-ops-file-credhub-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: credhub-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-credhub-develop
+        release: credhub-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-credhub-develop
       params:
         RELEASE_NAME: credhub
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-credhub-develop
+        ops-file: updated-cf-deployment-credhub-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
@@ -5365,36 +5395,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: cf-cli-release
+      output_mapping:
+        updated-deployment-manifest: updated-cf-deployment-cf-cli-develop
       params:
         RELEASE_NAME: cf-cli
     - task: update-additional-ops-files-cf-cli-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: updated-cf-deployment-cf-cli-develop
         release: cf-cli-release
+      output_mapping:
+        updated-ops-file: updated-cf-deployment-cf-cli-develop
       params:
         RELEASE_NAME: cf-cli
-    - task: update-compiled-releases-ops-cf-cli
+    - task: update-compiled-releases-ops-file-cf-cli-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: cf-cli-release
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: updated-cf-deployment-cf-cli-develop
+        release: cf-cli-release
+      output_mapping:
+        updated-compiled-releases-ops-file: updated-cf-deployment-cf-cli-develop
       params:
         RELEASE_NAME: cf-cli
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: updated-cf-deployment-cf-cli-develop
+        ops-file: updated-cf-deployment-cf-cli-develop
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true

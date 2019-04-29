@@ -173,36 +173,37 @@ jobs:
       input_mapping:
         deployment-configuration: cf-deployment-develop
         release: #@ r.name + "-release"
+      output_mapping:
+        updated-deployment-manifest: #@ "updated-cf-deployment-{}-develop".format(r.name)
       params:
         RELEASE_NAME: #@ r.name
     - task: #@ "update-additional-ops-files-{}-develop".format(r.name)
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
         current-commit-message: commit-message
-        original-ops-file: cf-deployment-develop
+        original-ops-file: #@ "updated-cf-deployment-{}-develop".format(r.name)
         release: #@ r.name + "-release"
+      output_mapping:
+        updated-ops-file: #@ "updated-cf-deployment-{}-develop".format(r.name)
       params:
         RELEASE_NAME: #@ r.name
-    - task: #@ "update-compiled-releases-ops-" + r.name
+    - task: #@ "update-compiled-releases-ops-file-{}-develop".format(r.name)
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        original-compiled-releases-ops-file: cf-deployment-develop
-        release: #@ r.name + "-release"
         current-commit-message: commit-message
+        original-compiled-releases-ops-file: #@ "updated-cf-deployment-{}-develop".format(r.name)
+        release: #@ r.name + "-release"
+      output_mapping:
+        updated-compiled-releases-ops-file: #@ "updated-cf-deployment-{}-develop".format(r.name)
       params:
         RELEASE_NAME: #@ r.name
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: combine-inputs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: updated-compiled-releases-ops-file
-        second-input: updated-ops-file
     - task: commit-generated-manifest-and-ops
       file: runtime-ci/tasks/commit-generated-manifest/task.yml
       input_mapping:
-        manifest: updated-deployment-manifest
-        ops-file: combined-inputs
+        manifest: #@ "updated-cf-deployment-{}-develop".format(r.name)
+        ops-file: #@ "updated-cf-deployment-{}-develop".format(r.name)
         repo: cf-deployment-develop
       params:
         COMMIT_ALL_OPS_FILES: true
