@@ -408,14 +408,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: binary-buildpack-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-binary-buildpack-release-candidate
     params:
       RELEASE_NAME: binary-buildpack
   - task: update-additional-ops-files-binary-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-binary-buildpack-release-candidate
       release: binary-buildpack-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-binary-buildpack-release-candidate
     params:
       RELEASE_NAME: binary-buildpack
   - do:
@@ -452,8 +455,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-binary-buildpack-release-candidate
+        ops-files: updated-cf-deployment-binary-buildpack-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -466,7 +469,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-binary-buildpack-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: binary-buildpack
@@ -482,7 +485,6 @@ jobs:
     - task: update-additional-ops-files-binary-buildpack-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-binary-buildpack-develop
         release: binary-buildpack-release
       output_mapping:
@@ -492,7 +494,6 @@ jobs:
     - task: update-compiled-releases-ops-file-binary-buildpack-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-binary-buildpack-develop
         release: binary-buildpack-release
       output_mapping:
@@ -501,16 +502,6 @@ jobs:
         RELEASE_NAME: binary-buildpack
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-binary-buildpack-develop
-        ops-file: updated-cf-deployment-binary-buildpack-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: binary-buildpack-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -518,7 +509,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-binary-buildpack-develop
     ensure:
       do:
       - task: delete-deployment
@@ -572,14 +563,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: bosh-dns-aliases-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-bosh-dns-aliases-release-candidate
     params:
       RELEASE_NAME: bosh-dns-aliases
   - task: update-additional-ops-files-bosh-dns-aliases-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-bosh-dns-aliases-release-candidate
       release: bosh-dns-aliases-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-bosh-dns-aliases-release-candidate
     params:
       RELEASE_NAME: bosh-dns-aliases
   - do:
@@ -616,8 +610,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-bosh-dns-aliases-release-candidate
+        ops-files: updated-cf-deployment-bosh-dns-aliases-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -630,7 +624,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-bosh-dns-aliases-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: bosh-dns-aliases
@@ -646,7 +640,6 @@ jobs:
     - task: update-additional-ops-files-bosh-dns-aliases-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-bosh-dns-aliases-develop
         release: bosh-dns-aliases-release
       output_mapping:
@@ -656,7 +649,6 @@ jobs:
     - task: update-compiled-releases-ops-file-bosh-dns-aliases-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-bosh-dns-aliases-develop
         release: bosh-dns-aliases-release
       output_mapping:
@@ -665,16 +657,6 @@ jobs:
         RELEASE_NAME: bosh-dns-aliases
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-bosh-dns-aliases-develop
-        ops-file: updated-cf-deployment-bosh-dns-aliases-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: bosh-dns-aliases-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -682,7 +664,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-bosh-dns-aliases-develop
     ensure:
       do:
       - task: delete-deployment
@@ -736,14 +718,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: bpm-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-bpm-release-candidate
     params:
       RELEASE_NAME: bpm
   - task: update-additional-ops-files-bpm-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-bpm-release-candidate
       release: bpm-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-bpm-release-candidate
     params:
       RELEASE_NAME: bpm
   - do:
@@ -780,8 +765,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-bpm-release-candidate
+        ops-files: updated-cf-deployment-bpm-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -794,7 +779,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-bpm-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: bpm
@@ -810,7 +795,6 @@ jobs:
     - task: update-additional-ops-files-bpm-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-bpm-develop
         release: bpm-release
       output_mapping:
@@ -820,7 +804,6 @@ jobs:
     - task: update-compiled-releases-ops-file-bpm-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-bpm-develop
         release: bpm-release
       output_mapping:
@@ -829,16 +812,6 @@ jobs:
         RELEASE_NAME: bpm
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-bpm-develop
-        ops-file: updated-cf-deployment-bpm-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: bpm-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -846,7 +819,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-bpm-develop
     ensure:
       do:
       - task: delete-deployment
@@ -900,14 +873,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: capi-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-capi-release-candidate
     params:
       RELEASE_NAME: capi
   - task: update-additional-ops-files-capi-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-capi-release-candidate
       release: capi-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-capi-release-candidate
     params:
       RELEASE_NAME: capi
   - do:
@@ -944,8 +920,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-capi-release-candidate
+        ops-files: updated-cf-deployment-capi-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -958,7 +934,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-capi-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: capi
@@ -974,7 +950,6 @@ jobs:
     - task: update-additional-ops-files-capi-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-capi-develop
         release: capi-release
       output_mapping:
@@ -984,7 +959,6 @@ jobs:
     - task: update-compiled-releases-ops-file-capi-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-capi-develop
         release: capi-release
       output_mapping:
@@ -993,16 +967,6 @@ jobs:
         RELEASE_NAME: capi
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-capi-develop
-        ops-file: updated-cf-deployment-capi-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: capi-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -1010,7 +974,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-capi-develop
     ensure:
       do:
       - task: delete-deployment
@@ -1064,14 +1028,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: cf-networking-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-cf-networking-release-candidate
     params:
       RELEASE_NAME: cf-networking
   - task: update-additional-ops-files-cf-networking-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-cf-networking-release-candidate
       release: cf-networking-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-cf-networking-release-candidate
     params:
       RELEASE_NAME: cf-networking
   - do:
@@ -1108,8 +1075,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-cf-networking-release-candidate
+        ops-files: updated-cf-deployment-cf-networking-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -1122,7 +1089,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-cf-networking-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: cf-networking
@@ -1138,7 +1105,6 @@ jobs:
     - task: update-additional-ops-files-cf-networking-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-cf-networking-develop
         release: cf-networking-release
       output_mapping:
@@ -1148,7 +1114,6 @@ jobs:
     - task: update-compiled-releases-ops-file-cf-networking-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-cf-networking-develop
         release: cf-networking-release
       output_mapping:
@@ -1157,16 +1122,6 @@ jobs:
         RELEASE_NAME: cf-networking
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-cf-networking-develop
-        ops-file: updated-cf-deployment-cf-networking-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: cf-networking-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -1174,7 +1129,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-cf-networking-develop
     ensure:
       do:
       - task: delete-deployment
@@ -1228,14 +1183,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: cf-smoke-tests-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-cf-smoke-tests-release-candidate
     params:
       RELEASE_NAME: cf-smoke-tests
   - task: update-additional-ops-files-cf-smoke-tests-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-cf-smoke-tests-release-candidate
       release: cf-smoke-tests-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-cf-smoke-tests-release-candidate
     params:
       RELEASE_NAME: cf-smoke-tests
   - do:
@@ -1272,8 +1230,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-cf-smoke-tests-release-candidate
+        ops-files: updated-cf-deployment-cf-smoke-tests-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -1286,7 +1244,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-cf-smoke-tests-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: cf-smoke-tests
@@ -1302,7 +1260,6 @@ jobs:
     - task: update-additional-ops-files-cf-smoke-tests-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-cf-smoke-tests-develop
         release: cf-smoke-tests-release
       output_mapping:
@@ -1312,7 +1269,6 @@ jobs:
     - task: update-compiled-releases-ops-file-cf-smoke-tests-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-cf-smoke-tests-develop
         release: cf-smoke-tests-release
       output_mapping:
@@ -1321,16 +1277,6 @@ jobs:
         RELEASE_NAME: cf-smoke-tests
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-cf-smoke-tests-develop
-        ops-file: updated-cf-deployment-cf-smoke-tests-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: cf-smoke-tests-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -1338,7 +1284,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-cf-smoke-tests-develop
     ensure:
       do:
       - task: delete-deployment
@@ -1392,14 +1338,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: cf-syslog-drain-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-cf-syslog-drain-release-candidate
     params:
       RELEASE_NAME: cf-syslog-drain
   - task: update-additional-ops-files-cf-syslog-drain-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-cf-syslog-drain-release-candidate
       release: cf-syslog-drain-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-cf-syslog-drain-release-candidate
     params:
       RELEASE_NAME: cf-syslog-drain
   - do:
@@ -1436,8 +1385,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-cf-syslog-drain-release-candidate
+        ops-files: updated-cf-deployment-cf-syslog-drain-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -1450,7 +1399,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-cf-syslog-drain-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: cf-syslog-drain
@@ -1466,7 +1415,6 @@ jobs:
     - task: update-additional-ops-files-cf-syslog-drain-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-cf-syslog-drain-develop
         release: cf-syslog-drain-release
       output_mapping:
@@ -1476,7 +1424,6 @@ jobs:
     - task: update-compiled-releases-ops-file-cf-syslog-drain-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-cf-syslog-drain-develop
         release: cf-syslog-drain-release
       output_mapping:
@@ -1485,16 +1432,6 @@ jobs:
         RELEASE_NAME: cf-syslog-drain
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-cf-syslog-drain-develop
-        ops-file: updated-cf-deployment-cf-syslog-drain-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: cf-syslog-drain-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -1502,7 +1439,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-cf-syslog-drain-develop
     ensure:
       do:
       - task: delete-deployment
@@ -1556,14 +1493,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: cflinuxfs3-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-cflinuxfs3-release-candidate
     params:
       RELEASE_NAME: cflinuxfs3
   - task: update-additional-ops-files-cflinuxfs3-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-cflinuxfs3-release-candidate
       release: cflinuxfs3-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-cflinuxfs3-release-candidate
     params:
       RELEASE_NAME: cflinuxfs3
   - do:
@@ -1600,8 +1540,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-cflinuxfs3-release-candidate
+        ops-files: updated-cf-deployment-cflinuxfs3-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -1614,7 +1554,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-cflinuxfs3-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: cflinuxfs3
@@ -1630,7 +1570,6 @@ jobs:
     - task: update-additional-ops-files-cflinuxfs3-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-cflinuxfs3-develop
         release: cflinuxfs3-release
       output_mapping:
@@ -1640,7 +1579,6 @@ jobs:
     - task: update-compiled-releases-ops-file-cflinuxfs3-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-cflinuxfs3-develop
         release: cflinuxfs3-release
       output_mapping:
@@ -1649,16 +1587,6 @@ jobs:
         RELEASE_NAME: cflinuxfs3
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-cflinuxfs3-develop
-        ops-file: updated-cf-deployment-cflinuxfs3-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: cflinuxfs3-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -1666,7 +1594,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-cflinuxfs3-develop
     ensure:
       do:
       - task: delete-deployment
@@ -1720,14 +1648,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: diego-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-diego-release-candidate
     params:
       RELEASE_NAME: diego
   - task: update-additional-ops-files-diego-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-diego-release-candidate
       release: diego-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-diego-release-candidate
     params:
       RELEASE_NAME: diego
   - do:
@@ -1764,8 +1695,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-diego-release-candidate
+        ops-files: updated-cf-deployment-diego-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -1778,7 +1709,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-diego-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: diego
@@ -1794,7 +1725,6 @@ jobs:
     - task: update-additional-ops-files-diego-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-diego-develop
         release: diego-release
       output_mapping:
@@ -1804,7 +1734,6 @@ jobs:
     - task: update-compiled-releases-ops-file-diego-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-diego-develop
         release: diego-release
       output_mapping:
@@ -1813,16 +1742,6 @@ jobs:
         RELEASE_NAME: diego
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-diego-develop
-        ops-file: updated-cf-deployment-diego-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: diego-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -1830,7 +1749,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-diego-develop
     ensure:
       do:
       - task: delete-deployment
@@ -1884,14 +1803,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: dotnet-core-buildpack-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-dotnet-core-buildpack-release-candidate
     params:
       RELEASE_NAME: dotnet-core-buildpack
   - task: update-additional-ops-files-dotnet-core-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-dotnet-core-buildpack-release-candidate
       release: dotnet-core-buildpack-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-dotnet-core-buildpack-release-candidate
     params:
       RELEASE_NAME: dotnet-core-buildpack
   - do:
@@ -1928,8 +1850,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-dotnet-core-buildpack-release-candidate
+        ops-files: updated-cf-deployment-dotnet-core-buildpack-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -1942,7 +1864,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-dotnet-core-buildpack-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: dotnet-core-buildpack
@@ -1958,7 +1880,6 @@ jobs:
     - task: update-additional-ops-files-dotnet-core-buildpack-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-dotnet-core-buildpack-develop
         release: dotnet-core-buildpack-release
       output_mapping:
@@ -1968,7 +1889,6 @@ jobs:
     - task: update-compiled-releases-ops-file-dotnet-core-buildpack-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-dotnet-core-buildpack-develop
         release: dotnet-core-buildpack-release
       output_mapping:
@@ -1977,16 +1897,6 @@ jobs:
         RELEASE_NAME: dotnet-core-buildpack
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-dotnet-core-buildpack-develop
-        ops-file: updated-cf-deployment-dotnet-core-buildpack-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: dotnet-core-buildpack-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -1994,7 +1904,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-dotnet-core-buildpack-develop
     ensure:
       do:
       - task: delete-deployment
@@ -2048,14 +1958,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: garden-runc-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-garden-runc-release-candidate
     params:
       RELEASE_NAME: garden-runc
   - task: update-additional-ops-files-garden-runc-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-garden-runc-release-candidate
       release: garden-runc-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-garden-runc-release-candidate
     params:
       RELEASE_NAME: garden-runc
   - do:
@@ -2092,8 +2005,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-garden-runc-release-candidate
+        ops-files: updated-cf-deployment-garden-runc-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -2106,7 +2019,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-garden-runc-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: garden-runc
@@ -2122,7 +2035,6 @@ jobs:
     - task: update-additional-ops-files-garden-runc-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-garden-runc-develop
         release: garden-runc-release
       output_mapping:
@@ -2132,7 +2044,6 @@ jobs:
     - task: update-compiled-releases-ops-file-garden-runc-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-garden-runc-develop
         release: garden-runc-release
       output_mapping:
@@ -2141,16 +2052,6 @@ jobs:
         RELEASE_NAME: garden-runc
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-garden-runc-develop
-        ops-file: updated-cf-deployment-garden-runc-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: garden-runc-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -2158,7 +2059,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-garden-runc-develop
     ensure:
       do:
       - task: delete-deployment
@@ -2212,14 +2113,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: go-buildpack-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-go-buildpack-release-candidate
     params:
       RELEASE_NAME: go-buildpack
   - task: update-additional-ops-files-go-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-go-buildpack-release-candidate
       release: go-buildpack-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-go-buildpack-release-candidate
     params:
       RELEASE_NAME: go-buildpack
   - do:
@@ -2256,8 +2160,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-go-buildpack-release-candidate
+        ops-files: updated-cf-deployment-go-buildpack-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -2270,7 +2174,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-go-buildpack-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: go-buildpack
@@ -2286,7 +2190,6 @@ jobs:
     - task: update-additional-ops-files-go-buildpack-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-go-buildpack-develop
         release: go-buildpack-release
       output_mapping:
@@ -2296,7 +2199,6 @@ jobs:
     - task: update-compiled-releases-ops-file-go-buildpack-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-go-buildpack-develop
         release: go-buildpack-release
       output_mapping:
@@ -2305,16 +2207,6 @@ jobs:
         RELEASE_NAME: go-buildpack
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-go-buildpack-develop
-        ops-file: updated-cf-deployment-go-buildpack-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: go-buildpack-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -2322,7 +2214,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-go-buildpack-develop
     ensure:
       do:
       - task: delete-deployment
@@ -2376,14 +2268,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: java-buildpack-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-java-buildpack-release-candidate
     params:
       RELEASE_NAME: java-buildpack
   - task: update-additional-ops-files-java-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-java-buildpack-release-candidate
       release: java-buildpack-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-java-buildpack-release-candidate
     params:
       RELEASE_NAME: java-buildpack
   - do:
@@ -2420,8 +2315,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-java-buildpack-release-candidate
+        ops-files: updated-cf-deployment-java-buildpack-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -2434,7 +2329,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-java-buildpack-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: java-buildpack
@@ -2450,7 +2345,6 @@ jobs:
     - task: update-additional-ops-files-java-buildpack-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-java-buildpack-develop
         release: java-buildpack-release
       output_mapping:
@@ -2460,7 +2354,6 @@ jobs:
     - task: update-compiled-releases-ops-file-java-buildpack-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-java-buildpack-develop
         release: java-buildpack-release
       output_mapping:
@@ -2469,16 +2362,6 @@ jobs:
         RELEASE_NAME: java-buildpack
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-java-buildpack-develop
-        ops-file: updated-cf-deployment-java-buildpack-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: java-buildpack-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -2486,7 +2369,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-java-buildpack-develop
     ensure:
       do:
       - task: delete-deployment
@@ -2540,14 +2423,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: log-cache-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-log-cache-release-candidate
     params:
       RELEASE_NAME: log-cache
   - task: update-additional-ops-files-log-cache-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-log-cache-release-candidate
       release: log-cache-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-log-cache-release-candidate
     params:
       RELEASE_NAME: log-cache
   - do:
@@ -2584,8 +2470,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-log-cache-release-candidate
+        ops-files: updated-cf-deployment-log-cache-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -2598,7 +2484,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-log-cache-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: log-cache
@@ -2614,7 +2500,6 @@ jobs:
     - task: update-additional-ops-files-log-cache-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-log-cache-develop
         release: log-cache-release
       output_mapping:
@@ -2624,7 +2509,6 @@ jobs:
     - task: update-compiled-releases-ops-file-log-cache-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-log-cache-develop
         release: log-cache-release
       output_mapping:
@@ -2633,16 +2517,6 @@ jobs:
         RELEASE_NAME: log-cache
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-log-cache-develop
-        ops-file: updated-cf-deployment-log-cache-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: log-cache-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -2650,7 +2524,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-log-cache-develop
     ensure:
       do:
       - task: delete-deployment
@@ -2704,14 +2578,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: loggregator-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-loggregator-release-candidate
     params:
       RELEASE_NAME: loggregator
   - task: update-additional-ops-files-loggregator-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-loggregator-release-candidate
       release: loggregator-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-loggregator-release-candidate
     params:
       RELEASE_NAME: loggregator
   - do:
@@ -2748,8 +2625,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-loggregator-release-candidate
+        ops-files: updated-cf-deployment-loggregator-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -2762,7 +2639,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-loggregator-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: loggregator
@@ -2778,7 +2655,6 @@ jobs:
     - task: update-additional-ops-files-loggregator-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-loggregator-develop
         release: loggregator-release
       output_mapping:
@@ -2788,7 +2664,6 @@ jobs:
     - task: update-compiled-releases-ops-file-loggregator-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-loggregator-develop
         release: loggregator-release
       output_mapping:
@@ -2797,16 +2672,6 @@ jobs:
         RELEASE_NAME: loggregator
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-loggregator-develop
-        ops-file: updated-cf-deployment-loggregator-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: loggregator-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -2814,7 +2679,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-loggregator-develop
     ensure:
       do:
       - task: delete-deployment
@@ -2868,14 +2733,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: loggregator-agent-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-loggregator-agent-release-candidate
     params:
       RELEASE_NAME: loggregator-agent
   - task: update-additional-ops-files-loggregator-agent-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-loggregator-agent-release-candidate
       release: loggregator-agent-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-loggregator-agent-release-candidate
     params:
       RELEASE_NAME: loggregator-agent
   - do:
@@ -2912,8 +2780,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-loggregator-agent-release-candidate
+        ops-files: updated-cf-deployment-loggregator-agent-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -2926,7 +2794,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-loggregator-agent-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: loggregator-agent
@@ -2942,7 +2810,6 @@ jobs:
     - task: update-additional-ops-files-loggregator-agent-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-loggregator-agent-develop
         release: loggregator-agent-release
       output_mapping:
@@ -2952,7 +2819,6 @@ jobs:
     - task: update-compiled-releases-ops-file-loggregator-agent-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-loggregator-agent-develop
         release: loggregator-agent-release
       output_mapping:
@@ -2961,16 +2827,6 @@ jobs:
         RELEASE_NAME: loggregator-agent
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-loggregator-agent-develop
-        ops-file: updated-cf-deployment-loggregator-agent-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: loggregator-agent-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -2978,7 +2834,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-loggregator-agent-develop
     ensure:
       do:
       - task: delete-deployment
@@ -3032,14 +2888,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: nats-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-nats-release-candidate
     params:
       RELEASE_NAME: nats
   - task: update-additional-ops-files-nats-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-nats-release-candidate
       release: nats-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-nats-release-candidate
     params:
       RELEASE_NAME: nats
   - do:
@@ -3076,8 +2935,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-nats-release-candidate
+        ops-files: updated-cf-deployment-nats-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -3090,7 +2949,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-nats-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: nats
@@ -3106,7 +2965,6 @@ jobs:
     - task: update-additional-ops-files-nats-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-nats-develop
         release: nats-release
       output_mapping:
@@ -3116,7 +2974,6 @@ jobs:
     - task: update-compiled-releases-ops-file-nats-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-nats-develop
         release: nats-release
       output_mapping:
@@ -3125,16 +2982,6 @@ jobs:
         RELEASE_NAME: nats
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-nats-develop
-        ops-file: updated-cf-deployment-nats-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: nats-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -3142,7 +2989,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-nats-develop
     ensure:
       do:
       - task: delete-deployment
@@ -3196,14 +3043,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: nginx-buildpack-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-nginx-buildpack-release-candidate
     params:
       RELEASE_NAME: nginx-buildpack
   - task: update-additional-ops-files-nginx-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-nginx-buildpack-release-candidate
       release: nginx-buildpack-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-nginx-buildpack-release-candidate
     params:
       RELEASE_NAME: nginx-buildpack
   - do:
@@ -3240,8 +3090,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-nginx-buildpack-release-candidate
+        ops-files: updated-cf-deployment-nginx-buildpack-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -3254,7 +3104,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-nginx-buildpack-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: nginx-buildpack
@@ -3270,7 +3120,6 @@ jobs:
     - task: update-additional-ops-files-nginx-buildpack-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-nginx-buildpack-develop
         release: nginx-buildpack-release
       output_mapping:
@@ -3280,7 +3129,6 @@ jobs:
     - task: update-compiled-releases-ops-file-nginx-buildpack-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-nginx-buildpack-develop
         release: nginx-buildpack-release
       output_mapping:
@@ -3289,16 +3137,6 @@ jobs:
         RELEASE_NAME: nginx-buildpack
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-nginx-buildpack-develop
-        ops-file: updated-cf-deployment-nginx-buildpack-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: nginx-buildpack-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -3306,7 +3144,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-nginx-buildpack-develop
     ensure:
       do:
       - task: delete-deployment
@@ -3360,14 +3198,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: nodejs-buildpack-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-nodejs-buildpack-release-candidate
     params:
       RELEASE_NAME: nodejs-buildpack
   - task: update-additional-ops-files-nodejs-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-nodejs-buildpack-release-candidate
       release: nodejs-buildpack-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-nodejs-buildpack-release-candidate
     params:
       RELEASE_NAME: nodejs-buildpack
   - do:
@@ -3404,8 +3245,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-nodejs-buildpack-release-candidate
+        ops-files: updated-cf-deployment-nodejs-buildpack-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -3418,7 +3259,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-nodejs-buildpack-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: nodejs-buildpack
@@ -3434,7 +3275,6 @@ jobs:
     - task: update-additional-ops-files-nodejs-buildpack-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-nodejs-buildpack-develop
         release: nodejs-buildpack-release
       output_mapping:
@@ -3444,7 +3284,6 @@ jobs:
     - task: update-compiled-releases-ops-file-nodejs-buildpack-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-nodejs-buildpack-develop
         release: nodejs-buildpack-release
       output_mapping:
@@ -3453,16 +3292,6 @@ jobs:
         RELEASE_NAME: nodejs-buildpack
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-nodejs-buildpack-develop
-        ops-file: updated-cf-deployment-nodejs-buildpack-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: nodejs-buildpack-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -3470,7 +3299,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-nodejs-buildpack-develop
     ensure:
       do:
       - task: delete-deployment
@@ -3524,14 +3353,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: php-buildpack-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-php-buildpack-release-candidate
     params:
       RELEASE_NAME: php-buildpack
   - task: update-additional-ops-files-php-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-php-buildpack-release-candidate
       release: php-buildpack-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-php-buildpack-release-candidate
     params:
       RELEASE_NAME: php-buildpack
   - do:
@@ -3568,8 +3400,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-php-buildpack-release-candidate
+        ops-files: updated-cf-deployment-php-buildpack-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -3582,7 +3414,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-php-buildpack-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: php-buildpack
@@ -3598,7 +3430,6 @@ jobs:
     - task: update-additional-ops-files-php-buildpack-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-php-buildpack-develop
         release: php-buildpack-release
       output_mapping:
@@ -3608,7 +3439,6 @@ jobs:
     - task: update-compiled-releases-ops-file-php-buildpack-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-php-buildpack-develop
         release: php-buildpack-release
       output_mapping:
@@ -3617,16 +3447,6 @@ jobs:
         RELEASE_NAME: php-buildpack
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-php-buildpack-develop
-        ops-file: updated-cf-deployment-php-buildpack-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: php-buildpack-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -3634,7 +3454,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-php-buildpack-develop
     ensure:
       do:
       - task: delete-deployment
@@ -3688,14 +3508,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: python-buildpack-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-python-buildpack-release-candidate
     params:
       RELEASE_NAME: python-buildpack
   - task: update-additional-ops-files-python-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-python-buildpack-release-candidate
       release: python-buildpack-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-python-buildpack-release-candidate
     params:
       RELEASE_NAME: python-buildpack
   - do:
@@ -3732,8 +3555,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-python-buildpack-release-candidate
+        ops-files: updated-cf-deployment-python-buildpack-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -3746,7 +3569,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-python-buildpack-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: python-buildpack
@@ -3762,7 +3585,6 @@ jobs:
     - task: update-additional-ops-files-python-buildpack-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-python-buildpack-develop
         release: python-buildpack-release
       output_mapping:
@@ -3772,7 +3594,6 @@ jobs:
     - task: update-compiled-releases-ops-file-python-buildpack-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-python-buildpack-develop
         release: python-buildpack-release
       output_mapping:
@@ -3781,16 +3602,6 @@ jobs:
         RELEASE_NAME: python-buildpack
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-python-buildpack-develop
-        ops-file: updated-cf-deployment-python-buildpack-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: python-buildpack-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -3798,7 +3609,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-python-buildpack-develop
     ensure:
       do:
       - task: delete-deployment
@@ -3852,14 +3663,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: pxc-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-pxc-release-candidate
     params:
       RELEASE_NAME: pxc
   - task: update-additional-ops-files-pxc-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-pxc-release-candidate
       release: pxc-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-pxc-release-candidate
     params:
       RELEASE_NAME: pxc
   - do:
@@ -3896,8 +3710,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-pxc-release-candidate
+        ops-files: updated-cf-deployment-pxc-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -3910,7 +3724,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-pxc-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: pxc
@@ -3926,7 +3740,6 @@ jobs:
     - task: update-additional-ops-files-pxc-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-pxc-develop
         release: pxc-release
       output_mapping:
@@ -3936,7 +3749,6 @@ jobs:
     - task: update-compiled-releases-ops-file-pxc-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-pxc-develop
         release: pxc-release
       output_mapping:
@@ -3945,16 +3757,6 @@ jobs:
         RELEASE_NAME: pxc
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-pxc-develop
-        ops-file: updated-cf-deployment-pxc-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: pxc-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -3962,7 +3764,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-pxc-develop
     ensure:
       do:
       - task: delete-deployment
@@ -4016,14 +3818,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: r-buildpack-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-r-buildpack-release-candidate
     params:
       RELEASE_NAME: r-buildpack
   - task: update-additional-ops-files-r-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-r-buildpack-release-candidate
       release: r-buildpack-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-r-buildpack-release-candidate
     params:
       RELEASE_NAME: r-buildpack
   - do:
@@ -4060,8 +3865,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-r-buildpack-release-candidate
+        ops-files: updated-cf-deployment-r-buildpack-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -4074,7 +3879,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-r-buildpack-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: r-buildpack
@@ -4090,7 +3895,6 @@ jobs:
     - task: update-additional-ops-files-r-buildpack-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-r-buildpack-develop
         release: r-buildpack-release
       output_mapping:
@@ -4100,7 +3904,6 @@ jobs:
     - task: update-compiled-releases-ops-file-r-buildpack-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-r-buildpack-develop
         release: r-buildpack-release
       output_mapping:
@@ -4109,16 +3912,6 @@ jobs:
         RELEASE_NAME: r-buildpack
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-r-buildpack-develop
-        ops-file: updated-cf-deployment-r-buildpack-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: r-buildpack-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -4126,7 +3919,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-r-buildpack-develop
     ensure:
       do:
       - task: delete-deployment
@@ -4180,14 +3973,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: routing-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-routing-release-candidate
     params:
       RELEASE_NAME: routing
   - task: update-additional-ops-files-routing-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-routing-release-candidate
       release: routing-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-routing-release-candidate
     params:
       RELEASE_NAME: routing
   - do:
@@ -4224,8 +4020,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-routing-release-candidate
+        ops-files: updated-cf-deployment-routing-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -4238,7 +4034,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-routing-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: routing
@@ -4254,7 +4050,6 @@ jobs:
     - task: update-additional-ops-files-routing-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-routing-develop
         release: routing-release
       output_mapping:
@@ -4264,7 +4059,6 @@ jobs:
     - task: update-compiled-releases-ops-file-routing-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-routing-develop
         release: routing-release
       output_mapping:
@@ -4273,16 +4067,6 @@ jobs:
         RELEASE_NAME: routing
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-routing-develop
-        ops-file: updated-cf-deployment-routing-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: routing-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -4290,7 +4074,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-routing-develop
     ensure:
       do:
       - task: delete-deployment
@@ -4344,14 +4128,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: ruby-buildpack-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-ruby-buildpack-release-candidate
     params:
       RELEASE_NAME: ruby-buildpack
   - task: update-additional-ops-files-ruby-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-ruby-buildpack-release-candidate
       release: ruby-buildpack-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-ruby-buildpack-release-candidate
     params:
       RELEASE_NAME: ruby-buildpack
   - do:
@@ -4388,8 +4175,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-ruby-buildpack-release-candidate
+        ops-files: updated-cf-deployment-ruby-buildpack-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -4402,7 +4189,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-ruby-buildpack-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: ruby-buildpack
@@ -4418,7 +4205,6 @@ jobs:
     - task: update-additional-ops-files-ruby-buildpack-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-ruby-buildpack-develop
         release: ruby-buildpack-release
       output_mapping:
@@ -4428,7 +4214,6 @@ jobs:
     - task: update-compiled-releases-ops-file-ruby-buildpack-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-ruby-buildpack-develop
         release: ruby-buildpack-release
       output_mapping:
@@ -4437,16 +4222,6 @@ jobs:
         RELEASE_NAME: ruby-buildpack
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-ruby-buildpack-develop
-        ops-file: updated-cf-deployment-ruby-buildpack-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: ruby-buildpack-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -4454,7 +4229,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-ruby-buildpack-develop
     ensure:
       do:
       - task: delete-deployment
@@ -4508,14 +4283,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: silk-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-silk-release-candidate
     params:
       RELEASE_NAME: silk
   - task: update-additional-ops-files-silk-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-silk-release-candidate
       release: silk-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-silk-release-candidate
     params:
       RELEASE_NAME: silk
   - do:
@@ -4552,8 +4330,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-silk-release-candidate
+        ops-files: updated-cf-deployment-silk-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -4566,7 +4344,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-silk-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: silk
@@ -4582,7 +4360,6 @@ jobs:
     - task: update-additional-ops-files-silk-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-silk-develop
         release: silk-release
       output_mapping:
@@ -4592,7 +4369,6 @@ jobs:
     - task: update-compiled-releases-ops-file-silk-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-silk-develop
         release: silk-release
       output_mapping:
@@ -4601,16 +4377,6 @@ jobs:
         RELEASE_NAME: silk
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-silk-develop
-        ops-file: updated-cf-deployment-silk-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: silk-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -4618,7 +4384,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-silk-develop
     ensure:
       do:
       - task: delete-deployment
@@ -4672,14 +4438,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: staticfile-buildpack-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-staticfile-buildpack-release-candidate
     params:
       RELEASE_NAME: staticfile-buildpack
   - task: update-additional-ops-files-staticfile-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-staticfile-buildpack-release-candidate
       release: staticfile-buildpack-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-staticfile-buildpack-release-candidate
     params:
       RELEASE_NAME: staticfile-buildpack
   - do:
@@ -4716,8 +4485,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-staticfile-buildpack-release-candidate
+        ops-files: updated-cf-deployment-staticfile-buildpack-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -4730,7 +4499,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-staticfile-buildpack-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: staticfile-buildpack
@@ -4746,7 +4515,6 @@ jobs:
     - task: update-additional-ops-files-staticfile-buildpack-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-staticfile-buildpack-develop
         release: staticfile-buildpack-release
       output_mapping:
@@ -4756,7 +4524,6 @@ jobs:
     - task: update-compiled-releases-ops-file-staticfile-buildpack-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-staticfile-buildpack-develop
         release: staticfile-buildpack-release
       output_mapping:
@@ -4765,16 +4532,6 @@ jobs:
         RELEASE_NAME: staticfile-buildpack
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-staticfile-buildpack-develop
-        ops-file: updated-cf-deployment-staticfile-buildpack-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: staticfile-buildpack-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -4782,7 +4539,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-staticfile-buildpack-develop
     ensure:
       do:
       - task: delete-deployment
@@ -4836,14 +4593,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: statsd-injector-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-statsd-injector-release-candidate
     params:
       RELEASE_NAME: statsd-injector
   - task: update-additional-ops-files-statsd-injector-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-statsd-injector-release-candidate
       release: statsd-injector-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-statsd-injector-release-candidate
     params:
       RELEASE_NAME: statsd-injector
   - do:
@@ -4880,8 +4640,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-statsd-injector-release-candidate
+        ops-files: updated-cf-deployment-statsd-injector-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -4894,7 +4654,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-statsd-injector-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: statsd-injector
@@ -4910,7 +4670,6 @@ jobs:
     - task: update-additional-ops-files-statsd-injector-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-statsd-injector-develop
         release: statsd-injector-release
       output_mapping:
@@ -4920,7 +4679,6 @@ jobs:
     - task: update-compiled-releases-ops-file-statsd-injector-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-statsd-injector-develop
         release: statsd-injector-release
       output_mapping:
@@ -4929,16 +4687,6 @@ jobs:
         RELEASE_NAME: statsd-injector
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-statsd-injector-develop
-        ops-file: updated-cf-deployment-statsd-injector-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: statsd-injector-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -4946,7 +4694,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-statsd-injector-develop
     ensure:
       do:
       - task: delete-deployment
@@ -5000,14 +4748,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: uaa-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-uaa-release-candidate
     params:
       RELEASE_NAME: uaa
   - task: update-additional-ops-files-uaa-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-uaa-release-candidate
       release: uaa-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-uaa-release-candidate
     params:
       RELEASE_NAME: uaa
   - do:
@@ -5044,8 +4795,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-uaa-release-candidate
+        ops-files: updated-cf-deployment-uaa-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -5058,7 +4809,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-uaa-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: uaa
@@ -5074,7 +4825,6 @@ jobs:
     - task: update-additional-ops-files-uaa-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-uaa-develop
         release: uaa-release
       output_mapping:
@@ -5084,7 +4834,6 @@ jobs:
     - task: update-compiled-releases-ops-file-uaa-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-uaa-develop
         release: uaa-release
       output_mapping:
@@ -5093,16 +4842,6 @@ jobs:
         RELEASE_NAME: uaa
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-uaa-develop
-        ops-file: updated-cf-deployment-uaa-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: uaa-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -5110,7 +4849,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-uaa-develop
     ensure:
       do:
       - task: delete-deployment
@@ -5164,14 +4903,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: credhub-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-credhub-release-candidate
     params:
       RELEASE_NAME: credhub
   - task: update-additional-ops-files-credhub-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-credhub-release-candidate
       release: credhub-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-credhub-release-candidate
     params:
       RELEASE_NAME: credhub
   - do:
@@ -5208,8 +4950,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-credhub-release-candidate
+        ops-files: updated-cf-deployment-credhub-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -5222,7 +4964,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-credhub-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: credhub
@@ -5238,7 +4980,6 @@ jobs:
     - task: update-additional-ops-files-credhub-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-credhub-develop
         release: credhub-release
       output_mapping:
@@ -5248,7 +4989,6 @@ jobs:
     - task: update-compiled-releases-ops-file-credhub-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-credhub-develop
         release: credhub-release
       output_mapping:
@@ -5257,16 +4997,6 @@ jobs:
         RELEASE_NAME: credhub
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-credhub-develop
-        ops-file: updated-cf-deployment-credhub-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: credhub-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -5274,7 +5004,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-credhub-develop
     ensure:
       do:
       - task: delete-deployment
@@ -5328,14 +5058,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: cf-cli-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-cf-cli-release-candidate
     params:
       RELEASE_NAME: cf-cli
   - task: update-additional-ops-files-cf-cli-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: updated-cf-deployment-cf-cli-release-candidate
       release: cf-cli-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-cf-cli-release-candidate
     params:
       RELEASE_NAME: cf-cli
   - do:
@@ -5372,8 +5105,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: updated-cf-deployment-cf-cli-release-candidate
+        ops-files: updated-cf-deployment-cf-cli-release-candidate
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -5386,7 +5119,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment-cf-cli-release-candidate
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: cf-cli
@@ -5402,7 +5135,6 @@ jobs:
     - task: update-additional-ops-files-cf-cli-develop
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: updated-cf-deployment-cf-cli-develop
         release: cf-cli-release
       output_mapping:
@@ -5412,7 +5144,6 @@ jobs:
     - task: update-compiled-releases-ops-file-cf-cli-develop
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: updated-cf-deployment-cf-cli-develop
         release: cf-cli-release
       output_mapping:
@@ -5421,16 +5152,6 @@ jobs:
         RELEASE_NAME: cf-cli
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: updated-cf-deployment-cf-cli-develop
-        ops-file: updated-cf-deployment-cf-cli-develop
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: cf-cli-release-gcs
       params:
         file: compiled-release-tarball/*.tgz
@@ -5438,7 +5159,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: updated-cf-deployment-cf-cli-develop
     ensure:
       do:
       - task: delete-deployment

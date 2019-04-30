@@ -115,14 +115,17 @@ jobs:
     input_mapping:
       deployment-configuration: cf-deployment-release-candidate
       release: #@ r.name + "-release"
+    output_mapping:
+      updated-deployment-manifest: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
     params:
       RELEASE_NAME: #@ r.name
   - task: #@ "update-additional-ops-files-{}-release-candidate".format(r.name)
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      current-commit-message: commit-message
-      original-ops-file: cf-deployment-release-candidate
+      original-ops-file: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
       release: #@ r.name + "-release"
+    output_mapping:
+      updated-ops-file: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
     params:
       RELEASE_NAME: #@ r.name
   - do:
@@ -150,8 +153,8 @@ jobs:
       file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-deployment-manifest
-        ops-files: cf-deployment-release-candidate
+        cf-deployment: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
+        ops-files: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
@@ -164,7 +167,7 @@ jobs:
       file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         RELEASE_NAME: #@ r.name
@@ -180,7 +183,6 @@ jobs:
     - task: #@ "update-additional-ops-files-{}-develop".format(r.name)
       file: runtime-ci/tasks/update-single-opsfile-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-ops-file: #@ "updated-cf-deployment-{}-develop".format(r.name)
         release: #@ r.name + "-release"
       output_mapping:
@@ -190,7 +192,6 @@ jobs:
     - task: #@ "update-compiled-releases-ops-file-{}-develop".format(r.name)
       file: runtime-ci/tasks/update-single-compiled-release/task.yml
       input_mapping:
-        current-commit-message: commit-message
         original-compiled-releases-ops-file: #@ "updated-cf-deployment-{}-develop".format(r.name)
         release: #@ r.name + "-release"
       output_mapping:
@@ -199,16 +200,6 @@ jobs:
         RELEASE_NAME: #@ r.name
         ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
         UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - task: commit-generated-manifest-and-ops
-      file: runtime-ci/tasks/commit-generated-manifest/task.yml
-      input_mapping:
-        manifest: #@ "updated-cf-deployment-{}-develop".format(r.name)
-        ops-file: #@ "updated-cf-deployment-{}-develop".format(r.name)
-        repo: cf-deployment-develop
-      params:
-        COMMIT_ALL_OPS_FILES: true
-        MANIFEST_DESTINATION: cf-deployment.yml
-        MANIFEST_NAME: cf-deployment.yml
     - put: #@ r.name + "-release-gcs"
       params:
         file: compiled-release-tarball/*.tgz
@@ -216,7 +207,7 @@ jobs:
     - put: cf-deployment-develop
       params:
         rebase: true
-        repository: updated-repo
+        repository: #@ "updated-cf-deployment-{}-develop".format(r.name)
     ensure:
       do:
       - #@ delete_deployment("pre-dev")
