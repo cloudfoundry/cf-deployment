@@ -392,7 +392,7 @@ jobs:
   plan:
   - aggregate:
     - get: binary-buildpack-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -547,7 +547,7 @@ jobs:
   plan:
   - aggregate:
     - get: bosh-dns-aliases-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -702,7 +702,7 @@ jobs:
   plan:
   - aggregate:
     - get: bpm-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -857,7 +857,7 @@ jobs:
   plan:
   - aggregate:
     - get: capi-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -1012,7 +1012,7 @@ jobs:
   plan:
   - aggregate:
     - get: cf-networking-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -1167,7 +1167,7 @@ jobs:
   plan:
   - aggregate:
     - get: cf-smoke-tests-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -1322,7 +1322,7 @@ jobs:
   plan:
   - aggregate:
     - get: cf-syslog-drain-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -1477,7 +1477,7 @@ jobs:
   plan:
   - aggregate:
     - get: cflinuxfs3-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -1632,7 +1632,7 @@ jobs:
   plan:
   - aggregate:
     - get: diego-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -1787,7 +1787,7 @@ jobs:
   plan:
   - aggregate:
     - get: dotnet-core-buildpack-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -1942,7 +1942,7 @@ jobs:
   plan:
   - aggregate:
     - get: garden-runc-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -2097,7 +2097,7 @@ jobs:
   plan:
   - aggregate:
     - get: go-buildpack-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -2252,7 +2252,7 @@ jobs:
   plan:
   - aggregate:
     - get: java-buildpack-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -2407,7 +2407,7 @@ jobs:
   plan:
   - aggregate:
     - get: log-cache-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -2562,7 +2562,7 @@ jobs:
   plan:
   - aggregate:
     - get: loggregator-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -2717,7 +2717,7 @@ jobs:
   plan:
   - aggregate:
     - get: loggregator-agent-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -2872,7 +2872,7 @@ jobs:
   plan:
   - aggregate:
     - get: nats-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -3027,7 +3027,7 @@ jobs:
   plan:
   - aggregate:
     - get: nginx-buildpack-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -3182,7 +3182,7 @@ jobs:
   plan:
   - aggregate:
     - get: nodejs-buildpack-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -3337,7 +3337,7 @@ jobs:
   plan:
   - aggregate:
     - get: php-buildpack-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -3492,7 +3492,7 @@ jobs:
   plan:
   - aggregate:
     - get: python-buildpack-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -3647,7 +3647,7 @@ jobs:
   plan:
   - aggregate:
     - get: pxc-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -3802,7 +3802,7 @@ jobs:
   plan:
   - aggregate:
     - get: r-buildpack-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -3957,7 +3957,7 @@ jobs:
   plan:
   - aggregate:
     - get: routing-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -4112,7 +4112,7 @@ jobs:
   plan:
   - aggregate:
     - get: ruby-buildpack-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -4267,7 +4267,7 @@ jobs:
   plan:
   - aggregate:
     - get: silk-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -4422,7 +4422,7 @@ jobs:
   plan:
   - aggregate:
     - get: staticfile-buildpack-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -4577,7 +4577,7 @@ jobs:
   plan:
   - aggregate:
     - get: statsd-injector-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -4732,7 +4732,7 @@ jobs:
   plan:
   - aggregate:
     - get: uaa-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -4887,7 +4887,7 @@ jobs:
   plan:
   - aggregate:
     - get: credhub-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
@@ -5042,7 +5042,7 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli-release
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate

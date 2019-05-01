@@ -99,7 +99,7 @@ jobs:
   plan:
   - aggregate:
     - get: #@ r.name + "-release"
-      trigger: false
+      trigger: true
       params:
         tarball: false
     - get: cf-deployment-release-candidate
