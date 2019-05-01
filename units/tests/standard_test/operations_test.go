@@ -80,6 +80,7 @@ var standardTests = map[string]helpers.OpsFileTestParams{
 	"use-haproxy.yml": {
 		Vars: []string{"haproxy_private_ip=10.0.10.10"},
 	},
+	"use-internal-lookup-for-route-services.yml": {},
 	"use-latest-stemcell.yml": {
 		PathValidator: helpers.PathValidator{
 			Path: "/stemcells/alias=default/version", ExpectedValue: "latest",
