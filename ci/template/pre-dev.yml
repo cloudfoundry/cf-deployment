@@ -58,6 +58,15 @@ resources:
     uri: git@github.com:cloudfoundry/cf-deployment.git
     private_key: ((cf_deployment_readwrite_deploy_key.private_key))
 
+#@ for r in data.values.baseReleases:
+- name: #@ "cf-deployment-" + r.name
+  type: git
+  source:
+    branch: #@ "update-{}-release".format(r.name)
+    uri: git@github.com:cloudfoundry/cf-deployment.git
+    private_key: ((cf_deployment_readwrite_deploy_key.private_key))
+
+#@ end
 - name: stemcell
   type: bosh-io-stemcell
   source:
@@ -149,65 +158,72 @@ jobs:
           repository: updated-bbl-state
           rebase: true
     - #@ manage_gcp_dns("add")
-    - task: deploy-cf
-      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        cf-deployment: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
-        ops-files: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
-        vars-files: relint-envs
-      params:
-        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
-        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
-        OPS_FILES: |
-          operations/experimental/fast-deploy-with-downtime-and-danger.yml
-        REGENERATE_CREDENTIALS: false
-        BOSH_DEPLOY_ARGS: "--parallel 50"
-    - task: #@ "export-compiled-release-" + r.name
-      file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        manifest: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
-      params:
-        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
-        RELEASE_NAME: #@ r.name
-    - task: #@ "update-release-{}-develop".format(r.name)
-      file: runtime-ci/tasks/update-single-manifest-release/task.yml
-      input_mapping:
-        deployment-configuration: cf-deployment-develop
-        release: #@ r.name + "-release"
-      output_mapping:
-        updated-deployment-manifest: #@ "updated-cf-deployment-{}-develop".format(r.name)
-      params:
-        RELEASE_NAME: #@ r.name
-    - task: #@ "update-additional-ops-files-{}-develop".format(r.name)
-      file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-      input_mapping:
-        original-ops-file: #@ "updated-cf-deployment-{}-develop".format(r.name)
-        release: #@ r.name + "-release"
-      output_mapping:
-        updated-ops-file: #@ "updated-cf-deployment-{}-develop".format(r.name)
-      params:
-        RELEASE_NAME: #@ r.name
-    - task: #@ "update-compiled-releases-ops-file-{}-develop".format(r.name)
-      file: runtime-ci/tasks/update-single-compiled-release/task.yml
-      input_mapping:
-        original-compiled-releases-ops-file: #@ "updated-cf-deployment-{}-develop".format(r.name)
-        release: #@ r.name + "-release"
-      output_mapping:
-        updated-compiled-releases-ops-file: #@ "updated-cf-deployment-{}-develop".format(r.name)
-      params:
-        RELEASE_NAME: #@ r.name
-        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-    - put: #@ r.name + "-release-gcs"
-      params:
-        file: compiled-release-tarball/*.tgz
-        predefined_acl: publicRead
-    - put: cf-deployment-develop
-      params:
-        rebase: true
-        repository: #@ "updated-cf-deployment-{}-develop".format(r.name)
+    - do:
+      - task: deploy-cf
+        file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          cf-deployment: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
+          ops-files: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
+          vars-files: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+          OPS_FILES: |
+            operations/experimental/fast-deploy-with-downtime-and-danger.yml
+          REGENERATE_CREDENTIALS: false
+          BOSH_DEPLOY_ARGS: "--parallel 50"
+      - task: #@ "export-compiled-release-" + r.name
+        file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: #@ r.name
+      - task: #@ "update-release-{}-develop".format(r.name)
+        file: runtime-ci/tasks/update-single-manifest-release/task.yml
+        input_mapping:
+          deployment-configuration: cf-deployment-develop
+          release: #@ r.name + "-release"
+        output_mapping:
+          updated-deployment-manifest: #@ "updated-cf-deployment-{}-develop".format(r.name)
+        params:
+          RELEASE_NAME: #@ r.name
+      - task: #@ "update-additional-ops-files-{}-develop".format(r.name)
+        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+        input_mapping:
+          original-ops-file: #@ "updated-cf-deployment-{}-develop".format(r.name)
+          release: #@ r.name + "-release"
+        output_mapping:
+          updated-ops-file: #@ "updated-cf-deployment-{}-develop".format(r.name)
+        params:
+          RELEASE_NAME: #@ r.name
+      - task: #@ "update-compiled-releases-ops-file-{}-develop".format(r.name)
+        file: runtime-ci/tasks/update-single-compiled-release/task.yml
+        input_mapping:
+          original-compiled-releases-ops-file: #@ "updated-cf-deployment-{}-develop".format(r.name)
+          release: #@ r.name + "-release"
+        output_mapping:
+          updated-compiled-releases-ops-file: #@ "updated-cf-deployment-{}-develop".format(r.name)
+        params:
+          RELEASE_NAME: #@ r.name
+          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      on_success:
+        aggregate:
+        - put: #@ r.name + "-release-gcs"
+          params:
+            file: compiled-release-tarball/*.tgz
+            predefined_acl: publicRead
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: #@ "updated-cf-deployment-{}-develop".format(r.name)
+      on_failure:
+        put: #@ "cf-deployment-" + r.name
+        params:
+          repository: #@ "updated-cf-deployment-{}-develop".format(r.name)
     ensure:
       do:
       - #@ delete_deployment("pre-dev")
