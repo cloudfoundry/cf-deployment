@@ -243,7 +243,7 @@ func TestSemantic(t *testing.T) {
 }
 
 func TestReleaseVersions(t *testing.T) {
-	t.Run("verify relase versions", func(t *testing.T) {
+	t.Run("verify release versions", func(t *testing.T) {
 		cfDeploymentHome, err := helpers.SetPath()
 		if err != nil {
 			t.Fatalf("setup: %v", err)
