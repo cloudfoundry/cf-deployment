@@ -125,8 +125,10 @@ jobs:
   - task: #@ "update-release-" + r.name
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: #@ r.name + "-release"
       deployment-configuration: cf-deployment-develop
+      release: #@ r.name + "-release"
+    output_mapping:
+      updated-deployment-manifest: #@ "updated-cf-deployment-{}".format(r.name)
     params:
       RELEASE_NAME: #@ r.name
   #@ if r.name.count("buildpack")==0:
@@ -134,7 +136,7 @@ jobs:
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
       bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
+      cf-deployment: #@ "updated-cf-deployment-{}".format(r.name)
       ops-files: cf-deployment-develop
       #@ if hasattr(r, "varsFilesInput"):
       vars-files: #@ r.varsFilesInput
@@ -157,51 +159,39 @@ jobs:
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: #@ "updated-cf-deployment-{}".format(r.name)
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: #@ r.name
   - task: #@ "update-additional-ops-files-" + r.name
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: #@ "updated-cf-deployment-{}".format(r.name)
       release: #@ r.name + "-release"
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: #@ "updated-cf-deployment-{}".format(r.name)
     params:
       RELEASE_NAME: #@ r.name
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: #@ r.name + "-release"
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: #@ "updated-cf-deployment-{}".format(r.name)
+      release: #@ r.name + "-release"
+    output_mapping:
+      updated-compiled-releases-ops-file: #@ "updated-cf-deployment-{}".format(r.name)
     params:
       RELEASE_NAME: #@ r.name
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: #@ r.name + "-release-gcs"
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: #@ "updated-cf-deployment-{}".format(r.name)
 #@ end
 
 #@ for r in data.values.opsReleases:
@@ -260,18 +250,10 @@ jobs:
       SYSTEM_DOMAIN: greengrass.cf-app.com
       #@ if/end hasattr(r, "varsFiles"):
       VARS_FILES: #@ r.varsFiles
-  - task: #@ "commit-generated-manifest-and-ops-" + r.name
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-ops-file
-      manifest: cf-deployment-develop
-    params:
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-ops-file
 #@ end
 
 #@ for s in data.values.windowsVersSupported:
@@ -293,19 +275,10 @@ jobs:
     params:
       ORIGINAL_WINDOWS_OPS_FILE_PATH: #@ "{}/{}".format(s.opsFileDir, s.opsFile)
       UPDATED_WINDOWS_OPS_FILE_PATH: #@ s.opsFile
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-stemcell-ops-file
-      manifest: cf-deployment-develop
-    params:
-      OPS_FILE_NAME: #@ s.opsFile
-      OPS_FILE_DESTINATION: #@ "{}/{}".format(s.opsFileDir, s.opsFile)
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-stemcell-ops-file
 #@ end
 
 - name: update-stemcell-and-recompile-releases
@@ -366,15 +339,14 @@ jobs:
       #@ end
       release: #@ s.name + "-release"
       compiled-release-tarball: #@ "exported-release-" + s.name
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: #@ s.name
       #@ if hasattr(s, "bootstrap"):
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       #@ else:
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       #@ end
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   #@ end
   - aggregate:
     #@ for s in data.values.baseReleases:
@@ -383,17 +355,6 @@ jobs:
         file: #@ "exported-release-" + s.name + "/*.tgz"
         predefined_acl: publicRead
     #@ end
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-compiled-releases-ops-file
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      OPS_FILE_NAME: use-compiled-releases.yml
-      OPS_FILE_DESTINATION: operations/use-compiled-releases.yml
   - put: cf-deployment-develop
     params:
       rebase: true
@@ -423,20 +384,11 @@ jobs:
     params:
       RELEASE_NAME: windows2016fs
       ORIGINAL_OPS_FILE_PATH: operations/use-offline-windows2016fs.yml
-      UPDATED_OPS_FILE_PATH: use-offline-windows2016fs.yml
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-ops-file
-      manifest: cf-deployment-develop
-    params:
-      OPS_FILE_DESTINATION: operations/use-offline-windows2016fs.yml
-      OPS_FILE_NAME: use-offline-windows2016fs.yml
+      UPDATED_OPS_FILE_PATH: operations/use-offline-windows2016fs.yml
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-ops-file
 
 - name: setup-infrastructure-compilation
   serial: true

@@ -543,59 +543,49 @@ jobs:
   - task: update-release-binary-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: binary-buildpack-release
       deployment-configuration: cf-deployment-develop
+      release: binary-buildpack-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-binary-buildpack
     params:
       RELEASE_NAME: binary-buildpack
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-binary-buildpack
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: binary-buildpack
   - task: update-additional-ops-files-binary-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-binary-buildpack
       release: binary-buildpack-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-binary-buildpack
     params:
       RELEASE_NAME: binary-buildpack
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: binary-buildpack-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-binary-buildpack
+      release: binary-buildpack-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-binary-buildpack
     params:
       RELEASE_NAME: binary-buildpack
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: binary-buildpack-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-binary-buildpack
 - name: update-bosh-dns-aliases
   serial_groups:
   - stemcell
@@ -619,15 +609,17 @@ jobs:
   - task: update-release-bosh-dns-aliases
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: bosh-dns-aliases-release
       deployment-configuration: cf-deployment-develop
+      release: bosh-dns-aliases-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-bosh-dns-aliases
     params:
       RELEASE_NAME: bosh-dns-aliases
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
       bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
+      cf-deployment: updated-cf-deployment-bosh-dns-aliases
       ops-files: cf-deployment-develop
       vars-files: relint-envs
     params:
@@ -645,51 +637,39 @@ jobs:
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-bosh-dns-aliases
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: bosh-dns-aliases
   - task: update-additional-ops-files-bosh-dns-aliases
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-bosh-dns-aliases
       release: bosh-dns-aliases-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-bosh-dns-aliases
     params:
       RELEASE_NAME: bosh-dns-aliases
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: bosh-dns-aliases-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-bosh-dns-aliases
+      release: bosh-dns-aliases-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-bosh-dns-aliases
     params:
       RELEASE_NAME: bosh-dns-aliases
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: bosh-dns-aliases-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-bosh-dns-aliases
 - name: update-bpm
   serial_groups:
   - stemcell
@@ -713,15 +693,17 @@ jobs:
   - task: update-release-bpm
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: bpm-release
       deployment-configuration: cf-deployment-develop
+      release: bpm-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-bpm
     params:
       RELEASE_NAME: bpm
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
       bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
+      cf-deployment: updated-cf-deployment-bpm
       ops-files: cf-deployment-develop
       vars-files: relint-envs
     params:
@@ -739,51 +721,39 @@ jobs:
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-bpm
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: bpm
   - task: update-additional-ops-files-bpm
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-bpm
       release: bpm-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-bpm
     params:
       RELEASE_NAME: bpm
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: bpm-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-bpm
+      release: bpm-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-bpm
     params:
       RELEASE_NAME: bpm
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: bpm-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-bpm
 - name: update-capi
   serial_groups:
   - stemcell
@@ -807,15 +777,17 @@ jobs:
   - task: update-release-capi
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: capi-release
       deployment-configuration: cf-deployment-develop
+      release: capi-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-capi
     params:
       RELEASE_NAME: capi
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
       bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
+      cf-deployment: updated-cf-deployment-capi
       ops-files: cf-deployment-develop
       vars-files: relint-envs
     params:
@@ -833,51 +805,39 @@ jobs:
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-capi
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: capi
   - task: update-additional-ops-files-capi
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-capi
       release: capi-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-capi
     params:
       RELEASE_NAME: capi
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: capi-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-capi
+      release: capi-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-capi
     params:
       RELEASE_NAME: capi
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: capi-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-capi
 - name: update-cf-networking
   serial_groups:
   - stemcell
@@ -901,15 +861,17 @@ jobs:
   - task: update-release-cf-networking
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: cf-networking-release
       deployment-configuration: cf-deployment-develop
+      release: cf-networking-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-cf-networking
     params:
       RELEASE_NAME: cf-networking
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
       bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
+      cf-deployment: updated-cf-deployment-cf-networking
       ops-files: cf-deployment-develop
       vars-files: relint-envs
     params:
@@ -927,51 +889,39 @@ jobs:
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-cf-networking
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: cf-networking
   - task: update-additional-ops-files-cf-networking
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-cf-networking
       release: cf-networking-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-cf-networking
     params:
       RELEASE_NAME: cf-networking
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: cf-networking-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-cf-networking
+      release: cf-networking-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-cf-networking
     params:
       RELEASE_NAME: cf-networking
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: cf-networking-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-cf-networking
 - name: update-cf-smoke-tests
   serial_groups:
   - stemcell
@@ -995,15 +945,17 @@ jobs:
   - task: update-release-cf-smoke-tests
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: cf-smoke-tests-release
       deployment-configuration: cf-deployment-develop
+      release: cf-smoke-tests-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-cf-smoke-tests
     params:
       RELEASE_NAME: cf-smoke-tests
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
       bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
+      cf-deployment: updated-cf-deployment-cf-smoke-tests
       ops-files: cf-deployment-develop
       vars-files: relint-envs
     params:
@@ -1021,51 +973,39 @@ jobs:
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-cf-smoke-tests
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: cf-smoke-tests
   - task: update-additional-ops-files-cf-smoke-tests
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-cf-smoke-tests
       release: cf-smoke-tests-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-cf-smoke-tests
     params:
       RELEASE_NAME: cf-smoke-tests
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: cf-smoke-tests-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-cf-smoke-tests
+      release: cf-smoke-tests-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-cf-smoke-tests
     params:
       RELEASE_NAME: cf-smoke-tests
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: cf-smoke-tests-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-cf-smoke-tests
 - name: update-cf-syslog-drain
   serial_groups:
   - stemcell
@@ -1089,15 +1029,17 @@ jobs:
   - task: update-release-cf-syslog-drain
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: cf-syslog-drain-release
       deployment-configuration: cf-deployment-develop
+      release: cf-syslog-drain-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-cf-syslog-drain
     params:
       RELEASE_NAME: cf-syslog-drain
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
       bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
+      cf-deployment: updated-cf-deployment-cf-syslog-drain
       ops-files: cf-deployment-develop
       vars-files: relint-envs
     params:
@@ -1115,51 +1057,39 @@ jobs:
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-cf-syslog-drain
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: cf-syslog-drain
   - task: update-additional-ops-files-cf-syslog-drain
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-cf-syslog-drain
       release: cf-syslog-drain-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-cf-syslog-drain
     params:
       RELEASE_NAME: cf-syslog-drain
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: cf-syslog-drain-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-cf-syslog-drain
+      release: cf-syslog-drain-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-cf-syslog-drain
     params:
       RELEASE_NAME: cf-syslog-drain
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: cf-syslog-drain-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-cf-syslog-drain
 - name: update-cflinuxfs3
   serial_groups:
   - stemcell
@@ -1183,15 +1113,17 @@ jobs:
   - task: update-release-cflinuxfs3
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: cflinuxfs3-release
       deployment-configuration: cf-deployment-develop
+      release: cflinuxfs3-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-cflinuxfs3
     params:
       RELEASE_NAME: cflinuxfs3
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
       bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
+      cf-deployment: updated-cf-deployment-cflinuxfs3
       ops-files: cf-deployment-develop
       vars-files: relint-envs
     params:
@@ -1209,51 +1141,39 @@ jobs:
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-cflinuxfs3
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: cflinuxfs3
   - task: update-additional-ops-files-cflinuxfs3
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-cflinuxfs3
       release: cflinuxfs3-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-cflinuxfs3
     params:
       RELEASE_NAME: cflinuxfs3
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: cflinuxfs3-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-cflinuxfs3
+      release: cflinuxfs3-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-cflinuxfs3
     params:
       RELEASE_NAME: cflinuxfs3
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: cflinuxfs3-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-cflinuxfs3
 - name: update-diego
   serial_groups:
   - stemcell
@@ -1277,15 +1197,17 @@ jobs:
   - task: update-release-diego
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: diego-release
       deployment-configuration: cf-deployment-develop
+      release: diego-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-diego
     params:
       RELEASE_NAME: diego
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
       bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
+      cf-deployment: updated-cf-deployment-diego
       ops-files: cf-deployment-develop
       vars-files: relint-envs
     params:
@@ -1303,51 +1225,39 @@ jobs:
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-diego
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: diego
   - task: update-additional-ops-files-diego
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-diego
       release: diego-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-diego
     params:
       RELEASE_NAME: diego
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: diego-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-diego
+      release: diego-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-diego
     params:
       RELEASE_NAME: diego
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: diego-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-diego
 - name: update-dotnet-core-buildpack
   serial_groups:
   - stemcell
@@ -1371,59 +1281,49 @@ jobs:
   - task: update-release-dotnet-core-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: dotnet-core-buildpack-release
       deployment-configuration: cf-deployment-develop
+      release: dotnet-core-buildpack-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-dotnet-core-buildpack
     params:
       RELEASE_NAME: dotnet-core-buildpack
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-dotnet-core-buildpack
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: dotnet-core-buildpack
   - task: update-additional-ops-files-dotnet-core-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-dotnet-core-buildpack
       release: dotnet-core-buildpack-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-dotnet-core-buildpack
     params:
       RELEASE_NAME: dotnet-core-buildpack
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: dotnet-core-buildpack-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-dotnet-core-buildpack
+      release: dotnet-core-buildpack-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-dotnet-core-buildpack
     params:
       RELEASE_NAME: dotnet-core-buildpack
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: dotnet-core-buildpack-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-dotnet-core-buildpack
 - name: update-garden-runc
   serial_groups:
   - stemcell
@@ -1447,15 +1347,17 @@ jobs:
   - task: update-release-garden-runc
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: garden-runc-release
       deployment-configuration: cf-deployment-develop
+      release: garden-runc-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-garden-runc
     params:
       RELEASE_NAME: garden-runc
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
       bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
+      cf-deployment: updated-cf-deployment-garden-runc
       ops-files: cf-deployment-develop
       vars-files: relint-envs
     params:
@@ -1473,51 +1375,39 @@ jobs:
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-garden-runc
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: garden-runc
   - task: update-additional-ops-files-garden-runc
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-garden-runc
       release: garden-runc-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-garden-runc
     params:
       RELEASE_NAME: garden-runc
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: garden-runc-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-garden-runc
+      release: garden-runc-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-garden-runc
     params:
       RELEASE_NAME: garden-runc
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: garden-runc-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-garden-runc
 - name: update-go-buildpack
   serial_groups:
   - stemcell
@@ -1541,59 +1431,49 @@ jobs:
   - task: update-release-go-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: go-buildpack-release
       deployment-configuration: cf-deployment-develop
+      release: go-buildpack-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-go-buildpack
     params:
       RELEASE_NAME: go-buildpack
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-go-buildpack
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: go-buildpack
   - task: update-additional-ops-files-go-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-go-buildpack
       release: go-buildpack-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-go-buildpack
     params:
       RELEASE_NAME: go-buildpack
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: go-buildpack-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-go-buildpack
+      release: go-buildpack-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-go-buildpack
     params:
       RELEASE_NAME: go-buildpack
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: go-buildpack-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-go-buildpack
 - name: update-java-buildpack
   serial_groups:
   - stemcell
@@ -1617,59 +1497,49 @@ jobs:
   - task: update-release-java-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: java-buildpack-release
       deployment-configuration: cf-deployment-develop
+      release: java-buildpack-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-java-buildpack
     params:
       RELEASE_NAME: java-buildpack
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-java-buildpack
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: java-buildpack
   - task: update-additional-ops-files-java-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-java-buildpack
       release: java-buildpack-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-java-buildpack
     params:
       RELEASE_NAME: java-buildpack
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: java-buildpack-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-java-buildpack
+      release: java-buildpack-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-java-buildpack
     params:
       RELEASE_NAME: java-buildpack
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: java-buildpack-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-java-buildpack
 - name: update-log-cache
   serial_groups:
   - stemcell
@@ -1693,15 +1563,17 @@ jobs:
   - task: update-release-log-cache
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: log-cache-release
       deployment-configuration: cf-deployment-develop
+      release: log-cache-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-log-cache
     params:
       RELEASE_NAME: log-cache
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
       bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
+      cf-deployment: updated-cf-deployment-log-cache
       ops-files: cf-deployment-develop
       vars-files: relint-envs
     params:
@@ -1719,51 +1591,39 @@ jobs:
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-log-cache
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: log-cache
   - task: update-additional-ops-files-log-cache
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-log-cache
       release: log-cache-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-log-cache
     params:
       RELEASE_NAME: log-cache
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: log-cache-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-log-cache
+      release: log-cache-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-log-cache
     params:
       RELEASE_NAME: log-cache
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: log-cache-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-log-cache
 - name: update-loggregator
   serial_groups:
   - stemcell
@@ -1787,15 +1647,17 @@ jobs:
   - task: update-release-loggregator
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: loggregator-release
       deployment-configuration: cf-deployment-develop
+      release: loggregator-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-loggregator
     params:
       RELEASE_NAME: loggregator
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
       bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
+      cf-deployment: updated-cf-deployment-loggregator
       ops-files: cf-deployment-develop
       vars-files: relint-envs
     params:
@@ -1813,51 +1675,39 @@ jobs:
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-loggregator
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: loggregator
   - task: update-additional-ops-files-loggregator
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-loggregator
       release: loggregator-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-loggregator
     params:
       RELEASE_NAME: loggregator
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: loggregator-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-loggregator
+      release: loggregator-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-loggregator
     params:
       RELEASE_NAME: loggregator
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: loggregator-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-loggregator
 - name: update-loggregator-agent
   serial_groups:
   - stemcell
@@ -1881,15 +1731,17 @@ jobs:
   - task: update-release-loggregator-agent
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: loggregator-agent-release
       deployment-configuration: cf-deployment-develop
+      release: loggregator-agent-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-loggregator-agent
     params:
       RELEASE_NAME: loggregator-agent
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
       bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
+      cf-deployment: updated-cf-deployment-loggregator-agent
       ops-files: cf-deployment-develop
       vars-files: relint-envs
     params:
@@ -1907,51 +1759,39 @@ jobs:
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-loggregator-agent
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: loggregator-agent
   - task: update-additional-ops-files-loggregator-agent
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-loggregator-agent
       release: loggregator-agent-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-loggregator-agent
     params:
       RELEASE_NAME: loggregator-agent
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: loggregator-agent-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-loggregator-agent
+      release: loggregator-agent-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-loggregator-agent
     params:
       RELEASE_NAME: loggregator-agent
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: loggregator-agent-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-loggregator-agent
 - name: update-nats
   serial_groups:
   - stemcell
@@ -1975,15 +1815,17 @@ jobs:
   - task: update-release-nats
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: nats-release
       deployment-configuration: cf-deployment-develop
+      release: nats-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-nats
     params:
       RELEASE_NAME: nats
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
       bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
+      cf-deployment: updated-cf-deployment-nats
       ops-files: cf-deployment-develop
       vars-files: relint-envs
     params:
@@ -2001,51 +1843,39 @@ jobs:
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-nats
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: nats
   - task: update-additional-ops-files-nats
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-nats
       release: nats-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-nats
     params:
       RELEASE_NAME: nats
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: nats-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-nats
+      release: nats-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-nats
     params:
       RELEASE_NAME: nats
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: nats-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-nats
 - name: update-nginx-buildpack
   serial_groups:
   - stemcell
@@ -2069,59 +1899,49 @@ jobs:
   - task: update-release-nginx-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: nginx-buildpack-release
       deployment-configuration: cf-deployment-develop
+      release: nginx-buildpack-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-nginx-buildpack
     params:
       RELEASE_NAME: nginx-buildpack
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-nginx-buildpack
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: nginx-buildpack
   - task: update-additional-ops-files-nginx-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-nginx-buildpack
       release: nginx-buildpack-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-nginx-buildpack
     params:
       RELEASE_NAME: nginx-buildpack
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: nginx-buildpack-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-nginx-buildpack
+      release: nginx-buildpack-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-nginx-buildpack
     params:
       RELEASE_NAME: nginx-buildpack
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: nginx-buildpack-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-nginx-buildpack
 - name: update-nodejs-buildpack
   serial_groups:
   - stemcell
@@ -2145,59 +1965,49 @@ jobs:
   - task: update-release-nodejs-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: nodejs-buildpack-release
       deployment-configuration: cf-deployment-develop
+      release: nodejs-buildpack-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-nodejs-buildpack
     params:
       RELEASE_NAME: nodejs-buildpack
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-nodejs-buildpack
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: nodejs-buildpack
   - task: update-additional-ops-files-nodejs-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-nodejs-buildpack
       release: nodejs-buildpack-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-nodejs-buildpack
     params:
       RELEASE_NAME: nodejs-buildpack
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: nodejs-buildpack-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-nodejs-buildpack
+      release: nodejs-buildpack-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-nodejs-buildpack
     params:
       RELEASE_NAME: nodejs-buildpack
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: nodejs-buildpack-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-nodejs-buildpack
 - name: update-php-buildpack
   serial_groups:
   - stemcell
@@ -2221,59 +2031,49 @@ jobs:
   - task: update-release-php-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: php-buildpack-release
       deployment-configuration: cf-deployment-develop
+      release: php-buildpack-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-php-buildpack
     params:
       RELEASE_NAME: php-buildpack
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-php-buildpack
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: php-buildpack
   - task: update-additional-ops-files-php-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-php-buildpack
       release: php-buildpack-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-php-buildpack
     params:
       RELEASE_NAME: php-buildpack
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: php-buildpack-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-php-buildpack
+      release: php-buildpack-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-php-buildpack
     params:
       RELEASE_NAME: php-buildpack
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: php-buildpack-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-php-buildpack
 - name: update-python-buildpack
   serial_groups:
   - stemcell
@@ -2297,59 +2097,49 @@ jobs:
   - task: update-release-python-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: python-buildpack-release
       deployment-configuration: cf-deployment-develop
+      release: python-buildpack-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-python-buildpack
     params:
       RELEASE_NAME: python-buildpack
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-python-buildpack
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: python-buildpack
   - task: update-additional-ops-files-python-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-python-buildpack
       release: python-buildpack-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-python-buildpack
     params:
       RELEASE_NAME: python-buildpack
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: python-buildpack-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-python-buildpack
+      release: python-buildpack-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-python-buildpack
     params:
       RELEASE_NAME: python-buildpack
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: python-buildpack-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-python-buildpack
 - name: update-pxc
   serial_groups:
   - stemcell
@@ -2373,15 +2163,17 @@ jobs:
   - task: update-release-pxc
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: pxc-release
       deployment-configuration: cf-deployment-develop
+      release: pxc-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-pxc
     params:
       RELEASE_NAME: pxc
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
       bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
+      cf-deployment: updated-cf-deployment-pxc
       ops-files: cf-deployment-develop
       vars-files: relint-envs
     params:
@@ -2399,51 +2191,39 @@ jobs:
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-pxc
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: pxc
   - task: update-additional-ops-files-pxc
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-pxc
       release: pxc-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-pxc
     params:
       RELEASE_NAME: pxc
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: pxc-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-pxc
+      release: pxc-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-pxc
     params:
       RELEASE_NAME: pxc
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: pxc-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-pxc
 - name: update-r-buildpack
   serial_groups:
   - stemcell
@@ -2467,59 +2247,49 @@ jobs:
   - task: update-release-r-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: r-buildpack-release
       deployment-configuration: cf-deployment-develop
+      release: r-buildpack-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-r-buildpack
     params:
       RELEASE_NAME: r-buildpack
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-r-buildpack
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: r-buildpack
   - task: update-additional-ops-files-r-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-r-buildpack
       release: r-buildpack-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-r-buildpack
     params:
       RELEASE_NAME: r-buildpack
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: r-buildpack-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-r-buildpack
+      release: r-buildpack-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-r-buildpack
     params:
       RELEASE_NAME: r-buildpack
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: r-buildpack-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-r-buildpack
 - name: update-routing
   serial_groups:
   - stemcell
@@ -2543,15 +2313,17 @@ jobs:
   - task: update-release-routing
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: routing-release
       deployment-configuration: cf-deployment-develop
+      release: routing-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-routing
     params:
       RELEASE_NAME: routing
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
       bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
+      cf-deployment: updated-cf-deployment-routing
       ops-files: cf-deployment-develop
       vars-files: relint-envs
     params:
@@ -2569,51 +2341,39 @@ jobs:
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-routing
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: routing
   - task: update-additional-ops-files-routing
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-routing
       release: routing-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-routing
     params:
       RELEASE_NAME: routing
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: routing-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-routing
+      release: routing-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-routing
     params:
       RELEASE_NAME: routing
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: routing-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-routing
 - name: update-ruby-buildpack
   serial_groups:
   - stemcell
@@ -2637,59 +2397,49 @@ jobs:
   - task: update-release-ruby-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: ruby-buildpack-release
       deployment-configuration: cf-deployment-develop
+      release: ruby-buildpack-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-ruby-buildpack
     params:
       RELEASE_NAME: ruby-buildpack
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-ruby-buildpack
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: ruby-buildpack
   - task: update-additional-ops-files-ruby-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-ruby-buildpack
       release: ruby-buildpack-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-ruby-buildpack
     params:
       RELEASE_NAME: ruby-buildpack
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: ruby-buildpack-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-ruby-buildpack
+      release: ruby-buildpack-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-ruby-buildpack
     params:
       RELEASE_NAME: ruby-buildpack
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: ruby-buildpack-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-ruby-buildpack
 - name: update-silk
   serial_groups:
   - stemcell
@@ -2713,15 +2463,17 @@ jobs:
   - task: update-release-silk
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: silk-release
       deployment-configuration: cf-deployment-develop
+      release: silk-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-silk
     params:
       RELEASE_NAME: silk
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
       bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
+      cf-deployment: updated-cf-deployment-silk
       ops-files: cf-deployment-develop
       vars-files: relint-envs
     params:
@@ -2739,51 +2491,39 @@ jobs:
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-silk
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: silk
   - task: update-additional-ops-files-silk
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-silk
       release: silk-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-silk
     params:
       RELEASE_NAME: silk
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: silk-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-silk
+      release: silk-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-silk
     params:
       RELEASE_NAME: silk
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: silk-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-silk
 - name: update-staticfile-buildpack
   serial_groups:
   - stemcell
@@ -2807,59 +2547,49 @@ jobs:
   - task: update-release-staticfile-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: staticfile-buildpack-release
       deployment-configuration: cf-deployment-develop
+      release: staticfile-buildpack-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-staticfile-buildpack
     params:
       RELEASE_NAME: staticfile-buildpack
   - task: compile-release
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-staticfile-buildpack
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: staticfile-buildpack
   - task: update-additional-ops-files-staticfile-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-staticfile-buildpack
       release: staticfile-buildpack-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-staticfile-buildpack
     params:
       RELEASE_NAME: staticfile-buildpack
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: staticfile-buildpack-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-staticfile-buildpack
+      release: staticfile-buildpack-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-staticfile-buildpack
     params:
       RELEASE_NAME: staticfile-buildpack
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: staticfile-buildpack-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-staticfile-buildpack
 - name: update-statsd-injector
   serial_groups:
   - stemcell
@@ -2883,15 +2613,17 @@ jobs:
   - task: update-release-statsd-injector
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: statsd-injector-release
       deployment-configuration: cf-deployment-develop
+      release: statsd-injector-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-statsd-injector
     params:
       RELEASE_NAME: statsd-injector
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
       bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
+      cf-deployment: updated-cf-deployment-statsd-injector
       ops-files: cf-deployment-develop
       vars-files: relint-envs
     params:
@@ -2909,51 +2641,39 @@ jobs:
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-statsd-injector
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: statsd-injector
   - task: update-additional-ops-files-statsd-injector
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-statsd-injector
       release: statsd-injector-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-statsd-injector
     params:
       RELEASE_NAME: statsd-injector
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: statsd-injector-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-statsd-injector
+      release: statsd-injector-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-statsd-injector
     params:
       RELEASE_NAME: statsd-injector
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: statsd-injector-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-statsd-injector
 - name: update-uaa
   serial_groups:
   - stemcell
@@ -2977,15 +2697,17 @@ jobs:
   - task: update-release-uaa
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: uaa-release
       deployment-configuration: cf-deployment-develop
+      release: uaa-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-uaa
     params:
       RELEASE_NAME: uaa
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
       bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
+      cf-deployment: updated-cf-deployment-uaa
       ops-files: cf-deployment-develop
       vars-files: relint-envs
     params:
@@ -3003,51 +2725,39 @@ jobs:
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-uaa
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: uaa
   - task: update-additional-ops-files-uaa
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-uaa
       release: uaa-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-uaa
     params:
       RELEASE_NAME: uaa
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: uaa-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-uaa
+      release: uaa-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-uaa
     params:
       RELEASE_NAME: uaa
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: uaa-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-uaa
 - name: update-credhub
   serial_groups:
   - stemcell
@@ -3071,15 +2781,17 @@ jobs:
   - task: update-release-credhub
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: credhub-release
       deployment-configuration: cf-deployment-develop
+      release: credhub-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-credhub
     params:
       RELEASE_NAME: credhub
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
       bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
+      cf-deployment: updated-cf-deployment-credhub
       ops-files: cf-deployment-develop
       vars-files: relint-envs
     params:
@@ -3097,51 +2809,39 @@ jobs:
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-credhub
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: credhub
   - task: update-additional-ops-files-credhub
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-credhub
       release: credhub-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-credhub
     params:
       RELEASE_NAME: credhub
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: credhub-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-credhub
+      release: credhub-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-credhub
     params:
       RELEASE_NAME: credhub
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: credhub-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-credhub
 - name: update-cf-cli
   serial_groups:
   - stemcell
@@ -3165,15 +2865,17 @@ jobs:
   - task: update-release-cf-cli
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      release: cf-cli-release
       deployment-configuration: cf-deployment-develop
+      release: cf-cli-release
+    output_mapping:
+      updated-deployment-manifest: updated-cf-deployment-cf-cli
     params:
       RELEASE_NAME: cf-cli
   - task: bosh-dry-run
     file: runtime-ci/tasks/bosh-dry-run-with-ops/task.yml
     input_mapping:
       bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
+      cf-deployment: updated-cf-deployment-cf-cli
       ops-files: cf-deployment-develop
       vars-files: relint-envs
     params:
@@ -3191,51 +2893,39 @@ jobs:
     file: runtime-ci/tasks/compile-release-from-manifest/task.yml
     input_mapping:
       bbl-state: relint-envs
-      manifest: updated-deployment-manifest
+      manifest: updated-cf-deployment-cf-cli
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: cf-cli
   - task: update-additional-ops-files-cf-cli
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: updated-cf-deployment-cf-cli
       release: cf-cli-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-cf-cli
     params:
       RELEASE_NAME: cf-cli
   - task: update-compiled-release-ops
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
-      release: cf-cli-release
       compiled-release-tarball: exported-release
-      current-commit-message: commit-message
+      original-compiled-releases-ops-file: updated-cf-deployment-cf-cli
+      release: cf-cli-release
+    output_mapping:
+      updated-compiled-releases-ops-file: updated-cf-deployment-cf-cli
     params:
       RELEASE_NAME: cf-cli
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
       UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  - task: combine-inputs
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: updated-compiled-releases-ops-file
-      second-input: updated-ops-file
   - put: cf-cli-release-gcs
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: combined-inputs
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-cf-deployment-cf-cli
 - name: update-backup-and-restore-sdk
   serial: true
   public: true
@@ -3286,18 +2976,10 @@ jobs:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: backup-and-restore-sdk
       SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: commit-generated-manifest-and-ops-backup-and-restore-sdk
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-ops-file
-      manifest: cf-deployment-develop
-    params:
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-ops-file
 - name: update-bits-service
   serial: true
   public: true
@@ -3348,18 +3030,10 @@ jobs:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: bits-service
       SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: commit-generated-manifest-and-ops-bits-service
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-ops-file
-      manifest: cf-deployment-develop
-    params:
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-ops-file
 - name: update-cf-app-sd
   serial: true
   public: true
@@ -3410,18 +3084,10 @@ jobs:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: cf-app-sd
       SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: commit-generated-manifest-and-ops-cf-app-sd
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-ops-file
-      manifest: cf-deployment-develop
-    params:
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-ops-file
 - name: update-haproxy
   serial: true
   public: true
@@ -3473,18 +3139,10 @@ jobs:
       DEPLOYMENT_NAME_SUFFIX: haproxy
       SYSTEM_DOMAIN: greengrass.cf-app.com
       VARS_FILES: environments/test/greengrass/vars-files/haproxy-vars.yml
-  - task: commit-generated-manifest-and-ops-haproxy
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-ops-file
-      manifest: cf-deployment-develop
-    params:
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-ops-file
 - name: update-mapfs
   serial: true
   public: true
@@ -3535,18 +3193,10 @@ jobs:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: mapfs
       SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: commit-generated-manifest-and-ops-mapfs
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-ops-file
-      manifest: cf-deployment-develop
-    params:
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-ops-file
 - name: update-nfs-volume
   serial: true
   public: true
@@ -3597,18 +3247,10 @@ jobs:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: nfs-volume
       SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: commit-generated-manifest-and-ops-nfs-volume
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-ops-file
-      manifest: cf-deployment-develop
-    params:
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-ops-file
 - name: update-smb-volume
   serial: true
   public: true
@@ -3659,18 +3301,10 @@ jobs:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: smb-volume
       SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: commit-generated-manifest-and-ops-smb-volume
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-ops-file
-      manifest: cf-deployment-develop
-    params:
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-ops-file
 - name: update-postgres
   serial: true
   public: true
@@ -3721,18 +3355,10 @@ jobs:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: postgres
       SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: commit-generated-manifest-and-ops-postgres
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-ops-file
-      manifest: cf-deployment-develop
-    params:
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-ops-file
 - name: update-syslog
   serial: true
   public: true
@@ -3784,18 +3410,10 @@ jobs:
       DEPLOYMENT_NAME_SUFFIX: syslog
       SYSTEM_DOMAIN: greengrass.cf-app.com
       VARS_FILES: operations/addons/example-vars-files/vars-enable-component-syslog.yml
-  - task: commit-generated-manifest-and-ops-syslog
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-ops-file
-      manifest: cf-deployment-develop
-    params:
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-ops-file
 - name: update-windows-syslog
   serial: true
   public: true
@@ -3847,18 +3465,10 @@ jobs:
       DEPLOYMENT_NAME_SUFFIX: windows-syslog
       SYSTEM_DOMAIN: greengrass.cf-app.com
       VARS_FILES: environments/test/greengrass/vars-files/windows-enable-component-syslog-vars.yml
-  - task: commit-generated-manifest-and-ops-windows-syslog
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-ops-file
-      manifest: cf-deployment-develop
-    params:
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-ops-file
 - name: update-hwc-buildpack
   serial: true
   public: true
@@ -3909,18 +3519,10 @@ jobs:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: hwc-buildpack
       SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: commit-generated-manifest-and-ops-hwc-buildpack
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-ops-file
-      manifest: cf-deployment-develop
-    params:
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-ops-file
 - name: update-windows-utilities
   serial: true
   public: true
@@ -3971,18 +3573,10 @@ jobs:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: windows-utilities
       SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: commit-generated-manifest-and-ops-windows-utilities
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-ops-file
-      manifest: cf-deployment-develop
-    params:
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-ops-file
 - name: update-garden-windows
   serial: true
   public: true
@@ -4033,18 +3627,10 @@ jobs:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: garden-windows
       SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: commit-generated-manifest-and-ops-garden-windows
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-ops-file
-      manifest: cf-deployment-develop
-    params:
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-ops-file
 - name: update-winc
   serial: true
   public: true
@@ -4095,18 +3681,10 @@ jobs:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: winc
       SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: commit-generated-manifest-and-ops-winc
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-ops-file
-      manifest: cf-deployment-develop
-    params:
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-ops-file
 - name: update-windows1803fs
   serial: true
   public: true
@@ -4157,18 +3735,10 @@ jobs:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: windows1803fs
       SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: commit-generated-manifest-and-ops-windows1803fs
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-ops-file
-      manifest: cf-deployment-develop
-    params:
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-ops-file
 - name: update-windows2016fs
   serial: true
   public: true
@@ -4219,18 +3789,10 @@ jobs:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: windows2016fs
       SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: commit-generated-manifest-and-ops-windows2016fs
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-ops-file
-      manifest: cf-deployment-develop
-    params:
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-ops-file
 - name: update-node-exporter
   serial: true
   public: true
@@ -4281,18 +3843,10 @@ jobs:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: node-exporter
       SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: commit-generated-manifest-and-ops-node-exporter
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-ops-file
-      manifest: cf-deployment-develop
-    params:
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-ops-file
 - name: update-leadership-election
   serial: true
   public: true
@@ -4343,18 +3897,10 @@ jobs:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: leadership-election
       SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: commit-generated-manifest-and-ops-leadership-election
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-ops-file
-      manifest: cf-deployment-develop
-    params:
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-ops-file
 - name: update-metric-store
   serial: true
   public: true
@@ -4405,18 +3951,10 @@ jobs:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       DEPLOYMENT_NAME_SUFFIX: metric-store
       SYSTEM_DOMAIN: greengrass.cf-app.com
-  - task: commit-generated-manifest-and-ops-metric-store
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-ops-file
-      manifest: cf-deployment-develop
-    params:
-      COMMIT_ALL_OPS_FILES: true
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-ops-file
 - name: update-windows2012R2-stemcell
   public: true
   plan:
@@ -4435,19 +3973,10 @@ jobs:
     params:
       ORIGINAL_WINDOWS_OPS_FILE_PATH: operations/windows2012R2-cell.yml
       UPDATED_WINDOWS_OPS_FILE_PATH: windows2012R2-cell.yml
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-stemcell-ops-file
-      manifest: cf-deployment-develop
-    params:
-      OPS_FILE_NAME: windows2012R2-cell.yml
-      OPS_FILE_DESTINATION: operations/windows2012R2-cell.yml
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-stemcell-ops-file
 - name: update-windows2016-stemcell
   public: true
   plan:
@@ -4466,19 +3995,10 @@ jobs:
     params:
       ORIGINAL_WINDOWS_OPS_FILE_PATH: operations/windows2016-cell.yml
       UPDATED_WINDOWS_OPS_FILE_PATH: windows2016-cell.yml
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-stemcell-ops-file
-      manifest: cf-deployment-develop
-    params:
-      OPS_FILE_NAME: windows2016-cell.yml
-      OPS_FILE_DESTINATION: operations/windows2016-cell.yml
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-stemcell-ops-file
 - name: update-windows1803-stemcell
   public: true
   plan:
@@ -4497,19 +4017,10 @@ jobs:
     params:
       ORIGINAL_WINDOWS_OPS_FILE_PATH: operations/windows1803-cell.yml
       UPDATED_WINDOWS_OPS_FILE_PATH: windows1803-cell.yml
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-stemcell-ops-file
-      manifest: cf-deployment-develop
-    params:
-      OPS_FILE_NAME: windows1803-cell.yml
-      OPS_FILE_DESTINATION: operations/windows1803-cell.yml
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-stemcell-ops-file
 - name: update-windows2019-stemcell
   public: true
   plan:
@@ -4528,19 +4039,10 @@ jobs:
     params:
       ORIGINAL_WINDOWS_OPS_FILE_PATH: operations/windows2019-cell.yml
       UPDATED_WINDOWS_OPS_FILE_PATH: windows2019-cell.yml
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-stemcell-ops-file
-      manifest: cf-deployment-develop
-    params:
-      OPS_FILE_NAME: windows2019-cell.yml
-      OPS_FILE_DESTINATION: operations/windows2019-cell.yml
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-stemcell-ops-file
 - name: update-stemcell-and-recompile-releases
   public: true
   serial_groups:
@@ -5008,341 +4510,310 @@ jobs:
       original-compiled-releases-ops-file: cf-deployment-develop
       release: binary-buildpack-release
       compiled-release-tarball: exported-release-binary-buildpack
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: binary-buildpack
       ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-bosh-dns-aliases
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: bosh-dns-aliases-release
       compiled-release-tarball: exported-release-bosh-dns-aliases
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: bosh-dns-aliases
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-bpm
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: bpm-release
       compiled-release-tarball: exported-release-bpm
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: bpm
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-capi
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: capi-release
       compiled-release-tarball: exported-release-capi
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: capi
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-cf-networking
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: cf-networking-release
       compiled-release-tarball: exported-release-cf-networking
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: cf-networking
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-cf-smoke-tests
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: cf-smoke-tests-release
       compiled-release-tarball: exported-release-cf-smoke-tests
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: cf-smoke-tests
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-cf-syslog-drain
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: cf-syslog-drain-release
       compiled-release-tarball: exported-release-cf-syslog-drain
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: cf-syslog-drain
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-cflinuxfs3
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: cflinuxfs3-release
       compiled-release-tarball: exported-release-cflinuxfs3
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: cflinuxfs3
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-diego
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: diego-release
       compiled-release-tarball: exported-release-diego
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: diego
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-dotnet-core-buildpack
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: dotnet-core-buildpack-release
       compiled-release-tarball: exported-release-dotnet-core-buildpack
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: dotnet-core-buildpack
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-garden-runc
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: garden-runc-release
       compiled-release-tarball: exported-release-garden-runc
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: garden-runc
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-go-buildpack
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: go-buildpack-release
       compiled-release-tarball: exported-release-go-buildpack
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: go-buildpack
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-java-buildpack
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: java-buildpack-release
       compiled-release-tarball: exported-release-java-buildpack
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: java-buildpack
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-log-cache
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: log-cache-release
       compiled-release-tarball: exported-release-log-cache
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: log-cache
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-loggregator
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: loggregator-release
       compiled-release-tarball: exported-release-loggregator
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: loggregator
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-loggregator-agent
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: loggregator-agent-release
       compiled-release-tarball: exported-release-loggregator-agent
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: loggregator-agent
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-nats
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: nats-release
       compiled-release-tarball: exported-release-nats
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: nats
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-nginx-buildpack
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: nginx-buildpack-release
       compiled-release-tarball: exported-release-nginx-buildpack
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: nginx-buildpack
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-nodejs-buildpack
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: nodejs-buildpack-release
       compiled-release-tarball: exported-release-nodejs-buildpack
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: nodejs-buildpack
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-php-buildpack
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: php-buildpack-release
       compiled-release-tarball: exported-release-php-buildpack
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: php-buildpack
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-python-buildpack
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: python-buildpack-release
       compiled-release-tarball: exported-release-python-buildpack
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: python-buildpack
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-pxc
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: pxc-release
       compiled-release-tarball: exported-release-pxc
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: pxc
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-r-buildpack
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: r-buildpack-release
       compiled-release-tarball: exported-release-r-buildpack
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: r-buildpack
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-routing
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: routing-release
       compiled-release-tarball: exported-release-routing
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: routing
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-ruby-buildpack
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: ruby-buildpack-release
       compiled-release-tarball: exported-release-ruby-buildpack
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: ruby-buildpack
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-silk
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: silk-release
       compiled-release-tarball: exported-release-silk
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: silk
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-staticfile-buildpack
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: staticfile-buildpack-release
       compiled-release-tarball: exported-release-staticfile-buildpack
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: staticfile-buildpack
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-statsd-injector
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: statsd-injector-release
       compiled-release-tarball: exported-release-statsd-injector
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: statsd-injector
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-uaa
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: uaa-release
       compiled-release-tarball: exported-release-uaa
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: uaa
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-credhub
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: credhub-release
       compiled-release-tarball: exported-release-credhub
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: credhub
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - task: update-compiled-releases-ops-cf-cli
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       release: cf-cli-release
       compiled-release-tarball: exported-release-cf-cli
-      current-commit-message: commit-message
     params:
       RELEASE_NAME: cf-cli
-      ORIGINAL_OPS_FILE_PATH: use-compiled-releases.yml
-      UPDATED_OPS_FILE_PATH: use-compiled-releases.yml
+      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
   - aggregate:
     - put: binary-buildpack-release-gcs
       params:
@@ -5468,17 +4939,6 @@ jobs:
       params:
         file: exported-release-cf-cli/*.tgz
         predefined_acl: publicRead
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-compiled-releases-ops-file
-      manifest: updated-deployment-manifest
-    params:
-      MANIFEST_NAME: cf-deployment.yml
-      MANIFEST_DESTINATION: cf-deployment.yml
-      OPS_FILE_NAME: use-compiled-releases.yml
-      OPS_FILE_DESTINATION: operations/use-compiled-releases.yml
   - put: cf-deployment-develop
     params:
       rebase: true
@@ -5507,20 +4967,11 @@ jobs:
     params:
       RELEASE_NAME: windows2016fs
       ORIGINAL_OPS_FILE_PATH: operations/use-offline-windows2016fs.yml
-      UPDATED_OPS_FILE_PATH: use-offline-windows2016fs.yml
-  - task: commit-generated-manifest-and-ops
-    file: runtime-ci/tasks/commit-generated-manifest/task.yml
-    input_mapping:
-      repo: cf-deployment-develop
-      ops-file: updated-ops-file
-      manifest: cf-deployment-develop
-    params:
-      OPS_FILE_DESTINATION: operations/use-offline-windows2016fs.yml
-      OPS_FILE_NAME: use-offline-windows2016fs.yml
+      UPDATED_OPS_FILE_PATH: operations/use-offline-windows2016fs.yml
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-repo
+      repository: updated-ops-file
 - name: setup-infrastructure-compilation
   serial: true
   public: true
