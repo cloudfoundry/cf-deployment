@@ -4,3 +4,12 @@
 - type: replace
   path: /addons/name=loggregator_agent/jobs/name=loggregator_agent/properties/deployment?
   value: ((loggregator_agent_deployment))
+- type: replace
+  path: /addons/name=loggregator_agent/jobs/name=loggregator_agent/properties/tags?/deployment
+  value: ((loggregator_agent_deployment))
+- type: replace
+  path: /addons/name=forwarder_agent/jobs/name=loggr-forwarder-agent/properties/deployment?
+  value: ((loggregator_agent_deployment))
+- type: replace
+  path: /addons/name=forwarder_agent/jobs/name=loggr-forwarder-agent/properties/tags?/deployment
+  value: ((loggregator_agent_deployment))
