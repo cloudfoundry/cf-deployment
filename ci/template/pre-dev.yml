@@ -58,15 +58,6 @@ resources:
     uri: git@github.com:cloudfoundry/cf-deployment.git
     private_key: ((cf_deployment_readwrite_deploy_key.private_key))
 
-#@ for r in data.values.baseReleases:
-- name: #@ "cf-deployment-" + r.name
-  type: git
-  source:
-    branch: #@ "update-{}-release".format(r.name)
-    uri: git@github.com:cloudfoundry/cf-deployment.git
-    private_key: ((cf_deployment_readwrite_deploy_key.private_key))
-
-#@ end
 - name: stemcell
   type: bosh-io-stemcell
   source:
@@ -221,9 +212,14 @@ jobs:
             rebase: true
             repository: #@ "updated-cf-deployment-{}-develop".format(r.name)
       on_failure:
-        put: #@ "cf-deployment-" + r.name
+        task: push-to-release-branch
+        file: runtime-ci/tasks/push-to-release-branch/task.yml
+        input_mapping:
+          cf-deployment: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
+          release: #@ r.name + "-release"
         params:
-          repository: #@ "updated-cf-deployment-{}-develop".format(r.name)
+          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+          RELEASE_NAME: #@ r.name
     ensure:
       do:
       - #@ delete_deployment("pre-dev")
