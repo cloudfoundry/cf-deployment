@@ -53,6 +53,7 @@ test_standard_ops() {
       check_interpolation "name: use-gcs-blobstore-access-key.yml" "use-external-blobstore.yml -o use-gcs-blobstore-access-key.yml
       -v blobstore_access_key_id=TEST_ACCESS_KEY -v blobstore_secret_access_key=TEST_SECRET_ACCESS_KEY -l example-vars-files/vars-use-gcs-blobstore-access-key.yml"
       check_interpolation "use-haproxy.yml" "-v haproxy_private_ip=10.0.10.10"
+      check_interpolation "use-internal-lookup-for-route-services.yml"
       check_interpolation "name: use-haproxy-public-network.yml" "use-haproxy.yml" "-o use-haproxy-public-network.yml -v haproxy_public_network_name=public -v haproxy_public_ip=6.7.8.9"
       check_latest        "use-latest-stemcell.yml" "default"
       check_latest        "use-latest-windows1803-stemcell.yml" "windows1803" "-o windows1803-cell.yml"
