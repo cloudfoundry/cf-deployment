@@ -466,6 +466,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-binary-buildpack
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -633,6 +640,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-bosh-dns-aliases
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -800,6 +814,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-bpm
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -967,6 +988,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-capi
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -1134,6 +1162,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-cf-networking
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -1301,6 +1336,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-cf-smoke-tests
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -1468,6 +1510,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-cf-syslog-drain
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -1635,6 +1684,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-cflinuxfs3
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -1802,6 +1858,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-diego
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -1969,6 +2032,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-dotnet-core-buildpack
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -2136,6 +2206,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-garden-runc
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -2303,6 +2380,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-go-buildpack
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -2470,6 +2554,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-java-buildpack
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -2637,6 +2728,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-log-cache
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -2804,6 +2902,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-loggregator
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -2971,6 +3076,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-loggregator-agent
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -3138,6 +3250,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-nats
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -3305,6 +3424,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-nginx-buildpack
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -3472,6 +3598,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-nodejs-buildpack
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -3639,6 +3772,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-php-buildpack
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -3806,6 +3946,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-python-buildpack
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -3973,6 +4120,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-pxc
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -4140,6 +4294,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-r-buildpack
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -4307,6 +4468,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-routing
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -4474,6 +4642,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-ruby-buildpack
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -4641,6 +4816,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-silk
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -4808,6 +4990,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-staticfile-buildpack
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -4975,6 +5164,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-statsd-injector
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -5142,6 +5338,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-uaa
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -5309,6 +5512,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-credhub
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -5476,6 +5686,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: export-compiled-release-cf-cli
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:

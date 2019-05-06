@@ -62,6 +62,7 @@ resources:
   type: bosh-io-stemcell
   source:
     name: bosh-google-kvm-ubuntu-xenial-go_agent
+
 - name: cf-deployment-concourse-tasks
   type: git
   source:
@@ -164,6 +165,13 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: "--parallel 50"
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: #@ "export-compiled-release-" + r.name
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
