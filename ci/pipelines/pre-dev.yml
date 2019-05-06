@@ -517,7 +517,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-binary-buildpack-release-candidate
+          updated-cf-deployment: updated-cf-deployment-binary-buildpack-release-candidate
           release: binary-buildpack-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -684,7 +684,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-bosh-dns-aliases-release-candidate
+          updated-cf-deployment: updated-cf-deployment-bosh-dns-aliases-release-candidate
           release: bosh-dns-aliases-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -851,7 +851,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-bpm-release-candidate
+          updated-cf-deployment: updated-cf-deployment-bpm-release-candidate
           release: bpm-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -1018,7 +1018,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-capi-release-candidate
+          updated-cf-deployment: updated-cf-deployment-capi-release-candidate
           release: capi-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -1185,7 +1185,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-cf-networking-release-candidate
+          updated-cf-deployment: updated-cf-deployment-cf-networking-release-candidate
           release: cf-networking-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -1352,7 +1352,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-cf-smoke-tests-release-candidate
+          updated-cf-deployment: updated-cf-deployment-cf-smoke-tests-release-candidate
           release: cf-smoke-tests-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -1519,7 +1519,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-cf-syslog-drain-release-candidate
+          updated-cf-deployment: updated-cf-deployment-cf-syslog-drain-release-candidate
           release: cf-syslog-drain-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -1686,7 +1686,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-cflinuxfs3-release-candidate
+          updated-cf-deployment: updated-cf-deployment-cflinuxfs3-release-candidate
           release: cflinuxfs3-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -1853,7 +1853,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-diego-release-candidate
+          updated-cf-deployment: updated-cf-deployment-diego-release-candidate
           release: diego-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -2020,7 +2020,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-dotnet-core-buildpack-release-candidate
+          updated-cf-deployment: updated-cf-deployment-dotnet-core-buildpack-release-candidate
           release: dotnet-core-buildpack-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -2187,7 +2187,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-garden-runc-release-candidate
+          updated-cf-deployment: updated-cf-deployment-garden-runc-release-candidate
           release: garden-runc-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -2354,7 +2354,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-go-buildpack-release-candidate
+          updated-cf-deployment: updated-cf-deployment-go-buildpack-release-candidate
           release: go-buildpack-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -2521,7 +2521,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-java-buildpack-release-candidate
+          updated-cf-deployment: updated-cf-deployment-java-buildpack-release-candidate
           release: java-buildpack-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -2688,7 +2688,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-log-cache-release-candidate
+          updated-cf-deployment: updated-cf-deployment-log-cache-release-candidate
           release: log-cache-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -2855,7 +2855,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-loggregator-release-candidate
+          updated-cf-deployment: updated-cf-deployment-loggregator-release-candidate
           release: loggregator-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -3022,7 +3022,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-loggregator-agent-release-candidate
+          updated-cf-deployment: updated-cf-deployment-loggregator-agent-release-candidate
           release: loggregator-agent-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -3189,7 +3189,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-nats-release-candidate
+          updated-cf-deployment: updated-cf-deployment-nats-release-candidate
           release: nats-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -3356,7 +3356,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-nginx-buildpack-release-candidate
+          updated-cf-deployment: updated-cf-deployment-nginx-buildpack-release-candidate
           release: nginx-buildpack-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -3523,7 +3523,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-nodejs-buildpack-release-candidate
+          updated-cf-deployment: updated-cf-deployment-nodejs-buildpack-release-candidate
           release: nodejs-buildpack-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -3690,7 +3690,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-php-buildpack-release-candidate
+          updated-cf-deployment: updated-cf-deployment-php-buildpack-release-candidate
           release: php-buildpack-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -3857,7 +3857,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-python-buildpack-release-candidate
+          updated-cf-deployment: updated-cf-deployment-python-buildpack-release-candidate
           release: python-buildpack-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -4024,7 +4024,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-pxc-release-candidate
+          updated-cf-deployment: updated-cf-deployment-pxc-release-candidate
           release: pxc-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -4191,7 +4191,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-r-buildpack-release-candidate
+          updated-cf-deployment: updated-cf-deployment-r-buildpack-release-candidate
           release: r-buildpack-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -4358,7 +4358,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-routing-release-candidate
+          updated-cf-deployment: updated-cf-deployment-routing-release-candidate
           release: routing-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -4525,7 +4525,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-ruby-buildpack-release-candidate
+          updated-cf-deployment: updated-cf-deployment-ruby-buildpack-release-candidate
           release: ruby-buildpack-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -4692,7 +4692,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-silk-release-candidate
+          updated-cf-deployment: updated-cf-deployment-silk-release-candidate
           release: silk-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -4859,7 +4859,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-staticfile-buildpack-release-candidate
+          updated-cf-deployment: updated-cf-deployment-staticfile-buildpack-release-candidate
           release: staticfile-buildpack-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -5026,7 +5026,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-statsd-injector-release-candidate
+          updated-cf-deployment: updated-cf-deployment-statsd-injector-release-candidate
           release: statsd-injector-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -5193,7 +5193,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-uaa-release-candidate
+          updated-cf-deployment: updated-cf-deployment-uaa-release-candidate
           release: uaa-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -5360,7 +5360,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-credhub-release-candidate
+          updated-cf-deployment: updated-cf-deployment-credhub-release-candidate
           release: credhub-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -5527,7 +5527,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: updated-cf-deployment-cf-cli-release-candidate
+          updated-cf-deployment: updated-cf-deployment-cf-cli-release-candidate
           release: cf-cli-release
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))

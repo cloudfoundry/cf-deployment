@@ -215,7 +215,7 @@ jobs:
         task: push-to-release-branch
         file: runtime-ci/tasks/push-to-release-branch/task.yml
         input_mapping:
-          cf-deployment: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
+          updated-cf-deployment: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
           release: #@ r.name + "-release"
         params:
           DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
