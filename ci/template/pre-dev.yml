@@ -36,6 +36,13 @@ resource_types:
   source:
     repository: frodenas/gcs-resource
 
+- name: slack-notification
+  type: docker-image
+  source:
+    repository: cfcommunity/slack-notification-resource
+    tag: latest
+
+
 resources:
 #@ for r in data.values.baseReleases:
 - name: #@ r.name + "-release"
@@ -82,6 +89,13 @@ resources:
     uri: git@github.com:cloudfoundry/relint-envs.git
     private_key: ((hagrid_env_readwrite_deploy_key.private_key))
 
+- name: relint-team
+  type: git
+  source:
+    branch: master
+    uri: git@github.com:cloudfoundry/relint-team.git
+    private_key: ((runtime_ci_private_read_deploy_key.private_key))
+
 #@ for r in data.values.baseReleases:
 - name: #@ r.name + "-release-gcs"
   type: gcs-resource
@@ -91,6 +105,12 @@ resources:
     regexp: #@ r.name + "-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz"
 
 #@ end
+
+- name: slack-alert
+  type: slack-notification
+  source:
+    url: ((relint_slack_incoming_webhook))
+
 jobs:
 #@ for r in data.values.baseReleases:
 - name: #@ "update-" + r.name
@@ -111,6 +131,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: #@ "update-release-{}-release-candidate".format(r.name)
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -210,7 +231,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: #@ r.name + "-release-gcs"
           params:
             file: compiled-release-tarball/*.tgz
@@ -220,14 +241,27 @@ jobs:
             rebase: true
             repository: #@ "updated-cf-deployment-{}-develop".format(r.name)
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
-          release: #@ r.name + "-release"
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: #@ r.name
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
+            release: #@ r.name + "-release"
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: #@ r.name
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: #@ r.name + "-release"
+          params:
+            RELEASE_NAME: #@ r.name
+        - put: slack-alert
+          params:
+            channel_file: slack-message/channel.txt
+            text_file: slack-message/message.txt
+            username: "Release Integration"
+            icon_emoji: ":cloudfoundrylogo:"
     ensure:
       do:
       - #@ delete_deployment("pre-dev")
