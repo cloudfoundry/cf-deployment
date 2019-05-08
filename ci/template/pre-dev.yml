@@ -256,6 +256,7 @@ jobs:
             release: #@ r.name + "-release"
           params:
             RELEASE_NAME: #@ r.name
+            REPOSITORY: #@ r.repository
         - put: slack-alert
           params:
             channel_file: slack-message/channel.txt
