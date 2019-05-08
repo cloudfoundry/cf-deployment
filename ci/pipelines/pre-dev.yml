@@ -552,9 +552,9 @@ jobs:
             release: binary-buildpack-release
           params:
             RELEASE_NAME: binary-buildpack
+            REPOSITORY: cloudfoundry/binary-buildpack-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -740,9 +740,9 @@ jobs:
             release: bosh-dns-aliases-release
           params:
             RELEASE_NAME: bosh-dns-aliases
+            REPOSITORY: cloudfoundry/bosh-dns-aliases-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -928,9 +928,9 @@ jobs:
             release: bpm-release
           params:
             RELEASE_NAME: bpm
+            REPOSITORY: cloudfoundry-incubator/bpm-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -1116,9 +1116,9 @@ jobs:
             release: capi-release
           params:
             RELEASE_NAME: capi
+            REPOSITORY: cloudfoundry/capi-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -1304,9 +1304,9 @@ jobs:
             release: cf-networking-release
           params:
             RELEASE_NAME: cf-networking
+            REPOSITORY: cloudfoundry/cf-networking-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -1492,9 +1492,9 @@ jobs:
             release: cf-smoke-tests-release
           params:
             RELEASE_NAME: cf-smoke-tests
+            REPOSITORY: cloudfoundry/cf-smoke-tests-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -1680,9 +1680,9 @@ jobs:
             release: cf-syslog-drain-release
           params:
             RELEASE_NAME: cf-syslog-drain
+            REPOSITORY: cloudfoundry/cf-syslog-drain-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -1868,9 +1868,9 @@ jobs:
             release: cflinuxfs3-release
           params:
             RELEASE_NAME: cflinuxfs3
+            REPOSITORY: cloudfoundry/cflinuxfs3-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -2056,9 +2056,9 @@ jobs:
             release: diego-release
           params:
             RELEASE_NAME: diego
+            REPOSITORY: cloudfoundry/diego-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -2244,9 +2244,9 @@ jobs:
             release: dotnet-core-buildpack-release
           params:
             RELEASE_NAME: dotnet-core-buildpack
+            REPOSITORY: cloudfoundry/dotnet-core-buildpack-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -2432,9 +2432,9 @@ jobs:
             release: garden-runc-release
           params:
             RELEASE_NAME: garden-runc
+            REPOSITORY: cloudfoundry/garden-runc-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -2620,9 +2620,9 @@ jobs:
             release: go-buildpack-release
           params:
             RELEASE_NAME: go-buildpack
+            REPOSITORY: cloudfoundry/go-buildpack-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -2808,9 +2808,9 @@ jobs:
             release: java-buildpack-release
           params:
             RELEASE_NAME: java-buildpack
+            REPOSITORY: cloudfoundry/java-buildpack-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -2996,9 +2996,9 @@ jobs:
             release: log-cache-release
           params:
             RELEASE_NAME: log-cache
+            REPOSITORY: cloudfoundry/log-cache-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -3184,9 +3184,9 @@ jobs:
             release: loggregator-release
           params:
             RELEASE_NAME: loggregator
+            REPOSITORY: cloudfoundry/loggregator-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -3372,9 +3372,9 @@ jobs:
             release: loggregator-agent-release
           params:
             RELEASE_NAME: loggregator-agent
+            REPOSITORY: cloudfoundry/loggregator-agent-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -3560,9 +3560,9 @@ jobs:
             release: nats-release
           params:
             RELEASE_NAME: nats
+            REPOSITORY: cloudfoundry/nats-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -3748,9 +3748,9 @@ jobs:
             release: nginx-buildpack-release
           params:
             RELEASE_NAME: nginx-buildpack
+            REPOSITORY: cloudfoundry/nginx-buildpack-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -3936,9 +3936,9 @@ jobs:
             release: nodejs-buildpack-release
           params:
             RELEASE_NAME: nodejs-buildpack
+            REPOSITORY: cloudfoundry/nodejs-buildpack-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -4124,9 +4124,9 @@ jobs:
             release: php-buildpack-release
           params:
             RELEASE_NAME: php-buildpack
+            REPOSITORY: cloudfoundry/php-buildpack-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -4312,9 +4312,9 @@ jobs:
             release: python-buildpack-release
           params:
             RELEASE_NAME: python-buildpack
+            REPOSITORY: cloudfoundry/python-buildpack-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -4500,9 +4500,9 @@ jobs:
             release: pxc-release
           params:
             RELEASE_NAME: pxc
+            REPOSITORY: cloudfoundry-incubator/pxc-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -4688,9 +4688,9 @@ jobs:
             release: r-buildpack-release
           params:
             RELEASE_NAME: r-buildpack
+            REPOSITORY: cloudfoundry/r-buildpack-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -4876,9 +4876,9 @@ jobs:
             release: routing-release
           params:
             RELEASE_NAME: routing
+            REPOSITORY: cloudfoundry-incubator/cf-routing-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -5064,9 +5064,9 @@ jobs:
             release: ruby-buildpack-release
           params:
             RELEASE_NAME: ruby-buildpack
+            REPOSITORY: cloudfoundry/ruby-buildpack-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -5252,9 +5252,9 @@ jobs:
             release: silk-release
           params:
             RELEASE_NAME: silk
+            REPOSITORY: cloudfoundry/silk-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -5440,9 +5440,9 @@ jobs:
             release: staticfile-buildpack-release
           params:
             RELEASE_NAME: staticfile-buildpack
+            REPOSITORY: cloudfoundry/staticfile-buildpack-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -5628,9 +5628,9 @@ jobs:
             release: statsd-injector-release
           params:
             RELEASE_NAME: statsd-injector
+            REPOSITORY: cloudfoundry/statsd-injector-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -5816,9 +5816,9 @@ jobs:
             release: uaa-release
           params:
             RELEASE_NAME: uaa
+            REPOSITORY: cloudfoundry/uaa-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -6004,9 +6004,9 @@ jobs:
             release: credhub-release
           params:
             RELEASE_NAME: credhub
+            REPOSITORY: pivotal-cf/credhub-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'
@@ -6192,9 +6192,9 @@ jobs:
             release: cf-cli-release
           params:
             RELEASE_NAME: cf-cli
+            REPOSITORY: bosh-packages/cf-cli-release
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: Release Integration
             icon_emoji: ':cloudfoundrylogo:'

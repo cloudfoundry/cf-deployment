@@ -259,7 +259,8 @@ jobs:
             REPOSITORY: #@ r.repository
         - put: slack-alert
           params:
-            channel_file: slack-message/channel.txt
+            #! TODO(cdutra, webdave): Uncomment following line when we go live
+            #! channel_file: slack-message/channel.txt
             text_file: slack-message/message.txt
             username: "Release Integration"
             icon_emoji: ":cloudfoundrylogo:"
