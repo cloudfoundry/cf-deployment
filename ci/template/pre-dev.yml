@@ -104,7 +104,14 @@ resources:
     json_key: ((concourse_gcp_service_account_json))
     regexp: #@ r.name + "-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz"
 
+- name: #@ r.name + "-component-bump-logs-gcs"
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: #@ r.name + "/cf-(\d+)-(\d+)-(\d+)\.tgz"
 #@ end
+
 
 - name: slack-alert
   type: slack-notification
@@ -250,6 +257,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: #@ r.name
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: #@ r.name + "-component-bump-logs-gcs"
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -257,6 +273,7 @@ jobs:
           params:
             RELEASE_NAME: #@ r.name
             REPOSITORY: #@ r.repository
+            BOSH_LOGS_PREFIX: #@ "https://storage.cloud.google.com/component-bump-logs/" + r.name
         - put: slack-alert
           params:
             #! TODO(cdutra, webdave): Uncomment following line when we go live

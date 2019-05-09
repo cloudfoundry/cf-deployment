@@ -215,186 +215,372 @@ resources:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: binary-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: binary-buildpack-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: binary-buildpack/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: bosh-dns-aliases-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: bosh-dns-aliases-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: bosh-dns-aliases-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: bosh-dns-aliases/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: bpm-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: bpm-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: bpm-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: bpm/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: capi-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: capi-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: capi-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: capi/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: cf-networking-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: cf-networking-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: cf-networking-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: cf-networking/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: cf-smoke-tests-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: cf-smoke-tests-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: cf-smoke-tests-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: cf-smoke-tests/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: cf-syslog-drain-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: cf-syslog-drain-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: cf-syslog-drain-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: cf-syslog-drain/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: cflinuxfs3-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: cflinuxfs3-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: cflinuxfs3-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: cflinuxfs3/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: diego-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: diego-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: diego-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: diego/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: dotnet-core-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: dotnet-core-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: dotnet-core-buildpack-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: dotnet-core-buildpack/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: garden-runc-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: garden-runc-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: garden-runc-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: garden-runc/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: go-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: go-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: go-buildpack-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: go-buildpack/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: java-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: java-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: java-buildpack-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: java-buildpack/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: log-cache-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: log-cache-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: log-cache-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: log-cache/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: loggregator-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: loggregator-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: loggregator-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: loggregator/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: loggregator-agent-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: loggregator-agent-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: loggregator-agent-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: loggregator-agent/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: nats-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: nats-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: nats-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: nats/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: nginx-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: nginx-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: nginx-buildpack-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: nginx-buildpack/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: nodejs-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: nodejs-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: nodejs-buildpack-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: nodejs-buildpack/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: php-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: php-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: php-buildpack-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: php-buildpack/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: python-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: python-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: python-buildpack-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: python-buildpack/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: pxc-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: pxc-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: pxc-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: pxc/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: r-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: r-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: r-buildpack-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: r-buildpack/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: routing-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: routing-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: routing-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: routing/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: ruby-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: ruby-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: ruby-buildpack-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: ruby-buildpack/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: silk-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: silk-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: silk-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: silk/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: staticfile-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: staticfile-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: staticfile-buildpack-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: staticfile-buildpack/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: statsd-injector-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: statsd-injector-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: statsd-injector-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: statsd-injector/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: uaa-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: uaa-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: uaa-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: uaa/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: credhub-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: credhub-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: credhub-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: credhub/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: cf-cli-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: cf-cli-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: cf-cli-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: cf-cli/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: slack-alert
   type: slack-notification
   source:
@@ -546,6 +732,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: binary-buildpack
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: binary-buildpack-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -553,6 +748,7 @@ jobs:
           params:
             RELEASE_NAME: binary-buildpack
             REPOSITORY: cloudfoundry/binary-buildpack-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/binary-buildpack
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -734,6 +930,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: bosh-dns-aliases
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: bosh-dns-aliases-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -741,6 +946,7 @@ jobs:
           params:
             RELEASE_NAME: bosh-dns-aliases
             REPOSITORY: cloudfoundry/bosh-dns-aliases-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/bosh-dns-aliases
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -922,6 +1128,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: bpm
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: bpm-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -929,6 +1144,7 @@ jobs:
           params:
             RELEASE_NAME: bpm
             REPOSITORY: cloudfoundry-incubator/bpm-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/bpm
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -1110,6 +1326,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: capi
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: capi-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -1117,6 +1342,7 @@ jobs:
           params:
             RELEASE_NAME: capi
             REPOSITORY: cloudfoundry/capi-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/capi
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -1298,6 +1524,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: cf-networking
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: cf-networking-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -1305,6 +1540,7 @@ jobs:
           params:
             RELEASE_NAME: cf-networking
             REPOSITORY: cloudfoundry/cf-networking-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/cf-networking
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -1486,6 +1722,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: cf-smoke-tests
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: cf-smoke-tests-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -1493,6 +1738,7 @@ jobs:
           params:
             RELEASE_NAME: cf-smoke-tests
             REPOSITORY: cloudfoundry/cf-smoke-tests-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/cf-smoke-tests
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -1674,6 +1920,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: cf-syslog-drain
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: cf-syslog-drain-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -1681,6 +1936,7 @@ jobs:
           params:
             RELEASE_NAME: cf-syslog-drain
             REPOSITORY: cloudfoundry/cf-syslog-drain-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/cf-syslog-drain
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -1862,6 +2118,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: cflinuxfs3
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: cflinuxfs3-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -1869,6 +2134,7 @@ jobs:
           params:
             RELEASE_NAME: cflinuxfs3
             REPOSITORY: cloudfoundry/cflinuxfs3-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/cflinuxfs3
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -2050,6 +2316,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: diego
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: diego-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -2057,6 +2332,7 @@ jobs:
           params:
             RELEASE_NAME: diego
             REPOSITORY: cloudfoundry/diego-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/diego
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -2238,6 +2514,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: dotnet-core-buildpack
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: dotnet-core-buildpack-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -2245,6 +2530,7 @@ jobs:
           params:
             RELEASE_NAME: dotnet-core-buildpack
             REPOSITORY: cloudfoundry/dotnet-core-buildpack-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/dotnet-core-buildpack
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -2426,6 +2712,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: garden-runc
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: garden-runc-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -2433,6 +2728,7 @@ jobs:
           params:
             RELEASE_NAME: garden-runc
             REPOSITORY: cloudfoundry/garden-runc-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/garden-runc
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -2614,6 +2910,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: go-buildpack
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: go-buildpack-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -2621,6 +2926,7 @@ jobs:
           params:
             RELEASE_NAME: go-buildpack
             REPOSITORY: cloudfoundry/go-buildpack-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/go-buildpack
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -2802,6 +3108,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: java-buildpack
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: java-buildpack-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -2809,6 +3124,7 @@ jobs:
           params:
             RELEASE_NAME: java-buildpack
             REPOSITORY: cloudfoundry/java-buildpack-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/java-buildpack
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -2990,6 +3306,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: log-cache
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: log-cache-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -2997,6 +3322,7 @@ jobs:
           params:
             RELEASE_NAME: log-cache
             REPOSITORY: cloudfoundry/log-cache-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/log-cache
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -3178,6 +3504,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: loggregator
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: loggregator-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -3185,6 +3520,7 @@ jobs:
           params:
             RELEASE_NAME: loggregator
             REPOSITORY: cloudfoundry/loggregator-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/loggregator
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -3366,6 +3702,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: loggregator-agent
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: loggregator-agent-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -3373,6 +3718,7 @@ jobs:
           params:
             RELEASE_NAME: loggregator-agent
             REPOSITORY: cloudfoundry/loggregator-agent-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/loggregator-agent
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -3554,6 +3900,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: nats
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: nats-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -3561,6 +3916,7 @@ jobs:
           params:
             RELEASE_NAME: nats
             REPOSITORY: cloudfoundry/nats-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/nats
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -3742,6 +4098,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: nginx-buildpack
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: nginx-buildpack-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -3749,6 +4114,7 @@ jobs:
           params:
             RELEASE_NAME: nginx-buildpack
             REPOSITORY: cloudfoundry/nginx-buildpack-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/nginx-buildpack
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -3930,6 +4296,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: nodejs-buildpack
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: nodejs-buildpack-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -3937,6 +4312,7 @@ jobs:
           params:
             RELEASE_NAME: nodejs-buildpack
             REPOSITORY: cloudfoundry/nodejs-buildpack-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/nodejs-buildpack
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -4118,6 +4494,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: php-buildpack
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: php-buildpack-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -4125,6 +4510,7 @@ jobs:
           params:
             RELEASE_NAME: php-buildpack
             REPOSITORY: cloudfoundry/php-buildpack-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/php-buildpack
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -4306,6 +4692,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: python-buildpack
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: python-buildpack-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -4313,6 +4708,7 @@ jobs:
           params:
             RELEASE_NAME: python-buildpack
             REPOSITORY: cloudfoundry/python-buildpack-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/python-buildpack
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -4494,6 +4890,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: pxc
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: pxc-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -4501,6 +4906,7 @@ jobs:
           params:
             RELEASE_NAME: pxc
             REPOSITORY: cloudfoundry-incubator/pxc-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/pxc
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -4682,6 +5088,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: r-buildpack
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: r-buildpack-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -4689,6 +5104,7 @@ jobs:
           params:
             RELEASE_NAME: r-buildpack
             REPOSITORY: cloudfoundry/r-buildpack-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/r-buildpack
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -4870,6 +5286,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: routing
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: routing-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -4877,6 +5302,7 @@ jobs:
           params:
             RELEASE_NAME: routing
             REPOSITORY: cloudfoundry-incubator/cf-routing-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/routing
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -5058,6 +5484,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: ruby-buildpack
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: ruby-buildpack-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -5065,6 +5500,7 @@ jobs:
           params:
             RELEASE_NAME: ruby-buildpack
             REPOSITORY: cloudfoundry/ruby-buildpack-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/ruby-buildpack
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -5246,6 +5682,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: silk
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: silk-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -5253,6 +5698,7 @@ jobs:
           params:
             RELEASE_NAME: silk
             REPOSITORY: cloudfoundry/silk-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/silk
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -5434,6 +5880,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: staticfile-buildpack
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: staticfile-buildpack-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -5441,6 +5896,7 @@ jobs:
           params:
             RELEASE_NAME: staticfile-buildpack
             REPOSITORY: cloudfoundry/staticfile-buildpack-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/staticfile-buildpack
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -5622,6 +6078,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: statsd-injector
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: statsd-injector-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -5629,6 +6094,7 @@ jobs:
           params:
             RELEASE_NAME: statsd-injector
             REPOSITORY: cloudfoundry/statsd-injector-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/statsd-injector
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -5810,6 +6276,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: uaa
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: uaa-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -5817,6 +6292,7 @@ jobs:
           params:
             RELEASE_NAME: uaa
             REPOSITORY: cloudfoundry/uaa-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/uaa
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -5998,6 +6474,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: credhub
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: credhub-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -6005,6 +6490,7 @@ jobs:
           params:
             RELEASE_NAME: credhub
             REPOSITORY: pivotal-cf/credhub-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/credhub
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
@@ -6186,6 +6672,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: cf-cli
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: cf-cli-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
         - task: create-slack-message
           file: runtime-ci/tasks/create-slack-message/task.yml
           input_mapping:
@@ -6193,6 +6688,7 @@ jobs:
           params:
             RELEASE_NAME: cf-cli
             REPOSITORY: bosh-packages/cf-cli-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/cf-cli
         - put: slack-alert
           params:
             text_file: slack-message/message.txt
