@@ -486,6 +486,7 @@ jobs:
         operations/use-postgres.yml
         operations/experimental/enable-tls-cloud-controller-postgres.yml
         operations/change-postgres-max-connections.yml
+        operations/use-internal-lookup-for-route-services.yml
       VARS_FILES: |
         environments/test/luna/deployment-name.yml
         environments/test/luna/network-name.yml
@@ -622,6 +623,7 @@ jobs:
         operations/test/add-persistent-isolation-segment-diego-cell.yml
         operations/increase-doppler-vm-type-from-minimal-to-small.yml
         operations/scale-diego-cell-to-3.yml
+        operations/use-internal-lookup-for-route-services.yml
       VARS_FILES: |
         environments/test/trelawney/external-db-vars.yml
         environments/test/trelawney/gcs-vars.yml
@@ -1051,6 +1053,7 @@ jobs:
           operations/use-compiled-releases.yml
           operations/bosh-lite.yml
           operations/use-debug-level-logging.yml
+          operations/use-internal-lookup-for-route-services.yml
         REGENERATE_CREDENTIALS: true
         BOSH_LITE: true
     - task: run-bosh-cleanup

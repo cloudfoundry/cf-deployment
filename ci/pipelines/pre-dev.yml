@@ -41,6 +41,11 @@ resource_types:
   type: docker-image
   source:
     repository: frodenas/gcs-resource
+- name: slack-notification
+  type: docker-image
+  source:
+    repository: cfcommunity/slack-notification-resource
+    tag: latest
 resources:
 - name: binary-buildpack-release
   type: bosh-io-release
@@ -198,192 +203,388 @@ resources:
     branch: master
     uri: git@github.com:cloudfoundry/relint-envs.git
     private_key: ((hagrid_env_readwrite_deploy_key.private_key))
+- name: relint-team
+  type: git
+  source:
+    branch: master
+    uri: git@github.com:cloudfoundry/relint-team.git
+    private_key: ((runtime_ci_private_read_deploy_key.private_key))
 - name: binary-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: binary-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: binary-buildpack-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: binary-buildpack/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: bosh-dns-aliases-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: bosh-dns-aliases-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: bosh-dns-aliases-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: bosh-dns-aliases/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: bpm-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: bpm-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: bpm-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: bpm/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: capi-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: capi-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: capi-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: capi/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: cf-networking-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: cf-networking-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: cf-networking-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: cf-networking/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: cf-smoke-tests-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: cf-smoke-tests-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: cf-smoke-tests-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: cf-smoke-tests/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: cf-syslog-drain-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: cf-syslog-drain-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: cf-syslog-drain-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: cf-syslog-drain/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: cflinuxfs3-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: cflinuxfs3-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: cflinuxfs3-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: cflinuxfs3/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: diego-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: diego-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: diego-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: diego/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: dotnet-core-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: dotnet-core-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: dotnet-core-buildpack-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: dotnet-core-buildpack/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: garden-runc-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: garden-runc-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: garden-runc-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: garden-runc/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: go-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: go-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: go-buildpack-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: go-buildpack/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: java-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: java-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: java-buildpack-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: java-buildpack/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: log-cache-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: log-cache-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: log-cache-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: log-cache/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: loggregator-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: loggregator-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: loggregator-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: loggregator/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: loggregator-agent-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: loggregator-agent-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: loggregator-agent-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: loggregator-agent/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: nats-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: nats-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: nats-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: nats/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: nginx-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: nginx-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: nginx-buildpack-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: nginx-buildpack/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: nodejs-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: nodejs-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: nodejs-buildpack-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: nodejs-buildpack/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: php-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: php-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: php-buildpack-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: php-buildpack/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: python-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: python-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: python-buildpack-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: python-buildpack/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: pxc-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: pxc-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: pxc-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: pxc/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: r-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: r-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: r-buildpack-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: r-buildpack/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: routing-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: routing-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: routing-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: routing/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: ruby-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: ruby-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: ruby-buildpack-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: ruby-buildpack/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: silk-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: silk-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: silk-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: silk/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: staticfile-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: staticfile-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: staticfile-buildpack-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: staticfile-buildpack/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: statsd-injector-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: statsd-injector-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: statsd-injector-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: statsd-injector/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: uaa-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: uaa-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: uaa-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: uaa/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: credhub-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: credhub-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: credhub-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: credhub/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: cf-cli-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: cf-cli-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: cf-cli-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: cf-cli/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: slack-alert
+  type: slack-notification
+  source:
+    url: ((relint_slack_incoming_webhook))
 jobs:
 - name: update-binary-buildpack
   serial_groups:
@@ -403,6 +604,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-binary-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -511,7 +713,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: binary-buildpack-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -521,14 +723,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-binary-buildpack-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-binary-buildpack-release-candidate
-          release: binary-buildpack-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: binary-buildpack
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-binary-buildpack-release-candidate
+            release: binary-buildpack-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: binary-buildpack
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: binary-buildpack-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: binary-buildpack-release
+          params:
+            RELEASE_NAME: binary-buildpack
+            REPOSITORY: cloudfoundry/binary-buildpack-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/binary-buildpack
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -577,6 +802,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-bosh-dns-aliases-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -685,7 +911,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: bosh-dns-aliases-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -695,14 +921,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-bosh-dns-aliases-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-bosh-dns-aliases-release-candidate
-          release: bosh-dns-aliases-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: bosh-dns-aliases
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-bosh-dns-aliases-release-candidate
+            release: bosh-dns-aliases-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: bosh-dns-aliases
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: bosh-dns-aliases-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: bosh-dns-aliases-release
+          params:
+            RELEASE_NAME: bosh-dns-aliases
+            REPOSITORY: cloudfoundry/bosh-dns-aliases-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/bosh-dns-aliases
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -751,6 +1000,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-bpm-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -859,7 +1109,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: bpm-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -869,14 +1119,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-bpm-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-bpm-release-candidate
-          release: bpm-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: bpm
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-bpm-release-candidate
+            release: bpm-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: bpm
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: bpm-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: bpm-release
+          params:
+            RELEASE_NAME: bpm
+            REPOSITORY: cloudfoundry-incubator/bpm-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/bpm
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -925,6 +1198,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-capi-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1033,7 +1307,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: capi-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -1043,14 +1317,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-capi-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-capi-release-candidate
-          release: capi-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: capi
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-capi-release-candidate
+            release: capi-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: capi
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: capi-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: capi-release
+          params:
+            RELEASE_NAME: capi
+            REPOSITORY: cloudfoundry/capi-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/capi
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -1099,6 +1396,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-cf-networking-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1207,7 +1505,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: cf-networking-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -1217,14 +1515,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-cf-networking-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-cf-networking-release-candidate
-          release: cf-networking-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: cf-networking
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-cf-networking-release-candidate
+            release: cf-networking-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: cf-networking
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: cf-networking-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: cf-networking-release
+          params:
+            RELEASE_NAME: cf-networking
+            REPOSITORY: cloudfoundry/cf-networking-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/cf-networking
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -1273,6 +1594,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-cf-smoke-tests-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1381,7 +1703,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: cf-smoke-tests-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -1391,14 +1713,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-cf-smoke-tests-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-cf-smoke-tests-release-candidate
-          release: cf-smoke-tests-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: cf-smoke-tests
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-cf-smoke-tests-release-candidate
+            release: cf-smoke-tests-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: cf-smoke-tests
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: cf-smoke-tests-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: cf-smoke-tests-release
+          params:
+            RELEASE_NAME: cf-smoke-tests
+            REPOSITORY: cloudfoundry/cf-smoke-tests-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/cf-smoke-tests
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -1447,6 +1792,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-cf-syslog-drain-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1555,7 +1901,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: cf-syslog-drain-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -1565,14 +1911,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-cf-syslog-drain-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-cf-syslog-drain-release-candidate
-          release: cf-syslog-drain-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: cf-syslog-drain
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-cf-syslog-drain-release-candidate
+            release: cf-syslog-drain-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: cf-syslog-drain
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: cf-syslog-drain-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: cf-syslog-drain-release
+          params:
+            RELEASE_NAME: cf-syslog-drain
+            REPOSITORY: cloudfoundry/cf-syslog-drain-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/cf-syslog-drain
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -1621,6 +1990,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-cflinuxfs3-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1729,7 +2099,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: cflinuxfs3-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -1739,14 +2109,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-cflinuxfs3-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-cflinuxfs3-release-candidate
-          release: cflinuxfs3-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: cflinuxfs3
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-cflinuxfs3-release-candidate
+            release: cflinuxfs3-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: cflinuxfs3
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: cflinuxfs3-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: cflinuxfs3-release
+          params:
+            RELEASE_NAME: cflinuxfs3
+            REPOSITORY: cloudfoundry/cflinuxfs3-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/cflinuxfs3
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -1795,6 +2188,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-diego-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -1903,7 +2297,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: diego-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -1913,14 +2307,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-diego-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-diego-release-candidate
-          release: diego-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: diego
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-diego-release-candidate
+            release: diego-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: diego
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: diego-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: diego-release
+          params:
+            RELEASE_NAME: diego
+            REPOSITORY: cloudfoundry/diego-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/diego
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -1969,6 +2386,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-dotnet-core-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2077,7 +2495,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: dotnet-core-buildpack-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -2087,14 +2505,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-dotnet-core-buildpack-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-dotnet-core-buildpack-release-candidate
-          release: dotnet-core-buildpack-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: dotnet-core-buildpack
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-dotnet-core-buildpack-release-candidate
+            release: dotnet-core-buildpack-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: dotnet-core-buildpack
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: dotnet-core-buildpack-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: dotnet-core-buildpack-release
+          params:
+            RELEASE_NAME: dotnet-core-buildpack
+            REPOSITORY: cloudfoundry/dotnet-core-buildpack-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/dotnet-core-buildpack
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -2143,6 +2584,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-garden-runc-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2251,7 +2693,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: garden-runc-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -2261,14 +2703,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-garden-runc-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-garden-runc-release-candidate
-          release: garden-runc-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: garden-runc
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-garden-runc-release-candidate
+            release: garden-runc-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: garden-runc
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: garden-runc-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: garden-runc-release
+          params:
+            RELEASE_NAME: garden-runc
+            REPOSITORY: cloudfoundry/garden-runc-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/garden-runc
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -2317,6 +2782,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-go-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2425,7 +2891,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: go-buildpack-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -2435,14 +2901,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-go-buildpack-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-go-buildpack-release-candidate
-          release: go-buildpack-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: go-buildpack
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-go-buildpack-release-candidate
+            release: go-buildpack-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: go-buildpack
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: go-buildpack-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: go-buildpack-release
+          params:
+            RELEASE_NAME: go-buildpack
+            REPOSITORY: cloudfoundry/go-buildpack-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/go-buildpack
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -2491,6 +2980,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-java-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2599,7 +3089,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: java-buildpack-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -2609,14 +3099,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-java-buildpack-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-java-buildpack-release-candidate
-          release: java-buildpack-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: java-buildpack
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-java-buildpack-release-candidate
+            release: java-buildpack-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: java-buildpack
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: java-buildpack-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: java-buildpack-release
+          params:
+            RELEASE_NAME: java-buildpack
+            REPOSITORY: cloudfoundry/java-buildpack-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/java-buildpack
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -2665,6 +3178,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-log-cache-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2773,7 +3287,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: log-cache-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -2783,14 +3297,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-log-cache-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-log-cache-release-candidate
-          release: log-cache-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: log-cache
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-log-cache-release-candidate
+            release: log-cache-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: log-cache
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: log-cache-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: log-cache-release
+          params:
+            RELEASE_NAME: log-cache
+            REPOSITORY: cloudfoundry/log-cache-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/log-cache
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -2839,6 +3376,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-loggregator-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -2947,7 +3485,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: loggregator-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -2957,14 +3495,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-loggregator-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-loggregator-release-candidate
-          release: loggregator-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: loggregator
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-loggregator-release-candidate
+            release: loggregator-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: loggregator
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: loggregator-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: loggregator-release
+          params:
+            RELEASE_NAME: loggregator
+            REPOSITORY: cloudfoundry/loggregator-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/loggregator
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -3013,6 +3574,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-loggregator-agent-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -3121,7 +3683,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: loggregator-agent-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -3131,14 +3693,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-loggregator-agent-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-loggregator-agent-release-candidate
-          release: loggregator-agent-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: loggregator-agent
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-loggregator-agent-release-candidate
+            release: loggregator-agent-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: loggregator-agent
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: loggregator-agent-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: loggregator-agent-release
+          params:
+            RELEASE_NAME: loggregator-agent
+            REPOSITORY: cloudfoundry/loggregator-agent-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/loggregator-agent
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -3187,6 +3772,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-nats-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -3295,7 +3881,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: nats-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -3305,14 +3891,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-nats-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-nats-release-candidate
-          release: nats-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: nats
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-nats-release-candidate
+            release: nats-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: nats
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: nats-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: nats-release
+          params:
+            RELEASE_NAME: nats
+            REPOSITORY: cloudfoundry/nats-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/nats
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -3361,6 +3970,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-nginx-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -3469,7 +4079,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: nginx-buildpack-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -3479,14 +4089,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-nginx-buildpack-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-nginx-buildpack-release-candidate
-          release: nginx-buildpack-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: nginx-buildpack
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-nginx-buildpack-release-candidate
+            release: nginx-buildpack-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: nginx-buildpack
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: nginx-buildpack-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: nginx-buildpack-release
+          params:
+            RELEASE_NAME: nginx-buildpack
+            REPOSITORY: cloudfoundry/nginx-buildpack-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/nginx-buildpack
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -3535,6 +4168,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-nodejs-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -3643,7 +4277,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: nodejs-buildpack-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -3653,14 +4287,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-nodejs-buildpack-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-nodejs-buildpack-release-candidate
-          release: nodejs-buildpack-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: nodejs-buildpack
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-nodejs-buildpack-release-candidate
+            release: nodejs-buildpack-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: nodejs-buildpack
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: nodejs-buildpack-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: nodejs-buildpack-release
+          params:
+            RELEASE_NAME: nodejs-buildpack
+            REPOSITORY: cloudfoundry/nodejs-buildpack-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/nodejs-buildpack
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -3709,6 +4366,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-php-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -3817,7 +4475,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: php-buildpack-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -3827,14 +4485,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-php-buildpack-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-php-buildpack-release-candidate
-          release: php-buildpack-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: php-buildpack
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-php-buildpack-release-candidate
+            release: php-buildpack-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: php-buildpack
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: php-buildpack-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: php-buildpack-release
+          params:
+            RELEASE_NAME: php-buildpack
+            REPOSITORY: cloudfoundry/php-buildpack-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/php-buildpack
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -3883,6 +4564,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-python-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -3991,7 +4673,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: python-buildpack-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -4001,14 +4683,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-python-buildpack-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-python-buildpack-release-candidate
-          release: python-buildpack-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: python-buildpack
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-python-buildpack-release-candidate
+            release: python-buildpack-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: python-buildpack
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: python-buildpack-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: python-buildpack-release
+          params:
+            RELEASE_NAME: python-buildpack
+            REPOSITORY: cloudfoundry/python-buildpack-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/python-buildpack
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -4057,6 +4762,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-pxc-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -4165,7 +4871,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: pxc-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -4175,14 +4881,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-pxc-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-pxc-release-candidate
-          release: pxc-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: pxc
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-pxc-release-candidate
+            release: pxc-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: pxc
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: pxc-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: pxc-release
+          params:
+            RELEASE_NAME: pxc
+            REPOSITORY: cloudfoundry-incubator/pxc-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/pxc
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -4231,6 +4960,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-r-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -4339,7 +5069,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: r-buildpack-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -4349,14 +5079,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-r-buildpack-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-r-buildpack-release-candidate
-          release: r-buildpack-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: r-buildpack
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-r-buildpack-release-candidate
+            release: r-buildpack-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: r-buildpack
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: r-buildpack-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: r-buildpack-release
+          params:
+            RELEASE_NAME: r-buildpack
+            REPOSITORY: cloudfoundry/r-buildpack-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/r-buildpack
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -4405,6 +5158,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-routing-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -4513,7 +5267,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: routing-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -4523,14 +5277,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-routing-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-routing-release-candidate
-          release: routing-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: routing
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-routing-release-candidate
+            release: routing-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: routing
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: routing-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: routing-release
+          params:
+            RELEASE_NAME: routing
+            REPOSITORY: cloudfoundry-incubator/cf-routing-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/routing
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -4579,6 +5356,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-ruby-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -4687,7 +5465,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: ruby-buildpack-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -4697,14 +5475,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-ruby-buildpack-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-ruby-buildpack-release-candidate
-          release: ruby-buildpack-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: ruby-buildpack
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-ruby-buildpack-release-candidate
+            release: ruby-buildpack-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: ruby-buildpack
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: ruby-buildpack-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: ruby-buildpack-release
+          params:
+            RELEASE_NAME: ruby-buildpack
+            REPOSITORY: cloudfoundry/ruby-buildpack-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/ruby-buildpack
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -4753,6 +5554,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-silk-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -4861,7 +5663,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: silk-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -4871,14 +5673,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-silk-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-silk-release-candidate
-          release: silk-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: silk
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-silk-release-candidate
+            release: silk-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: silk
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: silk-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: silk-release
+          params:
+            RELEASE_NAME: silk
+            REPOSITORY: cloudfoundry/silk-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/silk
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -4927,6 +5752,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-staticfile-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -5035,7 +5861,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: staticfile-buildpack-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -5045,14 +5871,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-staticfile-buildpack-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-staticfile-buildpack-release-candidate
-          release: staticfile-buildpack-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: staticfile-buildpack
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-staticfile-buildpack-release-candidate
+            release: staticfile-buildpack-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: staticfile-buildpack
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: staticfile-buildpack-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: staticfile-buildpack-release
+          params:
+            RELEASE_NAME: staticfile-buildpack
+            REPOSITORY: cloudfoundry/staticfile-buildpack-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/staticfile-buildpack
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -5101,6 +5950,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-statsd-injector-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -5209,7 +6059,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: statsd-injector-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -5219,14 +6069,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-statsd-injector-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-statsd-injector-release-candidate
-          release: statsd-injector-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: statsd-injector
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-statsd-injector-release-candidate
+            release: statsd-injector-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: statsd-injector
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: statsd-injector-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: statsd-injector-release
+          params:
+            RELEASE_NAME: statsd-injector
+            REPOSITORY: cloudfoundry/statsd-injector-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/statsd-injector
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -5275,6 +6148,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-uaa-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -5383,7 +6257,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: uaa-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -5393,14 +6267,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-uaa-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-uaa-release-candidate
-          release: uaa-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: uaa
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-uaa-release-candidate
+            release: uaa-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: uaa
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: uaa-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: uaa-release
+          params:
+            RELEASE_NAME: uaa
+            REPOSITORY: cloudfoundry/uaa-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/uaa
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -5449,6 +6346,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-credhub-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -5557,7 +6455,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: credhub-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -5567,14 +6465,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-credhub-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-credhub-release-candidate
-          release: credhub-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: credhub
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-credhub-release-candidate
+            release: credhub-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: credhub
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: credhub-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: credhub-release
+          params:
+            RELEASE_NAME: credhub
+            REPOSITORY: pivotal-cf/credhub-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/credhub
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -5623,6 +6544,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-release-cf-cli-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
@@ -5731,7 +6653,7 @@ jobs:
           ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
           UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
-        aggregate:
+        do:
         - put: cf-cli-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -5741,14 +6663,37 @@ jobs:
             rebase: true
             repository: updated-cf-deployment-cf-cli-develop
       on_failure:
-        task: push-to-release-branch
-        file: runtime-ci/tasks/push-to-release-branch/task.yml
-        input_mapping:
-          updated-cf-deployment: updated-cf-deployment-cf-cli-release-candidate
-          release: cf-cli-release
-        params:
-          DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-          RELEASE_NAME: cf-cli
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-cf-cli-release-candidate
+            release: cf-cli-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: cf-cli
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: cf-cli-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        - task: create-slack-message
+          file: runtime-ci/tasks/create-slack-message/task.yml
+          input_mapping:
+            release: cf-cli-release
+          params:
+            RELEASE_NAME: cf-cli
+            REPOSITORY: bosh-packages/cf-cli-release
+            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/cf-cli
+        - put: slack-alert
+          params:
+            text_file: slack-message/message.txt
+            username: Release Integration
+            icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
