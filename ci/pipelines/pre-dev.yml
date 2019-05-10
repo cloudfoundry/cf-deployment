@@ -36,6 +36,9 @@ groups:
   - update-uaa
   - update-credhub
   - update-cf-cli
+- name: cleanup
+  jobs:
+  - delete-stale-branches
 resource_types:
 - name: gcs-resource
   type: docker-image
@@ -183,6 +186,18 @@ resources:
     branch: pre-dev-test
     uri: git@github.com:cloudfoundry/cf-deployment.git
     private_key: ((cf_deployment_readwrite_deploy_key.private_key))
+- name: cf-deployment-all-branches
+  type: git
+  source:
+    branch: develop
+    uri: https://github.com/cloudfoundry/cf-deployment.git
+    ignore_paths:
+    - .envrc
+    - .overcommit.yml
+    - ISSUE_TEMPLATE.md
+    - PULL_REQUEST_TEMPLATE.md
+    - ci/**
+    - texts/**
 - name: stemcell
   type: bosh-io-stemcell
   source:
@@ -6724,3 +6739,18 @@ jobs:
           params:
             repository: updated-bbl-state
             rebase: true
+- name: delete-stale-branches
+  public: true
+  plan:
+  - aggregate:
+    - get: cf-deployment-all-branches
+    - get: runtime-ci
+  - task: delete-stale-branches
+    file: runtime-ci/tasks/validate-branch-freshness/task.yml
+    input_mapping:
+      repo: cf-deployment-all-branches
+    params:
+      BRANCH_REGEXP: update-.*-release-.*
+      MONTHS: 1
+      DELETE_STALE_BRANCHES: true
+      DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
