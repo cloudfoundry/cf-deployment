@@ -231,12 +231,6 @@ resources:
     branch: release-candidate
     uri: git@github.com:cloudfoundry/cf-acceptance-tests.git
     private_key: ((cf_acceptance_tests_readwrite_deploy_key.private_key))
-- name: cf-acceptance-tests
-  type: git
-  source:
-    branch: master
-    uri: git@github.com:cloudfoundry/cf-acceptance-tests.git
-    private_key: ((cf_acceptance_tests_readwrite_deploy_key.private_key))
 - name: cf-smoke-tests
   type: git
   source:
@@ -1314,7 +1308,7 @@ jobs:
       passed: [ stable-semihourly-pool-acquisition ]
     - aggregate:
       - get: cf-deployment-concourse-tasks
-      - get: cf-acceptance-tests
+      - get: cf-acceptance-tests-rc
       - get: relint-envs
       - get: cf-deployment-master
         passed: [ stable-deploy ]
@@ -1333,6 +1327,7 @@ jobs:
       file: cf-deployment-concourse-tasks/run-cats/task.yml
       input_mapping:
         integration-config: relint-envs
+        cf-acceptance-tests: cf-acceptance-tests-rc
       params:
         CONFIG_FILE_PATH: environments/test/bellatrix/integration_config.json
         REPORTER_CONFIG_FILE_PATH: environments/test/bellatrix/reporter_config.json
@@ -1373,12 +1368,13 @@ jobs:
       - get: runtime-ci
       - get: cf-deployment-master
         passed: [ stable-periodic-cats ]
-      - get: cf-acceptance-tests
+      - get: cf-acceptance-tests-rc
         passed: [ stable-periodic-cats ]
     - task: update-branch
       file: runtime-ci/tasks/update-cats-branch-with-cf-deployment-version/task.yml
       input_mapping:
         cf-deployment: cf-deployment-master
+        cf-acceptance-tests: cf-acceptance-tests-rc
       params:
         DEPLOY_KEY: ((cf_acceptance_tests_readwrite_deploy_key.private_key))
 
