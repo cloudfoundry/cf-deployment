@@ -72,7 +72,8 @@ resources:
   type: git
   source:
     branch: develop
-    uri: https://github.com/cloudfoundry/cf-deployment.git
+    uri: git@github.com:cloudfoundry/cf-deployment.git
+    private_key: ((cf_deployment_readwrite_deploy_key.private_key))
     ignore_paths:
     - .envrc
     - .overcommit.yml
