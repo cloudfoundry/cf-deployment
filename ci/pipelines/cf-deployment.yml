@@ -960,6 +960,7 @@ jobs:
           operations/scale-database-cluster.yml
           operations/windows2016-cell.yml
           operations/decrease-cc-event-retention.yml
+          operations/use-internal-lookup-for-route-services.yml
     - task: run-bosh-cleanup
       file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
       input_mapping:
