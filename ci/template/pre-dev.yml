@@ -135,6 +135,11 @@ resources:
   source:
     url: ((relint_slack_incoming_webhook))
 
+- name: daily
+  type: time
+  source:
+    interval: 24h
+
 jobs:
 #@ for r in data.values.baseReleases:
 - name: #@ "update-" + r.name
@@ -323,6 +328,8 @@ jobs:
   - aggregate:
     - get: cf-deployment-all-branches
     - get: runtime-ci
+    - get: daily
+      trigger: true
   - task: delete-stale-branches
     file: runtime-ci/tasks/validate-branch-freshness/task.yml
     input_mapping:
