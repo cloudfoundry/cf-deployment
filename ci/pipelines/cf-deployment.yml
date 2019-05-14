@@ -1377,6 +1377,7 @@ jobs:
         cf-deployment: cf-deployment-master
         cf-acceptance-tests: cf-acceptance-tests-rc
       params:
+        CATS_BRANCH: release-candidate
         DEPLOY_KEY: ((cf_acceptance_tests_readwrite_deploy_key.private_key))
 
 - name: fresh-cats
