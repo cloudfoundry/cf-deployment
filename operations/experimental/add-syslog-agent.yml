@@ -19,12 +19,12 @@
       properties:
         port: 3460
         tls:
-          ca_cert: "((loggregator_ca.certificate))"
+          ca_cert: "((loggregator_tls_agent.ca))"
           cert: "((loggregator_tls_agent.certificate))"
           key: "((loggregator_tls_agent.private_key))"
         cache:
           tls:
-            ca_cert: "((loggregator_ca.certificate))"
+            ca_cert: "((syslog_agent_api_tls.ca))"
             cert: "((syslog_agent_api_tls.certificate))"
             key: "((syslog_agent_api_tls.private_key))"
             cn: "binding-cache"
@@ -61,13 +61,13 @@
     properties:
       external_port: 9000
       tls:
-        ca_cert: "((loggregator_ca.certificate))"
+        ca_cert: "((binding_cache_tls.ca))"
         cert: "((binding_cache_tls.certificate))"
         key: "((binding_cache_tls.private_key))"
         cn: "binding-cache"
       api:
         tls:
-          ca_cert: "((service_cf_internal_ca.certificate))"
+          ca_cert: "((cc_tls.ca))"
           cert: "((binding_cache_api_tls.certificate))"
           key: "((binding_cache_api_tls.private_key))"
           cn: "cloud-controller-ng.service.cf.internal"
@@ -113,7 +113,7 @@
       disable_udp: true
       loggregator:
         tls:
-          ca_cert: "((loggregator_ca.certificate))"
+          ca_cert: "((loggregator_tls_agent.ca))"
           agent:
             cert: "((loggregator_tls_agent.certificate))"
             key: "((loggregator_tls_agent.private_key))"

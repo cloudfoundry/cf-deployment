@@ -20,7 +20,7 @@
   value:
     cert: ((grootfs_remote_layer_tls.certificate))
     key: ((grootfs_remote_layer_tls.private_key))
-    ca_cert: ((service_cf_internal_ca.certificate))
+    ca_cert: ((grootfs_remote_layer_tls.ca))
 
 - type: replace
   path: /variables/-

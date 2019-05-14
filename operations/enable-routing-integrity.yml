@@ -10,7 +10,7 @@
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=rep/properties/containers?/proxy/trusted_ca_certificates
   value:
-  - ((service_cf_internal_ca.certificate))
+  - ((router_ssl.ca))
 
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=rep/properties/containers?/proxy/verify_subject_alt_name

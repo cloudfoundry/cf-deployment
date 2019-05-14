@@ -91,14 +91,14 @@
       name: metric-store-cf-auth-proxy
       properties:
         cc:
-          ca_cert: ((service_cf_internal_ca.certificate))
+          ca_cert: ((cc.tls.ca))
           common_name: cloud-controller-ng.service.cf.internal
         external_cert: ((metricstore_ssl.certificate))
         external_key: ((metricstore_ssl.private_key))
-        proxy_ca_cert: ((metric_store_ca.certificate))
+        proxy_ca_cert: ((metric_store_proxy_tls.ca))
         proxy_port: 8083
         uaa:
-          ca_cert: ((uaa_ca.certificate))
+          ca_cert: ((uaa_ssl.ca))
           client_id: doppler
           client_secret: ((uaa_clients_doppler_secret))
           internal_addr: https://uaa.service.cf.internal:8443

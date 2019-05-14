@@ -17,9 +17,9 @@
       properties:
         containers:
           trusted_ca_certificates:
-          - ((application_ca.certificate))
-          - ((credhub_ca.certificate))
-          - ((uaa_ca.certificate))
+          - ((diego_instance_identity_ca.ca))
+          - ((credhub_tls.ca))
+          - ((uaa_ssl.ca))
         diego:
           executor:
             instance_identity_ca_cert: ((diego_instance_identity_ca.certificate))
@@ -33,14 +33,14 @@
           format:
             timestamp: rfc3339
         loggregator:
-          ca_cert: ((loggregator_ca.certificate))
+          ca_cert: ((loggregator_tls_agent.ca))
           cert: ((loggregator_tls_agent.certificate))
           key: ((loggregator_tls_agent.private_key))
           use_v2_api: true
         syslog_daemon_config:
           enable: false
         tls:
-          ca_cert: ((service_cf_internal_ca.certificate))
+          ca_cert: ((diego_rep_agent_v2.ca))
           cert: ((diego_rep_agent_v2.certificate))
           key: ((diego_rep_agent_v2.private_key))
       release: diego
@@ -49,7 +49,7 @@
         diego:
           route_emitter:
             bbs:
-              ca_cert: ((service_cf_internal_ca.certificate))
+              ca_cert: ((diego_bbs_client.ca))
               client_cert: ((diego_bbs_client.certificate))
               client_key: ((diego_bbs_client.private_key))
             local_mode: true
@@ -57,14 +57,14 @@
           format:
             timestamp: rfc3339
         loggregator:
-          ca_cert: ((loggregator_ca.certificate))
+          ca_cert: ((loggregator_tls_agent.ca))
           cert: ((loggregator_tls_agent.certificate))
           key: ((loggregator_tls_agent.private_key))
           use_v2_api: true
         tcp:
           enabled: true
         uaa:
-          ca_cert: ((uaa_ca.certificate))
+          ca_cert: ((uaa_ssl.ca))
           client_secret: ((uaa_clients_tcp_emitter_secret))
       release: diego
     - name: loggregator_agent_windows
@@ -75,7 +75,7 @@
             agent:
               cert: ((loggregator_tls_agent.certificate))
               key: ((loggregator_tls_agent.private_key))
-            ca_cert: ((loggregator_ca.certificate))
+            ca_cert: ((loggregator_tls_agent.ca))
         syslog_daemon_config:
           enable: false
       release: loggregator-agent

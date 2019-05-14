@@ -7,7 +7,7 @@
       ldap:
         ssl:
           active: true
-          ca_cert: ((ldap_test_server_ca.certificate))
+          ca_cert: ((ldap_test_server_ssl.ca))
           server_cert: ((ldap_test_server_ssl.certificate))
           server_key: ((ldap_test_server_ssl.private_key))
 
@@ -24,7 +24,7 @@
 
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=nfsv3driver/properties/nfsv3driver/ldap_ca_cert?
-  value: ((ldap_test_server_ca.certificate))
+  value: ((ldap_test_server_ssl.ca))
 
 - type: replace
   path: /variables/-
