@@ -71,7 +71,7 @@
     name: smbdriver
     properties:
       tls:
-        ca_cert: ((smb_ca.certificate))
+        ca_cert: ((smbdriver_cert.ca))
         client_cert: ((smbdriver_client_cert.certificate))
         client_key: ((smbdriver_client_cert.private_key))
         server_cert: ((smbdriver_cert.certificate))

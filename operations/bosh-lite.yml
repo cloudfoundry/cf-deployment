@@ -39,7 +39,7 @@
       diego:
         ssh_proxy:
           bbs: &5
-            ca_cert: "((service_cf_internal_ca.certificate))"
+            ca_cert: "((diego_bbs_client.ca))"
             client_cert: "((diego_bbs_client.certificate))"
             client_key: "((diego_bbs_client.private_key))"
           disable_healthcheck_server: true
@@ -47,12 +47,12 @@
           host_key: "((diego_ssh_proxy_host_key.private_key))"
           uaa_secret: "((uaa_clients_ssh-proxy_secret))"
           uaa:
-            ca_cert: "((uaa_ca.certificate))"
+            ca_cert: "((uaa_ssl.ca))"
       backends:
         tls:
           enabled: true
           ca_certificates:
-          - ((application_ca.certificate))
+          - ((diego_instance_identity_ca.ca))
           client_certificate: ((ssh_proxy_backends_tls.certificate))
           client_private_key: ((ssh_proxy_backends_tls.private_key))
       enable_consul_service_registration: false
@@ -60,7 +60,7 @@
         format:
           timestamp: "rfc3339"
       loggregator: &diego_loggregator_client_properties
-        ca_cert: "((loggregator_ca.certificate))"
+        ca_cert: "((loggregator_tls_agent.ca))"
         cert: "((loggregator_tls_agent.certificate))"
         key: "((loggregator_tls_agent.private_key))"
         use_v2_api: true

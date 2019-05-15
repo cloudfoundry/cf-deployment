@@ -21,7 +21,7 @@
     - name: haproxy
       properties:
         ha_proxy:
-          backend_ca_file: ((router_ca.certificate))
+          backend_ca_file: ((router_ssl.ca))
           backend_port: 443
           backend_ssl: verify
           ssl_pem: ((haproxy_ssl.certificate))((haproxy_ssl.private_key))

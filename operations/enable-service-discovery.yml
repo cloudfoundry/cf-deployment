@@ -9,7 +9,7 @@
         client:
           tls: ((cf_app_sd_client_tls))
         server:
-          ca: ((cf_app_sd_ca.certificate))
+          ca: ((cf_app_sd_client_tls.ca))
     release: cf-networking
 - type: replace
   path: /instance_groups/name=scheduler/jobs/-
@@ -18,7 +18,7 @@
     properties:
       dnshttps:
         client:
-          ca: ((cf_app_sd_ca.certificate))
+          ca: ((cf_app_sd_server_tls.ca))
         server:
           tls: ((cf_app_sd_server_tls))
     release: cf-networking

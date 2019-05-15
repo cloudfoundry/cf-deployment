@@ -113,19 +113,19 @@ test_add_persistent_isolation_segment_diego_cell() {
   fi
 }
 
-test_all_cas_references_from_ca_variables() {
+test_all_cas_references_from_cert_variables() {
   local invalid_ca_references
   local exit_code
 
   set +e
-    invalid_ca_references=$(grep -E '\(\(.*\.ca\)\)' cf-deployment.yml)
+    invalid_ca_references=$(grep -E '\(\(.*ca\.certificate\)\)' cf-deployment.yml | grep -v diego_instance_identity_ca)
     exit_code=$?
   set -e
 
   if [[ $exit_code == 0 ]]; then
-    fail "CAs should be referenced from their CA variables: $invalid_ca_references"
+    fail "CAs should be referenced from their certificate variables: $invalid_ca_references"
   else
-    pass "CA are referenced from CA variables in cf-deployment.yml"
+    pass "All CAs are referenced from certificate variables in cf-deployment.yml"
   fi
 }
 
@@ -156,7 +156,7 @@ semantic_tests() {
     test_use_compiled_releases
     test_use_trusted_ca_cert_for_apps_doesnt_overwrite_existing_trusted_cas
     test_add_persistent_isolation_segment_diego_cell
-    test_all_cas_references_from_ca_variables
+    test_all_cas_references_from_cert_variables
     test_ops_files_dont_have_double_question_marks
   popd > /dev/null
 }

@@ -2,7 +2,7 @@
 - type: replace
   path: /instance_groups/name=database/jobs/name=postgres/properties/databases/tls?
   value:
-    ca: "((postgres_ca.certificate))"
+    ca: "((postgres_tls.ca))"
     certificate: "((postgres_tls.certificate))"
     private_key: "((postgres_tls.private_key))"
 
@@ -12,7 +12,7 @@
 
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ccdb/ca_cert?
-  value: "((postgres_ca.certificate))"
+  value: "((postgres_tls.ca))"
 
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/ccdb/address?
@@ -20,7 +20,7 @@
 
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/ccdb/ca_cert?
-  value: "((postgres_ca.certificate))"
+  value: "((postgres_tls.ca))"
 
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb/address?
@@ -28,7 +28,7 @@
 
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb/ca_cert?
-  value: "((postgres_ca.certificate))"
+  value: "(postgres_tls.ca)"
 
 - type: replace
   path: /variables/name=postgres_ca?
