@@ -557,6 +557,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: binary-buildpack
+    attempts: 3
   - task: update-additional-ops-files-binary-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -642,6 +643,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: bosh-dns-aliases
+    attempts: 3
   - task: update-additional-ops-files-bosh-dns-aliases
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -727,6 +729,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: bpm
+    attempts: 3
   - task: update-additional-ops-files-bpm
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -812,6 +815,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: capi
+    attempts: 3
   - task: update-additional-ops-files-capi
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -897,6 +901,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: cf-networking
+    attempts: 3
   - task: update-additional-ops-files-cf-networking
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -982,6 +987,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: cf-smoke-tests
+    attempts: 3
   - task: update-additional-ops-files-cf-smoke-tests
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -1067,6 +1073,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: cf-syslog-drain
+    attempts: 3
   - task: update-additional-ops-files-cf-syslog-drain
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -1152,6 +1159,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: cflinuxfs3
+    attempts: 3
   - task: update-additional-ops-files-cflinuxfs3
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -1237,6 +1245,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: diego
+    attempts: 3
   - task: update-additional-ops-files-diego
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -1304,6 +1313,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: dotnet-core-buildpack
+    attempts: 3
   - task: update-additional-ops-files-dotnet-core-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -1389,6 +1399,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: garden-runc
+    attempts: 3
   - task: update-additional-ops-files-garden-runc
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -1456,6 +1467,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: go-buildpack
+    attempts: 3
   - task: update-additional-ops-files-go-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -1523,6 +1535,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: java-buildpack
+    attempts: 3
   - task: update-additional-ops-files-java-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -1608,6 +1621,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: log-cache
+    attempts: 3
   - task: update-additional-ops-files-log-cache
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -1693,6 +1707,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: loggregator
+    attempts: 3
   - task: update-additional-ops-files-loggregator
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -1778,6 +1793,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: loggregator-agent
+    attempts: 3
   - task: update-additional-ops-files-loggregator-agent
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -1863,6 +1879,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: nats
+    attempts: 3
   - task: update-additional-ops-files-nats
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -1930,6 +1947,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: nginx-buildpack
+    attempts: 3
   - task: update-additional-ops-files-nginx-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -1997,6 +2015,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: nodejs-buildpack
+    attempts: 3
   - task: update-additional-ops-files-nodejs-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -2064,6 +2083,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: php-buildpack
+    attempts: 3
   - task: update-additional-ops-files-php-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -2131,6 +2151,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: python-buildpack
+    attempts: 3
   - task: update-additional-ops-files-python-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -2216,6 +2237,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: pxc
+    attempts: 3
   - task: update-additional-ops-files-pxc
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -2283,6 +2305,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: r-buildpack
+    attempts: 3
   - task: update-additional-ops-files-r-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -2368,6 +2391,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: routing
+    attempts: 3
   - task: update-additional-ops-files-routing
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -2435,6 +2459,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: ruby-buildpack
+    attempts: 3
   - task: update-additional-ops-files-ruby-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -2520,6 +2545,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: silk
+    attempts: 3
   - task: update-additional-ops-files-silk
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -2587,6 +2613,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: staticfile-buildpack
+    attempts: 3
   - task: update-additional-ops-files-staticfile-buildpack
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -2672,6 +2699,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: statsd-injector
+    attempts: 3
   - task: update-additional-ops-files-statsd-injector
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -2757,6 +2785,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: uaa
+    attempts: 3
   - task: update-additional-ops-files-uaa
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -2842,6 +2871,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: credhub
+    attempts: 3
   - task: update-additional-ops-files-credhub
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -2927,6 +2957,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: cf-cli
+    attempts: 3
   - task: update-additional-ops-files-cf-cli
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -4235,6 +4266,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: binary-buildpack
+      attempts: 3
     - task: compile-release-bosh-dns-aliases
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4245,6 +4277,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: bosh-dns-aliases
+      attempts: 3
     - task: compile-release-bpm
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4255,6 +4288,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: bpm
+      attempts: 3
     - task: compile-release-capi
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4265,6 +4299,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: capi
+      attempts: 3
     - task: compile-release-cf-networking
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4275,6 +4310,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: cf-networking
+      attempts: 3
     - task: compile-release-cf-smoke-tests
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4285,6 +4321,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: cf-smoke-tests
+      attempts: 3
     - task: compile-release-cf-syslog-drain
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4295,6 +4332,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: cf-syslog-drain
+      attempts: 3
     - task: compile-release-cflinuxfs3
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4305,6 +4343,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: cflinuxfs3
+      attempts: 3
     - task: compile-release-diego
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4315,6 +4354,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: diego
+      attempts: 3
     - task: compile-release-dotnet-core-buildpack
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4325,6 +4365,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: dotnet-core-buildpack
+      attempts: 3
     - task: compile-release-garden-runc
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4335,6 +4376,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: garden-runc
+      attempts: 3
     - task: compile-release-go-buildpack
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4345,6 +4387,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: go-buildpack
+      attempts: 3
     - task: compile-release-java-buildpack
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4355,6 +4398,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: java-buildpack
+      attempts: 3
     - task: compile-release-log-cache
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4365,6 +4409,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: log-cache
+      attempts: 3
     - task: compile-release-loggregator
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4375,6 +4420,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: loggregator
+      attempts: 3
     - task: compile-release-loggregator-agent
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4385,6 +4431,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: loggregator-agent
+      attempts: 3
     - task: compile-release-nats
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4395,6 +4442,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: nats
+      attempts: 3
     - task: compile-release-nginx-buildpack
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4405,6 +4453,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: nginx-buildpack
+      attempts: 3
     - task: compile-release-nodejs-buildpack
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4415,6 +4464,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: nodejs-buildpack
+      attempts: 3
     - task: compile-release-php-buildpack
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4425,6 +4475,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: php-buildpack
+      attempts: 3
     - task: compile-release-python-buildpack
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4435,6 +4486,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: python-buildpack
+      attempts: 3
     - task: compile-release-pxc
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4445,6 +4497,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: pxc
+      attempts: 3
     - task: compile-release-r-buildpack
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4455,6 +4508,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: r-buildpack
+      attempts: 3
     - task: compile-release-routing
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4465,6 +4519,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: routing
+      attempts: 3
     - task: compile-release-ruby-buildpack
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4475,6 +4530,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: ruby-buildpack
+      attempts: 3
     - task: compile-release-silk
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4485,6 +4541,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: silk
+      attempts: 3
     - task: compile-release-staticfile-buildpack
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4495,6 +4552,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: staticfile-buildpack
+      attempts: 3
     - task: compile-release-statsd-injector
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4505,6 +4563,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: statsd-injector
+      attempts: 3
     - task: compile-release-uaa
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4515,6 +4574,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: uaa
+      attempts: 3
     - task: compile-release-credhub
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4525,6 +4585,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: credhub
+      attempts: 3
     - task: compile-release-cf-cli
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -4535,6 +4596,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: cf-cli
+      attempts: 3
   - task: update-compiled-releases-ops-binary-buildpack
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:

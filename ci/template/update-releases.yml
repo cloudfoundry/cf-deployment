@@ -163,6 +163,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       RELEASE_NAME: #@ r.name
+    attempts: 3
   - task: #@ "update-additional-ops-files-" + r.name
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -328,6 +329,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: #@ s.name
+      attempts: 3
     #@ end
   #@ for s in data.values.baseReleases:
   - task: #@ "update-compiled-releases-ops-" + s.name
