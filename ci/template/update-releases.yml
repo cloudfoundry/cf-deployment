@@ -188,6 +188,7 @@ jobs:
     params:
       file: exported-release/*.tgz
       predefined_acl: publicRead
+    attempts: 3
   - put: cf-deployment-develop
     params:
       rebase: true
@@ -354,6 +355,7 @@ jobs:
       params:
         file: #@ "exported-release-" + s.name + "/*.tgz"
         predefined_acl: publicRead
+      attempts: 3
     #@ end
   - put: cf-deployment-develop
     params:
