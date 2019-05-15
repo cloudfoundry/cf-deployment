@@ -288,21 +288,23 @@ jobs:
         - put: #@ r.name + "-component-bump-logs-gcs"
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: #@ r.name + "-release"
-          params:
-            RELEASE_NAME: #@ r.name
-            REPOSITORY: #@ r.repository
-            BOSH_LOGS_PREFIX: #@ "https://storage.cloud.google.com/component-bump-logs/" + r.name
-        - put: slack-alert
-          params:
-            #! TODO(cdutra, webdave): Uncomment following line when we go live
-            #! channel_file: slack-message/channel.txt
-            text_file: slack-message/message.txt
-            username: "Release Integration"
-            icon_emoji: ":cloudfoundrylogo:"
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: #@ r.name + "-release"
+            params:
+              RELEASE_NAME: #@ r.name
+              REPOSITORY: #@ r.repository
+              BOSH_LOGS_PREFIX: #@ "https://storage.cloud.google.com/component-bump-logs/" + r.name
+          - put: slack-alert
+            params:
+              #! TODO(cdutra, webdave): Uncomment following line when we go live
+              #! channel_file: slack-message/channel.txt
+              text_file: slack-message/message.txt
+              username: "Release Integration"
+              icon_emoji: ":cloudfoundrylogo:"
     ensure:
       do:
       - #@ delete_deployment("pre-dev")

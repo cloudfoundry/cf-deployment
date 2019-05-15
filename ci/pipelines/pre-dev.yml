@@ -761,19 +761,21 @@ jobs:
         - put: binary-buildpack-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: binary-buildpack-release
-          params:
-            RELEASE_NAME: binary-buildpack
-            REPOSITORY: cloudfoundry/binary-buildpack-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/binary-buildpack
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: binary-buildpack-release
+            params:
+              RELEASE_NAME: binary-buildpack
+              REPOSITORY: cloudfoundry/binary-buildpack-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/binary-buildpack
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -959,19 +961,21 @@ jobs:
         - put: bosh-dns-aliases-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: bosh-dns-aliases-release
-          params:
-            RELEASE_NAME: bosh-dns-aliases
-            REPOSITORY: cloudfoundry/bosh-dns-aliases-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/bosh-dns-aliases
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: bosh-dns-aliases-release
+            params:
+              RELEASE_NAME: bosh-dns-aliases
+              REPOSITORY: cloudfoundry/bosh-dns-aliases-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/bosh-dns-aliases
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -1157,19 +1161,21 @@ jobs:
         - put: bpm-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: bpm-release
-          params:
-            RELEASE_NAME: bpm
-            REPOSITORY: cloudfoundry-incubator/bpm-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/bpm
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: bpm-release
+            params:
+              RELEASE_NAME: bpm
+              REPOSITORY: cloudfoundry-incubator/bpm-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/bpm
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -1355,19 +1361,21 @@ jobs:
         - put: capi-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: capi-release
-          params:
-            RELEASE_NAME: capi
-            REPOSITORY: cloudfoundry/capi-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/capi
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: capi-release
+            params:
+              RELEASE_NAME: capi
+              REPOSITORY: cloudfoundry/capi-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/capi
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -1553,19 +1561,21 @@ jobs:
         - put: cf-networking-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: cf-networking-release
-          params:
-            RELEASE_NAME: cf-networking
-            REPOSITORY: cloudfoundry/cf-networking-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/cf-networking
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: cf-networking-release
+            params:
+              RELEASE_NAME: cf-networking
+              REPOSITORY: cloudfoundry/cf-networking-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/cf-networking
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -1751,19 +1761,21 @@ jobs:
         - put: cf-smoke-tests-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: cf-smoke-tests-release
-          params:
-            RELEASE_NAME: cf-smoke-tests
-            REPOSITORY: cloudfoundry/cf-smoke-tests-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/cf-smoke-tests
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: cf-smoke-tests-release
+            params:
+              RELEASE_NAME: cf-smoke-tests
+              REPOSITORY: cloudfoundry/cf-smoke-tests-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/cf-smoke-tests
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -1949,19 +1961,21 @@ jobs:
         - put: cf-syslog-drain-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: cf-syslog-drain-release
-          params:
-            RELEASE_NAME: cf-syslog-drain
-            REPOSITORY: cloudfoundry/cf-syslog-drain-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/cf-syslog-drain
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: cf-syslog-drain-release
+            params:
+              RELEASE_NAME: cf-syslog-drain
+              REPOSITORY: cloudfoundry/cf-syslog-drain-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/cf-syslog-drain
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -2147,19 +2161,21 @@ jobs:
         - put: cflinuxfs3-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: cflinuxfs3-release
-          params:
-            RELEASE_NAME: cflinuxfs3
-            REPOSITORY: cloudfoundry/cflinuxfs3-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/cflinuxfs3
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: cflinuxfs3-release
+            params:
+              RELEASE_NAME: cflinuxfs3
+              REPOSITORY: cloudfoundry/cflinuxfs3-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/cflinuxfs3
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -2345,19 +2361,21 @@ jobs:
         - put: diego-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: diego-release
-          params:
-            RELEASE_NAME: diego
-            REPOSITORY: cloudfoundry/diego-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/diego
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: diego-release
+            params:
+              RELEASE_NAME: diego
+              REPOSITORY: cloudfoundry/diego-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/diego
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -2543,19 +2561,21 @@ jobs:
         - put: dotnet-core-buildpack-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: dotnet-core-buildpack-release
-          params:
-            RELEASE_NAME: dotnet-core-buildpack
-            REPOSITORY: cloudfoundry/dotnet-core-buildpack-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/dotnet-core-buildpack
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: dotnet-core-buildpack-release
+            params:
+              RELEASE_NAME: dotnet-core-buildpack
+              REPOSITORY: cloudfoundry/dotnet-core-buildpack-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/dotnet-core-buildpack
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -2741,19 +2761,21 @@ jobs:
         - put: garden-runc-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: garden-runc-release
-          params:
-            RELEASE_NAME: garden-runc
-            REPOSITORY: cloudfoundry/garden-runc-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/garden-runc
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: garden-runc-release
+            params:
+              RELEASE_NAME: garden-runc
+              REPOSITORY: cloudfoundry/garden-runc-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/garden-runc
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -2939,19 +2961,21 @@ jobs:
         - put: go-buildpack-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: go-buildpack-release
-          params:
-            RELEASE_NAME: go-buildpack
-            REPOSITORY: cloudfoundry/go-buildpack-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/go-buildpack
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: go-buildpack-release
+            params:
+              RELEASE_NAME: go-buildpack
+              REPOSITORY: cloudfoundry/go-buildpack-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/go-buildpack
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -3137,19 +3161,21 @@ jobs:
         - put: java-buildpack-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: java-buildpack-release
-          params:
-            RELEASE_NAME: java-buildpack
-            REPOSITORY: cloudfoundry/java-buildpack-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/java-buildpack
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: java-buildpack-release
+            params:
+              RELEASE_NAME: java-buildpack
+              REPOSITORY: cloudfoundry/java-buildpack-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/java-buildpack
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -3335,19 +3361,21 @@ jobs:
         - put: log-cache-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: log-cache-release
-          params:
-            RELEASE_NAME: log-cache
-            REPOSITORY: cloudfoundry/log-cache-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/log-cache
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: log-cache-release
+            params:
+              RELEASE_NAME: log-cache
+              REPOSITORY: cloudfoundry/log-cache-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/log-cache
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -3533,19 +3561,21 @@ jobs:
         - put: loggregator-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: loggregator-release
-          params:
-            RELEASE_NAME: loggregator
-            REPOSITORY: cloudfoundry/loggregator-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/loggregator
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: loggregator-release
+            params:
+              RELEASE_NAME: loggregator
+              REPOSITORY: cloudfoundry/loggregator-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/loggregator
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -3731,19 +3761,21 @@ jobs:
         - put: loggregator-agent-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: loggregator-agent-release
-          params:
-            RELEASE_NAME: loggregator-agent
-            REPOSITORY: cloudfoundry/loggregator-agent-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/loggregator-agent
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: loggregator-agent-release
+            params:
+              RELEASE_NAME: loggregator-agent
+              REPOSITORY: cloudfoundry/loggregator-agent-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/loggregator-agent
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -3929,19 +3961,21 @@ jobs:
         - put: nats-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: nats-release
-          params:
-            RELEASE_NAME: nats
-            REPOSITORY: cloudfoundry/nats-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/nats
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: nats-release
+            params:
+              RELEASE_NAME: nats
+              REPOSITORY: cloudfoundry/nats-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/nats
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -4127,19 +4161,21 @@ jobs:
         - put: nginx-buildpack-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: nginx-buildpack-release
-          params:
-            RELEASE_NAME: nginx-buildpack
-            REPOSITORY: cloudfoundry/nginx-buildpack-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/nginx-buildpack
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: nginx-buildpack-release
+            params:
+              RELEASE_NAME: nginx-buildpack
+              REPOSITORY: cloudfoundry/nginx-buildpack-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/nginx-buildpack
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -4325,19 +4361,21 @@ jobs:
         - put: nodejs-buildpack-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: nodejs-buildpack-release
-          params:
-            RELEASE_NAME: nodejs-buildpack
-            REPOSITORY: cloudfoundry/nodejs-buildpack-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/nodejs-buildpack
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: nodejs-buildpack-release
+            params:
+              RELEASE_NAME: nodejs-buildpack
+              REPOSITORY: cloudfoundry/nodejs-buildpack-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/nodejs-buildpack
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -4523,19 +4561,21 @@ jobs:
         - put: php-buildpack-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: php-buildpack-release
-          params:
-            RELEASE_NAME: php-buildpack
-            REPOSITORY: cloudfoundry/php-buildpack-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/php-buildpack
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: php-buildpack-release
+            params:
+              RELEASE_NAME: php-buildpack
+              REPOSITORY: cloudfoundry/php-buildpack-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/php-buildpack
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -4721,19 +4761,21 @@ jobs:
         - put: python-buildpack-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: python-buildpack-release
-          params:
-            RELEASE_NAME: python-buildpack
-            REPOSITORY: cloudfoundry/python-buildpack-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/python-buildpack
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: python-buildpack-release
+            params:
+              RELEASE_NAME: python-buildpack
+              REPOSITORY: cloudfoundry/python-buildpack-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/python-buildpack
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -4919,19 +4961,21 @@ jobs:
         - put: pxc-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: pxc-release
-          params:
-            RELEASE_NAME: pxc
-            REPOSITORY: cloudfoundry-incubator/pxc-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/pxc
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: pxc-release
+            params:
+              RELEASE_NAME: pxc
+              REPOSITORY: cloudfoundry-incubator/pxc-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/pxc
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -5117,19 +5161,21 @@ jobs:
         - put: r-buildpack-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: r-buildpack-release
-          params:
-            RELEASE_NAME: r-buildpack
-            REPOSITORY: cloudfoundry/r-buildpack-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/r-buildpack
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: r-buildpack-release
+            params:
+              RELEASE_NAME: r-buildpack
+              REPOSITORY: cloudfoundry/r-buildpack-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/r-buildpack
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -5315,19 +5361,21 @@ jobs:
         - put: routing-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: routing-release
-          params:
-            RELEASE_NAME: routing
-            REPOSITORY: cloudfoundry-incubator/cf-routing-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/routing
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: routing-release
+            params:
+              RELEASE_NAME: routing
+              REPOSITORY: cloudfoundry-incubator/cf-routing-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/routing
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -5513,19 +5561,21 @@ jobs:
         - put: ruby-buildpack-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: ruby-buildpack-release
-          params:
-            RELEASE_NAME: ruby-buildpack
-            REPOSITORY: cloudfoundry/ruby-buildpack-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/ruby-buildpack
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: ruby-buildpack-release
+            params:
+              RELEASE_NAME: ruby-buildpack
+              REPOSITORY: cloudfoundry/ruby-buildpack-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/ruby-buildpack
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -5711,19 +5761,21 @@ jobs:
         - put: silk-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: silk-release
-          params:
-            RELEASE_NAME: silk
-            REPOSITORY: cloudfoundry/silk-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/silk
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: silk-release
+            params:
+              RELEASE_NAME: silk
+              REPOSITORY: cloudfoundry/silk-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/silk
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -5909,19 +5961,21 @@ jobs:
         - put: staticfile-buildpack-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: staticfile-buildpack-release
-          params:
-            RELEASE_NAME: staticfile-buildpack
-            REPOSITORY: cloudfoundry/staticfile-buildpack-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/staticfile-buildpack
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: staticfile-buildpack-release
+            params:
+              RELEASE_NAME: staticfile-buildpack
+              REPOSITORY: cloudfoundry/staticfile-buildpack-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/staticfile-buildpack
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -6107,19 +6161,21 @@ jobs:
         - put: statsd-injector-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: statsd-injector-release
-          params:
-            RELEASE_NAME: statsd-injector
-            REPOSITORY: cloudfoundry/statsd-injector-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/statsd-injector
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: statsd-injector-release
+            params:
+              RELEASE_NAME: statsd-injector
+              REPOSITORY: cloudfoundry/statsd-injector-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/statsd-injector
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -6305,19 +6361,21 @@ jobs:
         - put: uaa-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: uaa-release
-          params:
-            RELEASE_NAME: uaa
-            REPOSITORY: cloudfoundry/uaa-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/uaa
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: uaa-release
+            params:
+              RELEASE_NAME: uaa
+              REPOSITORY: cloudfoundry/uaa-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/uaa
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -6503,19 +6561,21 @@ jobs:
         - put: credhub-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: credhub-release
-          params:
-            RELEASE_NAME: credhub
-            REPOSITORY: pivotal-cf/credhub-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/credhub
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: credhub-release
+            params:
+              RELEASE_NAME: credhub
+              REPOSITORY: pivotal-cf/credhub-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/credhub
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
@@ -6701,19 +6761,21 @@ jobs:
         - put: cf-cli-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
-        - task: create-slack-message
-          file: runtime-ci/tasks/create-slack-message/task.yml
-          input_mapping:
-            release: cf-cli-release
-          params:
-            RELEASE_NAME: cf-cli
-            REPOSITORY: bosh-packages/cf-cli-release
-            BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/cf-cli
-        - put: slack-alert
-          params:
-            text_file: slack-message/message.txt
-            username: Release Integration
-            icon_emoji: ':cloudfoundrylogo:'
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: cf-cli-release
+            params:
+              RELEASE_NAME: cf-cli
+              REPOSITORY: bosh-packages/cf-cli-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/cf-cli
+          - put: slack-alert
+            params:
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
     ensure:
       do:
       - task: delete-deployment
