@@ -584,6 +584,14 @@ instance_groups:
       logging:
         format:
           timestamp: "rfc3339"
+  - name: loggr-udp-forwarder
+    release: loggregator-agent
+    properties:
+      loggregator:
+        tls:
+          ca: "((loggregator_ca.certificate))"
+          cert: "((loggregator_tls_agent.certificate))"
+          key: "((loggregator_tls_agent.private_key))"
 - name: uaa
   azs:
   - z1
