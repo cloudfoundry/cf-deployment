@@ -91,7 +91,7 @@
       name: metric-store-cf-auth-proxy
       properties:
         cc:
-          ca_cert: ((cc.tls.ca))
+          ca_cert: ((cc_tls.ca))
           common_name: cloud-controller-ng.service.cf.internal
         external_cert: ((metricstore_ssl.certificate))
         external_key: ((metricstore_ssl.private_key))
