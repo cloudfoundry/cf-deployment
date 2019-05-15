@@ -205,8 +205,8 @@ func TestSemantic(t *testing.T) {
 		}
 	})
 
-	t.Run("all-cas-referenced-from-ca-variables", func(t *testing.T) {
-		caRegexp := regexp.MustCompile(`\(\(.*\.ca\)\)`)
+	t.Run("all-cas-referenced-from-cert-variables", func(t *testing.T) {
+		caRegexp := regexp.MustCompile(`\(\(.*ca\.certificate\)\)`)
 		manifestFile, err := ioutil.ReadFile(manifestPath)
 		if err != nil {
 			t.Errorf("file read error: %v", err)
@@ -214,7 +214,11 @@ func TestSemantic(t *testing.T) {
 
 		badCAs := caRegexp.FindAllString(string(manifestFile), -1)
 		for _, ca := range badCAs {
-			t.Errorf("CAs should be referenced from their CA variables: %s", ca)
+			if ca == "((diego_instance_identity_ca.certificate))" {
+				continue
+			}
+
+			t.Errorf("CAs should be referenced from their certificate variables: %s", ca)
 		}
 	})
 

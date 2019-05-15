@@ -123,9 +123,9 @@ test_all_cas_references_from_cert_variables() {
   set -e
 
   if [[ $exit_code == 0 ]]; then
-    fail "CAs should be referenced from their CA variables: $invalid_ca_references"
+    fail "CAs should be referenced from their certificate variables: $invalid_ca_references"
   else
-    pass "CA are referenced from CA variables in cf-deployment.yml"
+    pass "All CAs are referenced from certificate variables in cf-deployment.yml"
   fi
 }
 
