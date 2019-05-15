@@ -589,7 +589,7 @@ instance_groups:
     properties:
       loggregator:
         tls:
-          ca: "((loggregator_ca.certificate))"
+          ca: "((loggregator_tls_agent.ca))"
           cert: "((loggregator_tls_agent.certificate))"
           key: "((loggregator_tls_agent.private_key))"
 - name: uaa
