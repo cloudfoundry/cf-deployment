@@ -4600,7 +4600,7 @@ jobs:
   - task: update-compiled-releases-ops-binary-buildpack
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: cf-deployment-develop
+      original-compiled-releases-ops-file: updated-deployment-manifest
       release: binary-buildpack-release
       compiled-release-tarball: exported-release-binary-buildpack
     params:

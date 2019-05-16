@@ -336,7 +336,7 @@ jobs:
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       #@ if hasattr(s, "bootstrap"):
-      original-compiled-releases-ops-file: cf-deployment-develop
+      original-compiled-releases-ops-file: updated-deployment-manifest
       #@ else:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       #@ end
