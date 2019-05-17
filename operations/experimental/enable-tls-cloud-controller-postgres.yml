@@ -28,7 +28,7 @@
 
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb/ca_cert?
-  value: "(postgres_tls.ca)"
+  value: "((postgres_tls.ca))"
 
 - type: replace
   path: /variables/name=postgres_ca?
