@@ -22,6 +22,43 @@ params:
   ACTION: #@ action
 #@ end
 
+#@ def bbl_up():
+task: bbl-up
+file: cf-deployment-concourse-tasks/bbl-up/task.yml
+params:
+  BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+  BBL_IAAS: gcp
+  BBL_ENV_NAME: pre-dev
+  BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+  BBL_GCP_REGION: us-central1
+  BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+  BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+  LB_DOMAIN: pre-dev.test.relint.rocks
+input_mapping:
+  bbl-state: relint-envs
+  bbl-config: relint-envs
+ensure:
+  put: relint-envs
+  params:
+    repository: updated-bbl-state
+    rebase: true
+#@ end
+
+#@ def bbl_down():
+task: bbl-down
+file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+input_mapping:
+  bbl-state: relint-envs
+params:
+  BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+  BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+ensure:
+  put: relint-envs
+  params:
+    repository: updated-bbl-state
+    rebase: true
+#@ end
+
 ---
 groups:
 - name: update-releases
@@ -178,10 +215,10 @@ jobs:
   - task: #@ "update-release-{}-release-candidate".format(r.name)
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-release-candidate
+      cf-deployment: cf-deployment-release-candidate
       release: #@ r.name + "-release"
     output_mapping:
-      updated-deployment-manifest: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
+      updated-cf-deployment: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
     params:
       RELEASE_NAME: #@ r.name
   - task: #@ "update-additional-ops-files-{}-release-candidate".format(r.name)
@@ -194,25 +231,7 @@ jobs:
     params:
       RELEASE_NAME: #@ r.name
   - do:
-    - task: bbl-up
-      file: cf-deployment-concourse-tasks/bbl-up/task.yml
-      params:
-        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
-        BBL_IAAS: gcp
-        BBL_ENV_NAME: pre-dev
-        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
-        BBL_GCP_REGION: us-central1
-        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
-        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
-        LB_DOMAIN: pre-dev.test.relint.rocks
-      input_mapping:
-        bbl-state: relint-envs
-        bbl-config: relint-envs
-      ensure:
-        put: relint-envs
-        params:
-          repository: updated-bbl-state
-          rebase: true
+    - #@ bbl_up()
     - #@ manage_gcp_dns("add")
     - do:
       - task: deploy-cf
@@ -247,10 +266,10 @@ jobs:
       - task: #@ "update-release-{}-develop".format(r.name)
         file: runtime-ci/tasks/update-single-manifest-release/task.yml
         input_mapping:
-          deployment-configuration: cf-deployment-develop
+          cf-deployment: cf-deployment-develop
           release: #@ r.name + "-release"
         output_mapping:
-          updated-deployment-manifest: #@ "updated-cf-deployment-{}-develop".format(r.name)
+          updated-cf-deployment: #@ "updated-cf-deployment-{}-develop".format(r.name)
         params:
           RELEASE_NAME: #@ r.name
       - task: #@ "update-additional-ops-files-{}-develop".format(r.name)
@@ -323,18 +342,7 @@ jobs:
       do:
       - #@ delete_deployment("pre-dev")
       - #@ manage_gcp_dns("remove")
-      - task: bbl-down
-        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-        params:
-          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
-          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
-        ensure:
-          put: relint-envs
-          params:
-            repository: updated-bbl-state
-            rebase: true
+      - #@ bbl_down()
 #@ end
 
 #@ for r in data.values.opsReleases:
@@ -356,17 +364,52 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: #@ "update-release-" + r.name
+  - task: #@ "update-release-{}-release-candidate".format(r.name)
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       release: #@ r.name + "-release"
       original-ops-file: cf-deployment-release-candidate
+    output_mapping:
+      updated-ops-file: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
     params:
       RELEASE_NAME: #@ r.name
-  - put: cf-deployment-develop
-    params:
-      rebase: true
-      repository: updated-ops-file
+  - do:
+    - #@ bbl_up()
+    - #@ manage_gcp_dns("add")
+    - do:
+      - task: deploy-cf
+        file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          cf-deployment: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
+          ops-files: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
+          vars-files: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+          OPS_FILES: |
+            operations/experimental/fast-deploy-with-downtime-and-danger.yml
+            operations/use-compiled-releases.yml
+          REGENERATE_CREDENTIALS: false
+          BOSH_DEPLOY_ARGS: "--parallel 50"
+      - task: #@ "update-release-{}-develop".format(r.name)
+        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+        input_mapping:
+          release: #@ r.name + "-release"
+          original-ops-file: cf-deployment-develop
+        output_mapping:
+          updated-ops-file: #@ "updated-cf-deployment-{}-develop".format(r.name)
+        params:
+          RELEASE_NAME: #@ r.name
+      - put: cf-deployment-develop
+        params:
+          rebase: true
+          repository: #@ "updated-cf-deployment-{}-develop".format(r.name)
+    ensure:
+      do:
+      - #@ delete_deployment("pre-dev")
+      - #@ manage_gcp_dns("remove")
+      - #@ bbl_down()
 #@ end
 
 - name: delete-stale-branches
