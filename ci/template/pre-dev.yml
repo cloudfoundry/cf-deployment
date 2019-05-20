@@ -29,6 +29,11 @@ groups:
   #@ for r in data.values.baseReleases:
   - #@ "update-" + r.name
   #@ end
+- name: update-ops-releases
+  jobs:
+  #@ for r in data.values.opsReleases:
+  - #@ "update-" + r.name
+  #@ end
 - name: cleanup
   jobs:
   - delete-stale-branches
@@ -54,6 +59,15 @@ resources:
     repository: #@ r.repository
 
 #@ end
+
+#@ for r in data.values.opsReleases:
+- name: #@ r.name + "-release"
+  type: bosh-io-release
+  source:
+    repository: #@ r.repository
+
+#@ end
+
 - name: cf-deployment-release-candidate
   type: git
   source:
@@ -127,8 +141,8 @@ resources:
     bucket: component-bump-logs
     json_key: ((greengrass_gcp_service_account_json))
     regexp: #@ r.name + "/cf-(\d+)-(\d+)-(\d+)\.tgz"
-#@ end
 
+#@ end
 
 - name: slack-alert
   type: slack-notification
@@ -321,7 +335,38 @@ jobs:
           params:
             repository: updated-bbl-state
             rebase: true
+#@ end
 
+#@ for r in data.values.opsReleases:
+- name: #@ "update-" + r.name
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: #@ r.name + "-release"
+      trigger: true
+      params:
+        tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
+    - get: stemcell
+      params:
+        tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+  - task: #@ "update-release-" + r.name
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      release: #@ r.name + "-release"
+      original-ops-file: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: #@ r.name
+  - put: cf-deployment-develop
+    params:
+      rebase: true
+      repository: updated-ops-file
 #@ end
 
 - name: delete-stale-branches

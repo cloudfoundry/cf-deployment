@@ -36,6 +36,27 @@ groups:
   - update-uaa
   - update-credhub
   - update-cf-cli
+- name: update-ops-releases
+  jobs:
+  - update-backup-and-restore-sdk
+  - update-bits-service
+  - update-cf-app-sd
+  - update-haproxy
+  - update-mapfs
+  - update-nfs-volume
+  - update-smb-volume
+  - update-postgres
+  - update-syslog
+  - update-windows-syslog
+  - update-hwc-buildpack
+  - update-windows-utilities
+  - update-garden-windows
+  - update-winc
+  - update-windows1803fs
+  - update-windows2016fs
+  - update-node-exporter
+  - update-leadership-election
+  - update-metric-store
 - name: cleanup
   jobs:
   - delete-stale-branches
@@ -174,6 +195,82 @@ resources:
   type: bosh-io-release
   source:
     repository: bosh-packages/cf-cli-release
+- name: backup-and-restore-sdk-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry-incubator/backup-and-restore-sdk-release
+- name: bits-service-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry-incubator/bits-service-release
+- name: cf-app-sd-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/cf-app-sd-release
+- name: haproxy-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry-incubator/haproxy-boshrelease
+- name: mapfs-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/mapfs-release
+- name: nfs-volume-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/nfs-volume-release
+- name: smb-volume-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/smb-volume-release
+- name: postgres-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/postgres-release
+- name: syslog-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/syslog-release
+- name: windows-syslog-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/windows-syslog-release
+- name: hwc-buildpack-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry-incubator/hwc-buildpack-release
+- name: windows-utilities-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry-incubator/windows-utilities-release
+- name: garden-windows-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry-incubator/garden-windows-bosh-release
+- name: winc-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry-incubator/winc-release
+- name: windows1803fs-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/windows1803fs-online-release
+- name: windows2016fs-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry-incubator/windows2016fs-online-release
+- name: node-exporter-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry-community/node-exporter-boshrelease
+- name: leadership-election-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/leadership-election-release
+- name: metric-store-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/metric-store-release
 - name: cf-deployment-release-candidate
   type: git
   source:
@@ -6806,6 +6903,557 @@ jobs:
           params:
             repository: updated-bbl-state
             rebase: true
+- name: update-backup-and-restore-sdk
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: backup-and-restore-sdk-release
+      trigger: true
+      params:
+        tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
+    - get: stemcell
+      params:
+        tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+  - task: update-release-backup-and-restore-sdk
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      release: backup-and-restore-sdk-release
+      original-ops-file: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: backup-and-restore-sdk
+  - put: cf-deployment-develop
+    params:
+      rebase: true
+      repository: updated-ops-file
+- name: update-bits-service
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: bits-service-release
+      trigger: true
+      params:
+        tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
+    - get: stemcell
+      params:
+        tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+  - task: update-release-bits-service
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      release: bits-service-release
+      original-ops-file: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: bits-service
+  - put: cf-deployment-develop
+    params:
+      rebase: true
+      repository: updated-ops-file
+- name: update-cf-app-sd
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: cf-app-sd-release
+      trigger: true
+      params:
+        tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
+    - get: stemcell
+      params:
+        tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+  - task: update-release-cf-app-sd
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      release: cf-app-sd-release
+      original-ops-file: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: cf-app-sd
+  - put: cf-deployment-develop
+    params:
+      rebase: true
+      repository: updated-ops-file
+- name: update-haproxy
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: haproxy-release
+      trigger: true
+      params:
+        tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
+    - get: stemcell
+      params:
+        tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+  - task: update-release-haproxy
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      release: haproxy-release
+      original-ops-file: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: haproxy
+  - put: cf-deployment-develop
+    params:
+      rebase: true
+      repository: updated-ops-file
+- name: update-mapfs
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: mapfs-release
+      trigger: true
+      params:
+        tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
+    - get: stemcell
+      params:
+        tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+  - task: update-release-mapfs
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      release: mapfs-release
+      original-ops-file: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: mapfs
+  - put: cf-deployment-develop
+    params:
+      rebase: true
+      repository: updated-ops-file
+- name: update-nfs-volume
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: nfs-volume-release
+      trigger: true
+      params:
+        tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
+    - get: stemcell
+      params:
+        tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+  - task: update-release-nfs-volume
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      release: nfs-volume-release
+      original-ops-file: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: nfs-volume
+  - put: cf-deployment-develop
+    params:
+      rebase: true
+      repository: updated-ops-file
+- name: update-smb-volume
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: smb-volume-release
+      trigger: true
+      params:
+        tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
+    - get: stemcell
+      params:
+        tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+  - task: update-release-smb-volume
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      release: smb-volume-release
+      original-ops-file: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: smb-volume
+  - put: cf-deployment-develop
+    params:
+      rebase: true
+      repository: updated-ops-file
+- name: update-postgres
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: postgres-release
+      trigger: true
+      params:
+        tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
+    - get: stemcell
+      params:
+        tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+  - task: update-release-postgres
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      release: postgres-release
+      original-ops-file: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: postgres
+  - put: cf-deployment-develop
+    params:
+      rebase: true
+      repository: updated-ops-file
+- name: update-syslog
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: syslog-release
+      trigger: true
+      params:
+        tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
+    - get: stemcell
+      params:
+        tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+  - task: update-release-syslog
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      release: syslog-release
+      original-ops-file: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: syslog
+  - put: cf-deployment-develop
+    params:
+      rebase: true
+      repository: updated-ops-file
+- name: update-windows-syslog
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: windows-syslog-release
+      trigger: true
+      params:
+        tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
+    - get: stemcell
+      params:
+        tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+  - task: update-release-windows-syslog
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      release: windows-syslog-release
+      original-ops-file: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: windows-syslog
+  - put: cf-deployment-develop
+    params:
+      rebase: true
+      repository: updated-ops-file
+- name: update-hwc-buildpack
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: hwc-buildpack-release
+      trigger: true
+      params:
+        tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
+    - get: stemcell
+      params:
+        tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+  - task: update-release-hwc-buildpack
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      release: hwc-buildpack-release
+      original-ops-file: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: hwc-buildpack
+  - put: cf-deployment-develop
+    params:
+      rebase: true
+      repository: updated-ops-file
+- name: update-windows-utilities
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: windows-utilities-release
+      trigger: true
+      params:
+        tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
+    - get: stemcell
+      params:
+        tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+  - task: update-release-windows-utilities
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      release: windows-utilities-release
+      original-ops-file: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: windows-utilities
+  - put: cf-deployment-develop
+    params:
+      rebase: true
+      repository: updated-ops-file
+- name: update-garden-windows
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: garden-windows-release
+      trigger: true
+      params:
+        tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
+    - get: stemcell
+      params:
+        tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+  - task: update-release-garden-windows
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      release: garden-windows-release
+      original-ops-file: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: garden-windows
+  - put: cf-deployment-develop
+    params:
+      rebase: true
+      repository: updated-ops-file
+- name: update-winc
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: winc-release
+      trigger: true
+      params:
+        tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
+    - get: stemcell
+      params:
+        tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+  - task: update-release-winc
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      release: winc-release
+      original-ops-file: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: winc
+  - put: cf-deployment-develop
+    params:
+      rebase: true
+      repository: updated-ops-file
+- name: update-windows1803fs
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: windows1803fs-release
+      trigger: true
+      params:
+        tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
+    - get: stemcell
+      params:
+        tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+  - task: update-release-windows1803fs
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      release: windows1803fs-release
+      original-ops-file: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: windows1803fs
+  - put: cf-deployment-develop
+    params:
+      rebase: true
+      repository: updated-ops-file
+- name: update-windows2016fs
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: windows2016fs-release
+      trigger: true
+      params:
+        tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
+    - get: stemcell
+      params:
+        tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+  - task: update-release-windows2016fs
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      release: windows2016fs-release
+      original-ops-file: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: windows2016fs
+  - put: cf-deployment-develop
+    params:
+      rebase: true
+      repository: updated-ops-file
+- name: update-node-exporter
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: node-exporter-release
+      trigger: true
+      params:
+        tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
+    - get: stemcell
+      params:
+        tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+  - task: update-release-node-exporter
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      release: node-exporter-release
+      original-ops-file: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: node-exporter
+  - put: cf-deployment-develop
+    params:
+      rebase: true
+      repository: updated-ops-file
+- name: update-leadership-election
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: leadership-election-release
+      trigger: true
+      params:
+        tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
+    - get: stemcell
+      params:
+        tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+  - task: update-release-leadership-election
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      release: leadership-election-release
+      original-ops-file: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: leadership-election
+  - put: cf-deployment-develop
+    params:
+      rebase: true
+      repository: updated-ops-file
+- name: update-metric-store
+  serial_groups:
+  - update-release
+  public: true
+  plan:
+  - aggregate:
+    - get: metric-store-release
+      trigger: true
+      params:
+        tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
+    - get: stemcell
+      params:
+        tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+  - task: update-release-metric-store
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      release: metric-store-release
+      original-ops-file: cf-deployment-release-candidate
+    params:
+      RELEASE_NAME: metric-store
+  - put: cf-deployment-develop
+    params:
+      rebase: true
+      repository: updated-ops-file
 - name: delete-stale-branches
   public: true
   plan:
