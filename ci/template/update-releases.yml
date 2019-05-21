@@ -125,10 +125,10 @@ jobs:
   - task: #@ "update-release-" + r.name
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: #@ r.name + "-release"
     output_mapping:
-      updated-deployment-manifest: #@ "updated-cf-deployment-{}".format(r.name)
+      updated-cf-deployment: #@ "updated-cf-deployment-{}".format(r.name)
     params:
       RELEASE_NAME: #@ r.name
   #@ if r.name.count("buildpack")==0:
@@ -308,12 +308,12 @@ jobs:
   - task: update-stemcell-manifest-section
     file: runtime-ci/tasks/update-stemcell-manifest-section/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
   - task: upload-updated-stemcell
     file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
     input_mapping:
       bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
+      cf-deployment: updated-cf-deployment
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       INFRASTRUCTURE: google
@@ -323,7 +323,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: #@ "exported-release-" + s.name
       params:
@@ -336,7 +336,7 @@ jobs:
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
       #@ if hasattr(s, "bootstrap"):
-      original-compiled-releases-ops-file: updated-deployment-manifest
+      original-compiled-releases-ops-file: updated-cf-deployment
       #@ else:
       original-compiled-releases-ops-file: updated-compiled-releases-ops-file
       #@ end

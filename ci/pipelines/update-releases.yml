@@ -543,10 +543,10 @@ jobs:
   - task: update-release-binary-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: binary-buildpack-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-binary-buildpack
+      updated-cf-deployment: updated-cf-deployment-binary-buildpack
     params:
       RELEASE_NAME: binary-buildpack
   - task: compile-release
@@ -611,10 +611,10 @@ jobs:
   - task: update-release-bosh-dns-aliases
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: bosh-dns-aliases-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-bosh-dns-aliases
+      updated-cf-deployment: updated-cf-deployment-bosh-dns-aliases
     params:
       RELEASE_NAME: bosh-dns-aliases
   - task: bosh-dry-run
@@ -697,10 +697,10 @@ jobs:
   - task: update-release-bpm
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: bpm-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-bpm
+      updated-cf-deployment: updated-cf-deployment-bpm
     params:
       RELEASE_NAME: bpm
   - task: bosh-dry-run
@@ -783,10 +783,10 @@ jobs:
   - task: update-release-capi
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: capi-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-capi
+      updated-cf-deployment: updated-cf-deployment-capi
     params:
       RELEASE_NAME: capi
   - task: bosh-dry-run
@@ -869,10 +869,10 @@ jobs:
   - task: update-release-cf-networking
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: cf-networking-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-cf-networking
+      updated-cf-deployment: updated-cf-deployment-cf-networking
     params:
       RELEASE_NAME: cf-networking
   - task: bosh-dry-run
@@ -955,10 +955,10 @@ jobs:
   - task: update-release-cf-smoke-tests
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: cf-smoke-tests-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-cf-smoke-tests
+      updated-cf-deployment: updated-cf-deployment-cf-smoke-tests
     params:
       RELEASE_NAME: cf-smoke-tests
   - task: bosh-dry-run
@@ -1041,10 +1041,10 @@ jobs:
   - task: update-release-cf-syslog-drain
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: cf-syslog-drain-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-cf-syslog-drain
+      updated-cf-deployment: updated-cf-deployment-cf-syslog-drain
     params:
       RELEASE_NAME: cf-syslog-drain
   - task: bosh-dry-run
@@ -1127,10 +1127,10 @@ jobs:
   - task: update-release-cflinuxfs3
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: cflinuxfs3-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-cflinuxfs3
+      updated-cf-deployment: updated-cf-deployment-cflinuxfs3
     params:
       RELEASE_NAME: cflinuxfs3
   - task: bosh-dry-run
@@ -1213,10 +1213,10 @@ jobs:
   - task: update-release-diego
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: diego-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-diego
+      updated-cf-deployment: updated-cf-deployment-diego
     params:
       RELEASE_NAME: diego
   - task: bosh-dry-run
@@ -1299,10 +1299,10 @@ jobs:
   - task: update-release-dotnet-core-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: dotnet-core-buildpack-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-dotnet-core-buildpack
+      updated-cf-deployment: updated-cf-deployment-dotnet-core-buildpack
     params:
       RELEASE_NAME: dotnet-core-buildpack
   - task: compile-release
@@ -1367,10 +1367,10 @@ jobs:
   - task: update-release-garden-runc
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: garden-runc-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-garden-runc
+      updated-cf-deployment: updated-cf-deployment-garden-runc
     params:
       RELEASE_NAME: garden-runc
   - task: bosh-dry-run
@@ -1453,10 +1453,10 @@ jobs:
   - task: update-release-go-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: go-buildpack-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-go-buildpack
+      updated-cf-deployment: updated-cf-deployment-go-buildpack
     params:
       RELEASE_NAME: go-buildpack
   - task: compile-release
@@ -1521,10 +1521,10 @@ jobs:
   - task: update-release-java-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: java-buildpack-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-java-buildpack
+      updated-cf-deployment: updated-cf-deployment-java-buildpack
     params:
       RELEASE_NAME: java-buildpack
   - task: compile-release
@@ -1589,10 +1589,10 @@ jobs:
   - task: update-release-log-cache
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: log-cache-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-log-cache
+      updated-cf-deployment: updated-cf-deployment-log-cache
     params:
       RELEASE_NAME: log-cache
   - task: bosh-dry-run
@@ -1675,10 +1675,10 @@ jobs:
   - task: update-release-loggregator
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: loggregator-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-loggregator
+      updated-cf-deployment: updated-cf-deployment-loggregator
     params:
       RELEASE_NAME: loggregator
   - task: bosh-dry-run
@@ -1761,10 +1761,10 @@ jobs:
   - task: update-release-loggregator-agent
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: loggregator-agent-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-loggregator-agent
+      updated-cf-deployment: updated-cf-deployment-loggregator-agent
     params:
       RELEASE_NAME: loggregator-agent
   - task: bosh-dry-run
@@ -1847,10 +1847,10 @@ jobs:
   - task: update-release-nats
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: nats-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-nats
+      updated-cf-deployment: updated-cf-deployment-nats
     params:
       RELEASE_NAME: nats
   - task: bosh-dry-run
@@ -1933,10 +1933,10 @@ jobs:
   - task: update-release-nginx-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: nginx-buildpack-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-nginx-buildpack
+      updated-cf-deployment: updated-cf-deployment-nginx-buildpack
     params:
       RELEASE_NAME: nginx-buildpack
   - task: compile-release
@@ -2001,10 +2001,10 @@ jobs:
   - task: update-release-nodejs-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: nodejs-buildpack-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-nodejs-buildpack
+      updated-cf-deployment: updated-cf-deployment-nodejs-buildpack
     params:
       RELEASE_NAME: nodejs-buildpack
   - task: compile-release
@@ -2069,10 +2069,10 @@ jobs:
   - task: update-release-php-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: php-buildpack-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-php-buildpack
+      updated-cf-deployment: updated-cf-deployment-php-buildpack
     params:
       RELEASE_NAME: php-buildpack
   - task: compile-release
@@ -2137,10 +2137,10 @@ jobs:
   - task: update-release-python-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: python-buildpack-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-python-buildpack
+      updated-cf-deployment: updated-cf-deployment-python-buildpack
     params:
       RELEASE_NAME: python-buildpack
   - task: compile-release
@@ -2205,10 +2205,10 @@ jobs:
   - task: update-release-pxc
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: pxc-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-pxc
+      updated-cf-deployment: updated-cf-deployment-pxc
     params:
       RELEASE_NAME: pxc
   - task: bosh-dry-run
@@ -2291,10 +2291,10 @@ jobs:
   - task: update-release-r-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: r-buildpack-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-r-buildpack
+      updated-cf-deployment: updated-cf-deployment-r-buildpack
     params:
       RELEASE_NAME: r-buildpack
   - task: compile-release
@@ -2359,10 +2359,10 @@ jobs:
   - task: update-release-routing
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: routing-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-routing
+      updated-cf-deployment: updated-cf-deployment-routing
     params:
       RELEASE_NAME: routing
   - task: bosh-dry-run
@@ -2445,10 +2445,10 @@ jobs:
   - task: update-release-ruby-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: ruby-buildpack-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-ruby-buildpack
+      updated-cf-deployment: updated-cf-deployment-ruby-buildpack
     params:
       RELEASE_NAME: ruby-buildpack
   - task: compile-release
@@ -2513,10 +2513,10 @@ jobs:
   - task: update-release-silk
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: silk-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-silk
+      updated-cf-deployment: updated-cf-deployment-silk
     params:
       RELEASE_NAME: silk
   - task: bosh-dry-run
@@ -2599,10 +2599,10 @@ jobs:
   - task: update-release-staticfile-buildpack
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: staticfile-buildpack-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-staticfile-buildpack
+      updated-cf-deployment: updated-cf-deployment-staticfile-buildpack
     params:
       RELEASE_NAME: staticfile-buildpack
   - task: compile-release
@@ -2667,10 +2667,10 @@ jobs:
   - task: update-release-statsd-injector
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: statsd-injector-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-statsd-injector
+      updated-cf-deployment: updated-cf-deployment-statsd-injector
     params:
       RELEASE_NAME: statsd-injector
   - task: bosh-dry-run
@@ -2753,10 +2753,10 @@ jobs:
   - task: update-release-uaa
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: uaa-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-uaa
+      updated-cf-deployment: updated-cf-deployment-uaa
     params:
       RELEASE_NAME: uaa
   - task: bosh-dry-run
@@ -2839,10 +2839,10 @@ jobs:
   - task: update-release-credhub
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: credhub-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-credhub
+      updated-cf-deployment: updated-cf-deployment-credhub
     params:
       RELEASE_NAME: credhub
   - task: bosh-dry-run
@@ -2925,10 +2925,10 @@ jobs:
   - task: update-release-cf-cli
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
       release: cf-cli-release
     output_mapping:
-      updated-deployment-manifest: updated-cf-deployment-cf-cli
+      updated-cf-deployment: updated-cf-deployment-cf-cli
     params:
       RELEASE_NAME: cf-cli
   - task: bosh-dry-run
@@ -4246,12 +4246,12 @@ jobs:
   - task: update-stemcell-manifest-section
     file: runtime-ci/tasks/update-stemcell-manifest-section/task.yml
     input_mapping:
-      deployment-configuration: cf-deployment-develop
+      cf-deployment: cf-deployment-develop
   - task: upload-updated-stemcell
     file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
     input_mapping:
       bbl-state: relint-envs
-      cf-deployment: updated-deployment-manifest
+      cf-deployment: updated-cf-deployment
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       INFRASTRUCTURE: google
@@ -4260,7 +4260,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-binary-buildpack
       params:
@@ -4271,7 +4271,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-bosh-dns-aliases
       params:
@@ -4282,7 +4282,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-bpm
       params:
@@ -4293,7 +4293,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-capi
       params:
@@ -4304,7 +4304,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-cf-networking
       params:
@@ -4315,7 +4315,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-cf-smoke-tests
       params:
@@ -4326,7 +4326,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-cf-syslog-drain
       params:
@@ -4337,7 +4337,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-cflinuxfs3
       params:
@@ -4348,7 +4348,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-diego
       params:
@@ -4359,7 +4359,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-dotnet-core-buildpack
       params:
@@ -4370,7 +4370,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-garden-runc
       params:
@@ -4381,7 +4381,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-go-buildpack
       params:
@@ -4392,7 +4392,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-java-buildpack
       params:
@@ -4403,7 +4403,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-log-cache
       params:
@@ -4414,7 +4414,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-loggregator
       params:
@@ -4425,7 +4425,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-loggregator-agent
       params:
@@ -4436,7 +4436,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-nats
       params:
@@ -4447,7 +4447,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-nginx-buildpack
       params:
@@ -4458,7 +4458,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-nodejs-buildpack
       params:
@@ -4469,7 +4469,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-php-buildpack
       params:
@@ -4480,7 +4480,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-python-buildpack
       params:
@@ -4491,7 +4491,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-pxc
       params:
@@ -4502,7 +4502,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-r-buildpack
       params:
@@ -4513,7 +4513,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-routing
       params:
@@ -4524,7 +4524,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-ruby-buildpack
       params:
@@ -4535,7 +4535,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-silk
       params:
@@ -4546,7 +4546,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-staticfile-buildpack
       params:
@@ -4557,7 +4557,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-statsd-injector
       params:
@@ -4568,7 +4568,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-uaa
       params:
@@ -4579,7 +4579,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-credhub
       params:
@@ -4590,7 +4590,7 @@ jobs:
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-deployment-manifest
+        manifest: updated-cf-deployment
       output_mapping:
         exported-release: exported-release-cf-cli
       params:
@@ -4600,7 +4600,7 @@ jobs:
   - task: update-compiled-releases-ops-binary-buildpack
     file: runtime-ci/tasks/update-single-compiled-release/task.yml
     input_mapping:
-      original-compiled-releases-ops-file: updated-deployment-manifest
+      original-compiled-releases-ops-file: updated-cf-deployment
       release: binary-buildpack-release
       compiled-release-tarball: exported-release-binary-buildpack
     params:
