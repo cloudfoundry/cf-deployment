@@ -276,7 +276,7 @@ jobs:
       windows-stemcell: #@ s.name + "-stemcell"
     params:
       ORIGINAL_WINDOWS_OPS_FILE_PATH: #@ "{}/{}".format(s.opsFileDir, s.opsFile)
-      UPDATED_WINDOWS_OPS_FILE_PATH: #@ s.opsFile
+      UPDATED_WINDOWS_OPS_FILE_PATH: #@ "{}/{}".format(s.opsFileDir, s.opsFile)
   - put: cf-deployment-develop
     params:
       rebase: true
