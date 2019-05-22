@@ -161,6 +161,7 @@ resources:
 
 jobs:
 #@ for r in data.values.baseReleases:
+#@ env = "pre-dev"
 - name: #@ "update-" + r.name
   serial_groups:
   - update-release
@@ -201,8 +202,8 @@ jobs:
     params:
       RELEASE_NAME: #@ r.name
   - do:
-    - #@ bbl_up()
-    - #@ manage_gcp_dns("add")
+    - #@ bbl_up(env)
+    - #@ manage_gcp_dns("add", env)
     - do:
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
@@ -310,9 +311,9 @@ jobs:
               icon_emoji: ":cloudfoundrylogo:"
     ensure:
       do:
-      - #@ delete_deployment("pre-dev")
-      - #@ manage_gcp_dns("remove")
-      - #@ bbl_down()
+      - #@ delete_deployment(env)
+      - #@ manage_gcp_dns("remove", env)
+      - #@ bbl_down(env)
 #@ end
 
 #@ for r in data.values.opsReleases:
