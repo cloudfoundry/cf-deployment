@@ -1,0 +1,29 @@
+#@ def update_release(release, type, branch, use_updated_cf_d = False):
+#@ if type == "manifest":
+  #@ task_name = "update-release-{}-{}".format(release.name, branch)
+#@ else:
+  #@ task_name = "update-additional-ops-files-{}-{}".format(release.name, branch)
+#@ end
+#@ if use_updated_cf_d:
+  #@ cf_deployment_input = "updated-cf-deployment-{}-{}".format(release.name, branch)
+#@ else:
+  #@ cf_deployment_input = "cf-deployment-{}".format(branch)
+#@ end
+task: #@ task_name
+file: #@ "runtime-ci/tasks/update-single-{}-release/task.yml".format(type)
+input_mapping:
+  #@ if type == "manifest":
+  cf-deployment: #@ cf_deployment_input
+  #@ else:
+  original-ops-file: #@ cf_deployment_input
+  #@ end
+  release: #@ release.name + "-release"
+output_mapping:
+  #@ if type == "manifest":
+  updated-cf-deployment: #@ "updated-cf-deployment-{}-{}".format(release.name, branch)
+  #@ else:
+  updated-ops-file: #@ "updated-cf-deployment-{}-{}".format(release.name, branch)
+  #@ end
+params:
+  RELEASE_NAME: #@ release.name
+#@ end

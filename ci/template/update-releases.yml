@@ -3,6 +3,7 @@
 #@ load("bbl-up.lib.yml", "bbl_up")
 #@ load("delete-deployment.lib.yml", "delete_deployment")
 #@ load("manage-gcp-dns.lib.yml", "manage_gcp_dns")
+#@ load("update-release.lib.yml", "update_release")
 
 ---
 groups:
@@ -183,24 +184,8 @@ jobs:
     - get: runtime-ci
     - get: relint-envs
     - get: relint-team
-  - task: #@ "update-release-{}-release-candidate".format(r.name)
-    file: runtime-ci/tasks/update-single-manifest-release/task.yml
-    input_mapping:
-      cf-deployment: cf-deployment-release-candidate
-      release: #@ r.name + "-release"
-    output_mapping:
-      updated-cf-deployment: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
-    params:
-      RELEASE_NAME: #@ r.name
-  - task: #@ "update-additional-ops-files-{}-release-candidate".format(r.name)
-    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-    input_mapping:
-      original-ops-file: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
-      release: #@ r.name + "-release"
-    output_mapping:
-      updated-ops-file: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
-    params:
-      RELEASE_NAME: #@ r.name
+  - #@ update_release(r, "manifest", "release-candidate")
+  - #@ update_release(r, "opsfile", "release-candidate", True)
   - do:
     - #@ bbl_up(env)
     - #@ manage_gcp_dns("add", env)
@@ -234,24 +219,8 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: #@ r.name
-      - task: #@ "update-release-{}-develop".format(r.name)
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: #@ r.name + "-release"
-        output_mapping:
-          updated-cf-deployment: #@ "updated-cf-deployment-{}-develop".format(r.name)
-        params:
-          RELEASE_NAME: #@ r.name
-      - task: #@ "update-additional-ops-files-{}-develop".format(r.name)
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: #@ "updated-cf-deployment-{}-develop".format(r.name)
-          release: #@ r.name + "-release"
-        output_mapping:
-          updated-ops-file: #@ "updated-cf-deployment-{}-develop".format(r.name)
-        params:
-          RELEASE_NAME: #@ r.name
+      - #@ update_release(r, "manifest", "develop")
+      - #@ update_release(r, "opsfile", "develop", True)
       - task: #@ "update-compiled-releases-ops-file-{}-develop".format(r.name)
         file: runtime-ci/tasks/update-single-compiled-release/task.yml
         input_mapping:
