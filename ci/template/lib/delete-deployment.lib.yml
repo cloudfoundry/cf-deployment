@@ -1,0 +1,9 @@
+#@ def delete_deployment(env):
+task: delete-deployment
+file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+input_mapping:
+  bbl-state: relint-envs
+params:
+  BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
+#@ end
+
