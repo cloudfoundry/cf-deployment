@@ -908,6 +908,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/binary-buildpack
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -1110,6 +1114,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/bosh-dns-aliases
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -1312,6 +1320,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/bpm
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -1514,6 +1526,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/capi
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -1716,6 +1732,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/cf-networking
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -1918,6 +1938,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/cf-smoke-tests
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -2120,6 +2144,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/cf-syslog-drain
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -2322,6 +2350,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/cflinuxfs3
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -2524,6 +2556,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/diego
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -2726,6 +2762,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/dotnet-core-buildpack
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -2928,6 +2968,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/garden-runc
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -3130,6 +3174,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/go-buildpack
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -3332,6 +3380,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/java-buildpack
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -3534,6 +3586,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/log-cache
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -3736,6 +3792,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/loggregator
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -3938,6 +3998,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/loggregator-agent
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -4140,6 +4204,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/nats
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -4342,6 +4410,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/nginx-buildpack
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -4544,6 +4616,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/nodejs-buildpack
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -4746,6 +4822,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/php-buildpack
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -4948,6 +5028,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/python-buildpack
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -5150,6 +5234,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/pxc
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -5352,6 +5440,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/r-buildpack
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -5554,6 +5646,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/routing
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -5756,6 +5852,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/ruby-buildpack
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -5958,6 +6058,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/silk
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -6160,6 +6264,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/staticfile-buildpack
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -6362,6 +6470,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/statsd-injector
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -6564,6 +6676,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/uaa
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -6766,6 +6882,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/credhub
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
@@ -6968,6 +7088,10 @@ jobs:
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/cf-cli
           - put: slack-alert
             params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: Release Integration
               icon_emoji: ':cloudfoundrylogo:'
