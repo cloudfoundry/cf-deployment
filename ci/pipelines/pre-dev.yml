@@ -7107,19 +7107,31 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           ERRAND_NAME: smoke-tests
-      - task: update-additional-ops-files-backup-and-restore-sdk-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: cf-deployment-develop
-          release: backup-and-restore-sdk-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-backup-and-restore-sdk-develop
-        params:
-          RELEASE_NAME: backup-and-restore-sdk
-      - put: cf-deployment-develop
-        params:
-          rebase: true
-          repository: updated-cf-deployment-backup-and-restore-sdk-develop
+      on_success:
+        do:
+        - task: update-additional-ops-files-backup-and-restore-sdk-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: backup-and-restore-sdk-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-backup-and-restore-sdk-develop
+          params:
+            RELEASE_NAME: backup-and-restore-sdk
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-backup-and-restore-sdk-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-backup-and-restore-sdk-release-candidate
+            release: backup-and-restore-sdk-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: backup-and-restore-sdk
     ensure:
       do:
       - task: delete-deployment
@@ -7230,19 +7242,31 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           ERRAND_NAME: smoke-tests
-      - task: update-additional-ops-files-bits-service-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: cf-deployment-develop
-          release: bits-service-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-bits-service-develop
-        params:
-          RELEASE_NAME: bits-service
-      - put: cf-deployment-develop
-        params:
-          rebase: true
-          repository: updated-cf-deployment-bits-service-develop
+      on_success:
+        do:
+        - task: update-additional-ops-files-bits-service-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: bits-service-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-bits-service-develop
+          params:
+            RELEASE_NAME: bits-service
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-bits-service-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-bits-service-release-candidate
+            release: bits-service-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: bits-service
     ensure:
       do:
       - task: delete-deployment
@@ -7353,19 +7377,31 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           ERRAND_NAME: smoke-tests
-      - task: update-additional-ops-files-cf-app-sd-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: cf-deployment-develop
-          release: cf-app-sd-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-cf-app-sd-develop
-        params:
-          RELEASE_NAME: cf-app-sd
-      - put: cf-deployment-develop
-        params:
-          rebase: true
-          repository: updated-cf-deployment-cf-app-sd-develop
+      on_success:
+        do:
+        - task: update-additional-ops-files-cf-app-sd-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: cf-app-sd-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-cf-app-sd-develop
+          params:
+            RELEASE_NAME: cf-app-sd
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-cf-app-sd-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-cf-app-sd-release-candidate
+            release: cf-app-sd-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: cf-app-sd
     ensure:
       do:
       - task: delete-deployment
@@ -7476,19 +7512,31 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           ERRAND_NAME: smoke-tests
-      - task: update-additional-ops-files-haproxy-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: cf-deployment-develop
-          release: haproxy-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-haproxy-develop
-        params:
-          RELEASE_NAME: haproxy
-      - put: cf-deployment-develop
-        params:
-          rebase: true
-          repository: updated-cf-deployment-haproxy-develop
+      on_success:
+        do:
+        - task: update-additional-ops-files-haproxy-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: haproxy-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-haproxy-develop
+          params:
+            RELEASE_NAME: haproxy
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-haproxy-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-haproxy-release-candidate
+            release: haproxy-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: haproxy
     ensure:
       do:
       - task: delete-deployment
@@ -7599,19 +7647,31 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           ERRAND_NAME: smoke-tests
-      - task: update-additional-ops-files-mapfs-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: cf-deployment-develop
-          release: mapfs-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-mapfs-develop
-        params:
-          RELEASE_NAME: mapfs
-      - put: cf-deployment-develop
-        params:
-          rebase: true
-          repository: updated-cf-deployment-mapfs-develop
+      on_success:
+        do:
+        - task: update-additional-ops-files-mapfs-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: mapfs-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-mapfs-develop
+          params:
+            RELEASE_NAME: mapfs
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-mapfs-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-mapfs-release-candidate
+            release: mapfs-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: mapfs
     ensure:
       do:
       - task: delete-deployment
@@ -7722,19 +7782,31 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           ERRAND_NAME: smoke-tests
-      - task: update-additional-ops-files-nfs-volume-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: cf-deployment-develop
-          release: nfs-volume-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-nfs-volume-develop
-        params:
-          RELEASE_NAME: nfs-volume
-      - put: cf-deployment-develop
-        params:
-          rebase: true
-          repository: updated-cf-deployment-nfs-volume-develop
+      on_success:
+        do:
+        - task: update-additional-ops-files-nfs-volume-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: nfs-volume-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-nfs-volume-develop
+          params:
+            RELEASE_NAME: nfs-volume
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-nfs-volume-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-nfs-volume-release-candidate
+            release: nfs-volume-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: nfs-volume
     ensure:
       do:
       - task: delete-deployment
@@ -7845,19 +7917,31 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           ERRAND_NAME: smoke-tests
-      - task: update-additional-ops-files-smb-volume-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: cf-deployment-develop
-          release: smb-volume-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-smb-volume-develop
-        params:
-          RELEASE_NAME: smb-volume
-      - put: cf-deployment-develop
-        params:
-          rebase: true
-          repository: updated-cf-deployment-smb-volume-develop
+      on_success:
+        do:
+        - task: update-additional-ops-files-smb-volume-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: smb-volume-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-smb-volume-develop
+          params:
+            RELEASE_NAME: smb-volume
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-smb-volume-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-smb-volume-release-candidate
+            release: smb-volume-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: smb-volume
     ensure:
       do:
       - task: delete-deployment
@@ -7968,19 +8052,31 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           ERRAND_NAME: smoke-tests
-      - task: update-additional-ops-files-postgres-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: cf-deployment-develop
-          release: postgres-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-postgres-develop
-        params:
-          RELEASE_NAME: postgres
-      - put: cf-deployment-develop
-        params:
-          rebase: true
-          repository: updated-cf-deployment-postgres-develop
+      on_success:
+        do:
+        - task: update-additional-ops-files-postgres-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: postgres-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-postgres-develop
+          params:
+            RELEASE_NAME: postgres
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-postgres-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-postgres-release-candidate
+            release: postgres-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: postgres
     ensure:
       do:
       - task: delete-deployment
@@ -8091,19 +8187,31 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           ERRAND_NAME: smoke-tests
-      - task: update-additional-ops-files-syslog-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: cf-deployment-develop
-          release: syslog-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-syslog-develop
-        params:
-          RELEASE_NAME: syslog
-      - put: cf-deployment-develop
-        params:
-          rebase: true
-          repository: updated-cf-deployment-syslog-develop
+      on_success:
+        do:
+        - task: update-additional-ops-files-syslog-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: syslog-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-syslog-develop
+          params:
+            RELEASE_NAME: syslog
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-syslog-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-syslog-release-candidate
+            release: syslog-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: syslog
     ensure:
       do:
       - task: delete-deployment
@@ -8214,19 +8322,31 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           ERRAND_NAME: smoke-tests
-      - task: update-additional-ops-files-windows-syslog-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: cf-deployment-develop
-          release: windows-syslog-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-windows-syslog-develop
-        params:
-          RELEASE_NAME: windows-syslog
-      - put: cf-deployment-develop
-        params:
-          rebase: true
-          repository: updated-cf-deployment-windows-syslog-develop
+      on_success:
+        do:
+        - task: update-additional-ops-files-windows-syslog-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: windows-syslog-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-windows-syslog-develop
+          params:
+            RELEASE_NAME: windows-syslog
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-windows-syslog-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-windows-syslog-release-candidate
+            release: windows-syslog-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: windows-syslog
     ensure:
       do:
       - task: delete-deployment
@@ -8337,19 +8457,31 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           ERRAND_NAME: smoke-tests
-      - task: update-additional-ops-files-hwc-buildpack-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: cf-deployment-develop
-          release: hwc-buildpack-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-hwc-buildpack-develop
-        params:
-          RELEASE_NAME: hwc-buildpack
-      - put: cf-deployment-develop
-        params:
-          rebase: true
-          repository: updated-cf-deployment-hwc-buildpack-develop
+      on_success:
+        do:
+        - task: update-additional-ops-files-hwc-buildpack-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: hwc-buildpack-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-hwc-buildpack-develop
+          params:
+            RELEASE_NAME: hwc-buildpack
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-hwc-buildpack-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-hwc-buildpack-release-candidate
+            release: hwc-buildpack-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: hwc-buildpack
     ensure:
       do:
       - task: delete-deployment
@@ -8460,19 +8592,31 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           ERRAND_NAME: smoke-tests
-      - task: update-additional-ops-files-windows-utilities-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: cf-deployment-develop
-          release: windows-utilities-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-windows-utilities-develop
-        params:
-          RELEASE_NAME: windows-utilities
-      - put: cf-deployment-develop
-        params:
-          rebase: true
-          repository: updated-cf-deployment-windows-utilities-develop
+      on_success:
+        do:
+        - task: update-additional-ops-files-windows-utilities-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: windows-utilities-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-windows-utilities-develop
+          params:
+            RELEASE_NAME: windows-utilities
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-windows-utilities-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-windows-utilities-release-candidate
+            release: windows-utilities-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: windows-utilities
     ensure:
       do:
       - task: delete-deployment
@@ -8583,19 +8727,31 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           ERRAND_NAME: smoke-tests
-      - task: update-additional-ops-files-garden-windows-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: cf-deployment-develop
-          release: garden-windows-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-garden-windows-develop
-        params:
-          RELEASE_NAME: garden-windows
-      - put: cf-deployment-develop
-        params:
-          rebase: true
-          repository: updated-cf-deployment-garden-windows-develop
+      on_success:
+        do:
+        - task: update-additional-ops-files-garden-windows-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: garden-windows-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-garden-windows-develop
+          params:
+            RELEASE_NAME: garden-windows
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-garden-windows-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-garden-windows-release-candidate
+            release: garden-windows-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: garden-windows
     ensure:
       do:
       - task: delete-deployment
@@ -8706,19 +8862,31 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           ERRAND_NAME: smoke-tests
-      - task: update-additional-ops-files-winc-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: cf-deployment-develop
-          release: winc-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-winc-develop
-        params:
-          RELEASE_NAME: winc
-      - put: cf-deployment-develop
-        params:
-          rebase: true
-          repository: updated-cf-deployment-winc-develop
+      on_success:
+        do:
+        - task: update-additional-ops-files-winc-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: winc-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-winc-develop
+          params:
+            RELEASE_NAME: winc
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-winc-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-winc-release-candidate
+            release: winc-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: winc
     ensure:
       do:
       - task: delete-deployment
@@ -8829,19 +8997,31 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           ERRAND_NAME: smoke-tests
-      - task: update-additional-ops-files-windows1803fs-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: cf-deployment-develop
-          release: windows1803fs-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-windows1803fs-develop
-        params:
-          RELEASE_NAME: windows1803fs
-      - put: cf-deployment-develop
-        params:
-          rebase: true
-          repository: updated-cf-deployment-windows1803fs-develop
+      on_success:
+        do:
+        - task: update-additional-ops-files-windows1803fs-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: windows1803fs-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-windows1803fs-develop
+          params:
+            RELEASE_NAME: windows1803fs
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-windows1803fs-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-windows1803fs-release-candidate
+            release: windows1803fs-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: windows1803fs
     ensure:
       do:
       - task: delete-deployment
@@ -8952,19 +9132,31 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           ERRAND_NAME: smoke-tests
-      - task: update-additional-ops-files-windows2016fs-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: cf-deployment-develop
-          release: windows2016fs-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-windows2016fs-develop
-        params:
-          RELEASE_NAME: windows2016fs
-      - put: cf-deployment-develop
-        params:
-          rebase: true
-          repository: updated-cf-deployment-windows2016fs-develop
+      on_success:
+        do:
+        - task: update-additional-ops-files-windows2016fs-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: windows2016fs-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-windows2016fs-develop
+          params:
+            RELEASE_NAME: windows2016fs
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-windows2016fs-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-windows2016fs-release-candidate
+            release: windows2016fs-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: windows2016fs
     ensure:
       do:
       - task: delete-deployment
@@ -9075,19 +9267,31 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           ERRAND_NAME: smoke-tests
-      - task: update-additional-ops-files-node-exporter-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: cf-deployment-develop
-          release: node-exporter-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-node-exporter-develop
-        params:
-          RELEASE_NAME: node-exporter
-      - put: cf-deployment-develop
-        params:
-          rebase: true
-          repository: updated-cf-deployment-node-exporter-develop
+      on_success:
+        do:
+        - task: update-additional-ops-files-node-exporter-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: node-exporter-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-node-exporter-develop
+          params:
+            RELEASE_NAME: node-exporter
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-node-exporter-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-node-exporter-release-candidate
+            release: node-exporter-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: node-exporter
     ensure:
       do:
       - task: delete-deployment
@@ -9198,19 +9402,31 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           ERRAND_NAME: smoke-tests
-      - task: update-additional-ops-files-leadership-election-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: cf-deployment-develop
-          release: leadership-election-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-leadership-election-develop
-        params:
-          RELEASE_NAME: leadership-election
-      - put: cf-deployment-develop
-        params:
-          rebase: true
-          repository: updated-cf-deployment-leadership-election-develop
+      on_success:
+        do:
+        - task: update-additional-ops-files-leadership-election-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: leadership-election-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-leadership-election-develop
+          params:
+            RELEASE_NAME: leadership-election
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-leadership-election-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-leadership-election-release-candidate
+            release: leadership-election-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: leadership-election
     ensure:
       do:
       - task: delete-deployment
@@ -9321,19 +9537,31 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           ERRAND_NAME: smoke-tests
-      - task: update-additional-ops-files-metric-store-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: cf-deployment-develop
-          release: metric-store-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-metric-store-develop
-        params:
-          RELEASE_NAME: metric-store
-      - put: cf-deployment-develop
-        params:
-          rebase: true
-          repository: updated-cf-deployment-metric-store-develop
+      on_success:
+        do:
+        - task: update-additional-ops-files-metric-store-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: metric-store-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-metric-store-develop
+          params:
+            RELEASE_NAME: metric-store
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-metric-store-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-metric-store-release-candidate
+            release: metric-store-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: metric-store
     ensure:
       do:
       - task: delete-deployment

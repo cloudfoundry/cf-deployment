@@ -311,11 +311,23 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           ERRAND_NAME: smoke-tests
-      - #@ update_release(r, "opsfile", "develop")
-      - put: cf-deployment-develop
-        params:
-          rebase: true
-          repository: #@ "updated-cf-deployment-{}-develop".format(r.name)
+      on_success:
+        do:
+        - #@ update_release(r, "opsfile", "develop")
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: #@ "updated-cf-deployment-{}-develop".format(r.name)
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
+            release: #@ r.name + "-release"
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: #@ r.name
     ensure:
       do:
       - #@ delete_deployment(env)
