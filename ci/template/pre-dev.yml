@@ -124,7 +124,15 @@ resources:
     bucket: component-bump-logs
     json_key: ((greengrass_gcp_service_account_json))
     regexp: #@ r.name + "/cf-(\d+)-(\d+)-(\d+)\.tgz"
+#@ end
 
+#@ for r in data.values.opsReleases:
+- name: #@ r.name + "-component-bump-logs-gcs"
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: #@ r.name + "/cf-(\d+)-(\d+)-(\d+)\.tgz"
 #@ end
 
 - name: slack-alert
@@ -328,6 +336,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: #@ r.name
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: #@ r.name + "-component-bump-logs-gcs"
+          params:
+            file: bosh-logs/cf-*.tgz
     ensure:
       do:
       - #@ delete_deployment(env)

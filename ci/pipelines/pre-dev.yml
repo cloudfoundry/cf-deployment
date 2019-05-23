@@ -694,6 +694,120 @@ resources:
     bucket: component-bump-logs
     json_key: ((greengrass_gcp_service_account_json))
     regexp: cf-cli/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: backup-and-restore-sdk-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: backup-and-restore-sdk/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: bits-service-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: bits-service/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: cf-app-sd-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: cf-app-sd/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: haproxy-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: haproxy/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: mapfs-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: mapfs/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: nfs-volume-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: nfs-volume/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: smb-volume-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: smb-volume/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: postgres-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: postgres/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: syslog-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: syslog/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: windows-syslog-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: windows-syslog/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: hwc-buildpack-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: hwc-buildpack/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: windows-utilities-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: windows-utilities/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: garden-windows-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: garden-windows/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: winc-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: winc/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: windows1803fs-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: windows1803fs/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: windows2016fs-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: windows2016fs/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: node-exporter-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: node-exporter/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: leadership-election-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: leadership-election/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: metric-store-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: metric-store/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: slack-alert
   type: slack-notification
   source:
@@ -7132,6 +7246,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: backup-and-restore-sdk
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: backup-and-restore-sdk-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
     ensure:
       do:
       - task: delete-deployment
@@ -7267,6 +7390,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: bits-service
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: bits-service-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
     ensure:
       do:
       - task: delete-deployment
@@ -7402,6 +7534,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: cf-app-sd
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: cf-app-sd-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
     ensure:
       do:
       - task: delete-deployment
@@ -7537,6 +7678,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: haproxy
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: haproxy-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
     ensure:
       do:
       - task: delete-deployment
@@ -7672,6 +7822,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: mapfs
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: mapfs-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
     ensure:
       do:
       - task: delete-deployment
@@ -7807,6 +7966,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: nfs-volume
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: nfs-volume-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
     ensure:
       do:
       - task: delete-deployment
@@ -7942,6 +8110,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: smb-volume
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: smb-volume-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
     ensure:
       do:
       - task: delete-deployment
@@ -8077,6 +8254,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: postgres
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: postgres-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
     ensure:
       do:
       - task: delete-deployment
@@ -8212,6 +8398,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: syslog
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: syslog-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
     ensure:
       do:
       - task: delete-deployment
@@ -8347,6 +8542,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: windows-syslog
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: windows-syslog-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
     ensure:
       do:
       - task: delete-deployment
@@ -8482,6 +8686,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: hwc-buildpack
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: hwc-buildpack-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
     ensure:
       do:
       - task: delete-deployment
@@ -8617,6 +8830,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: windows-utilities
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: windows-utilities-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
     ensure:
       do:
       - task: delete-deployment
@@ -8752,6 +8974,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: garden-windows
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: garden-windows-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
     ensure:
       do:
       - task: delete-deployment
@@ -8887,6 +9118,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: winc
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: winc-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
     ensure:
       do:
       - task: delete-deployment
@@ -9022,6 +9262,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: windows1803fs
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: windows1803fs-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
     ensure:
       do:
       - task: delete-deployment
@@ -9157,6 +9406,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: windows2016fs
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: windows2016fs-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
     ensure:
       do:
       - task: delete-deployment
@@ -9292,6 +9550,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: node-exporter
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: node-exporter-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
     ensure:
       do:
       - task: delete-deployment
@@ -9427,6 +9694,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: leadership-election
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: leadership-election-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
     ensure:
       do:
       - task: delete-deployment
@@ -9562,6 +9838,15 @@ jobs:
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
             RELEASE_NAME: metric-store
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: metric-store-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
     ensure:
       do:
       - task: delete-deployment
