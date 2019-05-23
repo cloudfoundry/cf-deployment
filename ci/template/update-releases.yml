@@ -414,32 +414,35 @@ jobs:
         bbl-state: relint-envs
         manifest: updated-cf-deployment
       output_mapping:
-        exported-release: #@ "exported-release-" + s.name
+        exported-release: #@ s.name + "-compiled-release-tarball"
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         RELEASE_NAME: #@ s.name
       attempts: 3
     #@ end
-  #@ for s in data.values.baseReleases:
-  - task: #@ "update-compiled-releases-ops-" + s.name
-    file: runtime-ci/tasks/update-single-compiled-release/task.yml
+  - task: update-stemcell
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+          tag: latest
+      inputs:
+      - name: runtime-ci
+        path: go/src/github.com/cloudfoundry/runtime-ci
+      - name: cf-deployment
+      - name: stemcell
+      #@ for s in data.values.baseReleases:
+      - name: #@ s.name + "-release"
+      - name: #@ s.name + "-compiled-release-tarball"
+      #@ end
+      outputs:
+      - name: updated-cf-deployment
+      run:
+        path: go/src/github.com/cloudfoundry/runtime-ci/tasks/update-stemcell/task
     input_mapping:
-      #@ if hasattr(s, "bootstrap"):
-      original-compiled-releases-ops-file: updated-cf-deployment
-      #@ else:
-      original-compiled-releases-ops-file: updated-compiled-releases-ops-file
-      #@ end
-      release: #@ s.name + "-release"
-      compiled-release-tarball: #@ "exported-release-" + s.name
-    params:
-      RELEASE_NAME: #@ s.name
-      #@ if hasattr(s, "bootstrap"):
-      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-      #@ else:
-      ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-      #@ end
-      UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-  #@ end
+      cf-deployment: cf-deployment-develop
   - aggregate:
     #@ for s in data.values.baseReleases:
     - put: #@ s.name + "-release-gcs"
@@ -451,7 +454,7 @@ jobs:
   - put: cf-deployment-develop
     params:
       rebase: true
-      repository: updated-compiled-releases-ops-file
+      repository: updated-cf-deployment
 
 - name: update-windows-2016-offline-releases
   serial: true
