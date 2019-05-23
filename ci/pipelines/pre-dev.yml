@@ -914,37 +914,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: binary-buildpack
-      - task: update-release-binary-buildpack-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: binary-buildpack-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-binary-buildpack-develop
-        params:
-          RELEASE_NAME: binary-buildpack
-      - task: update-additional-ops-files-binary-buildpack-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-binary-buildpack-develop
-          release: binary-buildpack-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-binary-buildpack-develop
-        params:
-          RELEASE_NAME: binary-buildpack
-      - task: update-compiled-releases-ops-file-binary-buildpack-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-binary-buildpack-develop
-          release: binary-buildpack-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-binary-buildpack-develop
-        params:
-          RELEASE_NAME: binary-buildpack
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-binary-buildpack-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: binary-buildpack-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-binary-buildpack-develop
+          params:
+            RELEASE_NAME: binary-buildpack
+        - task: update-additional-ops-files-binary-buildpack-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-binary-buildpack-develop
+            release: binary-buildpack-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-binary-buildpack-develop
+          params:
+            RELEASE_NAME: binary-buildpack
+        - task: update-compiled-releases-ops-file-binary-buildpack-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-binary-buildpack-develop
+            release: binary-buildpack-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-binary-buildpack-develop
+          params:
+            RELEASE_NAME: binary-buildpack
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: binary-buildpack-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -1118,37 +1118,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: bosh-dns-aliases
-      - task: update-release-bosh-dns-aliases-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: bosh-dns-aliases-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-bosh-dns-aliases-develop
-        params:
-          RELEASE_NAME: bosh-dns-aliases
-      - task: update-additional-ops-files-bosh-dns-aliases-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-bosh-dns-aliases-develop
-          release: bosh-dns-aliases-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-bosh-dns-aliases-develop
-        params:
-          RELEASE_NAME: bosh-dns-aliases
-      - task: update-compiled-releases-ops-file-bosh-dns-aliases-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-bosh-dns-aliases-develop
-          release: bosh-dns-aliases-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-bosh-dns-aliases-develop
-        params:
-          RELEASE_NAME: bosh-dns-aliases
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-bosh-dns-aliases-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: bosh-dns-aliases-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-bosh-dns-aliases-develop
+          params:
+            RELEASE_NAME: bosh-dns-aliases
+        - task: update-additional-ops-files-bosh-dns-aliases-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-bosh-dns-aliases-develop
+            release: bosh-dns-aliases-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-bosh-dns-aliases-develop
+          params:
+            RELEASE_NAME: bosh-dns-aliases
+        - task: update-compiled-releases-ops-file-bosh-dns-aliases-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-bosh-dns-aliases-develop
+            release: bosh-dns-aliases-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-bosh-dns-aliases-develop
+          params:
+            RELEASE_NAME: bosh-dns-aliases
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: bosh-dns-aliases-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -1322,37 +1322,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: bpm
-      - task: update-release-bpm-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: bpm-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-bpm-develop
-        params:
-          RELEASE_NAME: bpm
-      - task: update-additional-ops-files-bpm-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-bpm-develop
-          release: bpm-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-bpm-develop
-        params:
-          RELEASE_NAME: bpm
-      - task: update-compiled-releases-ops-file-bpm-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-bpm-develop
-          release: bpm-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-bpm-develop
-        params:
-          RELEASE_NAME: bpm
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-bpm-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: bpm-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-bpm-develop
+          params:
+            RELEASE_NAME: bpm
+        - task: update-additional-ops-files-bpm-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-bpm-develop
+            release: bpm-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-bpm-develop
+          params:
+            RELEASE_NAME: bpm
+        - task: update-compiled-releases-ops-file-bpm-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-bpm-develop
+            release: bpm-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-bpm-develop
+          params:
+            RELEASE_NAME: bpm
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: bpm-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -1526,37 +1526,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: capi
-      - task: update-release-capi-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: capi-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-capi-develop
-        params:
-          RELEASE_NAME: capi
-      - task: update-additional-ops-files-capi-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-capi-develop
-          release: capi-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-capi-develop
-        params:
-          RELEASE_NAME: capi
-      - task: update-compiled-releases-ops-file-capi-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-capi-develop
-          release: capi-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-capi-develop
-        params:
-          RELEASE_NAME: capi
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-capi-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: capi-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-capi-develop
+          params:
+            RELEASE_NAME: capi
+        - task: update-additional-ops-files-capi-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-capi-develop
+            release: capi-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-capi-develop
+          params:
+            RELEASE_NAME: capi
+        - task: update-compiled-releases-ops-file-capi-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-capi-develop
+            release: capi-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-capi-develop
+          params:
+            RELEASE_NAME: capi
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: capi-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -1730,37 +1730,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: cf-networking
-      - task: update-release-cf-networking-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: cf-networking-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-cf-networking-develop
-        params:
-          RELEASE_NAME: cf-networking
-      - task: update-additional-ops-files-cf-networking-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-cf-networking-develop
-          release: cf-networking-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-cf-networking-develop
-        params:
-          RELEASE_NAME: cf-networking
-      - task: update-compiled-releases-ops-file-cf-networking-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-cf-networking-develop
-          release: cf-networking-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-cf-networking-develop
-        params:
-          RELEASE_NAME: cf-networking
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-cf-networking-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: cf-networking-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-cf-networking-develop
+          params:
+            RELEASE_NAME: cf-networking
+        - task: update-additional-ops-files-cf-networking-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-cf-networking-develop
+            release: cf-networking-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-cf-networking-develop
+          params:
+            RELEASE_NAME: cf-networking
+        - task: update-compiled-releases-ops-file-cf-networking-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-cf-networking-develop
+            release: cf-networking-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-cf-networking-develop
+          params:
+            RELEASE_NAME: cf-networking
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: cf-networking-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -1934,37 +1934,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: cf-smoke-tests
-      - task: update-release-cf-smoke-tests-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: cf-smoke-tests-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-cf-smoke-tests-develop
-        params:
-          RELEASE_NAME: cf-smoke-tests
-      - task: update-additional-ops-files-cf-smoke-tests-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-cf-smoke-tests-develop
-          release: cf-smoke-tests-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-cf-smoke-tests-develop
-        params:
-          RELEASE_NAME: cf-smoke-tests
-      - task: update-compiled-releases-ops-file-cf-smoke-tests-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-cf-smoke-tests-develop
-          release: cf-smoke-tests-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-cf-smoke-tests-develop
-        params:
-          RELEASE_NAME: cf-smoke-tests
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-cf-smoke-tests-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: cf-smoke-tests-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-cf-smoke-tests-develop
+          params:
+            RELEASE_NAME: cf-smoke-tests
+        - task: update-additional-ops-files-cf-smoke-tests-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-cf-smoke-tests-develop
+            release: cf-smoke-tests-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-cf-smoke-tests-develop
+          params:
+            RELEASE_NAME: cf-smoke-tests
+        - task: update-compiled-releases-ops-file-cf-smoke-tests-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-cf-smoke-tests-develop
+            release: cf-smoke-tests-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-cf-smoke-tests-develop
+          params:
+            RELEASE_NAME: cf-smoke-tests
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: cf-smoke-tests-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -2138,37 +2138,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: cf-syslog-drain
-      - task: update-release-cf-syslog-drain-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: cf-syslog-drain-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-cf-syslog-drain-develop
-        params:
-          RELEASE_NAME: cf-syslog-drain
-      - task: update-additional-ops-files-cf-syslog-drain-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-cf-syslog-drain-develop
-          release: cf-syslog-drain-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-cf-syslog-drain-develop
-        params:
-          RELEASE_NAME: cf-syslog-drain
-      - task: update-compiled-releases-ops-file-cf-syslog-drain-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-cf-syslog-drain-develop
-          release: cf-syslog-drain-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-cf-syslog-drain-develop
-        params:
-          RELEASE_NAME: cf-syslog-drain
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-cf-syslog-drain-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: cf-syslog-drain-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-cf-syslog-drain-develop
+          params:
+            RELEASE_NAME: cf-syslog-drain
+        - task: update-additional-ops-files-cf-syslog-drain-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-cf-syslog-drain-develop
+            release: cf-syslog-drain-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-cf-syslog-drain-develop
+          params:
+            RELEASE_NAME: cf-syslog-drain
+        - task: update-compiled-releases-ops-file-cf-syslog-drain-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-cf-syslog-drain-develop
+            release: cf-syslog-drain-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-cf-syslog-drain-develop
+          params:
+            RELEASE_NAME: cf-syslog-drain
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: cf-syslog-drain-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -2342,37 +2342,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: cflinuxfs3
-      - task: update-release-cflinuxfs3-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: cflinuxfs3-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-cflinuxfs3-develop
-        params:
-          RELEASE_NAME: cflinuxfs3
-      - task: update-additional-ops-files-cflinuxfs3-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-cflinuxfs3-develop
-          release: cflinuxfs3-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-cflinuxfs3-develop
-        params:
-          RELEASE_NAME: cflinuxfs3
-      - task: update-compiled-releases-ops-file-cflinuxfs3-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-cflinuxfs3-develop
-          release: cflinuxfs3-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-cflinuxfs3-develop
-        params:
-          RELEASE_NAME: cflinuxfs3
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-cflinuxfs3-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: cflinuxfs3-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-cflinuxfs3-develop
+          params:
+            RELEASE_NAME: cflinuxfs3
+        - task: update-additional-ops-files-cflinuxfs3-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-cflinuxfs3-develop
+            release: cflinuxfs3-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-cflinuxfs3-develop
+          params:
+            RELEASE_NAME: cflinuxfs3
+        - task: update-compiled-releases-ops-file-cflinuxfs3-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-cflinuxfs3-develop
+            release: cflinuxfs3-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-cflinuxfs3-develop
+          params:
+            RELEASE_NAME: cflinuxfs3
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: cflinuxfs3-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -2546,37 +2546,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: diego
-      - task: update-release-diego-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: diego-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-diego-develop
-        params:
-          RELEASE_NAME: diego
-      - task: update-additional-ops-files-diego-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-diego-develop
-          release: diego-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-diego-develop
-        params:
-          RELEASE_NAME: diego
-      - task: update-compiled-releases-ops-file-diego-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-diego-develop
-          release: diego-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-diego-develop
-        params:
-          RELEASE_NAME: diego
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-diego-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: diego-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-diego-develop
+          params:
+            RELEASE_NAME: diego
+        - task: update-additional-ops-files-diego-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-diego-develop
+            release: diego-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-diego-develop
+          params:
+            RELEASE_NAME: diego
+        - task: update-compiled-releases-ops-file-diego-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-diego-develop
+            release: diego-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-diego-develop
+          params:
+            RELEASE_NAME: diego
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: diego-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -2750,37 +2750,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: dotnet-core-buildpack
-      - task: update-release-dotnet-core-buildpack-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: dotnet-core-buildpack-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-dotnet-core-buildpack-develop
-        params:
-          RELEASE_NAME: dotnet-core-buildpack
-      - task: update-additional-ops-files-dotnet-core-buildpack-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-dotnet-core-buildpack-develop
-          release: dotnet-core-buildpack-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-dotnet-core-buildpack-develop
-        params:
-          RELEASE_NAME: dotnet-core-buildpack
-      - task: update-compiled-releases-ops-file-dotnet-core-buildpack-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-dotnet-core-buildpack-develop
-          release: dotnet-core-buildpack-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-dotnet-core-buildpack-develop
-        params:
-          RELEASE_NAME: dotnet-core-buildpack
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-dotnet-core-buildpack-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: dotnet-core-buildpack-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-dotnet-core-buildpack-develop
+          params:
+            RELEASE_NAME: dotnet-core-buildpack
+        - task: update-additional-ops-files-dotnet-core-buildpack-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-dotnet-core-buildpack-develop
+            release: dotnet-core-buildpack-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-dotnet-core-buildpack-develop
+          params:
+            RELEASE_NAME: dotnet-core-buildpack
+        - task: update-compiled-releases-ops-file-dotnet-core-buildpack-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-dotnet-core-buildpack-develop
+            release: dotnet-core-buildpack-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-dotnet-core-buildpack-develop
+          params:
+            RELEASE_NAME: dotnet-core-buildpack
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: dotnet-core-buildpack-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -2954,37 +2954,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: garden-runc
-      - task: update-release-garden-runc-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: garden-runc-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-garden-runc-develop
-        params:
-          RELEASE_NAME: garden-runc
-      - task: update-additional-ops-files-garden-runc-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-garden-runc-develop
-          release: garden-runc-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-garden-runc-develop
-        params:
-          RELEASE_NAME: garden-runc
-      - task: update-compiled-releases-ops-file-garden-runc-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-garden-runc-develop
-          release: garden-runc-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-garden-runc-develop
-        params:
-          RELEASE_NAME: garden-runc
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-garden-runc-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: garden-runc-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-garden-runc-develop
+          params:
+            RELEASE_NAME: garden-runc
+        - task: update-additional-ops-files-garden-runc-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-garden-runc-develop
+            release: garden-runc-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-garden-runc-develop
+          params:
+            RELEASE_NAME: garden-runc
+        - task: update-compiled-releases-ops-file-garden-runc-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-garden-runc-develop
+            release: garden-runc-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-garden-runc-develop
+          params:
+            RELEASE_NAME: garden-runc
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: garden-runc-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -3158,37 +3158,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: go-buildpack
-      - task: update-release-go-buildpack-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: go-buildpack-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-go-buildpack-develop
-        params:
-          RELEASE_NAME: go-buildpack
-      - task: update-additional-ops-files-go-buildpack-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-go-buildpack-develop
-          release: go-buildpack-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-go-buildpack-develop
-        params:
-          RELEASE_NAME: go-buildpack
-      - task: update-compiled-releases-ops-file-go-buildpack-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-go-buildpack-develop
-          release: go-buildpack-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-go-buildpack-develop
-        params:
-          RELEASE_NAME: go-buildpack
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-go-buildpack-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: go-buildpack-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-go-buildpack-develop
+          params:
+            RELEASE_NAME: go-buildpack
+        - task: update-additional-ops-files-go-buildpack-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-go-buildpack-develop
+            release: go-buildpack-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-go-buildpack-develop
+          params:
+            RELEASE_NAME: go-buildpack
+        - task: update-compiled-releases-ops-file-go-buildpack-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-go-buildpack-develop
+            release: go-buildpack-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-go-buildpack-develop
+          params:
+            RELEASE_NAME: go-buildpack
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: go-buildpack-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -3362,37 +3362,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: java-buildpack
-      - task: update-release-java-buildpack-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: java-buildpack-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-java-buildpack-develop
-        params:
-          RELEASE_NAME: java-buildpack
-      - task: update-additional-ops-files-java-buildpack-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-java-buildpack-develop
-          release: java-buildpack-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-java-buildpack-develop
-        params:
-          RELEASE_NAME: java-buildpack
-      - task: update-compiled-releases-ops-file-java-buildpack-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-java-buildpack-develop
-          release: java-buildpack-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-java-buildpack-develop
-        params:
-          RELEASE_NAME: java-buildpack
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-java-buildpack-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: java-buildpack-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-java-buildpack-develop
+          params:
+            RELEASE_NAME: java-buildpack
+        - task: update-additional-ops-files-java-buildpack-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-java-buildpack-develop
+            release: java-buildpack-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-java-buildpack-develop
+          params:
+            RELEASE_NAME: java-buildpack
+        - task: update-compiled-releases-ops-file-java-buildpack-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-java-buildpack-develop
+            release: java-buildpack-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-java-buildpack-develop
+          params:
+            RELEASE_NAME: java-buildpack
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: java-buildpack-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -3566,37 +3566,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: log-cache
-      - task: update-release-log-cache-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: log-cache-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-log-cache-develop
-        params:
-          RELEASE_NAME: log-cache
-      - task: update-additional-ops-files-log-cache-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-log-cache-develop
-          release: log-cache-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-log-cache-develop
-        params:
-          RELEASE_NAME: log-cache
-      - task: update-compiled-releases-ops-file-log-cache-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-log-cache-develop
-          release: log-cache-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-log-cache-develop
-        params:
-          RELEASE_NAME: log-cache
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-log-cache-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: log-cache-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-log-cache-develop
+          params:
+            RELEASE_NAME: log-cache
+        - task: update-additional-ops-files-log-cache-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-log-cache-develop
+            release: log-cache-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-log-cache-develop
+          params:
+            RELEASE_NAME: log-cache
+        - task: update-compiled-releases-ops-file-log-cache-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-log-cache-develop
+            release: log-cache-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-log-cache-develop
+          params:
+            RELEASE_NAME: log-cache
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: log-cache-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -3770,37 +3770,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: loggregator
-      - task: update-release-loggregator-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: loggregator-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-loggregator-develop
-        params:
-          RELEASE_NAME: loggregator
-      - task: update-additional-ops-files-loggregator-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-loggregator-develop
-          release: loggregator-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-loggregator-develop
-        params:
-          RELEASE_NAME: loggregator
-      - task: update-compiled-releases-ops-file-loggregator-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-loggregator-develop
-          release: loggregator-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-loggregator-develop
-        params:
-          RELEASE_NAME: loggregator
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-loggregator-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: loggregator-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-loggregator-develop
+          params:
+            RELEASE_NAME: loggregator
+        - task: update-additional-ops-files-loggregator-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-loggregator-develop
+            release: loggregator-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-loggregator-develop
+          params:
+            RELEASE_NAME: loggregator
+        - task: update-compiled-releases-ops-file-loggregator-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-loggregator-develop
+            release: loggregator-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-loggregator-develop
+          params:
+            RELEASE_NAME: loggregator
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: loggregator-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -3974,37 +3974,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: loggregator-agent
-      - task: update-release-loggregator-agent-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: loggregator-agent-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-loggregator-agent-develop
-        params:
-          RELEASE_NAME: loggregator-agent
-      - task: update-additional-ops-files-loggregator-agent-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-loggregator-agent-develop
-          release: loggregator-agent-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-loggregator-agent-develop
-        params:
-          RELEASE_NAME: loggregator-agent
-      - task: update-compiled-releases-ops-file-loggregator-agent-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-loggregator-agent-develop
-          release: loggregator-agent-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-loggregator-agent-develop
-        params:
-          RELEASE_NAME: loggregator-agent
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-loggregator-agent-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: loggregator-agent-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-loggregator-agent-develop
+          params:
+            RELEASE_NAME: loggregator-agent
+        - task: update-additional-ops-files-loggregator-agent-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-loggregator-agent-develop
+            release: loggregator-agent-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-loggregator-agent-develop
+          params:
+            RELEASE_NAME: loggregator-agent
+        - task: update-compiled-releases-ops-file-loggregator-agent-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-loggregator-agent-develop
+            release: loggregator-agent-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-loggregator-agent-develop
+          params:
+            RELEASE_NAME: loggregator-agent
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: loggregator-agent-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -4178,37 +4178,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: nats
-      - task: update-release-nats-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: nats-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-nats-develop
-        params:
-          RELEASE_NAME: nats
-      - task: update-additional-ops-files-nats-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-nats-develop
-          release: nats-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-nats-develop
-        params:
-          RELEASE_NAME: nats
-      - task: update-compiled-releases-ops-file-nats-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-nats-develop
-          release: nats-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-nats-develop
-        params:
-          RELEASE_NAME: nats
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-nats-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: nats-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-nats-develop
+          params:
+            RELEASE_NAME: nats
+        - task: update-additional-ops-files-nats-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-nats-develop
+            release: nats-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-nats-develop
+          params:
+            RELEASE_NAME: nats
+        - task: update-compiled-releases-ops-file-nats-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-nats-develop
+            release: nats-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-nats-develop
+          params:
+            RELEASE_NAME: nats
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: nats-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -4382,37 +4382,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: nginx-buildpack
-      - task: update-release-nginx-buildpack-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: nginx-buildpack-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-nginx-buildpack-develop
-        params:
-          RELEASE_NAME: nginx-buildpack
-      - task: update-additional-ops-files-nginx-buildpack-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-nginx-buildpack-develop
-          release: nginx-buildpack-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-nginx-buildpack-develop
-        params:
-          RELEASE_NAME: nginx-buildpack
-      - task: update-compiled-releases-ops-file-nginx-buildpack-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-nginx-buildpack-develop
-          release: nginx-buildpack-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-nginx-buildpack-develop
-        params:
-          RELEASE_NAME: nginx-buildpack
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-nginx-buildpack-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: nginx-buildpack-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-nginx-buildpack-develop
+          params:
+            RELEASE_NAME: nginx-buildpack
+        - task: update-additional-ops-files-nginx-buildpack-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-nginx-buildpack-develop
+            release: nginx-buildpack-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-nginx-buildpack-develop
+          params:
+            RELEASE_NAME: nginx-buildpack
+        - task: update-compiled-releases-ops-file-nginx-buildpack-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-nginx-buildpack-develop
+            release: nginx-buildpack-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-nginx-buildpack-develop
+          params:
+            RELEASE_NAME: nginx-buildpack
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: nginx-buildpack-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -4586,37 +4586,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: nodejs-buildpack
-      - task: update-release-nodejs-buildpack-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: nodejs-buildpack-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-nodejs-buildpack-develop
-        params:
-          RELEASE_NAME: nodejs-buildpack
-      - task: update-additional-ops-files-nodejs-buildpack-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-nodejs-buildpack-develop
-          release: nodejs-buildpack-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-nodejs-buildpack-develop
-        params:
-          RELEASE_NAME: nodejs-buildpack
-      - task: update-compiled-releases-ops-file-nodejs-buildpack-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-nodejs-buildpack-develop
-          release: nodejs-buildpack-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-nodejs-buildpack-develop
-        params:
-          RELEASE_NAME: nodejs-buildpack
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-nodejs-buildpack-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: nodejs-buildpack-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-nodejs-buildpack-develop
+          params:
+            RELEASE_NAME: nodejs-buildpack
+        - task: update-additional-ops-files-nodejs-buildpack-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-nodejs-buildpack-develop
+            release: nodejs-buildpack-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-nodejs-buildpack-develop
+          params:
+            RELEASE_NAME: nodejs-buildpack
+        - task: update-compiled-releases-ops-file-nodejs-buildpack-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-nodejs-buildpack-develop
+            release: nodejs-buildpack-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-nodejs-buildpack-develop
+          params:
+            RELEASE_NAME: nodejs-buildpack
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: nodejs-buildpack-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -4790,37 +4790,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: php-buildpack
-      - task: update-release-php-buildpack-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: php-buildpack-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-php-buildpack-develop
-        params:
-          RELEASE_NAME: php-buildpack
-      - task: update-additional-ops-files-php-buildpack-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-php-buildpack-develop
-          release: php-buildpack-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-php-buildpack-develop
-        params:
-          RELEASE_NAME: php-buildpack
-      - task: update-compiled-releases-ops-file-php-buildpack-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-php-buildpack-develop
-          release: php-buildpack-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-php-buildpack-develop
-        params:
-          RELEASE_NAME: php-buildpack
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-php-buildpack-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: php-buildpack-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-php-buildpack-develop
+          params:
+            RELEASE_NAME: php-buildpack
+        - task: update-additional-ops-files-php-buildpack-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-php-buildpack-develop
+            release: php-buildpack-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-php-buildpack-develop
+          params:
+            RELEASE_NAME: php-buildpack
+        - task: update-compiled-releases-ops-file-php-buildpack-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-php-buildpack-develop
+            release: php-buildpack-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-php-buildpack-develop
+          params:
+            RELEASE_NAME: php-buildpack
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: php-buildpack-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -4994,37 +4994,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: python-buildpack
-      - task: update-release-python-buildpack-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: python-buildpack-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-python-buildpack-develop
-        params:
-          RELEASE_NAME: python-buildpack
-      - task: update-additional-ops-files-python-buildpack-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-python-buildpack-develop
-          release: python-buildpack-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-python-buildpack-develop
-        params:
-          RELEASE_NAME: python-buildpack
-      - task: update-compiled-releases-ops-file-python-buildpack-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-python-buildpack-develop
-          release: python-buildpack-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-python-buildpack-develop
-        params:
-          RELEASE_NAME: python-buildpack
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-python-buildpack-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: python-buildpack-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-python-buildpack-develop
+          params:
+            RELEASE_NAME: python-buildpack
+        - task: update-additional-ops-files-python-buildpack-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-python-buildpack-develop
+            release: python-buildpack-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-python-buildpack-develop
+          params:
+            RELEASE_NAME: python-buildpack
+        - task: update-compiled-releases-ops-file-python-buildpack-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-python-buildpack-develop
+            release: python-buildpack-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-python-buildpack-develop
+          params:
+            RELEASE_NAME: python-buildpack
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: python-buildpack-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -5198,37 +5198,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: pxc
-      - task: update-release-pxc-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: pxc-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-pxc-develop
-        params:
-          RELEASE_NAME: pxc
-      - task: update-additional-ops-files-pxc-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-pxc-develop
-          release: pxc-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-pxc-develop
-        params:
-          RELEASE_NAME: pxc
-      - task: update-compiled-releases-ops-file-pxc-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-pxc-develop
-          release: pxc-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-pxc-develop
-        params:
-          RELEASE_NAME: pxc
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-pxc-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: pxc-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-pxc-develop
+          params:
+            RELEASE_NAME: pxc
+        - task: update-additional-ops-files-pxc-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-pxc-develop
+            release: pxc-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-pxc-develop
+          params:
+            RELEASE_NAME: pxc
+        - task: update-compiled-releases-ops-file-pxc-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-pxc-develop
+            release: pxc-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-pxc-develop
+          params:
+            RELEASE_NAME: pxc
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: pxc-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -5402,37 +5402,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: r-buildpack
-      - task: update-release-r-buildpack-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: r-buildpack-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-r-buildpack-develop
-        params:
-          RELEASE_NAME: r-buildpack
-      - task: update-additional-ops-files-r-buildpack-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-r-buildpack-develop
-          release: r-buildpack-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-r-buildpack-develop
-        params:
-          RELEASE_NAME: r-buildpack
-      - task: update-compiled-releases-ops-file-r-buildpack-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-r-buildpack-develop
-          release: r-buildpack-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-r-buildpack-develop
-        params:
-          RELEASE_NAME: r-buildpack
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-r-buildpack-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: r-buildpack-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-r-buildpack-develop
+          params:
+            RELEASE_NAME: r-buildpack
+        - task: update-additional-ops-files-r-buildpack-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-r-buildpack-develop
+            release: r-buildpack-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-r-buildpack-develop
+          params:
+            RELEASE_NAME: r-buildpack
+        - task: update-compiled-releases-ops-file-r-buildpack-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-r-buildpack-develop
+            release: r-buildpack-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-r-buildpack-develop
+          params:
+            RELEASE_NAME: r-buildpack
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: r-buildpack-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -5606,37 +5606,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: routing
-      - task: update-release-routing-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: routing-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-routing-develop
-        params:
-          RELEASE_NAME: routing
-      - task: update-additional-ops-files-routing-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-routing-develop
-          release: routing-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-routing-develop
-        params:
-          RELEASE_NAME: routing
-      - task: update-compiled-releases-ops-file-routing-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-routing-develop
-          release: routing-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-routing-develop
-        params:
-          RELEASE_NAME: routing
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-routing-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: routing-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-routing-develop
+          params:
+            RELEASE_NAME: routing
+        - task: update-additional-ops-files-routing-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-routing-develop
+            release: routing-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-routing-develop
+          params:
+            RELEASE_NAME: routing
+        - task: update-compiled-releases-ops-file-routing-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-routing-develop
+            release: routing-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-routing-develop
+          params:
+            RELEASE_NAME: routing
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: routing-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -5810,37 +5810,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: ruby-buildpack
-      - task: update-release-ruby-buildpack-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: ruby-buildpack-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-ruby-buildpack-develop
-        params:
-          RELEASE_NAME: ruby-buildpack
-      - task: update-additional-ops-files-ruby-buildpack-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-ruby-buildpack-develop
-          release: ruby-buildpack-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-ruby-buildpack-develop
-        params:
-          RELEASE_NAME: ruby-buildpack
-      - task: update-compiled-releases-ops-file-ruby-buildpack-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-ruby-buildpack-develop
-          release: ruby-buildpack-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-ruby-buildpack-develop
-        params:
-          RELEASE_NAME: ruby-buildpack
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-ruby-buildpack-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: ruby-buildpack-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-ruby-buildpack-develop
+          params:
+            RELEASE_NAME: ruby-buildpack
+        - task: update-additional-ops-files-ruby-buildpack-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-ruby-buildpack-develop
+            release: ruby-buildpack-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-ruby-buildpack-develop
+          params:
+            RELEASE_NAME: ruby-buildpack
+        - task: update-compiled-releases-ops-file-ruby-buildpack-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-ruby-buildpack-develop
+            release: ruby-buildpack-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-ruby-buildpack-develop
+          params:
+            RELEASE_NAME: ruby-buildpack
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: ruby-buildpack-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -6014,37 +6014,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: silk
-      - task: update-release-silk-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: silk-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-silk-develop
-        params:
-          RELEASE_NAME: silk
-      - task: update-additional-ops-files-silk-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-silk-develop
-          release: silk-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-silk-develop
-        params:
-          RELEASE_NAME: silk
-      - task: update-compiled-releases-ops-file-silk-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-silk-develop
-          release: silk-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-silk-develop
-        params:
-          RELEASE_NAME: silk
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-silk-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: silk-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-silk-develop
+          params:
+            RELEASE_NAME: silk
+        - task: update-additional-ops-files-silk-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-silk-develop
+            release: silk-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-silk-develop
+          params:
+            RELEASE_NAME: silk
+        - task: update-compiled-releases-ops-file-silk-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-silk-develop
+            release: silk-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-silk-develop
+          params:
+            RELEASE_NAME: silk
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: silk-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -6218,37 +6218,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: staticfile-buildpack
-      - task: update-release-staticfile-buildpack-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: staticfile-buildpack-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-staticfile-buildpack-develop
-        params:
-          RELEASE_NAME: staticfile-buildpack
-      - task: update-additional-ops-files-staticfile-buildpack-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-staticfile-buildpack-develop
-          release: staticfile-buildpack-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-staticfile-buildpack-develop
-        params:
-          RELEASE_NAME: staticfile-buildpack
-      - task: update-compiled-releases-ops-file-staticfile-buildpack-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-staticfile-buildpack-develop
-          release: staticfile-buildpack-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-staticfile-buildpack-develop
-        params:
-          RELEASE_NAME: staticfile-buildpack
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-staticfile-buildpack-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: staticfile-buildpack-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-staticfile-buildpack-develop
+          params:
+            RELEASE_NAME: staticfile-buildpack
+        - task: update-additional-ops-files-staticfile-buildpack-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-staticfile-buildpack-develop
+            release: staticfile-buildpack-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-staticfile-buildpack-develop
+          params:
+            RELEASE_NAME: staticfile-buildpack
+        - task: update-compiled-releases-ops-file-staticfile-buildpack-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-staticfile-buildpack-develop
+            release: staticfile-buildpack-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-staticfile-buildpack-develop
+          params:
+            RELEASE_NAME: staticfile-buildpack
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: staticfile-buildpack-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -6422,37 +6422,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: statsd-injector
-      - task: update-release-statsd-injector-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: statsd-injector-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-statsd-injector-develop
-        params:
-          RELEASE_NAME: statsd-injector
-      - task: update-additional-ops-files-statsd-injector-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-statsd-injector-develop
-          release: statsd-injector-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-statsd-injector-develop
-        params:
-          RELEASE_NAME: statsd-injector
-      - task: update-compiled-releases-ops-file-statsd-injector-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-statsd-injector-develop
-          release: statsd-injector-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-statsd-injector-develop
-        params:
-          RELEASE_NAME: statsd-injector
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-statsd-injector-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: statsd-injector-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-statsd-injector-develop
+          params:
+            RELEASE_NAME: statsd-injector
+        - task: update-additional-ops-files-statsd-injector-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-statsd-injector-develop
+            release: statsd-injector-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-statsd-injector-develop
+          params:
+            RELEASE_NAME: statsd-injector
+        - task: update-compiled-releases-ops-file-statsd-injector-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-statsd-injector-develop
+            release: statsd-injector-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-statsd-injector-develop
+          params:
+            RELEASE_NAME: statsd-injector
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: statsd-injector-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -6626,37 +6626,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: uaa
-      - task: update-release-uaa-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: uaa-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-uaa-develop
-        params:
-          RELEASE_NAME: uaa
-      - task: update-additional-ops-files-uaa-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-uaa-develop
-          release: uaa-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-uaa-develop
-        params:
-          RELEASE_NAME: uaa
-      - task: update-compiled-releases-ops-file-uaa-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-uaa-develop
-          release: uaa-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-uaa-develop
-        params:
-          RELEASE_NAME: uaa
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-uaa-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: uaa-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-uaa-develop
+          params:
+            RELEASE_NAME: uaa
+        - task: update-additional-ops-files-uaa-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-uaa-develop
+            release: uaa-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-uaa-develop
+          params:
+            RELEASE_NAME: uaa
+        - task: update-compiled-releases-ops-file-uaa-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-uaa-develop
+            release: uaa-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-uaa-develop
+          params:
+            RELEASE_NAME: uaa
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: uaa-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -6830,37 +6830,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: credhub
-      - task: update-release-credhub-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: credhub-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-credhub-develop
-        params:
-          RELEASE_NAME: credhub
-      - task: update-additional-ops-files-credhub-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-credhub-develop
-          release: credhub-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-credhub-develop
-        params:
-          RELEASE_NAME: credhub
-      - task: update-compiled-releases-ops-file-credhub-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-credhub-develop
-          release: credhub-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-credhub-develop
-        params:
-          RELEASE_NAME: credhub
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-credhub-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: credhub-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-credhub-develop
+          params:
+            RELEASE_NAME: credhub
+        - task: update-additional-ops-files-credhub-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-credhub-develop
+            release: credhub-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-credhub-develop
+          params:
+            RELEASE_NAME: credhub
+        - task: update-compiled-releases-ops-file-credhub-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-credhub-develop
+            release: credhub-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-credhub-develop
+          params:
+            RELEASE_NAME: credhub
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: credhub-release-gcs
           params:
             file: compiled-release-tarball/*.tgz
@@ -7034,37 +7034,37 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: cf-cli
-      - task: update-release-cf-cli-develop
-        file: runtime-ci/tasks/update-single-manifest-release/task.yml
-        input_mapping:
-          cf-deployment: cf-deployment-develop
-          release: cf-cli-release
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-cf-cli-develop
-        params:
-          RELEASE_NAME: cf-cli
-      - task: update-additional-ops-files-cf-cli-develop
-        file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-        input_mapping:
-          original-ops-file: updated-cf-deployment-cf-cli-develop
-          release: cf-cli-release
-        output_mapping:
-          updated-ops-file: updated-cf-deployment-cf-cli-develop
-        params:
-          RELEASE_NAME: cf-cli
-      - task: update-compiled-releases-ops-file-cf-cli-develop
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: updated-cf-deployment-cf-cli-develop
-          release: cf-cli-release
-        output_mapping:
-          updated-compiled-releases-ops-file: updated-cf-deployment-cf-cli-develop
-        params:
-          RELEASE_NAME: cf-cli
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - task: update-release-cf-cli-develop
+          file: runtime-ci/tasks/update-single-manifest-release/task.yml
+          input_mapping:
+            cf-deployment: cf-deployment-develop
+            release: cf-cli-release
+          output_mapping:
+            updated-cf-deployment: updated-cf-deployment-cf-cli-develop
+          params:
+            RELEASE_NAME: cf-cli
+        - task: update-additional-ops-files-cf-cli-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: updated-cf-deployment-cf-cli-develop
+            release: cf-cli-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-cf-cli-develop
+          params:
+            RELEASE_NAME: cf-cli
+        - task: update-compiled-releases-ops-file-cf-cli-develop
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: updated-cf-deployment-cf-cli-develop
+            release: cf-cli-release
+          output_mapping:
+            updated-compiled-releases-ops-file: updated-cf-deployment-cf-cli-develop
+          params:
+            RELEASE_NAME: cf-cli
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: cf-cli-release-gcs
           params:
             file: compiled-release-tarball/*.tgz

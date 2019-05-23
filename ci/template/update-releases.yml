@@ -219,21 +219,21 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           RELEASE_NAME: #@ r.name
-      - #@ update_release(r, "manifest", "develop")
-      - #@ update_release(r, "opsfile", "develop", True)
-      - task: #@ "update-compiled-releases-ops-file-{}-develop".format(r.name)
-        file: runtime-ci/tasks/update-single-compiled-release/task.yml
-        input_mapping:
-          original-compiled-releases-ops-file: #@ "updated-cf-deployment-{}-develop".format(r.name)
-          release: #@ r.name + "-release"
-        output_mapping:
-          updated-compiled-releases-ops-file: #@ "updated-cf-deployment-{}-develop".format(r.name)
-        params:
-          RELEASE_NAME: #@ r.name
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       on_success:
         do:
+        - #@ update_release(r, "manifest", "develop")
+        - #@ update_release(r, "opsfile", "develop", True)
+        - task: #@ "update-compiled-releases-ops-file-{}-develop".format(r.name)
+          file: runtime-ci/tasks/update-single-compiled-release/task.yml
+          input_mapping:
+            original-compiled-releases-ops-file: #@ "updated-cf-deployment-{}-develop".format(r.name)
+            release: #@ r.name + "-release"
+          output_mapping:
+            updated-compiled-releases-ops-file: #@ "updated-cf-deployment-{}-develop".format(r.name)
+          params:
+            RELEASE_NAME: #@ r.name
+            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
         - put: #@ r.name + "-release-gcs"
           params:
             file: compiled-release-tarball/*.tgz
