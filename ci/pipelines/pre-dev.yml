@@ -7100,6 +7100,13 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: update-additional-ops-files-backup-and-restore-sdk-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
@@ -7216,6 +7223,13 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: update-additional-ops-files-bits-service-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
@@ -7332,6 +7346,13 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: update-additional-ops-files-cf-app-sd-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
@@ -7448,6 +7469,13 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: update-additional-ops-files-haproxy-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
@@ -7564,6 +7592,13 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: update-additional-ops-files-mapfs-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
@@ -7680,6 +7715,13 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: update-additional-ops-files-nfs-volume-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
@@ -7796,6 +7838,13 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: update-additional-ops-files-smb-volume-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
@@ -7912,6 +7961,13 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: update-additional-ops-files-postgres-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
@@ -8028,6 +8084,13 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: update-additional-ops-files-syslog-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
@@ -8144,6 +8207,13 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: update-additional-ops-files-windows-syslog-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
@@ -8260,6 +8330,13 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: update-additional-ops-files-hwc-buildpack-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
@@ -8376,6 +8453,13 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: update-additional-ops-files-windows-utilities-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
@@ -8492,6 +8576,13 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: update-additional-ops-files-garden-windows-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
@@ -8608,6 +8699,13 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: update-additional-ops-files-winc-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
@@ -8724,6 +8822,13 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: update-additional-ops-files-windows1803fs-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
@@ -8840,6 +8945,13 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: update-additional-ops-files-windows2016fs-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
@@ -8956,6 +9068,13 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: update-additional-ops-files-node-exporter-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
@@ -9072,6 +9191,13 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: update-additional-ops-files-leadership-election-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
@@ -9188,6 +9314,13 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
       - task: update-additional-ops-files-metric-store-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
