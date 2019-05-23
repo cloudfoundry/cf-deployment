@@ -7045,11 +7045,11 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-backup-and-restore-sdk-release-candidate
+  - task: update-additional-ops-files-backup-and-restore-sdk-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      release: backup-and-restore-sdk-release
       original-ops-file: cf-deployment-release-candidate
+      release: backup-and-restore-sdk-release
     output_mapping:
       updated-ops-file: updated-cf-deployment-backup-and-restore-sdk-release-candidate
     params:
@@ -7100,11 +7100,11 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
-      - task: update-release-backup-and-restore-sdk-develop
+      - task: update-additional-ops-files-backup-and-restore-sdk-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
-          release: backup-and-restore-sdk-release
           original-ops-file: cf-deployment-develop
+          release: backup-and-restore-sdk-release
         output_mapping:
           updated-ops-file: updated-cf-deployment-backup-and-restore-sdk-develop
         params:
@@ -7161,11 +7161,11 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-bits-service-release-candidate
+  - task: update-additional-ops-files-bits-service-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      release: bits-service-release
       original-ops-file: cf-deployment-release-candidate
+      release: bits-service-release
     output_mapping:
       updated-ops-file: updated-cf-deployment-bits-service-release-candidate
     params:
@@ -7216,11 +7216,11 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
-      - task: update-release-bits-service-develop
+      - task: update-additional-ops-files-bits-service-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
-          release: bits-service-release
           original-ops-file: cf-deployment-develop
+          release: bits-service-release
         output_mapping:
           updated-ops-file: updated-cf-deployment-bits-service-develop
         params:
@@ -7277,11 +7277,11 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-cf-app-sd-release-candidate
+  - task: update-additional-ops-files-cf-app-sd-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      release: cf-app-sd-release
       original-ops-file: cf-deployment-release-candidate
+      release: cf-app-sd-release
     output_mapping:
       updated-ops-file: updated-cf-deployment-cf-app-sd-release-candidate
     params:
@@ -7332,11 +7332,11 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
-      - task: update-release-cf-app-sd-develop
+      - task: update-additional-ops-files-cf-app-sd-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
-          release: cf-app-sd-release
           original-ops-file: cf-deployment-develop
+          release: cf-app-sd-release
         output_mapping:
           updated-ops-file: updated-cf-deployment-cf-app-sd-develop
         params:
@@ -7393,11 +7393,11 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-haproxy-release-candidate
+  - task: update-additional-ops-files-haproxy-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      release: haproxy-release
       original-ops-file: cf-deployment-release-candidate
+      release: haproxy-release
     output_mapping:
       updated-ops-file: updated-cf-deployment-haproxy-release-candidate
     params:
@@ -7448,11 +7448,11 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
-      - task: update-release-haproxy-develop
+      - task: update-additional-ops-files-haproxy-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
-          release: haproxy-release
           original-ops-file: cf-deployment-develop
+          release: haproxy-release
         output_mapping:
           updated-ops-file: updated-cf-deployment-haproxy-develop
         params:
@@ -7509,11 +7509,11 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-mapfs-release-candidate
+  - task: update-additional-ops-files-mapfs-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      release: mapfs-release
       original-ops-file: cf-deployment-release-candidate
+      release: mapfs-release
     output_mapping:
       updated-ops-file: updated-cf-deployment-mapfs-release-candidate
     params:
@@ -7564,11 +7564,11 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
-      - task: update-release-mapfs-develop
+      - task: update-additional-ops-files-mapfs-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
-          release: mapfs-release
           original-ops-file: cf-deployment-develop
+          release: mapfs-release
         output_mapping:
           updated-ops-file: updated-cf-deployment-mapfs-develop
         params:
@@ -7625,11 +7625,11 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-nfs-volume-release-candidate
+  - task: update-additional-ops-files-nfs-volume-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      release: nfs-volume-release
       original-ops-file: cf-deployment-release-candidate
+      release: nfs-volume-release
     output_mapping:
       updated-ops-file: updated-cf-deployment-nfs-volume-release-candidate
     params:
@@ -7680,11 +7680,11 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
-      - task: update-release-nfs-volume-develop
+      - task: update-additional-ops-files-nfs-volume-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
-          release: nfs-volume-release
           original-ops-file: cf-deployment-develop
+          release: nfs-volume-release
         output_mapping:
           updated-ops-file: updated-cf-deployment-nfs-volume-develop
         params:
@@ -7741,11 +7741,11 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-smb-volume-release-candidate
+  - task: update-additional-ops-files-smb-volume-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      release: smb-volume-release
       original-ops-file: cf-deployment-release-candidate
+      release: smb-volume-release
     output_mapping:
       updated-ops-file: updated-cf-deployment-smb-volume-release-candidate
     params:
@@ -7796,11 +7796,11 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
-      - task: update-release-smb-volume-develop
+      - task: update-additional-ops-files-smb-volume-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
-          release: smb-volume-release
           original-ops-file: cf-deployment-develop
+          release: smb-volume-release
         output_mapping:
           updated-ops-file: updated-cf-deployment-smb-volume-develop
         params:
@@ -7857,11 +7857,11 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-postgres-release-candidate
+  - task: update-additional-ops-files-postgres-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      release: postgres-release
       original-ops-file: cf-deployment-release-candidate
+      release: postgres-release
     output_mapping:
       updated-ops-file: updated-cf-deployment-postgres-release-candidate
     params:
@@ -7912,11 +7912,11 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
-      - task: update-release-postgres-develop
+      - task: update-additional-ops-files-postgres-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
-          release: postgres-release
           original-ops-file: cf-deployment-develop
+          release: postgres-release
         output_mapping:
           updated-ops-file: updated-cf-deployment-postgres-develop
         params:
@@ -7973,11 +7973,11 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-syslog-release-candidate
+  - task: update-additional-ops-files-syslog-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      release: syslog-release
       original-ops-file: cf-deployment-release-candidate
+      release: syslog-release
     output_mapping:
       updated-ops-file: updated-cf-deployment-syslog-release-candidate
     params:
@@ -8028,11 +8028,11 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
-      - task: update-release-syslog-develop
+      - task: update-additional-ops-files-syslog-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
-          release: syslog-release
           original-ops-file: cf-deployment-develop
+          release: syslog-release
         output_mapping:
           updated-ops-file: updated-cf-deployment-syslog-develop
         params:
@@ -8089,11 +8089,11 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-windows-syslog-release-candidate
+  - task: update-additional-ops-files-windows-syslog-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      release: windows-syslog-release
       original-ops-file: cf-deployment-release-candidate
+      release: windows-syslog-release
     output_mapping:
       updated-ops-file: updated-cf-deployment-windows-syslog-release-candidate
     params:
@@ -8144,11 +8144,11 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
-      - task: update-release-windows-syslog-develop
+      - task: update-additional-ops-files-windows-syslog-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
-          release: windows-syslog-release
           original-ops-file: cf-deployment-develop
+          release: windows-syslog-release
         output_mapping:
           updated-ops-file: updated-cf-deployment-windows-syslog-develop
         params:
@@ -8205,11 +8205,11 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-hwc-buildpack-release-candidate
+  - task: update-additional-ops-files-hwc-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      release: hwc-buildpack-release
       original-ops-file: cf-deployment-release-candidate
+      release: hwc-buildpack-release
     output_mapping:
       updated-ops-file: updated-cf-deployment-hwc-buildpack-release-candidate
     params:
@@ -8260,11 +8260,11 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
-      - task: update-release-hwc-buildpack-develop
+      - task: update-additional-ops-files-hwc-buildpack-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
-          release: hwc-buildpack-release
           original-ops-file: cf-deployment-develop
+          release: hwc-buildpack-release
         output_mapping:
           updated-ops-file: updated-cf-deployment-hwc-buildpack-develop
         params:
@@ -8321,11 +8321,11 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-windows-utilities-release-candidate
+  - task: update-additional-ops-files-windows-utilities-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      release: windows-utilities-release
       original-ops-file: cf-deployment-release-candidate
+      release: windows-utilities-release
     output_mapping:
       updated-ops-file: updated-cf-deployment-windows-utilities-release-candidate
     params:
@@ -8376,11 +8376,11 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
-      - task: update-release-windows-utilities-develop
+      - task: update-additional-ops-files-windows-utilities-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
-          release: windows-utilities-release
           original-ops-file: cf-deployment-develop
+          release: windows-utilities-release
         output_mapping:
           updated-ops-file: updated-cf-deployment-windows-utilities-develop
         params:
@@ -8437,11 +8437,11 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-garden-windows-release-candidate
+  - task: update-additional-ops-files-garden-windows-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      release: garden-windows-release
       original-ops-file: cf-deployment-release-candidate
+      release: garden-windows-release
     output_mapping:
       updated-ops-file: updated-cf-deployment-garden-windows-release-candidate
     params:
@@ -8492,11 +8492,11 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
-      - task: update-release-garden-windows-develop
+      - task: update-additional-ops-files-garden-windows-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
-          release: garden-windows-release
           original-ops-file: cf-deployment-develop
+          release: garden-windows-release
         output_mapping:
           updated-ops-file: updated-cf-deployment-garden-windows-develop
         params:
@@ -8553,11 +8553,11 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-winc-release-candidate
+  - task: update-additional-ops-files-winc-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      release: winc-release
       original-ops-file: cf-deployment-release-candidate
+      release: winc-release
     output_mapping:
       updated-ops-file: updated-cf-deployment-winc-release-candidate
     params:
@@ -8608,11 +8608,11 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
-      - task: update-release-winc-develop
+      - task: update-additional-ops-files-winc-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
-          release: winc-release
           original-ops-file: cf-deployment-develop
+          release: winc-release
         output_mapping:
           updated-ops-file: updated-cf-deployment-winc-develop
         params:
@@ -8669,11 +8669,11 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-windows1803fs-release-candidate
+  - task: update-additional-ops-files-windows1803fs-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      release: windows1803fs-release
       original-ops-file: cf-deployment-release-candidate
+      release: windows1803fs-release
     output_mapping:
       updated-ops-file: updated-cf-deployment-windows1803fs-release-candidate
     params:
@@ -8724,11 +8724,11 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
-      - task: update-release-windows1803fs-develop
+      - task: update-additional-ops-files-windows1803fs-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
-          release: windows1803fs-release
           original-ops-file: cf-deployment-develop
+          release: windows1803fs-release
         output_mapping:
           updated-ops-file: updated-cf-deployment-windows1803fs-develop
         params:
@@ -8785,11 +8785,11 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-windows2016fs-release-candidate
+  - task: update-additional-ops-files-windows2016fs-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      release: windows2016fs-release
       original-ops-file: cf-deployment-release-candidate
+      release: windows2016fs-release
     output_mapping:
       updated-ops-file: updated-cf-deployment-windows2016fs-release-candidate
     params:
@@ -8840,11 +8840,11 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
-      - task: update-release-windows2016fs-develop
+      - task: update-additional-ops-files-windows2016fs-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
-          release: windows2016fs-release
           original-ops-file: cf-deployment-develop
+          release: windows2016fs-release
         output_mapping:
           updated-ops-file: updated-cf-deployment-windows2016fs-develop
         params:
@@ -8901,11 +8901,11 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-node-exporter-release-candidate
+  - task: update-additional-ops-files-node-exporter-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      release: node-exporter-release
       original-ops-file: cf-deployment-release-candidate
+      release: node-exporter-release
     output_mapping:
       updated-ops-file: updated-cf-deployment-node-exporter-release-candidate
     params:
@@ -8956,11 +8956,11 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
-      - task: update-release-node-exporter-develop
+      - task: update-additional-ops-files-node-exporter-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
-          release: node-exporter-release
           original-ops-file: cf-deployment-develop
+          release: node-exporter-release
         output_mapping:
           updated-ops-file: updated-cf-deployment-node-exporter-develop
         params:
@@ -9017,11 +9017,11 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-leadership-election-release-candidate
+  - task: update-additional-ops-files-leadership-election-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      release: leadership-election-release
       original-ops-file: cf-deployment-release-candidate
+      release: leadership-election-release
     output_mapping:
       updated-ops-file: updated-cf-deployment-leadership-election-release-candidate
     params:
@@ -9072,11 +9072,11 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
-      - task: update-release-leadership-election-develop
+      - task: update-additional-ops-files-leadership-election-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
-          release: leadership-election-release
           original-ops-file: cf-deployment-develop
+          release: leadership-election-release
         output_mapping:
           updated-ops-file: updated-cf-deployment-leadership-election-develop
         params:
@@ -9133,11 +9133,11 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
-  - task: update-release-metric-store-release-candidate
+  - task: update-additional-ops-files-metric-store-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      release: metric-store-release
       original-ops-file: cf-deployment-release-candidate
+      release: metric-store-release
     output_mapping:
       updated-ops-file: updated-cf-deployment-metric-store-release-candidate
     params:
@@ -9188,11 +9188,11 @@ jobs:
             operations/use-compiled-releases.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
-      - task: update-release-metric-store-develop
+      - task: update-additional-ops-files-metric-store-develop
         file: runtime-ci/tasks/update-single-opsfile-release/task.yml
         input_mapping:
-          release: metric-store-release
           original-ops-file: cf-deployment-develop
+          release: metric-store-release
         output_mapping:
           updated-ops-file: updated-cf-deployment-metric-store-develop
         params:
