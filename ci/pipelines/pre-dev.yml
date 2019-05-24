@@ -7159,6 +7159,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-additional-ops-files-backup-and-restore-sdk-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -7322,6 +7323,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-additional-ops-files-bits-service-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -7485,6 +7487,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-additional-ops-files-cf-app-sd-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -7648,6 +7651,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-additional-ops-files-haproxy-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -7811,6 +7815,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-additional-ops-files-mapfs-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -7974,6 +7979,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-additional-ops-files-nfs-volume-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -8137,6 +8143,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-additional-ops-files-smb-volume-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -8300,6 +8307,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-additional-ops-files-postgres-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -8463,6 +8471,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-additional-ops-files-syslog-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -8626,6 +8635,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-additional-ops-files-windows-syslog-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -8789,6 +8799,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-additional-ops-files-hwc-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -8952,6 +8963,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-additional-ops-files-windows-utilities-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -9115,6 +9127,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-additional-ops-files-garden-windows-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -9278,6 +9291,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-additional-ops-files-winc-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -9441,6 +9455,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-additional-ops-files-windows1803fs-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -9604,6 +9619,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-additional-ops-files-windows2016fs-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -9767,6 +9783,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-additional-ops-files-node-exporter-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -9930,6 +9947,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-additional-ops-files-leadership-election-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -10093,6 +10111,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: relint-team
   - task: update-additional-ops-files-metric-store-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
