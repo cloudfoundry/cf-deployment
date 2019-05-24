@@ -8811,6 +8811,12 @@ jobs:
       - name: cf-cli-compiled-release-tarball
       outputs:
       - name: updated-cf-deployment
+      params:
+        COMMIT_MESSAGE_PATH: commit-message.txt
+        ORIGINAL_DEPLOYMENT_MANIFEST_PATH: cf-deployment.yml
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_DEPLOYMENT_MANIFEST_PATH: cf-deployment.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
       run:
         path: go/src/github.com/cloudfoundry/runtime-ci/tasks/update-stemcell/task
     input_mapping:
