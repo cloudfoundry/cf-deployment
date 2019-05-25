@@ -457,7 +457,7 @@ jobs:
     #@ for s in data.values.baseReleases:
     - put: #@ s.name + "-release-gcs"
       params:
-        file: #@ "exported-release-" + s.name + "/*.tgz"
+        file: #@ s.name + "-compiled-release-tarball/*.tgz"
         predefined_acl: publicRead
       attempts: 3
     #@ end

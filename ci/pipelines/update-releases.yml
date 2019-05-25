@@ -8824,157 +8824,157 @@ jobs:
   - aggregate:
     - put: binary-buildpack-release-gcs
       params:
-        file: exported-release-binary-buildpack/*.tgz
+        file: binary-buildpack-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: bosh-dns-aliases-release-gcs
       params:
-        file: exported-release-bosh-dns-aliases/*.tgz
+        file: bosh-dns-aliases-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: bpm-release-gcs
       params:
-        file: exported-release-bpm/*.tgz
+        file: bpm-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: capi-release-gcs
       params:
-        file: exported-release-capi/*.tgz
+        file: capi-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: cf-networking-release-gcs
       params:
-        file: exported-release-cf-networking/*.tgz
+        file: cf-networking-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: cf-smoke-tests-release-gcs
       params:
-        file: exported-release-cf-smoke-tests/*.tgz
+        file: cf-smoke-tests-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: cf-syslog-drain-release-gcs
       params:
-        file: exported-release-cf-syslog-drain/*.tgz
+        file: cf-syslog-drain-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: cflinuxfs3-release-gcs
       params:
-        file: exported-release-cflinuxfs3/*.tgz
+        file: cflinuxfs3-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: diego-release-gcs
       params:
-        file: exported-release-diego/*.tgz
+        file: diego-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: dotnet-core-buildpack-release-gcs
       params:
-        file: exported-release-dotnet-core-buildpack/*.tgz
+        file: dotnet-core-buildpack-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: garden-runc-release-gcs
       params:
-        file: exported-release-garden-runc/*.tgz
+        file: garden-runc-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: go-buildpack-release-gcs
       params:
-        file: exported-release-go-buildpack/*.tgz
+        file: go-buildpack-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: java-buildpack-release-gcs
       params:
-        file: exported-release-java-buildpack/*.tgz
+        file: java-buildpack-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: log-cache-release-gcs
       params:
-        file: exported-release-log-cache/*.tgz
+        file: log-cache-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: loggregator-release-gcs
       params:
-        file: exported-release-loggregator/*.tgz
+        file: loggregator-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: loggregator-agent-release-gcs
       params:
-        file: exported-release-loggregator-agent/*.tgz
+        file: loggregator-agent-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: nats-release-gcs
       params:
-        file: exported-release-nats/*.tgz
+        file: nats-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: nginx-buildpack-release-gcs
       params:
-        file: exported-release-nginx-buildpack/*.tgz
+        file: nginx-buildpack-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: nodejs-buildpack-release-gcs
       params:
-        file: exported-release-nodejs-buildpack/*.tgz
+        file: nodejs-buildpack-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: php-buildpack-release-gcs
       params:
-        file: exported-release-php-buildpack/*.tgz
+        file: php-buildpack-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: python-buildpack-release-gcs
       params:
-        file: exported-release-python-buildpack/*.tgz
+        file: python-buildpack-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: pxc-release-gcs
       params:
-        file: exported-release-pxc/*.tgz
+        file: pxc-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: r-buildpack-release-gcs
       params:
-        file: exported-release-r-buildpack/*.tgz
+        file: r-buildpack-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: routing-release-gcs
       params:
-        file: exported-release-routing/*.tgz
+        file: routing-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: ruby-buildpack-release-gcs
       params:
-        file: exported-release-ruby-buildpack/*.tgz
+        file: ruby-buildpack-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: silk-release-gcs
       params:
-        file: exported-release-silk/*.tgz
+        file: silk-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: staticfile-buildpack-release-gcs
       params:
-        file: exported-release-staticfile-buildpack/*.tgz
+        file: staticfile-buildpack-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: statsd-injector-release-gcs
       params:
-        file: exported-release-statsd-injector/*.tgz
+        file: statsd-injector-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: uaa-release-gcs
       params:
-        file: exported-release-uaa/*.tgz
+        file: uaa-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: credhub-release-gcs
       params:
-        file: exported-release-credhub/*.tgz
+        file: credhub-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
     - put: cf-cli-release-gcs
       params:
-        file: exported-release-cf-cli/*.tgz
+        file: cf-cli-compiled-release-tarball/*.tgz
         predefined_acl: publicRead
       attempts: 3
   - put: cf-deployment-develop
