@@ -1279,6 +1279,14 @@ instance_groups:
         source_id: log-cache-scheduler
         addr: http://localhost:6064/debug/vars
         template: "{{.WorkerHealth | jsonMap}}"
+  - name: loggr-udp-forwarder
+    release: loggregator-agent
+    properties:
+      loggregator:
+        tls:
+          ca: "((loggregator_tls_agent.ca))"
+          cert: "((loggregator_tls_agent.certificate))"
+          key: "((loggregator_tls_agent.private_key))"
 - name: router
   azs:
   - z1
@@ -1645,6 +1653,14 @@ instance_groups:
     properties:
       dns_servers:
       - 169.254.0.2
+  - name: loggr-udp-forwarder
+    release: loggregator-agent
+    properties:
+      loggregator:
+        tls:
+          ca: "((loggregator_tls_agent.ca))"
+          cert: "((loggregator_tls_agent.certificate))"
+          key: "((loggregator_tls_agent.private_key))"
 - name: log-api
   azs:
   - z1
