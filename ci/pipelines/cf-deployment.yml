@@ -1348,6 +1348,10 @@ jobs:
     - aggregate:
       - get: runtime-ci
       - get: relint-envs
+      - get: cf-deployment-master
+        passed: [ stable-periodic-cats ]
+      - get: cf-acceptance-tests-rc
+        passed: [ stable-periodic-cats ]
     - task: cleanup-stable-periodic-cats
       file: runtime-ci/tasks/cleanup-after-cats/task.yml
       input_mapping:
@@ -1365,13 +1369,13 @@ jobs:
     do:
     - get: stable-pool
       trigger: true
-      passed: [ stable-periodic-cats ]
+      passed: [ cleanup-stable-periodic-cats ]
     - aggregate:
       - get: runtime-ci
       - get: cf-deployment-master
-        passed: [ stable-periodic-cats ]
+        passed: [ cleanup-stable-periodic-cats ]
       - get: cf-acceptance-tests-rc
-        passed: [ stable-periodic-cats ]
+        passed: [ cleanup-stable-periodic-cats ]
     - task: update-branch
       file: runtime-ci/tasks/update-cats-branch-with-cf-deployment-version/task.yml
       input_mapping:
