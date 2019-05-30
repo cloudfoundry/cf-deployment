@@ -22,4 +22,4 @@ function suites() {
   echo "${suites}"
 }
 
-go test "$@" $(suites)
+go test "$@" $(suites) -mod=vendor
