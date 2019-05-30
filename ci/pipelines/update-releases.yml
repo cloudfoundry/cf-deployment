@@ -712,6 +712,120 @@ resources:
     bucket: component-bump-logs
     json_key: ((greengrass_gcp_service_account_json))
     regexp: cf-cli/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: backup-and-restore-sdk-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: backup-and-restore-sdk/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: bits-service-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: bits-service/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: cf-app-sd-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: cf-app-sd/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: haproxy-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: haproxy/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: mapfs-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: mapfs/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: nfs-volume-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: nfs-volume/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: smb-volume-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: smb-volume/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: postgres-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: postgres/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: syslog-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: syslog/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: windows-syslog-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: windows-syslog/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: hwc-buildpack-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: hwc-buildpack/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: windows-utilities-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: windows-utilities/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: garden-windows-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: garden-windows/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: winc-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: winc/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: windows1803fs-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: windows1803fs/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: windows2016fs-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: windows2016fs/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: node-exporter-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: node-exporter/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: leadership-election-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: leadership-election/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: metric-store-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: metric-store/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: windows2012R2-stemcell
   type: bosh-io-stemcell
   source:
@@ -7126,1034 +7240,3121 @@ jobs:
             repository: updated-bbl-state
             rebase: true
 - name: update-backup-and-restore-sdk
-  serial: true
+  serial_groups:
+  - update-release
   public: true
   plan:
   - aggregate:
-    - get: runtime-ci
-    - get: cf-deployment-develop
-    - get: cf-deployment-concourse-tasks
-    - get: relint-envs
     - get: backup-and-restore-sdk-release
       trigger: true
       params:
         tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
-      passed:
-      - update-stemcell-and-recompile-releases
-  - task: update-release-backup-and-restore-sdk
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+    - get: relint-team
+  - task: update-additional-ops-files-backup-and-restore-sdk-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: cf-deployment-release-candidate
       release: backup-and-restore-sdk-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-backup-and-restore-sdk-release-candidate
     params:
       RELEASE_NAME: backup-and-restore-sdk
-  - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: cf-deployment-develop
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      INFRASTRUCTURE: google
-      OPS_FILES: |
-        operations/windows2012R2-cell.yml
-        operations/windows2016-cell.yml
-        operations/windows1803-cell.yml
-        operations/windows2019-cell.yml
-  - task: bosh-dry-run-backup-and-restore-sdk
-    file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: modified-ops-files
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: backup-and-restore-sdk
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - put: cf-deployment-develop
-    params:
-      rebase: true
-      repository: updated-ops-file
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - do:
+      - task: deploy-cf
+        file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          cf-deployment: updated-cf-deployment-backup-and-restore-sdk-release-candidate
+          ops-files: updated-cf-deployment-backup-and-restore-sdk-release-candidate
+          vars-files: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+          OPS_FILES: |
+            operations/experimental/fast-deploy-with-downtime-and-danger.yml
+            operations/use-compiled-releases.yml
+          REGENERATE_CREDENTIALS: false
+          BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
+      on_success:
+        do:
+        - task: update-additional-ops-files-backup-and-restore-sdk-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: backup-and-restore-sdk-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-backup-and-restore-sdk-develop
+          params:
+            RELEASE_NAME: backup-and-restore-sdk
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-backup-and-restore-sdk-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-backup-and-restore-sdk-release-candidate
+            release: backup-and-restore-sdk-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: backup-and-restore-sdk
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: backup-and-restore-sdk-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: backup-and-restore-sdk-release
+            params:
+              RELEASE_NAME: backup-and-restore-sdk
+              REPOSITORY: cloudfoundry-incubator/backup-and-restore-sdk-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/backup-and-restore-sdk
+          - put: slack-alert
+            params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-bits-service
-  serial: true
+  serial_groups:
+  - update-release
   public: true
   plan:
   - aggregate:
-    - get: runtime-ci
-    - get: cf-deployment-develop
-    - get: cf-deployment-concourse-tasks
-    - get: relint-envs
     - get: bits-service-release
       trigger: true
       params:
         tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
-      passed:
-      - update-stemcell-and-recompile-releases
-  - task: update-release-bits-service
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+    - get: relint-team
+  - task: update-additional-ops-files-bits-service-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: cf-deployment-release-candidate
       release: bits-service-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-bits-service-release-candidate
     params:
       RELEASE_NAME: bits-service
-  - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: cf-deployment-develop
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      INFRASTRUCTURE: google
-      OPS_FILES: |
-        operations/windows2012R2-cell.yml
-        operations/windows2016-cell.yml
-        operations/windows1803-cell.yml
-        operations/windows2019-cell.yml
-  - task: bosh-dry-run-bits-service
-    file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: modified-ops-files
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: bits-service
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - put: cf-deployment-develop
-    params:
-      rebase: true
-      repository: updated-ops-file
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - do:
+      - task: deploy-cf
+        file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          cf-deployment: updated-cf-deployment-bits-service-release-candidate
+          ops-files: updated-cf-deployment-bits-service-release-candidate
+          vars-files: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+          OPS_FILES: |
+            operations/experimental/fast-deploy-with-downtime-and-danger.yml
+            operations/use-compiled-releases.yml
+          REGENERATE_CREDENTIALS: false
+          BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
+      on_success:
+        do:
+        - task: update-additional-ops-files-bits-service-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: bits-service-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-bits-service-develop
+          params:
+            RELEASE_NAME: bits-service
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-bits-service-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-bits-service-release-candidate
+            release: bits-service-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: bits-service
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: bits-service-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: bits-service-release
+            params:
+              RELEASE_NAME: bits-service
+              REPOSITORY: cloudfoundry-incubator/bits-service-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/bits-service
+          - put: slack-alert
+            params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-cf-app-sd
-  serial: true
+  serial_groups:
+  - update-release
   public: true
   plan:
   - aggregate:
-    - get: runtime-ci
-    - get: cf-deployment-develop
-    - get: cf-deployment-concourse-tasks
-    - get: relint-envs
     - get: cf-app-sd-release
       trigger: true
       params:
         tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
-      passed:
-      - update-stemcell-and-recompile-releases
-  - task: update-release-cf-app-sd
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+    - get: relint-team
+  - task: update-additional-ops-files-cf-app-sd-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: cf-deployment-release-candidate
       release: cf-app-sd-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-cf-app-sd-release-candidate
     params:
       RELEASE_NAME: cf-app-sd
-  - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: cf-deployment-develop
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      INFRASTRUCTURE: google
-      OPS_FILES: |
-        operations/windows2012R2-cell.yml
-        operations/windows2016-cell.yml
-        operations/windows1803-cell.yml
-        operations/windows2019-cell.yml
-  - task: bosh-dry-run-cf-app-sd
-    file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: modified-ops-files
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: cf-app-sd
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - put: cf-deployment-develop
-    params:
-      rebase: true
-      repository: updated-ops-file
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - do:
+      - task: deploy-cf
+        file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          cf-deployment: updated-cf-deployment-cf-app-sd-release-candidate
+          ops-files: updated-cf-deployment-cf-app-sd-release-candidate
+          vars-files: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+          OPS_FILES: |
+            operations/experimental/fast-deploy-with-downtime-and-danger.yml
+            operations/use-compiled-releases.yml
+          REGENERATE_CREDENTIALS: false
+          BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
+      on_success:
+        do:
+        - task: update-additional-ops-files-cf-app-sd-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: cf-app-sd-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-cf-app-sd-develop
+          params:
+            RELEASE_NAME: cf-app-sd
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-cf-app-sd-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-cf-app-sd-release-candidate
+            release: cf-app-sd-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: cf-app-sd
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: cf-app-sd-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: cf-app-sd-release
+            params:
+              RELEASE_NAME: cf-app-sd
+              REPOSITORY: cloudfoundry/cf-app-sd-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/cf-app-sd
+          - put: slack-alert
+            params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-haproxy
-  serial: true
+  serial_groups:
+  - update-release
   public: true
   plan:
   - aggregate:
-    - get: runtime-ci
-    - get: cf-deployment-develop
-    - get: cf-deployment-concourse-tasks
-    - get: relint-envs
     - get: haproxy-release
       trigger: true
       params:
         tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
-      passed:
-      - update-stemcell-and-recompile-releases
-  - task: update-release-haproxy
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+    - get: relint-team
+  - task: update-additional-ops-files-haproxy-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: cf-deployment-release-candidate
       release: haproxy-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-haproxy-release-candidate
     params:
       RELEASE_NAME: haproxy
-  - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: cf-deployment-develop
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      INFRASTRUCTURE: google
-      OPS_FILES: |
-        operations/windows2012R2-cell.yml
-        operations/windows2016-cell.yml
-        operations/windows1803-cell.yml
-        operations/windows2019-cell.yml
-  - task: bosh-dry-run-haproxy
-    file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: modified-ops-files
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: haproxy
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-      VARS_FILES: environments/test/greengrass/vars-files/haproxy-vars.yml
-  - put: cf-deployment-develop
-    params:
-      rebase: true
-      repository: updated-ops-file
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - do:
+      - task: deploy-cf
+        file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          cf-deployment: updated-cf-deployment-haproxy-release-candidate
+          ops-files: updated-cf-deployment-haproxy-release-candidate
+          vars-files: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+          OPS_FILES: |
+            operations/experimental/fast-deploy-with-downtime-and-danger.yml
+            operations/use-compiled-releases.yml
+          REGENERATE_CREDENTIALS: false
+          BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
+      on_success:
+        do:
+        - task: update-additional-ops-files-haproxy-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: haproxy-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-haproxy-develop
+          params:
+            RELEASE_NAME: haproxy
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-haproxy-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-haproxy-release-candidate
+            release: haproxy-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: haproxy
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: haproxy-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: haproxy-release
+            params:
+              RELEASE_NAME: haproxy
+              REPOSITORY: cloudfoundry-incubator/haproxy-boshrelease
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/haproxy
+          - put: slack-alert
+            params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-mapfs
-  serial: true
+  serial_groups:
+  - update-release
   public: true
   plan:
   - aggregate:
-    - get: runtime-ci
-    - get: cf-deployment-develop
-    - get: cf-deployment-concourse-tasks
-    - get: relint-envs
     - get: mapfs-release
       trigger: true
       params:
         tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
-      passed:
-      - update-stemcell-and-recompile-releases
-  - task: update-release-mapfs
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+    - get: relint-team
+  - task: update-additional-ops-files-mapfs-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: cf-deployment-release-candidate
       release: mapfs-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-mapfs-release-candidate
     params:
       RELEASE_NAME: mapfs
-  - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: cf-deployment-develop
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      INFRASTRUCTURE: google
-      OPS_FILES: |
-        operations/windows2012R2-cell.yml
-        operations/windows2016-cell.yml
-        operations/windows1803-cell.yml
-        operations/windows2019-cell.yml
-  - task: bosh-dry-run-mapfs
-    file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: modified-ops-files
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: mapfs
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - put: cf-deployment-develop
-    params:
-      rebase: true
-      repository: updated-ops-file
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - do:
+      - task: deploy-cf
+        file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          cf-deployment: updated-cf-deployment-mapfs-release-candidate
+          ops-files: updated-cf-deployment-mapfs-release-candidate
+          vars-files: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+          OPS_FILES: |
+            operations/experimental/fast-deploy-with-downtime-and-danger.yml
+            operations/use-compiled-releases.yml
+          REGENERATE_CREDENTIALS: false
+          BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
+      on_success:
+        do:
+        - task: update-additional-ops-files-mapfs-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: mapfs-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-mapfs-develop
+          params:
+            RELEASE_NAME: mapfs
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-mapfs-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-mapfs-release-candidate
+            release: mapfs-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: mapfs
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: mapfs-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: mapfs-release
+            params:
+              RELEASE_NAME: mapfs
+              REPOSITORY: cloudfoundry/mapfs-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/mapfs
+          - put: slack-alert
+            params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-nfs-volume
-  serial: true
+  serial_groups:
+  - update-release
   public: true
   plan:
   - aggregate:
-    - get: runtime-ci
-    - get: cf-deployment-develop
-    - get: cf-deployment-concourse-tasks
-    - get: relint-envs
     - get: nfs-volume-release
       trigger: true
       params:
         tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
-      passed:
-      - update-stemcell-and-recompile-releases
-  - task: update-release-nfs-volume
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+    - get: relint-team
+  - task: update-additional-ops-files-nfs-volume-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: cf-deployment-release-candidate
       release: nfs-volume-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-nfs-volume-release-candidate
     params:
       RELEASE_NAME: nfs-volume
-  - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: cf-deployment-develop
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      INFRASTRUCTURE: google
-      OPS_FILES: |
-        operations/windows2012R2-cell.yml
-        operations/windows2016-cell.yml
-        operations/windows1803-cell.yml
-        operations/windows2019-cell.yml
-  - task: bosh-dry-run-nfs-volume
-    file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: modified-ops-files
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: nfs-volume
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - put: cf-deployment-develop
-    params:
-      rebase: true
-      repository: updated-ops-file
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - do:
+      - task: deploy-cf
+        file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          cf-deployment: updated-cf-deployment-nfs-volume-release-candidate
+          ops-files: updated-cf-deployment-nfs-volume-release-candidate
+          vars-files: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+          OPS_FILES: |
+            operations/experimental/fast-deploy-with-downtime-and-danger.yml
+            operations/use-compiled-releases.yml
+          REGENERATE_CREDENTIALS: false
+          BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
+      on_success:
+        do:
+        - task: update-additional-ops-files-nfs-volume-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: nfs-volume-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-nfs-volume-develop
+          params:
+            RELEASE_NAME: nfs-volume
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-nfs-volume-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-nfs-volume-release-candidate
+            release: nfs-volume-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: nfs-volume
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: nfs-volume-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: nfs-volume-release
+            params:
+              RELEASE_NAME: nfs-volume
+              REPOSITORY: cloudfoundry/nfs-volume-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/nfs-volume
+          - put: slack-alert
+            params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-smb-volume
-  serial: true
+  serial_groups:
+  - update-release
   public: true
   plan:
   - aggregate:
-    - get: runtime-ci
-    - get: cf-deployment-develop
-    - get: cf-deployment-concourse-tasks
-    - get: relint-envs
     - get: smb-volume-release
       trigger: true
       params:
         tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
-      passed:
-      - update-stemcell-and-recompile-releases
-  - task: update-release-smb-volume
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+    - get: relint-team
+  - task: update-additional-ops-files-smb-volume-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: cf-deployment-release-candidate
       release: smb-volume-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-smb-volume-release-candidate
     params:
       RELEASE_NAME: smb-volume
-  - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: cf-deployment-develop
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      INFRASTRUCTURE: google
-      OPS_FILES: |
-        operations/windows2012R2-cell.yml
-        operations/windows2016-cell.yml
-        operations/windows1803-cell.yml
-        operations/windows2019-cell.yml
-  - task: bosh-dry-run-smb-volume
-    file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: modified-ops-files
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: smb-volume
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - put: cf-deployment-develop
-    params:
-      rebase: true
-      repository: updated-ops-file
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - do:
+      - task: deploy-cf
+        file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          cf-deployment: updated-cf-deployment-smb-volume-release-candidate
+          ops-files: updated-cf-deployment-smb-volume-release-candidate
+          vars-files: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+          OPS_FILES: |
+            operations/experimental/fast-deploy-with-downtime-and-danger.yml
+            operations/use-compiled-releases.yml
+          REGENERATE_CREDENTIALS: false
+          BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
+      on_success:
+        do:
+        - task: update-additional-ops-files-smb-volume-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: smb-volume-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-smb-volume-develop
+          params:
+            RELEASE_NAME: smb-volume
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-smb-volume-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-smb-volume-release-candidate
+            release: smb-volume-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: smb-volume
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: smb-volume-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: smb-volume-release
+            params:
+              RELEASE_NAME: smb-volume
+              REPOSITORY: cloudfoundry/smb-volume-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/smb-volume
+          - put: slack-alert
+            params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-postgres
-  serial: true
+  serial_groups:
+  - update-release
   public: true
   plan:
   - aggregate:
-    - get: runtime-ci
-    - get: cf-deployment-develop
-    - get: cf-deployment-concourse-tasks
-    - get: relint-envs
     - get: postgres-release
       trigger: true
       params:
         tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
-      passed:
-      - update-stemcell-and-recompile-releases
-  - task: update-release-postgres
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+    - get: relint-team
+  - task: update-additional-ops-files-postgres-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: cf-deployment-release-candidate
       release: postgres-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-postgres-release-candidate
     params:
       RELEASE_NAME: postgres
-  - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: cf-deployment-develop
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      INFRASTRUCTURE: google
-      OPS_FILES: |
-        operations/windows2012R2-cell.yml
-        operations/windows2016-cell.yml
-        operations/windows1803-cell.yml
-        operations/windows2019-cell.yml
-  - task: bosh-dry-run-postgres
-    file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: modified-ops-files
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: postgres
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - put: cf-deployment-develop
-    params:
-      rebase: true
-      repository: updated-ops-file
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - do:
+      - task: deploy-cf
+        file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          cf-deployment: updated-cf-deployment-postgres-release-candidate
+          ops-files: updated-cf-deployment-postgres-release-candidate
+          vars-files: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+          OPS_FILES: |
+            operations/experimental/fast-deploy-with-downtime-and-danger.yml
+            operations/use-compiled-releases.yml
+          REGENERATE_CREDENTIALS: false
+          BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
+      on_success:
+        do:
+        - task: update-additional-ops-files-postgres-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: postgres-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-postgres-develop
+          params:
+            RELEASE_NAME: postgres
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-postgres-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-postgres-release-candidate
+            release: postgres-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: postgres
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: postgres-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: postgres-release
+            params:
+              RELEASE_NAME: postgres
+              REPOSITORY: cloudfoundry/postgres-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/postgres
+          - put: slack-alert
+            params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-syslog
-  serial: true
+  serial_groups:
+  - update-release
   public: true
   plan:
   - aggregate:
-    - get: runtime-ci
-    - get: cf-deployment-develop
-    - get: cf-deployment-concourse-tasks
-    - get: relint-envs
     - get: syslog-release
       trigger: true
       params:
         tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
-      passed:
-      - update-stemcell-and-recompile-releases
-  - task: update-release-syslog
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+    - get: relint-team
+  - task: update-additional-ops-files-syslog-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: cf-deployment-release-candidate
       release: syslog-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-syslog-release-candidate
     params:
       RELEASE_NAME: syslog
-  - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: cf-deployment-develop
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      INFRASTRUCTURE: google
-      OPS_FILES: |
-        operations/windows2012R2-cell.yml
-        operations/windows2016-cell.yml
-        operations/windows1803-cell.yml
-        operations/windows2019-cell.yml
-  - task: bosh-dry-run-syslog
-    file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: modified-ops-files
-      vars-files: cf-deployment-develop
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: syslog
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-      VARS_FILES: operations/addons/example-vars-files/vars-enable-component-syslog.yml
-  - put: cf-deployment-develop
-    params:
-      rebase: true
-      repository: updated-ops-file
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - do:
+      - task: deploy-cf
+        file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          cf-deployment: updated-cf-deployment-syslog-release-candidate
+          ops-files: updated-cf-deployment-syslog-release-candidate
+          vars-files: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+          OPS_FILES: |
+            operations/experimental/fast-deploy-with-downtime-and-danger.yml
+            operations/use-compiled-releases.yml
+          REGENERATE_CREDENTIALS: false
+          BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
+      on_success:
+        do:
+        - task: update-additional-ops-files-syslog-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: syslog-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-syslog-develop
+          params:
+            RELEASE_NAME: syslog
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-syslog-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-syslog-release-candidate
+            release: syslog-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: syslog
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: syslog-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: syslog-release
+            params:
+              RELEASE_NAME: syslog
+              REPOSITORY: cloudfoundry/syslog-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/syslog
+          - put: slack-alert
+            params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-windows-syslog
-  serial: true
+  serial_groups:
+  - update-release
   public: true
   plan:
   - aggregate:
-    - get: runtime-ci
-    - get: cf-deployment-develop
-    - get: cf-deployment-concourse-tasks
-    - get: relint-envs
     - get: windows-syslog-release
       trigger: true
       params:
         tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
-      passed:
-      - update-stemcell-and-recompile-releases
-  - task: update-release-windows-syslog
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+    - get: relint-team
+  - task: update-additional-ops-files-windows-syslog-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: cf-deployment-release-candidate
       release: windows-syslog-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-windows-syslog-release-candidate
     params:
       RELEASE_NAME: windows-syslog
-  - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: cf-deployment-develop
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      INFRASTRUCTURE: google
-      OPS_FILES: |
-        operations/windows2012R2-cell.yml
-        operations/windows2016-cell.yml
-        operations/windows1803-cell.yml
-        operations/windows2019-cell.yml
-  - task: bosh-dry-run-windows-syslog
-    file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: modified-ops-files
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: windows-syslog
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-      VARS_FILES: environments/test/greengrass/vars-files/windows-enable-component-syslog-vars.yml
-  - put: cf-deployment-develop
-    params:
-      rebase: true
-      repository: updated-ops-file
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - do:
+      - task: deploy-cf
+        file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          cf-deployment: updated-cf-deployment-windows-syslog-release-candidate
+          ops-files: updated-cf-deployment-windows-syslog-release-candidate
+          vars-files: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+          OPS_FILES: |
+            operations/experimental/fast-deploy-with-downtime-and-danger.yml
+            operations/use-compiled-releases.yml
+          REGENERATE_CREDENTIALS: false
+          BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
+      on_success:
+        do:
+        - task: update-additional-ops-files-windows-syslog-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: windows-syslog-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-windows-syslog-develop
+          params:
+            RELEASE_NAME: windows-syslog
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-windows-syslog-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-windows-syslog-release-candidate
+            release: windows-syslog-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: windows-syslog
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: windows-syslog-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: windows-syslog-release
+            params:
+              RELEASE_NAME: windows-syslog
+              REPOSITORY: cloudfoundry/windows-syslog-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/windows-syslog
+          - put: slack-alert
+            params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-hwc-buildpack
-  serial: true
+  serial_groups:
+  - update-release
   public: true
   plan:
   - aggregate:
-    - get: runtime-ci
-    - get: cf-deployment-develop
-    - get: cf-deployment-concourse-tasks
-    - get: relint-envs
     - get: hwc-buildpack-release
       trigger: true
       params:
         tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
-      passed:
-      - update-stemcell-and-recompile-releases
-  - task: update-release-hwc-buildpack
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+    - get: relint-team
+  - task: update-additional-ops-files-hwc-buildpack-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: cf-deployment-release-candidate
       release: hwc-buildpack-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-hwc-buildpack-release-candidate
     params:
       RELEASE_NAME: hwc-buildpack
-  - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: cf-deployment-develop
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      INFRASTRUCTURE: google
-      OPS_FILES: |
-        operations/windows2012R2-cell.yml
-        operations/windows2016-cell.yml
-        operations/windows1803-cell.yml
-        operations/windows2019-cell.yml
-  - task: bosh-dry-run-hwc-buildpack
-    file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: modified-ops-files
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: hwc-buildpack
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - put: cf-deployment-develop
-    params:
-      rebase: true
-      repository: updated-ops-file
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - do:
+      - task: deploy-cf
+        file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          cf-deployment: updated-cf-deployment-hwc-buildpack-release-candidate
+          ops-files: updated-cf-deployment-hwc-buildpack-release-candidate
+          vars-files: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+          OPS_FILES: |
+            operations/experimental/fast-deploy-with-downtime-and-danger.yml
+            operations/use-compiled-releases.yml
+          REGENERATE_CREDENTIALS: false
+          BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
+      on_success:
+        do:
+        - task: update-additional-ops-files-hwc-buildpack-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: hwc-buildpack-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-hwc-buildpack-develop
+          params:
+            RELEASE_NAME: hwc-buildpack
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-hwc-buildpack-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-hwc-buildpack-release-candidate
+            release: hwc-buildpack-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: hwc-buildpack
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: hwc-buildpack-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: hwc-buildpack-release
+            params:
+              RELEASE_NAME: hwc-buildpack
+              REPOSITORY: cloudfoundry-incubator/hwc-buildpack-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/hwc-buildpack
+          - put: slack-alert
+            params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-windows-utilities
-  serial: true
+  serial_groups:
+  - update-release
   public: true
   plan:
   - aggregate:
-    - get: runtime-ci
-    - get: cf-deployment-develop
-    - get: cf-deployment-concourse-tasks
-    - get: relint-envs
     - get: windows-utilities-release
       trigger: true
       params:
         tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
-      passed:
-      - update-stemcell-and-recompile-releases
-  - task: update-release-windows-utilities
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+    - get: relint-team
+  - task: update-additional-ops-files-windows-utilities-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: cf-deployment-release-candidate
       release: windows-utilities-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-windows-utilities-release-candidate
     params:
       RELEASE_NAME: windows-utilities
-  - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: cf-deployment-develop
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      INFRASTRUCTURE: google
-      OPS_FILES: |
-        operations/windows2012R2-cell.yml
-        operations/windows2016-cell.yml
-        operations/windows1803-cell.yml
-        operations/windows2019-cell.yml
-  - task: bosh-dry-run-windows-utilities
-    file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: modified-ops-files
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: windows-utilities
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - put: cf-deployment-develop
-    params:
-      rebase: true
-      repository: updated-ops-file
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - do:
+      - task: deploy-cf
+        file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          cf-deployment: updated-cf-deployment-windows-utilities-release-candidate
+          ops-files: updated-cf-deployment-windows-utilities-release-candidate
+          vars-files: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+          OPS_FILES: |
+            operations/experimental/fast-deploy-with-downtime-and-danger.yml
+            operations/use-compiled-releases.yml
+          REGENERATE_CREDENTIALS: false
+          BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
+      on_success:
+        do:
+        - task: update-additional-ops-files-windows-utilities-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: windows-utilities-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-windows-utilities-develop
+          params:
+            RELEASE_NAME: windows-utilities
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-windows-utilities-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-windows-utilities-release-candidate
+            release: windows-utilities-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: windows-utilities
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: windows-utilities-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: windows-utilities-release
+            params:
+              RELEASE_NAME: windows-utilities
+              REPOSITORY: cloudfoundry-incubator/windows-utilities-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/windows-utilities
+          - put: slack-alert
+            params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-garden-windows
-  serial: true
+  serial_groups:
+  - update-release
   public: true
   plan:
   - aggregate:
-    - get: runtime-ci
-    - get: cf-deployment-develop
-    - get: cf-deployment-concourse-tasks
-    - get: relint-envs
     - get: garden-windows-release
       trigger: true
       params:
         tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
-      passed:
-      - update-stemcell-and-recompile-releases
-  - task: update-release-garden-windows
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+    - get: relint-team
+  - task: update-additional-ops-files-garden-windows-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: cf-deployment-release-candidate
       release: garden-windows-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-garden-windows-release-candidate
     params:
       RELEASE_NAME: garden-windows
-  - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: cf-deployment-develop
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      INFRASTRUCTURE: google
-      OPS_FILES: |
-        operations/windows2012R2-cell.yml
-        operations/windows2016-cell.yml
-        operations/windows1803-cell.yml
-        operations/windows2019-cell.yml
-  - task: bosh-dry-run-garden-windows
-    file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: modified-ops-files
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: garden-windows
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - put: cf-deployment-develop
-    params:
-      rebase: true
-      repository: updated-ops-file
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - do:
+      - task: deploy-cf
+        file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          cf-deployment: updated-cf-deployment-garden-windows-release-candidate
+          ops-files: updated-cf-deployment-garden-windows-release-candidate
+          vars-files: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+          OPS_FILES: |
+            operations/experimental/fast-deploy-with-downtime-and-danger.yml
+            operations/use-compiled-releases.yml
+          REGENERATE_CREDENTIALS: false
+          BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
+      on_success:
+        do:
+        - task: update-additional-ops-files-garden-windows-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: garden-windows-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-garden-windows-develop
+          params:
+            RELEASE_NAME: garden-windows
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-garden-windows-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-garden-windows-release-candidate
+            release: garden-windows-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: garden-windows
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: garden-windows-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: garden-windows-release
+            params:
+              RELEASE_NAME: garden-windows
+              REPOSITORY: cloudfoundry-incubator/garden-windows-bosh-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/garden-windows
+          - put: slack-alert
+            params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-winc
-  serial: true
+  serial_groups:
+  - update-release
   public: true
   plan:
   - aggregate:
-    - get: runtime-ci
-    - get: cf-deployment-develop
-    - get: cf-deployment-concourse-tasks
-    - get: relint-envs
     - get: winc-release
       trigger: true
       params:
         tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
-      passed:
-      - update-stemcell-and-recompile-releases
-  - task: update-release-winc
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+    - get: relint-team
+  - task: update-additional-ops-files-winc-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: cf-deployment-release-candidate
       release: winc-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-winc-release-candidate
     params:
       RELEASE_NAME: winc
-  - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: cf-deployment-develop
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      INFRASTRUCTURE: google
-      OPS_FILES: |
-        operations/windows2012R2-cell.yml
-        operations/windows2016-cell.yml
-        operations/windows1803-cell.yml
-        operations/windows2019-cell.yml
-  - task: bosh-dry-run-winc
-    file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: modified-ops-files
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: winc
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - put: cf-deployment-develop
-    params:
-      rebase: true
-      repository: updated-ops-file
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - do:
+      - task: deploy-cf
+        file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          cf-deployment: updated-cf-deployment-winc-release-candidate
+          ops-files: updated-cf-deployment-winc-release-candidate
+          vars-files: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+          OPS_FILES: |
+            operations/experimental/fast-deploy-with-downtime-and-danger.yml
+            operations/use-compiled-releases.yml
+          REGENERATE_CREDENTIALS: false
+          BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
+      on_success:
+        do:
+        - task: update-additional-ops-files-winc-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: winc-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-winc-develop
+          params:
+            RELEASE_NAME: winc
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-winc-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-winc-release-candidate
+            release: winc-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: winc
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: winc-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: winc-release
+            params:
+              RELEASE_NAME: winc
+              REPOSITORY: cloudfoundry-incubator/winc-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/winc
+          - put: slack-alert
+            params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-windows1803fs
-  serial: true
+  serial_groups:
+  - update-release
   public: true
   plan:
   - aggregate:
-    - get: runtime-ci
-    - get: cf-deployment-develop
-    - get: cf-deployment-concourse-tasks
-    - get: relint-envs
     - get: windows1803fs-release
       trigger: true
       params:
         tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
-      passed:
-      - update-stemcell-and-recompile-releases
-  - task: update-release-windows1803fs
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+    - get: relint-team
+  - task: update-additional-ops-files-windows1803fs-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: cf-deployment-release-candidate
       release: windows1803fs-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-windows1803fs-release-candidate
     params:
       RELEASE_NAME: windows1803fs
-  - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: cf-deployment-develop
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      INFRASTRUCTURE: google
-      OPS_FILES: |
-        operations/windows2012R2-cell.yml
-        operations/windows2016-cell.yml
-        operations/windows1803-cell.yml
-        operations/windows2019-cell.yml
-  - task: bosh-dry-run-windows1803fs
-    file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: modified-ops-files
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: windows1803fs
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - put: cf-deployment-develop
-    params:
-      rebase: true
-      repository: updated-ops-file
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - do:
+      - task: deploy-cf
+        file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          cf-deployment: updated-cf-deployment-windows1803fs-release-candidate
+          ops-files: updated-cf-deployment-windows1803fs-release-candidate
+          vars-files: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+          OPS_FILES: |
+            operations/experimental/fast-deploy-with-downtime-and-danger.yml
+            operations/use-compiled-releases.yml
+          REGENERATE_CREDENTIALS: false
+          BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
+      on_success:
+        do:
+        - task: update-additional-ops-files-windows1803fs-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: windows1803fs-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-windows1803fs-develop
+          params:
+            RELEASE_NAME: windows1803fs
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-windows1803fs-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-windows1803fs-release-candidate
+            release: windows1803fs-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: windows1803fs
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: windows1803fs-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: windows1803fs-release
+            params:
+              RELEASE_NAME: windows1803fs
+              REPOSITORY: cloudfoundry/windows1803fs-online-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/windows1803fs
+          - put: slack-alert
+            params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-windows2016fs
-  serial: true
+  serial_groups:
+  - update-release
   public: true
   plan:
   - aggregate:
-    - get: runtime-ci
-    - get: cf-deployment-develop
-    - get: cf-deployment-concourse-tasks
-    - get: relint-envs
     - get: windows2016fs-release
       trigger: true
       params:
         tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
-      passed:
-      - update-stemcell-and-recompile-releases
-  - task: update-release-windows2016fs
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+    - get: relint-team
+  - task: update-additional-ops-files-windows2016fs-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: cf-deployment-release-candidate
       release: windows2016fs-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-windows2016fs-release-candidate
     params:
       RELEASE_NAME: windows2016fs
-  - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: cf-deployment-develop
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      INFRASTRUCTURE: google
-      OPS_FILES: |
-        operations/windows2012R2-cell.yml
-        operations/windows2016-cell.yml
-        operations/windows1803-cell.yml
-        operations/windows2019-cell.yml
-  - task: bosh-dry-run-windows2016fs
-    file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: modified-ops-files
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: windows2016fs
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - put: cf-deployment-develop
-    params:
-      rebase: true
-      repository: updated-ops-file
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - do:
+      - task: deploy-cf
+        file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          cf-deployment: updated-cf-deployment-windows2016fs-release-candidate
+          ops-files: updated-cf-deployment-windows2016fs-release-candidate
+          vars-files: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+          OPS_FILES: |
+            operations/experimental/fast-deploy-with-downtime-and-danger.yml
+            operations/use-compiled-releases.yml
+          REGENERATE_CREDENTIALS: false
+          BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
+      on_success:
+        do:
+        - task: update-additional-ops-files-windows2016fs-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: windows2016fs-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-windows2016fs-develop
+          params:
+            RELEASE_NAME: windows2016fs
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-windows2016fs-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-windows2016fs-release-candidate
+            release: windows2016fs-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: windows2016fs
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: windows2016fs-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: windows2016fs-release
+            params:
+              RELEASE_NAME: windows2016fs
+              REPOSITORY: cloudfoundry-incubator/windows2016fs-online-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/windows2016fs
+          - put: slack-alert
+            params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-node-exporter
-  serial: true
+  serial_groups:
+  - update-release
   public: true
   plan:
   - aggregate:
-    - get: runtime-ci
-    - get: cf-deployment-develop
-    - get: cf-deployment-concourse-tasks
-    - get: relint-envs
     - get: node-exporter-release
       trigger: true
       params:
         tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
-      passed:
-      - update-stemcell-and-recompile-releases
-  - task: update-release-node-exporter
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+    - get: relint-team
+  - task: update-additional-ops-files-node-exporter-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: cf-deployment-release-candidate
       release: node-exporter-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-node-exporter-release-candidate
     params:
       RELEASE_NAME: node-exporter
-  - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: cf-deployment-develop
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      INFRASTRUCTURE: google
-      OPS_FILES: |
-        operations/windows2012R2-cell.yml
-        operations/windows2016-cell.yml
-        operations/windows1803-cell.yml
-        operations/windows2019-cell.yml
-  - task: bosh-dry-run-node-exporter
-    file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: modified-ops-files
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: node-exporter
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - put: cf-deployment-develop
-    params:
-      rebase: true
-      repository: updated-ops-file
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - do:
+      - task: deploy-cf
+        file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          cf-deployment: updated-cf-deployment-node-exporter-release-candidate
+          ops-files: updated-cf-deployment-node-exporter-release-candidate
+          vars-files: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+          OPS_FILES: |
+            operations/experimental/fast-deploy-with-downtime-and-danger.yml
+            operations/use-compiled-releases.yml
+          REGENERATE_CREDENTIALS: false
+          BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
+      on_success:
+        do:
+        - task: update-additional-ops-files-node-exporter-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: node-exporter-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-node-exporter-develop
+          params:
+            RELEASE_NAME: node-exporter
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-node-exporter-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-node-exporter-release-candidate
+            release: node-exporter-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: node-exporter
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: node-exporter-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: node-exporter-release
+            params:
+              RELEASE_NAME: node-exporter
+              REPOSITORY: cloudfoundry-community/node-exporter-boshrelease
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/node-exporter
+          - put: slack-alert
+            params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-leadership-election
-  serial: true
+  serial_groups:
+  - update-release
   public: true
   plan:
   - aggregate:
-    - get: runtime-ci
-    - get: cf-deployment-develop
-    - get: cf-deployment-concourse-tasks
-    - get: relint-envs
     - get: leadership-election-release
       trigger: true
       params:
         tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
-      passed:
-      - update-stemcell-and-recompile-releases
-  - task: update-release-leadership-election
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+    - get: relint-team
+  - task: update-additional-ops-files-leadership-election-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: cf-deployment-release-candidate
       release: leadership-election-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-leadership-election-release-candidate
     params:
       RELEASE_NAME: leadership-election
-  - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: cf-deployment-develop
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      INFRASTRUCTURE: google
-      OPS_FILES: |
-        operations/windows2012R2-cell.yml
-        operations/windows2016-cell.yml
-        operations/windows1803-cell.yml
-        operations/windows2019-cell.yml
-  - task: bosh-dry-run-leadership-election
-    file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: modified-ops-files
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: leadership-election
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - put: cf-deployment-develop
-    params:
-      rebase: true
-      repository: updated-ops-file
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - do:
+      - task: deploy-cf
+        file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          cf-deployment: updated-cf-deployment-leadership-election-release-candidate
+          ops-files: updated-cf-deployment-leadership-election-release-candidate
+          vars-files: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+          OPS_FILES: |
+            operations/experimental/fast-deploy-with-downtime-and-danger.yml
+            operations/use-compiled-releases.yml
+          REGENERATE_CREDENTIALS: false
+          BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
+      on_success:
+        do:
+        - task: update-additional-ops-files-leadership-election-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: leadership-election-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-leadership-election-develop
+          params:
+            RELEASE_NAME: leadership-election
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-leadership-election-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-leadership-election-release-candidate
+            release: leadership-election-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: leadership-election
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: leadership-election-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: leadership-election-release
+            params:
+              RELEASE_NAME: leadership-election
+              REPOSITORY: cloudfoundry/leadership-election-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/leadership-election
+          - put: slack-alert
+            params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-metric-store
-  serial: true
+  serial_groups:
+  - update-release
   public: true
   plan:
   - aggregate:
-    - get: runtime-ci
-    - get: cf-deployment-develop
-    - get: cf-deployment-concourse-tasks
-    - get: relint-envs
     - get: metric-store-release
       trigger: true
       params:
         tarball: false
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
     - get: stemcell
       params:
         tarball: false
-      passed:
-      - update-stemcell-and-recompile-releases
-  - task: update-release-metric-store
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+    - get: relint-team
+  - task: update-additional-ops-files-metric-store-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
+      original-ops-file: cf-deployment-release-candidate
       release: metric-store-release
-      original-ops-file: cf-deployment-develop
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-metric-store-release-candidate
     params:
       RELEASE_NAME: metric-store
-  - task: bosh-upload-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: cf-deployment-develop
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      INFRASTRUCTURE: google
-      OPS_FILES: |
-        operations/windows2012R2-cell.yml
-        operations/windows2016-cell.yml
-        operations/windows1803-cell.yml
-        operations/windows2019-cell.yml
-  - task: bosh-dry-run-metric-store
-    file: runtime-ci/tasks/bosh-dry-run-with-all-ops/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: modified-ops-files
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      DEPLOYMENT_NAME_SUFFIX: metric-store
-      SYSTEM_DOMAIN: greengrass.cf-app.com
-  - put: cf-deployment-develop
-    params:
-      rebase: true
-      repository: updated-ops-file
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - do:
+      - task: deploy-cf
+        file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          cf-deployment: updated-cf-deployment-metric-store-release-candidate
+          ops-files: updated-cf-deployment-metric-store-release-candidate
+          vars-files: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+          OPS_FILES: |
+            operations/experimental/fast-deploy-with-downtime-and-danger.yml
+            operations/use-compiled-releases.yml
+          REGENERATE_CREDENTIALS: false
+          BOSH_DEPLOY_ARGS: --parallel 50
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          ERRAND_NAME: smoke-tests
+      on_success:
+        do:
+        - task: update-additional-ops-files-metric-store-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: metric-store-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-metric-store-develop
+          params:
+            RELEASE_NAME: metric-store
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-metric-store-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-metric-store-release-candidate
+            release: metric-store-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: metric-store
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        - put: metric-store-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: metric-store-release
+            params:
+              RELEASE_NAME: metric-store
+              REPOSITORY: cloudfoundry/metric-store-release
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/metric-store
+          - put: slack-alert
+            params:
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+              text_file: slack-message/message.txt
+              username: Release Integration
+              icon_emoji: ':cloudfoundrylogo:'
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
 - name: update-windows2012R2-stemcell
   public: true
   plan:
