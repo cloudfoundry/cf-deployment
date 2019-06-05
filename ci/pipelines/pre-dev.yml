@@ -82,7 +82,7 @@ resources:
 - name: bpm-release
   type: bosh-io-release
   source:
-    repository: cloudfoundry-incubator/bpm-release
+    repository: cloudfoundry/bpm-release
 - name: capi-release
   type: bosh-io-release
   source:
@@ -1388,7 +1388,7 @@ jobs:
               release: bpm-release
             params:
               RELEASE_NAME: bpm
-              REPOSITORY: cloudfoundry-incubator/bpm-release
+              REPOSITORY: cloudfoundry/bpm-release
               BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/bpm
           - put: slack-alert
             params:
