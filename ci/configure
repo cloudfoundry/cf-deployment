@@ -1,10 +1,10 @@
 #!/bin/bash -e
 
 main() {
-  local CF_D_PIPELINES=(cf-deployment update-releases pull-requests pre-dev)
+  local CF_D_PIPELINES=(cf-deployment update-releases pull-requests)
   local PIPELINE=${1?"Valid input ${CF_D_PIPELINES[@]}"}
 
-  if [[ "${PIPELINE}" == "update-releases" || "${PIPELINE}" == "pre-dev" ]]; then
+  if [[ "${PIPELINE}" == "update-releases" ]]; then
     cat > "${PROJECT_DIR}/ci/pipelines/${PIPELINE}.yml" <<EOF
 ## ======================================================================
 ## GENERATED FILE. DO NOT EDIT
