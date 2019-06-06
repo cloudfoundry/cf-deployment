@@ -1,0 +1,1164 @@
+## ======================================================================
+## GENERATED FILE. DO NOT EDIT
+## ======================================================================
+
+resource_types:
+- name: gcs-resource
+  type: docker-image
+  source:
+    repository: frodenas/gcs-resource
+- name: slack-notification
+  type: docker-image
+  source:
+    repository: cfcommunity/slack-notification-resource
+    tag: latest
+resources:
+- name: cf-deployment-master
+  type: git
+  source:
+    branch: master-stemcell-test
+    uri: git@github.com:cloudfoundry/cf-deployment.git
+    private_key: ((cf_deployment_readwrite_deploy_key.private_key))
+- name: cf-deployment-concourse-tasks
+  type: git
+  source:
+    branch: master
+    uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
+- name: relint-envs
+  type: git
+  source:
+    branch: master
+    uri: git@github.com:cloudfoundry/relint-envs.git
+    private_key: ((hagrid_env_readwrite_deploy_key.private_key))
+- name: runtime-ci
+  type: git
+  source:
+    branch: master
+    uri: https://github.com/cloudfoundry/runtime-ci.git
+- name: stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-google-kvm-ubuntu-xenial-go_agent
+- name: binary-buildpack-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/binary-buildpack-release
+- name: binary-buildpack-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: binary-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: bosh-dns-aliases-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/bosh-dns-aliases-release
+- name: bosh-dns-aliases-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: bosh-dns-aliases-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: bpm-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/bpm-release
+- name: bpm-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: bpm-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: capi-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/capi-release
+- name: capi-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: capi-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: cf-networking-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/cf-networking-release
+- name: cf-networking-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: cf-networking-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: cf-smoke-tests-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/cf-smoke-tests-release
+- name: cf-smoke-tests-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: cf-smoke-tests-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: cf-syslog-drain-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/cf-syslog-drain-release
+- name: cf-syslog-drain-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: cf-syslog-drain-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: cflinuxfs3-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/cflinuxfs3-release
+- name: cflinuxfs3-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: cflinuxfs3-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: diego-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/diego-release
+- name: diego-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: diego-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: dotnet-core-buildpack-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/dotnet-core-buildpack-release
+- name: dotnet-core-buildpack-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: dotnet-core-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: garden-runc-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/garden-runc-release
+- name: garden-runc-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: garden-runc-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: go-buildpack-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/go-buildpack-release
+- name: go-buildpack-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: go-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: java-buildpack-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/java-buildpack-release
+- name: java-buildpack-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: java-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: log-cache-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/log-cache-release
+- name: log-cache-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: log-cache-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: loggregator-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/loggregator-release
+- name: loggregator-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: loggregator-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: loggregator-agent-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/loggregator-agent-release
+- name: loggregator-agent-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: loggregator-agent-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: nats-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/nats-release
+- name: nats-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: nats-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: nginx-buildpack-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/nginx-buildpack-release
+- name: nginx-buildpack-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: nginx-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: nodejs-buildpack-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/nodejs-buildpack-release
+- name: nodejs-buildpack-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: nodejs-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: php-buildpack-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/php-buildpack-release
+- name: php-buildpack-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: php-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: python-buildpack-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/python-buildpack-release
+- name: python-buildpack-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: python-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: pxc-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry-incubator/pxc-release
+- name: pxc-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: pxc-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: r-buildpack-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/r-buildpack-release
+- name: r-buildpack-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: r-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: routing-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry-incubator/cf-routing-release
+- name: routing-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: routing-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: ruby-buildpack-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/ruby-buildpack-release
+- name: ruby-buildpack-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: ruby-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: silk-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/silk-release
+- name: silk-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: silk-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: staticfile-buildpack-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/staticfile-buildpack-release
+- name: staticfile-buildpack-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: staticfile-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: statsd-injector-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/statsd-injector-release
+- name: statsd-injector-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: statsd-injector-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: uaa-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/uaa-release
+- name: uaa-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: uaa-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: credhub-release
+  type: bosh-io-release
+  source:
+    repository: pivotal-cf/credhub-release
+- name: credhub-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: credhub-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+- name: cf-cli-release
+  type: bosh-io-release
+  source:
+    repository: bosh-packages/cf-cli-release
+- name: cf-cli-release-gcs
+  type: gcs-resource
+  source:
+    bucket: cf-deployment-compiled-releases
+    json_key: ((concourse_gcp_service_account_json))
+    regexp: cf-cli-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+jobs:
+- name: update-stemcell-and-recompile-releases
+  public: true
+  serial_groups:
+  - stemcell
+  - update-binary-buildpack
+  - update-bosh-dns-aliases
+  - update-bpm
+  - update-capi
+  - update-cf-networking
+  - update-cf-smoke-tests
+  - update-cf-syslog-drain
+  - update-cflinuxfs3
+  - update-diego
+  - update-dotnet-core-buildpack
+  - update-garden-runc
+  - update-go-buildpack
+  - update-java-buildpack
+  - update-log-cache
+  - update-loggregator
+  - update-loggregator-agent
+  - update-nats
+  - update-nginx-buildpack
+  - update-nodejs-buildpack
+  - update-php-buildpack
+  - update-python-buildpack
+  - update-pxc
+  - update-r-buildpack
+  - update-routing
+  - update-ruby-buildpack
+  - update-silk
+  - update-staticfile-buildpack
+  - update-statsd-injector
+  - update-uaa
+  - update-credhub
+  - update-cf-cli
+  plan:
+  - aggregate:
+    - get: cf-deployment-concourse-tasks
+    - get: cf-deployment-master
+    - get: relint-envs
+    - get: runtime-ci
+    - get: binary-buildpack-release
+      params:
+        tarball: false
+    - get: bosh-dns-aliases-release
+      params:
+        tarball: false
+    - get: bpm-release
+      params:
+        tarball: false
+    - get: capi-release
+      params:
+        tarball: false
+    - get: cf-networking-release
+      params:
+        tarball: false
+    - get: cf-smoke-tests-release
+      params:
+        tarball: false
+    - get: cf-syslog-drain-release
+      params:
+        tarball: false
+    - get: cflinuxfs3-release
+      params:
+        tarball: false
+    - get: diego-release
+      params:
+        tarball: false
+    - get: dotnet-core-buildpack-release
+      params:
+        tarball: false
+    - get: garden-runc-release
+      params:
+        tarball: false
+    - get: go-buildpack-release
+      params:
+        tarball: false
+    - get: java-buildpack-release
+      params:
+        tarball: false
+    - get: log-cache-release
+      params:
+        tarball: false
+    - get: loggregator-release
+      params:
+        tarball: false
+    - get: loggregator-agent-release
+      params:
+        tarball: false
+    - get: nats-release
+      params:
+        tarball: false
+    - get: nginx-buildpack-release
+      params:
+        tarball: false
+    - get: nodejs-buildpack-release
+      params:
+        tarball: false
+    - get: php-buildpack-release
+      params:
+        tarball: false
+    - get: python-buildpack-release
+      params:
+        tarball: false
+    - get: pxc-release
+      params:
+        tarball: false
+    - get: r-buildpack-release
+      params:
+        tarball: false
+    - get: routing-release
+      params:
+        tarball: false
+    - get: ruby-buildpack-release
+      params:
+        tarball: false
+    - get: silk-release
+      params:
+        tarball: false
+    - get: staticfile-buildpack-release
+      params:
+        tarball: false
+    - get: statsd-injector-release
+      params:
+        tarball: false
+    - get: uaa-release
+      params:
+        tarball: false
+    - get: credhub-release
+      params:
+        tarball: false
+    - get: cf-cli-release
+      params:
+        tarball: false
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-stemcell-manifest-section
+    file: runtime-ci/tasks/update-stemcell-manifest-section/task.yml
+    input_mapping:
+      cf-deployment: cf-deployment-master
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_IAAS: gcp
+        BBL_ENV_NAME: pre-dev
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+        BBL_GCP_REGION: us-central1
+        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
+        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
+        LB_DOMAIN: pre-dev.test.relint.rocks
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+        ACTION: add
+    - task: upload-updated-stemcell
+      file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-cf-deployment
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        INFRASTRUCTURE: google
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-cf-deployment
+        ops-files: updated-cf-deployment
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: --parallel 50
+    - aggregate:
+      - task: compile-release-binary-buildpack
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: binary-buildpack-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: binary-buildpack
+        attempts: 3
+      - task: compile-release-bosh-dns-aliases
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: bosh-dns-aliases-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: bosh-dns-aliases
+        attempts: 3
+      - task: compile-release-bpm
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: bpm-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: bpm
+        attempts: 3
+      - task: compile-release-capi
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: capi-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: capi
+        attempts: 3
+      - task: compile-release-cf-networking
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: cf-networking-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: cf-networking
+        attempts: 3
+      - task: compile-release-cf-smoke-tests
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: cf-smoke-tests-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: cf-smoke-tests
+        attempts: 3
+      - task: compile-release-cf-syslog-drain
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: cf-syslog-drain-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: cf-syslog-drain
+        attempts: 3
+      - task: compile-release-cflinuxfs3
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: cflinuxfs3-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: cflinuxfs3
+        attempts: 3
+      - task: compile-release-diego
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: diego-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: diego
+        attempts: 3
+      - task: compile-release-dotnet-core-buildpack
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: dotnet-core-buildpack-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: dotnet-core-buildpack
+        attempts: 3
+      - task: compile-release-garden-runc
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: garden-runc-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: garden-runc
+        attempts: 3
+      - task: compile-release-go-buildpack
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: go-buildpack-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: go-buildpack
+        attempts: 3
+      - task: compile-release-java-buildpack
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: java-buildpack-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: java-buildpack
+        attempts: 3
+      - task: compile-release-log-cache
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: log-cache-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: log-cache
+        attempts: 3
+      - task: compile-release-loggregator
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: loggregator-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: loggregator
+        attempts: 3
+      - task: compile-release-loggregator-agent
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: loggregator-agent-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: loggregator-agent
+        attempts: 3
+      - task: compile-release-nats
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: nats-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: nats
+        attempts: 3
+      - task: compile-release-nginx-buildpack
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: nginx-buildpack-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: nginx-buildpack
+        attempts: 3
+      - task: compile-release-nodejs-buildpack
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: nodejs-buildpack-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: nodejs-buildpack
+        attempts: 3
+      - task: compile-release-php-buildpack
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: php-buildpack-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: php-buildpack
+        attempts: 3
+      - task: compile-release-python-buildpack
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: python-buildpack-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: python-buildpack
+        attempts: 3
+      - task: compile-release-pxc
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: pxc-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: pxc
+        attempts: 3
+      - task: compile-release-r-buildpack
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: r-buildpack-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: r-buildpack
+        attempts: 3
+      - task: compile-release-routing
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: routing-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: routing
+        attempts: 3
+      - task: compile-release-ruby-buildpack
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: ruby-buildpack-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: ruby-buildpack
+        attempts: 3
+      - task: compile-release-silk
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: silk-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: silk
+        attempts: 3
+      - task: compile-release-staticfile-buildpack
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: staticfile-buildpack-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: staticfile-buildpack
+        attempts: 3
+      - task: compile-release-statsd-injector
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: statsd-injector-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: statsd-injector
+        attempts: 3
+      - task: compile-release-uaa
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: uaa-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: uaa
+        attempts: 3
+      - task: compile-release-credhub
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: credhub-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: credhub
+        attempts: 3
+      - task: compile-release-cf-cli
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: cf-cli-compiled-release-tarball
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          RELEASE_NAME: cf-cli
+        attempts: 3
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
+          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
+  - task: update-stemcell
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+          tag: latest
+      inputs:
+      - name: runtime-ci
+        path: go/src/github.com/cloudfoundry/runtime-ci
+      - name: cf-deployment
+      - name: stemcell
+      - name: binary-buildpack-release
+      - name: binary-buildpack-compiled-release-tarball
+      - name: bosh-dns-aliases-release
+      - name: bosh-dns-aliases-compiled-release-tarball
+      - name: bpm-release
+      - name: bpm-compiled-release-tarball
+      - name: capi-release
+      - name: capi-compiled-release-tarball
+      - name: cf-networking-release
+      - name: cf-networking-compiled-release-tarball
+      - name: cf-smoke-tests-release
+      - name: cf-smoke-tests-compiled-release-tarball
+      - name: cf-syslog-drain-release
+      - name: cf-syslog-drain-compiled-release-tarball
+      - name: cflinuxfs3-release
+      - name: cflinuxfs3-compiled-release-tarball
+      - name: diego-release
+      - name: diego-compiled-release-tarball
+      - name: dotnet-core-buildpack-release
+      - name: dotnet-core-buildpack-compiled-release-tarball
+      - name: garden-runc-release
+      - name: garden-runc-compiled-release-tarball
+      - name: go-buildpack-release
+      - name: go-buildpack-compiled-release-tarball
+      - name: java-buildpack-release
+      - name: java-buildpack-compiled-release-tarball
+      - name: log-cache-release
+      - name: log-cache-compiled-release-tarball
+      - name: loggregator-release
+      - name: loggregator-compiled-release-tarball
+      - name: loggregator-agent-release
+      - name: loggregator-agent-compiled-release-tarball
+      - name: nats-release
+      - name: nats-compiled-release-tarball
+      - name: nginx-buildpack-release
+      - name: nginx-buildpack-compiled-release-tarball
+      - name: nodejs-buildpack-release
+      - name: nodejs-buildpack-compiled-release-tarball
+      - name: php-buildpack-release
+      - name: php-buildpack-compiled-release-tarball
+      - name: python-buildpack-release
+      - name: python-buildpack-compiled-release-tarball
+      - name: pxc-release
+      - name: pxc-compiled-release-tarball
+      - name: r-buildpack-release
+      - name: r-buildpack-compiled-release-tarball
+      - name: routing-release
+      - name: routing-compiled-release-tarball
+      - name: ruby-buildpack-release
+      - name: ruby-buildpack-compiled-release-tarball
+      - name: silk-release
+      - name: silk-compiled-release-tarball
+      - name: staticfile-buildpack-release
+      - name: staticfile-buildpack-compiled-release-tarball
+      - name: statsd-injector-release
+      - name: statsd-injector-compiled-release-tarball
+      - name: uaa-release
+      - name: uaa-compiled-release-tarball
+      - name: credhub-release
+      - name: credhub-compiled-release-tarball
+      - name: cf-cli-release
+      - name: cf-cli-compiled-release-tarball
+      outputs:
+      - name: updated-cf-deployment
+      params:
+        COMMIT_MESSAGE_PATH: commit-message.txt
+        ORIGINAL_DEPLOYMENT_MANIFEST_PATH: cf-deployment.yml
+        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        UPDATED_DEPLOYMENT_MANIFEST_PATH: cf-deployment.yml
+        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+      run:
+        path: go/src/github.com/cloudfoundry/runtime-ci/tasks/update-stemcell/task
+    input_mapping:
+      cf-deployment: cf-deployment-master
+  - aggregate:
+    - put: binary-buildpack-release-gcs
+      params:
+        file: binary-buildpack-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: bosh-dns-aliases-release-gcs
+      params:
+        file: bosh-dns-aliases-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: bpm-release-gcs
+      params:
+        file: bpm-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: capi-release-gcs
+      params:
+        file: capi-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: cf-networking-release-gcs
+      params:
+        file: cf-networking-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: cf-smoke-tests-release-gcs
+      params:
+        file: cf-smoke-tests-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: cf-syslog-drain-release-gcs
+      params:
+        file: cf-syslog-drain-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: cflinuxfs3-release-gcs
+      params:
+        file: cflinuxfs3-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: diego-release-gcs
+      params:
+        file: diego-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: dotnet-core-buildpack-release-gcs
+      params:
+        file: dotnet-core-buildpack-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: garden-runc-release-gcs
+      params:
+        file: garden-runc-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: go-buildpack-release-gcs
+      params:
+        file: go-buildpack-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: java-buildpack-release-gcs
+      params:
+        file: java-buildpack-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: log-cache-release-gcs
+      params:
+        file: log-cache-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: loggregator-release-gcs
+      params:
+        file: loggregator-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: loggregator-agent-release-gcs
+      params:
+        file: loggregator-agent-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: nats-release-gcs
+      params:
+        file: nats-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: nginx-buildpack-release-gcs
+      params:
+        file: nginx-buildpack-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: nodejs-buildpack-release-gcs
+      params:
+        file: nodejs-buildpack-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: php-buildpack-release-gcs
+      params:
+        file: php-buildpack-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: python-buildpack-release-gcs
+      params:
+        file: python-buildpack-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: pxc-release-gcs
+      params:
+        file: pxc-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: r-buildpack-release-gcs
+      params:
+        file: r-buildpack-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: routing-release-gcs
+      params:
+        file: routing-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: ruby-buildpack-release-gcs
+      params:
+        file: ruby-buildpack-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: silk-release-gcs
+      params:
+        file: silk-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: staticfile-buildpack-release-gcs
+      params:
+        file: staticfile-buildpack-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: statsd-injector-release-gcs
+      params:
+        file: statsd-injector-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: uaa-release-gcs
+      params:
+        file: uaa-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: credhub-release-gcs
+      params:
+        file: credhub-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+    - put: cf-cli-release-gcs
+      params:
+        file: cf-cli-compiled-release-tarball/*.tgz
+        predefined_acl: publicRead
+      attempts: 3
+  - put: cf-deployment-master
+    params:
+      rebase: true
+      repository: updated-cf-deployment
