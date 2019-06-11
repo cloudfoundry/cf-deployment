@@ -29,6 +29,13 @@
               key: ((loggregator_tls_statsdinjector.private_key))
       release: statsd-injector
     - name: bits-service
+      custom_provider_definitions:
+      - name: bits
+        type: bits
+      provides:
+        bbs:
+          aliases:
+          - domain: bits.service.cf.internal
       properties:
         bits-service:
           active_signing_key:
