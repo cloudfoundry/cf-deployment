@@ -301,9 +301,14 @@ jobs:
   - aggregate:
     - get: cf-deployment-develop
       trigger: true
-      passed: [unit-test-ops-files, unit-test-golang-tests, unit-test-update-releases-coverage]
+      passed:
+      - unit-test-ops-files
+      - lint-cf-deployment-manifest
+      - unit-test-golang-tests
+      - unit-test-update-releases-coverage
     - put: fresh-pool
       params: {acquire: true}
+    timeout: 4h
 
 - name: upgrade-acquire-pool
   serial: true
@@ -312,34 +317,46 @@ jobs:
   - aggregate:
     - get: cf-deployment-develop
       trigger: true
-      passed: [unit-test-ops-files, unit-test-golang-tests, unit-test-update-releases-coverage]
+      passed:
+      - unit-test-ops-files
+      - lint-cf-deployment-manifest
+      - unit-test-golang-tests
+      - unit-test-update-releases-coverage
     - put: upgrade-pool
       params: {acquire: true}
+    timeout: 4h
 
 - name: lite-acquire-pool
   serial: true
   public: true
   plan:
-  - timeout: 4h
-    do:
-    - aggregate:
-      - get: cf-deployment-develop
-        trigger: true
-        passed: [unit-test-ops-files, unit-test-golang-tests, unit-test-update-releases-coverage]
+  - aggregate:
+    - get: cf-deployment-develop
+      trigger: true
+      passed:
+      - unit-test-ops-files
+      - lint-cf-deployment-manifest
+      - unit-test-golang-tests
+      - unit-test-update-releases-coverage
     - put: lite-pool
       params: {acquire: true}
+    timeout: 4h
 
 - name: bbr-acquire-pool
   public: true
   serial: true
   plan:
-  - timeout: 4h
-    aggregate:
+  - aggregate:
     - get: cf-deployment-develop
       trigger: true
-      passed: [unit-test-ops-files, unit-test-golang-tests, unit-test-update-releases-coverage]
+      passed:
+      - unit-test-ops-files
+      - lint-cf-deployment-manifest
+      - unit-test-golang-tests
+      - unit-test-update-releases-coverage
     - put: bbr-pool
       params: {acquire: true}
+    timeout: 4h
 
 - name: lint-cf-deployment-manifest
   serial: false
@@ -689,9 +706,14 @@ jobs:
   - aggregate:
     - get: cf-deployment-develop
       trigger: true
-      passed: [unit-test-ops-files, unit-test-golang-tests, unit-test-update-releases-coverage]
+      passed:
+      - unit-test-ops-files
+      - lint-cf-deployment-manifest
+      - unit-test-golang-tests
+      - unit-test-update-releases-coverage
     - put: experimental-pool
       params: {acquire: true}
+    timeout: 4h
 
 - name: experimental-release-pool
   public: true
