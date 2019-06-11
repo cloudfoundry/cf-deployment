@@ -39,310 +39,186 @@ resources:
   type: bosh-io-stemcell
   source:
     name: bosh-google-kvm-ubuntu-xenial-go_agent
-- name: binary-buildpack-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/binary-buildpack-release
 - name: binary-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: binary-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: bosh-dns-aliases-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/bosh-dns-aliases-release
 - name: bosh-dns-aliases-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: bosh-dns-aliases-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: bpm-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/bpm-release
 - name: bpm-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: bpm-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: capi-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/capi-release
 - name: capi-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: capi-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: cf-networking-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/cf-networking-release
 - name: cf-networking-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: cf-networking-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: cf-smoke-tests-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/cf-smoke-tests-release
 - name: cf-smoke-tests-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: cf-smoke-tests-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: cf-syslog-drain-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/cf-syslog-drain-release
 - name: cf-syslog-drain-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: cf-syslog-drain-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: cflinuxfs3-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/cflinuxfs3-release
 - name: cflinuxfs3-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: cflinuxfs3-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: diego-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/diego-release
 - name: diego-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: diego-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: dotnet-core-buildpack-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/dotnet-core-buildpack-release
 - name: dotnet-core-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: dotnet-core-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: garden-runc-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/garden-runc-release
 - name: garden-runc-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: garden-runc-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: go-buildpack-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/go-buildpack-release
 - name: go-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: go-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: java-buildpack-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/java-buildpack-release
 - name: java-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: java-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: log-cache-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/log-cache-release
 - name: log-cache-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: log-cache-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: loggregator-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/loggregator-release
 - name: loggregator-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: loggregator-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: loggregator-agent-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/loggregator-agent-release
 - name: loggregator-agent-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: loggregator-agent-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: nats-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/nats-release
 - name: nats-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: nats-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: nginx-buildpack-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/nginx-buildpack-release
 - name: nginx-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: nginx-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: nodejs-buildpack-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/nodejs-buildpack-release
 - name: nodejs-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: nodejs-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: php-buildpack-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/php-buildpack-release
 - name: php-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: php-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: python-buildpack-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/python-buildpack-release
 - name: python-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: python-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: pxc-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry-incubator/pxc-release
 - name: pxc-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: pxc-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: r-buildpack-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/r-buildpack-release
 - name: r-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: r-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: routing-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry-incubator/cf-routing-release
 - name: routing-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: routing-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: ruby-buildpack-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/ruby-buildpack-release
 - name: ruby-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: ruby-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: silk-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/silk-release
 - name: silk-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: silk-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: staticfile-buildpack-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/staticfile-buildpack-release
 - name: staticfile-buildpack-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: staticfile-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: statsd-injector-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/statsd-injector-release
 - name: statsd-injector-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: statsd-injector-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: uaa-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/uaa-release
 - name: uaa-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: uaa-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: credhub-release
-  type: bosh-io-release
-  source:
-    repository: pivotal-cf/credhub-release
 - name: credhub-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
     regexp: credhub-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: cf-cli-release
-  type: bosh-io-release
-  source:
-    repository: bosh-packages/cf-cli-release
 - name: cf-cli-release-gcs
   type: gcs-resource
   source:
@@ -391,99 +267,6 @@ jobs:
     - get: cf-deployment-master
     - get: relint-envs
     - get: runtime-ci
-    - get: binary-buildpack-release
-      params:
-        tarball: false
-    - get: bosh-dns-aliases-release
-      params:
-        tarball: false
-    - get: bpm-release
-      params:
-        tarball: false
-    - get: capi-release
-      params:
-        tarball: false
-    - get: cf-networking-release
-      params:
-        tarball: false
-    - get: cf-smoke-tests-release
-      params:
-        tarball: false
-    - get: cf-syslog-drain-release
-      params:
-        tarball: false
-    - get: cflinuxfs3-release
-      params:
-        tarball: false
-    - get: diego-release
-      params:
-        tarball: false
-    - get: dotnet-core-buildpack-release
-      params:
-        tarball: false
-    - get: garden-runc-release
-      params:
-        tarball: false
-    - get: go-buildpack-release
-      params:
-        tarball: false
-    - get: java-buildpack-release
-      params:
-        tarball: false
-    - get: log-cache-release
-      params:
-        tarball: false
-    - get: loggregator-release
-      params:
-        tarball: false
-    - get: loggregator-agent-release
-      params:
-        tarball: false
-    - get: nats-release
-      params:
-        tarball: false
-    - get: nginx-buildpack-release
-      params:
-        tarball: false
-    - get: nodejs-buildpack-release
-      params:
-        tarball: false
-    - get: php-buildpack-release
-      params:
-        tarball: false
-    - get: python-buildpack-release
-      params:
-        tarball: false
-    - get: pxc-release
-      params:
-        tarball: false
-    - get: r-buildpack-release
-      params:
-        tarball: false
-    - get: routing-release
-      params:
-        tarball: false
-    - get: ruby-buildpack-release
-      params:
-        tarball: false
-    - get: silk-release
-      params:
-        tarball: false
-    - get: staticfile-buildpack-release
-      params:
-        tarball: false
-    - get: statsd-injector-release
-      params:
-        tarball: false
-    - get: uaa-release
-      params:
-        tarball: false
-    - get: credhub-release
-      params:
-        tarball: false
-    - get: cf-cli-release
-      params:
-        tarball: false
     - get: stemcell
       params:
         tarball: false
@@ -935,67 +718,36 @@ jobs:
         path: go/src/github.com/cloudfoundry/runtime-ci
       - name: cf-deployment
       - name: stemcell
-      - name: binary-buildpack-release
       - name: binary-buildpack-compiled-release-tarball
-      - name: bosh-dns-aliases-release
       - name: bosh-dns-aliases-compiled-release-tarball
-      - name: bpm-release
       - name: bpm-compiled-release-tarball
-      - name: capi-release
       - name: capi-compiled-release-tarball
-      - name: cf-networking-release
       - name: cf-networking-compiled-release-tarball
-      - name: cf-smoke-tests-release
       - name: cf-smoke-tests-compiled-release-tarball
-      - name: cf-syslog-drain-release
       - name: cf-syslog-drain-compiled-release-tarball
-      - name: cflinuxfs3-release
       - name: cflinuxfs3-compiled-release-tarball
-      - name: diego-release
       - name: diego-compiled-release-tarball
-      - name: dotnet-core-buildpack-release
       - name: dotnet-core-buildpack-compiled-release-tarball
-      - name: garden-runc-release
       - name: garden-runc-compiled-release-tarball
-      - name: go-buildpack-release
       - name: go-buildpack-compiled-release-tarball
-      - name: java-buildpack-release
       - name: java-buildpack-compiled-release-tarball
-      - name: log-cache-release
       - name: log-cache-compiled-release-tarball
-      - name: loggregator-release
       - name: loggregator-compiled-release-tarball
-      - name: loggregator-agent-release
       - name: loggregator-agent-compiled-release-tarball
-      - name: nats-release
       - name: nats-compiled-release-tarball
-      - name: nginx-buildpack-release
       - name: nginx-buildpack-compiled-release-tarball
-      - name: nodejs-buildpack-release
       - name: nodejs-buildpack-compiled-release-tarball
-      - name: php-buildpack-release
       - name: php-buildpack-compiled-release-tarball
-      - name: python-buildpack-release
       - name: python-buildpack-compiled-release-tarball
-      - name: pxc-release
       - name: pxc-compiled-release-tarball
-      - name: r-buildpack-release
       - name: r-buildpack-compiled-release-tarball
-      - name: routing-release
       - name: routing-compiled-release-tarball
-      - name: ruby-buildpack-release
       - name: ruby-buildpack-compiled-release-tarball
-      - name: silk-release
       - name: silk-compiled-release-tarball
-      - name: staticfile-buildpack-release
       - name: staticfile-buildpack-compiled-release-tarball
-      - name: statsd-injector-release
       - name: statsd-injector-compiled-release-tarball
-      - name: uaa-release
       - name: uaa-compiled-release-tarball
-      - name: credhub-release
       - name: credhub-compiled-release-tarball
-      - name: cf-cli-release
       - name: cf-cli-compiled-release-tarball
       outputs:
       - name: updated-cf-deployment
