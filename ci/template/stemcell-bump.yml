@@ -6,11 +6,6 @@
 
 ---
 resource_types:
-- name: gcs-resource
-  type: docker-image
-  source:
-    repository: frodenas/gcs-resource
-
 - name: slack-notification
   type: docker-image
   source:
@@ -48,15 +43,6 @@ resources:
   type: bosh-io-stemcell
   source:
     name: bosh-google-kvm-ubuntu-xenial-go_agent
-
-#@ for r in data.values.baseReleases:
-- name: #@ r.name + "-release-gcs"
-  type: gcs-resource
-  source:
-    bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
-    regexp: #@ r.name + "-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz"
-#@ end
 
 jobs:
 #@ env = "pre-dev"
@@ -112,62 +98,8 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         ERRAND_NAME: smoke-tests
-    - aggregate:
-      #@ for s in data.values.baseReleases:
-      - task: #@ "compile-release-" + s.name
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: #@ s.name + "-compiled-release-tarball"
-        params:
-          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
-          RELEASE_NAME: #@ s.name
-        attempts: 3
-      #@ end
     ensure:
       do:
       - #@ delete_deployment(env)
       - #@ manage_gcp_dns("remove", env)
       - #@ bbl_down(env)
-  - task: update-stemcell
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-          tag: latest
-      inputs:
-      - name: runtime-ci
-        path: go/src/github.com/cloudfoundry/runtime-ci
-      - name: cf-deployment
-      - name: stemcell
-      #@ for s in data.values.baseReleases:
-      - name: #@ s.name + "-compiled-release-tarball"
-      #@ end
-      outputs:
-      - name: updated-cf-deployment
-      params:
-        COMMIT_MESSAGE_PATH: commit-message.txt
-        ORIGINAL_DEPLOYMENT_MANIFEST_PATH: cf-deployment.yml
-        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-        UPDATED_DEPLOYMENT_MANIFEST_PATH: cf-deployment.yml
-        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-      run:
-        path: go/src/github.com/cloudfoundry/runtime-ci/tasks/update-stemcell/task
-    input_mapping:
-      cf-deployment: cf-deployment-master
-  - aggregate:
-    #@ for s in data.values.baseReleases:
-    - put: #@ s.name + "-release-gcs"
-      params:
-        file: #@ s.name + "-compiled-release-tarball/*.tgz"
-        predefined_acl: publicRead
-      attempts: 3
-    #@ end
-  - put: cf-deployment-master
-    params:
-      rebase: true
-      repository: updated-cf-deployment
