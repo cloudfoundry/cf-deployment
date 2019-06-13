@@ -34,6 +34,13 @@
     jobs:
     - name: uaa
       release: uaa
+      custom_provider_definitions:
+      - name: uaa-oidc
+        type: uaa-oidc
+      provides:
+        uaa-oidc:
+          aliases:
+          - domain: uaa-oidc.service.cf.internal
       properties:
         encryption:
           active_key_label: 'key-1'
@@ -88,17 +95,6 @@
                 key: ((saml_oidc-key1.private_key))
                 passphrase: ((saml_oidc_key1_passphrase))
                 certificate: ((saml_oidc-key1.certificate))
-
-- type: replace
-  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/-
-  value:
-    domain: uaa-oidc.service.cf.internal
-    targets:
-    - query: '*'
-      instance_group: uaa-oidc
-      deployment: cf
-      network: default
-      domain: bosh
 
 - type: replace
   path: /instance_groups/name=database/jobs/name=pxc-mysql/properties/seeded_databases/-
