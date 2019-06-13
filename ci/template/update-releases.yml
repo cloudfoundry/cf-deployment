@@ -337,6 +337,7 @@ jobs:
           OPS_FILES: |
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
             operations/use-compiled-releases.yml
+            operations/experimental/use-compiled-releases-windows.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: "--parallel 50"
       - task: run-errand-smoke-tests
