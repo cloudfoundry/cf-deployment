@@ -1003,6 +1003,12 @@ instance_groups:
     release: routing
     properties:
       routing_api:
+        enabled_api_endpoints: "both"
+        mtls_ca: "((routing_api_tls_client.ca))"
+        mtls_server_cert: "((routing_api_tls.certificate))"
+        mtls_server_key: "((routing_api_tls.private_key))"
+        mtls_client_cert: "((routing_api_tls_client.certificate))"
+        mtls_client_key: "((routing_api_tls_client.private_key))"
         skip_consul_lock: true
         system_domain: "((system_domain))"
         router_groups:
@@ -2171,6 +2177,25 @@ variables:
     alternative_names:
     - "((system_domain))"
     - "*.((system_domain))"
+- name: routing_api_ca
+  type: certificate
+  options:
+    common_name: routing_api
+    is_ca: true
+- name: routing_api_tls
+  type: certificate
+  options:
+    ca: routing_api_ca
+    common_name: routing-api.service.cf.internal
+    extended_key_usage:
+      - server_auth
+- name: routing_api_tls_client
+  type: certificate
+  options:
+    ca: routing_api_ca
+    common_name: routing-api-client
+    extended_key_usage:
+      - client_auth
 - name: uaa_ca
   type: certificate
   options:
