@@ -1,0 +1,19 @@
+---
+- type: replace
+  path: /instance_groups/name=api/jobs/name=file_server/properties/https_server_enabled?
+  value: true
+- type: replace
+  path: /instance_groups/name=api/jobs/name=file_server/properties/tls?
+  value:
+    cert: ((file_server_cert.certificate))
+    key: ((file_server_cert.private_key))
+- type: replace
+  path: /variables/-
+  value:
+    name: file_server_cert
+    options:
+      ca: service_cf_internal_ca
+      common_name: file-server.service.cf.internal
+    type: certificate
+    extended_key_usage:
+      - server_auth
