@@ -175,6 +175,7 @@ jobs:
 - name: #@ "update-" + r.name
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:

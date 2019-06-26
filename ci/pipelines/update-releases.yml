@@ -856,6 +856,7 @@ jobs:
 - name: update-binary-buildpack
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -1062,6 +1063,7 @@ jobs:
 - name: update-bosh-dns-aliases
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -1268,6 +1270,7 @@ jobs:
 - name: update-bpm
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -1474,6 +1477,7 @@ jobs:
 - name: update-capi
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -1680,6 +1684,7 @@ jobs:
 - name: update-cf-networking
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -1886,6 +1891,7 @@ jobs:
 - name: update-cf-smoke-tests
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -2092,6 +2098,7 @@ jobs:
 - name: update-cf-syslog-drain
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -2298,6 +2305,7 @@ jobs:
 - name: update-cflinuxfs3
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -2504,6 +2512,7 @@ jobs:
 - name: update-diego
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -2710,6 +2719,7 @@ jobs:
 - name: update-dotnet-core-buildpack
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -2916,6 +2926,7 @@ jobs:
 - name: update-garden-runc
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -3122,6 +3133,7 @@ jobs:
 - name: update-go-buildpack
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -3328,6 +3340,7 @@ jobs:
 - name: update-java-buildpack
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -3534,6 +3547,7 @@ jobs:
 - name: update-log-cache
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -3740,6 +3754,7 @@ jobs:
 - name: update-loggregator
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -3946,6 +3961,7 @@ jobs:
 - name: update-loggregator-agent
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -4152,6 +4168,7 @@ jobs:
 - name: update-nats
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -4358,6 +4375,7 @@ jobs:
 - name: update-nginx-buildpack
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -4564,6 +4582,7 @@ jobs:
 - name: update-nodejs-buildpack
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -4770,6 +4789,7 @@ jobs:
 - name: update-php-buildpack
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -4976,6 +4996,7 @@ jobs:
 - name: update-python-buildpack
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -5182,6 +5203,7 @@ jobs:
 - name: update-pxc
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -5388,6 +5410,7 @@ jobs:
 - name: update-r-buildpack
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -5594,6 +5617,7 @@ jobs:
 - name: update-routing
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -5800,6 +5824,7 @@ jobs:
 - name: update-ruby-buildpack
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -6006,6 +6031,7 @@ jobs:
 - name: update-silk
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -6212,6 +6238,7 @@ jobs:
 - name: update-staticfile-buildpack
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -6418,6 +6445,7 @@ jobs:
 - name: update-statsd-injector
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -6624,6 +6652,7 @@ jobs:
 - name: update-uaa
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -6830,6 +6859,7 @@ jobs:
 - name: update-credhub
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
@@ -7036,6 +7066,7 @@ jobs:
 - name: update-cf-cli
   serial_groups:
   - update-release
+  - stemcell
   public: true
   plan:
   - aggregate:
