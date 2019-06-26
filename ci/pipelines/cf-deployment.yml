@@ -948,80 +948,76 @@ jobs:
   serial_groups: [ bellatrix-smokes ]
   public: true
   plan:
-  - on_success:
-      put: stable-pool
-      params: {release: stable-pool}
-    do:
-    - get: stable-pool
-      trigger: true
-      passed: [ stable-acquire-pool ]
-    - aggregate:
-      - get: runtime-ci
-      - get: cf-deployment-concourse-tasks
-      - get: cf-deployment-master
-      - get: relint-envs
-    - task: collect-ops-files
-      file: cf-deployment-concourse-tasks/collect-ops-files/task.yml
-      input_mapping:
-        base-ops-files: cf-deployment-master
-        new-ops-files: relint-envs
+  - get: stable-pool
+    trigger: true
+    passed: [ stable-acquire-pool ]
+  - aggregate:
+    - get: runtime-ci
+    - get: cf-deployment-concourse-tasks
+    - get: cf-deployment-master
+    - get: relint-envs
+  - task: collect-ops-files
+    file: cf-deployment-concourse-tasks/collect-ops-files/task.yml
+    input_mapping:
+      base-ops-files: cf-deployment-master
+      new-ops-files: relint-envs
+    params:
+      BASE_OPS_FILE_DIR: "operations"
+      NEW_OPS_FILES: |
+        environments/test/bellatrix/decrease-cc-event-retention.yml
+  - task: bosh-deploy-cf
+    file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+      cf-deployment: cf-deployment-master
+      ops-files: collected-ops-files
+      vars-files: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/bellatrix/bbl-state
+      SYSTEM_DOMAIN: bellatrix.cf-app.com
+      OPS_FILES: |
+        operations/scale-database-cluster.yml
+        operations/windows2016-cell.yml
+        operations/decrease-cc-event-retention.yml
+        operations/use-internal-lookup-for-route-services.yml
+        operations/use-compiled-releases.yml
+  - task: run-bosh-cleanup
+    file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/bellatrix/bbl-state
+  - task: update-integration-configs
+    file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
+    params:
+      BBL_STATE_DIR: environments/test/bellatrix/bbl-state
+      CATS_INTEGRATION_CONFIG_FILE: environments/test/bellatrix/integration_config.json
+    input_mapping:
+      bbl-state: relint-envs
+      integration-configs: relint-envs
+    ensure:
+      put: relint-envs
       params:
-        BASE_OPS_FILE_DIR: "operations"
-        NEW_OPS_FILES: |
-          environments/test/bellatrix/decrease-cc-event-retention.yml
-    - task: bosh-deploy-cf
-      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        cf-deployment: cf-deployment-master
-        ops-files: collected-ops-files
-        vars-files: relint-envs
-      params:
-        BBL_STATE_DIR: environments/test/bellatrix/bbl-state
-        SYSTEM_DOMAIN: bellatrix.cf-app.com
-        OPS_FILES: |
-          operations/scale-database-cluster.yml
-          operations/windows2016-cell.yml
-          operations/decrease-cc-event-retention.yml
-          operations/use-internal-lookup-for-route-services.yml
-          operations/use-compiled-releases.yml
-    - task: run-bosh-cleanup
-      file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-      params:
-        BBL_STATE_DIR: environments/test/bellatrix/bbl-state
-    - task: update-integration-configs
-      file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
-      params:
-        BBL_STATE_DIR: environments/test/bellatrix/bbl-state
-        CATS_INTEGRATION_CONFIG_FILE: environments/test/bellatrix/integration_config.json
-      input_mapping:
-        bbl-state: relint-envs
-        integration-configs: relint-envs
-      ensure:
-        put: relint-envs
-        params:
-          repository: updated-integration-configs
-          rebase: true
-    - task: open-asgs-for-credhub
-      file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-      params:
-        BBL_STATE_DIR: environments/test/bellatrix/bbl-state
-        INSTANCE_GROUP_NAME: credhub
-        SYSTEM_DOMAIN: bellatrix.cf-app.com
-        SECURITY_GROUP_NAME: credhub
-    - task: open-asgs-for-uaa
-      file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-      params:
-        BBL_STATE_DIR: environments/test/bellatrix/bbl-state
-        INSTANCE_GROUP_NAME: uaa
-        SYSTEM_DOMAIN: bellatrix.cf-app.com
-        SECURITY_GROUP_NAME: uaa
+        repository: updated-integration-configs
+        rebase: true
+  - task: open-asgs-for-credhub
+    file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/bellatrix/bbl-state
+      INSTANCE_GROUP_NAME: credhub
+      SYSTEM_DOMAIN: bellatrix.cf-app.com
+      SECURITY_GROUP_NAME: credhub
+  - task: open-asgs-for-uaa
+    file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/bellatrix/bbl-state
+      INSTANCE_GROUP_NAME: uaa
+      SYSTEM_DOMAIN: bellatrix.cf-app.com
+      SECURITY_GROUP_NAME: uaa
 
 - name: lite-deploy
   public: true
@@ -1216,9 +1212,8 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/bellatrix/bbl-state
       ERRAND_NAME: smoke-tests
-    on_failure:
-      put: stable-pool
-      params: {release: stable-pool}
+  - put: stable-pool
+    params: {release: stable-pool}
 
 - name: bbr-deploy
   public: true
