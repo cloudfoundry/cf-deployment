@@ -102,6 +102,10 @@ opsReleases:
   repository: cloudfoundry/windows1803fs-online-release
 - name: windows2016fs
   repository: cloudfoundry-incubator/windows2016fs-online-release
+- name: windowsfs
+  repository: cloudfoundry/windowsfs-online-release
+  requiredOpsFiles:
+  - operations/windows2019-cell.yml
 - name: node-exporter
   repository: cloudfoundry-community/node-exporter-boshrelease
 - name: leadership-election

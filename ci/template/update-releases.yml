@@ -5,6 +5,15 @@
 #@ load("manage-gcp-dns.lib.yml", "manage_gcp_dns")
 #@ load("update-release.lib.yml", "update_release")
 
+#@ def collect_ops_files(release):
+  #@ ops_files = "operations/experimental/fast-deploy-with-downtime-and-danger.yml\noperations/use-compiled-releases.yml\noperations/experimental/use-compiled-releases-windows.yml\n"
+  #@ additional_files = ""
+  #@ if hasattr(release, "requiredOpsFiles"):
+  #@ additional_files = "\n".join(release.requiredOpsFiles)
+  #@ end
+  #@ return ops_files + additional_files
+#@ end
+
 ---
 groups:
 - name: update-base-stemcells-and-releases
@@ -335,10 +344,7 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
-          OPS_FILES: |
-            operations/experimental/fast-deploy-with-downtime-and-danger.yml
-            operations/use-compiled-releases.yml
-            operations/experimental/use-compiled-releases-windows.yml
+          OPS_FILES: #@ collect_ops_files(r)
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: "--parallel 50"
       - task: run-errand-smoke-tests
