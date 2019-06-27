@@ -397,7 +397,7 @@ jobs:
 - name: branch-freshness
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: cf-deployment-all-branches
       trigger: true
     - get: runtime-ci
@@ -410,7 +410,7 @@ jobs:
   serial: true
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: cf-deployment-develop
       trigger: true
       passed:
@@ -438,7 +438,7 @@ jobs:
   - get: fresh-pool
     trigger: true
     passed: [fresh-acquire-pool]
-  - aggregate:
+  - in_parallel:
     - get: cf-deployment-develop
       passed: [fresh-acquire-pool]
     - get: cf-deployment-concourse-tasks
@@ -520,7 +520,7 @@ jobs:
       GCP_PROJECT_ID: ((luna_gcp_project))
       GCP_BACKEND_SERVICE: ((luna_router_backend_service))
       GOOGLE_ACCOUNT_CREDS_PATH: environments/test/luna/google_account_creds.json
-  - aggregate:
+  - in_parallel:
     - task: ensure-api-healthy
       file: runtime-ci/tasks/ensure-api-healthy/task.yml
       input_mapping:
@@ -534,7 +534,7 @@ jobs:
       params:
         CHECK_ISOLATION_SEGMENT: true
         CONFIG_FILE_PATH: environments/test/luna/integration_config.json
-  - aggregate:
+  - in_parallel:
     - task: open-asgs-for-credhub
       file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
       input_mapping:
@@ -575,7 +575,7 @@ jobs:
     - get: fresh-pool
       passed: [ fresh-deploy ]
       trigger: true
-    - aggregate:
+    - in_parallel:
       - get: relint-envs
       - get: cf-deployment-develop
         passed: [ fresh-deploy ]
@@ -599,7 +599,7 @@ jobs:
     - get: fresh-pool
       trigger: true
       passed: [ fresh-deploy ]
-    - aggregate:
+    - in_parallel:
       - get: cf-deployment-concourse-tasks
       - get: cf-acceptance-tests-rc
       - get: relint-envs
@@ -627,7 +627,7 @@ jobs:
       passed:
       - fresh-cats
       - fresh-smoke-tests
-    - aggregate:
+    - in_parallel:
       - get: cf-deployment-concourse-tasks
       - get: relint-envs
     - task: delete-deployment-cf
@@ -645,7 +645,7 @@ jobs:
   serial: true
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: cf-deployment-develop
       trigger: true
       passed:
@@ -673,7 +673,7 @@ jobs:
   - get: upgrade-pool
     trigger: true
     passed: [upgrade-acquire-pool]
-  - aggregate:
+  - in_parallel:
     - get: cf-deployment-develop
       passed: [upgrade-acquire-pool]
     - get: cf-deployment-concourse-tasks
@@ -755,7 +755,7 @@ jobs:
       params:
         repository: updated-integration-configs
         rebase: true
-  - aggregate:
+  - in_parallel:
     - task: open-asgs-for-credhub
       file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
       input_mapping:
@@ -795,7 +795,7 @@ jobs:
     - get: upgrade-pool
       trigger: true
       passed: [upgrade-deploy]
-    - aggregate:
+    - in_parallel:
       - get: cf-deployment-concourse-tasks
       - get: cf-acceptance-tests-rc
       - get: relint-envs
@@ -821,7 +821,7 @@ jobs:
     - get: upgrade-pool
       trigger: true
       passed: [upgrade-deploy]
-    - aggregate:
+    - in_parallel:
       - get: cf-deployment-concourse-tasks
       - get: cf-acceptance-tests-rc
       - get: relint-envs
@@ -852,7 +852,7 @@ jobs:
   public: true
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: cf-deployment-develop
       trigger: true
       passed:
@@ -881,7 +881,7 @@ jobs:
     - get: experimental-pool
       trigger: true
       passed: [ experimental-acquire-pool ]
-    - aggregate:
+    - in_parallel:
       - get: runtime-ci
       - get: cf-deployment-concourse-tasks
       - get: cf-deployment-develop
@@ -961,7 +961,7 @@ jobs:
         params:
           repository: updated-integration-configs
           rebase: true
-    - aggregate:
+    - in_parallel:
       - task: open-asgs-for-credhub
         file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
         input_mapping:
@@ -995,7 +995,7 @@ jobs:
 - name: experimental-ops-files
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: experimental-pool
       trigger: true
       passed: [ experimental-acquire-pool ]
@@ -1011,7 +1011,7 @@ jobs:
     - get: experimental-pool
       passed: [ experimental-deploy ]
       trigger: true
-    - aggregate:
+    - in_parallel:
       - get: relint-envs
       - get: cf-deployment-develop
         passed: [ experimental-deploy ]
@@ -1034,7 +1034,7 @@ jobs:
     - get: experimental-pool
       trigger: true
       passed: [ experimental-deploy ]
-    - aggregate:
+    - in_parallel:
       - get: cf-acceptance-tests-rc
       - get: relint-envs
       - get: cf-deployment-develop
@@ -1063,7 +1063,7 @@ jobs:
   serial: true
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: cf-deployment-develop
       trigger: true
       passed:
@@ -1093,7 +1093,7 @@ jobs:
     - get: lite-pool
       trigger: true
       passed: [lite-acquire-pool]
-    - aggregate:
+    - in_parallel:
       - get: runtime-ci
       - get: cf-deployment-concourse-tasks
       - get: cf-deployment-develop
@@ -1155,7 +1155,7 @@ jobs:
         params:
           repository: updated-integration-configs
           rebase: true
-    - aggregate:
+    - in_parallel:
       - task: open-asgs-for-credhub
         file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
         input_mapping:
@@ -1194,7 +1194,7 @@ jobs:
     - get: lite-pool
       trigger: true
       passed: [ lite-deploy ]
-    - aggregate:
+    - in_parallel:
       - get: cf-acceptance-tests-rc
       - get: cf-deployment-develop
         passed: [ lite-deploy ]
@@ -1221,7 +1221,7 @@ jobs:
       trigger: true
       passed:
       - lite-cats
-    - aggregate:
+    - in_parallel:
       - get: cf-deployment-concourse-tasks
       - get: relint-envs
       - get: runtime-ci
@@ -1267,7 +1267,7 @@ jobs:
   public: true
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: cf-deployment-develop
       trigger: true
       passed:
@@ -1294,7 +1294,7 @@ jobs:
   - get: bbr-pool
     trigger: true
     passed: [ bbr-acquire-pool ]
-  - aggregate:
+  - in_parallel:
     - get: cf-deployment-develop
       passed: [bbr-acquire-pool]
     - get: cf-deployment-concourse-tasks
@@ -1353,7 +1353,7 @@ jobs:
   - get: bbr-pool
     trigger: true
     passed: [ bbr-deploy ]
-  - aggregate:
+  - in_parallel:
     - get: cf-deployment-develop
       passed: [ bbr-deploy ]
     - get: bbr-github-release
@@ -1389,7 +1389,7 @@ jobs:
   public: true
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: cf-deployment-master
       trigger: true
     - put: stable-pool
@@ -1411,7 +1411,7 @@ jobs:
   - get: stable-pool
     trigger: true
     passed: [ stable-acquire-pool ]
-  - aggregate:
+  - in_parallel:
     - get: runtime-ci
     - get: cf-deployment-concourse-tasks
     - get: cf-deployment-master
@@ -1488,7 +1488,7 @@ jobs:
     - get: stable-pool
       trigger: true
       passed: [stable-deploy]
-    - aggregate:
+    - in_parallel:
       - get: relint-envs
         passed: [stable-deploy]
       - get: cf-deployment-master
@@ -1527,7 +1527,7 @@ jobs:
     - get: stable-pool
       trigger: true
       passed: [ stable-semihourly-pool-acquisition ]
-    - aggregate:
+    - in_parallel:
       - get: cf-deployment-concourse-tasks
       - get: cf-acceptance-tests-rc
       - get: relint-envs
@@ -1564,7 +1564,7 @@ jobs:
     - get: stable-pool
       trigger: true
       passed: [ stable-periodic-cats ]
-    - aggregate:
+    - in_parallel:
       - get: runtime-ci
       - get: relint-envs
       - get: cf-deployment-master
@@ -1589,7 +1589,7 @@ jobs:
     - get: stable-pool
       trigger: true
       passed: [ cleanup-stable-periodic-cats ]
-    - aggregate:
+    - in_parallel:
       - get: runtime-ci
       - get: cf-deployment-master
         passed: [ cleanup-stable-periodic-cats ]
@@ -1702,7 +1702,7 @@ jobs:
 - name: release-notes-template
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: runtime-ci
     - get: cf-deployment-master
     - get: cf-deployment-release-candidate

@@ -187,7 +187,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: #@ r.name + "-release"
       trigger: true
       params:
@@ -315,7 +315,7 @@ jobs:
   - update-release
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: #@ r.name + "-release"
       trigger: true
       params:
@@ -412,7 +412,7 @@ jobs:
 - name: #@ "update-" + s.name + "-stemcell"
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: #@ s.name + "-stemcell"
@@ -441,7 +441,7 @@ jobs:
   - #@ "update-" + r.name
   #@ end
   plan:
-  - aggregate:
+  - in_parallel:
     - get: runtime-ci
     - get: relint-envs
     - get: cf-deployment-develop
@@ -467,7 +467,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       INFRASTRUCTURE: google
-  - aggregate:
+  - in_parallel:
     #@ for s in data.values.baseReleases:
     - task: #@ "compile-release-" + s.name
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
@@ -510,7 +510,7 @@ jobs:
         path: go/src/github.com/cloudfoundry/runtime-ci/tasks/update-stemcell/task
     input_mapping:
       cf-deployment: cf-deployment-develop
-  - aggregate:
+  - in_parallel:
     #@ for s in data.values.baseReleases:
     - put: #@ s.name + "-release-gcs"
       params:
@@ -527,7 +527,7 @@ jobs:
   serial: true
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: runtime-ci
     - get: relint-envs
     - get: cf-deployment-develop
@@ -556,7 +556,7 @@ jobs:
 - name: delete-stale-branches
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: cf-deployment-all-branches
     - get: runtime-ci
     - get: daily
@@ -575,7 +575,7 @@ jobs:
   serial: true
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
@@ -612,7 +612,7 @@ jobs:
   serial: true
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: relint-envs
     - get: runtime-ci
     - get: cf-deployment-concourse-tasks
@@ -641,7 +641,7 @@ jobs:
   plan:
   - timeout: 4h
     do:
-    - aggregate:
+    - in_parallel:
       - get: cf-deployment-concourse-tasks
       - get: cf-deployment-develop
       - get: relint-envs

@@ -870,7 +870,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: binary-buildpack-release
       trigger: true
       params:
@@ -1077,7 +1077,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: bosh-dns-aliases-release
       trigger: true
       params:
@@ -1284,7 +1284,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: bpm-release
       trigger: true
       params:
@@ -1491,7 +1491,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: capi-release
       trigger: true
       params:
@@ -1698,7 +1698,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: cf-networking-release
       trigger: true
       params:
@@ -1905,7 +1905,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: cf-smoke-tests-release
       trigger: true
       params:
@@ -2112,7 +2112,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: cf-syslog-drain-release
       trigger: true
       params:
@@ -2319,7 +2319,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: cflinuxfs3-release
       trigger: true
       params:
@@ -2526,7 +2526,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: diego-release
       trigger: true
       params:
@@ -2733,7 +2733,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: dotnet-core-buildpack-release
       trigger: true
       params:
@@ -2940,7 +2940,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: garden-runc-release
       trigger: true
       params:
@@ -3147,7 +3147,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: go-buildpack-release
       trigger: true
       params:
@@ -3354,7 +3354,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: java-buildpack-release
       trigger: true
       params:
@@ -3561,7 +3561,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: log-cache-release
       trigger: true
       params:
@@ -3768,7 +3768,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: loggregator-release
       trigger: true
       params:
@@ -3975,7 +3975,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: loggregator-agent-release
       trigger: true
       params:
@@ -4182,7 +4182,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: nats-release
       trigger: true
       params:
@@ -4389,7 +4389,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: nginx-buildpack-release
       trigger: true
       params:
@@ -4596,7 +4596,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: nodejs-buildpack-release
       trigger: true
       params:
@@ -4803,7 +4803,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: php-buildpack-release
       trigger: true
       params:
@@ -5010,7 +5010,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: python-buildpack-release
       trigger: true
       params:
@@ -5217,7 +5217,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: pxc-release
       trigger: true
       params:
@@ -5424,7 +5424,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: r-buildpack-release
       trigger: true
       params:
@@ -5631,7 +5631,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: routing-release
       trigger: true
       params:
@@ -5838,7 +5838,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: ruby-buildpack-release
       trigger: true
       params:
@@ -6045,7 +6045,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: silk-release
       trigger: true
       params:
@@ -6252,7 +6252,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: staticfile-buildpack-release
       trigger: true
       params:
@@ -6459,7 +6459,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: statsd-injector-release
       trigger: true
       params:
@@ -6666,7 +6666,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: uaa-release
       trigger: true
       params:
@@ -6873,7 +6873,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: credhub-release
       trigger: true
       params:
@@ -7080,7 +7080,7 @@ jobs:
   - stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: cf-cli-release
       trigger: true
       params:
@@ -7286,7 +7286,7 @@ jobs:
   - update-release
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: backup-and-restore-sdk-release
       trigger: true
       params:
@@ -7451,7 +7451,7 @@ jobs:
   - update-release
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: bits-service-release
       trigger: true
       params:
@@ -7616,7 +7616,7 @@ jobs:
   - update-release
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: cf-app-sd-release
       trigger: true
       params:
@@ -7781,7 +7781,7 @@ jobs:
   - update-release
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: haproxy-release
       trigger: true
       params:
@@ -7946,7 +7946,7 @@ jobs:
   - update-release
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: mapfs-release
       trigger: true
       params:
@@ -8111,7 +8111,7 @@ jobs:
   - update-release
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: nfs-volume-release
       trigger: true
       params:
@@ -8276,7 +8276,7 @@ jobs:
   - update-release
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: smb-volume-release
       trigger: true
       params:
@@ -8441,7 +8441,7 @@ jobs:
   - update-release
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: postgres-release
       trigger: true
       params:
@@ -8606,7 +8606,7 @@ jobs:
   - update-release
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: syslog-release
       trigger: true
       params:
@@ -8771,7 +8771,7 @@ jobs:
   - update-release
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: windows-syslog-release
       trigger: true
       params:
@@ -8936,7 +8936,7 @@ jobs:
   - update-release
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: hwc-buildpack-release
       trigger: true
       params:
@@ -9101,7 +9101,7 @@ jobs:
   - update-release
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: windows-utilities-release
       trigger: true
       params:
@@ -9266,7 +9266,7 @@ jobs:
   - update-release
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: garden-windows-release
       trigger: true
       params:
@@ -9431,7 +9431,7 @@ jobs:
   - update-release
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: winc-release
       trigger: true
       params:
@@ -9596,7 +9596,7 @@ jobs:
   - update-release
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: windows1803fs-release
       trigger: true
       params:
@@ -9761,7 +9761,7 @@ jobs:
   - update-release
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: windows2016fs-release
       trigger: true
       params:
@@ -9926,7 +9926,7 @@ jobs:
   - update-release
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: windowsfs-release
       trigger: true
       params:
@@ -10092,7 +10092,7 @@ jobs:
   - update-release
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: node-exporter-release
       trigger: true
       params:
@@ -10257,7 +10257,7 @@ jobs:
   - update-release
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: leadership-election-release
       trigger: true
       params:
@@ -10422,7 +10422,7 @@ jobs:
   - update-release
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: metric-store-release
       trigger: true
       params:
@@ -10585,7 +10585,7 @@ jobs:
 - name: update-windows2012R2-stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: windows2012R2-stemcell
@@ -10607,7 +10607,7 @@ jobs:
 - name: update-windows2016-stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: windows2016-stemcell
@@ -10629,7 +10629,7 @@ jobs:
 - name: update-windows1803-stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: windows1803-stemcell
@@ -10651,7 +10651,7 @@ jobs:
 - name: update-windows2019-stemcell
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: runtime-ci
     - get: cf-deployment-develop
     - get: windows2019-stemcell
@@ -10706,7 +10706,7 @@ jobs:
   - update-credhub
   - update-cf-cli
   plan:
-  - aggregate:
+  - in_parallel:
     - get: runtime-ci
     - get: relint-envs
     - get: cf-deployment-develop
@@ -10820,7 +10820,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       INFRASTRUCTURE: google
-  - aggregate:
+  - in_parallel:
     - task: compile-release-binary-buildpack
       file: runtime-ci/tasks/compile-release-from-manifest/task.yml
       input_mapping:
@@ -11249,7 +11249,7 @@ jobs:
         path: go/src/github.com/cloudfoundry/runtime-ci/tasks/update-stemcell/task
     input_mapping:
       cf-deployment: cf-deployment-develop
-  - aggregate:
+  - in_parallel:
     - put: binary-buildpack-release-gcs
       params:
         file: binary-buildpack-compiled-release-tarball/*.tgz
@@ -11413,7 +11413,7 @@ jobs:
   serial: true
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: runtime-ci
     - get: relint-envs
     - get: cf-deployment-develop
@@ -11441,7 +11441,7 @@ jobs:
 - name: delete-stale-branches
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: cf-deployment-all-branches
     - get: runtime-ci
     - get: daily
@@ -11459,7 +11459,7 @@ jobs:
   serial: true
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
@@ -11495,7 +11495,7 @@ jobs:
   serial: true
   public: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: relint-envs
     - get: runtime-ci
     - get: cf-deployment-concourse-tasks
@@ -11523,7 +11523,7 @@ jobs:
   plan:
   - timeout: 4h
     do:
-    - aggregate:
+    - in_parallel:
       - get: cf-deployment-concourse-tasks
       - get: cf-deployment-develop
       - get: relint-envs

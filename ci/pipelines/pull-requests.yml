@@ -132,7 +132,7 @@ jobs:
     plan:
     - timeout: 4h
       do:
-      - aggregate:
+      - in_parallel:
         - get: runtime-ci
         - get: cf-deployment-all-branches
           trigger: true
@@ -179,7 +179,7 @@ jobs:
                     exit 1
                   fi
                 popd
-        - aggregate:
+        - in_parallel:
           - task: unit-test-ops-files
             config:
               platform: linux
@@ -269,7 +269,7 @@ jobs:
     plan:
     - timeout: 4h
       do:
-      - aggregate:
+      - in_parallel:
         - get: runtime-ci
         - get: cats-all-branches
           trigger: true

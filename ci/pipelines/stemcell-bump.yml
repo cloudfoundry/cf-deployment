@@ -72,7 +72,7 @@ jobs:
   - update-credhub
   - update-cf-cli
   plan:
-  - aggregate:
+  - in_parallel:
     - get: cf-deployment-concourse-tasks
     - get: cf-deployment-master
     - get: relint-envs
