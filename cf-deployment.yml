@@ -647,6 +647,10 @@ instance_groups:
         aliases:
         - domain: blobstore.service.cf.internal
     properties:
+      select_directories_to_backup:
+      - "buildpacks"
+      - "packages"
+      - "droplets"
       system_domain: "((system_domain))"
       blobstore:
         admin_users:

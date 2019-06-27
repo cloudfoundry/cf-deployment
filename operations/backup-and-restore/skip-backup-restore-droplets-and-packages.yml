@@ -23,6 +23,8 @@
 - type: remove
   path: /instance_groups/name=backup-restore/jobs/name=s3-versioned-blobstore-backup-restorer?/properties/buckets/packages
 
-- type: replace
-  path: /instance_groups/name=singleton-blobstore?/jobs/name=blobstore/properties/select_directories_to_backup
-  value: ["buildpacks"]
+- type: remove
+  path: /instance_groups/name=singleton-blobstore?/jobs/name=blobstore/properties/select_directories_to_backup/2
+
+- type: remove
+  path: /instance_groups/name=singleton-blobstore?/jobs/name=blobstore/properties/select_directories_to_backup/1
