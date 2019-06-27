@@ -36,10 +36,18 @@ pass() {
 }
 
 interpolate() {
+  if [[ ${1} == output:* ]]; then
+    interpolation_output=$1
+    empty_string=""
+    interpolation_output="${interpolation_output/output: /$empty_string}"; shift
+  else
+    interpolation_output=/dev/null
+  fi
+
   local vars_store=$(mktemp)
   cp ${home}/scripts/fixtures/unit-test-vars-store.yml $vars_store
 
-  bosh interpolate --vars-store $vars_store --var-errs -v system_domain=foo.bar.com ${home}/cf-deployment.yml $@ > /dev/null
+  bosh interpolate --vars-store $vars_store --var-errs -v system_domain=foo.bar.com ${home}/cf-deployment.yml $@ > $interpolation_output
   local exit_code=$?
 
   rm $vars_store

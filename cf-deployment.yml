@@ -707,6 +707,10 @@ instance_groups:
   - name: blobstore
     release: capi
     properties:
+      select_directories_to_backup:
+      - "buildpacks"
+      - "packages"
+      - "droplets"
       system_domain: "((system_domain))"
       blobstore:
         admin_users:
