@@ -1318,7 +1318,7 @@ instance_groups:
         ca_certs: |
           ((diego_instance_identity_ca.ca))
           ((cc_tls.ca))
-          ((uaa_ca.certificate))
+          ((uaa_ssl.ca))
         backends:
           cert_chain: ((gorouter_backend_tls.certificate))
           private_key: ((gorouter_backend_tls.private_key))
