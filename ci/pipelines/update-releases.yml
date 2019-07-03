@@ -949,6 +949,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -1156,6 +1162,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -1363,6 +1375,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -1570,6 +1588,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -1777,6 +1801,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -1984,6 +2014,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -2191,6 +2227,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -2398,6 +2440,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -2605,6 +2653,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -2812,6 +2866,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -3019,6 +3079,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -3226,6 +3292,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -3433,6 +3505,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -3640,6 +3718,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -3847,6 +3931,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -4054,6 +4144,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -4261,6 +4357,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -4468,6 +4570,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -4675,6 +4783,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -4882,6 +4996,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -5089,6 +5209,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -5296,6 +5422,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -5503,6 +5635,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -5710,6 +5848,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -5917,6 +6061,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -6124,6 +6274,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -6331,6 +6487,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -6538,6 +6700,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -6745,6 +6913,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -6952,6 +7126,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -7159,6 +7339,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -7356,6 +7542,12 @@ jobs:
             operations/experimental/use-compiled-releases-windows.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -7521,6 +7713,12 @@ jobs:
             operations/experimental/use-compiled-releases-windows.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -7686,6 +7884,12 @@ jobs:
             operations/experimental/use-compiled-releases-windows.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -7852,6 +8056,12 @@ jobs:
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
           VARS_FILES: environments/test/pre-dev/haproxy-vars.yml
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -8017,6 +8227,12 @@ jobs:
             operations/experimental/use-compiled-releases-windows.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -8182,6 +8398,12 @@ jobs:
             operations/experimental/use-compiled-releases-windows.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -8347,6 +8569,12 @@ jobs:
             operations/experimental/use-compiled-releases-windows.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -8512,6 +8740,12 @@ jobs:
             operations/experimental/use-compiled-releases-windows.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -8678,6 +8912,12 @@ jobs:
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
           VARS_FILES: operations/addons/example-vars-files/vars-enable-component-syslog.yml
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -8844,6 +9084,12 @@ jobs:
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
           VARS_FILES: environments/test/pre-dev/windows-enable-component-syslog-vars.yml
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -9009,6 +9255,12 @@ jobs:
             operations/experimental/use-compiled-releases-windows.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -9174,6 +9426,12 @@ jobs:
             operations/experimental/use-compiled-releases-windows.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -9339,6 +9597,12 @@ jobs:
             operations/experimental/use-compiled-releases-windows.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -9504,6 +9768,12 @@ jobs:
             operations/experimental/use-compiled-releases-windows.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -9669,6 +9939,12 @@ jobs:
             operations/experimental/use-compiled-releases-windows.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -9834,6 +10110,12 @@ jobs:
             operations/experimental/use-compiled-releases-windows.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -10000,6 +10282,12 @@ jobs:
             operations/windows2019-cell.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -10165,6 +10453,12 @@ jobs:
             operations/experimental/use-compiled-releases-windows.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -10330,6 +10624,12 @@ jobs:
             operations/experimental/use-compiled-releases-windows.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -10495,6 +10795,12 @@ jobs:
             operations/experimental/use-compiled-releases-windows.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:

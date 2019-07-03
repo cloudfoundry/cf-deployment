@@ -223,6 +223,12 @@ jobs:
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: "--parallel 50"
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -350,6 +356,12 @@ jobs:
           #@ if hasattr(r, "varsFiles"):
           VARS_FILES: #@ r.varsFiles
           #@ end
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
