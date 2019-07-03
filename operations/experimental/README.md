@@ -10,7 +10,7 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 
 "Experimental" Ops-file represent configurations that we expect to promote to blessed configuration eventually, meaning that, once the configurations have been sufficiently validated, they will either become default (inlined into the base manifest), or GA'd as an optional feature (promoted from experimental to operations directory). Please follow the [ops file workflows](https://github.com/cloudfoundry/cf-deployment/blob/master/ops-file-promotion-workflow.md)
 
-# Expiremental ops files
+# Experimental ops files
 
 | Name | Purpose | Notes | Currently validated in Release Integration CI pipelines? |
 |:---  |:---     |:---   |:---   |
