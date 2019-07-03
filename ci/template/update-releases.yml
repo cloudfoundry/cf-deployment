@@ -347,6 +347,9 @@ jobs:
           OPS_FILES: #@ collect_ops_files(r)
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: "--parallel 50"
+          #@ if hasattr(r, "varsFiles"):
+          VARS_FILES: #@ r.varsFiles
+          #@ end
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:

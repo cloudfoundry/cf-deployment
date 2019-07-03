@@ -7851,6 +7851,7 @@ jobs:
             operations/experimental/use-compiled-releases-windows.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+          VARS_FILES: environments/test/pre-dev/haproxy-vars.yml
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -8676,6 +8677,7 @@ jobs:
             operations/experimental/use-compiled-releases-windows.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+          VARS_FILES: operations/addons/example-vars-files/vars-enable-component-syslog.yml
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
@@ -8841,6 +8843,7 @@ jobs:
             operations/experimental/use-compiled-releases-windows.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+          VARS_FILES: environments/test/pre-dev/windows-enable-component-syslog-vars.yml
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
