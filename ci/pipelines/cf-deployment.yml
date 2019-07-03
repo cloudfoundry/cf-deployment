@@ -1441,6 +1441,7 @@ jobs:
         operations/decrease-cc-event-retention.yml
         operations/use-internal-lookup-for-route-services.yml
         operations/use-compiled-releases.yml
+        operations/experimental/use-compiled-releases-windows.yml
   - task: run-bosh-cleanup
     file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
     input_mapping:
