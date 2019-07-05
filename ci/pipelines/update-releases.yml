@@ -8058,19 +8058,6 @@ jobs:
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
           VARS_FILES: environments/test/pre-dev/haproxy-vars.yml
-      - task: ensure-api-healthy
-        file: runtime-ci/tasks/ensure-api-healthy/task.yml
-        input_mapping:
-          cats-integration-config: relint-envs
-        params:
-          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
-      - task: run-errand-smoke-tests
-        file: cf-deployment-concourse-tasks/run-errand/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-        params:
-          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
-          ERRAND_NAME: smoke-tests
       on_success:
         do:
         - task: update-additional-ops-files-haproxy-develop
