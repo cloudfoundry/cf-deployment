@@ -403,6 +403,7 @@ jobs:
           #@ if hasattr(r, "varsFiles"):
           VARS_FILES: #@ r.varsFiles
           #@ end
+      #@ if hasattr(r, "skipSmokeTests") == False:
       - task: ensure-api-healthy
         file: runtime-ci/tasks/ensure-api-healthy/task.yml
         input_mapping:
@@ -416,6 +417,7 @@ jobs:
         params:
           BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
           ERRAND_NAME: smoke-tests
+      #@ end
       on_success:
         do:
         - #@ update_release(r, "opsfile", "develop")
