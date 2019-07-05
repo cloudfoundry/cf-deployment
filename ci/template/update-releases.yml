@@ -33,6 +33,20 @@ groups:
   - #@ "update-" + s.name + "-stemcell"
   #@ end
   - update-windows-2016-offline-releases
+- name: debug
+  jobs:
+  #@ for r in data.values.baseReleases:
+  #@ if hasattr(r, "debug"):
+  - #@ "update-" + r.name
+  - #@ "destroy-" + r.name + "-debug-env"
+  #@ end
+  #@ end
+  #@ for r in data.values.opsReleases:
+  #@ if hasattr(r, "debug"):
+  - #@ "update-" + r.name
+  - #@ "destroy-" + r.name + "-debug-env"
+  #@ end
+  #@ end
 - name: cleanup
   jobs:
   - delete-stale-branches
@@ -180,10 +194,18 @@ resources:
 
 jobs:
 #@ for r in data.values.baseReleases:
-#@ env = "pre-dev"
+#@ if hasattr(r, "debug"):
+  #@ env = "pre-dev-debug"
+#@ else:
+  #@ env = "pre-dev"
+#@ end
 - name: #@ "update-" + r.name
   serial_groups:
+  #@ if hasattr(r, "debug"):
+  - update-release-debug
+  #@ else:
   - update-release
+  #@ end
   - stemcell
   public: true
   plan:
@@ -307,18 +329,43 @@ jobs:
               text_file: slack-message/message.txt
               username: "Release Integration"
               icon_emoji: ":cloudfoundrylogo:"
+    #@ if hasattr(r, "debug") == False:
     ensure:
       do:
       - #@ delete_deployment(env)
       - #@ manage_gcp_dns("remove", env)
       - #@ bbl_down(env)
+    #@ end
+
+#@ if hasattr(r, "debug"):
+- name: #@ "destroy-" + r.name + "-debug-env"
+  serial_groups:
+  - update-release-debug
+  public: true
+  plan:
+  - in_parallel:
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+  - #@ delete_deployment(env)
+  - #@ manage_gcp_dns("remove", env)
+  - #@ bbl_down(env)
+#@ end
 #@ end
 
 #@ for r in data.values.opsReleases:
-#@ env = "pre-dev"
+#@ if hasattr(r, "debug"):
+  #@ env = "pre-dev-debug"
+#@ else:
+  #@ env = "pre-dev"
+#@ end
 - name: #@ "update-" + r.name
   serial_groups:
+  #@ if hasattr(r, "debug"):
+  - update-release-debug
+  #@ else:
   - update-release
+  #@ end
   public: true
   plan:
   - in_parallel:
@@ -416,11 +463,28 @@ jobs:
               text_file: slack-message/message.txt
               username: "Release Integration"
               icon_emoji: ":cloudfoundrylogo:"
+    #@ if hasattr(r, "debug") == False:
     ensure:
       do:
       - #@ delete_deployment(env)
       - #@ manage_gcp_dns("remove", env)
       - #@ bbl_down(env)
+    #@ end
+
+#@ if hasattr(r, "debug"):
+- name: #@ "destroy-" + r.name + "-debug-env"
+  serial_groups:
+  - update-release-debug
+  public: true
+  plan:
+  - in_parallel:
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+  - #@ delete_deployment(env)
+  - #@ manage_gcp_dns("remove", env)
+  - #@ bbl_down(env)
+#@ end
 #@ end
 
 #@ for s in data.values.windowsVersSupported:
