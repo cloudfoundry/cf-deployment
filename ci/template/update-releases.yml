@@ -217,8 +217,8 @@ jobs:
           ops-files: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
           vars-files: relint-envs
         params:
-          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
-          SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+          BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
+          SYSTEM_DOMAIN: #@ "{}.test.relint.rocks".format(env)
           OPS_FILES: |
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
@@ -228,13 +228,13 @@ jobs:
         input_mapping:
           cats-integration-config: relint-envs
         params:
-          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
+          CONFIG_FILE_PATH: #@ "environments/test/{}/integration_config.json".format(env)
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
           bbl-state: relint-envs
         params:
-          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
           ERRAND_NAME: smoke-tests
       - task: #@ "export-compiled-release-" + r.name
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
@@ -242,7 +242,7 @@ jobs:
           bbl-state: relint-envs
           manifest: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
         params:
-          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
           RELEASE_NAME: #@ r.name
       on_success:
         do:
@@ -282,7 +282,7 @@ jobs:
           input_mapping:
             bbl-state: relint-envs
           params:
-            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+            BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
         - put: #@ r.name + "-component-bump-logs-gcs"
           params:
             file: bosh-logs/cf-*.tgz
@@ -348,8 +348,8 @@ jobs:
           ops-files: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
           vars-files: relint-envs
         params:
-          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
-          SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+          BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
+          SYSTEM_DOMAIN: #@ "{}.test.relint.rocks".format(env)
           OPS_FILES: #@ collect_ops_files(r)
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: "--parallel 50"
@@ -361,13 +361,13 @@ jobs:
         input_mapping:
           cats-integration-config: relint-envs
         params:
-          CONFIG_FILE_PATH: environments/test/pre-dev/integration_config.json
+          CONFIG_FILE_PATH: #@ "environments/test/{}/integration_config.json".format(env)
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
           bbl-state: relint-envs
         params:
-          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
           ERRAND_NAME: smoke-tests
       on_success:
         do:
@@ -391,7 +391,7 @@ jobs:
           input_mapping:
             bbl-state: relint-envs
           params:
-            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+            BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
         - put: #@ r.name + "-component-bump-logs-gcs"
           params:
             file: bosh-logs/cf-*.tgz
