@@ -315,20 +315,22 @@ jobs:
             input_mapping:
               release: #@ r.name + "-release"
             params:
-              RELEASE_NAME: #@ r.name
-              REPOSITORY: #@ r.repository
               BOSH_LOGS_PREFIX: #@ "https://storage.cloud.google.com/component-bump-logs/" + r.name
+              RELEASE_NAME: #@ r.name
+          - task: lookup-slack-channel-for-release-owner
+            file: runtime-ci/tasks/lookup-slack-channel-for-release-owner/task.yml
+            params:
+              RELEASE_REPOSITORY: #@ r.repository
           - put: slack-alert
             params:
-              #! TODO(cdutra, webdave): Uncomment following line when we go live
-              #! channel_file: slack-message/channel.txt
+              channel_file: slack-channel/channel.txt
+              icon_emoji: ":cloudfoundrylogo:"
               text: |
                 $TEXT_FILE_CONTENT
 
                 CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: "Release Integration"
-              icon_emoji: ":cloudfoundrylogo:"
     #@ if hasattr(r, "debug") == False:
     ensure:
       do:
