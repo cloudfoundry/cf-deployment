@@ -29,7 +29,7 @@ resources:
 - name: runtime-ci
   type: git
   source:
-    branch: master
+    branch: wip-update-manifest-releases-refactor-166455124
     uri: https://github.com/cloudfoundry/runtime-ci.git
 - name: stemcell
   type: bosh-io-stemcell
@@ -143,6 +143,12 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/pre-dev/bbl-state
         ERRAND_NAME: smoke-tests
+    - task: export-all-compiled-release-tarballs
+      file: runtime-ci/tasks/export-all-compiled-release-tarballs/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
     ensure:
       do:
       - task: delete-deployment
@@ -173,3 +179,7 @@ jobs:
           params:
             repository: updated-bbl-state
             rebase: true
+  - task: update-stemcell
+    file: runtime-ci/tasks/update-stemcell/task.yml
+    input_mapping:
+      cf-deployment: cf-deployment-master
