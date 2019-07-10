@@ -1,5 +1,5 @@
-- path: /instance_groups/-
-  type: replace
+- type: replace
+  path: /instance_groups/-
   value:
     azs:
     - z1
@@ -17,9 +17,9 @@
       properties:
         containers:
           trusted_ca_certificates:
-          - ((application_ca.certificate))
-          - ((credhub_ca.certificate))
-          - ((uaa_ca.certificate))
+          - ((diego_instance_identity_ca.ca))
+          - ((credhub_tls.ca))
+          - ((uaa_ssl.ca))
         diego:
           executor:
             instance_identity_ca_cert: ((diego_instance_identity_ca.certificate))
@@ -33,14 +33,14 @@
           format:
             timestamp: rfc3339
         loggregator:
-          ca_cert: ((loggregator_ca.certificate))
+          ca_cert: ((loggregator_tls_agent.ca))
           cert: ((loggregator_tls_agent.certificate))
           key: ((loggregator_tls_agent.private_key))
           use_v2_api: true
         syslog_daemon_config:
           enable: false
         tls:
-          ca_cert: ((service_cf_internal_ca.certificate))
+          ca_cert: ((diego_rep_agent_v2.ca))
           cert: ((diego_rep_agent_v2.certificate))
           key: ((diego_rep_agent_v2.private_key))
       release: diego
@@ -49,7 +49,7 @@
         diego:
           route_emitter:
             bbs:
-              ca_cert: ((service_cf_internal_ca.certificate))
+              ca_cert: ((diego_bbs_client.ca))
               client_cert: ((diego_bbs_client.certificate))
               client_key: ((diego_bbs_client.private_key))
             local_mode: true
@@ -57,14 +57,14 @@
           format:
             timestamp: rfc3339
         loggregator:
-          ca_cert: ((loggregator_ca.certificate))
+          ca_cert: ((loggregator_tls_agent.ca))
           cert: ((loggregator_tls_agent.certificate))
           key: ((loggregator_tls_agent.private_key))
           use_v2_api: true
         tcp:
           enabled: true
         uaa:
-          ca_cert: ((uaa_ca.certificate))
+          ca_cert: ((uaa_ssl.ca))
           client_secret: ((uaa_clients_tcp_emitter_secret))
       release: diego
     - name: loggregator_agent_windows
@@ -75,7 +75,7 @@
             agent:
               cert: ((loggregator_tls_agent.certificate))
               key: ((loggregator_tls_agent.private_key))
-            ca_cert: ((loggregator_ca.certificate))
+            ca_cert: ((loggregator_tls_agent.ca))
         syslog_daemon_config:
           enable: false
       release: loggregator-agent
@@ -88,50 +88,50 @@
     vm_extensions:
     - 100GB_ephemeral_disk
     vm_type: small-highmem
-- path: /releases/-
-  type: replace
+- type: replace
+  path: /releases/-
   value:
     name: garden-windows
-    sha1: f678d11039d0719b100c45321057dca0788f92dd
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/garden-windows-bosh-release?v=0.14.0
-    version: 0.14.0
-- path: /releases/name=windows-utilities?
-  type: replace
+    sha1: 1f70a862621b2d879277c0eee6147bb8bddda060
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/garden-windows-bosh-release?v=0.16.0
+    version: 0.16.0
+- type: replace
+  path: /releases/name=windows-utilities?
   value:
     name: windows-utilities
     sha1: efc10ac0f4acae23637ce2c6f864d20df2e3a781
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.11.0
     version: 0.11.0
-- path: /stemcells/-
-  type: replace
+- type: replace
+  path: /stemcells/-
   value:
     alias: windows2012R2
     os: windows2012R2
-    version: "1200.31"
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2012R2?
-  type: replace
+    version: "1200.33"
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2012R2?
   value:
     description: Windows Server 2012 R2
     name: windows2012R2
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=hwc-buildpack-windows2012R2?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=hwc-buildpack-windows2012R2?
   value:
     name: hwc_buildpack
     package: hwc-buildpack-windows2012R2
-- path: /instance_groups/name=api/jobs/name=hwc-buildpack?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=hwc-buildpack?
   value:
     name: hwc-buildpack
     release: hwc-buildpack
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
   value:
     name: binary_buildpack
     package: binary-buildpack-windows2012R2
-- path: /releases/name=hwc-buildpack?
-  type: replace
+- type: replace
+  path: /releases/name=hwc-buildpack?
   value:
     name: hwc-buildpack
-    sha1: 3808fe37828fb50026b1f16235d1c0cb0e9fd8b6
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=3.1.6
-    version: 3.1.6
+    sha1: 7ebd9c5b1d6c8f1148ba4e1532e165ba6e35074e
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=3.1.9
+    version: 3.1.9

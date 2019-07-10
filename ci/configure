@@ -1,10 +1,10 @@
-#!/bin/bash
+#!/bin/bash -e
 
 main() {
-  local CF_D_PIPELINES=(cf-deployment update-releases pull-requests bbr)
+  local CF_D_PIPELINES=(cf-deployment update-releases pull-requests stemcell-bump)
   local PIPELINE=${1?"Valid input ${CF_D_PIPELINES[@]}"}
 
-  if [[ "${PIPELINE}" == "update-releases" ]]; then
+  if [[ -r "${PROJECT_DIR}/ci/template/${PIPELINE}.yml" ]]; then
     cat > "${PROJECT_DIR}/ci/pipelines/${PIPELINE}.yml" <<EOF
 ## ======================================================================
 ## GENERATED FILE. DO NOT EDIT
@@ -12,10 +12,12 @@ main() {
 
 EOF
 
-    texplate execute \
-                 "${PROJECT_DIR}/ci/template/${PIPELINE}.yml" \
-                 --input-file "${PROJECT_DIR}/ci/input/${PIPELINE}.yml" \
-                 >> "${PROJECT_DIR}/ci/pipelines/${PIPELINE}.yml"
+    ytt template \
+      -f "${PROJECT_DIR}/ci/template/${PIPELINE}.yml" \
+      -f "${PROJECT_DIR}/ci/input/inputs.yml" \
+      -f "${PROJECT_DIR}/ci/template/lib" \
+      -R \
+      >> "${PROJECT_DIR}/ci/pipelines/${PIPELINE}.yml"
   fi
 
   set -ex

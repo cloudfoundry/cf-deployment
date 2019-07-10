@@ -55,11 +55,11 @@
           create_credhub_security_group: true
           create_sql_security_group: false
           credhub:
-            uaa_ca_cert: ((uaa_ca.certificate))
+            uaa_ca_cert: ((uaa_ssl.ca))
             uaa_client_id: nfs-broker-credhub-client
             uaa_client_secret: ((nfs-broker-credhub-uaa-client-secret))
           db:
-            ca_cert: ((pxc_server_ca.certificate))
+            ca_cert: ((mysql_server_certificate.ca))
             driver: mysql
             host: sql-db.service.cf.internal
             name: nfs-broker
@@ -90,7 +90,7 @@
     properties:
       nfsv3driver:
         tls:
-          ca_cert: ((nfs_ca.certificate))
+          ca_cert: ((nfsv3driver_cert.ca))
           client_cert: ((nfsv3driver_client_cert.certificate))
           client_key: ((nfsv3driver_client_cert.private_key))
           server_cert: ((nfsv3driver_cert.certificate))
@@ -160,13 +160,13 @@
   path: /releases/-
   value:
     name: nfs-volume
-    sha1: 8dfed3071ba88c187b055681e4ee8e5c5a9e06e2
-    url: https://bosh.io/d/github.com/cloudfoundry/nfs-volume-release?v=2.0.2
-    version: 2.0.2
+    sha1: 0302809949ab4978eb76d02f47f21ed8a68ea0f6
+    url: https://bosh.io/d/github.com/cloudfoundry/nfs-volume-release?v=2.2.0
+    version: 2.2.0
 - type: replace
   path: /releases/name=mapfs?
   value:
     name: mapfs
-    sha1: bc3f7ba4342268a56ccc47463c28f86dd03d356f
-    url: https://bosh.io/d/github.com/cloudfoundry/mapfs-release?v=1.1.4
-    version: 1.1.4
+    sha1: 44c6dc3b8eeb7c5769e44b78484c32ee68cc97fc
+    url: https://bosh.io/d/github.com/cloudfoundry/mapfs-release?v=1.1.5
+    version: 1.1.5

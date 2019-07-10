@@ -54,7 +54,7 @@
           tls_enabled: true
         uaa:
           ca_certs:
-          - "((pxc_server_ca.certificate))"
+          - "((mysql_server_certificate.ca))"
           url: https://uaa-oidc.service.cf.internal:8443
           jwt:
             policy:

@@ -13,22 +13,14 @@
     networks:
     - name: default
     jobs:
-    - name: cflinuxfs2-rootfs-setup
-      release: cflinuxfs2
-      properties:
-        cflinuxfs2-rootfs:
-          trusted_certs:
-            - ((application_ca.certificate))
-            - ((credhub_ca.certificate))
-            - ((uaa_ca.certificate))
     - name: cflinuxfs3-rootfs-setup
       release: cflinuxfs3
       properties:
         cflinuxfs3-rootfs:
           trusted_certs:
-            - ((application_ca.certificate))
-            - ((credhub_ca.certificate))
-            - ((uaa_ca.certificate))
+          - ((diego_instance_identity_ca.ca))
+          - ((credhub_tls.ca))
+          - ((uaa_ssl.ca))
     - name: garden
       release: garden-runc
       properties:
@@ -54,24 +46,23 @@
             instance_identity_key: ((diego_instance_identity_ca.private_key))
           rep:
             preloaded_rootfses:
-            - cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs.tar
             - cflinuxfs3:/var/vcap/packages/cflinuxfs3/rootfs.tar
             placement_tags:
             - persistent_isolation_segment
         containers:
           trusted_ca_certificates:
-            - ((application_ca.certificate))
-            - ((credhub_ca.certificate))
-            - ((uaa_ca.certificate))
+          - ((diego_instance_identity_ca.ca))
+          - ((credhub_tls.ca))
+          - ((uaa_ssl.ca))
         enable_consul_service_registration: false
         enable_declarative_healthcheck: true
         loggregator:
           use_v2_api: true
-          ca_cert: "((loggregator_ca.certificate))"
+          ca_cert: "((loggregator_tls_agent.ca))"
           cert: "((loggregator_tls_agent.certificate))"
           key: "((loggregator_tls_agent.private_key))"
         tls:
-          ca_cert: "((service_cf_internal_ca.certificate))"
+          ca_cert: "((diego_rep_agent_v2.ca))"
           cert: "((diego_rep_agent_v2.certificate))"
           key: "((diego_rep_agent_v2.private_key))"
         logging:
@@ -84,14 +75,14 @@
           enabled: true
         loggregator:
           use_v2_api: true
-          ca_cert: "((loggregator_ca.certificate))"
+          ca_cert: "((loggregator_tls_agent.ca))"
           cert: "((loggregator_tls_agent.certificate))"
           key: "((loggregator_tls_agent.private_key))"
         diego:
           route_emitter:
             local_mode: true
             bbs:
-              ca_cert: "((service_cf_internal_ca.certificate))"
+              ca_cert: "((diego_bbs_client.ca))"
               client_cert: "((diego_bbs_client.certificate))"
               client_key: "((diego_bbs_client.private_key))"
         logging:

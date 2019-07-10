@@ -23,7 +23,7 @@
       properties:
         loggregator:
           tls:
-            ca_cert: ((loggregator_ca.certificate))
+            ca_cert: ((loggregator_tls_statsdinjector.ca))
             statsd_injector:
               cert: ((loggregator_tls_statsdinjector.certificate))
               key: ((loggregator_tls_statsdinjector.private_key))
@@ -38,7 +38,7 @@
             blobstore_type: webdav
             directory_key: cc-resources
             webdav_config:
-              ca_cert: ((service_cf_internal_ca.certificate))
+              ca_cert: ((blobstore_tls.ca))
               password: ((blobstore_admin_users_password))
               private_endpoint: https://blobstore.service.cf.internal:4443
               public_endpoint: https://blobstore.((system_domain))
@@ -47,20 +47,20 @@
             blobstore_type: webdav
             directory_key: cc-buildpacks
             webdav_config:
-              ca_cert: ((service_cf_internal_ca.certificate))
+              ca_cert: ((blobstore_tls.ca))
               password: ((blobstore_admin_users_password))
               private_endpoint: https://blobstore.service.cf.internal:4443
               public_endpoint: https://blobstore.((system_domain))
               username: blobstore-user
           cc_updates:
-            ca_cert: ((service_cf_internal_ca.certificate))
+            ca_cert: ((cc_tls.ca))
             client_cert: ((cc_tls.certificate))
             client_key: ((cc_tls.private_key))
           droplets:
             blobstore_type: webdav
             directory_key: cc-droplets
             webdav_config:
-              ca_cert: ((service_cf_internal_ca.certificate))
+              ca_cert: ((blobstore_tls.ca))
               password: ((blobstore_admin_users_password))
               private_endpoint: https://blobstore.service.cf.internal:4443
               public_endpoint: https://blobstore.((system_domain))
@@ -69,7 +69,7 @@
             blobstore_type: webdav
             directory_key: cc-packages
             webdav_config:
-              ca_cert: ((service_cf_internal_ca.certificate))
+              ca_cert: ((blobstore_tls.ca))
               password: ((blobstore_admin_users_password))
               private_endpoint: https://blobstore.service.cf.internal:4443
               public_endpoint: https://blobstore.((system_domain))
@@ -87,13 +87,15 @@
     networks:
     - name: default
     stemcell: default
+    update:
+      serial: true
     vm_extensions:
     - 50GB_ephemeral_disk
     vm_type: small
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/bits_service?
   value:
-    ca_cert: ((service_cf_internal_ca.certificate))
+    ca_cert: ((bits_service_ssl.ca))
     enabled: true
     password: ((bits_service_signing_password))
     private_endpoint: https://bits.service.cf.internal
@@ -102,7 +104,7 @@
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/bits_service?
   value:
-    ca_cert: ((service_cf_internal_ca.certificate))
+    ca_cert: ((bits_service_ssl.ca))
     enabled: true
     password: ((bits_service_signing_password))
     private_endpoint: https://bits.service.cf.internal
@@ -111,7 +113,7 @@
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/bits_service?
   value:
-    ca_cert: ((service_cf_internal_ca.certificate))
+    ca_cert: ((bits_service_ssl.ca))
     enabled: true
     password: ((bits_service_signing_password))
     private_endpoint: https://bits.service.cf.internal
@@ -144,6 +146,6 @@
   path: /releases/-
   value:
     name: bits-service
-    sha1: f6a6598fbbac233f94c4a0cfe914970ec34db7b3
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/bits-service-release?v=2.26.0
-    version: 2.26.0
+    sha1: bd173fc9952277ea962a330c04555d9bd1e8a10e
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/bits-service-release?v=2.28.0
+    version: 2.28.0

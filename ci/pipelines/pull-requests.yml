@@ -17,7 +17,6 @@ resource_types:
     type: docker-image
     source:
       repository: jtarchie/pr
-      tag: v25
 
 resources:
   - name: runtime-ci
@@ -71,7 +70,6 @@ resources:
 jobs:
   - name: fail-prs-to-cf-deployment-master
     public: true
-    build_logs_to_retain: 100
     plan:
       - get: runtime-ci
       - get: cf-deployment-master
@@ -93,7 +91,6 @@ jobs:
           comment: pull-request-comment/comment
   - name: fail-prs-to-cf-deployment-release-candidate
     public: true
-    build_logs_to_retain: 100
     plan:
       - get: runtime-ci
       - get: cf-deployment-rc
@@ -115,7 +112,6 @@ jobs:
           comment: pull-request-comment/comment
   - name: pass-prs-to-cf-deployment-develop
     public: true
-    build_logs_to_retain: 100
     plan:
       - get: cf-deployment-develop
         trigger: true
@@ -132,11 +128,11 @@ jobs:
 
   - name: run-unit-tests-on-all-cf-deployment-prs
     public: true
-    build_logs_to_retain: 100
+    serial: true
     plan:
     - timeout: 4h
       do:
-      - aggregate:
+      - in_parallel:
         - get: runtime-ci
         - get: cf-deployment-all-branches
           trigger: true
@@ -183,20 +179,34 @@ jobs:
                     exit 1
                   fi
                 popd
-        - task: unit-test-ops-files
-          config:
-            platform: linux
-            image_resource:
-              type: docker-image
-              source:
-                repository: relintdockerhubpushbot/bosh-cli
-            inputs:
-            - name: cf-deployment-all-branches
-            params:
-              RUN_SEMANTIC: false
-            run:
-              dir: cf-deployment-all-branches
-              path: scripts/test
+        - in_parallel:
+          - task: unit-test-ops-files
+            config:
+              platform: linux
+              image_resource:
+                type: docker-image
+                source:
+                  repository: relintdockerhubpushbot/bosh-cli
+              inputs:
+              - name: cf-deployment-all-branches
+              params:
+                RUN_SEMANTIC: false
+              run:
+                dir: cf-deployment-all-branches
+                path: scripts/test
+          - task: unit-test-golang-ops-files
+            config:
+
+              platform: linux
+              image_resource:
+                type: docker-image
+                source:
+                  repository: relintdockerhubpushbot/bosh-cli
+              inputs:
+              - name: cf-deployment-all-branches
+              run:
+                dir: cf-deployment-all-branches/units
+                path: ./test
         on_failure:
           do:
           - task: write-pr-check-failure-comment
@@ -219,7 +229,6 @@ jobs:
 
   - name: fail-prs-to-cats-master
     public: true
-    build_logs_to_retain: 100
     plan:
       - get: runtime-ci
       - get: cats-master
@@ -241,7 +250,6 @@ jobs:
           comment: pull-request-comment/comment
   - name: pass-prs-to-cats-develop
     public: true
-    build_logs_to_retain: 100
     plan:
       - get: cats-develop
         trigger: true
@@ -258,11 +266,10 @@ jobs:
 
   - name: run-unit-tests-on-all-cats-prs
     public: true
-    build_logs_to_retain: 100
     plan:
     - timeout: 4h
       do:
-      - aggregate:
+      - in_parallel:
         - get: runtime-ci
         - get: cats-all-branches
           trigger: true

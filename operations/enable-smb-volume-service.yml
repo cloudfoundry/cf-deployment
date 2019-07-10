@@ -71,7 +71,7 @@
     name: smbdriver
     properties:
       tls:
-        ca_cert: ((smb_ca.certificate))
+        ca_cert: ((smbdriver_cert.ca))
         client_cert: ((smbdriver_client_cert.certificate))
         client_key: ((smbdriver_client_cert.private_key))
         server_cert: ((smbdriver_cert.certificate))
@@ -126,6 +126,6 @@
   path: /releases/-
   value:
     name: smb-volume
-    sha1: c0be18f17aa1c0c19e8649e14b1eae256cb78c03
-    url: https://bosh.io/d/github.com/cloudfoundry/smb-volume-release?v=1.0.0
-    version: 1.0.0
+    sha1: a7b4f123394eaa01f29dce7dcbaf1191a9979a2f
+    url: https://bosh.io/d/github.com/cloudfoundry/smb-volume-release?v=1.3.0
+    version: 1.3.0

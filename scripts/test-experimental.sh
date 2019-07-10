@@ -12,8 +12,6 @@ test_experimental_ops() {
       check_interpolation "name: add-deployment-updater-postgres.yml" "add-deployment-updater.yml" "-o add-deployment-updater-postgres.yml"
       check_interpolation "name: add-deployment-updater-external-db.yml" "${home}/operations/use-external-dbs.yml" "-o add-deployment-updater.yml" "-o add-deployment-updater-external-db.yml" "-l ${home}/operations/example-vars-files/vars-use-external-dbs.yml"
 
-      check_interpolation "deploy-forwarder-agent.yml" "-v system_domain=something"
-
       check_interpolation "disable-interpolate-service-bindings.yml"
 
       check_interpolation "enable-bpm-garden.yml"
@@ -51,11 +49,14 @@ test_experimental_ops() {
       check_interpolation "name: enable-routing-integrity-windows1803.yml" "../windows1803-cell.yml" "-o enable-routing-integrity-windows1803.yml"
       check_interpolation "name: enable-routing-integrity-windows2016.yml" "../windows2016-cell.yml" "-o enable-routing-integrity-windows2016.yml"
 
-      check_interpolation "name: add-syslog-agent.yml" "deploy-forwarder-agent.yml" "-o add-syslog-agent.yml"
-      check_interpolation "name: add-syslog-agent-windows1803.yml" "../windows1803-cell.yml" "-o deploy-forwarder-agent.yml" "-o add-syslog-agent.yml" "-o add-syslog-agent-windows1803.yml"
+      check_interpolation "deploy-forwarder-agent.yml"
+      check_interpolation "add-syslog-agent.yml"
+      check_interpolation "name: add-syslog-agent-windows1803.yml" "../windows1803-cell.yml" "-o add-syslog-agent.yml" "-o add-syslog-agent-windows1803.yml"
 
       check_interpolation "add-system-metrics-agent.yml"
       check_interpolation "name: add-system-metrics-agent-windows1803.yml" "../windows1803-cell.yml" "-o add-system-metrics-agent.yml" "-o add-system-metrics-agent-windows1803.yml"
+
+      check_interpolation "add-metric-store.yml"
 
     popd > /dev/null # operations/experimental
   popd > /dev/null

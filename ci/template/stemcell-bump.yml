@@ -1,0 +1,115 @@
+#@ load("@ytt:data", "data")
+#@ load("bbl-down.lib.yml", "bbl_down")
+#@ load("bbl-up.lib.yml", "bbl_up")
+#@ load("delete-deployment.lib.yml", "delete_deployment")
+#@ load("manage-gcp-dns.lib.yml", "manage_gcp_dns")
+
+---
+resource_types:
+- name: slack-notification
+  type: docker-image
+  source:
+    repository: cfcommunity/slack-notification-resource
+    tag: latest
+
+resources:
+- name: cf-deployment-master
+  type: git
+  source:
+    branch: master-stemcell-test
+    uri: git@github.com:cloudfoundry/cf-deployment.git
+    private_key: ((cf_deployment_readwrite_deploy_key.private_key))
+
+- name: cf-deployment-concourse-tasks
+  type: git
+  source:
+    branch: master
+    uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
+
+- name: relint-envs
+  type: git
+  source:
+    branch: master
+    uri: git@github.com:cloudfoundry/relint-envs.git
+    private_key: ((hagrid_env_readwrite_deploy_key.private_key))
+
+- name: runtime-ci
+  type: git
+  source:
+    branch: wip-update-manifest-releases-refactor-166455124
+    uri: https://github.com/cloudfoundry/runtime-ci.git
+
+- name: stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-google-kvm-ubuntu-xenial-go_agent
+
+jobs:
+#@ env = "pre-dev"
+- name: update-stemcell-and-recompile-releases
+  public: true
+  serial_groups:
+  - stemcell
+  #@ for r in data.values.baseReleases:
+  - #@ "update-" + r.name
+  #@ end
+  plan:
+  - in_parallel:
+    - get: cf-deployment-concourse-tasks
+    - get: cf-deployment-master
+    - get: relint-envs
+    - get: runtime-ci
+    - get: stemcell
+      params:
+        tarball: false
+  - task: update-stemcell-manifest-section
+    file: runtime-ci/tasks/update-stemcell-manifest-section/task.yml
+    input_mapping:
+      cf-deployment: cf-deployment-master
+  - do:
+    - #@ bbl_up(env)
+    - #@ manage_gcp_dns("add", env)
+    - task: upload-updated-stemcell
+      file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-cf-deployment
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        INFRASTRUCTURE: google
+    - task: deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: updated-cf-deployment
+        ops-files: updated-cf-deployment
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+        OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        REGENERATE_CREDENTIALS: false
+        BOSH_DEPLOY_ARGS: "--parallel 50"
+    - task: run-errand-smoke-tests
+      file: cf-deployment-concourse-tasks/run-errand/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        ERRAND_NAME: smoke-tests
+    - task: export-all-compiled-release-tarballs
+      file: runtime-ci/tasks/export-all-compiled-release-tarballs/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+    ensure:
+      do:
+      - #@ delete_deployment(env)
+      - #@ manage_gcp_dns("remove", env)
+      - #@ bbl_down(env)
+  - task: update-stemcell
+    file: runtime-ci/tasks/update-stemcell/task.yml
+    input_mapping:
+      cf-deployment: cf-deployment-master

@@ -11,7 +11,7 @@ func SetPath() (string, error) {
 		return "", err
 	}
 
-	return filepath.Abs(filepath.Join(wd, "..", ".."))
+	return filepath.Abs(filepath.Join(wd, "..", "..", ".."))
 }
 
 func findFiles(cfDeploymentHome, operationsSubDir string) ([]string, error) {

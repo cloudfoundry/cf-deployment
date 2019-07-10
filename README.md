@@ -35,7 +35,7 @@ It:
 - deploys jobs to handle platform data persistence
 using singleton versions of the `PXC` release for databases
 and the CAPI release's singleton WebDAV job for blob storage.
-See the  [database](deployment-guide.md#databases) and [blobstore](deployment-guide.md#blobstore) sections
+See the  [database](texts/deployment-guide.md#databases) and [blobstore](texts/deployment-guide.md#blobstore) sections
 of the deployment guide
 for more information.
 - assumes load-balancing will be handled by the IaaS
@@ -59,7 +59,7 @@ to force the validation of `TLS` certificates
 for all components.
 
 ## <a name='deploying-cf'></a>Deploying CF
-Deployment instructions are verbose so we've moved them into a [dedicated deployment guide here](deployment-guide.md).
+Deployment instructions are verbose so we've moved them into a [dedicated deployment guide here](texts/deployment-guide.md).
 
 ## <a name='versioning'></a>Release Versioning
 The Semantic Versioning scheme has been adopted by cf-deployment.

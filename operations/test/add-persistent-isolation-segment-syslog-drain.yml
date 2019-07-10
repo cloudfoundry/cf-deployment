@@ -1,3 +1,4 @@
+# DEPRECATED
 ---
 - type: replace
   path: /instance_groups/-
@@ -22,14 +23,14 @@
         scalablesyslog:
           adapter:
             tls:
-              ca: "((isolated_loggregator_ca.certificate))"
+              ca: "((isolated_adapter_tls.ca))"
               cert: "((isolated_adapter_tls.certificate))"
               key: "((isolated_adapter_tls.private_key))"
               cn: ss-adapter
             bosh_dns: true
           adapter_rlp:
             tls:
-              ca: "((isolated_loggregator_ca.certificate))"
+              ca: "((isolated_adapter_rlp_tls.ca))"
               cert: "((isolated_adapter_rlp_tls.certificate))"
               key: "((isolated_adapter_rlp_tls.private_key))"
               cn: reverselogproxy
@@ -66,12 +67,12 @@
               url: https://cloud-controller-ng.service.cf.internal:9023
             tls:
               client:
-                ca: "((isolated_loggregator_ca.certificate))"
+                ca: "((isolated_scheduler_client_tls.ca))"
                 cert: "((isolated_scheduler_client_tls.certificate))"
                 key: "((isolated_scheduler_client_tls.private_key))"
                 adapter_cn: "ss-adapter"
               api:
-                ca: "((service_cf_internal_ca.certificate))"
+                ca: "((cc_tls.ca))"
                 cert: "((isolated_scheduler_api_tls.certificate))"
                 key: "((isolated_scheduler_api_tls.private_key))"
                 cn: "cloud-controller-ng.service.cf.internal"
@@ -90,7 +91,7 @@
         addr: "isolated-doppler.service.cf.internal"
       loggregator:
         tls:
-          ca_cert: "((isolated_loggregator_ca.certificate))"
+          ca_cert: "((isolated_loggregator_tls_agent.ca))"
           agent:
             cert: "((isolated_loggregator_tls_agent.certificate))"
             key: "((isolated_loggregator_tls_agent.private_key))"

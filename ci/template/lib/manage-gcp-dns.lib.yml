@@ -1,0 +1,12 @@
+#@ def manage_gcp_dns(action, env):
+task: #@ action + "-gcp-dns"
+file: runtime-ci/tasks/manage-gcp-dns/task.yml
+input_mapping:
+  bbl-state: relint-envs
+params:
+  BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
+  GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+  GCP_DNS_ZONE_NAME: test-relint-rocks
+  GCP_DNS_RECORD_SET_NAME: #@ env + ".test.relint.rocks"
+  ACTION: #@ action
+#@ end

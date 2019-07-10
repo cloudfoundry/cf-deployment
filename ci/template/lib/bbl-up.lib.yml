@@ -1,0 +1,21 @@
+#@ def bbl_up(env):
+task: bbl-up
+file: cf-deployment-concourse-tasks/bbl-up/task.yml
+params:
+  BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
+  BBL_IAAS: gcp
+  BBL_ENV_NAME: #@ env
+  BBL_GCP_SERVICE_ACCOUNT_KEY: #@ "environments/test/{}/google_account_creds.json".format(env)
+  BBL_GCP_REGION: us-central1
+  BBL_LB_CERT: #@ "(({}_cf_lb_cert.certificate))".format(env.replace("-", "_"))
+  BBL_LB_KEY: #@ "(({}_cf_lb_cert.private_key))".format(env.replace("-", "_"))
+  LB_DOMAIN: #@ env + ".test.relint.rocks"
+input_mapping:
+  bbl-state: relint-envs
+  bbl-config: relint-envs
+ensure:
+  put: relint-envs
+  params:
+    repository: updated-bbl-state
+    rebase: true
+#@ end

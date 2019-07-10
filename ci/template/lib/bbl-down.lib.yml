@@ -1,0 +1,14 @@
+#@ def bbl_down(env):
+task: bbl-down
+file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+input_mapping:
+  bbl-state: relint-envs
+params:
+  BBL_GCP_SERVICE_ACCOUNT_KEY: #@ "environments/test/{}/google_account_creds.json".format(env)
+  BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
+ensure:
+  put: relint-envs
+  params:
+    repository: updated-bbl-state
+    rebase: true
+#@ end

@@ -8,7 +8,7 @@
 - type: replace
   path: /instance_groups/name=windows1803-cell/jobs/name=rep_windows/properties/containers?/proxy/trusted_ca_certificates
   value:
-  - ((service_cf_internal_ca.certificate))
+  - ((gorouter_backend_tls.ca))
 - type: replace
   path: /instance_groups/name=windows1803-cell/jobs/name=rep_windows/properties/containers?/proxy/verify_subject_alt_name
   value:
