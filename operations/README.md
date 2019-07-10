@@ -40,7 +40,6 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 | [`enable-nfs-ldap.yml`](enable-nfs-ldap.yml) | Enables LDAP authentication for NFS volume services | Requires `enable-nfs-volume-service.yml`. Introduces [new variables](example-vars-files/vars-enable-nfs-ldap.yml) | **NO** |
 | [`enable-nfs-volume-service.yml`](enable-nfs-volume-service.yml) | Enables volume support and deploys an NFS broker and volume driver | As of cf-deployment v2, you must use the `nfsbrokerpush` errand to cf push the nfs broker after `bosh deploy` completes. | **YES** |
 | [`enable-privileged-container-support.yml`](enable-privileged-container-support.yml) | Enables Diego privileged container support. | | **NO** |
-| [`enable-routing-integrity.yml`](enable-routing-integrity.yml) | **DEPRECATED since it is now inlined in cf-deployment.yml** Enables container proxy on the Diego Cell `rep` and configures gorouter to opt into TLS-enabled connections to the backend. | | **NO** |
 | [`enable-service-discovery.yml`](enable-service-discovery.yml) | Enables application service discovery | | **YES** |
 | [`enable-smb-volume-service.yml`](enable-smb-volume-service.yml) | Enables volume support and deploys an SMB broker and volume driver | As of cf-deployment v2, you must use the `smbbrokerpush` errand to cf push the smb broker after `bosh deploy` completes. | **NO** |
 | [`enable-tls-on-file-server.yml`](enable-tls-on-file-server.yml) | Enables TLS on file-server for assets | Enables downloading lifecycle assets over HTTPS | **NO** |

@@ -50,6 +50,14 @@
             placement_tags:
             - persistent_isolation_segment
         containers:
+          proxy:
+            enabled: true
+            require_and_verify_client_certificates: true
+            trusted_ca_certificates:
+            - ((router_ssl.ca))
+            verify_subject_alt_name:
+            - gorouter.service.cf.internal
+            - ssh-proxy.service.cf.internal
           trusted_ca_certificates:
           - ((diego_instance_identity_ca.ca))
           - ((credhub_tls.ca))

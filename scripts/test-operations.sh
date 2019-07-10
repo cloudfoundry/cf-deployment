@@ -26,7 +26,6 @@ test_standard_ops() {
       check_interpolation "name: enable-nfs-ldap.yml" "enable-nfs-volume-service.yml -o enable-nfs-ldap.yml -l example-vars-files/vars-enable-nfs-ldap.yml"
       check_interpolation "enable-nfs-volume-service.yml"
       check_interpolation "enable-privileged-container-support.yml"
-      check_interpolation "enable-routing-integrity.yml"
       check_interpolation "enable-service-discovery.yml"
       check_interpolation "enable-smb-volume-service.yml"
       check_interpolation "enable-tls-on-file-server.yml"
