@@ -4,10 +4,10 @@
     name: nfstestldapserver
     release: nfs-volume
     custom_provider_definitions:
-    - name: nfstestldapserver_dns_aliases
-      type: nfstestldapserver_dns_aliases
+    - name: nfstestldapserver
+      type: nfstestldapserver
     provides:
-      nfstestldapserver_dns_aliases:
+      nfstestldapserver:
         aliases:
         - domain: nfstestldapserver.service.cf.internal
     properties:

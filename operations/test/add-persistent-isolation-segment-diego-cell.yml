@@ -38,10 +38,10 @@
     - name: rep
       release: diego
       custom_provider_definitions:
-      - name: rep_iso_seg_dns_aliases
-        type: rep_iso_seg_dns_aliases
+      - name: rep
+        type: rep
       provides:
-        rep_iso_seg_dns_aliases:
+        rep:
           aliases:
           - domain: _.cell.service.cf.internal
             placeholder_type: uuid

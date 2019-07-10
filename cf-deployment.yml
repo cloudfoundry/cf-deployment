@@ -114,6 +114,7 @@ addons:
         tags:
           origin: loggregator.metron
           metric_version: "2.0"
+
 - name: forwarder_agent
   include:
     stemcell:
@@ -126,6 +127,7 @@ addons:
         ca_cert: "((loggregator_tls_agent.ca))"
         cert: "((loggregator_tls_agent.certificate))"
         key: "((loggregator_tls_agent.private_key))"
+
 - name: bpm
   include:
     stemcell:
@@ -268,17 +270,14 @@ instance_groups:
         server: ((mysql_server_certificate))
   - name: proxy
     release: pxc
-    custom_provider_definitions:
-    - name: proxy_dns_aliases
-      type: proxy_dns_aliases
-    provides:
-      proxy_dns_aliases:
-        aliases:
-        - domain: sql-db.service.cf.internal
     properties:
       api_password: ((cf_mysql_proxy_api_password))
       api_port: 8083
       api_uri: proxy.((system_domain))
+    provides:
+      mysql-database:
+        aliases:
+        - domain: sql-db.service.cf.internal
   - name: galera-agent
     release: pxc
     properties:
@@ -332,10 +331,10 @@ instance_groups:
   - name: bbs
     release: diego
     custom_provider_definitions:
-    - name: bbs_dns_aliases
-      type: bbs_dns_aliases
+    - name: bbs
+      type: bbs
     provides:
-      bbs_dns_aliases:
+      bbs:
         aliases:
         - domain: bbs.service.cf.internal
           health_filter: all
@@ -382,11 +381,8 @@ instance_groups:
           timestamp: "rfc3339"
   - name: silk-controller
     release: silk
-    custom_provider_definitions:
-    - name: silk_controller_dns_aliases
-      type: silk_controller_dns_aliases
     provides:
-      silk_controller_dns_aliases:
+      cf_network:
         aliases:
         - domain: silk-controller.service.cf.internal
     properties:
@@ -409,10 +405,10 @@ instance_groups:
   - name: locket
     release: diego
     custom_provider_definitions:
-    - name: locket_dns_aliases
-      type: locket_dns_aliases
+    - name: locket
+      type: locket
     provides:
-      locket_dns_aliases:
+      locket:
         aliases:
         - domain: locket.service.cf.internal
     properties:
@@ -462,11 +458,8 @@ instance_groups:
   jobs:
   - name: uaa
     release: uaa
-    custom_provider_definitions:
-    - name: uaa_dns_aliases
-      type: uaa_dns_aliases
     provides:
-      uaa_dns_aliases:
+      uaa_db:
         aliases:
         - domain: uaa.service.cf.internal
     properties:
@@ -640,10 +633,10 @@ instance_groups:
   - name: blobstore
     release: capi
     custom_provider_definitions:
-    - name: blobstore_dns_aliases
-      type: blobstore_dns_aliases
+    - name: blobstore
+      type: blobstore
     provides:
-      blobstore_dns_aliases:
+      blobstore:
         aliases:
         - domain: blobstore.service.cf.internal
     properties:
@@ -683,14 +676,10 @@ instance_groups:
   jobs:
   - name: cloud_controller_ng
     release: capi
-    custom_provider_definitions:
-    - name: cloud_controller_dns_aliases
-      type: cloud_controller_dns_aliases
     provides:
       cloud_controller:
         as: cloud_controller
         shared: true
-      cloud_controller_dns_aliases:
         aliases:
         - domain: cloud-controller-ng.service.cf.internal
     properties:
@@ -872,10 +861,10 @@ instance_groups:
   - name: file_server
     release: diego
     custom_provider_definitions:
-    - name: file_server_dns_aliases
-      type: file_server_dns_aliases
+    - name: file_server
+      type: file_server
     provides:
-      file_server_dns_aliases:
+      file_server:
         aliases:
         - domain: file-server.service.cf.internal
     properties:
@@ -888,11 +877,8 @@ instance_groups:
       loggregator: *diego_loggregator_client_properties
   - name: routing-api
     release: routing
-    custom_provider_definitions:
-    - name: routing_api_dns_aliases
-      type: routing_api_dns_aliases
     provides:
-      routing_api_dns_aliases:
+      routing_api:
         aliases:
         - domain: routing-api.service.cf.internal
     properties:
@@ -927,11 +913,8 @@ instance_groups:
         tls_port: 8443
   - name: policy-server
     release: cf-networking
-    custom_provider_definitions:
-    - name: policy_server_dns_aliases
-      type: policy_server_dns_aliases
     provides:
-      policy_server_dns_aliases:
+      dbconn:
         aliases:
         - domain: policy-server.service.cf.internal
     properties:
@@ -955,11 +938,8 @@ instance_groups:
       server_key: ((network_policy_server.private_key))
   - name: cc_uploader
     release: capi
-    custom_provider_definitions:
-    - name: cc_uploader_dns_aliases
-      type: cc_uploader_dns_aliases
     provides:
-      cc_uploader_dns_aliases:
+      cc_uploader:
         aliases:
         - domain: cc-uploader.service.cf.internal
     properties:
@@ -1042,10 +1022,10 @@ instance_groups:
   - name: auctioneer
     release: diego
     custom_provider_definitions:
-    - name: auctioneer_dns_aliases
-      type: auctioneer_dns_aliases
+    - name: auctioneer
+      type: auctioneer
     provides:
-      auctioneer_dns_aliases:
+      auctioneer:
         aliases:
         - domain: auctioneer.service.cf.internal
           health_filter: all
@@ -1124,11 +1104,11 @@ instance_groups:
     properties: *statsd_injector_properties
   - name: tps
     custom_provider_definitions:
-    - name: tps_dns_aliases
-      type: tps_dns_aliases
+    - name: tps
+      type: tps
     release: capi
     provides:
-      tps_dns_aliases:
+      tps:
         aliases:
         - domain: tps.service.cf.internal
     properties:
@@ -1145,11 +1125,8 @@ instance_groups:
             client_key: "((cc_bridge_tps.private_key))"
   - name: ssh_proxy
     release: diego
-    custom_provider_definitions:
-    - name: ssh_proxy_dns_aliases
-      type: ssh_proxy_dns_aliases
     provides:
-      ssh_proxy_dns_aliases:
+      ssh_proxy:
         aliases:
         - domain: ssh-proxy.service.cf.internal
     properties:
@@ -1239,11 +1216,8 @@ instance_groups:
   jobs:
   - name: gorouter
     release: routing
-    custom_provider_definitions:
-    - name: gorouter_dns_aliases
-      type: gorouter_dns_aliases
     provides:
-      gorouter_dns_aliases:
+      gorouter:
         aliases:
         - domain: gorouter.service.cf.internal
     properties:
@@ -1323,16 +1297,12 @@ instance_groups:
   jobs:
   - name: doppler
     release: loggregator
-    custom_provider_definitions:
-    - name: doppler_dns_aliases
-      type: doppler_dns_aliases
     provides:
       doppler:
-        as: doppler
-        shared: true
-      doppler_dns_aliases:
         aliases:
         - domain: doppler.service.cf.internal
+        as: doppler
+        shared: true
     properties:
       loggregator:
         tls:
@@ -1532,10 +1502,10 @@ instance_groups:
   - name: rep
     release: diego
     custom_provider_definitions:
-    - name: rep_dns_aliases
-      type: rep_dns_aliases
+    - name: rep
+      type: rep
     provides:
-      rep_dns_aliases:
+      rep:
         aliases:
         - domain: _.cell.service.cf.internal
           placeholder_type: uuid
@@ -1635,11 +1605,8 @@ instance_groups:
   jobs:
   - name: loggregator_trafficcontroller
     release: loggregator
-    custom_provider_definitions:
-    - name: trafficcontroller_dns_aliases
-      type: trafficcontroller_dns_aliases
     provides:
-      trafficcontroller_dns_aliases:
+      trafficcontroller:
         aliases:
         - domain: loggregator-trafficcontroller.service.cf.internal
     consumes:
@@ -1671,16 +1638,12 @@ instance_groups:
           ca_cert: "((cc_tls.ca))"
   - name: reverse_log_proxy
     release: loggregator
-    custom_provider_definitions:
-    - name: reverse_log_proxy_dns_aliases
-      type: reverse_log_proxy_dns_aliases
     provides:
       reverse_log_proxy:
-        as: reverse_log_proxy
-        shared: true
-      reverse_log_proxy_dns_aliases:
         aliases:
         - domain: reverse-log-proxy.service.cf.internal
+        as: reverse_log_proxy
+        shared: true
     properties:
       loggregator:
         tls:
@@ -1738,12 +1701,8 @@ instance_groups:
   vm_type: minimal
   jobs:
   - name: credhub
-    release: credhub
-    custom_provider_definitions:
-    - name: credhub_dns_aliases
-      type: credhub_dns_aliases
     provides:
-      credhub_dns_aliases:
+      credhub:
         aliases:
         - domain: credhub.service.cf.internal
     properties:
@@ -1788,6 +1747,7 @@ instance_groups:
             type: internal
         internal_url: https://credhub.service.cf.internal
         tls: ((credhub_tls))
+    release: credhub
 - name: rotate-cc-database-key
   instances: 1
   azs: [z1]

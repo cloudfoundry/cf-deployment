@@ -11,10 +11,10 @@
     - name: nfstestserver
       release: nfs-volume
       custom_provider_definitions:
-      - name: nfstestserver_dns_aliases
-        type: nfstestserver_dns_aliases
+      - name: nfstestserver
+        type: nfstestserver
       provides:
-        nfstestserver_dns_aliases:
+        nfstestserver:
           aliases:
           - domain: nfstestserver.service.cf.internal
       properties:

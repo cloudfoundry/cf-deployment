@@ -14,10 +14,10 @@
     jobs:
     - name: doppler
       custom_provider_definitions:
-      - name: doppler_iso_seg_dns_aliases
-        type: doppler_iso_seg_dns_aliases
+      - name: isolated-doppler
+        type: isolated-doppler
       provides:
-        doppler_iso_seg_dns_aliases:
+        isolated-doppler:
           aliases:
           - domain: "isolated-doppler.service.cf.internal"
       release: loggregator
