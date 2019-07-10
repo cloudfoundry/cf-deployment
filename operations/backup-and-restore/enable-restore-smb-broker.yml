@@ -1,0 +1,32 @@
+- type: replace
+  path: /instance_groups/name=backup-restore/jobs/-
+  value:
+    name: smbbrokerpush
+    provides:
+      smbbrokerpush: {as: ignore-me}
+    properties:
+      app_domain: ((system_domain))
+      cf:
+        client_id: smb-broker-client
+        client_secret: ((smb-broker-uaa-client-secret))
+      credhub:
+        store_id: smbbroker
+        uaa_client_id: smb-broker-credhub-client
+        uaa_client_secret: ((smb-broker-credhub-uaa-client-secret))
+        url: https://credhub.service.cf.internal:8844
+      domain: ((system_domain))
+      organization: system
+      password: ((smb-broker-password))
+      skip_cert_verify: true
+      space: smb-broker-space
+      syslog_url: ""
+      username: smb-broker
+    release: smb-volume
+- type: replace
+  path: /instance_groups/name=backup-restore/jobs/-
+  value:
+    name: bbr-smbbroker
+    release: smb-volume
+    consumes:
+      smbbrokerpush: {from: smbbrokerpush}
+
