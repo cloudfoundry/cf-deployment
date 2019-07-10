@@ -740,7 +740,8 @@ instance_groups:
             name: uaa-healthcheck
             script_path: "/var/vcap/jobs/uaa/bin/health_check"
           name: uaa
-          port: 8080
+          tls_port: 8443
+          server_cert_domain_san: "uaa.service.cf.internal"
           registration_interval: 10s
           tags:
             component: uaa
