@@ -30,10 +30,10 @@
       release: statsd-injector
     - name: bits-service
       custom_provider_definitions:
-      - name: bits
-        type: bits
+      - name: bits_dns_aliases
+        type: bits_dns_aliases
       provides:
-        bbs:
+        bits_dns_aliases:
           aliases:
           - domain: bits.service.cf.internal
       properties:

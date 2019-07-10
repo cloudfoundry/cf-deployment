@@ -12,10 +12,10 @@
     - name: smbtestserver
       release: smb-volume
       custom_provider_definitions:
-      - name: smbtestserver
-        type: smbtestserver
+      - name: smbtestserver_dns_aliases
+        type: smbtestserver_dns_aliases
       provides:
-        smbtestserver:
+        smbtestserver_dns_aliases:
           aliases:
           - domain: smbtestserver.service.cf.internal
       properties:
