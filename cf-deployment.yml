@@ -1602,7 +1602,7 @@ instance_groups:
           enabled: true
           require_and_verify_client_certificates: true
           trusted_ca_certificates:
-          - ((router_ssl.ca))
+          - ((gorouter_backend_tls.ca))
           verify_subject_alt_name:
           - gorouter.service.cf.internal
           - ssh-proxy.service.cf.internal

@@ -40,6 +40,9 @@
           ca_certs: |
             ((diego_instance_identity_ca.ca))
             ((cc_tls.ca))
+          backends:
+            cert_chain: ((gorouter_backend_tls.certificate))
+            private_key: ((gorouter_backend_tls.private_key))
           tls_pem:
           - cert_chain: "((router_ssl.certificate))"
             private_key: "((router_ssl.private_key))"
