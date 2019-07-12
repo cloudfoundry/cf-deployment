@@ -34,6 +34,9 @@ var experimentalTests = map[string]helpers.OpsFileTestParams{
 	"enable-mysql-tls.yml":                     {},
 	"enable-nfs-volume-service-credhub.yml":    {},
 	"enable-oci-phase-1.yml":                   {},
+	"enable-nginx-routing-integrity-windows2019.yml": {
+		Ops: []string{"../windows2019-cell.yml", "enable-nginx-routing-integrity-windows2019.yml"},
+	},
 	"enable-routing-integrity-windows1803.yml": {
 		Ops: []string{"../windows1803-cell.yml", "enable-routing-integrity-windows1803.yml"},
 	},
