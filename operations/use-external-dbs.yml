@@ -61,8 +61,9 @@
   value: ((external_uaa_database_username))
 - type: remove
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa?/ca_certs
-- type: remove
-  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/tls_enabled?
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaadb/tls?
+  value: disabled
 
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ccdb/db_scheme
