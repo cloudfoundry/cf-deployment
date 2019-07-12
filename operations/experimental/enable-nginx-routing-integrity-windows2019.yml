@@ -1,0 +1,32 @@
+---
+- type: replace
+  path: /instance_groups/name=windows2019-cell/jobs/name=rep_windows/properties/containers?/proxy/enabled
+  value: true
+
+- type: replace
+  path: /instance_groups/name=windows2019-cell/jobs/name=rep_windows/properties/containers?/proxy/require_and_verify_client_certificates
+  value: true
+
+- type: replace
+  path: /instance_groups/name=windows2019-cell/jobs/name=rep_windows/properties/containers?/proxy/trusted_ca_certificates
+  value:
+  - ((gorouter_backend_tls.ca))
+  - ((ssh_proxy_backends_tls.ca))
+
+- type: replace
+  path: /instance_groups/name=windows2019-cell/jobs/name=rep_windows/properties/containers?/proxy/verify_subject_alt_name
+  value:
+  - gorouter.service.cf.internal
+  - ssh-proxy.service.cf.internal
+
+- type: replace
+  path: /instance_groups/name=windows2019-cell/jobs/-
+  value:
+    name: envoy_windows
+    release: envoy-nginx
+
+- path: /releases/name=envoy-nginx?
+  type: replace
+  value:
+    name: envoy
+    version: latest
