@@ -25,6 +25,7 @@
 - [ ] NO
 
 > **Examples of breaking changes:**
+> - **causes app or operator downtime**
 > - modifies, deletes or moves the name of a job or instance group
 > - changes the name of a credentials
 > - requires out-of-band manual intervention on the part of the operator
