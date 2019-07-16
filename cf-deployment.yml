@@ -1352,7 +1352,7 @@ instance_groups:
       cc:
         ca_cert: ((cc_tls.ca))
         common_name: cloud-controller-ng.service.cf.internal
-      proxy_ca_cert: "((log_cache_ca.certificate))"
+      proxy_ca_cert: "((log_cache.ca))"
       proxy_port: 8083
       external_cert: ((logcache_ssl.certificate))
       external_key: ((logcache_ssl.private_key))
