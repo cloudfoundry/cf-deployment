@@ -111,9 +111,9 @@
           enable: false
       release: loggregator-agent
     - name: prom_scraper_windows
-      release: loggregator-agent
       properties:
         metrics_urls: http://localhost:14822/metrics,http://localhost:14823/metrics,http://localhost:14824/metrics
+      release: loggregator-agent
     - name: enable_ssh
       release: windows-utilities
     name: windows1803-cell
@@ -189,6 +189,6 @@
   path: /releases/name=windows-utilities?
   value:
     name: windows-utilities
-    sha1: efc10ac0f4acae23637ce2c6f864d20df2e3a781
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.11.0
-    version: 0.11.0
+    sha1: 494b6900c3fc382931634d9edbf7ba2695c3de72
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.12.0
+    version: 0.12.0
