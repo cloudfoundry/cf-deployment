@@ -66,6 +66,12 @@ addons:
   jobs:
   - name: bpm
     release: bpm
+- name: bosh-dns-aliases
+  jobs:
+  - name: bosh-dns-aliases
+    release: bosh-dns-aliases
+    properties:
+      aliases: []
 
 instance_groups:
 - name: smoke-tests

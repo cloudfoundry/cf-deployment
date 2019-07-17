@@ -3,6 +3,13 @@
   value:
     name: nfstestldapserver
     release: nfs-volume
+    custom_provider_definitions:
+    - name: nfstestldapserver
+      type: nfstestldapserver
+    provides:
+      nfstestldapserver:
+        aliases:
+        - domain: nfstestldapserver.service.cf.internal
     properties:
       ldap:
         ssl:
@@ -10,17 +17,6 @@
           ca_cert: ((ldap_test_server_ssl.ca))
           server_cert: ((ldap_test_server_ssl.certificate))
           server_key: ((ldap_test_server_ssl.private_key))
-
-- type: replace
-  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/domain=nfstestldapserver.service.cf.internal?
-  value:
-    domain: nfstestldapserver.service.cf.internal
-    targets:
-    - query: '*'
-      instance_group: nfstestserver
-      deployment: cf
-      network: default
-      domain: bosh
 
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=nfsv3driver/properties/nfsv3driver/ldap_ca_cert?
