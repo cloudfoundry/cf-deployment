@@ -35,10 +35,10 @@
     - name: uaa
       release: uaa
       custom_provider_definitions:
-      - name: uaa-oidc
-        type: uaa-oidc
+      - name: uaa_oidc_dns_aliases
+        type: uaa_oidc_dns_aliases
       provides:
-        uaa-oidc:
+        uaa_oidc_dns_aliases:
           aliases:
           - domain: uaa-oidc.service.cf.internal
       properties:

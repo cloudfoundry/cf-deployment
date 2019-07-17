@@ -38,10 +38,10 @@
       release: garden-runc
     - name: rep_windows
       custom_provider_definitions:
-      - name: rep
-        type: rep
+      - name: rep_windows_2019_dns_aliases
+        type: rep_windows_2019_dns_aliases
       provides:
-        rep:
+        rep_windows_2019_dns_aliases:
           aliases:
           - domain: _.cell.service.cf.internal
             placeholder_type: uuid
