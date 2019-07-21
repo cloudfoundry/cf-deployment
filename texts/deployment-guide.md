@@ -18,7 +18,7 @@ and installing a BOSH Director.
  
 #### bosh-lite
 If you're deploying bosh-lite to a VM on AWS, GCP, or Azure,
-look at [this guide](iaas-support/bosh-lite/README.md).
+look at [this guide](/iaas-support/bosh-lite/README.md).
 
 If you're planning to deploy against a **local** bosh-lite,
 follow [these instructions](https://bosh.io/docs/bosh-lite.html)
@@ -26,7 +26,7 @@ to setup a BOSH Lite director. Then follow [these instructions](#deploy-cf-to-lo
 to deploy CF.
 
 #### IaaSes not supported by `bbl`
-See [IaaS Support](iaas-support/README.md)
+See [IaaS Support](/iaas-support/README.md)
 
 ### Step 1: Get you some load balancers
 The CF Routers need a way to receive traffic.
@@ -116,7 +116,7 @@ export BOSH_CA_CERT="$(bbl director-ca-cert)"
 
 ### Step 5: Upload a `cloud-config`
 cf-deployment depends on use of a [cloud-config](https://bosh.io/docs/cloud-config).
-You can find details about the requirements for a cloud-config [here](texts/on-cloud-configs.md),
+You can find details about the requirements for a cloud-config [here](/texts/on-cloud-configs.md),
 but if you used `bbl` to set up your BOSH director,
 `bbl` already uploaded a valid cloud-config for you.
 
@@ -138,15 +138,15 @@ bosh update-runtime-config bosh-deployment/runtime-configs/dns.yml --name dns
 ### Step 7: Upload a stemcell
 Before BOSH can deploy CF,
 it needs a base VM image to start with.
-In the BOSH ecosystem, these images are called [stemcells](http://bosh.io/docs/stemcell.html).
+In the BOSH ecosystem, these images are called [stemcells](https://bosh.io/docs/stemcell.html).
 
 Stemcells are closely tied to the IaaS against which they're compatible,
 but the BOSH team versions stemcells for different IaaSes consistently.
 As such, we can encode the stemcell version in the cf-deployment manifest,
 but we can't encode the IaaS.
 
-As such, you'll need to [upload the stemcell](http://bosh.io/docs/uploading-stemcells.html) to the BOSH director yourself.
-Take a look at the list of stemcells at http://bosh.io/stemcells
+As such, you'll need to [upload the stemcell](https://bosh.io/docs/uploading-stemcells.html) to the BOSH director yourself.
+Take a look at the list of stemcells at <https://bosh.io/stemcells>
 and find the stemcell for your IaaS.
 Each stemcell will have an important descriptor in its url that describes the platform and virtualization technology.
 For example, for GCP, the url contains `google-kvm`; for AWS, it's `aws-xen-hvm`.
@@ -290,7 +290,7 @@ that are singletons. The MySQL databases can be scaled by applying `operations/s
 Some may want to deploy IaaS-managed database systems
 such as [Amazon RDS](https://aws.amazon.com/rds/) or [Google Cloud SQL](https://cloud.google.com/sql/).
 External databases
-will require the use of the [`use-external-dbs.yml`](operations/use-external-dbs.yml) opsfile.
+will require the use of the [`use-external-dbs.yml`](/operations/use-external-dbs.yml) opsfile.
 
 
 ### Blobstore
@@ -307,10 +307,10 @@ such as [Amazon S3](https://aws.amazon.com/s3/),
 [Azure Blob storage](https://azure.microsoft.com/en-us/services/storage/blobs/), or
 [OpenStack Swift](https://docs.openstack.org/swift/latest/).
 External blobstores
-require the use of opsfiles listed in the operations [README](operations/README.md#iaas-required-ops-files)
+require the use of opsfiles listed in the operations [README](/operations/README.md#iaas-required-ops-files)
 
 ### The `update` section of instance groups
-The [`update` section of a deployment manifest](http://bosh.io/docs/manifest-v2.html#update)
+The [`update` section of a deployment manifest](https://bosh.io/docs/manifest-v2.html#update)
 controls the way BOSH rolls out updates to instance groups.
 CF-Deployment assumes the default scale as defined in the base manifest
 (typically two instances of each instance group).
@@ -342,7 +342,7 @@ would be with a custom ops-file, such as:
 two instances, distributed across two AZs
 (with the exception of some jobs that require more instances).
 While it's easy for us to provide an ops-file
-[to scale instance groups _down_](operations/scale-to-one-az.yml), operators will need to provide their own ops-file
+[to scale instance groups _down_](/operations/scale-to-one-az.yml), operators will need to provide their own ops-file
 to scale instances _up_ to suit the unique requirements of their foundations.
 Here's an example:
 ```yml
