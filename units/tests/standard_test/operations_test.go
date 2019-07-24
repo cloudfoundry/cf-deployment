@@ -113,6 +113,12 @@ var standardTests = map[string]helpers.OpsFileTestParams{
 	"use-offline-windows2016fs.yml": {
 		Ops: []string{"windows2016-cell.yml", "use-offline-windows2016fs.yml"},
 	},
+	"use-offline-windows1803fs.yml": {
+		Ops: []string{"windows1803-cell.yml", "use-offline-windows1803fs.yml"},
+	},
+	"use-offline-windows2019fs.yml": {
+		Ops: []string{"windows2019-cell.yml", "use-offline-windows2019fs.yml"},
+	},
 	"use-online-windows2019fs.yml": {
 		Ops: []string{"windows2019-cell.yml", "use-online-windows2019fs.yml"},
 	},
