@@ -33,6 +33,20 @@ groups:
   - #@ "update-" + s.name + "-stemcell"
   #@ end
   - update-windows-2016-offline-releases
+- name: debug
+  jobs:
+  #@ for r in data.values.baseReleases:
+  #@ if hasattr(r, "debug"):
+  - #@ "update-" + r.name
+  - #@ "destroy-" + r.name + "-debug-env"
+  #@ end
+  #@ end
+  #@ for r in data.values.opsReleases:
+  #@ if hasattr(r, "debug"):
+  - #@ "update-" + r.name
+  - #@ "destroy-" + r.name + "-debug-env"
+  #@ end
+  #@ end
 - name: cleanup
   jobs:
   - delete-stale-branches
@@ -180,10 +194,18 @@ resources:
 
 jobs:
 #@ for r in data.values.baseReleases:
-#@ env = "pre-dev"
+#@ if hasattr(r, "debug"):
+  #@ env = "pre-dev-debug"
+#@ else:
+  #@ env = "pre-dev"
+#@ end
 - name: #@ "update-" + r.name
   serial_groups:
+  #@ if hasattr(r, "debug"):
+  - update-release-debug
+  #@ else:
   - update-release
+  #@ end
   - stemcell
   public: true
   plan:
@@ -217,18 +239,24 @@ jobs:
           ops-files: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
           vars-files: relint-envs
         params:
-          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
-          SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+          BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
+          SYSTEM_DOMAIN: #@ "{}.test.relint.rocks".format(env)
           OPS_FILES: |
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: "--parallel 50"
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: #@ "environments/test/{}/integration_config.json".format(env)
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
           bbl-state: relint-envs
         params:
-          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
           ERRAND_NAME: smoke-tests
       - task: #@ "export-compiled-release-" + r.name
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
@@ -236,7 +264,7 @@ jobs:
           bbl-state: relint-envs
           manifest: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
         params:
-          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
           RELEASE_NAME: #@ r.name
       on_success:
         do:
@@ -276,7 +304,7 @@ jobs:
           input_mapping:
             bbl-state: relint-envs
           params:
-            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+            BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
         - put: #@ r.name + "-component-bump-logs-gcs"
           params:
             file: bosh-logs/cf-*.tgz
@@ -287,32 +315,59 @@ jobs:
             input_mapping:
               release: #@ r.name + "-release"
             params:
-              RELEASE_NAME: #@ r.name
-              REPOSITORY: #@ r.repository
               BOSH_LOGS_PREFIX: #@ "https://storage.cloud.google.com/component-bump-logs/" + r.name
+              RELEASE_NAME: #@ r.name
+          - task: lookup-slack-channel-for-release-owner
+            file: runtime-ci/tasks/lookup-slack-channel-for-release-owner/task.yml
+            params:
+              RELEASE_REPOSITORY: #@ r.repository
           - put: slack-alert
             params:
-              #! TODO(cdutra, webdave): Uncomment following line when we go live
-              #! channel_file: slack-message/channel.txt
+              channel_file: slack-channel/channel.txt
+              icon_emoji: ":cloudfoundrylogo:"
               text: |
                 $TEXT_FILE_CONTENT
 
                 CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
               text_file: slack-message/message.txt
               username: "Release Integration"
-              icon_emoji: ":cloudfoundrylogo:"
+    #@ if hasattr(r, "debug") == False:
     ensure:
       do:
       - #@ delete_deployment(env)
       - #@ manage_gcp_dns("remove", env)
       - #@ bbl_down(env)
+    #@ end
+
+#@ if hasattr(r, "debug"):
+- name: #@ "destroy-" + r.name + "-debug-env"
+  serial_groups:
+  - update-release-debug
+  public: true
+  plan:
+  - in_parallel:
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+  - #@ delete_deployment(env)
+  - #@ manage_gcp_dns("remove", env)
+  - #@ bbl_down(env)
+#@ end
 #@ end
 
 #@ for r in data.values.opsReleases:
-#@ env = "pre-dev"
+#@ if hasattr(r, "debug"):
+  #@ env = "pre-dev-debug"
+#@ else:
+  #@ env = "pre-dev"
+#@ end
 - name: #@ "update-" + r.name
   serial_groups:
+  #@ if hasattr(r, "debug"):
+  - update-release-debug
+  #@ else:
   - update-release
+  #@ end
   public: true
   plan:
   - in_parallel:
@@ -342,18 +397,29 @@ jobs:
           ops-files: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
           vars-files: relint-envs
         params:
-          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
-          SYSTEM_DOMAIN: pre-dev.test.relint.rocks
+          BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
+          SYSTEM_DOMAIN: #@ "{}.test.relint.rocks".format(env)
           OPS_FILES: #@ collect_ops_files(r)
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: "--parallel 50"
+          #@ if hasattr(r, "varsFiles"):
+          VARS_FILES: #@ r.varsFiles
+          #@ end
+      #@ if hasattr(r, "skipSmokeTests") == False:
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+        params:
+          CONFIG_FILE_PATH: #@ "environments/test/{}/integration_config.json".format(env)
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
           bbl-state: relint-envs
         params:
-          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+          BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
           ERRAND_NAME: smoke-tests
+      #@ end
       on_success:
         do:
         - #@ update_release(r, "opsfile", "develop")
@@ -376,7 +442,7 @@ jobs:
           input_mapping:
             bbl-state: relint-envs
           params:
-            BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+            BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
         - put: #@ r.name + "-component-bump-logs-gcs"
           params:
             file: bosh-logs/cf-*.tgz
@@ -401,11 +467,28 @@ jobs:
               text_file: slack-message/message.txt
               username: "Release Integration"
               icon_emoji: ":cloudfoundrylogo:"
+    #@ if hasattr(r, "debug") == False:
     ensure:
       do:
       - #@ delete_deployment(env)
       - #@ manage_gcp_dns("remove", env)
       - #@ bbl_down(env)
+    #@ end
+
+#@ if hasattr(r, "debug"):
+- name: #@ "destroy-" + r.name + "-debug-env"
+  serial_groups:
+  - update-release-debug
+  public: true
+  plan:
+  - in_parallel:
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+  - #@ delete_deployment(env)
+  - #@ manage_gcp_dns("remove", env)
+  - #@ bbl_down(env)
+#@ end
 #@ end
 
 #@ for s in data.values.windowsVersSupported:

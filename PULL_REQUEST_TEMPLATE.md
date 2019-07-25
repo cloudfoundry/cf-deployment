@@ -1,42 +1,41 @@
-### Is this a PR to [the develop branch](https://github.com/cloudfoundry/cf-deployment/tree/develop) of cf-deployment?
+## Please take a moment to review the questions before submitting the PR
 
-_Only PR's to develop are accepted._
+🚫 We only accept PRs to develop branch. If this is an exception, please specify why 🚫
 
 ### WHAT is this change about?
 
-_Describe the change._
+> _Please describe the change._
 
-### WHY is this change being made (What problem is being addressed)?
+### What customer problem is being addressed? Use customer persona to define the problem e.g. Alana is unable to...
 
-_Understanding why this change is being made is fantastically helpful. Please do tell..._
+> _Understanding why this change is being made is fantastically helpful. Please do tell..._
 
-### Please provide contextual information.
+### Please provide any contextual information.
 
-_Include any links to other PRs, stories, slack discussions, etc... that will help establish context._
+> _Include any links to other PRs, stories, slack discussions, etc... that will help establish context._
 
-### Has a cf-deployment including this change passed our [cf-acceptance-tests](https://github.com/cloudfoundry/cf-acceptance-tests)?
+### Has a cf-deployment including this change passed [cf-acceptance-tests](https://github.com/cloudfoundry/cf-acceptance-tests)?
 
 - [ ] YES
 - [ ] NO
 
+### Does this PR introduce a breaking change? Please see definition of breaking change below
+
+- [ ] YES - please specify
+- [ ] NO
+
+> **Examples of breaking changes:**
+> - **causes app or operator downtime**
+> - modifies, deletes or moves the name of a job or instance group
+> - changes the name of a credentials
+> - requires out-of-band manual intervention on the part of the operator
+> - removes Ops-file (e.g. from `./operations/` or `./operations/experimental` folders)
+
+> _If you're promoting an experimental Ops-file (or removing one), Please follow the [Ops-file workflows](https://github.com/cloudfoundry/cf-deployment/blob/master/ops-file-promotion-workflow.md)._
+
 ### How should this change be described in cf-deployment release notes?
 
-_Something brief that conveys the change and is written with the Operator audience in mind.
-See [previous release notes](https://github.com/cloudfoundry/cf-deployment/releases) for examples._
-
-### Does this PR introduce a breaking change?
-
-_Does this introduce changes that would require operators to take action in order to deploy without a failure? Please see below for few examples._
-
-If you're promoting an experimental Ops-file (or removing one), Please follow the [Ops-file workflows](https://github.com/cloudfoundry/cf-deployment/blob/master/ops-file-promotion-workflow.md).
-
-**Examples of breaking changes:**
-- changes the name of a job or instance group
-- moves a job to a different instance group
-- deletes a job or instance group
-- changes the name of a credential
-- requires out-of-band manual intervention on the part of the operator
-- removes Ops-file (e.g. from `./operations/` or `./operations/experimental` folders)
+> _Something brief that conveys the change and is written with the **persona (Alana, Cody...)** in mind. See [previous release notes](https://github.com/cloudfoundry/cf-deployment/releases) for examples._
 
 ### Does this PR introduce a new BOSH release into the base cf-deployment.yml manifest or any ops-files?
 

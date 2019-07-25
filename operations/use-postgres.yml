@@ -129,6 +129,7 @@
     - name: uaa
       password: ((uaa_database_password))
       tag: admin
+    tls: disabled
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=bbs/properties/diego/bbs/sql
   value:

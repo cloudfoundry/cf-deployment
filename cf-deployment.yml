@@ -1,6 +1,6 @@
 ---
 name: cf
-manifest_version: v9.3.0
+manifest_version: v10.1.0
 update:
   canaries: 1
   canary_watch_time: 30000-1200000
@@ -28,89 +28,6 @@ addons:
           agent:
             cert: "((loggregator_tls_agent.certificate))"
             key: "((loggregator_tls_agent.private_key))"
-  - name: loggr-expvar-forwarder
-    release: loggregator-agent
-    properties:
-      log_agent:
-        ca_cert: "((expvar_forwarder.ca))"
-        client_cert: "((expvar_forwarder.certificate))"
-        client_key: "((expvar_forwarder.private_key))"
-      default_source_id: metron
-      counters:
-      - addr: http://127.0.0.1:14823/debug/vars
-        name: ingress
-        source_id: forwarder_agent
-        template: "{{.ForwarderAgent.IngressV2}}"
-        tags:
-          metric_version: "2.0"
-      - addr: http://127.0.0.1:14824/debug/vars
-        name: dropped
-        template: "{{.Agent.Dropped}}"
-        tags:
-          origin: loggregator.metron
-      - addr: http://127.0.0.1:14824/debug/vars
-        name: dropped
-        template: "{{.Agent.DroppedEgressV2}}"
-        tags:
-          origin: loggregator.metron
-          direction: egress
-          metric_version: "2.0"
-      - addr: http://127.0.0.1:14824/debug/vars
-        name: dropped
-        template: "{{.Agent.DroppedIngressV2}}"
-        tags:
-          origin: loggregator.metron
-          direction: ingress
-          metric_version: "2.0"
-
-      - addr: http://127.0.0.1:14824/debug/vars
-        name: egress
-        template: "{{.Agent.Egress}}"
-        tags:
-          origin: loggregator.metron
-      - addr: http://127.0.0.1:14824/debug/vars
-        name: egress
-        template: "{{.Agent.EgressV2}}"
-        tags:
-          origin: loggregator.metron
-          metric_version: "2.0"
-
-      - addr: http://127.0.0.1:14824/debug/vars
-        name: ingress
-        template: "{{.Agent.Ingress}}"
-        tags:
-          origin: loggregator.metron
-      - addr: http://127.0.0.1:14824/debug/vars
-        name: ingress
-        template: "{{.Agent.IngressV2}}"
-        tags:
-          origin: loggregator.metron
-          metric_version: "2.0"
-
-      gauges:
-      - addr: http://127.0.0.1:14824/debug/vars
-        name: average_envelopes
-        unit: bytes/minute
-        template: "{{.Agent.AverageEnvelope}}"
-        tags:
-          origin: loggregator.metron
-          loggregator: v1
-      - addr: http://127.0.0.1:14824/debug/vars
-        name: average_envelopes
-        unit: bytes/minute
-        template: "{{.Agent.AverageEnvelopeV2}}"
-        tags:
-          origin: loggregator.metron
-          metric_version: "2.0"
-          loggregator: v2
-
-      - addr: http://127.0.0.1:14824/debug/vars
-        name: origin_mappings
-        unit: bytes/minute
-        template: "{{.Agent.OriginMappingsV2}}"
-        tags:
-          origin: loggregator.metron
-          metric_version: "2.0"
 
 - name: forwarder_agent
   include:
@@ -124,6 +41,20 @@ addons:
         ca_cert: "((loggregator_tls_agent.ca))"
         cert: "((loggregator_tls_agent.certificate))"
         key: "((loggregator_tls_agent.private_key))"
+
+- name: prom_scraper
+  include:
+    stemcell:
+      - os: ubuntu-xenial
+  exclude:
+    jobs:
+    - name: smoke_tests
+      release: cf-smoke-tests
+  jobs:
+    - name: prom_scraper
+      release: loggregator-agent
+      properties:
+        metrics_urls: http://localhost:14822/metrics,http://localhost:14823/metrics,http://localhost:14824/metrics
 
 - name: bpm
   include:
@@ -740,7 +671,8 @@ instance_groups:
             name: uaa-healthcheck
             script_path: "/var/vcap/jobs/uaa/bin/health_check"
           name: uaa
-          port: 8080
+          tls_port: 8443
+          server_cert_domain_san: "uaa.service.cf.internal"
           registration_interval: 10s
           tags:
             component: uaa
@@ -1266,25 +1198,6 @@ instance_groups:
               cn: "cloud-controller-ng.service.cf.internal"
   - name: log-cache-scheduler
     release: log-cache
-  - name: log-cache-expvar-forwarder
-    release: log-cache
-    properties:
-      loggregator_agent:
-        tls:
-          ca_cert: "((log_cache_to_loggregator_agent.ca))"
-          cert: "((log_cache_to_loggregator_agent.certificate))"
-          key: "((log_cache_to_loggregator_agent.private_key))"
-      counters: []
-      gauges: []
-      maps:
-      - name: worker-assignments
-        source_id: log-cache-scheduler
-        addr: http://localhost:6064/debug/vars
-        template: "{{.WorkerAssignments | jsonMap}}"
-      - name: worker-health
-        source_id: log-cache-scheduler
-        addr: http://localhost:6064/debug/vars
-        template: "{{.WorkerHealth | jsonMap}}"
   - name: loggr-udp-forwarder
     release: loggregator-agent
     properties:
@@ -1408,6 +1321,8 @@ instance_groups:
   - name: log-cache-gateway
     properties:
       gateway_addr: localhost:8081
+      proxy_cert: "((log_cache_proxy_tls.certificate))"
+      proxy_key: "((log_cache_proxy_tls.private_key))"
     release: log-cache
   - consumes:
       reverse_log_proxy: {from: reverse_log_proxy}
@@ -1418,107 +1333,6 @@ instance_groups:
           ca_cert: ((logs_provider.ca))
           cert: ((logs_provider.certificate))
           key: ((logs_provider.private_key))
-    release: log-cache
-  - name: log-cache-expvar-forwarder
-    properties:
-      loggregator_agent:
-        tls:
-          ca_cert: "((log_cache_to_loggregator_agent.ca))"
-          cert: "((log_cache_to_loggregator_agent.certificate))"
-          key: "((log_cache_to_loggregator_agent.private_key))"
-      maps: []
-      counters:
-      # Log Cache
-      - name: egress
-        source_id: log-cache
-        addr: http://localhost:6060/debug/vars
-        template: "{{.LogCache.Egress}}"
-      - name: ingress
-        source_id: log-cache
-        addr: http://localhost:6060/debug/vars
-        template: "{{.LogCache.Ingress}}"
-      - name: expired
-        source_id: log-cache
-        addr: http://localhost:6060/debug/vars
-        template: "{{.LogCache.Expired}}"
-      - name: dropped
-        source_id: log-cache
-        addr: http://localhost:6060/debug/vars
-        template: "{{.LogCache.Dropped}}"
-      - name: promql-timeout
-        source_id: log-cache
-        addr: http://localhost:6060/debug/vars
-        template: "{{.LogCache.PromQLTimeout}}"
-
-        # Nozzle
-      - name: egress
-        source_id: log-cache-nozzle
-        addr: http://localhost:6061/debug/vars
-        template: "{{.Nozzle.Egress}}"
-      - name: ingress
-        source_id: log-cache-nozzle
-        addr: http://localhost:6061/debug/vars
-        template: "{{.Nozzle.Ingress}}"
-      - name: err
-        source_id: log-cache-nozzle
-        addr: http://localhost:6061/debug/vars
-        template: "{{.Nozzle.Err}}"
-      - name: dropped
-        source_id: log-cache-nozzle
-        addr: http://localhost:6061/debug/vars
-        template: "{{.Nozzle.Dropped}}"
-      gauges:
-      # Log Cache
-      - name: cache-period
-        source_id: log-cache
-        addr: http://localhost:6060/debug/vars
-        template: "{{.LogCache.CachePeriod}}"
-      - name: store-size
-        source_id: log-cache
-        addr: http://localhost:6060/debug/vars
-        template: "{{.LogCache.StoreSize}}"
-      - name: total-system-memory
-        source_id: log-cache
-        addr: http://localhost:6060/debug/vars
-        template: "{{.LogCache.TotalSystemMemory}}"
-      - name: available-system-memory
-        source_id: log-cache
-        addr: http://localhost:6060/debug/vars
-        template: "{{.LogCache.AvailableSystemMemory}}"
-      - name: uptime
-        source_id: log-cache
-        addr: http://localhost:6060/debug/vars
-        template: "{{.LogCache.Uptime}}"
-      - name: promql-instant-query-time
-        source_id: log-cache
-        addr: http://localhost:6060/debug/vars
-        template: "{{.LogCache.PromQLInstantQueryTime}}"
-      - name: promql-range-query-time
-        source_id: log-cache
-        addr: http://localhost:6060/debug/vars
-        template: "{{.LogCache.PromQLRangeQueryTime}}"
-
-        # CF Auth Proxy
-      - name: last-uaa-latency
-        source_id: log-cache-cf-auth-proxy
-        addr: http://localhost:6065/debug/vars
-        template: "{{.CFAuthProxy.LastUAALatency}}"
-      - name: last-capi-v3-apps-latency
-        source_id: log-cache-cf-auth-proxy
-        addr: http://localhost:6065/debug/vars
-        template: "{{.CFAuthProxy.LastCAPIV3AppsLatency}}"
-      - name: last-capi-v2-list-service-instances-latency
-        source_id: log-cache-cf-auth-proxy
-        addr: http://localhost:6065/debug/vars
-        template: "{{.CFAuthProxy.LastCAPIV2ListServiceInstancesLatency}}"
-      - name: last-capi-v4-log-access-latency
-        source_id: log-cache-cf-auth-proxy
-        addr: http://localhost:6065/debug/vars
-        template: "{{.CFAuthProxy.LastCAPIV4LogAccessLatency}}"
-      - name: last-capi-v2-service-instances-latency
-        source_id: log-cache-cf-auth-proxy
-        addr: http://localhost:6065/debug/vars
-        template: "{{.CFAuthProxy.LastCAPIV2ServiceInstancesLatency}}"
     release: log-cache
   - name: route_registrar
     properties:
@@ -1538,6 +1352,7 @@ instance_groups:
       cc:
         ca_cert: ((cc_tls.ca))
         common_name: cloud-controller-ng.service.cf.internal
+      proxy_ca_cert: "((log_cache.ca))"
       proxy_port: 8083
       external_cert: ((logcache_ssl.certificate))
       external_key: ((logcache_ssl.private_key))
@@ -1597,6 +1412,14 @@ instance_groups:
           preloaded_rootfses:
           - cflinuxfs3:/var/vcap/packages/cflinuxfs3/rootfs.tar
       containers:
+        proxy:
+          enabled: true
+          require_and_verify_client_certificates: true
+          trusted_ca_certificates:
+          - ((gorouter_backend_tls.ca))
+          verify_subject_alt_name:
+          - gorouter.service.cf.internal
+          - ssh-proxy.service.cf.internal
         trusted_ca_certificates:
         - ((diego_instance_identity_ca.ca))
         - ((credhub_tls.ca))
@@ -2019,13 +1842,6 @@ variables:
   options:
     is_ca: true
     common_name: loggregatorCA
-- name: expvar_forwarder
-  type: certificate
-  options:
-    ca: loggregator_ca
-    common_name: expvar_forwarder
-    extended_key_usage:
-    - client_auth
 - name: loggregator_tls_statsdinjector
   type: certificate
   options:
@@ -2165,6 +1981,11 @@ variables:
     alternative_names:
     - log-cache.((system_domain))
     - "*.log-cache.((system_domain))"
+- name: log_cache_proxy_tls
+  type: certificate
+  options:
+    ca: log_cache_ca
+    common_name: localhost
 - name: router_ca
   type: certificate
   options:
@@ -2356,97 +2177,97 @@ variables:
 
 releases:
 - name: binary-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/binary-buildpack-release?v=1.0.32
-  version: 1.0.32
-  sha1: 5ab3b7e685ca18a47d0b4a16d0e3b60832b0a393
+  url: https://bosh.io/d/github.com/cloudfoundry/binary-buildpack-release?v=1.0.33
+  version: 1.0.33
+  sha1: 61dc701f2b851f18282cd249aaf153479fdd620c
 - name: bpm
   url: https://bosh.io/d/github.com/cloudfoundry/bpm-release?v=1.1.0
   version: 1.1.0
   sha1: 82e83a5e8ebd6e07f6ca0765e94eb69e03324a19
 - name: capi
-  url: https://bosh.io/d/github.com/cloudfoundry/capi-release?v=1.83.0
-  version: 1.83.0
-  sha1: 339e21175080d77e648e0181b394a6aa2679d271
+  url: https://bosh.io/d/github.com/cloudfoundry/capi-release?v=1.84.0
+  version: 1.84.0
+  sha1: 486f45b43b58663582011bbd4d3265db8c55e602
 - name: cf-networking
   url: https://bosh.io/d/github.com/cloudfoundry/cf-networking-release?v=2.23.0
   version: 2.23.0
   sha1: d1e8982a26287edc239116c2013de098fb9e15a8
 - name: cf-smoke-tests
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=40.0.109
-  version: 40.0.109
-  sha1: a8ee46d7aebea7c5b956e3dd6fef04bdd599a356
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=40.0.113
+  version: 40.0.113
+  sha1: c6ae92c28620b2b9fd6592f9ad091e990c8a6b09
 - name: cf-syslog-drain
   url: https://bosh.io/d/github.com/cloudfoundry/cf-syslog-drain-release?v=10.2
   version: "10.2"
   sha1: fe9fd8946c39554425b534cdb8ce14f3923a31f8
 - name: cflinuxfs3
-  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs3-release?v=0.109.0
-  version: 0.109.0
-  sha1: ec7f36d7377cc6423d19d0a35e4bb585fd654745
+  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs3-release?v=0.118.0
+  version: 0.118.0
+  sha1: 5a957226acf878e53059971510f7755215d9face
 - name: credhub
-  url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=2.4.0
-  version: 2.4.0
-  sha1: 2e08e5de86288f421fb7eff72a095adb78c31ea8
+  url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=2.5.0
+  version: 2.5.0
+  sha1: 89c5ab853980fbfa4525e04851766cb3e0e3f8c5
 - name: diego
-  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=2.34.0
-  version: 2.34.0
-  sha1: 2ef1517f78126e0ef079244a83941a83b6dd0731
+  url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=2.35.0
+  version: 2.35.0
+  sha1: 8b65e5caf06822310b7f2d84263bffaf8a0ca65d
 - name: dotnet-core-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/dotnet-core-buildpack-release?v=2.2.12
   version: 2.2.12
   sha1: ba037a288209a1d088ec717a006164f2baa99a7b
 - name: garden-runc
-  url: https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.19.3
-  version: 1.19.3
-  sha1: 76810f5dd66d8320b344b3eca197c5b669a3a633
+  url: https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.19.4
+  version: 1.19.4
+  sha1: 99c034707bb13a34e2de0591ffa793df0f193693
 - name: go-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/go-buildpack-release?v=1.8.40
-  version: 1.8.40
-  sha1: e2f6b8088a006cd36cd91d243e89a9533154e3b7
+  url: https://bosh.io/d/github.com/cloudfoundry/go-buildpack-release?v=1.8.42
+  version: 1.8.42
+  sha1: c6841bcd189f4593765958f0df8b01e9abb2b046
 - name: java-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/java-buildpack-release?v=4.19
-  version: "4.19"
-  sha1: 7099d188d47517f0cb2725aa71b540605e4058b6
+  url: https://bosh.io/d/github.com/cloudfoundry/java-buildpack-release?v=4.20
+  version: "4.20"
+  sha1: ae615136fde0d83af5f7ee564f2a00656bb9286b
 - name: loggregator
-  url: https://bosh.io/d/github.com/cloudfoundry/loggregator-release?v=105.5
-  version: "105.5"
-  sha1: 62b9210def7c5179f6088b9449f551f57f1a1ee8
+  url: https://bosh.io/d/github.com/cloudfoundry/loggregator-release?v=105.6
+  version: "105.6"
+  sha1: eccfbd65e1d217a2b46afd414163e82553fb3084
 - name: nats
   url: https://bosh.io/d/github.com/cloudfoundry/nats-release?v=27
   version: "27"
   sha1: 9817e8e460b8619a99a0a0fbec8220dc12b2a6f5
 - name: nginx-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/nginx-buildpack-release?v=1.0.13
-  version: 1.0.13
-  sha1: a9f9464fac46617b415285e1f94ad6c36e55b2b8
+  url: https://bosh.io/d/github.com/cloudfoundry/nginx-buildpack-release?v=1.0.15
+  version: 1.0.15
+  sha1: 0d62a3f8c7af747854035d105a50e52c7ddb57f2
 - name: r-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/r-buildpack-release?v=1.0.10
-  version: 1.0.10
-  sha1: e7f40b13293c5f0b68d306729dabb54e1ee3c765
+  url: https://bosh.io/d/github.com/cloudfoundry/r-buildpack-release?v=1.0.11
+  version: 1.0.11
+  sha1: 856e42f81645521288562dfe9da2ec22c01f4d12
 - name: nodejs-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/nodejs-buildpack-release?v=1.6.51
-  version: 1.6.51
-  sha1: a8104e1769cce2ba5a7ed9c775c9e046df21edc6
+  url: https://bosh.io/d/github.com/cloudfoundry/nodejs-buildpack-release?v=1.6.52
+  version: 1.6.52
+  sha1: 33832018e3a33a73f812a45388ae6c3e4621dd37
 - name: php-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/php-buildpack-release?v=4.3.77
-  version: 4.3.77
-  sha1: 06359e8512b40f8bc81300aca08e0a7ba77bc1af
+  url: https://bosh.io/d/github.com/cloudfoundry/php-buildpack-release?v=4.3.78
+  version: 4.3.78
+  sha1: d613d9523ff9fd172f0788bd1ebd79db6ea8ac77
 - name: pxc
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/pxc-release?v=0.17.0
-  version: 0.17.0
-  sha1: 0504d96fcfcae0f0692a563e8beb2b05f71d8249
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/pxc-release?v=0.18.0
+  version: 0.18.0
+  sha1: eb9abbca28e2c04da796300cd7efbb75611ddf66
 - name: python-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/python-buildpack-release?v=1.6.34
-  version: 1.6.34
-  sha1: 941778b5b6fc0b60b5cba95315ae8f18aacdae65
+  url: https://bosh.io/d/github.com/cloudfoundry/python-buildpack-release?v=1.6.36
+  version: 1.6.36
+  sha1: 5cf6e45c5a4dc012b6e65d973b43d4646e2b03c6
 - name: routing
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.188.0
-  version: 0.188.0
-  sha1: d3420851c470790e8980ff0c506f75e3e52c15d9
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.189.0
+  version: 0.189.0
+  sha1: 2f38246d7c8a0a393b0cbb8210d89dfa191701a2
 - name: ruby-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/ruby-buildpack-release?v=1.7.40
-  version: 1.7.40
-  sha1: dd28168efe9efc463de830855cbab704b8f8b99e
+  url: https://bosh.io/d/github.com/cloudfoundry/ruby-buildpack-release?v=1.7.42
+  version: 1.7.42
+  sha1: c2118a686a670f96d92e12dbda545ff70b0cc98b
 - name: silk
   url: https://bosh.io/d/github.com/cloudfoundry/silk-release?v=2.23.0
   version: 2.23.0
@@ -2460,26 +2281,26 @@ releases:
   version: 1.10.0
   sha1: 255cfb2815e692576efd5caa082f5a48f6799ca0
 - name: uaa
-  url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=72.0
-  version: "72.0"
-  sha1: 7130e5ac640ed1e1f52c09e76995e4d0680f3b45
+  url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=73.7.0
+  version: 73.7.0
+  sha1: 86d544dc3e1eaa46d5a44530c609723888a51ffa
 - name: loggregator-agent
-  url: https://bosh.io/d/github.com/cloudfoundry/loggregator-agent-release?v=3.9
-  version: "3.9"
-  sha1: bf723af956a61c7b51db0ba535c871bad24dd289
+  url: https://bosh.io/d/github.com/cloudfoundry/loggregator-agent-release?v=3.18
+  version: "3.18"
+  sha1: 1167870b3078e23f59905758e3172a5566f5dab3
 - name: log-cache
-  url: https://bosh.io/d/github.com/cloudfoundry/log-cache-release?v=2.2.2
-  version: 2.2.2
-  sha1: 634dd3e134d0dac00f3f86beb00c06653579af4b
+  url: https://bosh.io/d/github.com/cloudfoundry/log-cache-release?v=2.3.1
+  version: 2.3.1
+  sha1: 467c7f48e6a31c87d3ce36f854e6416b5a9f8a86
 - name: bosh-dns-aliases
   url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-aliases-release?v=0.0.3
   version: 0.0.3
   sha1: b0d0a0350ed87f1ded58b2ebb469acea0e026ccc
 - name: cf-cli
-  url: https://bosh.io/d/github.com/bosh-packages/cf-cli-release?v=1.16.0
-  version: 1.16.0
-  sha1: fa5d89b88a07822665d82e00f1629b98935b17e8
+  url: https://bosh.io/d/github.com/bosh-packages/cf-cli-release?v=1.17.0
+  version: 1.17.0
+  sha1: f04e1e5a7644c73b8a216a7385813ae55d544d6f
 stemcells:
 - alias: default
   os: ubuntu-xenial
-  version: "315.64"
+  version: "456.1"
