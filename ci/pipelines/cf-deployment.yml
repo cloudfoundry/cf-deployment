@@ -129,6 +129,7 @@ resource_types:
 resources:
 - name: fresh-pool
   type: pool
+  icon: pool
   source:
     uri: git@github.com:cloudfoundry/relint-ci-pools
     branch: master
@@ -137,6 +138,7 @@ resources:
 
 - name: upgrade-pool
   type: pool
+  icon: pool
   source:
     uri: git@github.com:cloudfoundry/relint-ci-pools
     branch: master
@@ -145,6 +147,7 @@ resources:
 
 - name: experimental-pool
   type: pool
+  icon: pool
   source:
     uri: git@github.com:cloudfoundry/relint-ci-pools
     branch: master
@@ -153,6 +156,7 @@ resources:
 
 - name: lite-pool
   type: pool
+  icon: pool
   source:
     uri: git@github.com:cloudfoundry/relint-ci-pools
     branch: master
@@ -161,6 +165,7 @@ resources:
 
 - name: bbr-pool
   type: pool
+  icon: pool
   source:
     uri: git@github.com:cloudfoundry/relint-ci-pools
     branch: master
@@ -169,6 +174,7 @@ resources:
 
 - name: stable-pool
   type: pool
+  icon: pool
   source:
     uri: git@github.com:cloudfoundry/relint-ci-pools
     branch: master
@@ -177,6 +183,7 @@ resources:
 
 - name: relint-envs
   type: git
+  icon: github-box
   source:
     branch: master
     uri: git@github.com:cloudfoundry/relint-envs.git
@@ -184,29 +191,34 @@ resources:
 
 - name: half-hourly
   type: time
+  icon: clock-outline
   source:
     interval: 30m
 
 - name: cf-deployment-concourse-tasks
   type: git
+  icon: github-box
   source:
     branch: master
     uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
 
 - name: runtime-ci
   type: git
+  icon: github-box
   source:
     branch: master
     uri: https://github.com/cloudfoundry/runtime-ci.git
 
 - name: bosh-bootloader
   type: git
+  icon: github-box
   source:
     branch: master
     uri: https://github.com/cloudfoundry/bosh-bootloader
 
 - name: cf-deployment-develop
   type: git
+  icon: github-box
   source:
     branch: develop
     uri: git@github.com:cloudfoundry/cf-deployment.git
@@ -221,6 +233,7 @@ resources:
 
 - name: cf-deployment-release-candidate
   type: git
+  icon: github-box
   source:
     branch: release-candidate
     uri: git@github.com:cloudfoundry/cf-deployment.git
@@ -235,6 +248,7 @@ resources:
 
 - name: cf-deployment-master
   type: git
+  icon: github-box
   source:
     branch: master
     uri: git@github.com:cloudfoundry/cf-deployment.git
@@ -249,6 +263,7 @@ resources:
 
 - name: cf-deployment-all-branches
   type: git
+  icon: github-box
   source:
     branch: develop
     uri: https://github.com/cloudfoundry/cf-deployment.git
@@ -262,6 +277,7 @@ resources:
 
 - name: cf-acceptance-tests-rc
   type: git
+  icon: github-box
   source:
     branch: release-candidate
     uri: git@github.com:cloudfoundry/cf-acceptance-tests.git
@@ -269,12 +285,14 @@ resources:
 
 - name: cf-smoke-tests
   type: git
+  icon: github-box
   source:
     branch: master
     uri: https://github.com/cloudfoundry/cf-smoke-tests
 
 - name: bosh-deployment
   type: git
+  icon: github-box
   source:
     branch: master
     uri: https://github.com/cloudfoundry/bosh-deployment.git
@@ -298,12 +316,14 @@ resources:
 
 - name: drats-master
   type: git
+  icon: github-box
   source:
     branch: master
     uri: https://github.com/cloudfoundry-incubator/disaster-recovery-acceptance-tests.git
 
 - name: bbr-github-release
   type: github-release
+  icon: github-face
   source:
     owner: cloudfoundry-incubator
     repository: bosh-backup-and-restore

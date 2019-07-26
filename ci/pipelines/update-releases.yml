@@ -90,6 +90,7 @@ resource_types:
 resources:
 - name: cf-deployment-all-branches
   type: git
+  icon: github-box
   source:
     uri: git@github.com:cloudfoundry/cf-deployment.git
     private_key: ((cf_deployment_readwrite_deploy_key.private_key))
@@ -102,44 +103,52 @@ resources:
     - texts/**
 - name: cf-deployment-develop
   type: git
+  icon: github-box
   source:
     branch: develop
     uri: git@github.com:cloudfoundry/cf-deployment.git
     private_key: ((cf_deployment_readwrite_deploy_key.private_key))
 - name: cf-deployment-release-candidate
   type: git
+  icon: github-box
   source:
     branch: release-candidate
     uri: git@github.com:cloudfoundry/cf-deployment.git
     private_key: ((cf_deployment_readwrite_deploy_key.private_key))
 - name: cf-deployment-concourse-tasks
   type: git
+  icon: github-box
   source:
     branch: master
     uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
 - name: relint-envs
   type: git
+  icon: github-box
   source:
     branch: master
     uri: git@github.com:cloudfoundry/relint-envs.git
     private_key: ((hagrid_env_readwrite_deploy_key.private_key))
 - name: relint-team
   type: git
+  icon: github-box
   source:
     branch: master
     uri: git@github.com:cloudfoundry/relint-team.git
     private_key: ((runtime_ci_private_read_deploy_key.private_key))
 - name: runtime-ci
   type: git
+  icon: github-box
   source:
     branch: master
     uri: https://github.com/cloudfoundry/runtime-ci.git
 - name: stemcell
   type: bosh-io-stemcell
+  icon: dna
   source:
     name: bosh-google-kvm-ubuntu-xenial-go_agent
 - name: windows2016fs-offline-release
   type: github-release
+  icon: github-face
   source:
     owner: cloudfoundry-incubator
     repository: windows2016fs-release
@@ -852,26 +861,32 @@ resources:
     regexp: envoy-nginx/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: windows2012R2-stemcell
   type: bosh-io-stemcell
+  icon: dna
   source:
     name: bosh-google-kvm-windows2012R2-go_agent
 - name: windows2016-stemcell
   type: bosh-io-stemcell
+  icon: dna
   source:
     name: bosh-google-kvm-windows2016-go_agent
 - name: windows1803-stemcell
   type: bosh-io-stemcell
+  icon: dna
   source:
     name: bosh-google-kvm-windows1803-go_agent
 - name: windows2019-stemcell
   type: bosh-io-stemcell
+  icon: dna
   source:
     name: bosh-google-kvm-windows2019-go_agent
 - name: slack-alert
   type: slack-notification
+  icon: slack
   source:
     url: ((relint_slack_incoming_webhook))
 - name: daily
   type: time
+  icon: clock-outline
   source:
     start: 3:00 -0700
     stop: 3:30 -0700

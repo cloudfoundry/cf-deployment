@@ -15,6 +15,7 @@ resource_types:
 resources:
 - name: cf-deployment-master
   type: git
+  icon: github-box
   source:
     branch: master-stemcell-test
     uri: git@github.com:cloudfoundry/cf-deployment.git
@@ -22,12 +23,14 @@ resources:
 
 - name: cf-deployment-concourse-tasks
   type: git
+  icon: github-box
   source:
     branch: master
     uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
 
 - name: relint-envs
   type: git
+  icon: github-box
   source:
     branch: master
     uri: git@github.com:cloudfoundry/relint-envs.git
@@ -35,12 +38,14 @@ resources:
 
 - name: runtime-ci
   type: git
+  icon: github-box
   source:
     branch: wip-update-manifest-releases-refactor-166455124
     uri: https://github.com/cloudfoundry/runtime-ci.git
 
 - name: stemcell
   type: bosh-io-stemcell
+  icon: dna
   source:
     name: bosh-google-kvm-ubuntu-xenial-go_agent
 
