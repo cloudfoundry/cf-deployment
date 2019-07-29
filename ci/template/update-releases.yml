@@ -532,9 +532,6 @@ jobs:
   public: true
   serial_groups:
   - stemcell
-  #@ for r in data.values.baseReleases:
-  - #@ "update-" + r.name
-  #@ end
   plan:
   - in_parallel:
     - get: runtime-ci

@@ -11293,37 +11293,6 @@ jobs:
   public: true
   serial_groups:
   - stemcell
-  - update-binary-buildpack
-  - update-bosh-dns-aliases
-  - update-bpm
-  - update-capi
-  - update-cf-networking
-  - update-cf-smoke-tests
-  - update-cf-syslog-drain
-  - update-cflinuxfs3
-  - update-diego
-  - update-dotnet-core-buildpack
-  - update-garden-runc
-  - update-go-buildpack
-  - update-java-buildpack
-  - update-log-cache
-  - update-loggregator
-  - update-loggregator-agent
-  - update-nats
-  - update-nginx-buildpack
-  - update-nodejs-buildpack
-  - update-php-buildpack
-  - update-python-buildpack
-  - update-pxc
-  - update-r-buildpack
-  - update-routing
-  - update-ruby-buildpack
-  - update-silk
-  - update-staticfile-buildpack
-  - update-statsd-injector
-  - update-uaa
-  - update-credhub
-  - update-cf-cli
   plan:
   - in_parallel:
     - get: runtime-ci
