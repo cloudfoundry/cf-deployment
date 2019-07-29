@@ -70,6 +70,12 @@ var experimentalTests = map[string]helpers.OpsFileTestParams{
 	},
 	"rootless-containers.yml": {},
 	"set-cpu-weight.yml":      {},
+	"set-cpu-weight-windows1803.yml": {
+		Ops: []string{"../windows1803-cell.yml"},
+	},
+	"set-cpu-weight-windows2019.yml": {
+		Ops: []string{"../windows2019-cell.yml"},
+	},
 	"use-compiled-releases-windows.yml": {
 		Ops: []string{"../use-compiled-releases.yml", "../windows2012R2-cell.yml", "use-compiled-releases-windows.yml"},
 	},
