@@ -536,8 +536,6 @@ instance_groups:
   - name: uaa
     release: uaa
     properties:
-      bpm:
-        enabled: true
       encryption:
         active_key_label: default_key
         encryption_keys:
@@ -661,7 +659,6 @@ instance_groups:
         - name: uaa
           password: "((uaa_database_password))"
           tag: admin
-        tls_enabled: true
   - name: route_registrar
     release: routing
     properties:
