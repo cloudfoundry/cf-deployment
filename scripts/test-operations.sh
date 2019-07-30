@@ -44,6 +44,7 @@ test_standard_ops() {
       check_interpolation "stop-skipping-tls-validation.yml"
 
       check_interpolation "name: use-alicloud-oss-blobstore.yml" "use-external-blobstore.yml -o use-alicloud-oss-blobstore.yml -l example-vars-files/vars-use-alicloud-oss-blobstore.yml"
+      check_interpolation "name: use-alicloud-oss-blobstore-to-multi-bucket.yml" "use-external-blobstore.yml -o use-alicloud-oss-blobstore-to-multi-bucket.yml -l example-vars-files/vars-use-alicloud-oss-blobstore-to-multi-bucket.yml"
       check_interpolation "name: use-azure-storage-blobstore.yml" "use-external-blobstore.yml -o use-azure-storage-blobstore.yml -l example-vars-files/vars-use-azure-storage-blobstore.yml"
       check_interpolation "use-blobstore-cdn.yml" "-l example-vars-files/vars-use-blobstore-cdn.yml"
       check_interpolation "use-compiled-releases.yml"

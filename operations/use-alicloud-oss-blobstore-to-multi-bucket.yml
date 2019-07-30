@@ -1,0 +1,71 @@
+---
+# Note: Capi release version 1.61.0 or more is required to use Alibaba Cloud OSS as CF blobstore.
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks/fog_connection
+  error: "Please apply 'use-external-blobstore.yml' before applying 'use-alicloud-oss-blobstore-to-multi-bucket.yml'."
+  value: &buildpacks-blobstore-properties
+    provider: aliyun
+    aliyun_accesskey_id: ((blobstore_access_key_id))
+    aliyun_accesskey_secret: ((blobstore_secret_access_key))
+    aliyun_region_id: ((blobstore_region))
+    aliyun_oss_bucket: ((buildpack_directory_key))
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/droplets/fog_connection
+  value: &droplets-blobstore-properties
+    provider: aliyun
+    aliyun_accesskey_id: ((blobstore_access_key_id))
+    aliyun_accesskey_secret: ((blobstore_secret_access_key))
+    aliyun_region_id: ((blobstore_region))
+    aliyun_oss_bucket: ((droplet_directory_key))
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/packages/fog_connection
+  value: &packages-blobstore-properties
+    provider: aliyun
+    aliyun_accesskey_id: ((blobstore_access_key_id))
+    aliyun_accesskey_secret: ((blobstore_secret_access_key))
+    aliyun_region_id: ((blobstore_region))
+    aliyun_oss_bucket: ((app_package_directory_key))
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/resource_pool/fog_connection
+  value: &resources-blobstore-properties
+    provider: aliyun
+    aliyun_accesskey_id: ((blobstore_access_key_id))
+    aliyun_accesskey_secret: ((blobstore_secret_access_key))
+    aliyun_region_id: ((blobstore_region))
+    aliyun_oss_bucket: ((resource_directory_key))
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/buildpacks/fog_connection
+  value: *buildpacks-blobstore-properties
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/droplets/fog_connection
+  value: *droplets-blobstore-properties
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/packages/fog_connection
+  value: *packages-blobstore-properties
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/resource_pool/fog_connection
+  value: *resources-blobstore-properties
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/buildpacks/fog_connection
+  value: *buildpacks-blobstore-properties
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/droplets/fog_connection
+  value: *droplets-blobstore-properties
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/packages/fog_connection
+  value: *packages-blobstore-properties
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/resource_pool/fog_connection
+  value: *resources-blobstore-properties
