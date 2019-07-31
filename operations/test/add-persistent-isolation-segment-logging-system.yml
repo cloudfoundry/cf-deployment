@@ -68,8 +68,6 @@
           internal_addr: https://uaa.service.cf.internal:8443
       release: log-cache
     - name: prom_scraper
-      properties:
-        metrics_urls: "http://localhost:6060/metrics,http://localhost:6061/metrics,http://localhost:6065/metrics"
       release: loggregator-agent
     - name: log-cache-gateway
       release: log-cache
