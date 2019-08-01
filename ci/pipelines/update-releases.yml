@@ -66,7 +66,9 @@ groups:
   - update-windows2016-stemcell
   - update-windows1803-stemcell
   - update-windows2019-stemcell
+  - update-windows1803fs-offline-release
   - update-windows2016fs-offline-release
+  - update-windows2019fs-offline-release
 - name: debug
   jobs: []
 - name: cleanup
@@ -146,12 +148,26 @@ resources:
   icon: dna
   source:
     name: bosh-google-kvm-ubuntu-xenial-go_agent
+- name: windows1803fs-offline-release
+  type: github-release
+  icon: github-face
+  source:
+    owner: cloudfoundry
+    repository: windows1803fs-release
+    access_token: ((release_integration_download_bot_access_token))
 - name: windows2016fs-offline-release
   type: github-release
   icon: github-face
   source:
-    owner: cloudfoundry-incubator
+    owner: cloudfoundry
     repository: windows2016fs-release
+    access_token: ((release_integration_download_bot_access_token))
+- name: windows2019fs-offline-release
+  type: github-release
+  icon: github-face
+  source:
+    owner: cloudfoundry
+    repository: windows2019fs-release
     access_token: ((release_integration_download_bot_access_token))
 - name: binary-buildpack-release
   type: bosh-io-release
@@ -11997,6 +12013,35 @@ jobs:
     params:
       rebase: true
       repository: updated-cf-deployment
+- name: update-windows1803fs-offline-release
+  serial: true
+  public: true
+  plan:
+  - in_parallel:
+    - get: runtime-ci
+    - get: relint-envs
+    - get: cf-deployment-develop
+    - get: cf-deployment-concourse-tasks
+      params:
+        tarball: false
+    - get: windows1803fs-offline-release
+      trigger: true
+      params:
+        tarball: false
+    - get: windows2016-stemcell
+  - task: update-windows-releases
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      original-ops-file: cf-deployment-develop
+      release: windows1803fs-offline-release
+    params:
+      RELEASE_NAME: windows1803fs
+      ORIGINAL_OPS_FILE_PATH: operations/use-offline-windows1803fs.yml
+      UPDATED_OPS_FILE_PATH: operations/use-offline-windows1803fs.yml
+  - put: cf-deployment-develop
+    params:
+      rebase: true
+      repository: updated-ops-file
 - name: update-windows2016fs-offline-release
   serial: true
   public: true
@@ -12022,6 +12067,35 @@ jobs:
       RELEASE_NAME: windows2016fs
       ORIGINAL_OPS_FILE_PATH: operations/use-offline-windows2016fs.yml
       UPDATED_OPS_FILE_PATH: operations/use-offline-windows2016fs.yml
+  - put: cf-deployment-develop
+    params:
+      rebase: true
+      repository: updated-ops-file
+- name: update-windows2019fs-offline-release
+  serial: true
+  public: true
+  plan:
+  - in_parallel:
+    - get: runtime-ci
+    - get: relint-envs
+    - get: cf-deployment-develop
+    - get: cf-deployment-concourse-tasks
+      params:
+        tarball: false
+    - get: windows2019fs-offline-release
+      trigger: true
+      params:
+        tarball: false
+    - get: windows2016-stemcell
+  - task: update-windows-releases
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      original-ops-file: cf-deployment-develop
+      release: windows2019fs-offline-release
+    params:
+      RELEASE_NAME: windows2019fs
+      ORIGINAL_OPS_FILE_PATH: operations/use-offline-windows2019fs.yml
+      UPDATED_OPS_FILE_PATH: operations/use-offline-windows2019fs.yml
   - put: cf-deployment-develop
     params:
       rebase: true
