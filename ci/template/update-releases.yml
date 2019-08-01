@@ -29,7 +29,7 @@ groups:
   #@ end
 - name: update-windows-stemcells-and-releases
   jobs:
-  #@ for s in data.values.windowsVersSupported:
+  #@ for s in data.values.windowsStemcells:
   - #@ "update-" + s.name + "-stemcell"
   #@ end
   - update-windows-2016-offline-releases
@@ -182,7 +182,7 @@ resources:
     regexp: #@ r.name + "/cf-(\d+)-(\d+)-(\d+)\.tgz"
 #@ end
 
-#@ for s in data.values.windowsVersSupported:
+#@ for s in data.values.windowsStemcells:
 - name: #@ s.name + "-stemcell"
   type: bosh-io-stemcell
   icon: dna
@@ -503,7 +503,7 @@ jobs:
 #@ end
 #@ end
 
-#@ for s in data.values.windowsVersSupported:
+#@ for s in data.values.windowsStemcells:
 - name: #@ "update-" + s.name + "-stemcell"
   public: true
   plan:
