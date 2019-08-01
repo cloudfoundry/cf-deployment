@@ -32,7 +32,9 @@ groups:
   #@ for s in data.values.windowsStemcells:
   - #@ "update-" + s.name + "-stemcell"
   #@ end
-  - update-windows-2016-offline-releases
+  #@ for r in data.values.windowsOfflineReleases:
+  - #@ "update-" + r.name + "-offline-release"
+  #@ end
 - name: debug
   jobs:
   #@ for r in data.values.baseReleases:
@@ -135,13 +137,15 @@ resources:
   source:
     name: bosh-google-kvm-ubuntu-xenial-go_agent
 
-- name: windows2016fs-offline-release
+#@ for r in data.values.windowsOfflineReleases:
+- name: #@ r.name + "-offline-release"
   type: github-release
   icon: github-face
   source:
     owner: cloudfoundry-incubator
-    repository: windows2016fs-release
+    repository: #@ r.name + "-release"
     access_token: ((release_integration_download_bot_access_token))
+#@ end
 
 #@ for r in data.values.baseReleases:
 - name: #@ r.name + "-release"
@@ -615,7 +619,8 @@ jobs:
       rebase: true
       repository: updated-cf-deployment
 
-- name: update-windows-2016-offline-releases
+#@ for r in data.values.windowsOfflineReleases:
+- name: #@ "update-" + r.name + "-offline-release"
   serial: true
   public: true
   plan:
@@ -626,7 +631,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
       params:
         tarball: false
-    - get: windows2016fs-offline-release
+    - get: #@ r.name + "-offline-release"
       trigger: true
       params:
         tarball: false
@@ -635,15 +640,16 @@ jobs:
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       original-ops-file: cf-deployment-develop
-      release: windows2016fs-offline-release
+      release: #@ r.name + "-offline-release"
     params:
-      RELEASE_NAME: windows2016fs
-      ORIGINAL_OPS_FILE_PATH: operations/use-offline-windows2016fs.yml
-      UPDATED_OPS_FILE_PATH: operations/use-offline-windows2016fs.yml
+      RELEASE_NAME: #@ r.name
+      ORIGINAL_OPS_FILE_PATH: #@ "{}/{}".format(r.opsFileDir, r.opsFile)
+      UPDATED_OPS_FILE_PATH: #@ "{}/{}".format(r.opsFileDir, r.opsFile)
   - put: cf-deployment-develop
     params:
       rebase: true
       repository: updated-ops-file
+#@ end
 
 - name: delete-stale-branches
   public: true

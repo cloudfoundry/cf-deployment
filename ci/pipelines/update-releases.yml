@@ -66,7 +66,7 @@ groups:
   - update-windows2016-stemcell
   - update-windows1803-stemcell
   - update-windows2019-stemcell
-  - update-windows-2016-offline-releases
+  - update-windows2016fs-offline-release
 - name: debug
   jobs: []
 - name: cleanup
@@ -11997,7 +11997,7 @@ jobs:
     params:
       rebase: true
       repository: updated-cf-deployment
-- name: update-windows-2016-offline-releases
+- name: update-windows2016fs-offline-release
   serial: true
   public: true
   plan:
