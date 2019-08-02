@@ -931,6 +931,7 @@ jobs:
         BBL_STATE_DIR: environments/test/hermione/bbl-state
         SYSTEM_DOMAIN: hermione.cf-app.com
         OPS_FILES: |
+          operations/experimental/fast-deploy-with-downtime-and-danger.yml
           operations/aws.yml
           operations/use-compiled-releases.yml
           operations/use-external-blobstore.yml
