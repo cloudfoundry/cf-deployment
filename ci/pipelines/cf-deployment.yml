@@ -18,9 +18,12 @@ groups:
   - upgrade-cats-windows2016
   - upgrade-release-pool
   - experimental-acquire-pool
+  - experimental-deploy-latest-release
+  - experimental-smoke-tests-latest-release
   - experimental-deploy
   - experimental-smoke-tests
   - experimental-cats
+  - experimental-delete-deployment
   - experimental-release-pool
   - lite-acquire-pool
   - lite-deploy
@@ -69,7 +72,10 @@ groups:
   - lint-cf-deployment-manifest
   - experimental-acquire-pool
   - experimental-cats
+  - experimental-deploy-latest-release
+  - experimental-smoke-tests-latest-release
   - experimental-deploy
+  - experimental-delete-deployment
   - experimental-release-pool
   - experimental-release-pool-manual
   - experimental-smoke-tests
@@ -890,7 +896,7 @@ jobs:
       put: experimental-pool
       params: {release: experimental-pool}
 
-- name: experimental-deploy
+- name: experimental-deploy-latest-release
   serial_groups: [ hermione-wats, hermione-cats, hermione-smokes ]
   public: true
   plan:
@@ -901,8 +907,84 @@ jobs:
     - in_parallel:
       - get: runtime-ci
       - get: cf-deployment-concourse-tasks
+      - get: cf-deployment-master
       - get: cf-deployment-develop
         passed: [ experimental-acquire-pool ]
+      - get: relint-envs
+    - task: collect-ops-files
+      file: cf-deployment-concourse-tasks/collect-ops-files/task.yml
+      input_mapping:
+        base-ops-files: cf-deployment-master
+        new-ops-files: relint-envs
+      params:
+        BASE_OPS_FILE_DIR: operations
+        NEW_OPS_FILES: |
+          environments/test/hermione/increase-doppler-vm-type-from-minimal-to-small.yml
+    - task: bosh-deploy-cf
+      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: cf-deployment-master
+        ops-files: collected-ops-files
+        vars-files: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/hermione/bbl-state
+        SYSTEM_DOMAIN: hermione.cf-app.com
+        OPS_FILES: |
+          operations/aws.yml
+          operations/use-compiled-releases.yml
+          operations/use-external-blobstore.yml
+          operations/use-s3-blobstore.yml
+          operations/bits-service/use-bits-service.yml
+          operations/bits-service/configure-bits-service-s3.yml
+          operations/scale-database-cluster.yml
+          operations/stop-skipping-tls-validation.yml
+          operations/use-operator-provided-router-tls-certificates.yml
+          operations/experimental/enable-iptables-logger.yml
+          operations/experimental/set-cpu-weight.yml
+          operations/experimental/deploy-forwarder-agent.yml
+          operations/experimental/use-logcache-for-cloud-controller-app-stats.yml
+          operations/experimental/add-syslog-agent.yml
+          operations/increase-doppler-vm-type-from-minimal-to-small.yml
+        VARS_FILES: |
+          environments/test/hermione/bbl-state/vars/director-vars-file.yml
+          environments/test/hermione/vars-use-operator-provided-router-tls-certificates.yml
+        REGENERATE_CREDENTIALS: true
+
+- name: experimental-smoke-tests-latest-release
+  public: true
+  plan:
+  - do:
+    - get: experimental-pool
+      passed: [ experimental-deploy-latest-release ]
+      trigger: true
+    - in_parallel:
+      - get: relint-envs
+      - get: cf-deployment-develop
+        passed: [ experimental-deploy-latest-release ]
+      - get: cf-deployment-concourse-tasks
+    timeout: 1h
+  - task: bosh-run-errand-smoke-tests
+    file: cf-deployment-concourse-tasks/run-errand/task.yml
+    params:
+      BBL_STATE_DIR: environments/test/hermione/bbl-state
+      ERRAND_NAME: smoke-tests
+    input_mapping:
+      bbl-state: relint-envs
+
+- name: experimental-deploy
+  serial_groups: [ hermione-wats, hermione-cats, hermione-smokes ]
+  public: true
+  plan:
+  - do:
+    - get: experimental-pool
+      trigger: true
+      passed: [ experimental-smoke-tests-latest-release ]
+    - in_parallel:
+      - get: runtime-ci
+      - get: cf-deployment-concourse-tasks
+      - get: cf-deployment-develop
+        passed: [ experimental-smoke-tests-latest-release ]
       - get: relint-envs
     - task: add-tcp-domain
       file: runtime-ci/tasks/add-tcp-domain/task.yml
@@ -960,12 +1042,6 @@ jobs:
         STREAMING_LOGS_THRESHOLD: 3
         APP_SYSLOG_AVAILABILITY_THRESHOLD: 5
         FAIL_ON_DOWNTIME: true
-    - task: run-bosh-cleanup
-      file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-      params:
-        BBL_STATE_DIR: environments/test/hermione/bbl-state
     - task: update-integration-configs
       file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
       params:
@@ -1068,11 +1144,37 @@ jobs:
         REPORTER_CONFIG_FILE_PATH: environments/test/hermione/reporter_config.json
         RELINT_VERBOSE_AUTH: "true"
 
+- name: experimental-delete-deployment
+  serial: true
+  public: true
+  plan:
+  - get: experimental-pool
+    trigger: true
+    passed:
+    - experimental-cats
+    - experimental-smoke-tests
+  - in_parallel:
+    - get: cf-deployment-concourse-tasks
+    - get: relint-envs
+  - task: delete-deployment-cf
+    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/hermione/bbl-state
+      IGNORE_ERRORS: true
+  - task: run-bosh-cleanup
+    file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/hermione/bbl-state
+
 - name: experimental-release-pool
   public: true
   plan:
   - get: experimental-pool
-    passed: [ experimental-cats, experimental-smoke-tests ]
+    passed: [ experimental-delete-deployment ]
     trigger: true
   - put: experimental-pool
     params: {release: experimental-pool}
