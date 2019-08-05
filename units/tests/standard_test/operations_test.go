@@ -50,6 +50,10 @@ var standardTests = map[string]helpers.OpsFileTestParams{
 		Ops:       []string{"use-external-blobstore.yml", "use-alicloud-oss-blobstore.yml"},
 		VarsFiles: []string{"example-vars-files/vars-use-alicloud-oss-blobstore.yml"},
 	},
+	"use-alicloud-oss-blobstore-to-multi-bucket.yml": {
+		Ops:       []string{"use-external-blobstore.yml", "use-alicloud-oss-blobstore-to-multi-bucket.yml"},
+		VarsFiles: []string{"example-vars-files/vars-use-alicloud-oss-blobstore-to-multi-bucket.yml"},
+	},
 	"use-azure-storage-blobstore.yml": {
 		Ops:       []string{"use-external-blobstore.yml", "use-azure-storage-blobstore.yml"},
 		VarsFiles: []string{"example-vars-files/vars-use-azure-storage-blobstore.yml"},

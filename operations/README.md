@@ -26,6 +26,7 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 | [`use-swift-blobstore.yml`](use-swift-blobstore.yml) | Replaces local WebDAV blobstore with OpenStack swift blobstore. Used for deploying Cloud Foundry on OpenStack with BOSH | Requires `use-external-blobstore.yml`. Introduces [new variables](example-vars-files/vars-use-swift-blobstore.yml) for OpenStack credentials and directory names. If you plan using the [Swift ops file](use-swift-blobstore.yml) to enable Swift as blobstore for the Cloud Controller, you should also run the [Swift extension](https://github.com/cloudfoundry-incubator/cf-openstack-validator/tree/master/extensions/object_storage). | **NO** |
 | **Alibaba Cloud** | | **\* Not validated or supported by the Release Integration team** | |
 | [`use-alicloud-oss-blobstore.yml`](use-alicloud-oss-blobstore.yml) | Configures external blobstore to use Alibaba Cloud OSS blobstore. | Requires `use-external-blobstore.yml`. Introduces [new variables](example-vars-files/vars-use-alicloud-oss-blobstore.yml) for oss credentials and bucket names.| **NO** |
+| [`use-alicloud-oss-blobstore-to-multi-bucket.yml`](use-alicloud-oss-blobstore-to-multi-bucket.yml) | Configures external blobstore to use Alibaba Cloud OSS blobstore. Each blobstore is in one alone OSS bucket. | Requires `use-external-blobstore.yml`. Introduces [new variables](example-vars-files/vars-use-alicloud-oss-blobstore.yml) for oss credentials and bucket names.| **NO** |
 
 
 ## Feature-based Ops-files
