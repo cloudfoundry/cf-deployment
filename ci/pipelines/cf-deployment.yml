@@ -911,6 +911,13 @@ jobs:
       - get: cf-deployment-develop
         passed: [ experimental-acquire-pool ]
       - get: relint-envs
+    - task: guarantee-no-existing-cf-deployment
+      file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/hermione/bbl-state
+        IGNORE_ERRORS: true
     - task: collect-ops-files
       file: cf-deployment-concourse-tasks/collect-ops-files/task.yml
       input_mapping:
