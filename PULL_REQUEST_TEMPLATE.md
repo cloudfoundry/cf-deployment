@@ -19,7 +19,7 @@
 - [ ] YES
 - [ ] NO
 
-### Does this PR introduce a breaking change? Please see definition of breaking change below
+### Does this PR introduce a breaking change? Please see few examples of breaking change below.
 
 - [ ] YES - please specify
 - [ ] NO
@@ -27,9 +27,10 @@
 > **Examples of breaking changes:**
 > - **causes app or operator downtime**
 > - modifies, deletes or moves the name of a job or instance group
-> - changes the name of a credentials
+> - modifies the name or deletes a property of a job or instance group 
+> - changes the name of credentials
 > - requires out-of-band manual intervention on the part of the operator
-> - removes Ops-file (e.g. from `./operations/` or `./operations/experimental` folders)
+> - removes Ops-files from `./operations/` or `./operations/experimental` folders
 
 > _If you're promoting an experimental Ops-file (or removing one), Please follow the [Ops-file workflows](https://github.com/cloudfoundry/cf-deployment/blob/master/ops-file-promotion-workflow.md)._
 
@@ -59,4 +60,4 @@
 
 ### Tag your pair, your PM, and/or team!
 
-_It's helpful to tag a few other folks on your team or your team alias in case we need to follow up later._
+> _It's helpful to tag a few other folks on your team or your team alias in case we need to follow up later._
