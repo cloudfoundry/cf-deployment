@@ -23,6 +23,8 @@
     - name: bbr-routingdb
       release: routing
     - name: bbr-uaadb
+      properties:
+        release_level_backup: true
       release: uaa
     - name: bbr-credhubdb
       properties:
@@ -36,7 +38,4 @@
     vm_type: minimal
 - type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/release_level_backup?
-  value: true
-- type: replace
-  path: /instance_groups/name=uaa/jobs/name=uaa/properties/release_level_backup?
   value: true
