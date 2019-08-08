@@ -1014,6 +1014,12 @@ jobs:
       STREAMING_LOGS_THRESHOLD: 3
       APP_SYSLOG_AVAILABILITY_THRESHOLD: 5
       FAIL_ON_DOWNTIME: true
+  - task: run-bosh-cleanup
+    file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/hermione/bbl-state
   - task: update-integration-configs
     file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     params:
@@ -1135,13 +1141,6 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/hermione/bbl-state
       IGNORE_ERRORS: true
-  - task: run-bosh-cleanup
-    file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/hermione/bbl-state
-      CLEAN_ALL: false
   - put: experimental-pool
     params: {release: experimental-pool}
 
