@@ -22,7 +22,6 @@ groups:
   - experimental-smoke-tests
   - experimental-cats
   - experimental-delete-deployment
-  - experimental-release-pool
   - lite-acquire-pool
   - lite-deploy
   - lite-cats
@@ -72,7 +71,6 @@ groups:
   - experimental-cats
   - experimental-deploy
   - experimental-delete-deployment
-  - experimental-release-pool
   - experimental-release-pool-manual
   - experimental-smoke-tests
   - experimental-ops-files
@@ -1144,13 +1142,6 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/hermione/bbl-state
       CLEAN_ALL: false
-
-- name: experimental-release-pool
-  public: true
-  plan:
-  - get: experimental-pool
-    passed: [ experimental-delete-deployment ]
-    trigger: true
   - put: experimental-pool
     params: {release: experimental-pool}
 
