@@ -979,13 +979,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-binary-buildpack-release-candidate
           ops-files: updated-cf-deployment-binary-buildpack-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -1196,13 +1203,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-bosh-dns-aliases-release-candidate
           ops-files: updated-cf-deployment-bosh-dns-aliases-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -1413,13 +1427,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-bpm-release-candidate
           ops-files: updated-cf-deployment-bpm-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -1630,13 +1651,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-capi-release-candidate
           ops-files: updated-cf-deployment-capi-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -1847,13 +1875,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-cf-networking-release-candidate
           ops-files: updated-cf-deployment-cf-networking-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -2064,13 +2099,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-cf-smoke-tests-release-candidate
           ops-files: updated-cf-deployment-cf-smoke-tests-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -2281,13 +2323,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-cf-syslog-drain-release-candidate
           ops-files: updated-cf-deployment-cf-syslog-drain-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -2498,13 +2547,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-cflinuxfs3-release-candidate
           ops-files: updated-cf-deployment-cflinuxfs3-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -2715,13 +2771,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-diego-release-candidate
           ops-files: updated-cf-deployment-diego-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -2932,13 +2995,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-dotnet-core-buildpack-release-candidate
           ops-files: updated-cf-deployment-dotnet-core-buildpack-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -3149,13 +3219,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-garden-runc-release-candidate
           ops-files: updated-cf-deployment-garden-runc-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -3366,13 +3443,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-go-buildpack-release-candidate
           ops-files: updated-cf-deployment-go-buildpack-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -3583,13 +3667,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-java-buildpack-release-candidate
           ops-files: updated-cf-deployment-java-buildpack-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -3800,13 +3891,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-log-cache-release-candidate
           ops-files: updated-cf-deployment-log-cache-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -4017,13 +4115,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-loggregator-release-candidate
           ops-files: updated-cf-deployment-loggregator-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -4234,13 +4339,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-loggregator-agent-release-candidate
           ops-files: updated-cf-deployment-loggregator-agent-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -4451,13 +4563,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-nats-release-candidate
           ops-files: updated-cf-deployment-nats-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -4668,13 +4787,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-nginx-buildpack-release-candidate
           ops-files: updated-cf-deployment-nginx-buildpack-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -4885,13 +5011,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-nodejs-buildpack-release-candidate
           ops-files: updated-cf-deployment-nodejs-buildpack-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -5102,13 +5235,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-php-buildpack-release-candidate
           ops-files: updated-cf-deployment-php-buildpack-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -5319,13 +5459,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-python-buildpack-release-candidate
           ops-files: updated-cf-deployment-python-buildpack-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -5536,13 +5683,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-pxc-release-candidate
           ops-files: updated-cf-deployment-pxc-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -5753,13 +5907,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-r-buildpack-release-candidate
           ops-files: updated-cf-deployment-r-buildpack-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -5970,13 +6131,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-routing-release-candidate
           ops-files: updated-cf-deployment-routing-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -6187,13 +6355,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-ruby-buildpack-release-candidate
           ops-files: updated-cf-deployment-ruby-buildpack-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -6404,13 +6579,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-silk-release-candidate
           ops-files: updated-cf-deployment-silk-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -6621,13 +6803,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-staticfile-buildpack-release-candidate
           ops-files: updated-cf-deployment-staticfile-buildpack-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -6838,13 +7027,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-statsd-injector-release-candidate
           ops-files: updated-cf-deployment-statsd-injector-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -7055,13 +7251,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-uaa-release-candidate
           ops-files: updated-cf-deployment-uaa-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -7272,13 +7475,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-credhub-release-candidate
           ops-files: updated-cf-deployment-credhub-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -7489,13 +7699,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-cf-cli-release-candidate
           ops-files: updated-cf-deployment-cf-cli-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -7694,13 +7911,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-backup-and-restore-sdk-release-candidate
           ops-files: updated-cf-deployment-backup-and-restore-sdk-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -7865,13 +8089,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-bits-service-release-candidate
           ops-files: updated-cf-deployment-bits-service-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -8036,13 +8267,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-cf-app-sd-release-candidate
           ops-files: updated-cf-deployment-cf-app-sd-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -8207,13 +8445,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-haproxy-release-candidate
           ops-files: updated-cf-deployment-haproxy-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -8366,13 +8611,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-mapfs-release-candidate
           ops-files: updated-cf-deployment-mapfs-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -8537,13 +8789,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-nfs-volume-release-candidate
           ops-files: updated-cf-deployment-nfs-volume-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -8708,13 +8967,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-smb-volume-release-candidate
           ops-files: updated-cf-deployment-smb-volume-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -8879,13 +9145,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-postgres-release-candidate
           ops-files: updated-cf-deployment-postgres-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -9050,13 +9323,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-syslog-release-candidate
           ops-files: updated-cf-deployment-syslog-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -9222,13 +9502,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-windows-syslog-release-candidate
           ops-files: updated-cf-deployment-windows-syslog-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -9394,13 +9681,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-hwc-buildpack-release-candidate
           ops-files: updated-cf-deployment-hwc-buildpack-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -9565,13 +9859,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-windows-utilities-release-candidate
           ops-files: updated-cf-deployment-windows-utilities-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -9736,13 +10037,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-garden-windows-release-candidate
           ops-files: updated-cf-deployment-garden-windows-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -9907,13 +10215,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-winc-release-candidate
           ops-files: updated-cf-deployment-winc-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -10078,13 +10393,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-windows1803fs-release-candidate
           ops-files: updated-cf-deployment-windows1803fs-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -10249,13 +10571,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-windows2016fs-release-candidate
           ops-files: updated-cf-deployment-windows2016fs-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -10420,13 +10749,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-windowsfs-release-candidate
           ops-files: updated-cf-deployment-windowsfs-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -10592,13 +10928,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-node-exporter-release-candidate
           ops-files: updated-cf-deployment-node-exporter-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -10763,13 +11106,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-leadership-election-release-candidate
           ops-files: updated-cf-deployment-leadership-election-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -10934,13 +11284,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-metric-store-release-candidate
           ops-files: updated-cf-deployment-metric-store-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks
@@ -11105,13 +11462,20 @@ jobs:
         GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
         ACTION: add
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: updated-cf-deployment-envoy-nginx-release-candidate
           ops-files: updated-cf-deployment-envoy-nginx-release-candidate
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: environments/test/pre-dev/bbl-state
           SYSTEM_DOMAIN: pre-dev.test.relint.rocks

@@ -247,13 +247,20 @@ jobs:
     - #@ bbl_up(env)
     - #@ manage_gcp_dns("add", env)
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
           ops-files: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
           SYSTEM_DOMAIN: #@ "{}.test.relint.rocks".format(env)
@@ -405,13 +412,20 @@ jobs:
     - #@ bbl_up(env)
     - #@ manage_gcp_dns("add", env)
     - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
       - task: deploy-cf
         file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
           ops-files: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
-          vars-files: relint-envs
+          vars-files: combined-vars-files
         params:
           BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
           SYSTEM_DOMAIN: #@ "{}.test.relint.rocks".format(env)
