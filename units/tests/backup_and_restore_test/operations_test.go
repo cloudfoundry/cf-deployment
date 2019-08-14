@@ -110,6 +110,12 @@ var backupAndRestoreTests = map[string]helpers.OpsFileTestParams{
 		Ops:  []string{"enable-backup-restore.yml", "enable-backup-restore-nfs-broker.yml"},
 		Vars: []string{"nfs-broker-database-password=i_am_a_password"},
 	},
+	"enable-restore-nfs-broker.yml": {
+		Ops: []string{"enable-backup-restore.yml", "../enable-nfs-volume-service.yml", "enable-backup-restore-nfs-broker.yml", "skip-backup-restore-droplets-and-packages.yml", "enable-restore-nfs-broker.yml"},
+	},
+	"enable-restore-smb-broker.yml": {
+		Ops: []string{"enable-backup-restore.yml", "../enable-smb-volume-service.yml", "skip-backup-restore-droplets-and-packages.yml", "enable-restore-smb-broker.yml"},
+	},
 }
 
 func TestBackupAndRestore(t *testing.T) {

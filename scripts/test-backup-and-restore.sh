@@ -52,7 +52,12 @@ test_backup_and_restore_ops() {
 
       # nfs
       check_interpolation "name: enable-backup-restore-nfs-broker.yml" "enable-backup-restore.yml" "-o enable-backup-restore-nfs-broker.yml" "-v nfs-broker-database-password=i_am_a_password"
-      check_interpolation "name: enable-backup-restore-nfs-broker.yml" "enable-backup-restore.yml -o enable-backup-restore-nfs-broker.yml -v nfs-broker-database-password=i_am_a_password"
+      check_interpolation "name: enable-restore-nfs-broker.yml" "enable-backup-restore.yml" "-o enable-restore-nfs-broker.yml" "-v nfs-broker-push-uaa-client-secret=s3cr3t"
+      ensure_properties_are_in_sync "nfs" "nfsbrokerpush"
+
+      # smb
+      check_interpolation "name: enable-restore-smb-broker.yml" "enable-backup-restore.yml" "-o enable-restore-smb-broker.yml" "-v smb-broker-password=pa55word" "-v smb-broker-uaa-client-secret=s3cr3t" "-v smb-broker-credhub-uaa-client-secret=s3cr3t"
+      ensure_properties_are_in_sync "smb" "smbbrokerpush"
     popd > /dev/null
   popd > /dev/null
   exit $exit_code
