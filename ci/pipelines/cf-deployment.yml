@@ -15,7 +15,7 @@ groups:
   - upgrade-acquire-pool
   - upgrade-deploy
   - upgrade-cats
-  - upgrade-cats-windows2016
+  - upgrade-cats-windows
   - upgrade-release-pool
   - experimental-acquire-pool
   - experimental-deploy
@@ -57,7 +57,7 @@ groups:
   - upgrade-acquire-pool
   - upgrade-deploy
   - upgrade-cats
-  - upgrade-cats-windows2016
+  - upgrade-cats-windows
   - upgrade-release-pool-manual
   - upgrade-release-pool
   - bless-manifest
@@ -829,7 +829,7 @@ jobs:
         CAPTURE_LOGS: true
         RELINT_VERBOSE_AUTH: "true"
 
-- name: upgrade-cats-windows2016
+- name: upgrade-cats-windows
   serial: true
   public: true
   plan:
@@ -851,7 +851,7 @@ jobs:
         cf-acceptance-tests: cf-acceptance-tests-rc
       params:
         CAPTURE_LOGS: true
-        CONFIG_FILE_PATH: environments/test/trelawney/cats_windows2016_integration_config.json
+        CONFIG_FILE_PATH: environments/test/trelawney/cats_windows_integration_config.json
         REPORTER_CONFIG_FILE_PATH: environments/test/trelawney/reporter_config.json
         NODES: 8
         RELINT_VERBOSE_AUTH: "true"
@@ -860,7 +860,7 @@ jobs:
   public: true
   plan:
   - get: upgrade-pool
-    passed: [ upgrade-cats, upgrade-cats-windows2016 ]
+    passed: [ upgrade-cats, upgrade-cats-windows ]
     trigger: true
   - put: upgrade-pool
     params: {release: upgrade-pool}
@@ -1521,7 +1521,7 @@ jobs:
       SYSTEM_DOMAIN: bellatrix.cf-app.com
       OPS_FILES: |
         operations/scale-database-cluster.yml
-        operations/windows2016-cell.yml
+        operations/windows1803-cell.yml
         operations/decrease-cc-event-retention.yml
         operations/use-internal-lookup-for-route-services.yml
         operations/use-compiled-releases.yml
@@ -1701,7 +1701,7 @@ jobs:
     - experimental-cats
     - experimental-smoke-tests
     - upgrade-cats
-    - upgrade-cats-windows2016
+    - upgrade-cats-windows
     - bbr-run-drats
     - lite-cats
   - put: cf-deployment-release-candidate
