@@ -3,7 +3,7 @@ task: delete-deployment
 file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
 input_mapping:
   bbl-state: relint-envs
+  pool-lock: pre-dev-pool
 params:
-  BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
+  BBL_JSON_CONFIG: pool-lock/metadata
 #@ end
-

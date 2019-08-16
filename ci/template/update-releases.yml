@@ -208,6 +208,15 @@ resources:
     stop: 3:30 -0700
     interval: 24h
 
+- name: pre-dev-pool
+  type: pool
+  icon: pool
+  source:
+    uri: git@github.com:cloudfoundry/relint-ci-pools
+    branch: master
+    pool: update-release-pool
+    private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
+
 jobs:
 #@ for r in data.values.baseReleases:
 #@ if hasattr(r, "debug"):
@@ -219,12 +228,12 @@ jobs:
   serial_groups:
   #@ if hasattr(r, "debug"):
   - update-release-debug
-  #@ else:
-  - update-release
   #@ end
   - stemcell
   public: true
   plan:
+  - put: pre-dev-pool
+    params: {acquire: true}
   - in_parallel:
     - get: #@ r.name + "-release"
       trigger: true
@@ -261,9 +270,9 @@ jobs:
           cf-deployment: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
           ops-files: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
           vars-files: combined-vars-files
+          pool-lock: pre-dev-pool
         params:
-          BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
-          SYSTEM_DOMAIN: #@ "{}.test.relint.rocks".format(env)
+          BBL_JSON_CONFIG: pool-lock/metadata
           OPS_FILES: |
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
@@ -271,23 +280,26 @@ jobs:
       - task: ensure-api-healthy
         file: runtime-ci/tasks/ensure-api-healthy/task.yml
         input_mapping:
+          pool-lock: pre-dev-pool
           cats-integration-config: relint-envs
         params:
-          CONFIG_FILE_PATH: #@ "environments/test/{}/integration_config.json".format(env)
+          BBL_JSON_CONFIG: pool-lock/metadata
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
           bbl-state: relint-envs
+          pool-lock: pre-dev-pool
         params:
-          BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
+          BBL_JSON_CONFIG: pool-lock/metadata
           ERRAND_NAME: smoke-tests
       - task: #@ "export-compiled-release-" + r.name
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
           manifest: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
+          pool-lock: pre-dev-pool
         params:
-          BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
+          BBL_JSON_CONFIG: pool-lock/metadata
           RELEASE_NAME: #@ r.name
       on_success:
         do:
@@ -326,8 +338,9 @@ jobs:
           file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
           input_mapping:
             bbl-state: relint-envs
+            pool-lock: pre-dev-pool
           params:
-            BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
+            BBL_JSON_CONFIG: pool-lock/metadata
         - put: #@ r.name + "-component-bump-logs-gcs"
           params:
             file: bosh-logs/cf-*.tgz
@@ -360,6 +373,8 @@ jobs:
       - #@ delete_deployment(env)
       - #@ manage_gcp_dns("remove", env)
       - #@ bbl_down(env)
+      - put: pre-dev-pool
+        params: {release: pre-dev-pool}
     #@ end
 
 #@ if hasattr(r, "debug"):
@@ -388,11 +403,11 @@ jobs:
   serial_groups:
   #@ if hasattr(r, "debug"):
   - update-release-debug
-  #@ else:
-  - update-release
   #@ end
   public: true
   plan:
+  - put: pre-dev-pool
+    params: {acquire: true}
   - in_parallel:
     - get: #@ r.name + "-release"
       trigger: true
@@ -426,9 +441,9 @@ jobs:
           cf-deployment: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
           ops-files: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
           vars-files: combined-vars-files
+          pool-lock: pre-dev-pool
         params:
-          BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
-          SYSTEM_DOMAIN: #@ "{}.test.relint.rocks".format(env)
+          BBL_JSON_CONFIG: pool-lock/metadata
           OPS_FILES: #@ collect_ops_files(r)
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: "--parallel 50"
@@ -440,14 +455,16 @@ jobs:
         file: runtime-ci/tasks/ensure-api-healthy/task.yml
         input_mapping:
           cats-integration-config: relint-envs
+          pool-lock: pre-dev-pool
         params:
-          CONFIG_FILE_PATH: #@ "environments/test/{}/integration_config.json".format(env)
+          BBL_JSON_CONFIG: pool-lock/metadata
       - task: run-errand-smoke-tests
         file: cf-deployment-concourse-tasks/run-errand/task.yml
         input_mapping:
           bbl-state: relint-envs
+          pool-lock: pre-dev-pool
         params:
-          BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
+          BBL_JSON_CONFIG: pool-lock/metadata
           ERRAND_NAME: smoke-tests
       #@ end
       on_success:
@@ -471,8 +488,9 @@ jobs:
           file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
           input_mapping:
             bbl-state: relint-envs
+            pool-lock: pre-dev-pool
           params:
-            BBL_STATE_DIR: #@ "environments/test/{}/bbl-state".format(env)
+            BBL_JSON_CONFIG: pool-lock/metadata
         - put: #@ r.name + "-component-bump-logs-gcs"
           params:
             file: bosh-logs/cf-*.tgz
@@ -503,6 +521,8 @@ jobs:
       - #@ delete_deployment(env)
       - #@ manage_gcp_dns("remove", env)
       - #@ bbl_down(env)
+      - put: pre-dev-pool
+        params: {release: pre-dev-pool}
     #@ end
 
 #@ if hasattr(r, "debug"):
