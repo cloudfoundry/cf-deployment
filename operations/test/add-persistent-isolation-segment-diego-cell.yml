@@ -55,6 +55,7 @@
             require_and_verify_client_certificates: true
             trusted_ca_certificates:
             - ((gorouter_backend_tls.ca))
+            - ((ssh_proxy_backends_tls.ca))
             verify_subject_alt_name:
             - gorouter.service.cf.internal
             - ssh-proxy.service.cf.internal
