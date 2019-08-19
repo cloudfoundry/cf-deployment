@@ -24,15 +24,22 @@
 - [ ] YES - please specify
 - [ ] NO
 
-> **Examples of breaking changes:**
+> **Types of breaking changes:**
 > - **causes app or operator downtime**
-> - modifies, deletes or moves the name of a job or instance group
-> - modifies the name or deletes a property of a job or instance group 
-> - changes the name of credentials
-> - requires out-of-band manual intervention on the part of the operator
-> - removes Ops-files from `./operations/` or `./operations/experimental` folders
-
+> - modifies, deletes or moves the name of a job or instance group in the main manifest
+> - modifies the name or deletes a property of a job or instance group in the main manifest
+> - changes the name of credentials in the main manifest
+> - requires out-of-band manual intervention on the part of the operator 
+> - modifies the ops-file path, changes the type, changes the values or removes ops-files from the followning folders
+>    - `./operations/` or `./operations/experimental` 
+>    - `./addons`
+>    - `./backup-and-restore/`
+>    - `./bits-service/`
+>
 > _If you're promoting an experimental Ops-file (or removing one), Please follow the [Ops-file workflows](https://github.com/cloudfoundry/cf-deployment/blob/master/ops-file-promotion-workflow.md)._
+
+> Ops files changes in the following folders are considered as NON BREAKING CHANGES
+> `./community`, `./example-vars-files`, `./test/`, `./workaround`
 
 ### How should this change be described in cf-deployment release notes?
 
