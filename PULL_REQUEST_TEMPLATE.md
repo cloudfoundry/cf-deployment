@@ -26,7 +26,6 @@
 
 > **Types of breaking changes:**
 > - **causes app or operator downtime**
-<<<<<<< HEAD
 > - modifies, deletes or moves the name of a job or instance group in the main manifest
 > - modifies the name or deletes a property of a job or instance group in the main manifest
 > - changes the name of credentials in the main manifest
@@ -37,14 +36,6 @@
 >    - `./backup-and-restore/`
 >    - `./bits-service/`
 >
-=======
-> - modifies, deletes or moves the name of a job or instance group
-> - modifies the name or deletes a property of a job or instance group 
-> - changes the name of credentials
-> - requires out-of-band manual intervention on the part of the operator
-> - removes Ops-files from `./operations/` or `./operations/experimental` folders
-
->>>>>>> 95e931e9af14d8f8c94983eff2e53b3f51909502
 > _If you're promoting an experimental Ops-file (or removing one), Please follow the [Ops-file workflows](https://github.com/cloudfoundry/cf-deployment/blob/master/ops-file-promotion-workflow.md)._
 
 > Ops files changes in the following folders are considered as NON BREAKING CHANGES
