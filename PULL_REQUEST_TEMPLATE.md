@@ -19,7 +19,7 @@
 - [ ] YES
 - [ ] NO
 
-### Does this PR introduce a breaking change? Please see few examples of breaking change below.
+### Does this PR introduce a breaking change? Please see definition of breaking change below.
 
 - [ ] YES - please specify
 - [ ] NO
