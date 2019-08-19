@@ -31,6 +31,7 @@ var experimentalTests = map[string]helpers.OpsFileTestParams{
 	"disable-interpolate-service-bindings.yml":                 {},
 	"disable-uaa-client-redirect-uri-legacy-matching-mode.yml": {},
 	"enable-bpm-garden.yml":                                    {},
+	"enable-containerd-for-processes.yml":                      {},
 	"enable-iptables-logger.yml":                               {},
 	"enable-mysql-tls.yml":                                     {},
 	"enable-nfs-volume-service-credhub.yml":                    {},

@@ -27,6 +27,7 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 | [`disable-interpolate-service-bindings.yml`](disable-interpolate-service-bindings.yml) | Disables the interpolation of CredHub service credentials by Cloud Controller. | | **NO** |
 | [`disable-uaa-client-redirect-uri-legacy-matching-mode.yml`](disable-uaa-client-redirect-uri-legacy-matching-mode.yml) | Disables legacy (non-exact) matching of redirect URIs in the UAA. | | **NO** |
 | [`enable-bpm-garden.yml`](enable-bpm-garden.yml) | Enables the [BOSH Process Manager](https://github.com/cloudfoundry-incubator/bpm-release) for Garden. | This ops file **cannot** be deployed in conjunction with `enable-oci-phase-1.yml`. | **NO** |
+| [`enable-containerd-for-processes.yml`](enable-containerd-for-processes.yml) | Configure Garden to run processes via containerd. | This ops file **cannot** be deployed in conjunction with `rootless-containers.yml`. | **NO** |
 | [`enable-iptables-logger.yml`](enable-iptables-logger.yml) | Enables iptables logger. | | **YES** |
 | [`enable-mysql-tls.yml`](enable-mysql-tls.yml) | **DEPRECATED because PXC is now the default database in cf-deployment** Enables TLS on the database job, and secures all client database connections. | | **NO** |
 | [`enable-nfs-volume-service-credhub.yml`](enable-nfs-volume-service-credhub.yml) | **DEPRECATED because it is inlined into `enable-nfs-volume-service.yml`** Enables credhub integration for NFS volume services | | **NO** |

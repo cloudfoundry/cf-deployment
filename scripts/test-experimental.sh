@@ -16,6 +16,7 @@ test_experimental_ops() {
       check_interpolation "disable-uaa-client-redirect-uri-legacy-matching-mode.yml"
 
       check_interpolation "enable-bpm-garden.yml"
+      check_interpolation "enable-containerd-for-processes.yml"
       check_interpolation "enable-iptables-logger.yml"
       check_interpolation "enable-mysql-tls.yml"
       check_interpolation "enable-nfs-volume-service-credhub.yml"
