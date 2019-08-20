@@ -16,7 +16,6 @@ EOF
       -f "${PROJECT_DIR}/ci/template/${PIPELINE}.yml" \
       -f "${PROJECT_DIR}/ci/input/inputs.yml" \
       -f "${PROJECT_DIR}/ci/template/lib" \
-      -R \
       >> "${PROJECT_DIR}/ci/pipelines/${PIPELINE}.yml"
   fi
 
