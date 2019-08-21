@@ -18,7 +18,11 @@ var experimentalTests = map[string]helpers.OpsFileTestParams{
 	"add-deployment-updater-postgres.yml": {
 		Ops: []string{"add-deployment-updater.yml", "../use-postgres.yml", "add-deployment-updater-postgres.yml"},
 	},
-	"add-metric-store.yml": {},
+	"add-metric-store.yml":                {},
+	"add-metrics-discovery-registrar.yml": {},
+	"add-metrics-discovery-registrar-windows1803.yml": {
+		Ops: []string{"../windows1803-cell.yml", "add-metrics-discovery-registrar.yml", "add-metrics-discovery-registrar-windows1803.yml"},
+	},
 	"add-syslog-agent.yml": {},
 	"add-syslog-agent-windows1803.yml": {
 		Ops: []string{"../windows1803-cell.yml", "add-syslog-agent.yml", "add-syslog-agent-windows1803.yml"},
