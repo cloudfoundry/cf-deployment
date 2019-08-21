@@ -3,7 +3,7 @@
   value:
     name: smbbrokerpush
     provides:
-      smbbrokerpush: {as: ignore-me}
+      smbbrokerpush: {as: smbbrokerpush-co-located}
     properties:
       app_domain: ((system_domain))
       cf:
@@ -28,5 +28,5 @@
     name: bbr-smbbroker
     release: smb-volume
     consumes:
-      smbbrokerpush: {from: smbbrokerpush}
+      smbbrokerpush: {from: smbbrokerpush-co-located}
 
