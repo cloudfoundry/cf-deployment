@@ -64,6 +64,9 @@ test_experimental_ops() {
 
       check_interpolation "add-metric-store.yml"
 
+      check_interpolation "add-metrics-discovery-registrar.yml"
+      check_interpolation "name: add-metrics-discovery-registrar-windows1803.yml" "../windows1803-cell.yml" "-o add-metrics-discovery-registrar.yml" "-o add-metrics-discovery-registrar-windows1803.yml"
+
     popd > /dev/null # operations/experimental
   popd > /dev/null
   exit $exit_code

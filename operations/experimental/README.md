@@ -19,6 +19,8 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 | [`add-deployment-updater-postgres.yml`](add-deployment-updater-postgres.yml) |  **"DEPRECATED because it is inlined in to `cf-deployment.yml`"** | Requires `add-deployment-updater.yml` | **NO** |
 | [`add-deployment-updater.yml`](add-deployment-updater.yml) |  **"DEPRECATED because it is inlined in to `cf-deployment.yml`"** | | **NO** |
 | [`add-metric-store.yml`](add-metric-store.yml) |  **Add Metric Store node for persistence of metrics from Loggregator** | | **NO** |
+| [`add-metrics-discovery-registrar.yml`](add-metrics-discovery-registrar.yml) |  Add metrics discovery registrar to all vms to register scrape configurations with NATS | | **NO** |
+| [`add-metrics-discovery-registrar-windows1803.yml`](add-metrics-discovery-registrar-windows1803.yml) |  Add metrics discovery registrar to windows1803 Diego cells to register scrape configurations with NATS | Requires `../windows1803-cell.yml`, `add-metrics-discovery-registrar.yml` | **NO** |
 | [`add-syslog-agent.yml`](add-syslog-agent.yml) |  Add agent to all vms for the purpose of egressing application logs to syslog | | **YES** |
 | [`add-syslog-agent-windows1803.yml`](add-syslog-agent-windows1803.yml) |  Add agent to windows1803 Diego cells for the purpose of egressing application logs to syslog | Requires `../windows1803-cell.yml`, `add-syslog-agent.yml` and `deploy-forwarder-agent.yml` | **NO** |
 | [`add-system-metrics-agent.yml`](add-system-metrics-agent.yml) | Add agent to all vms with the purpose of egressing system metrics | | **NO** |

@@ -1,0 +1,47 @@
+- type: replace
+  path: /addons/name=metrics-discovery-registrar?
+  value:
+    name: metrics-discovery-registrar
+    include:
+      stemcell:
+        - os: ubuntu-trusty
+        - os: ubuntu-xenial
+    exclude:
+      jobs:
+        - name: smoke_tests
+          release: cf-smoke-tests
+    jobs:
+      - name: metrics-discovery-registrar
+        release: metrics-discovery
+        properties:
+          metrics:
+            ca_cert: "((metrics_discovery_metrics_tls.ca))"
+            cert: "((metrics_discovery_metrics_tls.certificate))"
+            key: "((metrics_discovery_metrics_tls.private_key))"
+            server_name: metrics_discovery_metrics
+
+- type: replace
+  path: /releases/name=metrics-discovery?
+  value:
+    name: metrics-discovery
+    version: latest
+
+- type: replace
+  path: /variables/name=metric_scraper_ca?
+  value:
+    name: metric_scraper_ca
+    type: certificate
+    options:
+      is_ca: true
+      common_name: metricScraperCA
+
+- type: replace
+  path: /variables/name=metrics_discovery_metrics_tls?
+  value:
+    name: metrics_discovery_metrics_tls
+    type: certificate
+    options:
+      ca: metric_scraper_ca
+      common_name: metrics_discovery_metrics
+      extended_key_usage:
+        - server_auth
