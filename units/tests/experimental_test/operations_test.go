@@ -82,7 +82,13 @@ var experimentalTests = map[string]helpers.OpsFileTestParams{
 	},
 	"use-create-swap-delete-vm-strategy.yml":          {},
 	"use-logcache-for-cloud-controller-app-stats.yml": {},
-	"use-native-garden-runc-runner.yml":               {},
+	"use-logcache-syslog-ingress.yml": {
+		Ops: []string{"add-syslog-agent.yml", "use-logcache-syslog-ingress.yml"},
+	},
+	"use-logcache-syslog-ingress-windows1803.yml": {
+		Ops: []string{"../windows1803-cell.yml", "add-syslog-agent.yml", "add-syslog-agent-windows1803.yml", "use-logcache-syslog-ingress.yml", "use-logcache-syslog-ingress-windows1803.yml"},
+	},
+	"use-native-garden-runc-runner.yml": {},
 	"windows-component-syslog-ca.yml": {
 		Ops:       []string{"windows-enable-component-syslog.yml", "windows-component-syslog-ca.yml"},
 		VarsFiles: []string{"../addons/example-vars-files/vars-enable-component-syslog.yml"},
