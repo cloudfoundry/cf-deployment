@@ -77,13 +77,6 @@ resources:
   source:
     uri: git@github.com:cloudfoundry/cf-deployment.git
     private_key: ((cf_deployment_readwrite_deploy_key.private_key))
-    ignore_paths:
-    - .envrc
-    - .overcommit.yml
-    - ISSUE_TEMPLATE.md
-    - PULL_REQUEST_TEMPLATE.md
-    - ci/**
-    - texts/**
 
 - name: cf-deployment-develop
   type: git
