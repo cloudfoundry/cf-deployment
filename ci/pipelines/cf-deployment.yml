@@ -16,7 +16,7 @@ groups:
   - upgrade-deploy
   - upgrade-cats
   - upgrade-cats-windows
-  - upgrade-release-pool
+  - upgrade-delete-deployment
   - experimental-acquire-pool
   - experimental-deploy
   - experimental-smoke-tests
@@ -59,7 +59,7 @@ groups:
   - upgrade-cats
   - upgrade-cats-windows
   - upgrade-release-pool-manual
-  - upgrade-release-pool
+  - upgrade-delete-deployment
   - bless-manifest
 - name: ex
   jobs:
@@ -693,11 +693,67 @@ jobs:
     trigger: true
     passed: [upgrade-acquire-pool]
   - in_parallel:
+    - get: runtime-ci
+    - get: cf-deployment-concourse-tasks
+    - get: cf-deployment-master
     - get: cf-deployment-develop
       passed: [upgrade-acquire-pool]
-    - get: cf-deployment-concourse-tasks
-    - get: runtime-ci
     - get: relint-envs
+  - task: guarantee-no-existing-cf-deployment
+    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/trelawney/bbl-state
+      IGNORE_ERRORS: true
+  - task: collect-ops-files-latest-release
+    file: cf-deployment-concourse-tasks/collect-ops-files/task.yml
+    input_mapping:
+      base-ops-files: cf-deployment-master
+      new-ops-files: relint-envs
+    params:
+      BASE_OPS_FILE_DIR: operations
+      NEW_OPS_FILES: |
+        environments/test/trelawney/add-external-ips-for-cloud-sql-db.yml
+        environments/test/trelawney/increase-doppler-vm-type-from-minimal-to-small.yml
+        environments/test/trelawney/scale-diego-cell-to-3.yml
+  - task: bosh-deploy-cf-latest-release
+    file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+      cf-deployment: cf-deployment-master
+      ops-files: collected-ops-files
+      vars-files: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/trelawney/bbl-state
+      SYSTEM_DOMAIN: trelawney.cf-app.com
+      OPS_FILES: |
+        operations/experimental/fast-deploy-with-downtime-and-danger.yml
+        operations/use-compiled-releases.yml
+        operations/use-external-dbs.yml
+        operations/add-external-ips-for-cloud-sql-db.yml
+        operations/windows2012R2-cell.yml
+        operations/windows1803-cell.yml
+        operations/bits-service/use-bits-service.yml
+        operations/use-external-blobstore.yml
+        operations/use-gcs-blobstore-service-account.yml
+        operations/bits-service/configure-bits-service-gcs-service-account.yml
+        operations/enable-service-discovery.yml
+        operations/test/add-persistent-isolation-segment-diego-cell.yml
+        operations/increase-doppler-vm-type-from-minimal-to-small.yml
+        operations/scale-diego-cell-to-3.yml
+        operations/use-internal-lookup-for-route-services.yml
+      VARS_FILES: |
+        environments/test/trelawney/external-db-vars.yml
+        environments/test/trelawney/gcs-vars.yml
+      REGENERATE_CREDENTIALS: true
+  - task: bosh-run-errand-smoke-tests-latest-release
+    file: cf-deployment-concourse-tasks/run-errand/task.yml
+    params:
+      BBL_STATE_DIR: environments/test/trelawney/bbl-state
+      ERRAND_NAME: smoke-tests
+    input_mapping:
+      bbl-state: relint-envs
   - task: add-tcp-domain
     file: runtime-ci/tasks/add-tcp-domain/task.yml
     input_mapping:
@@ -705,7 +761,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
       SYSTEM_DOMAIN: trelawney.cf-app.com
-  - task: collect-ops-files
+  - task: collect-ops-files-develop
     file: cf-deployment-concourse-tasks/collect-ops-files/task.yml
     input_mapping:
       base-ops-files: cf-deployment-develop
@@ -716,7 +772,7 @@ jobs:
         environments/test/trelawney/add-external-ips-for-cloud-sql-db.yml
         environments/test/trelawney/increase-doppler-vm-type-from-minimal-to-small.yml
         environments/test/trelawney/scale-diego-cell-to-3.yml
-  - task: bosh-deploy-cf
+  - task: bosh-deploy-cf-develop
     file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
     input_mapping:
       bbl-state: relint-envs
@@ -856,12 +912,25 @@ jobs:
         NODES: 8
         RELINT_VERBOSE_AUTH: "true"
 
-- name: upgrade-release-pool
+- name: upgrade-delete-deployment
+  serial: true
   public: true
   plan:
   - get: upgrade-pool
-    passed: [ upgrade-cats, upgrade-cats-windows ]
     trigger: true
+    passed:
+    - upgrade-cats
+    - upgrade-cats-windows
+  - in_parallel:
+    - get: cf-deployment-concourse-tasks
+    - get: relint-envs
+  - task: delete-deployment-cf
+    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/trelawney/bbl-state
+      IGNORE_ERRORS: true
   - put: upgrade-pool
     params: {release: upgrade-pool}
 
