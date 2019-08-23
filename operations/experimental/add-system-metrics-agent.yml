@@ -30,6 +30,9 @@
           key: ((system_metrics.private_key))
     release: loggregator-agent
 - type: replace
+  path: /instance_groups/name=scheduler/instances
+  value: 3
+- type: replace
   path: /instance_groups/name=scheduler/jobs/name=leadership-election?
   value:
     name: leadership-election
