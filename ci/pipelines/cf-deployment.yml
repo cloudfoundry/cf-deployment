@@ -121,6 +121,7 @@ resource_types:
   type: docker-image
   source:
     repository: ljfranklin/terraform-resource
+
 - name: bosh-deployment-v2
   type: docker-image
   source:
@@ -327,6 +328,20 @@ resources:
   source:
     owner: cloudfoundry-incubator
     repository: bosh-backup-and-restore
+
+- name: trelawney-external-resources
+  type: terraform
+  source:
+    backend_type: gcs
+    backend_config:
+      bucket: trelawney-external-resource-state
+      credentials: ((trelawney_gcp_service_account_json))
+    env_name: trelawney
+    vars:
+      cf_db_name: "terraform-20180530192426196300000001"
+      project: "cf-relint-trelawney"
+      region: "us-central1"
+      service_account_key: ((trelawney_gcp_service_account_json))
 
 jobs:
 - name: unit-test-ops-files
@@ -707,6 +722,17 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
       IGNORE_ERRORS: true
+  - try:
+      put: trelawney-external-resources
+      params:
+        action: destroy
+        terraform_source: relint-envs/environments/test/trelawney/external-resource-templates
+      get_params:
+        action: destroy
+  - put: trelawney-external-resources
+    params:
+      terraform_source: relint-envs/environments/test/trelawney/external-resource-templates
+      delete_on_failure: true
   - task: collect-ops-files-latest-release
     file: cf-deployment-concourse-tasks/collect-ops-files/task.yml
     input_mapping:
@@ -932,6 +958,13 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
       IGNORE_ERRORS: true
+  - try:
+      put: trelawney-external-resources
+      params:
+        action: destroy
+        terraform_source: relint-envs/environments/test/trelawney/external-resource-templates
+      get_params:
+        action: destroy
   - put: upgrade-pool
     params: {release: upgrade-pool}
 
