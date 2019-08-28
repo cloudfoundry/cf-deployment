@@ -6,6 +6,8 @@
     url: https://bosh.io/d/github.com/cloudfoundry/postgres-release?v=39
     version: "39"
 - type: remove
+  path: /instance_groups/name=database/jobs/name=route_registrar
+- type: remove
   path: /instance_groups/name=database/jobs/name=pxc-mysql
 - type: remove
   path: /instance_groups/name=database/jobs/name=proxy
