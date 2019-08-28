@@ -842,14 +842,23 @@ jobs:
       bbl-state: relint-envs
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
-  - task: update-integration-configs
-    file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
-    params:
-      BBL_STATE_DIR: environments/test/trelawney/bbl-state
-      CATS_INTEGRATION_CONFIG_FILE: environments/test/trelawney/integration_config.json
-    input_mapping:
-      bbl-state: relint-envs
-      integration-configs: relint-envs
+  - do:
+    - task: update-integration-config
+      file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/trelawney/bbl-state
+        CATS_INTEGRATION_CONFIG_FILE: environments/test/trelawney/integration_config.json
+      input_mapping:
+        bbl-state: relint-envs
+        integration-configs: relint-envs
+    - task: update-cats-windows-integration-config
+      file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/trelawney/bbl-state
+        CATS_INTEGRATION_CONFIG_FILE: environments/test/trelawney/cats_windows_integration_config.json
+      input_mapping:
+        bbl-state: relint-envs
+        integration-configs: updated-integration-configs
     ensure:
       put: relint-envs
       params:
