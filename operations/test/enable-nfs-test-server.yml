@@ -10,16 +10,12 @@
     jobs:
     - name: nfstestserver
       release: nfs-volume
+      custom_provider_definitions:
+      - name: nfstestserver_dns_aliases
+        type: nfstestserver_dns_aliases
+      provides:
+        nfstestserver_dns_aliases:
+          aliases:
+          - domain: nfstestserver.service.cf.internal
       properties:
         nfstestserver: {}
-
-- type: replace
-  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/domain=nfstestserver.service.cf.internal?
-  value:
-    domain: nfstestserver.service.cf.internal
-    targets:
-    - query: '*'
-      instance_group: nfstestserver
-      deployment: cf
-      network: default
-      domain: bosh

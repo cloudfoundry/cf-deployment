@@ -7,6 +7,9 @@ update:
   max_in_flight: 1
   serial: false
   update_watch_time: 5000-1200000
+features:
+  use_link_dns_names: true
+  use_short_dns_addresses: true
 addons:
 - name: loggregator_agent
   include:
@@ -28,7 +31,6 @@ addons:
           agent:
             cert: "((loggregator_tls_agent.certificate))"
             key: "((loggregator_tls_agent.private_key))"
-
 - name: forwarder_agent
   include:
     stemcell:
@@ -41,7 +43,6 @@ addons:
         ca_cert: "((loggregator_tls_agent.ca))"
         cert: "((loggregator_tls_agent.certificate))"
         key: "((loggregator_tls_agent.private_key))"
-
 - name: prom_scraper
   include:
     stemcell:
@@ -66,179 +67,7 @@ addons:
   - name: bosh-dns-aliases
     release: bosh-dns-aliases
     properties:
-      aliases:
-      - domain: '_.cell.service.cf.internal'
-        targets:
-        - query: '_'
-          instance_group: diego-cell
-          deployment: cf
-          network: default
-          domain: bosh
-        - query: '_'
-          instance_group: windows2012R2-cell
-          deployment: cf
-          network: default
-          domain: bosh
-        - query: '_'
-          instance_group: windows2016-cell
-          deployment: cf
-          network: default
-          domain: bosh
-        - query: '_'
-          instance_group: windows1803-cell
-          deployment: cf
-          network: default
-          domain: bosh
-        - query: '_'
-          instance_group: windows2019-cell
-          deployment: cf
-          network: default
-          domain: bosh
-        - query: '_'
-          instance_group: isolated-diego-cell
-          deployment: cf
-          network: default
-          domain: bosh
-      - domain: auctioneer.service.cf.internal
-        targets:
-        - query: 'q-s4'
-          instance_group: scheduler
-          deployment: cf
-          network: default
-          domain: bosh
-      - domain: bbs.service.cf.internal
-        targets:
-        - query: 'q-s4'
-          instance_group: diego-api
-          deployment: cf
-          network: default
-          domain: bosh
-      - domain: bits.service.cf.internal
-        targets:
-        - query: '*'
-          instance_group: bits
-          deployment: cf
-          network: default
-          domain: bosh
-      - domain: blobstore.service.cf.internal
-        targets:
-        - query: '*'
-          instance_group: singleton-blobstore
-          deployment: cf
-          network: default
-          domain: bosh
-      - domain: cc-uploader.service.cf.internal
-        targets:
-        - query: '*'
-          instance_group: api
-          deployment: cf
-          network: default
-          domain: bosh
-      - domain: cloud-controller-ng.service.cf.internal
-        targets:
-        - query: '*'
-          instance_group: api
-          deployment: cf
-          network: default
-          domain: bosh
-      - domain: credhub.service.cf.internal
-        targets:
-        - query: '*'
-          instance_group: credhub
-          deployment: cf
-          network: default
-          domain: bosh
-      - domain: doppler.service.cf.internal
-        targets:
-        - query: '*'
-          instance_group: doppler
-          deployment: cf
-          network: default
-          domain: bosh
-      - domain: file-server.service.cf.internal
-        targets:
-        - query: '*'
-          instance_group: api
-          deployment: cf
-          network: default
-          domain: bosh
-      - domain: gorouter.service.cf.internal
-        targets:
-        - query: '*'
-          instance_group: router
-          deployment: cf
-          network: default
-          domain: bosh
-      - domain: locket.service.cf.internal
-        targets:
-        - query: '*'
-          instance_group: diego-api
-          deployment: cf
-          network: default
-          domain: bosh
-      - domain: loggregator-trafficcontroller.service.cf.internal
-        targets:
-        - query: '*'
-          instance_group: log-api
-          deployment: cf
-          network: default
-          domain: bosh
-      - domain: policy-server.service.cf.internal
-        targets:
-        - query: '*'
-          instance_group: api
-          deployment: cf
-          network: default
-          domain: bosh
-      - domain: reverse-log-proxy.service.cf.internal
-        targets:
-        - query: '*'
-          instance_group: log-api
-          deployment: cf
-          network: default
-          domain: bosh
-      - domain: routing-api.service.cf.internal
-        targets:
-        - query: '*'
-          instance_group: api
-          deployment: cf
-          network: default
-          domain: bosh
-      - domain: silk-controller.service.cf.internal
-        targets:
-        - query: '*'
-          instance_group: diego-api
-          deployment: cf
-          network: default
-          domain: bosh
-      - domain: sql-db.service.cf.internal
-        targets:
-        - query: '*'
-          instance_group: database
-          deployment: cf
-          network: default
-          domain: bosh
-      - domain: ssh-proxy.service.cf.internal
-        targets:
-        - query: '*'
-          instance_group: scheduler
-          deployment: cf
-          network: default
-          domain: bosh
-      - domain: tps.service.cf.internal
-        targets:
-        - query: '*'
-          instance_group: scheduler
-          deployment: cf
-          network: default
-          domain: bosh
-      - domain: uaa.service.cf.internal
-        targets:
-        - query: '*'
-          instance_group: uaa
-          deployment: cf
-          network: default
-          domain: bosh
+      aliases: []
 
 instance_groups:
 - name: smoke-tests
@@ -368,6 +197,13 @@ instance_groups:
         server: ((mysql_server_certificate))
   - name: proxy
     release: pxc
+    custom_provider_definitions:
+    - name: proxy_dns_aliases
+      type: proxy_dns_aliases
+    provides:
+      proxy_dns_aliases:
+        aliases:
+        - domain: sql-db.service.cf.internal
     properties:
       api_password: ((cf_mysql_proxy_api_password))
       api_port: 8083
@@ -424,6 +260,14 @@ instance_groups:
         private_key: "((diego_rep_client.private_key))"
   - name: bbs
     release: diego
+    custom_provider_definitions:
+    - name: bbs_dns_aliases
+      type: bbs_dns_aliases
+    provides:
+      bbs_dns_aliases:
+        aliases:
+        - domain: bbs.service.cf.internal
+          health_filter: all
     properties:
       bpm:
         enabled: true
@@ -467,6 +311,13 @@ instance_groups:
           timestamp: "rfc3339"
   - name: silk-controller
     release: silk
+    custom_provider_definitions:
+    - name: silk_controller_dns_aliases
+      type: silk_controller_dns_aliases
+    provides:
+      silk_controller_dns_aliases:
+        aliases:
+        - domain: silk-controller.service.cf.internal
     properties:
       ca_cert: ((silk_controller.ca))
       server_cert: ((silk_controller.certificate))
@@ -486,6 +337,13 @@ instance_groups:
         client_key: ((silk_daemon.private_key))
   - name: locket
     release: diego
+    custom_provider_definitions:
+    - name: locket_dns_aliases
+      type: locket_dns_aliases
+    provides:
+      locket_dns_aliases:
+        aliases:
+        - domain: locket.service.cf.internal
     properties:
       bpm:
         enabled: true
@@ -533,6 +391,13 @@ instance_groups:
   jobs:
   - name: uaa
     release: uaa
+    custom_provider_definitions:
+    - name: uaa_dns_aliases
+      type: uaa_dns_aliases
+    provides:
+      uaa_dns_aliases:
+        aliases:
+        - domain: uaa.service.cf.internal
     properties:
       encryption:
         active_key_label: default_key
@@ -701,6 +566,13 @@ instance_groups:
   jobs:
   - name: blobstore
     release: capi
+    custom_provider_definitions:
+    - name: blobstore_dns_aliases
+      type: blobstore_dns_aliases
+    provides:
+      blobstore_dns_aliases:
+        aliases:
+        - domain: blobstore.service.cf.internal
     properties:
       select_directories_to_backup:
       - "buildpacks"
@@ -742,8 +614,16 @@ instance_groups:
   jobs:
   - name: cloud_controller_ng
     release: capi
+    custom_provider_definitions:
+    - name: cloud_controller_dns_aliases
+      type: cloud_controller_dns_aliases
     provides:
-      cloud_controller: {as: cloud_controller, shared: true}
+      cloud_controller:
+        as: cloud_controller
+        shared: true
+      cloud_controller_dns_aliases:
+        aliases:
+        - domain: cloud-controller-ng.service.cf.internal
     properties:
       router:
         route_services_secret: "((router_route_services_secret))"
@@ -923,6 +803,13 @@ instance_groups:
     properties: *statsd_injector_properties
   - name: file_server
     release: diego
+    custom_provider_definitions:
+    - name: file_server_dns_aliases
+      type: file_server_dns_aliases
+    provides:
+      file_server_dns_aliases:
+        aliases:
+        - domain: file-server.service.cf.internal
     properties:
       bpm:
         enabled: true
@@ -933,6 +820,13 @@ instance_groups:
       loggregator: *diego_loggregator_client_properties
   - name: routing-api
     release: routing
+    custom_provider_definitions:
+    - name: routing_api_dns_aliases
+      type: routing_api_dns_aliases
+    provides:
+      routing_api_dns_aliases:
+        aliases:
+        - domain: routing-api.service.cf.internal
     properties:
       routing_api:
         enabled_api_endpoints: "both"
@@ -965,6 +859,13 @@ instance_groups:
         tls_port: 8443
   - name: policy-server
     release: cf-networking
+    custom_provider_definitions:
+    - name: policy_server_dns_aliases
+      type: policy_server_dns_aliases
+    provides:
+      policy_server_dns_aliases:
+        aliases:
+        - domain: policy-server.service.cf.internal
     properties:
       uaa_client_secret: ((uaa_clients_network_policy_secret))
       uaa_ca: ((uaa_ssl.ca))
@@ -989,6 +890,13 @@ instance_groups:
       server_key: ((network_policy_server.private_key))
   - name: cc_uploader
     release: capi
+    custom_provider_definitions:
+    - name: cc_uploader_dns_aliases
+      type: cc_uploader_dns_aliases
+    provides:
+      cc_uploader_dns_aliases:
+        aliases:
+        - domain: cc-uploader.service.cf.internal
     properties:
       capi:
         cc_uploader:
@@ -1068,6 +976,14 @@ instance_groups:
       tls: *cfdot_tls_client_properties
   - name: auctioneer
     release: diego
+    custom_provider_definitions:
+    - name: auctioneer_dns_aliases
+      type: auctioneer_dns_aliases
+    provides:
+      auctioneer_dns_aliases:
+        aliases:
+        - domain: auctioneer.service.cf.internal
+          health_filter: all
     properties:
       bpm:
         enabled: true
@@ -1142,7 +1058,14 @@ instance_groups:
     release: statsd-injector
     properties: *statsd_injector_properties
   - name: tps
+    custom_provider_definitions:
+    - name: tps_dns_aliases
+      type: tps_dns_aliases
     release: capi
+    provides:
+      tps_dns_aliases:
+        aliases:
+        - domain: tps.service.cf.internal
     properties:
       capi:
         tps:
@@ -1157,6 +1080,13 @@ instance_groups:
             client_key: "((cc_bridge_tps.private_key))"
   - name: ssh_proxy
     release: diego
+    custom_provider_definitions:
+    - name: ssh_proxy_dns_aliases
+      type: ssh_proxy_dns_aliases
+    provides:
+      ssh_proxy_dns_aliases:
+        aliases:
+        - domain: ssh-proxy.service.cf.internal
     properties:
       bpm:
         enabled: true
@@ -1223,6 +1153,13 @@ instance_groups:
   jobs:
   - name: gorouter
     release: routing
+    custom_provider_definitions:
+    - name: gorouter_dns_aliases
+      type: gorouter_dns_aliases
+    provides:
+      gorouter_dns_aliases:
+        aliases:
+        - domain: gorouter.service.cf.internal
     properties:
       router:
         enable_ssl: true
@@ -1301,8 +1238,16 @@ instance_groups:
   jobs:
   - name: doppler
     release: loggregator
+    custom_provider_definitions:
+    - name: doppler_dns_aliases
+      type: doppler_dns_aliases
     provides:
-      doppler: {as: doppler, shared: true}
+      doppler:
+        as: doppler
+        shared: true
+      doppler_dns_aliases:
+        aliases:
+        - domain: doppler.service.cf.internal
     properties:
       loggregator:
         tls:
@@ -1403,6 +1348,14 @@ instance_groups:
           timestamp: "rfc3339"
   - name: rep
     release: diego
+    custom_provider_definitions:
+    - name: rep_dns_aliases
+      type: rep_dns_aliases
+    provides:
+      rep_dns_aliases:
+        aliases:
+        - domain: _.cell.service.cf.internal
+          placeholder_type: uuid
     properties:
       bpm:
         enabled: true
@@ -1508,6 +1461,13 @@ instance_groups:
   jobs:
   - name: loggregator_trafficcontroller
     release: loggregator
+    custom_provider_definitions:
+    - name: trafficcontroller_dns_aliases
+      type: trafficcontroller_dns_aliases
+    provides:
+      trafficcontroller_dns_aliases:
+        aliases:
+        - domain: loggregator-trafficcontroller.service.cf.internal
     consumes:
       doppler: {from: doppler}
     properties:
@@ -1537,8 +1497,16 @@ instance_groups:
           ca_cert: "((cc_tls.ca))"
   - name: reverse_log_proxy
     release: loggregator
+    custom_provider_definitions:
+    - name: reverse_log_proxy_dns_aliases
+      type: reverse_log_proxy_dns_aliases
     provides:
-      reverse_log_proxy: {as: reverse_log_proxy, shared: true}
+      reverse_log_proxy:
+        as: reverse_log_proxy
+        shared: true
+      reverse_log_proxy_dns_aliases:
+        aliases:
+        - domain: reverse-log-proxy.service.cf.internal
     properties:
       loggregator:
         tls:
@@ -1598,6 +1566,14 @@ instance_groups:
   vm_type: minimal
   jobs:
   - name: credhub
+    release: credhub
+    custom_provider_definitions:
+    - name: credhub_dns_aliases
+      type: credhub_dns_aliases
+    provides:
+      credhub_dns_aliases:
+        aliases:
+        - domain: credhub.service.cf.internal
     properties:
       credhub:
         authentication:
@@ -1639,7 +1615,6 @@ instance_groups:
             type: internal
         internal_url: https://credhub.service.cf.internal
         tls: ((credhub_tls))
-    release: credhub
 - name: rotate-cc-database-key
   azs:
   - z1

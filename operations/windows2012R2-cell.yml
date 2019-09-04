@@ -14,6 +14,14 @@
           enable: false
       release: garden-windows
     - name: rep_windows
+      custom_provider_definitions:
+      - name: rep_windows_2012R2_dns_aliases
+        type: rep_windows_2012R2_dns_aliases
+      provides:
+        rep_windows_2012R2_dns_aliases:
+          aliases:
+          - domain: _.cell.service.cf.internal
+            placeholder_type: uuid
       properties:
         containers:
           trusted_ca_certificates:

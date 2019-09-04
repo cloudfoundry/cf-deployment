@@ -1,17 +1,6 @@
 # DEPRECATED
 ---
 - type: replace
-  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/-
-  value:
-    domain: "isolated-doppler.service.cf.internal"
-    targets:
-    - query: "*"
-      instance_group: isolated-doppler
-      deployment: cf
-      network: default
-      domain: bosh
-
-- type: replace
   path: /instance_groups/-
   value:
     name: isolated-doppler
@@ -24,6 +13,13 @@
     - name: default
     jobs:
     - name: doppler
+      custom_provider_definitions:
+      - name: doppler_iso_seg_dns_aliases
+        type: doppler_iso_seg_dns_aliases
+      provides:
+        doppler_iso_seg_dns_aliases:
+          aliases:
+          - domain: "isolated-doppler.service.cf.internal"
       release: loggregator
       provides:
         doppler: {as: isolated_doppler, shared: true}

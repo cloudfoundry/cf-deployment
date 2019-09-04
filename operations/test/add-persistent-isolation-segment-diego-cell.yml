@@ -37,6 +37,14 @@
             timestamp: "rfc3339"
     - name: rep
       release: diego
+      custom_provider_definitions:
+      - name: rep_iso_seg_dns_aliases
+        type: rep_iso_seg_dns_aliases
+      provides:
+        rep_iso_seg_dns_aliases:
+          aliases:
+          - domain: _.cell.service.cf.internal
+            placeholder_type: uuid
       properties:
         bpm:
           enabled: true

@@ -11,17 +11,13 @@
     jobs:
     - name: smbtestserver
       release: smb-volume
+      custom_provider_definitions:
+      - name: smbtestserver_dns_aliases
+        type: smbtestserver_dns_aliases
+      provides:
+        smbtestserver_dns_aliases:
+          aliases:
+          - domain: smbtestserver.service.cf.internal
       properties:
         username: ((smb-username))
         password: ((smb-password))
-
-- type: replace
-  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/domain=smbtestserver.service.cf.internal?
-  value:
-    domain: smbtestserver.service.cf.internal
-    targets:
-    - query: '*'
-      instance_group: smbtestserver
-      deployment: cf
-      network: default
-      domain: bosh
