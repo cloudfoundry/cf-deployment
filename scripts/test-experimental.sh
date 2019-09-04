@@ -64,6 +64,9 @@ test_experimental_ops() {
 
       check_interpolation "add-metric-store.yml"
 
+      check_interpolation "name: use-logcache-syslog-ingress.yml" "add-syslog-agent.yml" "-o use-logcache-syslog-ingress.yml"
+      check_interpolation "name: use-logcache-syslog-ingress-windows1803.yml" "../windows1803-cell.yml" "-o add-syslog-agent.yml" "-o add-syslog-agent-windows1803.yml" "-o use-logcache-syslog-ingress.yml" "-o use-logcache-syslog-ingress-windows1803.yml"
+
     popd > /dev/null # operations/experimental
   popd > /dev/null
   exit $exit_code
