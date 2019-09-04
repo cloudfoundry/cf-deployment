@@ -1608,7 +1608,6 @@ instance_groups:
             ca_certs:
             - ((uaa_ssl.ca))
             url: https://uaa.service.cf.internal:8443
-            verification_key: ((uaa_jwt_signing_key.public_key))
         authorization:
           acls:
             enabled: true
