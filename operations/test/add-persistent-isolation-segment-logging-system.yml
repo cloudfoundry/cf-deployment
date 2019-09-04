@@ -461,8 +461,3 @@
   path: /instance_groups/name=log-api/jobs/name=loggregator_trafficcontroller/consumes/log-cache?
   value:
     from: log_cache
-
-- type: replace
-  path: /instance_groups/name=scheduler/jobs/name=log-cache-scheduler/consumes?
-  value:
-    log-cache: {from: log_cache}

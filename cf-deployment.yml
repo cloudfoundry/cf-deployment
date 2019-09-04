@@ -1195,8 +1195,6 @@ instance_groups:
               cert: "((scheduler_api_tls.certificate))"
               key: "((scheduler_api_tls.private_key))"
               cn: "cloud-controller-ng.service.cf.internal"
-  - name: log-cache-scheduler
-    release: log-cache
   - name: loggr-udp-forwarder
     release: loggregator-agent
     properties:
