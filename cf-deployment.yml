@@ -913,7 +913,8 @@ instance_groups:
             script_path: "/var/vcap/jobs/cloud_controller_ng/bin/cloud_controller_ng_health_check"
             timeout: 6s
         - name: policy-server
-          port: 4002
+          tls_port: 4002
+          server_cert_domain_san: "api.((system_domain))"
           registration_interval: 20s
           uris:
           - api.((system_domain))/networking
@@ -968,6 +969,7 @@ instance_groups:
       uaa_client_secret: ((uaa_clients_network_policy_secret))
       uaa_ca: ((uaa_ssl.ca))
       enable_space_developer_self_service: true
+      enable_tls: true
       database:
         type: mysql
         username: network_policy
@@ -977,6 +979,8 @@ instance_groups:
         name: network_policy
         ca_cert: "((mysql_server_certificate.ca))"
         require_ssl: true
+      server_cert: ((network_policy_server_external.certificate))
+      server_key: ((network_policy_server_external.private_key))
   - name: policy-server-internal
     release: cf-networking
     properties:
@@ -1229,6 +1233,7 @@ instance_groups:
           ((diego_instance_identity_ca.ca))
           ((cc_tls.ca))
           ((uaa_ssl.ca))
+          ((network_policy_server_external.ca))
         backends:
           cert_chain: ((gorouter_backend_tls.certificate))
           private_key: ((gorouter_backend_tls.private_key))
@@ -1713,6 +1718,15 @@ variables:
   options:
     is_ca: true
     common_name: networkPolicyCA
+- name: network_policy_server_external
+  type: certificate
+  options:
+    ca: network_policy_ca
+    common_name: "api.((system_domain))"
+    alternative_names:
+    - "api.((system_domain))"
+    extended_key_usage:
+    - server_auth
 - name: network_policy_server
   type: certificate
   options:
