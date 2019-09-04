@@ -1363,7 +1363,7 @@ instance_groups:
   azs:
   - z1
   - z2
-  instances: 2
+  instances: 3
   vm_type: small-highmem
   vm_extensions:
   - 100GB_ephemeral_disk
@@ -1583,7 +1583,9 @@ instance_groups:
           - log-stream.((system_domain))
           - "*.log-stream.((system_domain))"
 - name: credhub
-  azs: [z1, z2]
+  azs:
+  - z1
+  - z2
   instances: 2
   networks:
   - name: default
@@ -1635,8 +1637,9 @@ instance_groups:
         tls: ((credhub_tls))
     release: credhub
 - name: rotate-cc-database-key
+  azs:
+  - z1
   instances: 1
-  azs: [z1]
   lifecycle: errand
   vm_type: minimal
   stemcell: default

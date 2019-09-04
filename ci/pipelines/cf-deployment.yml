@@ -743,7 +743,6 @@ jobs:
       NEW_OPS_FILES: |
         environments/test/trelawney/add-external-ips-for-cloud-sql-db.yml
         environments/test/trelawney/increase-doppler-vm-type-from-minimal-to-small.yml
-        environments/test/trelawney/scale-diego-cell-to-3.yml
         environments/test/trelawney/scale-log-api-to-4.yml
   - task: bosh-deploy-cf-latest-release
     file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
@@ -769,7 +768,6 @@ jobs:
         operations/enable-service-discovery.yml
         operations/test/add-persistent-isolation-segment-diego-cell.yml
         operations/increase-doppler-vm-type-from-minimal-to-small.yml
-        operations/scale-diego-cell-to-3.yml
         operations/scale-log-api-to-4.yml
         operations/use-internal-lookup-for-route-services.yml
       VARS_FILES: |
@@ -800,7 +798,6 @@ jobs:
       NEW_OPS_FILES: |
         environments/test/trelawney/add-external-ips-for-cloud-sql-db.yml
         environments/test/trelawney/increase-doppler-vm-type-from-minimal-to-small.yml
-        environments/test/trelawney/scale-diego-cell-to-3.yml
         environments/test/trelawney/scale-log-api-to-4.yml
   - task: bosh-deploy-cf-develop
     file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
@@ -824,7 +821,6 @@ jobs:
         operations/enable-service-discovery.yml
         operations/test/add-persistent-isolation-segment-diego-cell.yml
         operations/increase-doppler-vm-type-from-minimal-to-small.yml
-        operations/scale-diego-cell-to-3.yml
         operations/scale-log-api-to-4.yml
         operations/use-internal-lookup-for-route-services.yml
       VARS_FILES: |
@@ -1036,7 +1032,6 @@ jobs:
       BASE_OPS_FILE_DIR: operations
       NEW_OPS_FILES: |
         environments/test/hermione/increase-doppler-vm-type-from-minimal-to-small.yml
-        environments/test/hermione/scale-diego-cell-to-3.yml
   - task: bosh-deploy-cf-latest-release
     file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
     input_mapping:
@@ -1064,7 +1059,6 @@ jobs:
         operations/experimental/use-logcache-for-cloud-controller-app-stats.yml
         operations/experimental/add-syslog-agent.yml
         operations/increase-doppler-vm-type-from-minimal-to-small.yml
-        operations/scale-diego-cell-to-3.yml
       VARS_FILES: |
         environments/test/hermione/bbl-state/vars/director-vars-file.yml
         environments/test/hermione/vars-use-operator-provided-router-tls-certificates.yml
@@ -1092,7 +1086,6 @@ jobs:
       BASE_OPS_FILE_DIR: operations
       NEW_OPS_FILES: |
         environments/test/hermione/increase-doppler-vm-type-from-minimal-to-small.yml
-        environments/test/hermione/scale-diego-cell-to-3.yml
   - task: bosh-deploy-cf-develop
     file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
     input_mapping:
@@ -1120,7 +1113,6 @@ jobs:
         operations/experimental/add-syslog-agent.yml
         operations/experimental/enable-oci-phase-1.yml
         operations/increase-doppler-vm-type-from-minimal-to-small.yml
-        operations/scale-diego-cell-to-3.yml
       VARS_FILES: |
         environments/test/hermione/bbl-state/vars/director-vars-file.yml
         environments/test/hermione/vars-use-operator-provided-router-tls-certificates.yml
