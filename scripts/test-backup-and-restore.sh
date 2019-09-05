@@ -51,7 +51,6 @@ test_backup_and_restore_ops() {
       check_interpolation "name: skip-backup-restore-droplets-and-packages.yml (with gcs)" "enable-backup-restore.yml" "-o ${home}/operations/use-external-blobstore.yml" "-o ${home}/operations/use-gcs-blobstore-service-account.yml" "-o enable-backup-restore-gcs.yml" "-o skip-backup-restore-droplets-and-packages.yml" "-l ${home}/operations/example-vars-files/vars-use-gcs-blobstore-service-account.yml" "-l ${home}/operations/backup-and-restore/example-vars-files/vars-enable-backup-restore-gcs.yml"
 
       # nfs
-      check_interpolation "name: enable-backup-restore-nfs-broker.yml" "enable-backup-restore.yml" "-o enable-backup-restore-nfs-broker.yml" "-v nfs-broker-database-password=i_am_a_password"
       check_interpolation "name: enable-restore-nfs-broker.yml" "enable-backup-restore.yml" "-o enable-restore-nfs-broker.yml" "-v nfs-broker-push-uaa-client-secret=s3cr3t"
       ensure_properties_are_in_sync "nfs" "nfsbrokerpush"
 
