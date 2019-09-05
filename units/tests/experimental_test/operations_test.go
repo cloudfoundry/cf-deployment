@@ -33,7 +33,6 @@ var experimentalTests = map[string]helpers.OpsFileTestParams{
 	"enable-bpm-garden.yml":                                    {},
 	"enable-containerd-for-processes.yml":                      {},
 	"enable-iptables-logger.yml":                               {},
-	"enable-mysql-tls.yml":                                     {},
 	"enable-nfs-volume-service-credhub.yml":                    {},
 	"enable-oci-phase-1.yml":                                   {},
 	"enable-nginx-routing-integrity-windows2019.yml": {
@@ -58,7 +57,7 @@ var experimentalTests = map[string]helpers.OpsFileTestParams{
 		VarsFiles: []string{"../example-vars-files/vars-migrate-nfsbroker-mysql-to-credhub.yml"},
 	},
 	"perm-service.yml": {
-		Ops:  []string{"enable-mysql-tls.yml", "perm-service.yml"},
+		Ops:  []string{"perm-service.yml"},
 		Vars: []string{"perm_uaa_clients_cc_perm_secret=perm_secret", "perm_uaa_clients_perm_monitor_secret=perm_monitor_secret"},
 	},
 	"perm-service-with-pxc-release.yml": {
