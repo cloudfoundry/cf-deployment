@@ -30,8 +30,6 @@ test_standard_ops() {
       check_interpolation "enable-smb-volume-service.yml"
       check_interpolation "enable-tls-on-file-server.yml"
 
-      check_interpolation "migrate-cf-mysql-to-pxc.yml"
-
       check_interpolation "openstack.yml"
       check_interpolation "override-app-domains.yml" "-l example-vars-files/vars-override-app-domains.yml"
 
