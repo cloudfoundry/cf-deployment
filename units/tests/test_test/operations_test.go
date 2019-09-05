@@ -18,11 +18,8 @@ var testTests = map[string]helpers.OpsFileTestParams{
 	},
 	"add-persistent-isolation-segment-diego-cell.yml": {},
 	"add-persistent-isolation-segment-router.yml":     {},
-	"add-persistent-isolation-segment-logging-system.yml": {
-		Ops: []string{"add-persistent-isolation-segment-diego-cell.yml", "add-persistent-isolation-segment-logging-system.yml"},
-	},
 	"add-persistent-isolation-segment-syslog-drain.yml": {
-		Ops: []string{"add-persistent-isolation-segment-diego-cell.yml", "add-persistent-isolation-segment-logging-system.yml", "add-persistent-isolation-segment-syslog-drain.yml"},
+		Ops: []string{"add-persistent-isolation-segment-diego-cell.yml", "add-persistent-isolation-segment-syslog-drain.yml"},
 	},
 	"alter-ssh-proxy-redirect-uri.yml": {},
 	"enable-nfs-test-server.yml":       {},
@@ -33,7 +30,7 @@ var testTests = map[string]helpers.OpsFileTestParams{
 		Vars: []string{"smb-password=FOO.PASS", "smb-username=BAR.USER"},
 	},
 	"isolated-logging-system-with-windows-cells.yml": {
-		Ops: []string{"add-persistent-isolation-segment-diego-cell.yml", "add-persistent-isolation-segment-logging-system.yml", "../windows2012R2-cell.yml", "../windows1803-cell.yml", "isolated-logging-system-with-windows-cells.yml"},
+		Ops: []string{"add-persistent-isolation-segment-diego-cell.yml", "../windows2012R2-cell.yml", "../windows1803-cell.yml", "isolated-logging-system-with-windows-cells.yml"},
 	},
 }
 
