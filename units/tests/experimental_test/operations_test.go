@@ -61,11 +61,11 @@ var experimentalTests = map[string]helpers.OpsFileTestParams{
 		Vars: []string{"perm_uaa_clients_cc_perm_secret=perm_secret", "perm_uaa_clients_perm_monitor_secret=perm_monitor_secret"},
 	},
 	"perm-service-with-pxc-release.yml": {
-		Ops:  []string{"perm-service.yml", "../use-pxc.yml", "perm-service-with-pxc-release.yml"},
+		Ops:  []string{"perm-service.yml", "perm-service-with-pxc-release.yml"},
 		Vars: []string{"perm_uaa_clients_cc_perm_secret=perm_secret", "perm_uaa_clients_perm_monitor_secret=perm_monitor_secret"},
 	},
 	"perm-service-with-tcp-routing.yml": {
-		Ops:  []string{"perm-service.yml", "../use-pxc.yml", "perm-service-with-pxc-release.yml", "perm-service-with-tcp-routing.yml"},
+		Ops:  []string{"perm-service.yml", "perm-service-with-pxc-release.yml", "perm-service-with-tcp-routing.yml"},
 		Vars: []string{"perm_uaa_clients_cc_perm_secret=perm_secret", "perm_uaa_clients_perm_monitor_secret=perm_monitor_secret"},
 	},
 	"rootless-containers.yml": {},

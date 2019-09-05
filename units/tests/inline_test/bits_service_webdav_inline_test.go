@@ -39,7 +39,7 @@ func TestInline(t *testing.T) {
 	cfDeploymentManifestPath := filepath.Join(cfDeploymentHome, "cf-deployment.yml")
 
 	// before inline
-	beforeManifest, err := boshInterpolate(beforeDir, cfDeploymentManifestPath, "operations/use-pxc.yml")
+	beforeManifest, err := boshInterpolate(beforeDir, cfDeploymentManifestPath)
 	if err != nil {
 		t.Error("before inline manifest interpolation failed:", err)
 	}
@@ -86,7 +86,7 @@ func gitSetup(tempDir string) error {
 		return err
 	}
 
-	err = runCommandInDirectory(tempDir, "git", "checkout", "FETCH_HEAD", "--", "operations/use-pxc.yml", "cf-deployment.yml")
+	err = runCommandInDirectory(tempDir, "git", "checkout", "FETCH_HEAD", "--", "cf-deployment.yml")
 	if err != nil {
 		return err
 	}

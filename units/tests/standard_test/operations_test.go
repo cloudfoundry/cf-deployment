@@ -131,9 +131,8 @@ var standardTests = map[string]helpers.OpsFileTestParams{
 	},
 	"use-postgres.yml": {},
 	"use-pxc-for-nfs-volume-service.yml": {
-		Ops: []string{"enable-nfs-volume-service.yml", "use-pxc.yml", "use-pxc-for-nfs-volume-service.yml"},
+		Ops: []string{"enable-nfs-volume-service.yml", "use-pxc-for-nfs-volume-service.yml"},
 	},
-	"use-pxc.yml": {},
 	"use-s3-blobstore.yml": {
 		Ops:       []string{"use-external-blobstore.yml", "use-s3-blobstore.yml"},
 		VarsFiles: []string{"example-vars-files/vars-use-s3-blobstore.yml"},
