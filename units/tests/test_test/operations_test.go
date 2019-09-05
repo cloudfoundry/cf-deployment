@@ -26,9 +26,6 @@ var testTests = map[string]helpers.OpsFileTestParams{
 	"enable-smb-test-server.yml": {
 		Vars: []string{"smb-password=FOO.PASS", "smb-username=BAR.USER"},
 	},
-	"isolated-logging-system-with-windows-cells.yml": {
-		Ops: []string{"add-persistent-isolation-segment-diego-cell.yml", "../windows2012R2-cell.yml", "../windows1803-cell.yml", "isolated-logging-system-with-windows-cells.yml"},
-	},
 }
 
 func TestTest(t *testing.T) {

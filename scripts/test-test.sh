@@ -15,7 +15,6 @@ test_test_ops() {
       check_interpolation "enable-nfs-test-server.yml"
       check_interpolation "name: enable-nfs-test-ldapserver.yml" "${home}/operations/enable-nfs-volume-service.yml" "-o enable-nfs-test-server.yml" "-o enable-nfs-test-ldapserver.yml"
       check_interpolation "enable-smb-test-server.yml" "-v smb-password=FOO.PASS" "-v smb-username=BAR.USER"
-      check_interpolation "name: isolated-logging-system-with-windows-cells.yml" "add-persistent-isolation-segment-diego-cell.yml" "-o ${home}/operations/windows2012R2-cell.yml" "-o ${home}/operations/windows1803-cell.yml" "-o isolated-logging-system-with-windows-cells.yml"
     popd > /dev/null # operations/test
   popd > /dev/null
   exit $exit_code
