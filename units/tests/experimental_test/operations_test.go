@@ -51,16 +51,12 @@ var experimentalTests = map[string]helpers.OpsFileTestParams{
 	"enable-traffic-to-internal-networks.yml":  {},
 	"fast-deploy-with-downtime-and-danger.yml": {},
 	"infrastructure-metrics.yml":               {},
-	"perm-service.yml": {
-		Ops:  []string{"perm-service.yml"},
-		Vars: []string{"perm_uaa_clients_cc_perm_secret=perm_secret", "perm_uaa_clients_perm_monitor_secret=perm_monitor_secret"},
-	},
 	"perm-service-with-pxc-release.yml": {
-		Ops:  []string{"perm-service.yml", "perm-service-with-pxc-release.yml"},
+		Ops:  []string{"perm-service-with-pxc-release.yml"},
 		Vars: []string{"perm_uaa_clients_cc_perm_secret=perm_secret", "perm_uaa_clients_perm_monitor_secret=perm_monitor_secret"},
 	},
 	"perm-service-with-tcp-routing.yml": {
-		Ops:  []string{"perm-service.yml", "perm-service-with-pxc-release.yml", "perm-service-with-tcp-routing.yml"},
+		Ops:  []string{"perm-service-with-pxc-release.yml", "perm-service-with-tcp-routing.yml"},
 		Vars: []string{"perm_uaa_clients_cc_perm_secret=perm_secret", "perm_uaa_clients_perm_monitor_secret=perm_monitor_secret"},
 	},
 	"rootless-containers.yml": {},

@@ -41,7 +41,6 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 | [`infrastructure-metrics.yml`](infrastructure-metrics.yml) | Add the Prometheus node exporter and Loggregator Prom Scraper to addons. This puts infrastructure metrics into Loggregator's metric stream. | | **NO** |
 | [`perm-service-with-pxc-release.yml`](perm-service-with-pxc-release.yml) | **"DEPRECATED because the perm-service is incompatible with [PXC](https://github.com/cloudfoundry-incubator/pxc-release)."** | | **NO** |
 | [`perm-service-with-tcp-routing.yml`](perm-service-with-tcp-routing.yml) | **"DEPRECATED because the perm-service is incompatible with [PXC](https://github.com/cloudfoundry-incubator/pxc-release)."** | | **NO** |
-| [`perm-service.yml`](perm-service.yml) | **"DEPRECATED because the perm-service is incompatible with [PXC](https://github.com/cloudfoundry-incubator/pxc-release)."** | | **NO** |
 | [`rootless-containers.yml`](rootless-containers.yml) | Enable rootless garden-runc containers. | Requires garden-runc 1.9.5 or later and grootfs 0.27.0 or later. This ops file **cannot** be deployed in conjunction with `enable-oci-phase-1.yml`. | **NO** |
 | [`set-cpu-weight.yml`](set-cpu-weight.yml) | CPU shares for each garden container are proportional to its memory limits. | | **YES** |
 | [`set-cpu-weight-windows1803.yml`](set-cpu-weight-windows1803.yml) | CPU shares for each garden container are proportional to its memory limits. | Requires `../windows1803-cell.yml` | **NO** |
