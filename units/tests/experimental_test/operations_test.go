@@ -9,10 +9,9 @@ import (
 const testDirectory = "operations/experimental"
 
 var experimentalTests = map[string]helpers.OpsFileTestParams{
-	"add-credhub-lb.yml":         {},
-	"add-deployment-updater.yml": {},
-	"add-metric-store.yml":       {},
-	"add-syslog-agent.yml":       {},
+	"add-credhub-lb.yml":   {},
+	"add-metric-store.yml": {},
+	"add-syslog-agent.yml": {},
 	"add-syslog-agent-windows1803.yml": {
 		Ops: []string{"../windows1803-cell.yml", "add-syslog-agent.yml", "add-syslog-agent-windows1803.yml"},
 	},
@@ -25,7 +24,6 @@ var experimentalTests = map[string]helpers.OpsFileTestParams{
 	"enable-bpm-garden.yml":                                    {},
 	"enable-containerd-for-processes.yml":                      {},
 	"enable-iptables-logger.yml":                               {},
-	"enable-nfs-volume-service-credhub.yml":                    {},
 	"enable-oci-phase-1.yml":                                   {},
 	"enable-nginx-routing-integrity-windows2019.yml": {
 		Ops: []string{"../windows2019-cell.yml", "enable-nginx-routing-integrity-windows2019.yml"},

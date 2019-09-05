@@ -15,7 +15,6 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 | Name | Purpose | Notes | Currently validated in Release Integration CI pipelines? |
 |:---  |:---     |:---   |:---   |
 | [`add-credhub-lb.yml`](add-credhub-lb.yml) |  **[DEPRECATED]** Use load balancer to expose external address for CredHub. | | **NO** |
-| [`add-deployment-updater.yml`](add-deployment-updater.yml) |  **"DEPRECATED because it is inlined in to `cf-deployment.yml`"** | | **NO** |
 | [`add-metric-store.yml`](add-metric-store.yml) |  **Add Metric Store node for persistence of metrics from Loggregator** | | **NO** |
 | [`add-syslog-agent.yml`](add-syslog-agent.yml) |  Add agent to all vms for the purpose of egressing application logs to syslog | | **YES** |
 | [`add-syslog-agent-windows1803.yml`](add-syslog-agent-windows1803.yml) |  Add agent to windows1803 Diego cells for the purpose of egressing application logs to syslog | Requires `../windows1803-cell.yml` and `add-syslog-agent.yml` | **NO** |
@@ -26,7 +25,6 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 | [`enable-bpm-garden.yml`](enable-bpm-garden.yml) | Enables the [BOSH Process Manager](https://github.com/cloudfoundry-incubator/bpm-release) for Garden. | This ops file **cannot** be deployed in conjunction with `enable-oci-phase-1.yml`. | **NO** |
 | [`enable-containerd-for-processes.yml`](enable-containerd-for-processes.yml) | Configure Garden to run processes via containerd. | This ops file **cannot** be deployed in conjunction with `rootless-containers.yml`. | **NO** |
 | [`enable-iptables-logger.yml`](enable-iptables-logger.yml) | Enables iptables logger. | | **YES** |
-| [`enable-nfs-volume-service-credhub.yml`](enable-nfs-volume-service-credhub.yml) | **DEPRECATED because it is inlined into `enable-nfs-volume-service.yml`** Enables credhub integration for NFS volume services | | **NO** |
 | [`enable-nginx-routing-integrity-windows2019.yml`](enable-nginx-routing-integrity-windows2019.yml) | Enables container proxy on the Windows 2019 Diego Cell `rep` and configures gorouter to opt into TLS-enabled connections to the backend. | **Warning: this is very experimental** Requires `../windows1803-cell.yml` | **NO** |
 | [`enable-oci-phase-1.yml`](enable-oci-phase-1.yml) | Configure CC, Diego, and Garden to create app and task containers more efficiently via OCI image specs. | This ops file **cannot** be deployed in conjunction with `rootless-containers.yml`. | **NO** |
 | [`enable-routing-integrity-windows1803.yml`](enable-routing-integrity-windows1803.yml) | Enables container proxy on the Windows 1803 Diego Cell `rep` and configures gorouter to opt into TLS-enabled connections to the backend. | **Warning: this is very experimental** Requires `../windows1803-cell.yml` | **NO** |

@@ -8,15 +8,12 @@ test_experimental_ops() {
     pushd operations/experimental > /dev/null
       check_interpolation "add-credhub-lb.yml"
 
-      check_interpolation "add-deployment-updater.yml"
-
       check_interpolation "disable-interpolate-service-bindings.yml"
       check_interpolation "disable-uaa-client-redirect-uri-legacy-matching-mode.yml"
 
       check_interpolation "enable-bpm-garden.yml"
       check_interpolation "enable-containerd-for-processes.yml"
       check_interpolation "enable-iptables-logger.yml"
-      check_interpolation "enable-nfs-volume-service-credhub.yml"
       check_interpolation "enable-oci-phase-1.yml"
       check_interpolation "enable-smb-volume-service.yml"
       check_interpolation "enable-suspect-actual-lrp-generation.yml"
