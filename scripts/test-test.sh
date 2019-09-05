@@ -18,7 +18,6 @@ test_test_ops() {
       check_interpolation "name: add-persistent-isolation-segment-logging-system.yml" "add-persistent-isolation-segment-diego-cell.yml" "-o add-persistent-isolation-segment-logging-system.yml"
       check_interpolation "name: add-persistent-isolation-segment-syslog-drain.yml" "add-persistent-isolation-segment-diego-cell.yml" "-o add-persistent-isolation-segment-logging-system.yml" "-o add-persistent-isolation-segment-syslog-drain.yml"
       check_interpolation "name: isolated-logging-system-with-windows-cells.yml" "add-persistent-isolation-segment-diego-cell.yml" "-o add-persistent-isolation-segment-logging-system.yml" "-o ${home}/operations/windows2012R2-cell.yml" "-o ${home}/operations/windows1803-cell.yml" "-o isolated-logging-system-with-windows-cells.yml"
-      check_interpolation "name: add-persistent-isolation-segment-infrastructure-metrics.yml" "${home}/operations/experimental/infrastructure-metrics.yml" "-o add-persistent-isolation-segment-diego-cell.yml" "-o add-persistent-isolation-segment-logging-system.yml" "-o add-persistent-isolation-segment-infrastructure-metrics.yml"
     popd > /dev/null # operations/test
   popd > /dev/null
   exit $exit_code

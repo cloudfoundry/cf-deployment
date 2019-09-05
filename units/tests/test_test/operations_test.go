@@ -17,10 +17,7 @@ var testTests = map[string]helpers.OpsFileTestParams{
 		Ops: []string{"add-persistent-isolation-segment-diego-cell.yml", "add-persistent-isolation-segment-diego-cell-bosh-lite.yml"},
 	},
 	"add-persistent-isolation-segment-diego-cell.yml": {},
-	"add-persistent-isolation-segment-infrastructure-metrics.yml": {
-		Ops: []string{"../experimental/infrastructure-metrics.yml", "add-persistent-isolation-segment-diego-cell.yml", "add-persistent-isolation-segment-logging-system.yml", "add-persistent-isolation-segment-infrastructure-metrics.yml"},
-	},
-	"add-persistent-isolation-segment-router.yml": {},
+	"add-persistent-isolation-segment-router.yml":     {},
 	"add-persistent-isolation-segment-logging-system.yml": {
 		Ops: []string{"add-persistent-isolation-segment-diego-cell.yml", "add-persistent-isolation-segment-logging-system.yml"},
 	},
