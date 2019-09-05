@@ -11,10 +11,6 @@ const testDirectory = "operations/experimental"
 var experimentalTests = map[string]helpers.OpsFileTestParams{
 	"add-credhub-lb.yml":         {},
 	"add-deployment-updater.yml": {},
-	"add-deployment-updater-external-db.yml": {
-		Ops:       []string{"add-deployment-updater.yml", "../use-external-dbs.yml", "add-deployment-updater-external-db.yml"},
-		VarsFiles: []string{"../example-vars-files/vars-use-external-dbs.yml"},
-	},
 	"add-deployment-updater-postgres.yml": {
 		Ops: []string{"add-deployment-updater.yml", "../use-postgres.yml", "add-deployment-updater-postgres.yml"},
 	},
