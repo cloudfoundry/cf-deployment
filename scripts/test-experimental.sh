@@ -9,7 +9,6 @@ test_experimental_ops() {
       check_interpolation "add-credhub-lb.yml"
 
       check_interpolation "add-deployment-updater.yml"
-      check_interpolation "name: add-deployment-updater-postgres.yml" "add-deployment-updater.yml" "-o add-deployment-updater-postgres.yml"
 
       check_interpolation "disable-interpolate-service-bindings.yml"
       check_interpolation "disable-uaa-client-redirect-uri-legacy-matching-mode.yml"

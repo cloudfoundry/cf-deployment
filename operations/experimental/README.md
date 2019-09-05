@@ -15,7 +15,6 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 | Name | Purpose | Notes | Currently validated in Release Integration CI pipelines? |
 |:---  |:---     |:---   |:---   |
 | [`add-credhub-lb.yml`](add-credhub-lb.yml) |  **[DEPRECATED]** Use load balancer to expose external address for CredHub. | | **NO** |
-| [`add-deployment-updater-postgres.yml`](add-deployment-updater-postgres.yml) |  **"DEPRECATED because it is inlined in to `cf-deployment.yml`"** | Requires `add-deployment-updater.yml` | **NO** |
 | [`add-deployment-updater.yml`](add-deployment-updater.yml) |  **"DEPRECATED because it is inlined in to `cf-deployment.yml`"** | | **NO** |
 | [`add-metric-store.yml`](add-metric-store.yml) |  **Add Metric Store node for persistence of metrics from Loggregator** | | **NO** |
 | [`add-syslog-agent.yml`](add-syslog-agent.yml) |  Add agent to all vms for the purpose of egressing application logs to syslog | | **YES** |
