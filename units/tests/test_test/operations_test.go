@@ -18,11 +18,8 @@ var testTests = map[string]helpers.OpsFileTestParams{
 	},
 	"add-persistent-isolation-segment-diego-cell.yml": {},
 	"add-persistent-isolation-segment-router.yml":     {},
-	"add-persistent-isolation-segment-syslog-drain.yml": {
-		Ops: []string{"add-persistent-isolation-segment-diego-cell.yml", "add-persistent-isolation-segment-syslog-drain.yml"},
-	},
-	"alter-ssh-proxy-redirect-uri.yml": {},
-	"enable-nfs-test-server.yml":       {},
+	"alter-ssh-proxy-redirect-uri.yml":                {},
+	"enable-nfs-test-server.yml":                      {},
 	"enable-nfs-test-ldapserver.yml": {
 		Ops: []string{"../enable-nfs-volume-service.yml", "enable-nfs-test-server.yml", "enable-nfs-test-ldapserver.yml"},
 	},
