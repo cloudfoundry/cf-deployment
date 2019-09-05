@@ -20,10 +20,9 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 | [`add-deployment-updater.yml`](add-deployment-updater.yml) |  **"DEPRECATED because it is inlined in to `cf-deployment.yml`"** | | **NO** |
 | [`add-metric-store.yml`](add-metric-store.yml) |  **Add Metric Store node for persistence of metrics from Loggregator** | | **NO** |
 | [`add-syslog-agent.yml`](add-syslog-agent.yml) |  Add agent to all vms for the purpose of egressing application logs to syslog | | **YES** |
-| [`add-syslog-agent-windows1803.yml`](add-syslog-agent-windows1803.yml) |  Add agent to windows1803 Diego cells for the purpose of egressing application logs to syslog | Requires `../windows1803-cell.yml`, `add-syslog-agent.yml` and `deploy-forwarder-agent.yml` | **NO** |
+| [`add-syslog-agent-windows1803.yml`](add-syslog-agent-windows1803.yml) |  Add agent to windows1803 Diego cells for the purpose of egressing application logs to syslog | Requires `../windows1803-cell.yml` and `add-syslog-agent.yml` | **NO** |
 | [`add-system-metrics-agent.yml`](add-system-metrics-agent.yml) | Add agent to all vms with the purpose of egressing system metrics | | **NO** |
 | [`add-system-metrics-agent-windows1803.yml`](add-system-metrics-agent-windows1803.yml) | Add agent to windows1803 Diego cells for the purpose of egressing system metrics | | **NO** |
-| [`deploy-forwarder-agent.yml`](deploy-forwarder-agent.yml) |  **"DEPRECATED because it is inlined in to `cf-deployment.yml`"** | | **YES** |
 | [`disable-interpolate-service-bindings.yml`](disable-interpolate-service-bindings.yml) | Disables the interpolation of CredHub service credentials by Cloud Controller. | | **NO** |
 | [`disable-uaa-client-redirect-uri-legacy-matching-mode.yml`](disable-uaa-client-redirect-uri-legacy-matching-mode.yml) | Disables legacy (non-exact) matching of redirect URIs in the UAA. | | **NO** |
 | [`enable-bpm-garden.yml`](enable-bpm-garden.yml) | Enables the [BOSH Process Manager](https://github.com/cloudfoundry-incubator/bpm-release) for Garden. | This ops file **cannot** be deployed in conjunction with `enable-oci-phase-1.yml`. | **NO** |
