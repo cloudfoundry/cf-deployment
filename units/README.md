@@ -5,6 +5,7 @@
 1. [Running](#running)
 1. [Contributing](#contributing)
     - [New Interpolate Tests](#new-interpolate-tests)
+    - [Validating Ops-File Actions](#validating-ops-file-actions)
 
 ## Types of tests
 Each unit test subdirectory suite has a set of basic tests it runs.
@@ -46,3 +47,39 @@ The optional `bosh interpolate` configurations are:
   `-o` flag. These must be relative to the subdirectory being tested.
 - `Vars` `[]string`: a list of `-vars` arguments to be added.
 - `VarsFiles` `[]string`: a list of `-vars-file` arguments to be added.
+
+### Validating Ops-File Actions
+An `InterpolateTest` can optionally include a `PathValidator` configuration
+that will interpolate the given path and compare the resulting output with
+the given expected value.
+
+For example, given the following manifest snippet:
+```
+stemcells:
+- alias: default
+  os: ubuntu-xenial
+  version: "456.16"
+```
+
+and the following ops-file:
+```
+- path: /stemcells/alias=default/version
+  type: replace
+  value: latest
+```
+
+you could write your `InterpolateTest` to not only confirm that the ops-file
+will apply cleanly, but also that it results in the desired change:
+```
+"use-latest-stemcell.yml": {
+	PathValidator: helpers.PathValidator{
+		Path: "/stemcells/alias=default/version", ExpectedValue: "latest",
+	},
+}
+```
+
+#### Current Limitations
+- only one path can be validated per test
+- the validation is performed using a string matcher, as opposed to a yaml
+  matcher, which means that the output will be formatted exactly as `bosh
+  interpolate --path` returns, including newlines and `-` markers for arrays.
