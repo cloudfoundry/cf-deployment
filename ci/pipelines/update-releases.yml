@@ -11840,10 +11840,11 @@ jobs:
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
-          OPS_FILES: |
+          OPS_FILES: |-
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
             operations/use-compiled-releases.yml
             operations/experimental/use-compiled-releases-windows.yml
+            operations/windows2019-cell.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
       - task: ensure-api-healthy
