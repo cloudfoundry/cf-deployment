@@ -18,6 +18,7 @@
             key: ((system_metrics.private_key))
       release: loggregator-agent
     name: loggr-system-metrics-agent
+
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=loggr-metric-scraper?
   value:
@@ -28,17 +29,38 @@
           ca_cert: ((system_metrics.ca))
           cert: ((system_metrics.certificate))
           key: ((system_metrics.private_key))
+      leadership_election:
+        ca_cert: "((leadership_election_client_tls.ca))"
+        cert: "((leadership_election_client_tls.certificate))"
+        key: "((leadership_election_client_tls.private_key))"
+      metrics:
+        ca_cert: "((loggr_metric_scraper_metrics_tls.ca))"
+        cert: "((loggr_metric_scraper_metrics_tls.certificate))"
+        key: "((loggr_metric_scraper_metrics_tls.private_key))"
+        server_name: loggr_metric_scraper_metrics
     release: loggregator-agent
+
 - type: replace
   path: /instance_groups/name=scheduler/instances
   value: 3
+
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=leadership-election?
   value:
     name: leadership-election
     properties:
       port: 7100
+      tls:
+        ca_cert: "((leadership_election_tls.ca))"
+        cert: "((leadership_election_tls.certificate))"
+        key: "((leadership_election_tls.private_key))"
+      metrics:
+        ca_cert: "((leadership_election_metrics_tls.ca))"
+        cert: "((leadership_election_metrics_tls.certificate))"
+        key: "((leadership_election_metrics_tls.private_key))"
+        server_name: leadership_election_metrics
     release: leadership-election
+
 - type: replace
   path: /variables/name=system_metrics?
   value:
@@ -50,10 +72,55 @@
       - client_auth
       - server_auth
     type: certificate
+
 - type: replace
   path: /releases/name=leadership-election?
   value:
     name: leadership-election
-    sha1: 1ada72f49da02d06002d1c77dc6e5067458f5e9a
-    url: https://bosh.io/d/github.com/cloudfoundry/leadership-election-release?v=1.4
-    version: "1.4"
+    version: 2.0.0
+    url: https://bosh.io/d/github.com/cloudfoundry/leadership-election-release?v=2.0.0
+    sha1: f92817c3432f71ae3b99bec362711940ee6d179a
+
+- type: replace
+  path: /variables/name=leadership_election_tls?
+  value:
+    name: leadership_election_tls
+    type: certificate
+    options:
+      ca: loggregator_ca
+      common_name: leadership_election
+      extended_key_usage:
+      - server_auth
+
+- type: replace
+  path: /variables/name=leadership_election_client_tls?
+  value:
+    name: leadership_election_client_tls
+    type: certificate
+    options:
+      ca: loggregator_ca
+      common_name: leadership_election_client
+      extended_key_usage:
+      - client_auth
+
+- type: replace
+  path: /variables/name=loggr_metric_scraper_metrics_tls?
+  value:
+    name: loggr_metric_scraper_metrics_tls
+    type: certificate
+    options:
+      ca: metric_scraper_ca
+      common_name: loggr_metric_scraper_metrics
+      extended_key_usage:
+      - server_auth
+
+- type: replace
+  path: /variables/name=leadership_election_metrics_tls?
+  value:
+    name: leadership_election_metrics_tls
+    type: certificate
+    options:
+      ca: metric_scraper_ca
+      common_name: leadership_election_metrics
+      extended_key_usage:
+      - server_auth

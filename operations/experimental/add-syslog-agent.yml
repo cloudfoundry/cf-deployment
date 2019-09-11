@@ -28,6 +28,11 @@
             cert: "((syslog_agent_api_tls.certificate))"
             key: "((syslog_agent_api_tls.private_key))"
             cn: "binding-cache"
+        metrics:
+          ca_cert: "((syslog_agent_metrics_tls.ca))"
+          cert: "((syslog_agent_metrics_tls.certificate))"
+          key: "((syslog_agent_metrics_tls.private_key))"
+          server_name: syslog_agent_metrics
 
 - type: replace
   path: /variables/-
@@ -71,6 +76,11 @@
           cert: "((binding_cache_api_tls.certificate))"
           key: "((binding_cache_api_tls.private_key))"
           cn: "cloud-controller-ng.service.cf.internal"
+      metrics:
+        ca_cert: "((loggr_syslog_binding_cache_metrics_tls.ca))"
+        cert: "((loggr_syslog_binding_cache_metrics_tls.certificate))"
+        key: "((loggr_syslog_binding_cache_metrics_tls.private_key))"
+        server_name: loggr_syslog_binding_cache_metrics
 
 - type: replace
   path: /variables/-
@@ -94,26 +104,24 @@
       extended_key_usage:
       - server_auth
 
-#################
-# UDP Forwarder #
-#################
 - type: replace
-  path: /addons/name=loggregator_agent/exclude/jobs?/-
+  path: /variables/name=syslog_agent_metrics_tls?
   value:
-    name: cloud_controller_ng
-    release: capi
+    name: syslog_agent_metrics_tls
+    type: certificate
+    options:
+      ca: metric_scraper_ca
+      common_name: syslog_agent_metrics
+      extended_key_usage:
+      - server_auth
 
 - type: replace
-  path: /instance_groups/name=api/jobs/name=loggregator_agent?
+  path: /variables/name=loggr_syslog_binding_cache_metrics_tls?
   value:
-    name: loggregator_agent
-    release: loggregator-agent
-    properties:
-      grpc_port: 3459
-      disable_udp: true
-      loggregator:
-        tls:
-          ca_cert: "((loggregator_tls_agent.ca))"
-          agent:
-            cert: "((loggregator_tls_agent.certificate))"
-            key: "((loggregator_tls_agent.private_key))"
+    name: loggr_syslog_binding_cache_metrics_tls
+    type: certificate
+    options:
+      ca: metric_scraper_ca
+      common_name: loggr_syslog_binding_cache_metrics
+      extended_key_usage:
+      - server_auth

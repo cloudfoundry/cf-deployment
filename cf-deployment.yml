@@ -28,6 +28,11 @@ addons:
           agent:
             cert: "((loggregator_tls_agent.certificate))"
             key: "((loggregator_tls_agent.private_key))"
+      metrics:
+        ca_cert: "((loggregator_agent_metrics_tls.ca))"
+        cert: "((loggregator_agent_metrics_tls.certificate))"
+        key: "((loggregator_agent_metrics_tls.private_key))"
+        server_name: loggregator_agent_metrics
 
 - name: forwarder_agent
   include:
@@ -41,6 +46,11 @@ addons:
         ca_cert: "((loggregator_tls_agent.ca))"
         cert: "((loggregator_tls_agent.certificate))"
         key: "((loggregator_tls_agent.private_key))"
+      metrics:
+        ca_cert: "((forwarder_agent_metrics_tls.ca))"
+        cert: "((forwarder_agent_metrics_tls.certificate))"
+        key: "((forwarder_agent_metrics_tls.private_key))"
+        server_name: forwarder_agent_metrics
 
 - name: prom_scraper
   include:
@@ -51,8 +61,20 @@ addons:
     - name: smoke_tests
       release: cf-smoke-tests
   jobs:
-    - name: prom_scraper
-      release: loggregator-agent
+  - name: prom_scraper
+    release: loggregator-agent
+    properties:
+      scrape:
+        tls:
+          ca_cert: "((prom_scraper_scrape_tls.ca))"
+          cert: "((prom_scraper_scrape_tls.certificate))"
+          key: "((prom_scraper_scrape_tls.private_key))"
+          cn: prom_scraper
+      metrics:
+        ca_cert: "((prom_scraper_metrics_tls.ca))"
+        cert: "((prom_scraper_metrics_tls.certificate))"
+        key: "((prom_scraper_metrics_tls.private_key))"
+        server_name: prom_scraper_metrics
 
 - name: bpm
   include:
@@ -521,6 +543,12 @@ instance_groups:
           ca: "((loggregator_tls_agent.ca))"
           cert: "((loggregator_tls_agent.certificate))"
           key: "((loggregator_tls_agent.private_key))"
+      metrics:
+        ca_cert: "((loggr_udp_forwarder_tls.ca))"
+        cert: "((loggr_udp_forwarder_tls.certificate))"
+        key: "((loggr_udp_forwarder_tls.private_key))"
+        server_name: loggr_udp_forwarder_metrics
+
 - name: uaa
   azs:
   - z1
@@ -1008,6 +1036,11 @@ instance_groups:
           ca: "((loggregator_tls_agent.ca))"
           cert: "((loggregator_tls_agent.certificate))"
           key: "((loggregator_tls_agent.private_key))"
+      metrics:
+        ca_cert: "((loggr_udp_forwarder_tls.ca))"
+        cert: "((loggr_udp_forwarder_tls.certificate))"
+        key: "((loggr_udp_forwarder_tls.private_key))"
+        server_name: loggr_udp_forwarder_metrics
 - name: cc-worker
   azs:
   - z1
@@ -1207,6 +1240,11 @@ instance_groups:
           ca: "((loggregator_tls_agent.ca))"
           cert: "((loggregator_tls_agent.certificate))"
           key: "((loggregator_tls_agent.private_key))"
+      metrics:
+        ca_cert: "((loggr_udp_forwarder_tls.ca))"
+        cert: "((loggr_udp_forwarder_tls.certificate))"
+        key: "((loggr_udp_forwarder_tls.private_key))"
+        server_name: loggr_udp_forwarder_metrics
 - name: router
   azs:
   - z1
@@ -1260,6 +1298,11 @@ instance_groups:
           ca: "((loggregator_tls_agent.ca))"
           cert: "((loggregator_tls_agent.certificate))"
           key: "((loggregator_tls_agent.private_key))"
+      metrics:
+        ca_cert: "((loggr_udp_forwarder_tls.ca))"
+        cert: "((loggr_udp_forwarder_tls.certificate))"
+        key: "((loggr_udp_forwarder_tls.private_key))"
+        server_name: loggr_udp_forwarder_metrics
 - name: tcp-router
   azs:
   - z1
@@ -1289,6 +1332,11 @@ instance_groups:
           ca: "((loggregator_tls_agent.ca))"
           cert: "((loggregator_tls_agent.certificate))"
           key: "((loggregator_tls_agent.private_key))"
+      metrics:
+        ca_cert: "((loggr_udp_forwarder_tls.ca))"
+        cert: "((loggr_udp_forwarder_tls.certificate))"
+        key: "((loggr_udp_forwarder_tls.private_key))"
+        server_name: loggr_udp_forwarder_metrics
 - name: doppler
   azs:
   - z1
@@ -1314,6 +1362,11 @@ instance_groups:
     provides:
       log-cache: {shared: true}
     properties:
+      metrics:
+        ca_cert: "((log_cache_metrics_tls.ca))"
+        cert: "((log_cache_metrics_tls.certificate))"
+        key: "((log_cache_metrics_tls.private_key))"
+        server_name: log_cache_metrics
       health_addr: localhost:6060
       tls:
         ca_cert: ((log_cache.ca))
@@ -1325,6 +1378,11 @@ instance_groups:
       gateway_addr: localhost:8081
       proxy_cert: "((log_cache_proxy_tls.certificate))"
       proxy_key: "((log_cache_proxy_tls.private_key))"
+      metrics:
+        ca_cert: "((log_cache_gateway_metrics_tls.ca))"
+        cert: "((log_cache_gateway_metrics_tls.certificate))"
+        key: "((log_cache_gateway_metrics_tls.private_key))"
+        server_name: log_cache_gateway_metrics
     release: log-cache
   - consumes:
       reverse_log_proxy: {from: reverse_log_proxy}
@@ -1351,6 +1409,11 @@ instance_groups:
     release: routing
   - name: log-cache-cf-auth-proxy
     properties:
+      metrics:
+        ca_cert: "((log_cache_cf_auth_proxy_metrics_tls.ca))"
+        cert: "((log_cache_cf_auth_proxy_metrics_tls.certificate))"
+        key: "((log_cache_cf_auth_proxy_metrics_tls.private_key))"
+        server_name: log_cache_cf_auth_proxy_metrics
       cc:
         ca_cert: ((cc_tls.ca))
         common_name: cloud-controller-ng.service.cf.internal
@@ -1494,6 +1557,11 @@ instance_groups:
           ca: "((loggregator_tls_agent.ca))"
           cert: "((loggregator_tls_agent.certificate))"
           key: "((loggregator_tls_agent.private_key))"
+      metrics:
+        ca_cert: "((loggr_udp_forwarder_tls.ca))"
+        cert: "((loggr_udp_forwarder_tls.certificate))"
+        key: "((loggr_udp_forwarder_tls.private_key))"
+        server_name: loggr_udp_forwarder_metrics
 - name: log-api
   azs:
   - z1
@@ -2189,6 +2257,76 @@ variables:
     ca: service_cf_internal_ca
     common_name: doppler.((system_domain))
 
+- name: metric_scraper_ca
+  type: certificate
+  options:
+    is_ca: true
+    common_name: metricScraperCA
+
+- name: log_cache_metrics_tls
+  type: certificate
+  options:
+    ca: metric_scraper_ca
+    common_name: log_cache_metrics
+    extended_key_usage:
+    - server_auth
+
+- name: log_cache_cf_auth_proxy_metrics_tls
+  type: certificate
+  options:
+    ca: metric_scraper_ca
+    common_name: log_cache_cf_auth_proxy_metrics
+    extended_key_usage:
+    - server_auth
+
+- name: log_cache_gateway_metrics_tls
+  type: certificate
+  options:
+    ca: metric_scraper_ca
+    common_name: log_cache_gateway_metrics
+    extended_key_usage:
+    - server_auth
+
+- name: forwarder_agent_metrics_tls
+  type: certificate
+  options:
+    ca: metric_scraper_ca
+    common_name: forwarder_agent_metrics
+    extended_key_usage:
+    - server_auth
+
+- name: loggregator_agent_metrics_tls
+  type: certificate
+  options:
+    ca: metric_scraper_ca
+    common_name: loggregator_agent_metrics
+    extended_key_usage:
+    - server_auth
+
+- name: loggr_udp_forwarder_tls
+  type: certificate
+  options:
+    ca: metric_scraper_ca
+    common_name: loggr_udp_forwarder_metrics
+    extended_key_usage:
+    - server_auth
+
+- name: prom_scraper_scrape_tls
+  type: certificate
+  options:
+    ca: metric_scraper_ca
+    common_name: prom_scraper
+    extended_key_usage:
+    - client_auth
+
+- name: prom_scraper_metrics_tls
+  type: certificate
+  options:
+    ca: metric_scraper_ca
+    common_name: prom_scraper_metrics
+    extended_key_usage:
+    - server_auth
+
 releases:
 - name: binary-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/binary-buildpack-release?v=1.0.33
@@ -2299,13 +2437,13 @@ releases:
   version: 74.1.0
   sha1: e5ec082acf7d9c0154883ca46c937fc7838891aa
 - name: loggregator-agent
-  url: https://bosh.io/d/github.com/cloudfoundry/loggregator-agent-release?v=3.21
-  version: "3.21"
-  sha1: c4fc1e176a92777a5d1070543a786f86f5cfd8b9
+  version: 4.0.0
+  url: https://bosh.io/d/github.com/cloudfoundry/loggregator-agent-release?v=4.0.0
+  sha1: 9d40ba43ee87520afaedee73a407e4a9c4de8196
 - name: log-cache
-  url: https://bosh.io/d/github.com/cloudfoundry/log-cache-release?v=2.4.0
-  version: 2.4.0
-  sha1: 8bc1226f6ba9a6d3527b180415a8c361c1509b93
+  version: 2.5.1
+  url: https://bosh.io/d/github.com/cloudfoundry/log-cache-release?v=2.5.1
+  sha1: 626d7d54ab7a774b62484a29be21b08e5b5a1ba2
 - name: bosh-dns-aliases
   url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-aliases-release?v=0.0.3
   version: 0.0.3
