@@ -55,9 +55,6 @@ jobs:
   public: true
   serial_groups:
   - stemcell
-  #@ for r in data.values.baseReleases:
-  - #@ "update-" + r.name
-  #@ end
   plan:
   - in_parallel:
     - get: cf-deployment-concourse-tasks
@@ -67,53 +64,44 @@ jobs:
     - get: stemcell
       params:
         tarball: false
-  - task: update-stemcell-manifest-section
-    file: runtime-ci/tasks/update-stemcell-manifest-section/task.yml
-    input_mapping:
-      cf-deployment: cf-deployment-master
   - do:
-    - #@ bbl_up(env)
-    - #@ manage_gcp_dns("add", env)
-    - task: upload-updated-stemcell
-      file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        cf-deployment: updated-cf-deployment
-      params:
-        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
-        INFRASTRUCTURE: google
-    - task: deploy-cf
-      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        cf-deployment: updated-cf-deployment
-        ops-files: updated-cf-deployment
-        vars-files: relint-envs
-      params:
-        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
-        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
-        OPS_FILES: |
-          operations/experimental/fast-deploy-with-downtime-and-danger.yml
-        REGENERATE_CREDENTIALS: false
-        BOSH_DEPLOY_ARGS: "--parallel 50"
-    - task: run-errand-smoke-tests
-      file: cf-deployment-concourse-tasks/run-errand/task.yml
+    - task: upload-stemcell
+      file: runtime-ci/tasks/bosh-upload-stemcell/task.yml
       input_mapping:
         bbl-state: relint-envs
       params:
-        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
-        ERRAND_NAME: smoke-tests
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
+    - task: deploy-releases
+      file: runtime-ci/tasks/deploy-all-releases/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        cf-deployment: cf-deployment-master
+      params:
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
     - task: export-all-compiled-release-tarballs
       file: runtime-ci/tasks/export-all-compiled-release-tarballs/task.yml
       input_mapping:
         bbl-state: relint-envs
       params:
-        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
+        BOSH_DEPLOYMENT: cf-compilation
     ensure:
       do:
-      - #@ delete_deployment(env)
-      - #@ manage_gcp_dns("remove", env)
-      - #@ bbl_down(env)
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/greengrass/bbl-state
+          DELETE_ALL_DEPLOYMENTS: true
+          IGNORE_ERRORS: true
+        attempts: 3
+      - task: run-bosh-cleanup
+        file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/greengrass/bbl-state
   - task: update-stemcell
     file: runtime-ci/tasks/update-stemcell/task.yml
     input_mapping:

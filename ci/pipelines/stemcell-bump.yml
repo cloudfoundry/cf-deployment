@@ -45,37 +45,6 @@ jobs:
   public: true
   serial_groups:
   - stemcell
-  - update-binary-buildpack
-  - update-bosh-dns-aliases
-  - update-bpm
-  - update-capi
-  - update-cf-networking
-  - update-cf-smoke-tests
-  - update-cf-syslog-drain
-  - update-cflinuxfs3
-  - update-diego
-  - update-dotnet-core-buildpack
-  - update-garden-runc
-  - update-go-buildpack
-  - update-java-buildpack
-  - update-log-cache
-  - update-loggregator
-  - update-loggregator-agent
-  - update-nats
-  - update-nginx-buildpack
-  - update-nodejs-buildpack
-  - update-php-buildpack
-  - update-python-buildpack
-  - update-pxc
-  - update-r-buildpack
-  - update-routing
-  - update-ruby-buildpack
-  - update-silk
-  - update-staticfile-buildpack
-  - update-statsd-injector
-  - update-uaa
-  - update-credhub
-  - update-cf-cli
   plan:
   - in_parallel:
     - get: cf-deployment-concourse-tasks
@@ -85,75 +54,27 @@ jobs:
     - get: stemcell
       params:
         tarball: false
-  - task: update-stemcell-manifest-section
-    file: runtime-ci/tasks/update-stemcell-manifest-section/task.yml
-    input_mapping:
-      cf-deployment: cf-deployment-master
   - do:
-    - task: bbl-up
-      file: cf-deployment-concourse-tasks/bbl-up/task.yml
-      params:
-        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
-        BBL_IAAS: gcp
-        BBL_ENV_NAME: pre-dev
-        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
-        BBL_GCP_REGION: us-central1
-        BBL_LB_CERT: ((pre_dev_cf_lb_cert.certificate))
-        BBL_LB_KEY: ((pre_dev_cf_lb_cert.private_key))
-        LB_DOMAIN: pre-dev.test.relint.rocks
-      input_mapping:
-        bbl-state: relint-envs
-        bbl-config: relint-envs
-      ensure:
-        put: relint-envs
-        params:
-          repository: updated-bbl-state
-          rebase: true
-    - task: add-gcp-dns
-      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+    - task: upload-stemcell
+      file: runtime-ci/tasks/bosh-upload-stemcell/task.yml
       input_mapping:
         bbl-state: relint-envs
       params:
-        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
-        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-        GCP_DNS_ZONE_NAME: test-relint-rocks
-        GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
-        ACTION: add
-    - task: upload-updated-stemcell
-      file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
+    - task: deploy-releases
+      file: runtime-ci/tasks/deploy-all-releases/task.yml
       input_mapping:
         bbl-state: relint-envs
-        cf-deployment: updated-cf-deployment
+        cf-deployment: cf-deployment-master
       params:
-        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
-        INFRASTRUCTURE: google
-    - task: deploy-cf
-      file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        cf-deployment: updated-cf-deployment
-        ops-files: updated-cf-deployment
-        vars-files: relint-envs
-      params:
-        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
-        SYSTEM_DOMAIN: pre-dev.test.relint.rocks
-        OPS_FILES: |
-          operations/experimental/fast-deploy-with-downtime-and-danger.yml
-        REGENERATE_CREDENTIALS: false
-        BOSH_DEPLOY_ARGS: --parallel 50
-    - task: run-errand-smoke-tests
-      file: cf-deployment-concourse-tasks/run-errand/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-      params:
-        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
-        ERRAND_NAME: smoke-tests
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
     - task: export-all-compiled-release-tarballs
       file: runtime-ci/tasks/export-all-compiled-release-tarballs/task.yml
       input_mapping:
         bbl-state: relint-envs
       params:
-        BBL_STATE_DIR: environments/test/pre-dev/bbl-state
+        BBL_STATE_DIR: environments/test/greengrass/bbl-state
+        BOSH_DEPLOYMENT: cf-compilation
     ensure:
       do:
       - task: delete-deployment
@@ -161,29 +82,16 @@ jobs:
         input_mapping:
           bbl-state: relint-envs
         params:
-          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
-      - task: remove-gcp-dns
-        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+          BBL_STATE_DIR: environments/test/greengrass/bbl-state
+          DELETE_ALL_DEPLOYMENTS: true
+          IGNORE_ERRORS: true
+        attempts: 3
+      - task: run-bosh-cleanup
+        file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
         input_mapping:
           bbl-state: relint-envs
         params:
-          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
-          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-          GCP_DNS_ZONE_NAME: test-relint-rocks
-          GCP_DNS_RECORD_SET_NAME: pre-dev.test.relint.rocks
-          ACTION: remove
-      - task: bbl-down
-        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-        params:
-          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/pre-dev/google_account_creds.json
-          BBL_STATE_DIR: environments/test/pre-dev/bbl-state
-        ensure:
-          put: relint-envs
-          params:
-            repository: updated-bbl-state
-            rebase: true
+          BBL_STATE_DIR: environments/test/greengrass/bbl-state
   - task: update-stemcell
     file: runtime-ci/tasks/update-stemcell/task.yml
     input_mapping:
