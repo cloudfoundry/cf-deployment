@@ -76,6 +76,11 @@
               cert: ((loggregator_tls_agent.certificate))
               key: ((loggregator_tls_agent.private_key))
             ca_cert: ((loggregator_tls_agent.ca))
+        metrics:
+          ca_cert: "((loggregator_agent_metrics_tls.ca))"
+          cert: "((loggregator_agent_metrics_tls.certificate))"
+          key: "((loggregator_agent_metrics_tls.private_key))"
+          server_name: loggregator_agent_metrics
         syslog_daemon_config:
           enable: false
       release: loggregator-agent

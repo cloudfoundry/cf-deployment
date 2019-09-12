@@ -98,11 +98,27 @@
               cert: ((loggregator_tls_agent.certificate))
               key: ((loggregator_tls_agent.private_key))
             ca_cert: ((loggregator_tls_agent.ca))
+        metrics:
+          ca_cert: "((loggregator_agent_metrics_tls.ca))"
+          cert: "((loggregator_agent_metrics_tls.certificate))"
+          key: "((loggregator_agent_metrics_tls.private_key))"
+          server_name: loggregator_agent_metrics
         syslog_daemon_config:
           enable: false
       release: loggregator-agent
     - name: prom_scraper_windows
       release: loggregator-agent
+      properties:
+        scrape:
+          tls:
+            ca_cert: "((prom_scraper_scrape_tls.ca))"
+            cert: "((prom_scraper_scrape_tls.certificate))"
+            key: "((prom_scraper_scrape_tls.private_key))"
+        metrics:
+          ca_cert: "((prom_scraper_metrics_tls.ca))"
+          cert: "((prom_scraper_metrics_tls.certificate))"
+          key: "((prom_scraper_metrics_tls.private_key))"
+          server_name: prom_scraper_metrics
     - name: enable_ssh
       release: windows-utilities
     name: windows1803-cell
