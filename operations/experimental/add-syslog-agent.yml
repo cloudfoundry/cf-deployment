@@ -2,7 +2,7 @@
 # Syslog Agent #
 ################
 - type: replace
-  path: /addons/-
+  path: /addons/name=loggr-syslog-agent?
   value:
     name: loggr-syslog-agent
     include:
@@ -35,7 +35,7 @@
           server_name: syslog_agent_metrics
 
 - type: replace
-  path: /variables/-
+  path: /variables/name=syslog_agent_api_tls
   value:
     name: syslog_agent_api_tls
     type: certificate
@@ -49,7 +49,7 @@
 # Binding Cache #
 #################
 - type: replace
-  path: /instance_groups/name=scheduler/jobs/-
+  path: /instance_groups/name=scheduler/jobs/name=loggr-syslog-binding-cache?
   value:
     name: loggr-syslog-binding-cache
     release: loggregator-agent
@@ -73,7 +73,7 @@
         server_name: loggr_syslog_binding_cache_metrics
 
 - type: replace
-  path: /variables/-
+  path: /variables/name=binding_cache_api_tls?
   value:
     name: binding_cache_api_tls
     type: certificate
@@ -84,7 +84,7 @@
       - client_auth
 
 - type: replace
-  path: /variables/-
+  path: /variables/name=binding_cache_tls?
   value:
     name: binding_cache_tls
     type: certificate
