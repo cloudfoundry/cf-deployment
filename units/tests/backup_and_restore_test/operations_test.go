@@ -12,17 +12,23 @@ var backupAndRestoreTests = map[string]helpers.OpsFileTestParams{
 	//internal
 	"enable-backup-restore.yml": {
 		Ops: []string{"enable-backup-restore.yml"},
+		PathValidator: helpers.PathValidator{
+			Path:          "/instance_groups/name=singleton-blobstore/jobs/name=blobstore/properties/select_directories_to_backup",
+			ExpectedValue: "- buildpacks\n- packages\n- droplets",
+		},
 	},
 	"skip-backup-restore-droplets.yml": {
 		Ops: []string{"enable-backup-restore.yml", "skip-backup-restore-droplets.yml"},
 		PathValidator: helpers.PathValidator{
-			Path: "/instance_groups/name=singleton-blobstore/jobs/name=blobstore/properties/select_directories_to_backup", ExpectedValue: "- buildpacks\n- packages",
+			Path:          "/instance_groups/name=singleton-blobstore/jobs/name=blobstore/properties/select_directories_to_backup",
+			ExpectedValue: "- buildpacks\n- packages",
 		},
 	},
 	"skip-backup-restore-droplets-and-packages.yml": {
 		Ops: []string{"enable-backup-restore.yml", "skip-backup-restore-droplets-and-packages.yml"},
 		PathValidator: helpers.PathValidator{
-			Path: "/instance_groups/name=singleton-blobstore/jobs/name=blobstore/properties/select_directories_to_backup", ExpectedValue: "- buildpacks",
+			Path:          "/instance_groups/name=singleton-blobstore/jobs/name=blobstore/properties/select_directories_to_backup",
+			ExpectedValue: "- buildpacks",
 		},
 	},
 

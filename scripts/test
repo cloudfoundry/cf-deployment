@@ -10,8 +10,6 @@ LIGHT_RED='\033[1;31m'
 YELLOW='\033[0;93m'
 NOCOLOR='\033[0m'
 
-: "${RUN_SEMANTIC:="true"}"
-
 script_home="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 home="$( cd "${script_home}/.." && pwd )"
 
@@ -54,148 +52,13 @@ interpolate() {
   return $exit_code
 }
 
-check_interpolation() {
-  if [[ ${1} == name:* ]]; then
-    name_under_test=$1
-    empty_string=""
-    ops_under_test="${name_under_test/name: /$empty_string}"; shift
-  else
-    ops_under_test="${1}"
-  fi
-
-  if interpolate "-o $@"; then
-    pass "${ops_under_test}"
-  else
-    fail "${ops_under_test}"
-  fi
-}
-
-check_latest() {
-  local opsfile=${1}; shift
-  local stemcell_alias=${1}; shift
-  local version=$(bosh interpolate \
-    ${home}/cf-deployment.yml \
-    $@ \
-    -o ${opsfile} \
-    --path=/stemcells/alias=${stemcell_alias}/version)
-
-  if [ "${version}" == "latest" ]; then
-    pass "${opsfile}"
-  else
-    fail "${opsfile}, expected 'latest' but got '${version}'"
-  fi
-}
-
 test_opsfile_interpolation() {
-  test_standard_ops &
-  test_experimental_ops &
-  test_test_ops &
-  test_addons_ops &
   test_backup_and_restore_ops &
-  test_bits_service_ops &
 
   for job in $(jobs -p); do
     wait $job || exit_code=1
   done
 }
-
-test_iaas_opsfile_interpolation() {
-  test_iaas_ops &
-
-  for job in $(jobs -p); do
-    wait $job || exit_code=1
-  done
-}
-
-test_example_vars_files_interpolation() {
-  test_example_vars_files &
-
-  for job in $(jobs -p); do
-    wait $job || exit_code=1
-  done
-}
-
-ensure_test_opsfiles_not_in_readme() {
-  pushd ${home} > /dev/null
-    local opsfiles=$(ls operations/test/*.yml)
-    local output=$(grep $(for x in $opsfiles; do echo -n " -e $x"; done;) README.md -c)
-
-    if [ $output == "0" ]; then
-      pass "Test opsfiles do not appear in README"
-    else
-      fail "Test opsfiles appear in README"
-    fi
-  popd > /dev/null
-}
-
-ensure_opsfiles_in_readme() {
-  local readme=$1
-  shift
-
-  suite_name="$readme"
-
-  pushd ${home} > /dev/null
-    for x in $@; do
-      local basename=$(basename $x)
-      if [ $(grep \($basename\) $readme -c) != "0" ]; then
-        pass "$x is in $readme"
-      else
-        fail "$x does not appear in $readme"
-      fi
-    done;
-  popd > /dev/null
-}
-
-ensure_opsfiles_in_readme_exist() {
-  local ops_dir=$1
-  local readme=${ops_dir}/README.md
-
-
-  ops_files_in_readme=$(cat ${readme} | grep -Eo '\((.+\.yml)\)' | cut -d '(' -f2 | cut -d ')' -f1)
-
-  pushd ${home} > /dev/null
-    for ops_file in ${ops_files_in_readme}; do
-      set +e
-        ls ${ops_dir}/${ops_file} > /dev/null 2>&1
-        local ops_file_exists=$?
-      set -e
-
-      suite_name="${ops_dir}/${ops_file}"
-      if [ "${ops_file_exists}" == "0" ]; then
-          pass "$ops_file from $readme exists"
-      else
-          fail "$ops_file from $readme doesn't exist"
-      fi
-    done
-  popd > /dev/null
-
-}
-
-ensure_opsfiles_in_tests() {
-  local test=$1
-  shift
-
-  suite_name="$test"
-
-  pushd ${home} > /dev/null
-    for x in $@; do
-      local basename=$(basename $x)
-      # 'grep -E': Use extended regex
-      # A match has the following form:
-      #   A line starting with 'check_interpolation "', optionally followed by 'name: '
-      #   OR
-      #   A line starting with 'pass "'
-      #   AND
-      #   Followed by "$basename"
-      if [ $(grep -E "((check_interpolation|check_latest)\s+\"(name:\s+)?|pass\s+\")($basename)" $test -c) != "0" ]; then
-        pass "$x is tested in $test"
-      else
-        fail "$x is ${RED}NOT${NOCOLOR} tested in $test"
-      fi
-    done;
-  popd > /dev/null
-}
-
 main() {
   local ops_directories
   local ops_directories_without_test
@@ -209,40 +72,8 @@ main() {
   ops_directories_without_community="$(echo "${ops_directories}" | grep -v -e community)"
 
   echo
-  echo -e "${LIGHT_GREEN} ***** Begin affirmative readme operations tests ***** ${NOCOLOR}"
-  for f in $ops_directories_without_test; do
-    ensure_opsfiles_in_readme "$f"/README.md "$(ls "$f"/*.yml)"
-  done
-
-  echo
-  echo -e "${LIGHT_GREEN} ***** Begin affirmative operations in readme tests ***** ${NOCOLOR}"
-  for f in $ops_directories_without_test; do
-    ensure_opsfiles_in_readme_exist "$f"
-  done
-
-  echo
-  echo -e "${LIGHT_GREEN} ***** Begin negative readme operations tests ***** ${NOCOLOR}"
-  ensure_test_opsfiles_not_in_readme
-
-  echo
-  echo -e "${LIGHT_GREEN} ***** Begin test coverage analysis ***** ${NOCOLOR}"
-  for f in $ops_directories_without_community; do
-    ensure_opsfiles_in_tests "scripts/test-$(basename $f).sh" $(ls $f/*.yml)
-  done
-
-  echo
   echo -e "${LIGHT_GREEN} ***** Begin interpolation operations tests ***** ${NOCOLOR}"
   test_opsfile_interpolation
-
-  echo
-  echo -e "${LIGHT_GREEN} ***** Begin interpolation iaas operations tests ***** ${NOCOLOR}"
-  test_iaas_opsfile_interpolation
-
-  if [ "$RUN_SEMANTIC" == "true" ]; then
-    echo
-    echo -e "${LIGHT_GREEN} ***** Begin semantic operations tests ***** ${NOCOLOR}"
-    semantic_tests
-  fi
 
   echo
   if [ "$exit_code" == "0" ]; then

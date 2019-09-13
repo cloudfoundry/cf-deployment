@@ -146,8 +146,10 @@ func TestSemantic(t *testing.T) {
 	})
 
 	t.Run("use-trusted-ca-cert-for-apps.yml", func(t *testing.T) {
-		certPaths := []string{"/instance_groups/name=diego-cell/jobs/name=cflinuxfs3-rootfs-setup/properties/cflinuxfs3-rootfs/trusted_certs",
-			"/instance_groups/name=diego-cell/jobs/name=cflinuxfs3-rootfs-setup/properties/cflinuxfs3-rootfs/trusted_certs"}
+		certPaths := []string{
+			"/instance_groups/name=diego-cell/jobs/name=cflinuxfs3-rootfs-setup/properties/cflinuxfs3-rootfs/trusted_certs",
+			"/instance_groups/name=diego-cell/jobs/name=cflinuxfs3-rootfs-setup/properties/cflinuxfs3-rootfs/trusted_certs",
+		}
 
 		for _, certPath := range certPaths {
 			existingCA, err := helpers.BoshInterpolate(
@@ -171,7 +173,7 @@ func TestSemantic(t *testing.T) {
 				t.Errorf("bosh interpolate error: %v", err)
 			}
 
-			if diff, ok := diffLeft(string(existingCA), string(newCA)); !ok {
+			if diff, same := diffLeft(string(existingCA), string(newCA)); !same {
 				t.Errorf("use-trusted-ca-cert-for-apps.yml overwrites existing trusted CAs from cf-deployment.yml.\n%s", diff)
 			}
 		}
@@ -200,7 +202,7 @@ func TestSemantic(t *testing.T) {
 			t.Errorf("bosh interpolate error: %v", err)
 		}
 
-		if diff, ok := diffLeft(string(diegoCellRepProperties), string(isoSegDiegoCellRepProperties)); !ok {
+		if diff, same := diffLeft(string(diegoCellRepProperties), string(isoSegDiegoCellRepProperties)); !same {
 			t.Errorf("rep properties on diego-cell have diverged between cf-deployment.yml and test/add-persistent-isolation-segment-diego-cell.yml.\n%s", diff)
 		}
 	})

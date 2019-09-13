@@ -6,56 +6,9 @@ test_backup_and_restore_ops() {
 
   pushd ${home} > /dev/null
     pushd operations/backup-and-restore > /dev/null
-
-      # internal
-      check_interpolation "name: enable-backup-restore.yml" "enable-backup-restore.yml"
-
-      # internal skip-droplets & skip-droplets-and-packages
-      check_interpolation "name: skip-backup-restore-droplets.yml" "enable-backup-restore.yml" "-o skip-backup-restore-droplets.yml"
-      check_interpolation "name: skip-backup-restore-droplets-and-packages.yml" "enable-backup-restore.yml" "-o skip-backup-restore-droplets-and-packages.yml"
-
-      check_internal_blobstore_properties "$(echo -e '- buildpacks\n- packages\n- droplets')" ""
-      check_internal_blobstore_properties "$(echo -e '- buildpacks\n- packages')" "-o skip-backup-restore-droplets.yml"
-      check_internal_blobstore_properties "$(echo -e '- buildpacks')" "-o skip-backup-restore-droplets-and-packages.yml"
-
       ensure_singleton_blobstore_not_templated "skip-backup-restore-droplets.yml"
       ensure_singleton_blobstore_not_templated "skip-backup-restore-droplets-and-packages.yml"
-
-      # s3 versioned & unversioned
-      check_interpolation "name: enable-backup-restore-s3-versioned.yml"   "enable-backup-restore.yml" "-o ${home}/operations/use-external-blobstore.yml" "-o ${home}/operations/use-s3-blobstore.yml" "-o enable-backup-restore-s3-versioned.yml"   "-l ${home}/operations/example-vars-files/vars-use-s3-blobstore.yml"
-      check_interpolation "name: enable-backup-restore-s3-unversioned.yml" "enable-backup-restore.yml" "-o ${home}/operations/use-external-blobstore.yml" "-o ${home}/operations/use-s3-blobstore.yml" "-o enable-backup-restore-s3-unversioned.yml" "-l ${home}/operations/example-vars-files/vars-use-s3-blobstore.yml" "-l example-vars-files/vars-enable-backup-restore-s3-unversioned.yml"
-
-      # s3 versioned & unversioned, skip-droplets & skip-droplets-and-packages
-      check_interpolation "name: skip-backup-restore-droplets.yml (with s3 ver)"   "enable-backup-restore.yml" "-o ${home}/operations/use-external-blobstore.yml" "-o ${home}/operations/use-s3-blobstore.yml" "-o enable-backup-restore-s3-versioned.yml" "-o skip-backup-restore-droplets.yml"  "-l ${home}/operations/example-vars-files/vars-use-s3-blobstore.yml"
-      check_interpolation "name: skip-backup-restore-droplets-and-packages.yml (with s3 ver)"   "enable-backup-restore.yml" "-o ${home}/operations/use-external-blobstore.yml" "-o ${home}/operations/use-s3-blobstore.yml" "-o enable-backup-restore-s3-versioned.yml" "-o skip-backup-restore-droplets-and-packages.yml"  "-l ${home}/operations/example-vars-files/vars-use-s3-blobstore.yml"
-
-      check_interpolation "name: skip-backup-restore-droplets.yml (with s3 unver)"   "enable-backup-restore.yml" "-o ${home}/operations/use-external-blobstore.yml" "-o ${home}/operations/use-s3-blobstore.yml" "-o enable-backup-restore-s3-unversioned.yml" "-o skip-backup-restore-droplets.yml"  "-l ${home}/operations/example-vars-files/vars-use-s3-blobstore.yml" "-l example-vars-files/vars-enable-backup-restore-s3-unversioned.yml"
-      check_interpolation "name: skip-backup-restore-droplets-and-packages.yml (with s3 unver)"   "enable-backup-restore.yml" "-o ${home}/operations/use-external-blobstore.yml" "-o ${home}/operations/use-s3-blobstore.yml" "-o enable-backup-restore-s3-unversioned.yml" "-o skip-backup-restore-droplets-and-packages.yml"  "-l ${home}/operations/example-vars-files/vars-use-s3-blobstore.yml" "-l example-vars-files/vars-enable-backup-restore-s3-unversioned.yml"
-
-      # azure
-      check_interpolation "name: enable-backup-restore-azure.yml" "enable-backup-restore.yml" "-o ${home}/operations/use-external-blobstore.yml" "-o ${home}/operations/use-azure-storage-blobstore.yml" "-o enable-backup-restore-azure.yml" "-l ${home}/operations/example-vars-files/vars-use-azure-storage-blobstore.yml"
-      check_interpolation "name: enable-restore-azure-clone.yml"  "enable-backup-restore.yml" "-o ${home}/operations/use-external-blobstore.yml" "-o ${home}/operations/use-azure-storage-blobstore.yml" "-o enable-restore-azure-clone.yml"  "-l ${home}/operations/example-vars-files/vars-use-azure-storage-blobstore.yml" "-l example-vars-files/vars-enable-restore-azure-clone.yml"
-
-      # azure skip-droplets & skip-droplets-and-packages
-      check_interpolation "name: skip-backup-restore-droplets.yml (with azure)" "enable-backup-restore.yml" "-o ${home}/operations/use-external-blobstore.yml" "-o ${home}/operations/use-azure-storage-blobstore.yml" "-o enable-backup-restore-azure.yml" "-o skip-backup-restore-droplets.yml" "-l ${home}/operations/example-vars-files/vars-use-azure-storage-blobstore.yml"
-      check_interpolation "name: skip-backup-restore-droplets-and-packages.yml (with azure)" "enable-backup-restore.yml" "-o ${home}/operations/use-external-blobstore.yml" "-o ${home}/operations/use-azure-storage-blobstore.yml" "-o enable-backup-restore-azure.yml" "-o skip-backup-restore-droplets-and-packages.yml" "-l ${home}/operations/example-vars-files/vars-use-azure-storage-blobstore.yml"
-
-      check_interpolation "name: skip-backup-restore-droplets.yml"  "enable-backup-restore.yml" "-o ${home}/operations/use-external-blobstore.yml" "-o ${home}/operations/use-azure-storage-blobstore.yml" "-o enable-restore-azure-clone.yml" "-o skip-backup-restore-droplets.yml" "-l ${home}/operations/example-vars-files/vars-use-azure-storage-blobstore.yml" "-l example-vars-files/vars-enable-restore-azure-clone.yml"
-      check_interpolation "name: skip-backup-restore-droplets-and-packages.yml"  "enable-backup-restore.yml" "-o ${home}/operations/use-external-blobstore.yml" "-o ${home}/operations/use-azure-storage-blobstore.yml" "-o enable-restore-azure-clone.yml" "-o skip-backup-restore-droplets-and-packages.yml" "-l ${home}/operations/example-vars-files/vars-use-azure-storage-blobstore.yml" "-l example-vars-files/vars-enable-restore-azure-clone.yml"
-
-      # gcs
-      check_interpolation "name: enable-backup-restore-gcs.yml" "enable-backup-restore.yml" "-o ${home}/operations/use-external-blobstore.yml" "-o ${home}/operations/use-gcs-blobstore-service-account.yml" "-o enable-backup-restore-gcs.yml" "-l ${home}/operations/example-vars-files/vars-use-gcs-blobstore-service-account.yml" "-l ${home}/operations/backup-and-restore/example-vars-files/vars-enable-backup-restore-gcs.yml"
-
-      # gcs skip-droplets & skip-droplets-and-packages
-      check_interpolation "name: skip-backup-restore-droplets.yml (with gcs)" "enable-backup-restore.yml" "-o ${home}/operations/use-external-blobstore.yml" "-o ${home}/operations/use-gcs-blobstore-service-account.yml" "-o enable-backup-restore-gcs.yml" "-o skip-backup-restore-droplets.yml" "-l ${home}/operations/example-vars-files/vars-use-gcs-blobstore-service-account.yml" "-l ${home}/operations/backup-and-restore/example-vars-files/vars-enable-backup-restore-gcs.yml"
-      check_interpolation "name: skip-backup-restore-droplets-and-packages.yml (with gcs)" "enable-backup-restore.yml" "-o ${home}/operations/use-external-blobstore.yml" "-o ${home}/operations/use-gcs-blobstore-service-account.yml" "-o enable-backup-restore-gcs.yml" "-o skip-backup-restore-droplets-and-packages.yml" "-l ${home}/operations/example-vars-files/vars-use-gcs-blobstore-service-account.yml" "-l ${home}/operations/backup-and-restore/example-vars-files/vars-enable-backup-restore-gcs.yml"
-
-      # nfs
-      check_interpolation "name: enable-restore-nfs-broker.yml" "enable-backup-restore.yml" "-o enable-restore-nfs-broker.yml" "-v nfs-broker-push-uaa-client-secret=s3cr3t"
       ensure_properties_are_in_sync "nfs" "nfsbrokerpush"
-
-      # smb
-      check_interpolation "name: enable-restore-smb-broker.yml" "enable-backup-restore.yml" "-o enable-restore-smb-broker.yml" "-v smb-broker-password=pa55word" "-v smb-broker-uaa-client-secret=s3cr3t" "-v smb-broker-credhub-uaa-client-secret=s3cr3t"
       ensure_properties_are_in_sync "smb" "smbbrokerpush"
     popd > /dev/null
   popd > /dev/null
