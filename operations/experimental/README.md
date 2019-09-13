@@ -16,7 +16,7 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 |:---  |:---     |:---   |:---   |
 | [`add-credhub-lb.yml`](add-credhub-lb.yml) |  **[DEPRECATED]** Use load balancer to expose external address for CredHub. | | **NO** |
 | [`add-metric-store.yml`](add-metric-store.yml) |  **Add Metric Store node for persistence of metrics from Loggregator** | | **NO** |
-| [`add-syslog-agent.yml`](add-syslog-agent.yml) |  Add agent to all vms for the purpose of egressing application logs to syslog | | **YES** |
+| [`add-syslog-agent.yml`](add-syslog-agent.yml) |  Add agent to all vms for the purpose of egressing application logs to syslog and disable cf-syslog-drain release | | **YES** |
 | [`add-syslog-agent-windows1803.yml`](add-syslog-agent-windows1803.yml) |  Add agent to windows1803 Diego cells for the purpose of egressing application logs to syslog | Requires `../windows1803-cell.yml` and `add-syslog-agent.yml` | **NO** |
 | [`add-system-metrics-agent.yml`](add-system-metrics-agent.yml) | Add agent to all vms with the purpose of egressing system metrics | | **NO** |
 | [`add-system-metrics-agent-windows1803.yml`](add-system-metrics-agent-windows1803.yml) | Add agent to windows1803 Diego cells for the purpose of egressing system metrics | | **NO** |

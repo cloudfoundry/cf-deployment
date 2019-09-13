@@ -45,16 +45,6 @@
       extended_key_usage:
       - client_auth
 
-
-##################
-# Forwader Agent #
-##################
-- type: replace
-  path: /addons/name=forwarder_agent/jobs/name=loggr-forwarder-agent/properties/downstream_ingress_ports?
-  value:
-  - 3459
-  - 3460
-
 #################
 # Binding Cache #
 #################
@@ -125,3 +115,16 @@
       common_name: loggr_syslog_binding_cache_metrics
       extended_key_usage:
       - server_auth
+
+#################
+# Remove cf-syslog-drain-release #
+#################
+
+- type: remove
+  path: /releases/name=cf-syslog-drain
+
+- type: remove
+  path: /instance_groups/name=adapter
+
+- type: remove
+  path: /instance_groups/name=scheduler/jobs/name=scheduler
