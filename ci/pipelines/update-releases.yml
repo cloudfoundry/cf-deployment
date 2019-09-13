@@ -3926,7 +3926,7 @@ jobs:
   - task: update-release-log-cache-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      cf-deployment: cf-deployment-develop
+      cf-deployment: cf-deployment-release-candidate
       release: log-cache-release
     output_mapping:
       updated-cf-deployment: updated-cf-deployment-log-cache-release-candidate
@@ -3969,7 +3969,7 @@ jobs:
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
-          first-input: cf-deployment-develop
+          first-input: cf-deployment-release-candidate
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
@@ -4386,7 +4386,7 @@ jobs:
   - task: update-release-loggregator-agent-release-candidate
     file: runtime-ci/tasks/update-single-manifest-release/task.yml
     input_mapping:
-      cf-deployment: cf-deployment-develop
+      cf-deployment: cf-deployment-release-candidate
       release: loggregator-agent-release
     output_mapping:
       updated-cf-deployment: updated-cf-deployment-loggregator-agent-release-candidate
@@ -4429,7 +4429,7 @@ jobs:
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
-          first-input: cf-deployment-develop
+          first-input: cf-deployment-release-candidate
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
@@ -11418,7 +11418,7 @@ jobs:
   - task: update-additional-ops-files-leadership-election-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
-      original-ops-file: cf-deployment-develop
+      original-ops-file: cf-deployment-release-candidate
       release: leadership-election-release
     output_mapping:
       updated-ops-file: updated-cf-deployment-leadership-election-release-candidate
@@ -11452,7 +11452,7 @@ jobs:
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
-          first-input: cf-deployment-develop
+          first-input: cf-deployment-release-candidate
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
