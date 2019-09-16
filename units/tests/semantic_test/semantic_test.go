@@ -120,19 +120,16 @@ func TestSemantic(t *testing.T) {
 	})
 
 	t.Run("use-compiled-releases.yml", func(t *testing.T) {
+		t.Skip("Must be fixed with story [#163164326](https://www.pivotaltracker.com/story/show/163164326)")
 
 		manifest, err := boshInterpolateAndUnmarshal(
 			operationsSubDirectory,
 			manifestPath,
 			"-o", "use-compiled-releases.yml",
 		)
+
 		if err != nil {
 			t.Errorf("failed to get unmarshalled manifest: %v", err)
-		}
-
-		out, err := helpers.RunCommandInDirectory(cfDeploymentHome, "git", "diff", "release-candidate")
-		if err != nil {
-			t.Errorf("failed to run git command: %v", err)
 		}
 
 		for _, r := range manifest.Releases {
@@ -143,15 +140,6 @@ func TestSemantic(t *testing.T) {
 			}
 
 			if re.MatchString(r.URL) {
-				releaseRegex, err := regexp.Compile(fmt.Sprintf("\\+\\s*- name: %s", r.Name))
-				if err != nil {
-					t.Fatalf("failed creating regexp: %v", err)
-				}
-
-				if releaseRegex.Match(out) {
-					continue
-				}
-
 				t.Errorf("expected release %s to be compiled, but got the release from %s", r.Name, r.URL)
 			}
 		}

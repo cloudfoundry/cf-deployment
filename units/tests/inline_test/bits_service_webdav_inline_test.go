@@ -6,9 +6,9 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 	"testing"
 
-	"github.com/cf-deployment/units/helpers"
 	"github.com/sergi/go-diff/diffmatchpatch"
 )
 
@@ -71,24 +71,36 @@ func TestInline(t *testing.T) {
 }
 
 func gitSetup(tempDir string) error {
-	err := helpers.RunCommandInDirectory(tempDir, "git", "init")
+	err := runCommandInDirectory(tempDir, "git", "init")
 	if err != nil {
 		return err
 	}
 
-	err = helpers.RunCommandInDirectory(tempDir, "git", "remote", "add", "origin", "https://github.com/cloudfoundry/cf-deployment")
+	err = runCommandInDirectory(tempDir, "git", "remote", "add", "origin", "https://github.com/cloudfoundry/cf-deployment")
 	if err != nil {
 		return err
 	}
 
-	err = helpers.RunCommandInDirectory(tempDir, "git", "fetch", "origin", "master")
+	err = runCommandInDirectory(tempDir, "git", "fetch", "origin", "master")
 	if err != nil {
 		return err
 	}
 
-	err = helpers.RunCommandInDirectory(tempDir, "git", "checkout", "FETCH_HEAD", "--", "cf-deployment.yml")
+	err = runCommandInDirectory(tempDir, "git", "checkout", "FETCH_HEAD", "--", "cf-deployment.yml")
 	if err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func runCommandInDirectory(dir string, name string, args ...string) error {
+	cmd := exec.Command(name, args...)
+	cmd.Dir = dir
+
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("%s failed: %s", strings.Join(cmd.Args, " "), string(out))
 	}
 
 	return nil
