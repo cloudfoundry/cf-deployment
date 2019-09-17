@@ -19,18 +19,19 @@
 - [ ] YES
 - [ ] NO
 
-### Does this PR introduce a breaking change? Please see definition of breaking change below.
+### Does this PR introduce a breaking change? Please take a moment to read through the examples before answering the question.
 
-- [ ] YES - please specify
+- [ ] YES - please choose the category from below. Feel free to provide additional details.
 - [ ] NO
 
 > **Types of breaking changes:**
-> - **causes app or operator downtime**
-> - modifies, deletes or moves the name of a job or instance group in the main manifest
-> - modifies the name or deletes a property of a job or instance group in the main manifest
-> - changes the name of credentials in the main manifest
-> - requires out-of-band manual intervention on the part of the operator 
-> - modifies the ops-file path, changes the type, changes the values or removes ops-files from the followning folders
+> 1. **causes app or operator downtime**
+> 2. increases VM footprint of cf-deployment - e.g. new jobs, new add ons, increases # of instances etc.
+> 3. modifies, deletes or moves the name of a job or instance group in the main manifest
+> 4. modifies the name or deletes a property of a job or instance group in the main manifest
+> 5. changes the name of credentials in the main manifest
+> 6. requires out-of-band manual intervention on the part of the operator 
+> 7. modifies the ops-file path, changes the type, changes the values or removes ops-files from the followning folders
 >    - `./operations/` or `./operations/experimental` 
 >    - `./addons`
 >    - `./backup-and-restore/`
@@ -50,15 +51,18 @@
 - [ ] YES - please specify
 - [ ] NO
 
-### Will this change increase the VM footprint of cf-deployment?
-
-- [ ] YES - does it really have to?
-- [ ] NO
-
 ### Does this PR make a change to an experimental or GA'd feature/component?
 
 - [ ] experimental feature/component
 - [ ] GA'd feature/component
+
+### Please provide Acceptance Criteria for this change?
+
+> _Please specify either bosh cli or cf cli commands for our team (and cf operators) to verify the changes._
+
+> _Few examples_
+> 1. For a PR with a new job in the manifest, `bosh instances` can verify the job is running after upgrade. You can provide additional commands to verify the job is running as specified.
+> 2. For a PR with new variables, `bosh variables | grep <var-name>` command can verify the variable exists. This is the simplest varification but you can also provide additional commands to test that the variable holds the desired value.
 
 ### What is the level of urgency for publishing this change?
 
