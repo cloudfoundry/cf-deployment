@@ -1,4 +1,5 @@
 #@ load("@ytt:data", "data")
+
 #@ load("bbl-down.lib.yml", "bbl_down")
 #@ load("bbl-up.lib.yml", "bbl_up")
 #@ load("delete-deployment.lib.yml", "delete_deployment")
@@ -210,6 +211,17 @@ resources:
     pool: update-release-pool
     private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
 
+#@ for e in data.values.preDevEnvs:
+- name: #@ "pre-dev-" + e.name
+  type: pool
+  icon: pool
+  source:
+    uri: git@github.com:cloudfoundry/relint-ci-pools
+    branch: master
+    pool: update-release-pool
+    private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
+#@ end
+
 jobs:
 #@ for r in data.values.baseReleases:
 #@ if hasattr(r, "debug"):
@@ -218,11 +230,6 @@ jobs:
   #@ env = "pre-dev"
 #@ end
 - name: #@ "update-" + r.name
-  serial_groups:
-  #@ if hasattr(r, "debug"):
-  - update-release-debug
-  #@ end
-  - stemcell
   public: true
   plan:
   - put: pre-dev-pool
@@ -372,8 +379,6 @@ jobs:
 
 #@ if hasattr(r, "debug"):
 - name: #@ "destroy-" + r.name + "-debug-env"
-  serial_groups:
-  - update-release-debug
   public: true
   plan:
   - in_parallel:
@@ -393,10 +398,6 @@ jobs:
   #@ env = "pre-dev"
 #@ end
 - name: #@ "update-" + r.name
-  serial_groups:
-  #@ if hasattr(r, "debug"):
-  - update-release-debug
-  #@ end
   public: true
   plan:
   - put: pre-dev-pool
@@ -522,8 +523,6 @@ jobs:
 
 #@ if hasattr(r, "debug"):
 - name: #@ "destroy-" + r.name + "-debug-env"
-  serial_groups:
-  - update-release-debug
   public: true
   plan:
   - in_parallel:
@@ -563,90 +562,102 @@ jobs:
 
 - name: update-stemcell-and-recompile-releases
   public: true
-  serial_groups:
-  - stemcell
   plan:
   - in_parallel:
-    - get: runtime-ci
-    - get: relint-envs
-    - get: cf-deployment-develop
-    - get: cf-deployment-concourse-tasks
-    #@ for s in data.values.baseReleases:
-    - get: #@ s.name + "-release"
+    #@ for e in data.values.preDevEnvs:
+    - put: #@ "pre-dev-" + e.name
       params:
-        tarball: false
+        claim: #@ "pre-dev-" + e.name
     #@ end
-    - get: stemcell
-      trigger: true
-      params:
-        tarball: false
-  - task: update-stemcell-manifest-section
-    file: runtime-ci/tasks/update-stemcell-manifest-section/task.yml
-    input_mapping:
-      cf-deployment: cf-deployment-develop
-  - task: upload-updated-stemcell
-    file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: updated-cf-deployment
-    params:
-      BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      INFRASTRUCTURE: google
-  - in_parallel:
-    #@ for s in data.values.baseReleases:
-    - task: #@ "compile-release-" + s.name
-      file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+  - do:
+    - in_parallel:
+      - get: runtime-ci
+      - get: relint-envs
+      - get: cf-deployment-develop
+      - get: cf-deployment-concourse-tasks
+      #@ for s in data.values.baseReleases:
+      - get: #@ s.name + "-release"
+        params:
+          tarball: false
+      #@ end
+      - get: stemcell
+        trigger: true
+        params:
+          tarball: false
+    - task: update-stemcell-manifest-section
+      file: runtime-ci/tasks/update-stemcell-manifest-section/task.yml
+      input_mapping:
+        cf-deployment: cf-deployment-develop
+    - task: upload-updated-stemcell
+      file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
       input_mapping:
         bbl-state: relint-envs
-        manifest: updated-cf-deployment
-      output_mapping:
-        exported-release: #@ s.name + "-compiled-release-tarball"
+        cf-deployment: updated-cf-deployment
       params:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
-        RELEASE_NAME: #@ s.name
-      attempts: 3
-    #@ end
-  - task: update-stemcell
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-          tag: latest
-      inputs:
-      - name: runtime-ci
-        path: go/src/github.com/cloudfoundry/runtime-ci
-      - name: cf-deployment
-      - name: stemcell
+        INFRASTRUCTURE: google
+    - in_parallel:
       #@ for s in data.values.baseReleases:
-      - name: #@ s.name + "-release"
-      - name: #@ s.name + "-compiled-release-tarball"
+      - task: #@ "compile-release-" + s.name
+        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          manifest: updated-cf-deployment
+        output_mapping:
+          exported-release: #@ s.name + "-compiled-release-tarball"
+        params:
+          BBL_STATE_DIR: environments/test/greengrass/bbl-state
+          RELEASE_NAME: #@ s.name
+        attempts: 3
       #@ end
-      outputs:
-      - name: updated-cf-deployment
+    - task: update-stemcell
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+            tag: latest
+        inputs:
+        - name: runtime-ci
+          path: go/src/github.com/cloudfoundry/runtime-ci
+        - name: cf-deployment
+        - name: stemcell
+        #@ for s in data.values.baseReleases:
+        - name: #@ s.name + "-release"
+        - name: #@ s.name + "-compiled-release-tarball"
+        #@ end
+        outputs:
+        - name: updated-cf-deployment
+        params:
+          COMMIT_MESSAGE_PATH: commit-message.txt
+          ORIGINAL_DEPLOYMENT_MANIFEST_PATH: cf-deployment.yml
+          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
+          UPDATED_DEPLOYMENT_MANIFEST_PATH: cf-deployment.yml
+          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
+        run:
+          path: go/src/github.com/cloudfoundry/runtime-ci/tasks/update-stemcell/task
+      input_mapping:
+        cf-deployment: cf-deployment-develop
+    - in_parallel:
+      #@ for s in data.values.baseReleases:
+      - put: #@ s.name + "-release-gcs"
+        params:
+          file: #@ s.name + "-compiled-release-tarball/*.tgz"
+          predefined_acl: publicRead
+        attempts: 3
+      #@ end
+    - put: cf-deployment-develop
       params:
-        COMMIT_MESSAGE_PATH: commit-message.txt
-        ORIGINAL_DEPLOYMENT_MANIFEST_PATH: cf-deployment.yml
-        ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-        UPDATED_DEPLOYMENT_MANIFEST_PATH: cf-deployment.yml
-        UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-      run:
-        path: go/src/github.com/cloudfoundry/runtime-ci/tasks/update-stemcell/task
-    input_mapping:
-      cf-deployment: cf-deployment-develop
-  - in_parallel:
-    #@ for s in data.values.baseReleases:
-    - put: #@ s.name + "-release-gcs"
-      params:
-        file: #@ s.name + "-compiled-release-tarball/*.tgz"
-        predefined_acl: publicRead
-      attempts: 3
-    #@ end
-  - put: cf-deployment-develop
-    params:
-      rebase: true
-      repository: updated-cf-deployment
+        rebase: true
+        repository: updated-cf-deployment
+    ensure:
+      in_parallel:
+      #@ for e in data.values.preDevEnvs:
+      - put: #@ "pre-dev-" + e.name
+        params:
+          release: #@ "pre-dev-" + e.name
+      #@ end
 
 #@ for r in data.values.windowsOfflineReleases:
 - name: #@ "update-" + r.name + "-offline-release"
