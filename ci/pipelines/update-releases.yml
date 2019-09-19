@@ -12016,699 +12016,278 @@ jobs:
       - get: relint-envs
       - get: cf-deployment-develop
       - get: cf-deployment-concourse-tasks
-      - get: binary-buildpack-release
-        params:
-          tarball: false
-      - get: bosh-dns-aliases-release
-        params:
-          tarball: false
-      - get: bpm-release
-        params:
-          tarball: false
-      - get: capi-release
-        params:
-          tarball: false
-      - get: cf-networking-release
-        params:
-          tarball: false
-      - get: cf-smoke-tests-release
-        params:
-          tarball: false
-      - get: cf-syslog-drain-release
-        params:
-          tarball: false
-      - get: cflinuxfs3-release
-        params:
-          tarball: false
-      - get: diego-release
-        params:
-          tarball: false
-      - get: dotnet-core-buildpack-release
-        params:
-          tarball: false
-      - get: garden-runc-release
-        params:
-          tarball: false
-      - get: go-buildpack-release
-        params:
-          tarball: false
-      - get: java-buildpack-release
-        params:
-          tarball: false
-      - get: log-cache-release
-        params:
-          tarball: false
-      - get: loggregator-release
-        params:
-          tarball: false
-      - get: loggregator-agent-release
-        params:
-          tarball: false
-      - get: nats-release
-        params:
-          tarball: false
-      - get: nginx-buildpack-release
-        params:
-          tarball: false
-      - get: nodejs-buildpack-release
-        params:
-          tarball: false
-      - get: php-buildpack-release
-        params:
-          tarball: false
-      - get: python-buildpack-release
-        params:
-          tarball: false
-      - get: pxc-release
-        params:
-          tarball: false
-      - get: r-buildpack-release
-        params:
-          tarball: false
-      - get: routing-release
-        params:
-          tarball: false
-      - get: ruby-buildpack-release
-        params:
-          tarball: false
-      - get: silk-release
-        params:
-          tarball: false
-      - get: staticfile-buildpack-release
-        params:
-          tarball: false
-      - get: statsd-injector-release
-        params:
-          tarball: false
-      - get: uaa-release
-        params:
-          tarball: false
-      - get: credhub-release
-        params:
-          tarball: false
-      - get: cf-cli-release
-        params:
-          tarball: false
       - get: stemcell
         trigger: true
         params:
           tarball: false
-    - task: update-stemcell-manifest-section
-      file: runtime-ci/tasks/update-stemcell-manifest-section/task.yml
-      input_mapping:
-        cf-deployment: cf-deployment-develop
-    - task: upload-updated-stemcell
-      file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        cf-deployment: updated-cf-deployment
-      params:
-        BBL_STATE_DIR: environments/test/greengrass/bbl-state
-        INFRASTRUCTURE: google
-    - in_parallel:
-      - task: compile-release-binary-buildpack
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+    - do:
+      - task: upload-stemcell
+        file: runtime-ci/tasks/bosh-upload-stemcell/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: binary-buildpack-compiled-release-tarball
         params:
           BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: binary-buildpack
-        attempts: 3
-      - task: compile-release-bosh-dns-aliases
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+      - task: guarantee-no-existing-deployments
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: bosh-dns-aliases-compiled-release-tarball
         params:
           BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: bosh-dns-aliases
+          DELETE_ALL_DEPLOYMENTS: true
+          IGNORE_ERRORS: true
         attempts: 3
-      - task: compile-release-bpm
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+      - task: deploy-all-releases
+        file: runtime-ci/tasks/deploy-all-releases/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: bpm-compiled-release-tarball
+          cf-deployment: cf-deployment-develop
         params:
           BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: bpm
-        attempts: 3
-      - task: compile-release-capi
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+      - task: export-all-compiled-release-tarballs
+        file: runtime-ci/tasks/export-all-compiled-release-tarballs/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: capi-compiled-release-tarball
         params:
           BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: capi
-        attempts: 3
-      - task: compile-release-cf-networking
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: cf-networking-compiled-release-tarball
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: cf-networking
-        attempts: 3
-      - task: compile-release-cf-smoke-tests
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: cf-smoke-tests-compiled-release-tarball
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: cf-smoke-tests
-        attempts: 3
-      - task: compile-release-cf-syslog-drain
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: cf-syslog-drain-compiled-release-tarball
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: cf-syslog-drain
-        attempts: 3
-      - task: compile-release-cflinuxfs3
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: cflinuxfs3-compiled-release-tarball
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: cflinuxfs3
-        attempts: 3
-      - task: compile-release-diego
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: diego-compiled-release-tarball
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: diego
-        attempts: 3
-      - task: compile-release-dotnet-core-buildpack
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: dotnet-core-buildpack-compiled-release-tarball
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: dotnet-core-buildpack
-        attempts: 3
-      - task: compile-release-garden-runc
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: garden-runc-compiled-release-tarball
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: garden-runc
-        attempts: 3
-      - task: compile-release-go-buildpack
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: go-buildpack-compiled-release-tarball
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: go-buildpack
-        attempts: 3
-      - task: compile-release-java-buildpack
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: java-buildpack-compiled-release-tarball
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: java-buildpack
-        attempts: 3
-      - task: compile-release-log-cache
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: log-cache-compiled-release-tarball
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: log-cache
-        attempts: 3
-      - task: compile-release-loggregator
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: loggregator-compiled-release-tarball
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: loggregator
-        attempts: 3
-      - task: compile-release-loggregator-agent
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: loggregator-agent-compiled-release-tarball
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: loggregator-agent
-        attempts: 3
-      - task: compile-release-nats
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: nats-compiled-release-tarball
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: nats
-        attempts: 3
-      - task: compile-release-nginx-buildpack
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: nginx-buildpack-compiled-release-tarball
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: nginx-buildpack
-        attempts: 3
-      - task: compile-release-nodejs-buildpack
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: nodejs-buildpack-compiled-release-tarball
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: nodejs-buildpack
-        attempts: 3
-      - task: compile-release-php-buildpack
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: php-buildpack-compiled-release-tarball
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: php-buildpack
-        attempts: 3
-      - task: compile-release-python-buildpack
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: python-buildpack-compiled-release-tarball
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: python-buildpack
-        attempts: 3
-      - task: compile-release-pxc
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: pxc-compiled-release-tarball
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: pxc
-        attempts: 3
-      - task: compile-release-r-buildpack
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: r-buildpack-compiled-release-tarball
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: r-buildpack
-        attempts: 3
-      - task: compile-release-routing
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: routing-compiled-release-tarball
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: routing
-        attempts: 3
-      - task: compile-release-ruby-buildpack
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: ruby-buildpack-compiled-release-tarball
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: ruby-buildpack
-        attempts: 3
-      - task: compile-release-silk
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: silk-compiled-release-tarball
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: silk
-        attempts: 3
-      - task: compile-release-staticfile-buildpack
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: staticfile-buildpack-compiled-release-tarball
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: staticfile-buildpack
-        attempts: 3
-      - task: compile-release-statsd-injector
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: statsd-injector-compiled-release-tarball
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: statsd-injector
-        attempts: 3
-      - task: compile-release-uaa
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: uaa-compiled-release-tarball
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: uaa
-        attempts: 3
-      - task: compile-release-credhub
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: credhub-compiled-release-tarball
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: credhub
-        attempts: 3
-      - task: compile-release-cf-cli
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: cf-cli-compiled-release-tarball
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: cf-cli
-        attempts: 3
+          BOSH_DEPLOYMENT: cf-compilation
+      ensure:
+        do:
+        - task: delete-all-deployments
+          file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/greengrass/bbl-state
+            DELETE_ALL_DEPLOYMENTS: true
+            IGNORE_ERRORS: true
+          attempts: 3
+        - task: run-bosh-cleanup
+          file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/greengrass/bbl-state
     - task: update-stemcell
-      config:
-        platform: linux
-        image_resource:
-          type: docker-image
-          source:
-            repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-            tag: latest
-        inputs:
-        - name: runtime-ci
-          path: go/src/github.com/cloudfoundry/runtime-ci
-        - name: cf-deployment
-        - name: stemcell
-        - name: binary-buildpack-release
-        - name: binary-buildpack-compiled-release-tarball
-        - name: bosh-dns-aliases-release
-        - name: bosh-dns-aliases-compiled-release-tarball
-        - name: bpm-release
-        - name: bpm-compiled-release-tarball
-        - name: capi-release
-        - name: capi-compiled-release-tarball
-        - name: cf-networking-release
-        - name: cf-networking-compiled-release-tarball
-        - name: cf-smoke-tests-release
-        - name: cf-smoke-tests-compiled-release-tarball
-        - name: cf-syslog-drain-release
-        - name: cf-syslog-drain-compiled-release-tarball
-        - name: cflinuxfs3-release
-        - name: cflinuxfs3-compiled-release-tarball
-        - name: diego-release
-        - name: diego-compiled-release-tarball
-        - name: dotnet-core-buildpack-release
-        - name: dotnet-core-buildpack-compiled-release-tarball
-        - name: garden-runc-release
-        - name: garden-runc-compiled-release-tarball
-        - name: go-buildpack-release
-        - name: go-buildpack-compiled-release-tarball
-        - name: java-buildpack-release
-        - name: java-buildpack-compiled-release-tarball
-        - name: log-cache-release
-        - name: log-cache-compiled-release-tarball
-        - name: loggregator-release
-        - name: loggregator-compiled-release-tarball
-        - name: loggregator-agent-release
-        - name: loggregator-agent-compiled-release-tarball
-        - name: nats-release
-        - name: nats-compiled-release-tarball
-        - name: nginx-buildpack-release
-        - name: nginx-buildpack-compiled-release-tarball
-        - name: nodejs-buildpack-release
-        - name: nodejs-buildpack-compiled-release-tarball
-        - name: php-buildpack-release
-        - name: php-buildpack-compiled-release-tarball
-        - name: python-buildpack-release
-        - name: python-buildpack-compiled-release-tarball
-        - name: pxc-release
-        - name: pxc-compiled-release-tarball
-        - name: r-buildpack-release
-        - name: r-buildpack-compiled-release-tarball
-        - name: routing-release
-        - name: routing-compiled-release-tarball
-        - name: ruby-buildpack-release
-        - name: ruby-buildpack-compiled-release-tarball
-        - name: silk-release
-        - name: silk-compiled-release-tarball
-        - name: staticfile-buildpack-release
-        - name: staticfile-buildpack-compiled-release-tarball
-        - name: statsd-injector-release
-        - name: statsd-injector-compiled-release-tarball
-        - name: uaa-release
-        - name: uaa-compiled-release-tarball
-        - name: credhub-release
-        - name: credhub-compiled-release-tarball
-        - name: cf-cli-release
-        - name: cf-cli-compiled-release-tarball
-        outputs:
-        - name: updated-cf-deployment
-        params:
-          COMMIT_MESSAGE_PATH: commit-message.txt
-          ORIGINAL_DEPLOYMENT_MANIFEST_PATH: cf-deployment.yml
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_DEPLOYMENT_MANIFEST_PATH: cf-deployment.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-        run:
-          path: go/src/github.com/cloudfoundry/runtime-ci/tasks/update-stemcell/task
+      file: runtime-ci/tasks/update-stemcell/task.yml
       input_mapping:
         cf-deployment: cf-deployment-develop
     - in_parallel:
       - put: binary-buildpack-release-gcs
         params:
-          file: binary-buildpack-compiled-release-tarball/*.tgz
+          file: compiled-releases/binary-buildpack-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: bosh-dns-aliases-release-gcs
         params:
-          file: bosh-dns-aliases-compiled-release-tarball/*.tgz
+          file: compiled-releases/bosh-dns-aliases-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: bpm-release-gcs
         params:
-          file: bpm-compiled-release-tarball/*.tgz
+          file: compiled-releases/bpm-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: capi-release-gcs
         params:
-          file: capi-compiled-release-tarball/*.tgz
+          file: compiled-releases/capi-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: cf-networking-release-gcs
         params:
-          file: cf-networking-compiled-release-tarball/*.tgz
+          file: compiled-releases/cf-networking-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: cf-smoke-tests-release-gcs
         params:
-          file: cf-smoke-tests-compiled-release-tarball/*.tgz
+          file: compiled-releases/cf-smoke-tests-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: cf-syslog-drain-release-gcs
         params:
-          file: cf-syslog-drain-compiled-release-tarball/*.tgz
+          file: compiled-releases/cf-syslog-drain-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: cflinuxfs3-release-gcs
         params:
-          file: cflinuxfs3-compiled-release-tarball/*.tgz
+          file: compiled-releases/cflinuxfs3-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: diego-release-gcs
         params:
-          file: diego-compiled-release-tarball/*.tgz
+          file: compiled-releases/diego-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: dotnet-core-buildpack-release-gcs
         params:
-          file: dotnet-core-buildpack-compiled-release-tarball/*.tgz
+          file: compiled-releases/dotnet-core-buildpack-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: garden-runc-release-gcs
         params:
-          file: garden-runc-compiled-release-tarball/*.tgz
+          file: compiled-releases/garden-runc-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: go-buildpack-release-gcs
         params:
-          file: go-buildpack-compiled-release-tarball/*.tgz
+          file: compiled-releases/go-buildpack-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: java-buildpack-release-gcs
         params:
-          file: java-buildpack-compiled-release-tarball/*.tgz
+          file: compiled-releases/java-buildpack-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: log-cache-release-gcs
         params:
-          file: log-cache-compiled-release-tarball/*.tgz
+          file: compiled-releases/log-cache-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: loggregator-release-gcs
         params:
-          file: loggregator-compiled-release-tarball/*.tgz
+          file: compiled-releases/loggregator-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: loggregator-agent-release-gcs
         params:
-          file: loggregator-agent-compiled-release-tarball/*.tgz
+          file: compiled-releases/loggregator-agent-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: nats-release-gcs
         params:
-          file: nats-compiled-release-tarball/*.tgz
+          file: compiled-releases/nats-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: nginx-buildpack-release-gcs
         params:
-          file: nginx-buildpack-compiled-release-tarball/*.tgz
+          file: compiled-releases/nginx-buildpack-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: nodejs-buildpack-release-gcs
         params:
-          file: nodejs-buildpack-compiled-release-tarball/*.tgz
+          file: compiled-releases/nodejs-buildpack-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: php-buildpack-release-gcs
         params:
-          file: php-buildpack-compiled-release-tarball/*.tgz
+          file: compiled-releases/php-buildpack-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: python-buildpack-release-gcs
         params:
-          file: python-buildpack-compiled-release-tarball/*.tgz
+          file: compiled-releases/python-buildpack-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: pxc-release-gcs
         params:
-          file: pxc-compiled-release-tarball/*.tgz
+          file: compiled-releases/pxc-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: r-buildpack-release-gcs
         params:
-          file: r-buildpack-compiled-release-tarball/*.tgz
+          file: compiled-releases/r-buildpack-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: routing-release-gcs
         params:
-          file: routing-compiled-release-tarball/*.tgz
+          file: compiled-releases/routing-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: ruby-buildpack-release-gcs
         params:
-          file: ruby-buildpack-compiled-release-tarball/*.tgz
+          file: compiled-releases/ruby-buildpack-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: silk-release-gcs
         params:
-          file: silk-compiled-release-tarball/*.tgz
+          file: compiled-releases/silk-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: staticfile-buildpack-release-gcs
         params:
-          file: staticfile-buildpack-compiled-release-tarball/*.tgz
+          file: compiled-releases/staticfile-buildpack-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: statsd-injector-release-gcs
         params:
-          file: statsd-injector-compiled-release-tarball/*.tgz
+          file: compiled-releases/statsd-injector-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: uaa-release-gcs
         params:
-          file: uaa-compiled-release-tarball/*.tgz
+          file: compiled-releases/uaa-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: credhub-release-gcs
         params:
-          file: credhub-compiled-release-tarball/*.tgz
+          file: compiled-releases/credhub-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       - put: cf-cli-release-gcs
         params:
-          file: cf-cli-compiled-release-tarball/*.tgz
+          file: compiled-releases/cf-cli-[0-9]*.tgz
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
     - put: cf-deployment-develop
       params:

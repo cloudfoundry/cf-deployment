@@ -575,76 +575,69 @@ jobs:
       - get: relint-envs
       - get: cf-deployment-develop
       - get: cf-deployment-concourse-tasks
-      #@ for s in data.values.baseReleases:
-      - get: #@ s.name + "-release"
-        params:
-          tarball: false
-      #@ end
       - get: stemcell
         trigger: true
         params:
           tarball: false
-    - task: update-stemcell-manifest-section
-      file: runtime-ci/tasks/update-stemcell-manifest-section/task.yml
-      input_mapping:
-        cf-deployment: cf-deployment-develop
-    - task: upload-updated-stemcell
-      file: cf-deployment-concourse-tasks/bosh-upload-stemcells/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        cf-deployment: updated-cf-deployment
-      params:
-        BBL_STATE_DIR: environments/test/greengrass/bbl-state
-        INFRASTRUCTURE: google
-    - in_parallel:
-      #@ for s in data.values.baseReleases:
-      - task: #@ "compile-release-" + s.name
-        file: runtime-ci/tasks/compile-release-from-manifest/task.yml
+    - do:
+      - task: upload-stemcell
+        file: runtime-ci/tasks/bosh-upload-stemcell/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment
-        output_mapping:
-          exported-release: #@ s.name + "-compiled-release-tarball"
         params:
           BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          RELEASE_NAME: #@ s.name
-        attempts: 3
-      #@ end
-    - task: update-stemcell
-      config:
-        platform: linux
-        image_resource:
-          type: docker-image
-          source:
-            repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
-            tag: latest
-        inputs:
-        - name: runtime-ci
-          path: go/src/github.com/cloudfoundry/runtime-ci
-        - name: cf-deployment
-        - name: stemcell
-        #@ for s in data.values.baseReleases:
-        - name: #@ s.name + "-release"
-        - name: #@ s.name + "-compiled-release-tarball"
-        #@ end
-        outputs:
-        - name: updated-cf-deployment
+      - task: guarantee-no-existing-deployments
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
         params:
-          COMMIT_MESSAGE_PATH: commit-message.txt
-          ORIGINAL_DEPLOYMENT_MANIFEST_PATH: cf-deployment.yml
-          ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-          UPDATED_DEPLOYMENT_MANIFEST_PATH: cf-deployment.yml
-          UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-        run:
-          path: go/src/github.com/cloudfoundry/runtime-ci/tasks/update-stemcell/task
+          BBL_STATE_DIR: environments/test/greengrass/bbl-state
+          DELETE_ALL_DEPLOYMENTS: true
+          IGNORE_ERRORS: true
+        attempts: 3
+      - task: deploy-all-releases
+        file: runtime-ci/tasks/deploy-all-releases/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          cf-deployment: cf-deployment-develop
+        params:
+          BBL_STATE_DIR: environments/test/greengrass/bbl-state
+      - task: export-all-compiled-release-tarballs
+        file: runtime-ci/tasks/export-all-compiled-release-tarballs/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/greengrass/bbl-state
+          BOSH_DEPLOYMENT: cf-compilation
+      ensure:
+        do:
+        - task: delete-all-deployments
+          file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/greengrass/bbl-state
+            DELETE_ALL_DEPLOYMENTS: true
+            IGNORE_ERRORS: true
+          attempts: 3
+        - task: run-bosh-cleanup
+          file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/greengrass/bbl-state
+    - task: update-stemcell
+      file: runtime-ci/tasks/update-stemcell/task.yml
       input_mapping:
         cf-deployment: cf-deployment-develop
     - in_parallel:
-      #@ for s in data.values.baseReleases:
-      - put: #@ s.name + "-release-gcs"
+      #@ for r in data.values.baseReleases:
+      - put: #@ r.name + "-release-gcs"
         params:
-          file: #@ s.name + "-compiled-release-tarball/*.tgz"
+          file: #@ "compiled-releases/" + r.name + "-[0-9]*.tgz"
           predefined_acl: publicRead
+        get_params:
+          skip_download: true
         attempts: 3
       #@ end
     - put: cf-deployment-develop
