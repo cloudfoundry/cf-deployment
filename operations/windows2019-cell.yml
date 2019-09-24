@@ -1,5 +1,5 @@
-- path: /instance_groups/-
-  type: replace
+- type: replace
+  path: /instance_groups/-
   value:
     azs:
     - z1
@@ -96,26 +96,26 @@
               key: ((loggregator_tls_agent.private_key))
             ca_cert: ((loggregator_tls_agent.ca))
         metrics:
-          ca_cert: "((loggregator_agent_metrics_tls.ca))"
-          cert: "((loggregator_agent_metrics_tls.certificate))"
-          key: "((loggregator_agent_metrics_tls.private_key))"
+          ca_cert: ((loggregator_agent_metrics_tls.ca))
+          cert: ((loggregator_agent_metrics_tls.certificate))
+          key: ((loggregator_agent_metrics_tls.private_key))
           server_name: loggregator_agent_metrics
         syslog_daemon_config:
           enable: false
       release: loggregator-agent
     - name: prom_scraper_windows
-      release: loggregator-agent
       properties:
+        metrics:
+          ca_cert: ((prom_scraper_metrics_tls.ca))
+          cert: ((prom_scraper_metrics_tls.certificate))
+          key: ((prom_scraper_metrics_tls.private_key))
+          server_name: prom_scraper_metrics
         scrape:
           tls:
-            ca_cert: "((prom_scraper_scrape_tls.ca))"
-            cert: "((prom_scraper_scrape_tls.certificate))"
-            key: "((prom_scraper_scrape_tls.private_key))"
-        metrics:
-          ca_cert: "((prom_scraper_metrics_tls.ca))"
-          cert: "((prom_scraper_metrics_tls.certificate))"
-          key: "((prom_scraper_metrics_tls.private_key))"
-          server_name: prom_scraper_metrics
+            ca_cert: ((prom_scraper_scrape_tls.ca))
+            cert: ((prom_scraper_scrape_tls.certificate))
+            key: ((prom_scraper_scrape_tls.private_key))
+      release: loggregator-agent
     - name: enable_ssh
       release: windows-utilities
     name: windows2019-cell
@@ -125,48 +125,48 @@
     vm_extensions:
     - 100GB_ephemeral_disk
     vm_type: small-highmem
-- path: /stemcells/-
-  type: replace
+- type: replace
+  path: /stemcells/-
   value:
     alias: windows2019
     os: windows2019
     version: "2019.9"
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows?
   value:
     description: Windows Server
     name: windows
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=hwc-buildpack-windows?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=hwc-buildpack-windows?
   value:
     name: hwc_buildpack
     package: hwc-buildpack-windows
-- path: /instance_groups/name=api/jobs/name=hwc-buildpack?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=hwc-buildpack?
   value:
     name: hwc-buildpack
     release: hwc-buildpack
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=binary-buildpack-windows?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=binary-buildpack-windows?
   value:
     name: binary_buildpack
     package: binary-buildpack-windows
-- path: /releases/name=hwc-buildpack?
-  type: replace
+- type: replace
+  path: /releases/name=hwc-buildpack?
   value:
     name: hwc-buildpack
-    sha1: 539c1960f17a5f7e932994c00386eab12e735f61
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=3.1.10
-    version: 3.1.10
-- path: /releases/name=winc?
-  type: replace
+    sha1: 334bde9edbfe1097b4ff866dc2ad5782fb1a7a37
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=3.1.11
+    version: 3.1.11
+- type: replace
+  path: /releases/name=winc?
   value:
     name: winc
     sha1: f1d0ae10a48be36afae76a83526427330a40a737
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/winc-release?v=1.14.0
     version: 1.14.0
-- path: /releases/name=windows-utilities?
-  type: replace
+- type: replace
+  path: /releases/name=windows-utilities?
   value:
     name: windows-utilities
     sha1: 339c0a80a295a3ecfa75688807909b46759d66d1

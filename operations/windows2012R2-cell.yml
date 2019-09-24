@@ -1,5 +1,5 @@
-- path: /instance_groups/-
-  type: replace
+- type: replace
+  path: /instance_groups/-
   value:
     azs:
     - z1
@@ -77,9 +77,9 @@
               key: ((loggregator_tls_agent.private_key))
             ca_cert: ((loggregator_tls_agent.ca))
         metrics:
-          ca_cert: "((loggregator_agent_metrics_tls.ca))"
-          cert: "((loggregator_agent_metrics_tls.certificate))"
-          key: "((loggregator_agent_metrics_tls.private_key))"
+          ca_cert: ((loggregator_agent_metrics_tls.ca))
+          cert: ((loggregator_agent_metrics_tls.certificate))
+          key: ((loggregator_agent_metrics_tls.private_key))
           server_name: loggregator_agent_metrics
         syslog_daemon_config:
           enable: false
@@ -93,50 +93,50 @@
     vm_extensions:
     - 100GB_ephemeral_disk
     vm_type: small-highmem
-- path: /releases/-
-  type: replace
+- type: replace
+  path: /releases/-
   value:
     name: garden-windows
     sha1: 1f70a862621b2d879277c0eee6147bb8bddda060
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/garden-windows-bosh-release?v=0.16.0
     version: 0.16.0
-- path: /releases/name=windows-utilities?
-  type: replace
+- type: replace
+  path: /releases/name=windows-utilities?
   value:
     name: windows-utilities
     sha1: 339c0a80a295a3ecfa75688807909b46759d66d1
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.13.0
     version: 0.13.0
-- path: /stemcells/-
-  type: replace
+- type: replace
+  path: /stemcells/-
   value:
     alias: windows2012R2
     os: windows2012R2
     version: "1200.33"
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2012R2?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2012R2?
   value:
     description: Windows Server 2012 R2
     name: windows2012R2
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=hwc-buildpack-windows2012R2?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=hwc-buildpack-windows2012R2?
   value:
     name: hwc_buildpack
     package: hwc-buildpack-windows2012R2
-- path: /instance_groups/name=api/jobs/name=hwc-buildpack?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=hwc-buildpack?
   value:
     name: hwc-buildpack
     release: hwc-buildpack
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
   value:
     name: binary_buildpack
     package: binary-buildpack-windows2012R2
-- path: /releases/name=hwc-buildpack?
-  type: replace
+- type: replace
+  path: /releases/name=hwc-buildpack?
   value:
     name: hwc-buildpack
-    sha1: 539c1960f17a5f7e932994c00386eab12e735f61
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=3.1.10
-    version: 3.1.10
+    sha1: 334bde9edbfe1097b4ff866dc2ad5782fb1a7a37
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=3.1.11
+    version: 3.1.11
