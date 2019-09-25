@@ -534,19 +534,6 @@ jobs:
       bbl-state: relint-envs
     params:
       BBL_STATE_DIR: environments/test/luna/bbl-state
-  - task: update-integration-configs
-    file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
-    params:
-      BBL_STATE_DIR: environments/test/luna/bbl-state
-      CATS_INTEGRATION_CONFIG_FILE: environments/test/luna/integration_config.json
-    input_mapping:
-      bbl-state: relint-envs
-      integration-configs: relint-envs
-    ensure:
-      put: relint-envs
-      params:
-        repository: updated-integration-configs
-        rebase: true
   - task: ensure-gcloud-backend-service-healthy
     file: runtime-ci/tasks/ensure-gcloud-backend-service-healthy/task.yml
     input_mapping:
@@ -640,10 +627,18 @@ jobs:
       - get: relint-envs
       - get: cf-deployment-develop
         passed: [ fresh-deploy ]
+    - task: update-integration-configs
+      file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/luna/bbl-state
+        CATS_INTEGRATION_CONFIG_FILE: environments/test/luna/integration_config.json
+      input_mapping:
+        bbl-state: relint-envs
+        integration-configs: relint-envs
     - task: run-cats
       file: cf-deployment-concourse-tasks/run-cats/task.yml
       input_mapping:
-        integration-config: relint-envs
+        integration-config: updated-integration-configs
         cf-acceptance-tests: cf-acceptance-tests-rc
       params:
         CONFIG_FILE_PATH: environments/test/luna/integration_config.json
@@ -838,28 +833,6 @@ jobs:
       bbl-state: relint-envs
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
-  - do:
-    - task: update-integration-config
-      file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
-      params:
-        BBL_STATE_DIR: environments/test/trelawney/bbl-state
-        CATS_INTEGRATION_CONFIG_FILE: environments/test/trelawney/integration_config.json
-      input_mapping:
-        bbl-state: relint-envs
-        integration-configs: relint-envs
-    - task: update-cats-windows-integration-config
-      file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
-      params:
-        BBL_STATE_DIR: environments/test/trelawney/bbl-state
-        CATS_INTEGRATION_CONFIG_FILE: environments/test/trelawney/cats_windows_integration_config.json
-      input_mapping:
-        bbl-state: relint-envs
-        integration-configs: updated-integration-configs
-    ensure:
-      put: relint-envs
-      params:
-        repository: updated-integration-configs
-        rebase: true
   - in_parallel:
     - task: open-asgs-for-credhub
       file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
@@ -906,10 +879,18 @@ jobs:
       - get: relint-envs
       - get: cf-deployment-develop
         passed: [upgrade-deploy]
+    - task: update-integration-config
+      file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/trelawney/bbl-state
+        CATS_INTEGRATION_CONFIG_FILE: environments/test/trelawney/integration_config.json
+      input_mapping:
+        bbl-state: relint-envs
+        integration-configs: relint-envs
     - task: run-cats
       file: cf-deployment-concourse-tasks/run-cats/task.yml
       input_mapping:
-        integration-config: relint-envs
+        integration-config: updated-integration-configs
         cf-acceptance-tests: cf-acceptance-tests-rc
       params:
         CONFIG_FILE_PATH: environments/test/trelawney/integration_config.json
@@ -932,10 +913,18 @@ jobs:
       - get: relint-envs
       - get: cf-deployment-develop
         passed: [upgrade-deploy]
+    - task: update-cats-windows-integration-config
+      file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/trelawney/bbl-state
+        CATS_INTEGRATION_CONFIG_FILE: environments/test/trelawney/cats_windows_integration_config.json
+      input_mapping:
+        bbl-state: relint-envs
+        integration-configs: updated-integration-configs
     - task: run-cats
       file: cf-deployment-concourse-tasks/run-cats/task.yml
       input_mapping:
-        integration-config: relint-envs
+        integration-config: updated-integration-configs
         cf-acceptance-tests: cf-acceptance-tests-rc
       params:
         CAPTURE_LOGS: true
@@ -1120,19 +1109,6 @@ jobs:
       bbl-state: relint-envs
     params:
       BBL_STATE_DIR: environments/test/hermione/bbl-state
-  - task: update-integration-configs
-    file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
-    params:
-      BBL_STATE_DIR: environments/test/hermione/bbl-state
-      CATS_INTEGRATION_CONFIG_FILE: environments/test/hermione/integration_config.json
-    input_mapping:
-      bbl-state: relint-envs
-      integration-configs: relint-envs
-    ensure:
-      put: relint-envs
-      params:
-        repository: updated-integration-configs
-        rebase: true
   - in_parallel:
     - task: open-asgs-for-credhub
       file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
@@ -1212,9 +1188,17 @@ jobs:
       - get: cf-deployment-develop
         passed: [ experimental-deploy ]
       - get: cf-deployment-concourse-tasks
+    - task: update-integration-configs
+      file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/hermione/bbl-state
+        CATS_INTEGRATION_CONFIG_FILE: environments/test/hermione/integration_config.json
+      input_mapping:
+        bbl-state: relint-envs
+        integration-configs: relint-envs
     - task: run-cats
       input_mapping:
-        integration-config: relint-envs
+        integration-config: updated-integration-configs
         cf-acceptance-tests: cf-acceptance-tests-rc
       file: cf-deployment-concourse-tasks/run-cats/task.yml
       params:
@@ -1327,19 +1311,6 @@ jobs:
         bbl-state: relint-envs
       params:
         BBL_STATE_DIR: environments/test/snitch/bbl-state
-    - task: update-integration-configs
-      file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
-      params:
-        BBL_STATE_DIR: environments/test/snitch/bbl-state
-        CATS_INTEGRATION_CONFIG_FILE: environments/test/snitch/integration_config.json
-      input_mapping:
-        bbl-state: relint-envs
-        integration-configs: relint-envs
-      ensure:
-        put: relint-envs
-        params:
-          repository: updated-integration-configs
-          rebase: true
     - in_parallel:
       - task: open-asgs-for-credhub
         file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
@@ -1385,10 +1356,18 @@ jobs:
         passed: [ lite-deploy ]
       - get: relint-envs
       - get: cf-deployment-concourse-tasks
+    - task: update-integration-configs
+      file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/snitch/bbl-state
+        CATS_INTEGRATION_CONFIG_FILE: environments/test/snitch/integration_config.json
+      input_mapping:
+        bbl-state: relint-envs
+        integration-configs: relint-envs
     - task: run-cats
       file: cf-deployment-concourse-tasks/run-cats/task.yml
       input_mapping:
-        integration-config: relint-envs
+        integration-config: updated-integration-configs
         cf-acceptance-tests: cf-acceptance-tests-rc
       params:
         CONFIG_FILE_PATH: environments/test/snitch/integration_config.json
@@ -1632,19 +1611,6 @@ jobs:
       bbl-state: relint-envs
     params:
       BBL_STATE_DIR: environments/test/bellatrix/bbl-state
-  - task: update-integration-configs
-    file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
-    params:
-      BBL_STATE_DIR: environments/test/bellatrix/bbl-state
-      CATS_INTEGRATION_CONFIG_FILE: environments/test/bellatrix/integration_config.json
-    input_mapping:
-      bbl-state: relint-envs
-      integration-configs: relint-envs
-    ensure:
-      put: relint-envs
-      params:
-        repository: updated-integration-configs
-        rebase: true
   - task: open-asgs-for-credhub
     file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
     input_mapping:
@@ -1729,10 +1695,18 @@ jobs:
           diego_docker
           task_creation
           service_instance_sharing
+    - task: update-integration-configs
+      file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/bellatrix/bbl-state
+        CATS_INTEGRATION_CONFIG_FILE: environments/test/bellatrix/integration_config.json
+      input_mapping:
+        bbl-state: relint-envs
+        integration-configs: relint-envs
     - task: run-cats
       file: cf-deployment-concourse-tasks/run-cats/task.yml
       input_mapping:
-        integration-config: relint-envs
+        integration-config: updated-integration-configs
         cf-acceptance-tests: cf-acceptance-tests-rc
       params:
         CONFIG_FILE_PATH: environments/test/bellatrix/integration_config.json
