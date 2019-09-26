@@ -819,10 +819,7 @@ jobs:
         environments/test/trelawney/external-db-vars.yml
         environments/test/trelawney/gcs-vars.yml
       DEPLOY_WITH_UPTIME_MEASUREMENTS: true
-      MEASURE_SYSLOG_AVAILABILITY: false
       FAIL_ON_DOWNTIME: true
-      TCP_DOMAIN: tcp.trelawney.cf-app.com
-      AVAILABLE_PORT: 1033
       HTTP_AVAILABILITY_THRESHOLD: 0
       APP_PUSHABILITY_THRESHOLD: 5
       RECENT_LOGS_THRESHOLD: 10000
@@ -1096,13 +1093,11 @@ jobs:
         environments/test/hermione/bbl-state/vars/director-vars-file.yml
         environments/test/hermione/vars-use-operator-provided-router-tls-certificates.yml
       DEPLOY_WITH_UPTIME_MEASUREMENTS: true
-      TCP_DOMAIN: tcp.hermione.cf-app.com
-      AVAILABLE_PORT: 1033
-      APP_PUSHABILITY_THRESHOLD: 5
+      FAIL_ON_DOWNTIME: true
       HTTP_AVAILABILITY_THRESHOLD: 0
+      APP_PUSHABILITY_THRESHOLD: 5
       RECENT_LOGS_THRESHOLD: 10000
       STREAMING_LOGS_THRESHOLD: 10000
-      FAIL_ON_DOWNTIME: true
   - task: run-bosh-cleanup
     file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
     input_mapping:
