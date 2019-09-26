@@ -542,6 +542,14 @@ jobs:
       GCP_PROJECT_ID: ((luna_gcp_project))
       GCP_BACKEND_SERVICE: ((luna_router_backend_service))
       GOOGLE_ACCOUNT_CREDS_PATH: environments/test/luna/google_account_creds.json
+  - task: update-integration-configs
+    file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
+    params:
+      BBL_STATE_DIR: environments/test/luna/bbl-state
+      CATS_INTEGRATION_CONFIG_FILE: environments/test/luna/integration_config.json
+    input_mapping:
+      bbl-state: relint-envs
+      integration-configs: relint-envs
   - in_parallel:
     - task: ensure-api-healthy
       file: runtime-ci/tasks/ensure-api-healthy/task.yml
@@ -552,7 +560,7 @@ jobs:
     - task: ensure-isolation-segment-healthy
       file: runtime-ci/tasks/ensure-api-healthy/task.yml
       input_mapping:
-        cats-integration-config: relint-envs
+        cats-integration-config: updated-integration-configs
       params:
         CHECK_ISOLATION_SEGMENT: true
         CONFIG_FILE_PATH: environments/test/luna/integration_config.json
