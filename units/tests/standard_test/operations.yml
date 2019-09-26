@@ -1,0 +1,170 @@
+---
+aws.yml: {}
+azure.yml: {}
+bosh-lite.yml: {}
+cf-syslog-skip-cert-verify.yml: {}
+configure-default-router-group.yml:
+  vars:
+  - default_router_group_reservable_ports=1234-2024
+disable-router-tls-termination.yml: {}
+enable-cc-rate-limiting.yml:
+  vars:
+  - cc_rate_limiter_general_limit=blah
+  - cc_rate_limiter_unauthenticated_limit=something
+enable-nfs-ldap.yml:
+  ops:
+  - enable-nfs-volume-service.yml
+  - enable-nfs-ldap.yml
+  varsfiles:
+  - example-vars-files/vars-enable-nfs-ldap.yml
+enable-nfs-volume-service.yml: {}
+enable-privileged-container-support.yml: {}
+enable-service-discovery.yml: {}
+enable-smb-volume-service.yml: {}
+enable-tls-on-file-server.yml: {}
+openstack.yml: {}
+override-app-domains.yml:
+  varsfiles:
+  - example-vars-files/vars-override-app-domains.yml
+rename-network-and-deployment.yml:
+  vars:
+  - deployment_name=renamed_deployment
+  - network_name=renamed_network
+scale-database-cluster.yml: {}
+scale-to-one-az.yml: {}
+set-bbs-active-key.yml:
+  vars:
+  - diego_bbs_active_key_label=my_key_name
+set-router-static-ips.yml:
+  vars:
+  - router_static_ips=[10.0.16.4,10.0.47.5]
+stop-skipping-tls-validation.yml: {}
+use-alicloud-oss-blobstore-to-multi-bucket.yml:
+  ops:
+  - use-external-blobstore.yml
+  - use-alicloud-oss-blobstore-to-multi-bucket.yml
+  varsfiles:
+  - example-vars-files/vars-use-alicloud-oss-blobstore-to-multi-bucket.yml
+use-alicloud-oss-blobstore.yml:
+  ops:
+  - use-external-blobstore.yml
+  - use-alicloud-oss-blobstore.yml
+  varsfiles:
+  - example-vars-files/vars-use-alicloud-oss-blobstore.yml
+use-azure-storage-blobstore.yml:
+  ops:
+  - use-external-blobstore.yml
+  - use-azure-storage-blobstore.yml
+  varsfiles:
+  - example-vars-files/vars-use-azure-storage-blobstore.yml
+use-blobstore-cdn.yml:
+  varsfiles:
+  - example-vars-files/vars-use-blobstore-cdn.yml
+use-compiled-releases.yml: {}
+use-external-blobstore.yml:
+  varsfiles:
+  - example-vars-files/vars-use-external-blobstore.yml
+use-external-dbs.yml:
+  varsfiles:
+  - example-vars-files/vars-use-external-dbs.yml
+use-gcs-blobstore-access-key.yml:
+  ops:
+  - use-external-blobstore.yml
+  - use-gcs-blobstore-access-key.yml
+  vars:
+  - blobstore_access_key_id=TEST_ACCESS_KEY
+  - blobstore_secret_access_key=TEST_SECRET_ACCESS_KEY
+  varsfiles:
+  - example-vars-files/vars-use-gcs-blobstore-access-key.yml
+use-gcs-blobstore-service-account.yml:
+  ops:
+  - use-external-blobstore.yml
+  - use-gcs-blobstore-service-account.yml
+  varsfiles:
+  - example-vars-files/vars-use-gcs-blobstore-service-account.yml
+use-haproxy-public-network.yml:
+  ops:
+  - use-haproxy.yml
+  - use-haproxy-public-network.yml
+  vars:
+  - haproxy_public_network_name=public
+  - haproxy_public_ip=6.7.8.9
+use-haproxy.yml:
+  vars:
+  - haproxy_private_ip=10.0.10.10
+use-internal-lookup-for-route-services.yml: {}
+use-latest-stemcell.yml:
+  pathvalidator:
+    path: /stemcells/alias=default/version
+    expectedvalue: latest
+use-latest-windows1803-stemcell.yml:
+  ops:
+  - windows1803-cell.yml
+  - use-latest-windows1803-stemcell.yml
+  pathvalidator:
+    path: /stemcells/alias=windows1803/version
+    expectedvalue: latest
+use-latest-windows2012R2-stemcell.yml:
+  ops:
+  - windows2012R2-cell.yml
+  - use-latest-windows2012R2-stemcell.yml
+  pathvalidator:
+    path: /stemcells/alias=windows2012R2/version
+    expectedvalue: latest
+use-latest-windows2016-stemcell.yml:
+  ops:
+  - windows2016-cell.yml
+  - use-latest-windows2016-stemcell.yml
+  pathvalidator:
+    path: /stemcells/alias=windows2016/version
+    expectedvalue: latest
+use-latest-windows2019-stemcell.yml:
+  ops:
+  - windows2019-cell.yml
+  - use-latest-windows2019-stemcell.yml
+  pathvalidator:
+    path: /stemcells/alias=windows2019/version
+    expectedvalue: latest
+use-offline-windows1803fs.yml:
+  ops:
+  - windows1803-cell.yml
+  - use-offline-windows1803fs.yml
+use-offline-windows2016fs.yml:
+  ops:
+  - windows2016-cell.yml
+  - use-offline-windows2016fs.yml
+use-offline-windows2019fs.yml:
+  ops:
+  - windows2019-cell.yml
+  - use-offline-windows2019fs.yml
+use-online-windows2019fs.yml:
+  ops:
+  - windows2019-cell.yml
+  - use-online-windows2019fs.yml
+use-operator-provided-router-tls-certificates.yml:
+  varsfiles:
+  - example-vars-files/vars-use-operator-provided-router-tls-certificates.yml
+use-postgres.yml: {}
+use-s3-blobstore.yml:
+  ops:
+  - use-external-blobstore.yml
+  - use-s3-blobstore.yml
+  varsfiles:
+  - example-vars-files/vars-use-s3-blobstore.yml
+use-swift-blobstore.yml:
+  ops:
+  - use-external-blobstore.yml
+  - use-swift-blobstore.yml
+  varsfiles:
+  - example-vars-files/vars-use-swift-blobstore.yml
+use-trusted-ca-cert-for-apps.yml:
+  varsfiles:
+  - example-vars-files/vars-use-trusted-ca-cert-for-apps.yml
+windows1803-cell.yml: {}
+windows2012R2-cell.yml: {}
+windows2012R2-cell.yml windows2016-cell.yml:
+  ops:
+  - windows2012R2-cell.yml
+  - windows2016-cell.yml
+windows2016-cell.yml: {}
+windows2019-cell.yml: {}

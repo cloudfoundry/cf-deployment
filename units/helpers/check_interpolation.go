@@ -13,10 +13,10 @@ import (
 )
 
 type OpsFileTestParams struct {
-	Ops           []string
-	Vars          []string
-	VarsFiles     []string
-	PathValidator PathValidator
+	Ops           []string      `yaml:",omitempty"`
+	Vars          []string      `yaml:",omitempty"`
+	VarsFiles     []string      `yaml:",omitempty"`
+	PathValidator PathValidator `yaml:",omitempty"`
 }
 
 type PathValidator struct {
