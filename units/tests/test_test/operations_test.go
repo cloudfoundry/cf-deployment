@@ -1,7 +1,6 @@
 package test_test
 
 import (
-	"fmt"
 	"io/ioutil"
 	"testing"
 
@@ -12,17 +11,17 @@ import (
 const testDirectory = "operations/test"
 
 func TestTest(t *testing.T) {
-	content, err := ioutil.ReadFile("operations.yml")
-	if err != nil {
-		fmt.Printf("Error reading operations file: %s", err)
-	}
-	testTests := make(map[string]helpers.OpsFileTestParams)
-	yaml.Unmarshal(content, &testTests)
-
 	cfDeploymentHome, err := helpers.SetPath()
 	if err != nil {
 		t.Fatalf("setup: %v", err)
 	}
+
+	content, err := ioutil.ReadFile("operations.yml")
+	if err != nil {
+		t.Fatalf("Error reading operations file: %s", err)
+	}
+	testTests := make(map[string]helpers.OpsFileTestParams)
+	yaml.Unmarshal(content, &testTests)
 
 	suite := helpers.NewSuiteTest(cfDeploymentHome, testDirectory, testTests)
 	suite.EnsureTestCoverage(t)

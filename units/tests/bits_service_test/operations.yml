@@ -1,0 +1,50 @@
+---
+configure-bits-service-alicloud-oss.yml:
+  ops:
+  - ../use-external-blobstore.yml
+  - ../use-alicloud-oss-blobstore.yml
+  - use-bits-service.yml
+  - configure-bits-service-alicloud-oss.yml
+  varsfiles:
+  - ../example-vars-files/vars-use-alicloud-oss-blobstore.yml
+configure-bits-service-azure-storage.yml:
+  ops:
+  - ../use-external-blobstore.yml
+  - ../use-azure-storage-blobstore.yml
+  - use-bits-service.yml
+  - configure-bits-service-azure-storage.yml
+  varsfiles:
+  - ../example-vars-files/vars-use-azure-storage-blobstore.yml
+configure-bits-service-gcs-access-key.yml:
+  ops:
+  - ../use-external-blobstore.yml
+  - ../use-gcs-blobstore-access-key.yml
+  - use-bits-service.yml
+  - configure-bits-service-gcs-access-key.yml
+  varsfiles:
+  - ../example-vars-files/vars-use-gcs-blobstore-access-key.yml
+configure-bits-service-gcs-service-account.yml:
+  ops:
+  - ../use-external-blobstore.yml
+  - ../use-gcs-blobstore-service-account.yml
+  - use-bits-service.yml
+  - configure-bits-service-gcs-service-account.yml
+  varsfiles:
+  - ../example-vars-files/vars-use-gcs-blobstore-service-account.yml
+configure-bits-service-s3.yml:
+  ops:
+  - ../use-external-blobstore.yml
+  - ../use-s3-blobstore.yml
+  - use-bits-service.yml
+  - configure-bits-service-s3.yml
+  varsfiles:
+  - ../example-vars-files/vars-use-s3-blobstore.yml
+configure-bits-service-swift.yml:
+  ops:
+  - ../use-external-blobstore.yml
+  - ../use-swift-blobstore.yml
+  - use-bits-service.yml
+  - configure-bits-service-swift.yml
+  varsfiles:
+  - ../example-vars-files/vars-use-swift-blobstore.yml
+use-bits-service.yml: {}

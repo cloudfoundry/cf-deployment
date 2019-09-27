@@ -1,0 +1,11 @@
+---
+component-syslog-custom-ca.yml:
+  ops:
+  - enable-component-syslog.yml
+  - component-syslog-custom-ca.yml
+  varsfiles:
+  - example-vars-files/vars-enable-component-syslog.yml
+
+enable-component-syslog.yml:
+  varsfiles:
+  - example-vars-files/vars-enable-component-syslog.yml
