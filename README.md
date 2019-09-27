@@ -76,7 +76,7 @@ to the deployment manifest.
 
 **Before submitting a pull request
 or pushing to the develop branch of cf-deployment, please:**
-1. run `./scripts/test`
+1. run `./units/test`
    which interpolates all of our ops files
    with the `bosh` cli.
     - By default, the test suite omits `semantic` tests,
@@ -87,13 +87,14 @@ please install these requirements and
 set `RUN_SEMANTIC=true` in your environment.
     - **Note:** it is necessary to run the tests
 from the root of the repo.
-2. confirm your changes can be successfully deployed with 
+1. confirm your changes can be successfully deployed with 
    the [latest release of cf-deployment](https://github.com/cloudfoundry/cf-deployment/releases) 
    and tested with the latest version of [CAT's](https://github.com/cloudfoundry/cf-acceptance-tests/releases).
-
+1. If modifying backup and restore, run `./scripts/test`
+   which runs a legacy bash suite for backup and restore ops.
 **If you're adding an Ops-file, you will need to:** 
 1. document it in its corresponding README.
-1. add it to the ops file tests in `scripts/test`.
+1. add it to the ops file tests in `units/test`.
 
 **If you're promoting or deprecating Ops-file, please follow [Ops-file workflows](https://github.com/cloudfoundry/cf-deployment/blob/master/ops-file-promotion-workflow.md)** 
 
