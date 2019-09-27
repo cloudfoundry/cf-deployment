@@ -52,12 +52,12 @@
   path: /releases/name=cf-networking
   value:
     name: cf-networking
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/cf-networking-2.25.0-ubuntu-xenial-456.22-20190926-182351-054627563.tgz
-    version: 2.25.0
     sha1: 3c63aec1db7b648c229283a2805544b75e5424ba
     stemcell:
       os: ubuntu-xenial
       version: "456.22"
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/cf-networking-2.25.0-ubuntu-xenial-456.22-20190926-182351-054627563.tgz
+    version: 2.25.0
 - type: replace
   path: /releases/name=cf-smoke-tests
   value:
@@ -272,12 +272,12 @@
   path: /releases/name=silk
   value:
     name: silk
-    sha1: 333e14c0066d6e979e69c6ea35b5031cc7b7532e
+    sha1: 222ce496ea230127716bf0344b6b2ec5add2c95f
     stemcell:
       os: ubuntu-xenial
       version: "456.27"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/silk-2.24.0-ubuntu-xenial-456.27-20190924-224139-13351783.tgz
-    version: 2.24.0
+    url: https://bosh.io/d/github.com/cloudfoundry/silk-release?v=2.25.0
+    version: 2.25.0
 - type: replace
   path: /releases/name=staticfile-buildpack
   value:
