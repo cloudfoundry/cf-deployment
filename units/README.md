@@ -33,20 +33,35 @@ To focus a specific suite use the `--run Test<SuiteName>/<TestName>`.
 
 ## Contributing
 ### New Interpolate Tests
-An `InterpolateTest` is composed of `helpers.OpsFileTestParams`.
+An `InterpolateTest` is composed of `helpers.OpsFileTestParams` shapes in yaml.
 
-The minimal test is:
-```golang
-"opsfile.yml": {}
+The minimal test is specified by the yaml file:
+
+```
+---
+opsfile.yml: {}
 ```
 
 In this case `opsfile.yml` is the name of the operations file being tested.
 
 The optional `bosh interpolate` configurations are:
-- `Ops` `[]string`: an ordered list of operations files to be added via the
+- `ops` `[]string`: an ordered list of operations files to be added via the
   `-o` flag. These must be relative to the subdirectory being tested.
-- `Vars` `[]string`: a list of `-vars` arguments to be added.
-- `VarsFiles` `[]string`: a list of `-vars-file` arguments to be added.
+- `vars` `[]string`: a list of `-vars` arguments to be added.
+- `varsfiles` `[]string`: a list of `-vars-file` arguments to be added.
+
+For Example - A test that uses all 3 flags for Interpolation:
+```
+use-gcs-blobstore-access-key.yml:
+  ops:
+  - use-external-blobstore.yml
+  - use-gcs-blobstore-access-key.yml
+  vars:
+  - blobstore_access_key_id=TEST_ACCESS_KEY
+  - blobstore_secret_access_key=TEST_SECRET_ACCESS_KEY
+  varsfiles:
+  - example-vars-files/vars-use-gcs-blobstore-access-key.yml
+```
 
 ### Validating Ops-File Actions
 An `InterpolateTest` can optionally include a `PathValidator` configuration
@@ -71,11 +86,10 @@ and the following ops-file:
 you could write your `InterpolateTest` to not only confirm that the ops-file
 will apply cleanly, but also that it results in the desired change:
 ```
-"use-latest-stemcell.yml": {
-	PathValidator: helpers.PathValidator{
-		Path: "/stemcells/alias=default/version", ExpectedValue: "latest",
-	},
-}
+use-latest-stemcell.yml:
+  pathvalidator:
+    path: /stemcells/alias=default/version
+    expectedvalue: latest
 ```
 
 #### Current Limitations
