@@ -142,12 +142,12 @@
   path: /releases/name=java-buildpack
   value:
     name: java-buildpack
-    sha1: 0b1281fbd8a82735540033d355e77f5281620ce4
+    sha1: 05657f2c789fc0358318db73ea01478edd16c290
     stemcell:
       os: ubuntu-xenial
       version: "456.27"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/java-buildpack-4.21-ubuntu-xenial-456.27-20190924-223951-236337432.tgz
-    version: "4.21"
+    url: https://bosh.io/d/github.com/cloudfoundry/java-buildpack-release?v=4.22
+    version: "4.22"
 - type: replace
   path: /releases/name=log-cache
   value:
@@ -272,12 +272,12 @@
   path: /releases/name=silk
   value:
     name: silk
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/silk-2.25.0-ubuntu-xenial-456.22-20190927-003756-163631787.tgz
-    version: 2.25.0
     sha1: 02cf576b802cb196641e526c8ae83e8a362e61fd
     stemcell:
       os: ubuntu-xenial
       version: "456.22"
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/silk-2.25.0-ubuntu-xenial-456.22-20190927-003756-163631787.tgz
+    version: 2.25.0
 - type: replace
   path: /releases/name=staticfile-buildpack
   value:
