@@ -142,12 +142,12 @@
   path: /releases/name=java-buildpack
   value:
     name: java-buildpack
-    sha1: 05657f2c789fc0358318db73ea01478edd16c290
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/java-buildpack-4.22-ubuntu-xenial-456.27-20190930-180422-943095821.tgz
+    version: "4.22"
+    sha1: dcacf88e1344aa3ad17c0262d055d778eee0be91
     stemcell:
       os: ubuntu-xenial
       version: "456.27"
-    url: https://bosh.io/d/github.com/cloudfoundry/java-buildpack-release?v=4.22
-    version: "4.22"
 - type: replace
   path: /releases/name=log-cache
   value:
