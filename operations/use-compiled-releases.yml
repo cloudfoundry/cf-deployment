@@ -82,12 +82,12 @@
   path: /releases/name=cflinuxfs3
   value:
     name: cflinuxfs3
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/cflinuxfs3-0.129.0-ubuntu-xenial-456.27-20190930-182017-818651741.tgz
-    version: 0.129.0
-    sha1: 812b1d804a9c6cfc0ba9eeccb1e2653bafa9cdae
+    sha1: aae51ef01aefd70d46a2918ee209e3b1d0d6b243
     stemcell:
       os: ubuntu-xenial
       version: "456.27"
+    url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs3-release?v=0.130.0
+    version: 0.130.0
 - type: replace
   path: /releases/name=credhub
   value:
@@ -142,12 +142,12 @@
   path: /releases/name=java-buildpack
   value:
     name: java-buildpack
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/java-buildpack-4.22-ubuntu-xenial-456.27-20190930-180422-943095821.tgz
-    version: "4.22"
     sha1: dcacf88e1344aa3ad17c0262d055d778eee0be91
     stemcell:
       os: ubuntu-xenial
       version: "456.27"
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/java-buildpack-4.22-ubuntu-xenial-456.27-20190930-180422-943095821.tgz
+    version: "4.22"
 - type: replace
   path: /releases/name=log-cache
   value:
