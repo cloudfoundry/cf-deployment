@@ -1314,6 +1314,12 @@ jobs:
         bbl-state: relint-envs
       params:
         BBL_STATE_DIR: environments/test/snitch/bbl-state
+    - task: ensure-api-healthy
+      file: runtime-ci/tasks/ensure-api-healthy/task.yml
+      input_mapping:
+        cats-integration-config: relint-envs
+      params:
+        CONFIG_FILE_PATH: environments/test/snitch/integration_config.json
     - in_parallel:
       - task: open-asgs-for-credhub
         file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
