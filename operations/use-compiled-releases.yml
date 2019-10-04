@@ -152,12 +152,12 @@
   path: /releases/name=log-cache
   value:
     name: log-cache
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/log-cache-2.5.2-ubuntu-xenial-456.27-20191004-004435-15172424.tgz
-    version: 2.5.2
     sha1: 474230595b76e0506ea41e9596a701c8dec6de1c
     stemcell:
       os: ubuntu-xenial
       version: "456.27"
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/log-cache-2.5.2-ubuntu-xenial-456.27-20191004-004435-15172424.tgz
+    version: 2.5.2
 - type: replace
   path: /releases/name=loggregator
   value:
@@ -292,12 +292,12 @@
   path: /releases/name=statsd-injector
   value:
     name: statsd-injector
-    sha1: eae56b3bd672a11b0d57cabbbde4d070837c98f3
+    sha1: baa39875e1e5d64dfd627affcfcef22690ae43ac
     stemcell:
       os: ubuntu-xenial
       version: "456.27"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/statsd-injector-1.10.0-ubuntu-xenial-456.27-20190924-224044-095322511.tgz
-    version: 1.10.0
+    url: https://bosh.io/d/github.com/cloudfoundry/statsd-injector-release?v=1.11.0
+    version: 1.11.0
 - type: replace
   path: /releases/name=uaa
   value:
