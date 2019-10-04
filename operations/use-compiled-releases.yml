@@ -142,22 +142,22 @@
   path: /releases/name=java-buildpack
   value:
     name: java-buildpack
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/java-buildpack-4.23-ubuntu-xenial-456.27-20191003-222848-29114873.tgz
-    version: "4.23"
     sha1: 97fd870ea43fbff226a520f5b936ca1c7dedf8da
     stemcell:
       os: ubuntu-xenial
       version: "456.27"
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/java-buildpack-4.23-ubuntu-xenial-456.27-20191003-222848-29114873.tgz
+    version: "4.23"
 - type: replace
   path: /releases/name=log-cache
   value:
     name: log-cache
-    sha1: cca4e4198a8903e2000a1275bd0ed0b1260af545
+    sha1: 55f2a1a1ae43e379f1ddaacb3324176329636bd9
     stemcell:
       os: ubuntu-xenial
       version: "456.27"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/log-cache-2.5.1-ubuntu-xenial-456.27-20190924-224416-000948989.tgz
-    version: 2.5.1
+    url: https://bosh.io/d/github.com/cloudfoundry/log-cache-release?v=2.5.2
+    version: 2.5.2
 - type: replace
   path: /releases/name=loggregator
   value:
