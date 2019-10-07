@@ -82,12 +82,12 @@
   path: /releases/name=cflinuxfs3
   value:
     name: cflinuxfs3
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/cflinuxfs3-0.131.0-ubuntu-xenial-456.27-20191004-205516-983119755.tgz
-    version: 0.131.0
-    sha1: d32e8ec44680b0382e5ae3b81d210bf1479b205c
+    sha1: 01c232fb1b8853fe0e28032abbf9976b126403c1
     stemcell:
       os: ubuntu-xenial
       version: "456.27"
+    url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs3-release?v=0.132.0
+    version: 0.132.0
 - type: replace
   path: /releases/name=credhub
   value:
@@ -292,12 +292,12 @@
   path: /releases/name=statsd-injector
   value:
     name: statsd-injector
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/statsd-injector-1.11.0-ubuntu-xenial-456.27-20191004-194018-321739828.tgz
-    version: 1.11.0
     sha1: 3fdaf0613116d1698a079e4c6d5346f867139816
     stemcell:
       os: ubuntu-xenial
       version: "456.27"
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/statsd-injector-1.11.0-ubuntu-xenial-456.27-20191004-194018-321739828.tgz
+    version: 1.11.0
 - type: replace
   path: /releases/name=uaa
   value:
