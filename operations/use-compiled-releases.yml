@@ -52,12 +52,12 @@
   path: /releases/name=cf-networking
   value:
     name: cf-networking
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/cf-networking-2.25.0-ubuntu-xenial-456.30-20191009-013200-932433402.tgz
-    version: 2.25.0
     sha1: f4b00084d3787355072745924d4ac2ec9c02200e
     stemcell:
       os: ubuntu-xenial
       version: "456.30"
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/cf-networking-2.25.0-ubuntu-xenial-456.30-20191009-013200-932433402.tgz
+    version: 2.25.0
 - type: replace
   path: /releases/name=cf-smoke-tests
   value:
@@ -122,12 +122,12 @@
   path: /releases/name=garden-runc
   value:
     name: garden-runc
-    sha1: a2b36ac3c22d42dcb47ed4f2211343cbfca9a776
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/garden-runc-1.19.7-ubuntu-xenial-456.30-20191009-141334-336241024.tgz
+    version: 1.19.7
+    sha1: 359b6169cf7eb6ffe69dee9b5e17e620b3f5503a
     stemcell:
       os: ubuntu-xenial
       version: "456.30"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/garden-runc-1.19.7-ubuntu-xenial-456.30-20191008-232732-767096863.tgz
-    version: 1.19.7
 - type: replace
   path: /releases/name=go-buildpack
   value:
