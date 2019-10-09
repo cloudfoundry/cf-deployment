@@ -22,7 +22,7 @@ look at [this guide](/iaas-support/bosh-lite/README.md).
 
 If you're planning to deploy against a **local** bosh-lite,
 follow [these instructions](https://bosh.io/docs/bosh-lite.html)
-to setup a BOSH Lite director. Then follow [these instructions](#deploy-cf-to-local-bosh-lite)
+to setup a BOSH Lite director. Then follow [these instructions](#for-operators-deploying-cf-to-local-bosh-lite)
 to deploy CF.
 
 #### IaaSes not supported by `bbl`
