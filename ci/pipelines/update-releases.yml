@@ -3,39 +3,73 @@
 ## ======================================================================
 
 groups:
-- name: update-base-stemcells-and-releases
+- name: update-linux-stemcell
   jobs:
+  - acquire-all-pre-dev-locks
   - update-stemcell-and-recompile-releases
+- name: update-base-releases
+  jobs:
+  - acquire-binary-buildpack-pre-dev-lock
   - update-binary-buildpack
+  - acquire-bosh-dns-aliases-pre-dev-lock
   - update-bosh-dns-aliases
+  - acquire-bpm-pre-dev-lock
   - update-bpm
+  - acquire-capi-pre-dev-lock
   - update-capi
+  - acquire-cf-networking-pre-dev-lock
   - update-cf-networking
+  - acquire-cf-smoke-tests-pre-dev-lock
   - update-cf-smoke-tests
+  - acquire-cf-syslog-drain-pre-dev-lock
   - update-cf-syslog-drain
+  - acquire-cflinuxfs3-pre-dev-lock
   - update-cflinuxfs3
+  - acquire-diego-pre-dev-lock
   - update-diego
+  - acquire-dotnet-core-buildpack-pre-dev-lock
   - update-dotnet-core-buildpack
+  - acquire-garden-runc-pre-dev-lock
   - update-garden-runc
+  - acquire-go-buildpack-pre-dev-lock
   - update-go-buildpack
+  - acquire-java-buildpack-pre-dev-lock
   - update-java-buildpack
+  - acquire-log-cache-pre-dev-lock
   - update-log-cache
+  - acquire-loggregator-pre-dev-lock
   - update-loggregator
+  - acquire-loggregator-agent-pre-dev-lock
   - update-loggregator-agent
+  - acquire-nats-pre-dev-lock
   - update-nats
+  - acquire-nginx-buildpack-pre-dev-lock
   - update-nginx-buildpack
+  - acquire-nodejs-buildpack-pre-dev-lock
   - update-nodejs-buildpack
+  - acquire-php-buildpack-pre-dev-lock
   - update-php-buildpack
+  - acquire-python-buildpack-pre-dev-lock
   - update-python-buildpack
+  - acquire-pxc-pre-dev-lock
   - update-pxc
+  - acquire-r-buildpack-pre-dev-lock
   - update-r-buildpack
+  - acquire-routing-pre-dev-lock
   - update-routing
+  - acquire-ruby-buildpack-pre-dev-lock
   - update-ruby-buildpack
+  - acquire-silk-pre-dev-lock
   - update-silk
+  - acquire-staticfile-buildpack-pre-dev-lock
   - update-staticfile-buildpack
+  - acquire-statsd-injector-pre-dev-lock
   - update-statsd-injector
+  - acquire-uaa-pre-dev-lock
   - update-uaa
+  - acquire-credhub-pre-dev-lock
   - update-credhub
+  - acquire-cf-cli-pre-dev-lock
   - update-cf-cli
 - name: update-ops-releases
   jobs:
@@ -941,17 +975,30 @@ resources:
     pool: update-release-pool
     private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
 jobs:
-- name: update-binary-buildpack
+- name: acquire-binary-buildpack-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: binary-buildpack-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-binary-buildpack
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-binary-buildpack-pre-dev-lock
+      trigger: true
+    - get: binary-buildpack-release
+      params:
+        tarball: false
+      passed:
+      - acquire-binary-buildpack-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -1171,17 +1218,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-bosh-dns-aliases
+- name: acquire-bosh-dns-aliases-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: bosh-dns-aliases-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-bosh-dns-aliases
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-bosh-dns-aliases-pre-dev-lock
+      trigger: true
+    - get: bosh-dns-aliases-release
+      params:
+        tarball: false
+      passed:
+      - acquire-bosh-dns-aliases-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -1401,17 +1461,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-bpm
+- name: acquire-bpm-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: bpm-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-bpm
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-bpm-pre-dev-lock
+      trigger: true
+    - get: bpm-release
+      params:
+        tarball: false
+      passed:
+      - acquire-bpm-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -1631,17 +1704,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-capi
+- name: acquire-capi-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: capi-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-capi
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-capi-pre-dev-lock
+      trigger: true
+    - get: capi-release
+      params:
+        tarball: false
+      passed:
+      - acquire-capi-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -1861,17 +1947,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-cf-networking
+- name: acquire-cf-networking-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: cf-networking-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-cf-networking
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-cf-networking-pre-dev-lock
+      trigger: true
+    - get: cf-networking-release
+      params:
+        tarball: false
+      passed:
+      - acquire-cf-networking-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -2091,17 +2190,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-cf-smoke-tests
+- name: acquire-cf-smoke-tests-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: cf-smoke-tests-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-cf-smoke-tests
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-cf-smoke-tests-pre-dev-lock
+      trigger: true
+    - get: cf-smoke-tests-release
+      params:
+        tarball: false
+      passed:
+      - acquire-cf-smoke-tests-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -2321,17 +2433,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-cf-syslog-drain
+- name: acquire-cf-syslog-drain-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: cf-syslog-drain-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-cf-syslog-drain
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-cf-syslog-drain-pre-dev-lock
+      trigger: true
+    - get: cf-syslog-drain-release
+      params:
+        tarball: false
+      passed:
+      - acquire-cf-syslog-drain-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -2551,17 +2676,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-cflinuxfs3
+- name: acquire-cflinuxfs3-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: cflinuxfs3-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-cflinuxfs3
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-cflinuxfs3-pre-dev-lock
+      trigger: true
+    - get: cflinuxfs3-release
+      params:
+        tarball: false
+      passed:
+      - acquire-cflinuxfs3-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -2781,17 +2919,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-diego
+- name: acquire-diego-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: diego-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-diego
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-diego-pre-dev-lock
+      trigger: true
+    - get: diego-release
+      params:
+        tarball: false
+      passed:
+      - acquire-diego-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -3011,17 +3162,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-dotnet-core-buildpack
+- name: acquire-dotnet-core-buildpack-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: dotnet-core-buildpack-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-dotnet-core-buildpack
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-dotnet-core-buildpack-pre-dev-lock
+      trigger: true
+    - get: dotnet-core-buildpack-release
+      params:
+        tarball: false
+      passed:
+      - acquire-dotnet-core-buildpack-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -3241,17 +3405,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-garden-runc
+- name: acquire-garden-runc-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: garden-runc-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-garden-runc
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-garden-runc-pre-dev-lock
+      trigger: true
+    - get: garden-runc-release
+      params:
+        tarball: false
+      passed:
+      - acquire-garden-runc-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -3471,17 +3648,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-go-buildpack
+- name: acquire-go-buildpack-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: go-buildpack-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-go-buildpack
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-go-buildpack-pre-dev-lock
+      trigger: true
+    - get: go-buildpack-release
+      params:
+        tarball: false
+      passed:
+      - acquire-go-buildpack-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -3701,17 +3891,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-java-buildpack
+- name: acquire-java-buildpack-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: java-buildpack-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-java-buildpack
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-java-buildpack-pre-dev-lock
+      trigger: true
+    - get: java-buildpack-release
+      params:
+        tarball: false
+      passed:
+      - acquire-java-buildpack-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -3931,17 +4134,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-log-cache
+- name: acquire-log-cache-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: log-cache-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-log-cache
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-log-cache-pre-dev-lock
+      trigger: true
+    - get: log-cache-release
+      params:
+        tarball: false
+      passed:
+      - acquire-log-cache-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -4161,17 +4377,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-loggregator
+- name: acquire-loggregator-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: loggregator-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-loggregator
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-loggregator-pre-dev-lock
+      trigger: true
+    - get: loggregator-release
+      params:
+        tarball: false
+      passed:
+      - acquire-loggregator-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -4391,17 +4620,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-loggregator-agent
+- name: acquire-loggregator-agent-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: loggregator-agent-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-loggregator-agent
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-loggregator-agent-pre-dev-lock
+      trigger: true
+    - get: loggregator-agent-release
+      params:
+        tarball: false
+      passed:
+      - acquire-loggregator-agent-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -4621,17 +4863,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-nats
+- name: acquire-nats-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: nats-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-nats
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-nats-pre-dev-lock
+      trigger: true
+    - get: nats-release
+      params:
+        tarball: false
+      passed:
+      - acquire-nats-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -4851,17 +5106,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-nginx-buildpack
+- name: acquire-nginx-buildpack-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: nginx-buildpack-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-nginx-buildpack
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-nginx-buildpack-pre-dev-lock
+      trigger: true
+    - get: nginx-buildpack-release
+      params:
+        tarball: false
+      passed:
+      - acquire-nginx-buildpack-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -5081,17 +5349,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-nodejs-buildpack
+- name: acquire-nodejs-buildpack-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: nodejs-buildpack-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-nodejs-buildpack
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-nodejs-buildpack-pre-dev-lock
+      trigger: true
+    - get: nodejs-buildpack-release
+      params:
+        tarball: false
+      passed:
+      - acquire-nodejs-buildpack-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -5311,17 +5592,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-php-buildpack
+- name: acquire-php-buildpack-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: php-buildpack-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-php-buildpack
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-php-buildpack-pre-dev-lock
+      trigger: true
+    - get: php-buildpack-release
+      params:
+        tarball: false
+      passed:
+      - acquire-php-buildpack-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -5541,17 +5835,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-python-buildpack
+- name: acquire-python-buildpack-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: python-buildpack-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-python-buildpack
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-python-buildpack-pre-dev-lock
+      trigger: true
+    - get: python-buildpack-release
+      params:
+        tarball: false
+      passed:
+      - acquire-python-buildpack-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -5771,17 +6078,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-pxc
+- name: acquire-pxc-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: pxc-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-pxc
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-pxc-pre-dev-lock
+      trigger: true
+    - get: pxc-release
+      params:
+        tarball: false
+      passed:
+      - acquire-pxc-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -6001,17 +6321,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-r-buildpack
+- name: acquire-r-buildpack-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: r-buildpack-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-r-buildpack
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-r-buildpack-pre-dev-lock
+      trigger: true
+    - get: r-buildpack-release
+      params:
+        tarball: false
+      passed:
+      - acquire-r-buildpack-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -6231,17 +6564,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-routing
+- name: acquire-routing-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: routing-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-routing
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-routing-pre-dev-lock
+      trigger: true
+    - get: routing-release
+      params:
+        tarball: false
+      passed:
+      - acquire-routing-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -6461,17 +6807,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-ruby-buildpack
+- name: acquire-ruby-buildpack-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: ruby-buildpack-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-ruby-buildpack
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-ruby-buildpack-pre-dev-lock
+      trigger: true
+    - get: ruby-buildpack-release
+      params:
+        tarball: false
+      passed:
+      - acquire-ruby-buildpack-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -6691,17 +7050,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-silk
+- name: acquire-silk-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: silk-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-silk
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-silk-pre-dev-lock
+      trigger: true
+    - get: silk-release
+      params:
+        tarball: false
+      passed:
+      - acquire-silk-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -6921,17 +7293,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-staticfile-buildpack
+- name: acquire-staticfile-buildpack-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: staticfile-buildpack-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-staticfile-buildpack
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-staticfile-buildpack-pre-dev-lock
+      trigger: true
+    - get: staticfile-buildpack-release
+      params:
+        tarball: false
+      passed:
+      - acquire-staticfile-buildpack-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -7151,17 +7536,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-statsd-injector
+- name: acquire-statsd-injector-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: statsd-injector-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-statsd-injector
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-statsd-injector-pre-dev-lock
+      trigger: true
+    - get: statsd-injector-release
+      params:
+        tarball: false
+      passed:
+      - acquire-statsd-injector-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -7381,17 +7779,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-uaa
+- name: acquire-uaa-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: uaa-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-uaa
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-uaa-pre-dev-lock
+      trigger: true
+    - get: uaa-release
+      params:
+        tarball: false
+      passed:
+      - acquire-uaa-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -7611,17 +8022,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-credhub
+- name: acquire-credhub-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: credhub-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-credhub
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-credhub-pre-dev-lock
+      trigger: true
+    - get: credhub-release
+      params:
+        tarball: false
+      passed:
+      - acquire-credhub-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -7841,17 +8265,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: update-cf-cli
+- name: acquire-cf-cli-pre-dev-lock
   public: true
   plan:
-  - put: pre-dev-pool
-    params:
-      acquire: true
   - in_parallel:
     - get: cf-cli-release
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-cf-cli
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-cf-cli-pre-dev-lock
+      trigger: true
+    - get: cf-cli-release
+      params:
+        tarball: false
+      passed:
+      - acquire-cf-cli-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -12098,9 +12535,13 @@ jobs:
     params:
       rebase: true
       repository: updated-stemcell-ops-file
-- name: update-stemcell-and-recompile-releases
+- name: acquire-all-pre-dev-locks
   public: true
   plan:
+  - get: stemcell
+    trigger: true
+    params:
+      tarball: false
   - in_parallel:
     - put: pre-dev-dagobah
       params:
@@ -12114,6 +12555,9 @@ jobs:
     - put: pre-dev-tatooine
       params:
         claim: pre-dev-tatooine
+- name: update-stemcell-and-recompile-releases
+  public: true
+  plan:
   - do:
     - in_parallel:
       - get: runtime-ci
@@ -12121,9 +12565,26 @@ jobs:
       - get: cf-deployment-develop
       - get: cf-deployment-concourse-tasks
       - get: stemcell
-        trigger: true
         params:
           tarball: false
+        passed:
+        - acquire-all-pre-dev-locks
+      - get: pre-dev-dagobah
+        passed:
+        - acquire-all-pre-dev-locks
+        trigger: true
+      - get: pre-dev-endor
+        passed:
+        - acquire-all-pre-dev-locks
+        trigger: true
+      - get: pre-dev-hoth
+        passed:
+        - acquire-all-pre-dev-locks
+        trigger: true
+      - get: pre-dev-tatooine
+        passed:
+        - acquire-all-pre-dev-locks
+        trigger: true
     - do:
       - task: upload-stemcell
         file: runtime-ci/tasks/bosh-upload-stemcell/task.yml

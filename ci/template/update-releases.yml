@@ -17,10 +17,14 @@
 
 ---
 groups:
-- name: update-base-stemcells-and-releases
+- name: update-linux-stemcell
   jobs:
+  - acquire-all-pre-dev-locks
   - update-stemcell-and-recompile-releases
+- name: update-base-releases
+  jobs:
   #@ for r in data.values.baseReleases:
+  - #@ "acquire-{}-pre-dev-lock".format(r.name)
   - #@ "update-" + r.name
   #@ end
 - name: update-ops-releases
@@ -229,16 +233,30 @@ jobs:
 #@ else:
   #@ env = "pre-dev"
 #@ end
-- name: #@ "update-" + r.name
+- name: #@ "acquire-{}-pre-dev-lock".format(r.name)
   public: true
   plan:
-  - put: pre-dev-pool
-    params: {acquire: true}
   - in_parallel:
     - get: #@ r.name + "-release"
       trigger: true
       params:
         tarball: false
+  - put: pre-dev-pool
+    params: {acquire: true}
+
+- name: #@ "update-" + r.name
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - #@ "acquire-{}-pre-dev-lock".format(r.name)
+      trigger: true
+    - get: #@ r.name + "-release"
+      params:
+        tarball: false
+      passed:
+      - #@ "acquire-{}-pre-dev-lock".format(r.name)
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -564,15 +582,23 @@ jobs:
       repository: updated-stemcell-ops-file
 #@ end
 
-- name: update-stemcell-and-recompile-releases
+- name: acquire-all-pre-dev-locks
   public: true
   plan:
+  - get: stemcell
+    trigger: true
+    params:
+      tarball: false
   - in_parallel:
     #@ for e in data.values.preDevEnvs:
     - put: #@ "pre-dev-" + e.name
       params:
         claim: #@ "pre-dev-" + e.name
     #@ end
+
+- name: update-stemcell-and-recompile-releases
+  public: true
+  plan:
   - do:
     - in_parallel:
       - get: runtime-ci
@@ -580,9 +606,16 @@ jobs:
       - get: cf-deployment-develop
       - get: cf-deployment-concourse-tasks
       - get: stemcell
-        trigger: true
         params:
           tarball: false
+        passed:
+        - acquire-all-pre-dev-locks
+    #@ for e in data.values.preDevEnvs:
+      - get: #@ "pre-dev-" + e.name
+        passed:
+        - acquire-all-pre-dev-locks
+        trigger: true
+    #@ end
     - do:
       - task: upload-stemcell
         file: runtime-ci/tasks/bosh-upload-stemcell/task.yml
