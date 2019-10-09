@@ -2,12 +2,6 @@
 ## GENERATED FILE. DO NOT EDIT
 ## ======================================================================
 
-resource_types:
-- name: slack-notification
-  type: docker-image
-  source:
-    repository: cfcommunity/slack-notification-resource
-    tag: latest
 resources:
 - name: cf-deployment-master
   type: git
@@ -16,31 +10,11 @@ resources:
     branch: master
     uri: git@github.com:cloudfoundry/cf-deployment.git
     private_key: ((cf_deployment_readwrite_deploy_key.private_key))
-- name: cf-deployment-develop
-  type: git
-  icon: github-box
-  source:
-    branch: develop
-    uri: git@github.com:cloudfoundry/cf-deployment.git
-    private_key: ((cf_deployment_readwrite_deploy_key.private_key))
-- name: cf-deployment-concourse-tasks
-  type: git
-  icon: github-box
-  source:
-    branch: master
-    uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
-- name: relint-envs
-  type: git
-  icon: github-box
-  source:
-    branch: master
-    uri: git@github.com:cloudfoundry/relint-envs.git
-    private_key: ((hagrid_env_readwrite_deploy_key.private_key))
 - name: runtime-ci
   type: git
   icon: github-box
   source:
-    branch: wip-update-manifest-releases-refactor-166455124
+    branch: master
     uri: https://github.com/cloudfoundry/runtime-ci.git
 - name: stemcell
   type: bosh-io-stemcell
@@ -48,63 +22,16 @@ resources:
   source:
     name: bosh-google-kvm-ubuntu-xenial-go_agent
 jobs:
-- name: update-stemcell-and-recompile-releases
+- name: update-stemcell-minor
   public: true
-  serial_groups:
-  - stemcell
   plan:
   - in_parallel:
-    - get: cf-deployment-concourse-tasks
     - get: cf-deployment-master
-    - get: cf-deployment-develop
-    - get: relint-envs
     - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
-  - do:
-    - task: upload-stemcell
-      file: runtime-ci/tasks/bosh-upload-stemcell/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-      params:
-        BBL_STATE_DIR: environments/test/greengrass/bbl-state
-    - task: detect-release-version-bumps
-      file: runtime-ci/tasks/detect-release-version-bumps/task.yml
-      input_mapping:
-        cf-deployment-prev: cf-deployment-master
-        cf-deployment-next: cf-deployment-develop
-    - task: deploy-releases
-      file: runtime-ci/tasks/deploy-all-releases/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-      params:
-        BBL_STATE_DIR: environments/test/greengrass/bbl-state
-    - task: export-compiled-release-tarballs
-      file: runtime-ci/tasks/export-all-compiled-release-tarballs/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-      params:
-        BBL_STATE_DIR: environments/test/greengrass/bbl-state
-        BOSH_DEPLOYMENT: cf-compilation
-    ensure:
-      do:
-      - task: delete-deployments
-        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-          DELETE_ALL_DEPLOYMENTS: true
-          IGNORE_ERRORS: true
-        attempts: 3
-      - task: run-bosh-cleanup
-        file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-        params:
-          BBL_STATE_DIR: environments/test/greengrass/bbl-state
-  - task: update-stemcell
-    file: runtime-ci/tasks/update-stemcell/task.yml
+  - task: update-stemcell-minor
+    file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
     input_mapping:
-      cf-deployment: cf-deployment-develop
+      cf-deployment: cf-deployment-master
