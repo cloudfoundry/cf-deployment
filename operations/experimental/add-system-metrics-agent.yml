@@ -11,19 +11,21 @@
     jobs:
     - name: loggr-system-metrics-agent
       properties:
+        metrics_port: 53035
         system_metrics:
           tls:
             ca_cert: ((system_metrics.ca))
             cert: ((system_metrics.certificate))
             key: ((system_metrics.private_key))
-      release: loggregator-agent
+      release: system-metrics
     name: loggr-system-metrics-agent
 
 - type: replace
-  path: /instance_groups/name=scheduler/jobs/name=loggr-metric-scraper?
+  path: /instance_groups/name=scheduler/jobs/name=loggr-system-metric-scraper?
   value:
-    name: loggr-metric-scraper
+    name: loggr-system-metric-scraper
     properties:
+      scrape_port: 53035
       system_metrics:
         tls:
           ca_cert: ((system_metrics.ca))
@@ -38,7 +40,7 @@
         cert: "((loggr_metric_scraper_metrics_tls.certificate))"
         key: "((loggr_metric_scraper_metrics_tls.private_key))"
         server_name: loggr_metric_scraper_metrics
-    release: loggregator-agent
+    release: system-metrics
 
 - type: replace
   path: /instance_groups/name=scheduler/instances
@@ -59,7 +61,7 @@
         cert: "((leadership_election_metrics_tls.certificate))"
         key: "((leadership_election_metrics_tls.private_key))"
         server_name: leadership_election_metrics
-    release: leadership-election
+    release: system-metrics
 
 - type: replace
   path: /variables/name=system_metrics?
@@ -74,12 +76,12 @@
     type: certificate
 
 - type: replace
-  path: /releases/name=leadership-election?
+  path: /releases/name=system-metrics?
   value:
-    name: leadership-election
-    version: 2.0.0
-    url: https://bosh.io/d/github.com/cloudfoundry/leadership-election-release?v=2.0.0
-    sha1: f92817c3432f71ae3b99bec362711940ee6d179a
+    name: system-metrics
+    version: 1.0.0
+    url: https://bosh.io/d/github.com/cloudfoundry/system-metrics-release?v=1.0.0
+    sha1: 59c3ddf9a969e474be0c696a59bff2a8e40f3eb3
 
 - type: replace
   path: /variables/name=leadership_election_tls?
