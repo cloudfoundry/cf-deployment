@@ -169,10 +169,12 @@ jobs:
         params:
           repository: cf-deployment-master-with-updated-manifest-version
           merge: true
+      ensure:
+        do:
+        - #@ delete_deployment(env)
+        - #@ manage_gcp_dns("remove", env)
+        - #@ bbl_down(env)
     ensure:
       do:
-      - #@ delete_deployment(env)
-      - #@ manage_gcp_dns("remove", env)
-      - #@ bbl_down(env)
       - put: pre-dev-pool
         params: {release: pre-dev-pool}

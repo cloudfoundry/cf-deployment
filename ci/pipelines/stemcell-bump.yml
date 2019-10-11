@@ -98,7 +98,23 @@ jobs:
         bbl-state: relint-envs
         bbl-config: relint-envs
         pool-lock: pre-dev-pool
-      ensure:
+      on_failure:
+        do:
+        - task: bbl-cleanup-leftovers
+          file: runtime-ci/tasks/bbl-cleanup-leftovers/task.yml
+          input_mapping:
+            bbl-state: updated-bbl-state
+            pool-lock: pre-dev-pool
+          output_mapping:
+            updated-bbl-state: clean-bbl-state
+          params:
+            BBL_JSON_CONFIG: pool-lock/metadata
+        ensure:
+          put: relint-envs
+          params:
+            repository: clean-bbl-state
+            rebase: true
+      on_success:
         put: relint-envs
         params:
           repository: updated-bbl-state
@@ -179,39 +195,57 @@ jobs:
         params:
           repository: cf-deployment-master-with-updated-manifest-version
           merge: true
+      ensure:
+        do:
+        - task: delete-deployment
+          file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+            pool-lock: pre-dev-pool
+          params:
+            BBL_JSON_CONFIG: pool-lock/metadata
+            IGNORE_ERRORS: true
+          attempts: 3
+        - task: remove-gcp-dns
+          file: runtime-ci/tasks/manage-gcp-dns/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+            pool-lock: pre-dev-pool
+          params:
+            BBL_JSON_CONFIG: pool-lock/metadata
+            GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+            GCP_DNS_ZONE_NAME: test-relint-rocks
+            ACTION: remove
+        - task: bbl-down
+          file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+            pool-lock: pre-dev-pool
+          params:
+            BBL_JSON_CONFIG: pool-lock/metadata
+          on_failure:
+            do:
+            - task: bbl-cleanup-leftovers
+              file: runtime-ci/tasks/bbl-cleanup-leftovers/task.yml
+              input_mapping:
+                bbl-state: updated-bbl-state
+                pool-lock: pre-dev-pool
+              output_mapping:
+                updated-bbl-state: clean-bbl-state
+              params:
+                BBL_JSON_CONFIG: pool-lock/metadata
+            ensure:
+              put: relint-envs
+              params:
+                repository: clean-bbl-state
+                rebase: true
+          on_success:
+            put: relint-envs
+            params:
+              repository: updated-bbl-state
+              rebase: true
     ensure:
       do:
-      - task: delete-deployment
-        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          pool-lock: pre-dev-pool
-        params:
-          BBL_JSON_CONFIG: pool-lock/metadata
-          IGNORE_ERRORS: true
-        attempts: 3
-      - task: remove-gcp-dns
-        file: runtime-ci/tasks/manage-gcp-dns/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          pool-lock: pre-dev-pool
-        params:
-          BBL_JSON_CONFIG: pool-lock/metadata
-          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-          GCP_DNS_ZONE_NAME: test-relint-rocks
-          ACTION: remove
-      - task: bbl-down
-        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          pool-lock: pre-dev-pool
-        params:
-          BBL_JSON_CONFIG: pool-lock/metadata
-        ensure:
-          put: relint-envs
-          params:
-            repository: updated-bbl-state
-            rebase: true
       - put: pre-dev-pool
         params:
           release: pre-dev-pool

@@ -6,7 +6,23 @@ input_mapping:
   pool-lock: pre-dev-pool
 params:
   BBL_JSON_CONFIG: pool-lock/metadata
-ensure:
+on_failure:
+  do:
+  - task: bbl-cleanup-leftovers
+    file: runtime-ci/tasks/bbl-cleanup-leftovers/task.yml
+    input_mapping:
+      bbl-state: updated-bbl-state
+      pool-lock: pre-dev-pool
+    output_mapping:
+      updated-bbl-state: clean-bbl-state
+    params:
+      BBL_JSON_CONFIG: pool-lock/metadata
+  ensure:
+    put: relint-envs
+    params:
+      repository: clean-bbl-state
+      rebase: true
+on_success:
   put: relint-envs
   params:
     repository: updated-bbl-state

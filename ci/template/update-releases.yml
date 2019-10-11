@@ -389,11 +389,13 @@ jobs:
               text_file: slack-message/message.txt
               username: "Release Integration"
     #@ if hasattr(r, "debug") == False:
+      ensure:
+        do:
+        - #@ delete_deployment(env)
+        - #@ manage_gcp_dns("remove", env)
+        - #@ bbl_down(env)
     ensure:
       do:
-      - #@ delete_deployment(env)
-      - #@ manage_gcp_dns("remove", env)
-      - #@ bbl_down(env)
       - put: pre-dev-pool
         params: {release: pre-dev-pool}
     #@ end
@@ -409,6 +411,10 @@ jobs:
   - #@ delete_deployment(env)
   - #@ manage_gcp_dns("remove", env)
   - #@ bbl_down(env)
+  - put: pre-dev-pool
+    params: {release: pre-dev-pool}
+    passed:
+    - #@ "update-" + r.name
 #@ end
 #@ end
 
@@ -549,11 +555,13 @@ jobs:
               text_file: slack-message/message.txt
               username: "Release Integration"
     #@ if hasattr(r, "debug") == False:
+      ensure:
+        do:
+        - #@ delete_deployment(env)
+        - #@ manage_gcp_dns("remove", env)
+        - #@ bbl_down(env)
     ensure:
       do:
-      - #@ delete_deployment(env)
-      - #@ manage_gcp_dns("remove", env)
-      - #@ bbl_down(env)
       - put: pre-dev-pool
         params: {release: pre-dev-pool}
     #@ end
@@ -569,6 +577,10 @@ jobs:
   - #@ delete_deployment(env)
   - #@ manage_gcp_dns("remove", env)
   - #@ bbl_down(env)
+  - put: pre-dev-pool
+    params: {release: pre-dev-pool}
+    passed:
+    - #@ "update-" + r.name
 #@ end
 #@ end
 
