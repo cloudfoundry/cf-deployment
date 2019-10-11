@@ -3,13 +3,56 @@
 ## ======================================================================
 
 resources:
+- name: cf-deployment-concourse-tasks
+  type: git
+  icon: github-box
+  source:
+    branch: master
+    uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
 - name: cf-deployment-master
   type: git
   icon: github-box
   source:
     branch: master
-    uri: git@github.com:cloudfoundry/cf-deployment.git
-    private_key: ((cf_deployment_readwrite_deploy_key.private_key))
+    uri: git@github.com:acosta11/test-cfd.git
+    private_key: ((test_cfd_readwrite_deploy_key.private_key))
+- name: cf-deployment-develop
+  type: git
+  icon: github-box
+  source:
+    branch: develop
+    uri: git@github.com:acosta11/test-cfd.git
+    private_key: ((test_cfd_readwrite_deploy_key.private_key))
+- name: cf-deployment-version
+  type: semver
+  source:
+    driver: git
+    uri: git@github.com:cloudfoundry/cf-relint-ci-semver.git
+    branch: minor-stemcell-test
+    private_key: ((cf_relint_ci_semver_readwrite_deploy_key.private_key))
+    git_user: CF MEGA BOT <cf-mega@pivotal.io>
+    file: cf-deployment-version
+- name: cf-deployment-release
+  type: github-release
+  source:
+    owner: acosta11
+    repository: test-cfd
+    access_token: ((test_cfd_repo_access_token))
+- name: pre-dev-pool
+  type: pool
+  icon: pool
+  source:
+    uri: git@github.com:cloudfoundry/relint-ci-pools
+    branch: master
+    pool: update-release-pool
+    private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
+- name: relint-envs
+  type: git
+  icon: github-box
+  source:
+    branch: master
+    uri: git@github.com:cloudfoundry/relint-envs.git
+    private_key: ((hagrid_env_readwrite_deploy_key.private_key))
 - name: runtime-ci
   type: git
   icon: github-box
@@ -27,12 +70,145 @@ jobs:
   public: true
   plan:
   - in_parallel:
+    - get: cf-deployment-concourse-tasks
     - get: cf-deployment-master
+    - get: relint-envs
     - get: runtime-ci
     - get: stemcell
       params:
         tarball: false
+    - get: cf-deployment-version
+      params:
+        bump: minor
   - task: update-stemcell-minor
     file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
     input_mapping:
       cf-deployment: cf-deployment-master
+    output_mapping:
+      updated-cf-deployment: updated-cf-deployment-master
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_JSON_CONFIG: pool-lock/metadata
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+        pool-lock: pre-dev-pool
+      ensure:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        pool-lock: pre-dev-pool
+      params:
+        BBL_JSON_CONFIG: pool-lock/metadata
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        ACTION: add
+    - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-master
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
+      - task: deploy-cf
+        file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          cf-deployment: updated-cf-deployment-master
+          ops-files: updated-cf-deployment-master
+          vars-files: combined-vars-files
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          OPS_FILES: |
+            operations/use-compiled-releases.yml
+            operations/experimental/fast-deploy-with-downtime-and-danger.yml
+          REGENERATE_CREDENTIALS: false
+          BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          pool-lock: pre-dev-pool
+          cats-integration-config: relint-envs
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          ERRAND_NAME: smoke-tests
+      - task: generate-cf-deployment-release-notes-template
+        file: runtime-ci/tasks/cf-deployment-minor-stemcell-bump-release-notes/task.yml
+        input_mapping:
+          release-version: cf-deployment-version
+      - task: update-cf-deployment-manifest-version
+        file: runtime-ci/tasks/record-cfd-version-in-manifest/task.yml
+        input_mapping:
+          cf-deployment-release-candidate: updated-cf-deployment-master
+        output_mapping:
+          cf-deployment-rc-with-updated-version: cf-deployment-master-with-updated-manifest-version
+      - put: cf-deployment-master
+        params:
+          repository: cf-deployment-master-with-updated-manifest-version
+          tag: cf-deployment-version/version
+          tag_prefix: v
+      - put: cf-deployment-release
+        params:
+          name: cf-deployment-minor-stemcell-bump-release-notes/name.txt
+          tag: cf-deployment-version/version
+          tag_prefix: v
+          body: cf-deployment-minor-stemcell-bump-release-notes/body.txt
+      - put: cf-deployment-version
+        params:
+          bump: minor
+      - put: cf-deployment-develop
+        params:
+          repository: cf-deployment-master-with-updated-manifest-version
+          merge: true
+    ensure:
+      do:
+      - task: delete-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          IGNORE_ERRORS: true
+        attempts: 3
+      - task: remove-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          ACTION: remove
+      - task: bbl-down
+        file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+        ensure:
+          put: relint-envs
+          params:
+            repository: updated-bbl-state
+            rebase: true
+      - put: pre-dev-pool
+        params:
+          release: pre-dev-pool
