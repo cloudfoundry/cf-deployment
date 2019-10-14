@@ -82,12 +82,12 @@
   path: /releases/name=cflinuxfs3
   value:
     name: cflinuxfs3
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/cflinuxfs3-0.134.0-ubuntu-xenial-456.30-20191014-201156-231562179.tgz
-    version: 0.134.0
     sha1: 013ab8d5166ef9b845f44c5272cb5060a7034c4e
     stemcell:
       os: ubuntu-xenial
       version: "456.30"
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/cflinuxfs3-0.134.0-ubuntu-xenial-456.30-20191014-201156-231562179.tgz
+    version: 0.134.0
 - type: replace
   path: /releases/name=credhub
   value:
@@ -192,12 +192,12 @@
   path: /releases/name=nginx-buildpack
   value:
     name: nginx-buildpack
-    sha1: 40ebeacf2acc9f0f06a85f39a095da6e90cdb953
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/nginx-buildpack-1.1.0-ubuntu-xenial-456.30-20191014-215900-983974551.tgz
+    version: 1.1.0
+    sha1: dee7f688be13a9de3967e73cce64934266baff03
     stemcell:
       os: ubuntu-xenial
       version: "456.30"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/nginx-buildpack-1.0.18-ubuntu-xenial-456.30-20191010-021551-958653721.tgz
-    version: 1.0.18
 - type: replace
   path: /releases/name=nodejs-buildpack
   value:
