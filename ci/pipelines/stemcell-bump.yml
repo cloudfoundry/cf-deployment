@@ -14,15 +14,15 @@ resources:
   icon: github-box
   source:
     branch: master
-    uri: git@github.com:acosta11/test-cfd.git
-    private_key: ((test_cfd_readwrite_deploy_key.private_key))
+    uri: git@github.com:weymanf/cf-deployment.git
+    private_key: ((weyman-cfd-deploy-key.private_key))
 - name: cf-deployment-develop
   type: git
   icon: github-box
   source:
     branch: develop
-    uri: git@github.com:acosta11/test-cfd.git
-    private_key: ((test_cfd_readwrite_deploy_key.private_key))
+    uri: git@github.com:weymanf/cf-deployment.git
+    private_key: ((weyman-cfd-deploy-key.private_key))
 - name: cf-deployment-version
   type: semver
   source:
@@ -35,9 +35,9 @@ resources:
 - name: cf-deployment-release
   type: github-release
   source:
-    owner: acosta11
-    repository: test-cfd
-    access_token: ((test_cfd_repo_access_token))
+    owner: weymanf
+    repository: cf-deployment
+    access_token: ((weymanf_repo_access_token))
 - name: pre-dev-pool
   type: pool
   icon: pool
