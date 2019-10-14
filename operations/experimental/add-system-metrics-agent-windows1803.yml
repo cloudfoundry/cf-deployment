@@ -2,8 +2,9 @@
   path: /instance_groups/name=windows1803-cell/jobs/name=loggr-system-metrics-agent-windows?
   value:
     name: loggr-system-metrics-agent-windows
-    release: loggregator-agent
+    release: system-metrics
     properties:
+      metrics_port: 53035
       system_metrics:
           tls:
             ca_cert: "((system_metrics.ca))"
