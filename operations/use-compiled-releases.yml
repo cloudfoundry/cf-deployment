@@ -22,12 +22,12 @@
   path: /releases/name=bpm
   value:
     name: bpm
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/bpm-1.1.4-ubuntu-xenial-456.30-20191012-002142-874317521.tgz
-    version: 1.1.4
     sha1: 8bef9cbba82c3a0af4ba2e4ddb658a7e41e4a9cb
     stemcell:
       os: ubuntu-xenial
       version: "456.30"
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/bpm-1.1.4-ubuntu-xenial-456.30-20191012-002142-874317521.tgz
+    version: 1.1.4
 - type: replace
   path: /releases/name=capi
   value:
@@ -82,12 +82,12 @@
   path: /releases/name=cflinuxfs3
   value:
     name: cflinuxfs3
-    sha1: 6376d5460ed3d90313c0cbf0dfefb1863eab5f20
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/cflinuxfs3-0.134.0-ubuntu-xenial-456.30-20191014-201156-231562179.tgz
+    version: 0.134.0
+    sha1: 013ab8d5166ef9b845f44c5272cb5060a7034c4e
     stemcell:
       os: ubuntu-xenial
       version: "456.30"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/cflinuxfs3-0.133.0-ubuntu-xenial-456.30-20191009-233055-73881014.tgz
-    version: 0.133.0
 - type: replace
   path: /releases/name=credhub
   value:
