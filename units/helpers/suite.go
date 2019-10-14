@@ -7,6 +7,8 @@ import (
 	"path/filepath"
 	"regexp"
 	"testing"
+
+	yaml "gopkg.in/yaml.v2"
 )
 
 type SuiteTest struct {
@@ -16,12 +18,24 @@ type SuiteTest struct {
 	tests map[string]OpsFileTestParams
 }
 
-func NewSuiteTest(cfDeploymentHome, testSubDirectory string, opsTests map[string]OpsFileTestParams) SuiteTest {
+func NewSuiteTest(cfDeploymentHome, testSubDirectory string) SuiteTest {
 	return SuiteTest{
 		homeDir:    cfDeploymentHome,
 		testSubDir: testSubDirectory,
-		tests:      opsTests,
 	}
+}
+
+func (suite *SuiteTest) LoadTestOperationsYaml(t *testing.T) {
+	content, err := ioutil.ReadFile("operations.yml")
+	if err != nil {
+		t.Fatalf("Error reading operations file: %s", err)
+	}
+	opsTests := make(map[string]OpsFileTestParams)
+	err = yaml.Unmarshal(content, &opsTests)
+	if err != nil {
+		t.Fatalf("Error unmarshalling operations.yml: %s", err)
+	}
+	suite.tests = opsTests
 }
 
 func (suite SuiteTest) EnsureTestCoverage(t *testing.T) {

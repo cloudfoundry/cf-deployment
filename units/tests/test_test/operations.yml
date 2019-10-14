@@ -1,0 +1,24 @@
+---
+add-datadog-firehose-nozzle.yml:
+  vars:
+  - datadog_api_key=XYZ
+  - datadog_metric_prefix=foo.bar
+  - traffic_controller_external_port=8443
+add-oidc-provider.yml: {}
+add-persistent-isolation-segment-diego-cell-bosh-lite.yml:
+  ops:
+  - add-persistent-isolation-segment-diego-cell.yml
+  - add-persistent-isolation-segment-diego-cell-bosh-lite.yml
+add-persistent-isolation-segment-diego-cell.yml: {}
+add-persistent-isolation-segment-router.yml: {}
+alter-ssh-proxy-redirect-uri.yml: {}
+enable-nfs-test-ldapserver.yml:
+  ops:
+  - ../enable-nfs-volume-service.yml
+  - enable-nfs-test-server.yml
+  - enable-nfs-test-ldapserver.yml
+enable-nfs-test-server.yml: {}
+enable-smb-test-server.yml:
+  vars:
+  - smb-password=FOO.PASS
+  - smb-username=BAR.USER

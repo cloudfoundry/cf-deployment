@@ -1,0 +1,190 @@
+---
+#internal
+enable-backup-restore-azure.yml:
+  ops:
+  - enable-backup-restore.yml
+  - ../use-external-blobstore.yml
+  - ../use-azure-storage-blobstore.yml
+  - enable-backup-restore-azure.yml
+  varsfiles:
+  - ../example-vars-files/vars-use-azure-storage-blobstore.yml
+
+# azure
+enable-backup-restore-azure.yml with skip droplets:
+  ops:
+  - enable-backup-restore.yml
+  - ../use-external-blobstore.yml
+  - ../use-azure-storage-blobstore.yml
+  - enable-backup-restore-azure.yml
+  - skip-backup-restore-droplets.yml
+  varsfiles:
+  - ../example-vars-files/vars-use-azure-storage-blobstore.yml
+enable-backup-restore-azure.yml with skip droplets and packages:
+  ops:
+  - enable-backup-restore.yml
+  - ../use-external-blobstore.yml
+  - ../use-azure-storage-blobstore.yml
+  - enable-backup-restore-azure.yml
+  - skip-backup-restore-droplets-and-packages.yml
+  varsfiles:
+  - ../example-vars-files/vars-use-azure-storage-blobstore.yml
+
+# azure-clone
+enable-restore-azure-clone.yml:
+  ops:
+  - enable-backup-restore.yml
+  - ../use-external-blobstore.yml
+  - ../use-azure-storage-blobstore.yml
+  - enable-restore-azure-clone.yml
+  varsfiles:
+  - ../example-vars-files/vars-use-azure-storage-blobstore.yml
+  - example-vars-files/vars-enable-restore-azure-clone.yml
+enable-restore-azure-clone.yml with skip droplets:
+  ops:
+  - enable-backup-restore.yml
+  - ../use-external-blobstore.yml
+  - ../use-azure-storage-blobstore.yml
+  - enable-restore-azure-clone.yml
+  - skip-backup-restore-droplets.yml
+  varsfiles:
+  - ../example-vars-files/vars-use-azure-storage-blobstore.yml
+  - example-vars-files/vars-enable-restore-azure-clone.yml
+enable-restore-azure-clone.yml-with-skip-droplets-and-packages:
+  ops:
+  - enable-backup-restore.yml
+  - ../use-external-blobstore.yml
+  - ../use-azure-storage-blobstore.yml
+  - enable-restore-azure-clone.yml
+  - skip-backup-restore-droplets-and-packages.yml
+  varsfiles:
+  - ../example-vars-files/vars-use-azure-storage-blobstore.yml
+  - example-vars-files/vars-enable-restore-azure-clone.yml
+
+# gcs
+enable-backup-restore-gcs.yml:
+  ops:
+  - enable-backup-restore.yml
+  - ../use-external-blobstore.yml
+  - ../use-gcs-blobstore-service-account.yml
+  - enable-backup-restore-gcs.yml
+  varsfiles:
+  - ../example-vars-files/vars-use-gcs-blobstore-service-account.yml
+  - example-vars-files/vars-enable-backup-restore-gcs.yml
+enable-backup-restore-gcs.yml-with-skip-droplets:
+  ops:
+  - enable-backup-restore.yml
+  - ../use-external-blobstore.yml
+  - ../use-gcs-blobstore-service-account.yml
+  - enable-backup-restore-gcs.yml
+  - skip-backup-restore-droplets.yml
+  varsfiles:
+  - ../example-vars-files/vars-use-gcs-blobstore-service-account.yml
+  - example-vars-files/vars-enable-backup-restore-gcs.yml
+enable-backup-restore-gcs.yml-with-skip-droplets-and-packages:
+  ops:
+  - enable-backup-restore.yml
+  - ../use-external-blobstore.yml
+  - ../use-gcs-blobstore-service-account.yml
+  - enable-backup-restore-gcs.yml
+  - skip-backup-restore-droplets-and-packages.yml
+  varsfiles:
+  - ../example-vars-files/vars-use-gcs-blobstore-service-account.yml
+  - example-vars-files/vars-enable-backup-restore-gcs.yml
+
+# s3-unversioned
+enable-backup-restore-s3-unversioned.yml:
+  ops:
+  - enable-backup-restore.yml
+  - ../use-external-blobstore.yml
+  - ../use-s3-blobstore.yml
+  - enable-backup-restore-s3-unversioned.yml
+  varsfiles:
+  - ../example-vars-files/vars-use-s3-blobstore.yml
+  - example-vars-files/vars-enable-backup-restore-s3-unversioned.yml
+enable-backup-restore-s3-unversioned.yml-with-skip-droplets:
+  ops:
+  - enable-backup-restore.yml
+  - ../use-external-blobstore.yml
+  - ../use-s3-blobstore.yml
+  - enable-backup-restore-s3-unversioned.yml
+  - skip-backup-restore-droplets.yml
+  varsfiles:
+  - ../example-vars-files/vars-use-s3-blobstore.yml
+  - example-vars-files/vars-enable-backup-restore-s3-unversioned.yml
+enable-backup-restore-s3-unversioned.yml-with-skip-droplets-and-packages:
+  ops:
+  - enable-backup-restore.yml
+  - ../use-external-blobstore.yml
+  - ../use-s3-blobstore.yml
+  - enable-backup-restore-s3-unversioned.yml
+  - skip-backup-restore-droplets-and-packages.yml
+  varsfiles:
+  - ../example-vars-files/vars-use-s3-blobstore.yml
+  - example-vars-files/vars-enable-backup-restore-s3-unversioned.yml
+
+# s3-versioned
+enable-backup-restore-s3-versioned.yml:
+  ops:
+  - enable-backup-restore.yml
+  - ../use-external-blobstore.yml
+  - ../use-s3-blobstore.yml
+  - enable-backup-restore-s3-versioned.yml
+  varsfiles:
+  - ../example-vars-files/vars-use-s3-blobstore.yml
+enable-backup-restore-s3-versioned.yml-with-skip-droplets:
+  ops:
+  - enable-backup-restore.yml
+  - ../use-external-blobstore.yml
+  - ../use-s3-blobstore.yml
+  - enable-backup-restore-s3-versioned.yml
+  - skip-backup-restore-droplets.yml
+  varsfiles:
+  - ../example-vars-files/vars-use-s3-blobstore.yml
+enable-backup-restore-s3-versioned.yml-with-skip-droplets-and-packages:
+  ops:
+  - enable-backup-restore.yml
+  - ../use-external-blobstore.yml
+  - ../use-s3-blobstore.yml
+  - enable-backup-restore-s3-versioned.yml
+  - skip-backup-restore-droplets-and-packages.yml
+  varsfiles:
+  - ../example-vars-files/vars-use-s3-blobstore.yml
+enable-backup-restore.yml:
+  ops:
+  - enable-backup-restore.yml
+  pathvalidator:
+    path: /instance_groups/name=singleton-blobstore/jobs/name=blobstore/properties/select_directories_to_backup
+    expectedvalue: |-
+      - buildpacks
+      - packages
+      - droplets
+
+# nfs-broker
+enable-restore-nfs-broker.yml:
+  ops:
+  - enable-backup-restore.yml
+  - ../enable-nfs-volume-service.yml
+  - skip-backup-restore-droplets-and-packages.yml
+  - enable-restore-nfs-broker.yml
+enable-restore-smb-broker.yml:
+  ops:
+  - enable-backup-restore.yml
+  - ../enable-smb-volume-service.yml
+  - skip-backup-restore-droplets-and-packages.yml
+  - enable-restore-smb-broker.yml
+skip-backup-restore-droplets-and-packages.yml:
+  ops:
+  - enable-backup-restore.yml
+  - skip-backup-restore-droplets-and-packages.yml
+  pathvalidator:
+    path: /instance_groups/name=singleton-blobstore/jobs/name=blobstore/properties/select_directories_to_backup
+    expectedvalue: '- buildpacks'
+skip-backup-restore-droplets.yml:
+  ops:
+  - enable-backup-restore.yml
+  - skip-backup-restore-droplets.yml
+  pathvalidator:
+    path: /instance_groups/name=singleton-blobstore/jobs/name=blobstore/properties/select_directories_to_backup
+    expectedvalue: |-
+      - buildpacks
+      - packages
