@@ -109,8 +109,8 @@ groups:
   - update-windowsfs
   - acquire-node-exporter-pre-dev-lock
   - update-node-exporter
-  - acquire-leadership-election-pre-dev-lock
-  - update-leadership-election
+  - acquire-system-metrics-pre-dev-lock
+  - update-system-metrics
   - acquire-metric-store-pre-dev-lock
   - update-metric-store
   - acquire-envoy-nginx-pre-dev-lock
@@ -413,10 +413,10 @@ resources:
   type: bosh-io-release
   source:
     repository: cloudfoundry-community/node-exporter-boshrelease
-- name: leadership-election-release
+- name: system-metrics-release
   type: bosh-io-release
   source:
-    repository: cloudfoundry/leadership-election-release
+    repository: cloudfoundry/system-metrics-release
 - name: metric-store-release
   type: bosh-io-release
   source:
@@ -905,12 +905,12 @@ resources:
     bucket: component-bump-logs
     json_key: ((greengrass_gcp_service_account_json))
     regexp: node-exporter/cf-(\d+)-(\d+)-(\d+)\.tgz
-- name: leadership-election-component-bump-logs-gcs
+- name: system-metrics-component-bump-logs-gcs
   type: gcs-resource
   source:
     bucket: component-bump-logs
     json_key: ((greengrass_gcp_service_account_json))
-    regexp: leadership-election/cf-(\d+)-(\d+)-(\d+)\.tgz
+    regexp: system-metrics/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: metric-store-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -13802,30 +13802,30 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
-- name: acquire-leadership-election-pre-dev-lock
+- name: acquire-system-metrics-pre-dev-lock
   public: true
   plan:
   - in_parallel:
-    - get: leadership-election-release
+    - get: system-metrics-release
       trigger: true
       params:
         tarball: false
   - put: pre-dev-pool
     params:
       acquire: true
-- name: update-leadership-election
+- name: update-system-metrics
   public: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
       passed:
-      - acquire-leadership-election-pre-dev-lock
+      - acquire-system-metrics-pre-dev-lock
       trigger: true
-    - get: leadership-election-release
+    - get: system-metrics-release
       params:
         tarball: false
       passed:
-      - acquire-leadership-election-pre-dev-lock
+      - acquire-system-metrics-pre-dev-lock
     - get: cf-deployment-release-candidate
     - get: cf-deployment-develop
     - get: stemcell
@@ -13835,15 +13835,15 @@ jobs:
     - get: runtime-ci
     - get: relint-envs
     - get: relint-team
-  - task: update-additional-ops-files-leadership-election-release-candidate
+  - task: update-additional-ops-files-system-metrics-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
       original-ops-file: cf-deployment-release-candidate
-      release: leadership-election-release
+      release: system-metrics-release
     output_mapping:
-      updated-ops-file: updated-cf-deployment-leadership-election-release-candidate
+      updated-ops-file: updated-cf-deployment-system-metrics-release-candidate
     params:
-      RELEASE_NAME: leadership-election
+      RELEASE_NAME: system-metrics
   - do:
     - task: bbl-up
       file: cf-deployment-concourse-tasks/bbl-up/task.yml
@@ -13896,8 +13896,8 @@ jobs:
         file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-leadership-election-release-candidate
-          ops-files: updated-cf-deployment-leadership-election-release-candidate
+          cf-deployment: updated-cf-deployment-system-metrics-release-candidate
+          ops-files: updated-cf-deployment-system-metrics-release-candidate
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -13925,29 +13925,29 @@ jobs:
           ERRAND_NAME: smoke-tests
       on_success:
         do:
-        - task: update-additional-ops-files-leadership-election-develop
+        - task: update-additional-ops-files-system-metrics-develop
           file: runtime-ci/tasks/update-single-opsfile-release/task.yml
           input_mapping:
             original-ops-file: cf-deployment-develop
-            release: leadership-election-release
+            release: system-metrics-release
           output_mapping:
-            updated-ops-file: updated-cf-deployment-leadership-election-develop
+            updated-ops-file: updated-cf-deployment-system-metrics-develop
           params:
-            RELEASE_NAME: leadership-election
+            RELEASE_NAME: system-metrics
         - put: cf-deployment-develop
           params:
             rebase: true
-            repository: updated-cf-deployment-leadership-election-develop
+            repository: updated-cf-deployment-system-metrics-develop
       on_failure:
         do:
         - task: push-to-release-branch
           file: runtime-ci/tasks/push-to-release-branch/task.yml
           input_mapping:
-            updated-cf-deployment: updated-cf-deployment-leadership-election-release-candidate
-            release: leadership-election-release
+            updated-cf-deployment: updated-cf-deployment-system-metrics-release-candidate
+            release: system-metrics-release
           params:
             DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-            RELEASE_NAME: leadership-election
+            RELEASE_NAME: system-metrics
         - task: retrieve-bosh-logs
           file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
           input_mapping:
@@ -13955,7 +13955,7 @@ jobs:
             pool-lock: pre-dev-pool
           params:
             BBL_JSON_CONFIG: pool-lock/metadata
-        - put: leadership-election-component-bump-logs-gcs
+        - put: system-metrics-component-bump-logs-gcs
           params:
             file: bosh-logs/cf-*.tgz
         ensure:
@@ -13963,14 +13963,14 @@ jobs:
           - task: create-slack-message
             file: runtime-ci/tasks/create-slack-message/task.yml
             input_mapping:
-              release: leadership-election-release
+              release: system-metrics-release
             params:
-              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/leadership-election
-              RELEASE_NAME: leadership-election
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/system-metrics
+              RELEASE_NAME: system-metrics
           - task: lookup-slack-channel-for-release-owner
             file: runtime-ci/tasks/lookup-slack-channel-for-release-owner/task.yml
             params:
-              RELEASE_REPOSITORY: cloudfoundry/leadership-election-release
+              RELEASE_REPOSITORY: cloudfoundry/system-metrics-release
           - put: slack-alert
             params:
               channel_file: slack-channel/channel.txt
