@@ -1798,74 +1798,83 @@ jobs:
 - name: ship-it-patch
   public: true
   plan:
-    - do:
-      - get: runtime-ci
-      - get: cf-deployment-version
-        params: {bump: patch}
-      - get: cf-deployment-develop
-      - get: cf-deployment-release-candidate
-        passed: [bless-manifest]
-      - task: update-cf-deployment-manifest-version
-        file: runtime-ci/tasks/record-cfd-version-in-manifest/task.yml
-      - put: cf-deployment-master
-        params:
-          repository: cf-deployment-rc-with-updated-version
-          tag: cf-deployment-version/version
-          tag_prefix: v
-      - put: cf-deployment-develop
-        params:
-          repository: cf-deployment-rc-with-updated-version
-          merge: true
-      - put: cf-deployment-version
-        params: {bump: patch}
+  - in_parallel:
+    - get: runtime-ci
+    - get: cf-deployment-version
+      params: {bump: patch}
+    - get: cf-deployment-master
+    - get: cf-deployment-develop
+    - get: cf-deployment-release-candidate
+      passed: [bless-manifest]
+  - task: check-stemcell-versions
+    file: runtime-ci/tasks/check-stemcell-versions-for-ship-it/task.yml
+  - task: update-cf-deployment-manifest-version
+    file: runtime-ci/tasks/record-cfd-version-in-manifest/task.yml
+  - put: cf-deployment-master
+    params:
+      repository: cf-deployment-rc-with-updated-version
+      tag: cf-deployment-version/version
+      tag_prefix: v
+  - put: cf-deployment-develop
+    params:
+      repository: cf-deployment-rc-with-updated-version
+      merge: true
+  - put: cf-deployment-version
+    params: {bump: patch}
 
 - name: ship-it-minor
   public: true
   plan:
-    - do:
-      - get: runtime-ci
-      - get: cf-deployment-version
-        params: {bump: minor}
-      - get: cf-deployment-develop
-      - get: cf-deployment-release-candidate
-        passed: [bless-manifest]
-      - task: update-cf-deployment-manifest-version
-        file: runtime-ci/tasks/record-cfd-version-in-manifest/task.yml
-      - put: cf-deployment-master
-        params:
-          repository: cf-deployment-rc-with-updated-version
-          tag: cf-deployment-version/version
-          tag_prefix: v
-      - put: cf-deployment-develop
-        params:
-          repository: cf-deployment-rc-with-updated-version
-          merge: true
-      - put: cf-deployment-version
-        params: {bump: minor}
+  - in_parallel:
+    - get: runtime-ci
+    - get: cf-deployment-version
+      params: {bump: minor}
+    - get: cf-deployment-master
+    - get: cf-deployment-develop
+    - get: cf-deployment-release-candidate
+      passed: [bless-manifest]
+  - task: check-stemcell-versions
+    file: runtime-ci/tasks/check-stemcell-versions-for-ship-it/task.yml
+  - task: update-cf-deployment-manifest-version
+    file: runtime-ci/tasks/record-cfd-version-in-manifest/task.yml
+  - put: cf-deployment-master
+    params:
+      repository: cf-deployment-rc-with-updated-version
+      tag: cf-deployment-version/version
+      tag_prefix: v
+  - put: cf-deployment-develop
+    params:
+      repository: cf-deployment-rc-with-updated-version
+      merge: true
+  - put: cf-deployment-version
+    params: {bump: minor}
 
 - name: ship-it-major
   public: true
   plan:
-    - do:
-      - get: runtime-ci
-      - get: cf-deployment-version
-        params: {bump: major}
-      - get: cf-deployment-develop
-      - get: cf-deployment-release-candidate
-        passed: [bless-manifest]
-      - task: update-cf-deployment-manifest-version
-        file: runtime-ci/tasks/record-cfd-version-in-manifest/task.yml
-      - put: cf-deployment-master
-        params:
-          repository: cf-deployment-rc-with-updated-version
-          tag: cf-deployment-version/version
-          tag_prefix: v
-      - put: cf-deployment-develop
-        params:
-          repository: cf-deployment-rc-with-updated-version
-          merge: true
-      - put: cf-deployment-version
-        params: {bump: major}
+  - in_parallel:
+    - get: runtime-ci
+    - get: cf-deployment-version
+      params: {bump: major}
+    - get: cf-deployment-master
+    - get: cf-deployment-develop
+    - get: cf-deployment-release-candidate
+      passed: [bless-manifest]
+  - task: check-stemcell-versions
+    file: runtime-ci/tasks/check-stemcell-versions-for-ship-it/task.yml
+  - task: update-cf-deployment-manifest-version
+    file: runtime-ci/tasks/record-cfd-version-in-manifest/task.yml
+  - put: cf-deployment-master
+    params:
+      repository: cf-deployment-rc-with-updated-version
+      tag: cf-deployment-version/version
+      tag_prefix: v
+  - put: cf-deployment-develop
+    params:
+      repository: cf-deployment-rc-with-updated-version
+      merge: true
+  - put: cf-deployment-version
+    params: {bump: major}
 
 - name: release-notes-template
   public: true

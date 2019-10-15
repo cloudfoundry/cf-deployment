@@ -16,6 +16,13 @@ resources:
     branch: master
     uri: git@github.com:weymanf/cf-deployment.git
     private_key: ((weyman-cfd-deploy-key.private_key))
+- name: cf-deployment-release-candidate
+  type: git
+  icon: github-box
+  source:
+    branch: release-candidate
+    uri: git@github.com:weymanf/cf-deployment.git
+    private_key: ((weyman-cfd-deploy-key.private_key))
 - name: cf-deployment-develop
   type: git
   icon: github-box
@@ -249,3 +256,22 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
+- name: check-stemcell-version-failure
+  plan:
+  - in_parallel:
+    - get: runtime-ci
+    - get: cf-deployment-master
+    - get: cf-deployment-release-candidate
+  - task: check-stemcell-versions
+    file: runtime-ci/tasks/check-stemcell-versions-for-ship-it/task.yml
+- name: check-stemcell-version-success
+  plan:
+  - in_parallel:
+    - get: runtime-ci
+    - get: cf-deployment-master
+    - get: cf-deployment-release-candidate
+  - task: check-stemcell-versions
+    file: runtime-ci/tasks/check-stemcell-versions-for-ship-it/task.yml
+    input_mapping:
+      cf-deployment-master: cf-deployment-release-candidate
+      cf-deployment-release-candidate: cf-deployment-master
