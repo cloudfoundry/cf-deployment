@@ -9,6 +9,7 @@ groups:
   - update-stemcell-and-recompile-releases
   - acquire-pre-dev-lock-for-update-stemcell-minor
   - update-stemcell-minor
+  - tell-us-when-there-is-a-new-stemcell
 - name: update-base-releases
   jobs:
   - acquire-binary-buildpack-pre-dev-lock
@@ -14964,6 +14965,20 @@ jobs:
       - put: pre-dev-tatooine
         params:
           release: pre-dev-tatooine
+- name: tell-us-when-there-is-a-new-stemcell
+  public: true
+  plan:
+  - get: stemcell-456
+    params:
+      tarball: false
+    trigger: true
+  - put: slack-alert
+    params:
+      icon_emoji: ':cloudfoundrylogo:'
+      text: |
+        New stemcell available: $TEXT_FILE_CONTENT
+      text_file: stemcell-456/version
+      username: Release Integration
 - name: acquire-pre-dev-lock-for-update-stemcell-minor
   public: true
   plan:
@@ -14974,6 +14989,13 @@ jobs:
   - put: pre-dev-pool
     params:
       acquire: true
+  - put: slack-alert
+    params:
+      icon_emoji: ':cloudfoundrylogo:'
+      text: |
+        Starting to bump to new minor stemcell: $TEXT_FILE_CONTENT
+      text_file: stemcell-456/version
+      username: Release Integration
 - name: update-stemcell-minor
   public: true
   plan:
@@ -15108,6 +15130,15 @@ jobs:
         params:
           repository: cf-deployment-master-with-updated-manifest-version
           merge: true
+      - put: slack-alert
+        params:
+          icon_emoji: ':cloudfoundrylogo:'
+          text: |
+            Releasing new minor stemcell bump in v$TEXT_FILE_CONTENT of cf-deployment
+
+            https://github.com/cloudfoundry/cf-deployment/releases/tag/v$TEXT_FILE_CONTENT
+          text_file: cf-deployment-version/version
+          username: Release Integration
       ensure:
         do:
         - task: delete-deployment
