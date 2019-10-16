@@ -29,7 +29,7 @@
   path: /instance_groups/name=doppler/jobs/name=log-cache-nozzle?
 
 - type: replace
-  path: /addons/name=loggr-syslog-agent/jobs/name=loggr-syslog-agent/properties/non_app_drains?
+  path: /addons/name=loggr-syslog-agent/jobs/name=loggr-syslog-agent/properties/aggregate_drains?
   value: "syslog-tls://doppler.service.cf.internal:6067"
 
 - type: replace
