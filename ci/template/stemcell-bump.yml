@@ -6,6 +6,12 @@
 #@ load("manage-gcp-dns.lib.yml", "manage_gcp_dns")
 
 ---
+resource_types:
+- name: stemcell-version-bump
+  type: docker-image
+  source:
+    repository: relintdockerhubpushbot/stemcell-version-bump-resource
+
 resources:
 - name: cf-deployment-concourse-tasks
   type: git
@@ -19,14 +25,6 @@ resources:
   icon: github-box
   source:
     branch: master
-    uri: git@github.com:weymanf/cf-deployment.git
-    private_key: ((weyman-cfd-deploy-key.private_key))
-
-- name: cf-deployment-release-candidate
-  type: git
-  icon: github-box
-  source:
-    branch: release-candidate
     uri: git@github.com:weymanf/cf-deployment.git
     private_key: ((weyman-cfd-deploy-key.private_key))
 
@@ -85,6 +83,24 @@ resources:
   source:
     name: bosh-google-kvm-ubuntu-xenial-go_agent
     version_family: "456.latest"
+
+- name: minor-stemcell-version-bump
+  type: stemcell-version-bump
+  icon: dna
+  source:
+    json_key: ((concourse_gcp_service_account_json))
+    bucket_name: cf-deployment-stemcell-bump-test
+    file_name: stemcell-version
+    type_filter: minor
+
+- name: major-stemcell-version-bump
+  type: stemcell-version-bump
+  icon: dna
+  source:
+    json_key: ((concourse_gcp_service_account_json))
+    bucket_name: cf-deployment-stemcell-bump-test
+    file_name: stemcell-version
+    type_filter: major
 
 jobs:
 #@ env = "pre-dev"
@@ -187,23 +203,12 @@ jobs:
       - put: pre-dev-pool
         params: {release: pre-dev-pool}
 
-- name: check-stemcell-version-failure
+- name: test-minor-stemcell-version-bump
   plan:
-  - in_parallel:
-    - get: runtime-ci
-    - get: cf-deployment-master
-    - get: cf-deployment-release-candidate
-  - task: check-stemcell-versions
-    file: runtime-ci/tasks/check-stemcell-versions-for-ship-it/task.yml
+  - get: minor-stemcell-version-bump
+    trigger: true
 
-- name: check-stemcell-version-success
+- name: test-major-stemcell-version-bump
   plan:
-  - in_parallel:
-    - get: runtime-ci
-    - get: cf-deployment-master
-    - get: cf-deployment-release-candidate
-  - task: check-stemcell-versions
-    file: runtime-ci/tasks/check-stemcell-versions-for-ship-it/task.yml
-    input_mapping:
-      cf-deployment-master: cf-deployment-release-candidate
-      cf-deployment-release-candidate: cf-deployment-master
+  - get: major-stemcell-version-bump
+    trigger: true
