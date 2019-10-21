@@ -773,6 +773,8 @@ jobs:
         operations/use-internal-lookup-for-route-services.yml
       VARS_FILES: |
         environments/test/trelawney/external-db-vars.yml
+        environments/test/trelawney/external-public-ip-vars.yml
+        environments/test/trelawney/external-db-host-vars.yml
         environments/test/trelawney/gcs-vars.yml
       REGENERATE_CREDENTIALS: true
   - task: bosh-run-errand-smoke-tests-latest-release
