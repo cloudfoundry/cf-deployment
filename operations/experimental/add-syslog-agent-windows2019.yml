@@ -24,6 +24,11 @@
             cert: "((syslog_agent_api_tls.certificate))"
             key: "((syslog_agent_api_tls.private_key))"
             cn: "binding-cache"
+        metrics:
+          ca_cert: "((syslog_agent_metrics_tls.ca))"
+          cert: "((syslog_agent_metrics_tls.certificate))"
+          key: "((syslog_agent_metrics_tls.private_key))"
+          server_name: syslog_agent_metrics
 
     - name: loggr-forwarder-agent-windows
       release: loggregator-agent
@@ -35,3 +40,8 @@
           ca_cert: "((loggregator_tls_agent.ca))"
           cert: "((loggregator_tls_agent.certificate))"
           key: "((loggregator_tls_agent.private_key))"
+        metrics:
+          ca_cert: "((forwarder_agent_metrics_tls.ca))"
+          cert: "((forwarder_agent_metrics_tls.certificate))"
+          key: "((forwarder_agent_metrics_tls.private_key))"
+          server_name: forwarder_agent_metrics
