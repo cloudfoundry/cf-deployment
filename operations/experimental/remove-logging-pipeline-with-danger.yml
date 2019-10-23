@@ -1,17 +1,4 @@
 ---
-# Windows
-- type: remove
-  path: /instance_groups/name=windows1803-cell?/jobs/name=prom_scraper_windows?
-
-- type: remove
-  path: /instance_groups/name=windows1803-cell?/jobs/name=loggregator_agent_windows?
-
-- type: remove
-  path: /instance_groups/name=windows2019-cell?/jobs/name=prom_scraper_windows?
-
-- type: remove
-  path: /instance_groups/name=windows2019-cell?/jobs/name=loggregator_agent_windows?
-
 # Linux
 - type: remove
   path: /addons/name=loggregator_agent?
@@ -112,7 +99,3 @@
           client_secret: ((uaa_clients_doppler_secret))
           internal_addr: https://uaa.service.cf.internal:8443
       release: log-cache
-
-- type: replace
-  path: /addons/name=loggr-syslog-agent/jobs/name=loggr-syslog-agent/properties/aggregate_drains
-  value: syslog-tls://log-cache.service.cf.internal:6067
