@@ -338,7 +338,7 @@ resources:
       credentials: ((trelawney_gcp_service_account_json))
     env_name: trelawney
     vars:
-      cf_db_name: "terraform-20191015203818318200000001"
+      cf_db_name: "terraform-20191021190301485500000002"
       project: "cf-relint-trelawney"
       region: "us-central1"
       service_account_key: ((trelawney_gcp_service_account_json))
@@ -758,7 +758,6 @@ jobs:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
       SYSTEM_DOMAIN: trelawney.cf-app.com
       OPS_FILES: |
-        operations/experimental/fast-deploy-with-downtime-and-danger.yml
         operations/use-compiled-releases.yml
         operations/use-external-dbs.yml
         operations/add-external-ips-for-cloud-sql-db.yml
@@ -774,6 +773,8 @@ jobs:
         operations/use-internal-lookup-for-route-services.yml
       VARS_FILES: |
         environments/test/trelawney/external-db-vars.yml
+        environments/test/trelawney/external-public-ip-vars.yml
+        environments/test/trelawney/external-db-host-vars.yml
         environments/test/trelawney/gcs-vars.yml
       REGENERATE_CREDENTIALS: true
   - task: bosh-run-errand-smoke-tests-latest-release
@@ -825,6 +826,8 @@ jobs:
         operations/use-internal-lookup-for-route-services.yml
       VARS_FILES: |
         environments/test/trelawney/external-db-vars.yml
+        environments/test/trelawney/external-public-ip-vars.yml
+        environments/test/trelawney/external-db-host-vars.yml
         environments/test/trelawney/gcs-vars.yml
       DEPLOY_WITH_UPTIME_MEASUREMENTS: true
       FAIL_ON_DOWNTIME: true
