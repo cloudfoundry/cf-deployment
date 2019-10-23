@@ -747,13 +747,22 @@ jobs:
         environments/test/trelawney/add-external-ips-for-cloud-sql-db.yml
         environments/test/trelawney/increase-doppler-vm-type-from-minimal-to-small.yml
         environments/test/trelawney/scale-log-api-to-4.yml
+  - task: setup-external-ip-db-vars
+    file: runtime-ci/tasks/generate-external-ip-db-vars/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    output_mapping:
+      updated-bbl-state: updated-bbl-state-with-db-vars
+    params:
+      BBL_STATE_DIR: environments/test/trelawney/bbl-state
+      VARS_DIR: environments/test/trelawney
   - task: bosh-deploy-cf-latest-release
     file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
     input_mapping:
       bbl-state: relint-envs
       cf-deployment: cf-deployment-master
       ops-files: collected-ops-files
-      vars-files: relint-envs
+      vars-files: updated-bbl-state-with-db-vars
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
       SYSTEM_DOMAIN: trelawney.cf-app.com
@@ -808,7 +817,7 @@ jobs:
       bbl-state: relint-envs
       cf-deployment: cf-deployment-develop
       ops-files: collected-ops-files
-      vars-files: relint-envs
+      vars-files: updated-bbl-state-with-db-vars
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
       SYSTEM_DOMAIN: trelawney.cf-app.com
