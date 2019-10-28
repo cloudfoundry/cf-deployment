@@ -1635,6 +1635,11 @@ instance_groups:
         client_id: doppler
         client_secret: ((uaa_clients_doppler_secret))
         internal_addr: https://uaa.service.cf.internal:8443
+      metrics:
+        ca_cert: "((rlp_gateway_metrics_tls.ca))"
+        cert: "((rlp_gateway_metrics_tls.certificate))"
+        key: "((rlp_gateway_metrics_tls.private_key))"
+        server_name: rlp_gateway_metrics
   - name: route_registrar
     release: routing
     properties:
@@ -2323,6 +2328,14 @@ variables:
   options:
     ca: metric_scraper_ca
     common_name: prom_scraper_metrics
+    extended_key_usage:
+    - server_auth
+
+- name: rlp_gateway_metrics_tls
+  type: certificate
+  options:
+    ca: metric_scraper_ca
+    common_name: rlp_gateway_metrics
     extended_key_usage:
     - server_auth
 
