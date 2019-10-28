@@ -84,7 +84,15 @@ resources:
     name: bosh-google-kvm-ubuntu-xenial-go_agent
     version_family: "456.latest"
 
-- name: minor-stemcell-version-bump
+- name: stemcell-version-bump-detect
+  type: stemcell-version-bump
+  icon: dna
+  source:
+    json_key: ((concourse_gcp_service_account_json))
+    bucket_name: cf-deployment-stemcell-bump-test
+    file_name: stemcell-version
+
+- name: stemcell-version-bump-minor
   type: stemcell-version-bump
   icon: dna
   source:
@@ -93,7 +101,7 @@ resources:
     file_name: stemcell-version
     type_filter: minor
 
-- name: major-stemcell-version-bump
+- name: stemcell-version-bump-major
   type: stemcell-version-bump
   icon: dna
   source:
@@ -203,12 +211,31 @@ jobs:
       - put: pre-dev-pool
         params: {release: pre-dev-pool}
 
+- name: detect-stemcell-bump
+  plan:
+  - get: stemcell
+    trigger: true
+  - get: cf-deployment-master
+  - get: runtime-ci
+  - task: detect-stemcell-bump
+    file: runtime-ci/tasks/detect-stemcell-bump/task.yml
+  - put: stemcell-version-bump-detect
+    params:
+      stemcell-bump-type-file: stemcell-bump-type
+      stemcell-bump-version-file: stemcell/version
+
 - name: test-minor-stemcell-version-bump
   plan:
-  - get: minor-stemcell-version-bump
+  - get: stemcell-version-bump-minor
     trigger: true
+  - get: stemcell
+    passed:
+    - detect-stemcell-bump
 
 - name: test-major-stemcell-version-bump
   plan:
-  - get: major-stemcell-version-bump
+  - get: stemcell-version-bump-major
     trigger: true
+  - get: stemcell
+    passed:
+    - detect-stemcell-bump
