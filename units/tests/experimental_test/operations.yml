@@ -1,6 +1,12 @@
 ---
 add-credhub-lb.yml: {}
 add-metric-store.yml: {}
+add-metrics-discovery.yml: {}
+add-metrics-discovery-windows.yml:
+  ops:
+  - ../windows1803-cell.yml
+  - ../windows2019-cell.yml
+  - add-metrics-discovery.yml
 add-syslog-agent-windows1803.yml:
   ops:
   - ../windows1803-cell.yml
