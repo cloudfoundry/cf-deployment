@@ -23,7 +23,6 @@ groups:
   - update-stemcell-and-recompile-releases
   - acquire-pre-dev-lock-for-update-stemcell-minor
   - update-stemcell-minor
-  - tell-us-when-there-is-a-new-stemcell
 - name: update-base-releases
   jobs:
   #@ for r in data.values.baseReleases:
@@ -317,12 +316,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
+        output_mapping:
+          updated-cf-deployment: #@ "updated-cf-deployment-{}-release-candidate-with-stemcell".format(r.name)
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
-          ops-files: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
+          cf-deployment: #@ "updated-cf-deployment-{}-release-candidate-with-stemcell".format(r.name)
+          ops-files: #@ "updated-cf-deployment-{}-release-candidate-with-stemcell".format(r.name)
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -350,7 +355,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
+          manifest: #@ "updated-cf-deployment-{}-release-candidate-with-stemcell".format(r.name)
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -750,21 +755,6 @@ jobs:
         params:
           release: #@ "pre-dev-" + e.name
       #@ end
-
-- name: tell-us-when-there-is-a-new-stemcell
-  public: true
-  plan:
-  - get: stemcell-456
-    params:
-      tarball: false
-    trigger: true
-  - put: slack-alert
-    params:
-      icon_emoji: ":cloudfoundrylogo:"
-      text: |
-        New stemcell available: $TEXT_FILE_CONTENT
-      text_file: stemcell-456/version
-      username: "Release Integration"
 
 - name: acquire-pre-dev-lock-for-update-stemcell-minor
   public: true

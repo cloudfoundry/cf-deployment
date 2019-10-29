@@ -16,7 +16,7 @@ resource_types:
   - name: pull-request
     type: docker-image
     source:
-      repository: jtarchie/pr
+      repository: teliaoss/github-pr-resource
 
 resources:
   - name: runtime-ci
@@ -30,43 +30,43 @@ resources:
     type: pull-request
     source:
       access_token: ((github_status_bot_repo_access_token))
-      repo: cloudfoundry/cf-deployment
+      repository: cloudfoundry/cf-deployment
   - name: cf-deployment-master
     type: pull-request
     source:
       access_token: ((github_status_bot_repo_access_token))
-      repo: cloudfoundry/cf-deployment
-      base: master
+      repository: cloudfoundry/cf-deployment
+      base_branch: master
   - name: cf-deployment-rc
     type: pull-request
     source:
       access_token: ((github_status_bot_repo_access_token))
-      repo: cloudfoundry/cf-deployment
-      base: release-candidate
+      repository: cloudfoundry/cf-deployment
+      base_branch: release-candidate
   - name: cf-deployment-develop
     type: pull-request
     source:
       access_token: ((github_status_bot_repo_access_token))
-      repo: cloudfoundry/cf-deployment
-      base: develop
+      repository: cloudfoundry/cf-deployment
+      base_branch: develop
 
   - name: cats-all-branches
     type: pull-request
     source:
       access_token: ((github_status_bot_repo_access_token))
-      repo: cloudfoundry/cf-acceptance-tests
+      repository: cloudfoundry/cf-acceptance-tests
   - name: cats-master
     type: pull-request
     source:
       access_token: ((github_status_bot_repo_access_token))
-      repo: cloudfoundry/cf-acceptance-tests
-      base: master
+      repository: cloudfoundry/cf-acceptance-tests
+      base_branch: master
   - name: cats-develop
     type: pull-request
     source:
       access_token: ((github_status_bot_repo_access_token))
-      repo: cloudfoundry/cf-acceptance-tests
-      base: develop
+      repository: cloudfoundry/cf-acceptance-tests
+      base_branch: develop
 
 jobs:
   - name: fail-prs-to-cf-deployment-master
@@ -76,10 +76,6 @@ jobs:
       - get: cf-deployment-master
         trigger: true
         version: every
-        params:
-          git:
-            submodules: none
-            depth: 1
       - task: write-pr-check-failure-comment
         file: runtime-ci/tasks/write-pr-check-failure-comment/task.yml
         input_mapping:
@@ -89,7 +85,7 @@ jobs:
           path: cf-deployment-master
           status: failure
           context: ((pr_context))
-          comment: pull-request-comment/comment
+          comment_file: pull-request-comment/comment
   - name: fail-prs-to-cf-deployment-release-candidate
     public: true
     plan:
@@ -97,10 +93,6 @@ jobs:
       - get: cf-deployment-rc
         trigger: true
         version: every
-        params:
-          git:
-            submodules: none
-            depth: 1
       - task: write-pr-check-failure-comment
         file: runtime-ci/tasks/write-pr-check-failure-comment/task.yml
         input_mapping:
@@ -110,17 +102,13 @@ jobs:
           path: cf-deployment-rc
           status: failure
           context: ((pr_context))
-          comment: pull-request-comment/comment
+          comment_file: pull-request-comment/comment
   - name: pass-prs-to-cf-deployment-develop
     public: true
     plan:
       - get: cf-deployment-develop
         trigger: true
         version: every
-        params:
-          git:
-            submodules: none
-            depth: 1
       - put: cf-deployment-develop
         params:
           path: cf-deployment-develop
@@ -219,7 +207,7 @@ jobs:
               path: cf-deployment-all-branches
               status: failure
               context: ((unit_tests_context))
-              comment: pull-request-comment/comment
+              comment_file: pull-request-comment/comment
         on_success:
           put: cf-deployment-all-branches
           params:
@@ -235,10 +223,6 @@ jobs:
       - get: cats-master
         trigger: true
         version: every
-        params:
-          git:
-            submodules: none
-            depth: 1
       - task: write-pr-check-failure-comment
         file: runtime-ci/tasks/write-pr-check-failure-comment/task.yml
         input_mapping:
@@ -248,17 +232,13 @@ jobs:
           path: cats-master
           status: failure
           context: ((pr_context))
-          comment: pull-request-comment/comment
+          comment_file: pull-request-comment/comment
   - name: pass-prs-to-cats-develop
     public: true
     plan:
       - get: cats-develop
         trigger: true
         version: every
-        params:
-          git:
-            submodules: none
-            depth: 1
       - put: cats-develop
         params:
           path: cats-develop
@@ -294,7 +274,7 @@ jobs:
               path: cats-all-branches
               status: failure
               context: ((unit_tests_context))
-              comment: pull-request-comment/comment
+              comment_file: pull-request-comment/comment
         on_success:
           put: cats-all-branches
           params:

@@ -1,17 +1,33 @@
 ---
 add-credhub-lb.yml: {}
 add-metric-store.yml: {}
+add-metrics-discovery.yml: {}
+add-metrics-discovery-windows.yml:
+  ops:
+  - ../windows1803-cell.yml
+  - ../windows2019-cell.yml
+  - add-metrics-discovery.yml
 add-syslog-agent-windows1803.yml:
   ops:
   - ../windows1803-cell.yml
   - add-syslog-agent.yml
   - add-syslog-agent-windows1803.yml
+add-syslog-agent-windows2019.yml:
+  ops:
+  - ../windows2019-cell.yml
+  - add-syslog-agent.yml
+  - add-syslog-agent-windows2019.yml
 add-syslog-agent.yml: {}
 add-system-metrics-agent-windows1803.yml:
   ops:
   - ../windows1803-cell.yml
   - add-system-metrics-agent.yml
   - add-system-metrics-agent-windows1803.yml
+add-system-metrics-agent-windows2019.yml:
+  ops:
+  - ../windows2019-cell.yml
+  - add-system-metrics-agent.yml
+  - add-system-metrics-agent-windows2019.yml
 add-system-metrics-agent.yml: {}
 disable-interpolate-service-bindings.yml: {}
 disable-uaa-client-redirect-uri-legacy-matching-mode.yml: {}
@@ -62,6 +78,13 @@ use-logcache-syslog-ingress-windows1803.yml:
   - add-syslog-agent-windows1803.yml
   - use-logcache-syslog-ingress.yml
   - use-logcache-syslog-ingress-windows1803.yml
+use-logcache-syslog-ingress-windows2019.yml:
+  ops:
+  - ../windows2019-cell.yml
+  - add-syslog-agent.yml
+  - add-syslog-agent-windows2019.yml
+  - use-logcache-syslog-ingress.yml
+  - use-logcache-syslog-ingress-windows2019.yml
 use-logcache-syslog-ingress.yml:
   ops:
   - add-syslog-agent.yml
