@@ -1128,12 +1128,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-binary-buildpack-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-binary-buildpack-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-binary-buildpack-release-candidate
-          ops-files: updated-cf-deployment-binary-buildpack-release-candidate
+          cf-deployment: updated-cf-deployment-binary-buildpack-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-binary-buildpack-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -1161,7 +1167,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-binary-buildpack-release-candidate
+          manifest: updated-cf-deployment-binary-buildpack-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -1405,12 +1411,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-bosh-dns-aliases-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-bosh-dns-aliases-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-bosh-dns-aliases-release-candidate
-          ops-files: updated-cf-deployment-bosh-dns-aliases-release-candidate
+          cf-deployment: updated-cf-deployment-bosh-dns-aliases-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-bosh-dns-aliases-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -1438,7 +1450,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-bosh-dns-aliases-release-candidate
+          manifest: updated-cf-deployment-bosh-dns-aliases-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -1682,12 +1694,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-bpm-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-bpm-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-bpm-release-candidate
-          ops-files: updated-cf-deployment-bpm-release-candidate
+          cf-deployment: updated-cf-deployment-bpm-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-bpm-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -1715,7 +1733,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-bpm-release-candidate
+          manifest: updated-cf-deployment-bpm-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -1959,12 +1977,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-capi-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-capi-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-capi-release-candidate
-          ops-files: updated-cf-deployment-capi-release-candidate
+          cf-deployment: updated-cf-deployment-capi-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-capi-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -1992,7 +2016,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-capi-release-candidate
+          manifest: updated-cf-deployment-capi-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -2236,12 +2260,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-cf-networking-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-cf-networking-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-cf-networking-release-candidate
-          ops-files: updated-cf-deployment-cf-networking-release-candidate
+          cf-deployment: updated-cf-deployment-cf-networking-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-cf-networking-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -2269,7 +2299,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-cf-networking-release-candidate
+          manifest: updated-cf-deployment-cf-networking-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -2513,12 +2543,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-cf-smoke-tests-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-cf-smoke-tests-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-cf-smoke-tests-release-candidate
-          ops-files: updated-cf-deployment-cf-smoke-tests-release-candidate
+          cf-deployment: updated-cf-deployment-cf-smoke-tests-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-cf-smoke-tests-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -2546,7 +2582,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-cf-smoke-tests-release-candidate
+          manifest: updated-cf-deployment-cf-smoke-tests-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -2790,12 +2826,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-cf-syslog-drain-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-cf-syslog-drain-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-cf-syslog-drain-release-candidate
-          ops-files: updated-cf-deployment-cf-syslog-drain-release-candidate
+          cf-deployment: updated-cf-deployment-cf-syslog-drain-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-cf-syslog-drain-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -2823,7 +2865,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-cf-syslog-drain-release-candidate
+          manifest: updated-cf-deployment-cf-syslog-drain-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -3067,12 +3109,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-cflinuxfs3-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-cflinuxfs3-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-cflinuxfs3-release-candidate
-          ops-files: updated-cf-deployment-cflinuxfs3-release-candidate
+          cf-deployment: updated-cf-deployment-cflinuxfs3-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-cflinuxfs3-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -3100,7 +3148,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-cflinuxfs3-release-candidate
+          manifest: updated-cf-deployment-cflinuxfs3-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -3344,12 +3392,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-diego-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-diego-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-diego-release-candidate
-          ops-files: updated-cf-deployment-diego-release-candidate
+          cf-deployment: updated-cf-deployment-diego-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-diego-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -3377,7 +3431,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-diego-release-candidate
+          manifest: updated-cf-deployment-diego-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -3621,12 +3675,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-dotnet-core-buildpack-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-dotnet-core-buildpack-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-dotnet-core-buildpack-release-candidate
-          ops-files: updated-cf-deployment-dotnet-core-buildpack-release-candidate
+          cf-deployment: updated-cf-deployment-dotnet-core-buildpack-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-dotnet-core-buildpack-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -3654,7 +3714,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-dotnet-core-buildpack-release-candidate
+          manifest: updated-cf-deployment-dotnet-core-buildpack-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -3898,12 +3958,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-garden-runc-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-garden-runc-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-garden-runc-release-candidate
-          ops-files: updated-cf-deployment-garden-runc-release-candidate
+          cf-deployment: updated-cf-deployment-garden-runc-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-garden-runc-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -3931,7 +3997,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-garden-runc-release-candidate
+          manifest: updated-cf-deployment-garden-runc-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -4175,12 +4241,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-go-buildpack-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-go-buildpack-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-go-buildpack-release-candidate
-          ops-files: updated-cf-deployment-go-buildpack-release-candidate
+          cf-deployment: updated-cf-deployment-go-buildpack-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-go-buildpack-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -4208,7 +4280,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-go-buildpack-release-candidate
+          manifest: updated-cf-deployment-go-buildpack-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -4452,12 +4524,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-java-buildpack-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-java-buildpack-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-java-buildpack-release-candidate
-          ops-files: updated-cf-deployment-java-buildpack-release-candidate
+          cf-deployment: updated-cf-deployment-java-buildpack-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-java-buildpack-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -4485,7 +4563,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-java-buildpack-release-candidate
+          manifest: updated-cf-deployment-java-buildpack-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -4729,12 +4807,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-log-cache-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-log-cache-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-log-cache-release-candidate
-          ops-files: updated-cf-deployment-log-cache-release-candidate
+          cf-deployment: updated-cf-deployment-log-cache-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-log-cache-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -4762,7 +4846,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-log-cache-release-candidate
+          manifest: updated-cf-deployment-log-cache-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -5006,12 +5090,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-loggregator-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-loggregator-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-loggregator-release-candidate
-          ops-files: updated-cf-deployment-loggregator-release-candidate
+          cf-deployment: updated-cf-deployment-loggregator-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-loggregator-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -5039,7 +5129,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-loggregator-release-candidate
+          manifest: updated-cf-deployment-loggregator-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -5283,12 +5373,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-loggregator-agent-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-loggregator-agent-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-loggregator-agent-release-candidate
-          ops-files: updated-cf-deployment-loggregator-agent-release-candidate
+          cf-deployment: updated-cf-deployment-loggregator-agent-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-loggregator-agent-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -5316,7 +5412,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-loggregator-agent-release-candidate
+          manifest: updated-cf-deployment-loggregator-agent-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -5560,12 +5656,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-nats-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-nats-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-nats-release-candidate
-          ops-files: updated-cf-deployment-nats-release-candidate
+          cf-deployment: updated-cf-deployment-nats-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-nats-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -5593,7 +5695,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-nats-release-candidate
+          manifest: updated-cf-deployment-nats-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -5837,12 +5939,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-nginx-buildpack-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-nginx-buildpack-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-nginx-buildpack-release-candidate
-          ops-files: updated-cf-deployment-nginx-buildpack-release-candidate
+          cf-deployment: updated-cf-deployment-nginx-buildpack-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-nginx-buildpack-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -5870,7 +5978,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-nginx-buildpack-release-candidate
+          manifest: updated-cf-deployment-nginx-buildpack-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -6114,12 +6222,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-nodejs-buildpack-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-nodejs-buildpack-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-nodejs-buildpack-release-candidate
-          ops-files: updated-cf-deployment-nodejs-buildpack-release-candidate
+          cf-deployment: updated-cf-deployment-nodejs-buildpack-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-nodejs-buildpack-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -6147,7 +6261,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-nodejs-buildpack-release-candidate
+          manifest: updated-cf-deployment-nodejs-buildpack-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -6391,12 +6505,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-php-buildpack-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-php-buildpack-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-php-buildpack-release-candidate
-          ops-files: updated-cf-deployment-php-buildpack-release-candidate
+          cf-deployment: updated-cf-deployment-php-buildpack-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-php-buildpack-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -6424,7 +6544,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-php-buildpack-release-candidate
+          manifest: updated-cf-deployment-php-buildpack-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -6668,12 +6788,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-python-buildpack-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-python-buildpack-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-python-buildpack-release-candidate
-          ops-files: updated-cf-deployment-python-buildpack-release-candidate
+          cf-deployment: updated-cf-deployment-python-buildpack-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-python-buildpack-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -6701,7 +6827,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-python-buildpack-release-candidate
+          manifest: updated-cf-deployment-python-buildpack-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -6945,12 +7071,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-pxc-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-pxc-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-pxc-release-candidate
-          ops-files: updated-cf-deployment-pxc-release-candidate
+          cf-deployment: updated-cf-deployment-pxc-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-pxc-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -6978,7 +7110,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-pxc-release-candidate
+          manifest: updated-cf-deployment-pxc-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -7222,12 +7354,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-r-buildpack-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-r-buildpack-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-r-buildpack-release-candidate
-          ops-files: updated-cf-deployment-r-buildpack-release-candidate
+          cf-deployment: updated-cf-deployment-r-buildpack-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-r-buildpack-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -7255,7 +7393,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-r-buildpack-release-candidate
+          manifest: updated-cf-deployment-r-buildpack-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -7499,12 +7637,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-routing-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-routing-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-routing-release-candidate
-          ops-files: updated-cf-deployment-routing-release-candidate
+          cf-deployment: updated-cf-deployment-routing-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-routing-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -7532,7 +7676,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-routing-release-candidate
+          manifest: updated-cf-deployment-routing-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -7776,12 +7920,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-ruby-buildpack-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-ruby-buildpack-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-ruby-buildpack-release-candidate
-          ops-files: updated-cf-deployment-ruby-buildpack-release-candidate
+          cf-deployment: updated-cf-deployment-ruby-buildpack-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-ruby-buildpack-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -7809,7 +7959,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-ruby-buildpack-release-candidate
+          manifest: updated-cf-deployment-ruby-buildpack-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -8053,12 +8203,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-silk-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-silk-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-silk-release-candidate
-          ops-files: updated-cf-deployment-silk-release-candidate
+          cf-deployment: updated-cf-deployment-silk-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-silk-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -8086,7 +8242,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-silk-release-candidate
+          manifest: updated-cf-deployment-silk-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -8330,12 +8486,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-staticfile-buildpack-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-staticfile-buildpack-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-staticfile-buildpack-release-candidate
-          ops-files: updated-cf-deployment-staticfile-buildpack-release-candidate
+          cf-deployment: updated-cf-deployment-staticfile-buildpack-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-staticfile-buildpack-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -8363,7 +8525,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-staticfile-buildpack-release-candidate
+          manifest: updated-cf-deployment-staticfile-buildpack-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -8607,12 +8769,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-statsd-injector-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-statsd-injector-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-statsd-injector-release-candidate
-          ops-files: updated-cf-deployment-statsd-injector-release-candidate
+          cf-deployment: updated-cf-deployment-statsd-injector-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-statsd-injector-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -8640,7 +8808,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-statsd-injector-release-candidate
+          manifest: updated-cf-deployment-statsd-injector-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -8884,12 +9052,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-uaa-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-uaa-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-uaa-release-candidate
-          ops-files: updated-cf-deployment-uaa-release-candidate
+          cf-deployment: updated-cf-deployment-uaa-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-uaa-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -8917,7 +9091,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-uaa-release-candidate
+          manifest: updated-cf-deployment-uaa-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -9161,12 +9335,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-credhub-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-credhub-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-credhub-release-candidate
-          ops-files: updated-cf-deployment-credhub-release-candidate
+          cf-deployment: updated-cf-deployment-credhub-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-credhub-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -9194,7 +9374,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-credhub-release-candidate
+          manifest: updated-cf-deployment-credhub-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
@@ -9438,12 +9618,18 @@ jobs:
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
+      - task: update-stemcell-for-deploy
+        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
+        input_mapping:
+          cf-deployment: updated-cf-deployment-cf-cli-release-candidate
+        output_mapping:
+          updated-cf-deployment: updated-cf-deployment-cf-cli-release-candidate-with-stemcell
       - task: deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-cf-cli-release-candidate
-          ops-files: updated-cf-deployment-cf-cli-release-candidate
+          cf-deployment: updated-cf-deployment-cf-cli-release-candidate-with-stemcell
+          ops-files: updated-cf-deployment-cf-cli-release-candidate-with-stemcell
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -9471,7 +9657,7 @@ jobs:
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
           bbl-state: relint-envs
-          manifest: updated-cf-deployment-cf-cli-release-candidate
+          manifest: updated-cf-deployment-cf-cli-release-candidate-with-stemcell
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
