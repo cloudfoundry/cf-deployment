@@ -7,7 +7,7 @@
 #@ load("update-release.lib.yml", "update_release")
 
 #@ def collect_ops_files(release):
-  #@ ops_files = "operations/experimental/fast-deploy-with-downtime-and-danger.yml\noperations/use-compiled-releases.yml\noperations/experimental/use-compiled-releases-windows.yml\n"
+  #@ ops_files = "operations/scale-to-one-az.yml\noperations/experimental/fast-deploy-with-downtime-and-danger.yml\noperations/use-compiled-releases.yml\noperations/experimental/use-compiled-releases-windows.yml\n"
   #@ additional_files = ""
   #@ if hasattr(release, "requiredOpsFiles"):
   #@ additional_files = "\n".join(release.requiredOpsFiles)
@@ -333,6 +333,7 @@ jobs:
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
           OPS_FILES: |
+            operations/scale-to-one-az.yml
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: "--parallel 50"
@@ -822,6 +823,7 @@ jobs:
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
           OPS_FILES: |
+            operations/scale-to-one-az.yml
             operations/use-compiled-releases.yml
             operations/experimental/fast-deploy-with-downtime-and-danger.yml
           REGENERATE_CREDENTIALS: false
