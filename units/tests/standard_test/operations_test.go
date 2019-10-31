@@ -9,6 +9,7 @@ import (
 const testDirectory = "operations"
 
 var standardTests = map[string]helpers.OpsFileTestParams{
+	"add-metric-store.yml":           {},
 	"aws.yml":                        {},
 	"azure.yml":                      {},
 	"bosh-lite.yml":                  {},

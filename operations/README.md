@@ -33,6 +33,7 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 
 | Name | Purpose | Notes | Currently validated in Release Integration CI pipelines? |
 |:---  |:---     |:---   |:---   |
+| [`add-metric-store.yml`](add-metric-store.yml) | Adds a single-node metric store. | | **NO** |
 | [`bosh-lite.yml`](bosh-lite.yml) | Enables `cf-deployment` to be deployed on `bosh-lite`. | See [bosh-lite](../iaas-support/bosh-lite/README.md) documentation. | **YES** |
 | [`cf-syslog-skip-cert-verify.yml`](cf-syslog-skip-cert-verify.yml) | This disables TLS verification when connecting to a HTTPS syslog drain. | | **NO** |
 | [`configure-default-router-group.yml`](configure-default-router-group.yml) | Allows deployer to configure reservable ports for default tcp router group by passing variable `default_router_group_ reservable_ports`. |  | **NO** |
