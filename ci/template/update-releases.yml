@@ -19,6 +19,7 @@
 groups:
 - name: update-linux-stemcell
   jobs:
+  - detect-stemcell-bump
   - acquire-all-pre-dev-locks
   - update-stemcell-and-recompile-releases
   - acquire-pre-dev-lock-for-update-stemcell-minor
@@ -67,6 +68,11 @@ groups:
   - run-bosh-cleanup-compilation
 
 resource_types:
+- name: stemcell-version-bump
+  type: docker-image
+  source:
+    repository: relintdockerhubpushbot/stemcell-version-bump-resource
+
 - name: gcs-resource
   type: docker-image
   source:
@@ -163,12 +169,31 @@ resources:
   source:
     name: bosh-google-kvm-ubuntu-xenial-go_agent
 
-- name: stemcell-456
-  type: bosh-io-stemcell
+- name: stemcell-version-bump-detect
+  type: stemcell-version-bump
   icon: dna
   source:
-    name: bosh-google-kvm-ubuntu-xenial-go_agent
-    version_family: "456.latest"
+    json_key: ((concourse_gcp_service_account_json))
+    bucket_name: cf-deployment-stemcell-bump
+    file_name: stemcell-version
+
+- name: stemcell-version-bump-major
+  type: stemcell-version-bump
+  icon: dna
+  source:
+    json_key: ((concourse_gcp_service_account_json))
+    bucket_name: cf-deployment-stemcell-bump
+    file_name: stemcell-version
+    type_filter: major
+
+- name: stemcell-version-bump-minor
+  type: stemcell-version-bump
+  icon: dna
+  source:
+    json_key: ((concourse_gcp_service_account_json))
+    bucket_name: cf-deployment-stemcell-bump
+    file_name: stemcell-version
+    type_filter: minor
 
 #@ for r in data.values.windowsOfflineReleases:
 - name: #@ r.name + "-offline-release"
@@ -650,13 +675,33 @@ jobs:
       repository: updated-stemcell-ops-file
 #@ end
 
+- name: detect-stemcell-bump
+  plan:
+  - in_parallel:
+    - get: stemcell
+      trigger: true
+    - get: cf-deployment-master
+    - get: runtime-ci
+  - task: detect-stemcell-bump
+    file: runtime-ci/tasks/detect-stemcell-bump/task.yml
+    input_mapping:
+      cf-deployment: cf-deployment-master
+  - put: stemcell-version-bump-detect
+    params:
+      type_file: stemcell-bump-type/result
+      version_file: stemcell/version
+
 - name: acquire-all-pre-dev-locks
   public: true
   plan:
-  - get: stemcell
-    trigger: true
-    params:
-      tarball: false
+  - in_parallel:
+    - get: stemcell-version-bump-major
+      trigger: true
+    - get: stemcell
+      passed:
+      - detect-stemcell-bump
+      params:
+        tarball: false
   - in_parallel:
     #@ for e in data.values.preDevEnvs:
     - put: #@ "pre-dev-" + e.name
@@ -760,10 +805,13 @@ jobs:
 - name: acquire-pre-dev-lock-for-update-stemcell-minor
   public: true
   plan:
-  - get: stemcell-456
+  - get: stemcell-version-bump-minor
+    trigger: true
+  - get: stemcell
+    passed:
+    - detect-stemcell-bump
     params:
       tarball: false
-    trigger: true
   - put: pre-dev-pool
     params: {acquire: true}
   - put: slack-alert
@@ -771,7 +819,7 @@ jobs:
       icon_emoji: ":cloudfoundrylogo:"
       text: |
         Starting to bump to new minor stemcell: $TEXT_FILE_CONTENT
-      text_file: stemcell-456/version
+      text_file: stemcell/version
       username: "Release Integration"
 
 #@ env = "pre-dev"
@@ -787,7 +835,7 @@ jobs:
     - get: cf-deployment-master
     - get: relint-envs
     - get: runtime-ci
-    - get: stemcell-456
+    - get: stemcell
       params:
         tarball: false
       passed:
@@ -798,7 +846,6 @@ jobs:
     file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
     input_mapping:
       cf-deployment: cf-deployment-master
-      stemcell: stemcell-456
     output_mapping:
       updated-cf-deployment: updated-cf-deployment-master
   - do:
@@ -847,7 +894,6 @@ jobs:
         file: runtime-ci/tasks/cf-deployment-minor-stemcell-bump-release-notes/task.yml
         input_mapping:
           release-version: cf-deployment-version
-          stemcell: stemcell-456
       - task: update-cf-deployment-manifest-version
         file: runtime-ci/tasks/record-cfd-version-in-manifest/task.yml
         input_mapping:
