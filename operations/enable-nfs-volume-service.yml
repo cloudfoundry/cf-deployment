@@ -45,6 +45,8 @@
     instances: 1
     jobs:
     - name: nfsbrokerpush
+      provides:
+        nfsbrokerpush: {as: ignore-me}
       properties:
         nfsbrokerpush:
           app_domain: ((system_domain))
