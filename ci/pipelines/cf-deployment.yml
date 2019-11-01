@@ -510,7 +510,6 @@ jobs:
       SYSTEM_DOMAIN: luna.cf-app.com
       OPS_FILES: |
         operations/experimental/fast-deploy-with-downtime-and-danger.yml
-        operations/use-compiled-releases.yml
         operations/rename-network-and-deployment.yml
         operations/set-bbs-active-key.yml
         operations/test/add-persistent-isolation-segment-diego-cell.yml
@@ -528,12 +527,6 @@ jobs:
         environments/test/luna/bbs-key-label.yml
         environments/test/luna/syslog-vars.yml
       REGENERATE_CREDENTIALS: true
-  - task: run-bosh-cleanup
-    file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/luna/bbl-state
   - task: ensure-gcloud-backend-service-healthy
     file: runtime-ci/tasks/ensure-gcloud-backend-service-healthy/task.yml
     input_mapping:
@@ -676,6 +669,12 @@ jobs:
         BBL_STATE_DIR: environments/test/luna/bbl-state
         DEPLOYMENT_NAME: luna-cf
         IGNORE_ERRORS: true
+    - task: run-bosh-cleanup
+      file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/luna/bbl-state
     - put: fresh-pool
       params: {release: fresh-pool}
 
@@ -772,10 +771,10 @@ jobs:
         operations/add-external-ips-for-cloud-sql-db.yml
         operations/windows2012R2-cell.yml
         operations/windows1803-cell.yml
+        operations/experimental/use-compiled-releases-windows.yml
         operations/use-external-blobstore.yml
         operations/use-gcs-blobstore-service-account.yml
         operations/enable-service-discovery.yml
-        operations/experimental/use-compiled-releases-windows.yml
         operations/test/add-persistent-isolation-segment-diego-cell.yml
         operations/increase-doppler-vm-type-from-minimal-to-small.yml
         operations/scale-log-api-to-4.yml
@@ -822,10 +821,12 @@ jobs:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
       SYSTEM_DOMAIN: trelawney.cf-app.com
       OPS_FILES: |
+        operations/use-compiled-releases.yml
         operations/use-external-dbs.yml
         operations/add-external-ips-for-cloud-sql-db.yml
         operations/windows2012R2-cell.yml
         operations/windows1803-cell.yml
+        operations/experimental/use-compiled-releases-windows.yml
         operations/use-external-blobstore.yml
         operations/use-gcs-blobstore-service-account.yml
         operations/enable-service-discovery.yml
@@ -844,12 +845,6 @@ jobs:
       APP_PUSHABILITY_THRESHOLD: 10
       RECENT_LOGS_THRESHOLD: 10000
       STREAMING_LOGS_THRESHOLD: 10000
-  - task: run-bosh-cleanup
-    file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/trelawney/bbl-state
   - in_parallel:
     - task: open-asgs-for-credhub
       file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
@@ -969,6 +964,12 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
       IGNORE_ERRORS: true
+  - task: run-bosh-cleanup
+    file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/trelawney/bbl-state
   - try:
       put: trelawney-external-resources
       params:
@@ -1118,12 +1119,6 @@ jobs:
       APP_PUSHABILITY_THRESHOLD: 10
       RECENT_LOGS_THRESHOLD: 10000
       STREAMING_LOGS_THRESHOLD: 10000
-  - task: run-bosh-cleanup
-    file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/hermione/bbl-state
   - in_parallel:
     - task: open-asgs-for-credhub
       file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
@@ -1240,6 +1235,12 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/hermione/bbl-state
       IGNORE_ERRORS: true
+  - task: run-bosh-cleanup
+    file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/hermione/bbl-state
   - put: experimental-pool
     params: {release: experimental-pool}
 
@@ -1320,12 +1321,6 @@ jobs:
           operations/use-internal-lookup-for-route-services.yml
         REGENERATE_CREDENTIALS: true
         BOSH_LITE: true
-    - task: run-bosh-cleanup
-      file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-      params:
-        BBL_STATE_DIR: environments/test/snitch/bbl-state
     - task: ensure-api-healthy
       file: runtime-ci/tasks/ensure-api-healthy/task.yml
       input_mapping:
@@ -1418,6 +1413,12 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/snitch/bbl-state
         IGNORE_ERRORS: true
+    - task: run-bosh-cleanup
+      file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/snitch/bbl-state
     - task: combine-bbl-configs
       file: runtime-ci/tasks/combine-inputs/task.yml
       input_mapping:
