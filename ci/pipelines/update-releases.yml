@@ -120,6 +120,8 @@ groups:
   - update-envoy-nginx
   - acquire-metrics-discovery-pre-dev-lock
   - update-metrics-discovery
+  - acquire-datadog-firehose-nozzle-pre-dev-lock
+  - update-datadog-firehose-nozzle
 - name: update-windows-stemcells-and-releases
   jobs:
   - update-windows2012R2-stemcell
@@ -483,6 +485,10 @@ resources:
   type: bosh-io-release
   source:
     repository: cloudfoundry/metrics-discovery-release
+- name: datadog-firehose-nozzle-release
+  type: bosh-io-release
+  source:
+    repository: DataDog/datadog-firehose-nozzle-release
 - name: binary-buildpack-release-gcs
   type: gcs-resource
   source:
@@ -987,6 +993,12 @@ resources:
     bucket: component-bump-logs
     json_key: ((greengrass_gcp_service_account_json))
     regexp: metrics-discovery/cf-(\d+)-(\d+)-(\d+)\.tgz
+- name: datadog-firehose-nozzle-component-bump-logs-gcs
+  type: gcs-resource
+  source:
+    bucket: component-bump-logs
+    json_key: ((greengrass_gcp_service_account_json))
+    regexp: datadog-firehose-nozzle/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: windows2012R2-stemcell
   type: bosh-io-stemcell
   icon: dna
@@ -14981,6 +14993,242 @@ jobs:
             file: runtime-ci/tasks/lookup-slack-channel-for-release-owner/task.yml
             params:
               RELEASE_REPOSITORY: cloudfoundry/metrics-discovery-release
+          - put: slack-alert
+            params:
+              channel_file: slack-channel/channel.txt
+              icon_emoji: ':cloudfoundrylogo:'
+              text: |
+                $TEXT_FILE_CONTENT
+
+                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+
+                If you're unfamiliar with the update-release pre-validation, please review the following FAQ: https://docs.google.com/document/d/1dUIk2HWbUzdxWs-pNZ-cCqH7CuSNDBixIUoXIFkFpz0
+              text_file: slack-message/message.txt
+              username: Release Integration
+      ensure:
+        do:
+        - task: delete-deployment
+          file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+            pool-lock: pre-dev-pool
+          params:
+            BBL_JSON_CONFIG: pool-lock/metadata
+            IGNORE_ERRORS: true
+          attempts: 3
+        - task: remove-gcp-dns
+          file: runtime-ci/tasks/manage-gcp-dns/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+            pool-lock: pre-dev-pool
+          params:
+            BBL_JSON_CONFIG: pool-lock/metadata
+            GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+            GCP_DNS_ZONE_NAME: test-relint-rocks
+            ACTION: remove
+        - task: bbl-down
+          file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+            pool-lock: pre-dev-pool
+          params:
+            BBL_JSON_CONFIG: pool-lock/metadata
+          on_failure:
+            do:
+            - task: bbl-cleanup-leftovers
+              file: runtime-ci/tasks/bbl-cleanup-leftovers/task.yml
+              input_mapping:
+                bbl-state: updated-bbl-state
+                pool-lock: pre-dev-pool
+              output_mapping:
+                updated-bbl-state: clean-bbl-state
+              params:
+                BBL_JSON_CONFIG: pool-lock/metadata
+            ensure:
+              put: relint-envs
+              params:
+                repository: clean-bbl-state
+                rebase: true
+          on_success:
+            put: relint-envs
+            params:
+              repository: updated-bbl-state
+              rebase: true
+    ensure:
+      do:
+      - put: pre-dev-pool
+        params:
+          release: pre-dev-pool
+- name: acquire-datadog-firehose-nozzle-pre-dev-lock
+  public: true
+  plan:
+  - in_parallel:
+    - get: datadog-firehose-nozzle-release
+      trigger: true
+      params:
+        tarball: false
+  - put: pre-dev-pool
+    params:
+      acquire: true
+- name: update-datadog-firehose-nozzle
+  public: true
+  plan:
+  - in_parallel:
+    - get: pre-dev-pool
+      passed:
+      - acquire-datadog-firehose-nozzle-pre-dev-lock
+      trigger: true
+    - get: datadog-firehose-nozzle-release
+      params:
+        tarball: false
+      passed:
+      - acquire-datadog-firehose-nozzle-pre-dev-lock
+    - get: cf-deployment-release-candidate
+    - get: cf-deployment-develop
+    - get: stemcell
+      params:
+        tarball: false
+    - get: cf-deployment-concourse-tasks
+    - get: runtime-ci
+    - get: relint-envs
+    - get: relint-team
+  - task: update-additional-ops-files-datadog-firehose-nozzle-release-candidate
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      original-ops-file: cf-deployment-release-candidate
+      release: datadog-firehose-nozzle-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-datadog-firehose-nozzle-release-candidate
+    params:
+      RELEASE_NAME: datadog-firehose-nozzle
+  - do:
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      params:
+        BBL_JSON_CONFIG: pool-lock/metadata
+      input_mapping:
+        bbl-state: relint-envs
+        bbl-config: relint-envs
+        pool-lock: pre-dev-pool
+      on_failure:
+        do:
+        - task: bbl-cleanup-leftovers
+          file: runtime-ci/tasks/bbl-cleanup-leftovers/task.yml
+          input_mapping:
+            bbl-state: updated-bbl-state
+            pool-lock: pre-dev-pool
+          output_mapping:
+            updated-bbl-state: clean-bbl-state
+          params:
+            BBL_JSON_CONFIG: pool-lock/metadata
+        ensure:
+          put: relint-envs
+          params:
+            repository: clean-bbl-state
+            rebase: true
+      on_success:
+        put: relint-envs
+        params:
+          repository: updated-bbl-state
+          rebase: true
+    - task: add-gcp-dns
+      file: runtime-ci/tasks/manage-gcp-dns/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        pool-lock: pre-dev-pool
+      params:
+        BBL_JSON_CONFIG: pool-lock/metadata
+        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+        GCP_DNS_ZONE_NAME: test-relint-rocks
+        ACTION: add
+    - do:
+      - task: combine-vars-files
+        file: runtime-ci/tasks/combine-inputs/task.yml
+        input_mapping:
+          first-input: cf-deployment-release-candidate
+          second-input: relint-envs
+        output_mapping:
+          combined-inputs: combined-vars-files
+      - task: deploy-cf
+        file: runtime-ci/tasks/bosh-deploy-with-first-ops/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          cf-deployment: updated-cf-deployment-datadog-firehose-nozzle-release-candidate
+          ops-files: updated-cf-deployment-datadog-firehose-nozzle-release-candidate
+          vars-files: combined-vars-files
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          OPS_FILES: |
+            operations/scale-to-one-az.yml
+            operations/experimental/fast-deploy-with-downtime-and-danger.yml
+            operations/use-compiled-releases.yml
+            operations/experimental/use-compiled-releases-windows.yml
+          REGENERATE_CREDENTIALS: false
+          BOSH_DEPLOY_ARGS: --parallel 50
+      - task: ensure-api-healthy
+        file: runtime-ci/tasks/ensure-api-healthy/task.yml
+        input_mapping:
+          cats-integration-config: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+      - task: run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          ERRAND_NAME: smoke-tests
+      on_success:
+        do:
+        - task: update-additional-ops-files-datadog-firehose-nozzle-develop
+          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+          input_mapping:
+            original-ops-file: cf-deployment-develop
+            release: datadog-firehose-nozzle-release
+          output_mapping:
+            updated-ops-file: updated-cf-deployment-datadog-firehose-nozzle-develop
+          params:
+            RELEASE_NAME: datadog-firehose-nozzle
+        - put: cf-deployment-develop
+          params:
+            rebase: true
+            repository: updated-cf-deployment-datadog-firehose-nozzle-develop
+      on_failure:
+        do:
+        - task: push-to-release-branch
+          file: runtime-ci/tasks/push-to-release-branch/task.yml
+          input_mapping:
+            updated-cf-deployment: updated-cf-deployment-datadog-firehose-nozzle-release-candidate
+            release: datadog-firehose-nozzle-release
+          params:
+            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            RELEASE_NAME: datadog-firehose-nozzle
+        - task: retrieve-bosh-logs
+          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
+          input_mapping:
+            bbl-state: relint-envs
+            pool-lock: pre-dev-pool
+          params:
+            BBL_JSON_CONFIG: pool-lock/metadata
+        - put: datadog-firehose-nozzle-component-bump-logs-gcs
+          params:
+            file: bosh-logs/cf-*.tgz
+        ensure:
+          do:
+          - task: create-slack-message
+            file: runtime-ci/tasks/create-slack-message/task.yml
+            input_mapping:
+              release: datadog-firehose-nozzle-release
+            params:
+              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/datadog-firehose-nozzle
+              RELEASE_NAME: datadog-firehose-nozzle
+          - task: lookup-slack-channel-for-release-owner
+            file: runtime-ci/tasks/lookup-slack-channel-for-release-owner/task.yml
+            params:
+              RELEASE_REPOSITORY: DataDog/datadog-firehose-nozzle-release
           - put: slack-alert
             params:
               channel_file: slack-channel/channel.txt
