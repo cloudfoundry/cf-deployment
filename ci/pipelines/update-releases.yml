@@ -15422,6 +15422,13 @@ jobs:
     - put: pre-dev-tatooine
       params:
         claim: pre-dev-tatooine
+  - put: slack-alert
+    params:
+      icon_emoji: ':cloudfoundrylogo:'
+      text: |
+        Starting to bump to new major stemcell: $TEXT_FILE_CONTENT
+      text_file: stemcell/version
+      username: Release Integration
 - name: update-stemcell-and-recompile-releases
   public: true
   plan:
