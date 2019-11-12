@@ -110,13 +110,6 @@ use-latest-windows2012R2-stemcell.yml:
   pathvalidator:
     path: /stemcells/alias=windows2012R2/version
     expectedvalue: latest
-use-latest-windows2016-stemcell.yml:
-  ops:
-  - windows2016-cell.yml
-  - use-latest-windows2016-stemcell.yml
-  pathvalidator:
-    path: /stemcells/alias=windows2016/version
-    expectedvalue: latest
 use-latest-windows2019-stemcell.yml:
   ops:
   - windows2019-cell.yml
@@ -129,10 +122,6 @@ use-offline-windows1803fs.yml:
   ops:
   - windows1803-cell.yml
   - use-offline-windows1803fs.yml
-use-offline-windows2016fs.yml:
-  ops:
-  - windows2016-cell.yml
-  - use-offline-windows2016fs.yml
 use-offline-windows2019fs.yml:
   ops:
   - windows2019-cell.yml
@@ -162,9 +151,4 @@ use-trusted-ca-cert-for-apps.yml:
   - example-vars-files/vars-use-trusted-ca-cert-for-apps.yml
 windows1803-cell.yml: {}
 windows2012R2-cell.yml: {}
-windows2012R2-cell.yml windows2016-cell.yml:
-  ops:
-  - windows2012R2-cell.yml
-  - windows2016-cell.yml
-windows2016-cell.yml: {}
 windows2019-cell.yml: {}
