@@ -1500,6 +1500,7 @@ jobs:
         operations/use-compiled-releases.yml
         operations/backup-and-restore/enable-backup-restore.yml
         operations/enable-nfs-volume-service.yml
+        operations/back-and-restore/enable-restore-nfs-broker.yml
   - task: open-asgs-for-credhub
     file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
     input_mapping:
