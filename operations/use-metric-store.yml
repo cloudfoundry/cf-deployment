@@ -94,16 +94,6 @@
           client_id: doppler
           client_secret: ((uaa_clients_doppler_secret))
           internal_addr: https://uaa.service.cf.internal:8443
-    - name: metric-store-gateway
-      release: metric-store
-      provides:
-        metric-store-gateway: {as: metric-store-gateway}
-      consumes:
-        metric-store: {from: metric-store}
-      properties:
-        gateway_addr: localhost:8081
-        proxy_cert: "((metric_store_proxy_tls.certificate))"
-        proxy_key: "((metric_store_proxy_tls.private_key))"
 
 - type: replace
   path: /variables/-
@@ -178,12 +168,3 @@
       alternative_names:
       - metric-store.((system_domain))
       - "*.metric-store.((system_domain))"
-
-- type: replace
-  path: /variables/-
-  value:
-    name: metric_store_proxy_tls
-    type: certificate
-    options:
-      ca: metric_store_ca
-      common_name: localhost
