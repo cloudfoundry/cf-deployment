@@ -3,7 +3,7 @@
   value:
     name: nfsbrokerpush
     provides:
-      nfsbrokerpush: {as: ignore-me}
+      nfsbrokerpush: {as: colocated-nfsbrokerpush}
     properties:
       nfsbrokerpush:
         app_domain: ((system_domain))
@@ -40,4 +40,4 @@
     name: nfsbroker-bbr-lock
     release: nfs-volume
     consumes:
-      nfsbrokerpush: {from: nfsbrokerpush}
+      nfsbrokerpush: {from: colocated-nfsbrokerpush}
