@@ -25,10 +25,6 @@
     jobs:
     - name: metric-store
       release: metric-store
-      provides:
-        name: metric-store
-      consumes:
-        name: metric-store
       properties:
         egress_port: 8080
         health_addr: localhost:6060
@@ -43,12 +39,6 @@
             key: ((metric_store_server.private_key))
     - name: metric-store-nozzle
       release: metric-store
-      provides:
-        name: metric-store-nozzle
-      consumes:
-        name: metric-store
-        name: metric-store-nozzle
-        name: reverse_log_proxy
       properties:
         metric_store_client:
           tls:
@@ -75,12 +65,6 @@
             - "*.metric-store.((system_domain))"
     - name: metric-store-cf-auth-proxy
       release: metric-store
-      provides:
-        name: metric-store-cf-auth-proxy
-      consumes:
-        name: metric-store
-        name: metric-store-nozzle
-        name: cloud_controller
       properties:
         cc:
           ca_cert: ((service_cf_internal_ca.certificate))
