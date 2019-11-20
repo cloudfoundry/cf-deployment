@@ -17,8 +17,6 @@
     jobs:
     - name: metric-store
       properties:
-        egress_port: 8080
-        health_addr: localhost:6060
         metric_store_server:
           tls:
             ca_cert: ((metric_store_server.ca))
