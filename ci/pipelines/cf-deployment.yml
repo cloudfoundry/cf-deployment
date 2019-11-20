@@ -1006,7 +1006,7 @@ jobs:
       params: {release: experimental-pool}
 
 - name: experimental-deploy
-  serial_groups: [ hermione-wats, hermione-cats, hermione-smokes ]
+  serial_groups: [ hermione-cats, hermione-smokes ]
   public: true
   plan:
   - get: experimental-pool
