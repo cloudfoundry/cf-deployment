@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strings"
 	"testing"
 
 	"github.com/cf-deployment/units/helpers"
@@ -220,14 +221,51 @@ func TestSemantic(t *testing.T) {
 				continue
 			}
 
-			t.Errorf("CAs should be referenced from their certificate variables: %s", ca)
+			t.Errorf("CAs should be referenced from their certificate variables: %s in cf-deployment.yml", ca)
+		}
+
+		err = filepath.Walk(operationsSubDirectory, func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				t.Errorf("filepath walk error: %v", err)
+				return nil
+			}
+
+			if info.IsDir() {
+				return nil
+			}
+
+			opsFile, err := ioutil.ReadFile(path)
+			if err != nil {
+				t.Errorf("file read error: %v", err)
+				return nil
+			}
+
+			badCAs := caRegexp.FindAllString(string(opsFile), -1)
+			for _, ca := range badCAs {
+				if ca == "((diego_instance_identity_ca.certificate))" {
+					continue
+				}
+
+				t.Errorf("CAs should be referenced from their certificate variables: %s in %s", ca, strings.Replace(path, operationsSubDirectory, "operations", 1))
+			}
+
+			return nil
+		})
+
+		if err != nil {
+			t.Errorf("walk error: %v", err)
 		}
 	})
 
 	t.Run("ops-files-don't-have-double-question-marks", func(t *testing.T) {
 		invalid_question_marks := regexp.MustCompile(`path: .*\?.*\?.*`)
 
-		filepath.Walk(operationsSubDirectory, func(path string, info os.FileInfo, err error) error {
+		err = filepath.Walk(operationsSubDirectory, func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				t.Errorf("filepath walk error: %v", err)
+				return nil
+			}
+
 			if info.IsDir() {
 				return nil
 			}
@@ -245,6 +283,10 @@ func TestSemantic(t *testing.T) {
 
 			return nil
 		})
+
+		if err != nil {
+			t.Errorf("walk error: %v", err)
+		}
 	})
 }
 
