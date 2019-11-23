@@ -526,8 +526,8 @@ jobs:
   - #@ update_release(r, "opsfile", "release-candidate")
   - do:
     - #@ bbl_up(env)
-    - #@ manage_gcp_dns("add", env)
     - do:
+      - #@ manage_gcp_dns("add", env)
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
@@ -857,8 +857,8 @@ jobs:
       updated-cf-deployment: updated-cf-deployment-master
   - do:
     - #@ bbl_up(env)
-    - #@ manage_gcp_dns("add", env)
     - do:
+      - #@ manage_gcp_dns("add", env)
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:

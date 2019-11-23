@@ -9948,17 +9948,17 @@ jobs:
         params:
           repository: updated-bbl-state
           rebase: true
-    - task: add-gcp-dns
-      file: runtime-ci/tasks/manage-gcp-dns/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        pool-lock: pre-dev-pool
-      params:
-        BBL_JSON_CONFIG: pool-lock/metadata
-        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-        GCP_DNS_ZONE_NAME: test-relint-rocks
-        ACTION: add
     - do:
+      - task: add-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          ACTION: add
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
@@ -10184,17 +10184,17 @@ jobs:
         params:
           repository: updated-bbl-state
           rebase: true
-    - task: add-gcp-dns
-      file: runtime-ci/tasks/manage-gcp-dns/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        pool-lock: pre-dev-pool
-      params:
-        BBL_JSON_CONFIG: pool-lock/metadata
-        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-        GCP_DNS_ZONE_NAME: test-relint-rocks
-        ACTION: add
     - do:
+      - task: add-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          ACTION: add
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
@@ -10420,17 +10420,17 @@ jobs:
         params:
           repository: updated-bbl-state
           rebase: true
-    - task: add-gcp-dns
-      file: runtime-ci/tasks/manage-gcp-dns/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        pool-lock: pre-dev-pool
-      params:
-        BBL_JSON_CONFIG: pool-lock/metadata
-        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-        GCP_DNS_ZONE_NAME: test-relint-rocks
-        ACTION: add
     - do:
+      - task: add-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          ACTION: add
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
@@ -10656,17 +10656,17 @@ jobs:
         params:
           repository: updated-bbl-state
           rebase: true
-    - task: add-gcp-dns
-      file: runtime-ci/tasks/manage-gcp-dns/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        pool-lock: pre-dev-pool
-      params:
-        BBL_JSON_CONFIG: pool-lock/metadata
-        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-        GCP_DNS_ZONE_NAME: test-relint-rocks
-        ACTION: add
     - do:
+      - task: add-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          ACTION: add
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
@@ -10878,17 +10878,17 @@ jobs:
         params:
           repository: updated-bbl-state
           rebase: true
-    - task: add-gcp-dns
-      file: runtime-ci/tasks/manage-gcp-dns/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        pool-lock: pre-dev-pool
-      params:
-        BBL_JSON_CONFIG: pool-lock/metadata
-        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-        GCP_DNS_ZONE_NAME: test-relint-rocks
-        ACTION: add
     - do:
+      - task: add-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          ACTION: add
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
@@ -11114,17 +11114,17 @@ jobs:
         params:
           repository: updated-bbl-state
           rebase: true
-    - task: add-gcp-dns
-      file: runtime-ci/tasks/manage-gcp-dns/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        pool-lock: pre-dev-pool
-      params:
-        BBL_JSON_CONFIG: pool-lock/metadata
-        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-        GCP_DNS_ZONE_NAME: test-relint-rocks
-        ACTION: add
     - do:
+      - task: add-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          ACTION: add
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
@@ -11350,17 +11350,17 @@ jobs:
         params:
           repository: updated-bbl-state
           rebase: true
-    - task: add-gcp-dns
-      file: runtime-ci/tasks/manage-gcp-dns/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        pool-lock: pre-dev-pool
-      params:
-        BBL_JSON_CONFIG: pool-lock/metadata
-        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-        GCP_DNS_ZONE_NAME: test-relint-rocks
-        ACTION: add
     - do:
+      - task: add-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          ACTION: add
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
@@ -11586,17 +11586,17 @@ jobs:
         params:
           repository: updated-bbl-state
           rebase: true
-    - task: add-gcp-dns
-      file: runtime-ci/tasks/manage-gcp-dns/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        pool-lock: pre-dev-pool
-      params:
-        BBL_JSON_CONFIG: pool-lock/metadata
-        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-        GCP_DNS_ZONE_NAME: test-relint-rocks
-        ACTION: add
     - do:
+      - task: add-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          ACTION: add
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
@@ -11822,17 +11822,17 @@ jobs:
         params:
           repository: updated-bbl-state
           rebase: true
-    - task: add-gcp-dns
-      file: runtime-ci/tasks/manage-gcp-dns/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        pool-lock: pre-dev-pool
-      params:
-        BBL_JSON_CONFIG: pool-lock/metadata
-        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-        GCP_DNS_ZONE_NAME: test-relint-rocks
-        ACTION: add
     - do:
+      - task: add-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          ACTION: add
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
@@ -12059,17 +12059,17 @@ jobs:
         params:
           repository: updated-bbl-state
           rebase: true
-    - task: add-gcp-dns
-      file: runtime-ci/tasks/manage-gcp-dns/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        pool-lock: pre-dev-pool
-      params:
-        BBL_JSON_CONFIG: pool-lock/metadata
-        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-        GCP_DNS_ZONE_NAME: test-relint-rocks
-        ACTION: add
     - do:
+      - task: add-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          ACTION: add
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
@@ -12296,17 +12296,17 @@ jobs:
         params:
           repository: updated-bbl-state
           rebase: true
-    - task: add-gcp-dns
-      file: runtime-ci/tasks/manage-gcp-dns/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        pool-lock: pre-dev-pool
-      params:
-        BBL_JSON_CONFIG: pool-lock/metadata
-        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-        GCP_DNS_ZONE_NAME: test-relint-rocks
-        ACTION: add
     - do:
+      - task: add-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          ACTION: add
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
@@ -12532,17 +12532,17 @@ jobs:
         params:
           repository: updated-bbl-state
           rebase: true
-    - task: add-gcp-dns
-      file: runtime-ci/tasks/manage-gcp-dns/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        pool-lock: pre-dev-pool
-      params:
-        BBL_JSON_CONFIG: pool-lock/metadata
-        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-        GCP_DNS_ZONE_NAME: test-relint-rocks
-        ACTION: add
     - do:
+      - task: add-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          ACTION: add
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
@@ -12768,17 +12768,17 @@ jobs:
         params:
           repository: updated-bbl-state
           rebase: true
-    - task: add-gcp-dns
-      file: runtime-ci/tasks/manage-gcp-dns/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        pool-lock: pre-dev-pool
-      params:
-        BBL_JSON_CONFIG: pool-lock/metadata
-        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-        GCP_DNS_ZONE_NAME: test-relint-rocks
-        ACTION: add
     - do:
+      - task: add-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          ACTION: add
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
@@ -13004,17 +13004,17 @@ jobs:
         params:
           repository: updated-bbl-state
           rebase: true
-    - task: add-gcp-dns
-      file: runtime-ci/tasks/manage-gcp-dns/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        pool-lock: pre-dev-pool
-      params:
-        BBL_JSON_CONFIG: pool-lock/metadata
-        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-        GCP_DNS_ZONE_NAME: test-relint-rocks
-        ACTION: add
     - do:
+      - task: add-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          ACTION: add
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
@@ -13240,17 +13240,17 @@ jobs:
         params:
           repository: updated-bbl-state
           rebase: true
-    - task: add-gcp-dns
-      file: runtime-ci/tasks/manage-gcp-dns/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        pool-lock: pre-dev-pool
-      params:
-        BBL_JSON_CONFIG: pool-lock/metadata
-        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-        GCP_DNS_ZONE_NAME: test-relint-rocks
-        ACTION: add
     - do:
+      - task: add-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          ACTION: add
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
@@ -13476,17 +13476,17 @@ jobs:
         params:
           repository: updated-bbl-state
           rebase: true
-    - task: add-gcp-dns
-      file: runtime-ci/tasks/manage-gcp-dns/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        pool-lock: pre-dev-pool
-      params:
-        BBL_JSON_CONFIG: pool-lock/metadata
-        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-        GCP_DNS_ZONE_NAME: test-relint-rocks
-        ACTION: add
     - do:
+      - task: add-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          ACTION: add
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
@@ -13712,17 +13712,17 @@ jobs:
         params:
           repository: updated-bbl-state
           rebase: true
-    - task: add-gcp-dns
-      file: runtime-ci/tasks/manage-gcp-dns/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        pool-lock: pre-dev-pool
-      params:
-        BBL_JSON_CONFIG: pool-lock/metadata
-        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-        GCP_DNS_ZONE_NAME: test-relint-rocks
-        ACTION: add
     - do:
+      - task: add-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          ACTION: add
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
@@ -13949,17 +13949,17 @@ jobs:
         params:
           repository: updated-bbl-state
           rebase: true
-    - task: add-gcp-dns
-      file: runtime-ci/tasks/manage-gcp-dns/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        pool-lock: pre-dev-pool
-      params:
-        BBL_JSON_CONFIG: pool-lock/metadata
-        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-        GCP_DNS_ZONE_NAME: test-relint-rocks
-        ACTION: add
     - do:
+      - task: add-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          ACTION: add
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
@@ -14185,17 +14185,17 @@ jobs:
         params:
           repository: updated-bbl-state
           rebase: true
-    - task: add-gcp-dns
-      file: runtime-ci/tasks/manage-gcp-dns/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        pool-lock: pre-dev-pool
-      params:
-        BBL_JSON_CONFIG: pool-lock/metadata
-        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-        GCP_DNS_ZONE_NAME: test-relint-rocks
-        ACTION: add
     - do:
+      - task: add-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          ACTION: add
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
@@ -14421,17 +14421,17 @@ jobs:
         params:
           repository: updated-bbl-state
           rebase: true
-    - task: add-gcp-dns
-      file: runtime-ci/tasks/manage-gcp-dns/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        pool-lock: pre-dev-pool
-      params:
-        BBL_JSON_CONFIG: pool-lock/metadata
-        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-        GCP_DNS_ZONE_NAME: test-relint-rocks
-        ACTION: add
     - do:
+      - task: add-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          ACTION: add
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
@@ -14657,17 +14657,17 @@ jobs:
         params:
           repository: updated-bbl-state
           rebase: true
-    - task: add-gcp-dns
-      file: runtime-ci/tasks/manage-gcp-dns/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        pool-lock: pre-dev-pool
-      params:
-        BBL_JSON_CONFIG: pool-lock/metadata
-        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-        GCP_DNS_ZONE_NAME: test-relint-rocks
-        ACTION: add
     - do:
+      - task: add-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          ACTION: add
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
@@ -14895,17 +14895,17 @@ jobs:
         params:
           repository: updated-bbl-state
           rebase: true
-    - task: add-gcp-dns
-      file: runtime-ci/tasks/manage-gcp-dns/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        pool-lock: pre-dev-pool
-      params:
-        BBL_JSON_CONFIG: pool-lock/metadata
-        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-        GCP_DNS_ZONE_NAME: test-relint-rocks
-        ACTION: add
     - do:
+      - task: add-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          ACTION: add
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
@@ -15131,17 +15131,17 @@ jobs:
         params:
           repository: updated-bbl-state
           rebase: true
-    - task: add-gcp-dns
-      file: runtime-ci/tasks/manage-gcp-dns/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        pool-lock: pre-dev-pool
-      params:
-        BBL_JSON_CONFIG: pool-lock/metadata
-        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-        GCP_DNS_ZONE_NAME: test-relint-rocks
-        ACTION: add
     - do:
+      - task: add-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          ACTION: add
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
@@ -15822,17 +15822,17 @@ jobs:
         params:
           repository: updated-bbl-state
           rebase: true
-    - task: add-gcp-dns
-      file: runtime-ci/tasks/manage-gcp-dns/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        pool-lock: pre-dev-pool
-      params:
-        BBL_JSON_CONFIG: pool-lock/metadata
-        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-        GCP_DNS_ZONE_NAME: test-relint-rocks
-        ACTION: add
     - do:
+      - task: add-gcp-dns
+        file: runtime-ci/tasks/manage-gcp-dns/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          pool-lock: pre-dev-pool
+        params:
+          BBL_JSON_CONFIG: pool-lock/metadata
+          GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
+          GCP_DNS_ZONE_NAME: test-relint-rocks
+          ACTION: add
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
