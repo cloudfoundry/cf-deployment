@@ -691,7 +691,7 @@ instance_groups:
         routes:
         - health_check:
             name: uaa-healthcheck
-            script_path: "/var/vcap/jobs/uaa/bin/health_check"
+            script_path: "/var/vcap/jobs/uaa/bin/dns/healthy"
           name: uaa
           tls_port: 8443
           server_cert_domain_san: "uaa.service.cf.internal"
