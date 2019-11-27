@@ -691,7 +691,7 @@ instance_groups:
         routes:
         - health_check:
             name: uaa-healthcheck
-            script_path: "/var/vcap/jobs/uaa/bin/health_check"
+            script_path: "/var/vcap/jobs/uaa/bin/dns/healthy"
           name: uaa
           tls_port: 8443
           server_cert_domain_san: "uaa.service.cf.internal"
@@ -2365,13 +2365,13 @@ releases:
   version: 10.2.2
   sha1: e899847cd564cb53232961cc1621e3bbec1189e1
 - name: cflinuxfs3
-  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs3-release?v=0.147.0
-  version: 0.147.0
-  sha1: deec3262cc10d5e6066130ca436f66ea9d767728
+  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs3-release?v=0.149.0
+  version: 0.149.0
+  sha1: 8b8e7d24b815e39e10bc8498a73e80a3667007d6
 - name: credhub
-  url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=2.5.8
-  version: 2.5.8
-  sha1: 03d6f7765a710b1503980d224f7f7664d5550e67
+  url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=2.5.9
+  version: 2.5.9
+  sha1: 225d508eed11c3f6f4a360118de068d5db9fa427
 - name: diego
   url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=2.40.0
   version: 2.40.0
@@ -2445,9 +2445,9 @@ releases:
   version: 1.11.4
   sha1: 255e718ed424a8e3d6ccfe8a4c5c5c0718fced17
 - name: uaa
-  url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=74.10.0
-  version: 74.10.0
-  sha1: 8fbc7344691240859a628140b9220045f264aa8e
+  url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=74.11.0
+  version: 74.11.0
+  sha1: 7887fd2f849389d5ee192b5ac6e0f5a5b9807ca6
 - name: loggregator-agent
   url: https://bosh.io/d/github.com/cloudfoundry/loggregator-agent-release?v=5.2.1
   version: 5.2.1
