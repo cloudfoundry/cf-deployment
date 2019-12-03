@@ -45,8 +45,6 @@
     instances: 1
     jobs:
     - name: nfsbrokerpush
-      provides:
-        nfsbrokerpush: {as: ignore-me}
       properties:
         nfsbrokerpush:
           app_domain: ((system_domain))
@@ -76,6 +74,9 @@
           store_id: nfsbroker
           syslog_url: ""
           username: nfs-broker
+      provides:
+        nfsbrokerpush:
+          as: ignore-me
       release: nfs-volume
     - name: cf-cli-6-linux
       release: cf-cli
@@ -162,9 +163,9 @@
   path: /releases/-
   value:
     name: nfs-volume
-    sha1: bfcb4851042cece00bade294a56c0ad15da53f29
-    url: https://bosh.io/d/github.com/cloudfoundry/nfs-volume-release?v=5.0.2
-    version: 5.0.2
+    sha1: 7e69209eaf05484f73cbeb314e7d9cabfadba75a
+    url: https://bosh.io/d/github.com/cloudfoundry/nfs-volume-release?v=6.0.0
+    version: 6.0.0
 - type: replace
   path: /releases/name=mapfs?
   value:
