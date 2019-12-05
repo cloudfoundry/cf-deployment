@@ -17,14 +17,6 @@
           uaa_ca_cert: ((uaa_ssl.ca))
           uaa_client_id: nfs-broker-credhub-client
           uaa_client_secret: ((nfs-broker-credhub-uaa-client-secret))
-        db:
-          ca_cert: ((mysql_server_certificate.ca))
-          driver: mysql
-          host: sql-db.service.cf.internal
-          name: nfs-broker
-          password: ((nfs-broker-database-password))
-          port: 3306
-          username: nfs-broker
         domain: ((system_domain))
         organization: system
         password: ((nfs-broker-password))
