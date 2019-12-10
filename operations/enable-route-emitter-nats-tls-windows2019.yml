@@ -1,0 +1,16 @@
+---
+- type: replace
+  path: /instance_groups/name=windows2019-cell/jobs/name=route_emitter_windows/properties/diego/route_emitter/nats?
+  value:
+    tls:
+      enabled: true
+      client_cert: "((nats_client_cert.certificate))"
+      client_key: "((nats_client_cert.private_key))"
+
+- type: replace
+  path: /instance_groups/name=windows2019-cell/jobs/name=route_emitter_windows/consumes?
+  value:
+    nats:
+      ip_addresses: false
+    nats-tls:
+      ip_addresses: false
