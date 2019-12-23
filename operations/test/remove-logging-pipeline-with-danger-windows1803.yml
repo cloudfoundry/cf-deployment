@@ -1,0 +1,11 @@
+# Windows
+- type: replace
+  path: /instance_groups/name=windows1803-cell/jobs/name=prom_scraper_windows/properties/loggregator_agent?
+  value:
+    tls:
+      ca_cert: "((loggregator_tls_agent.ca))"
+      cert: "((loggregator_tls_agent.certificate))"
+      key: "((loggregator_tls_agent.private_key))"
+
+- type: remove
+  path: /instance_groups/name=windows1803-cell/jobs/name=loggregator_agent_windows?
