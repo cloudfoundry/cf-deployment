@@ -1,46 +1,42 @@
----
 - type: replace
   path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/datadog-firehose-nozzle?
   value:
     access-token-validity: 1209600
+    authorities: oauth.login,doppler.firehose
     authorized-grant-types: client_credentials,refresh_token
     override: true
-    secret: "((uaa_clients_datadog-firehose-nozzle_secret))"
     scope: openid,oauth.approvals,doppler.firehose
-    authorities: oauth.login,doppler.firehose
-
-
+    secret: ((uaa_clients_datadog-firehose-nozzle_secret))
 - type: replace
   path: /instance_groups/-
   value:
-    name: nozzle
     azs:
     - z1
     instances: 1
-    persistent_disk_type: 5GB
-    vm_type: minimal
-    stemcell: default
-    networks:
-    - name: default
     jobs:
     - name: datadog-firehose-nozzle
-      release: datadog-firehose-nozzle
       properties:
-        loggregator:
-          traffic_controller_url: "wss://doppler.((system_domain)):((traffic_controller_external_port))"
         datadog:
-          api_key: "((datadog_api_key))"
+          api_key: ((datadog_api_key))
           flush_duration_seconds: 15
-          metric_prefix: "((datadog_metric_prefix))"
-        uaa:
-          url: "https://uaa.((system_domain))"
-          client: "datadog-firehose-nozzle"
-          client_secret: "((uaa_clients_datadog-firehose-nozzle_secret))"
+          metric_prefix: ((datadog_metric_prefix))
+        loggregator:
+          traffic_controller_url: wss://doppler.((system_domain)):((traffic_controller_external_port))
         nozzle:
+          deployment: cf
           insecure_ssl_skip_verify: true
           subscription_id: datadog-nozzle
-          deployment: cf
-
+        uaa:
+          client: datadog-firehose-nozzle
+          client_secret: ((uaa_clients_datadog-firehose-nozzle_secret))
+          url: https://uaa.((system_domain))
+      release: datadog-firehose-nozzle
+    name: nozzle
+    networks:
+    - name: default
+    persistent_disk_type: 5GB
+    stemcell: default
+    vm_type: minimal
 - type: replace
   path: /variables/-
   value:
@@ -50,6 +46,6 @@
   path: /releases/-
   value:
     name: datadog-firehose-nozzle
-    url: https://bosh.io/d/github.com/DataDog/datadog-firehose-nozzle-release?v=77
-    version: "77"
-    sha1: c47fe351b361aecbfa7c05674b079e32a859f6a7
+    sha1: 6b7ef6d614bb9c8d025105db31753eec4f707566
+    url: https://bosh.io/d/github.com/DataDog/datadog-firehose-nozzle-release?v=78
+    version: "78"
