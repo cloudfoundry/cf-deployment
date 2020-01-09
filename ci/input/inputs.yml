@@ -123,6 +123,11 @@ opsReleases:
 - name: metrics-discovery
   repository: cloudfoundry/metrics-discovery-release
 
+untestedOpsReleases:
+- name: datadog-firehose-nozzle
+  repository: DataDog/datadog-firehose-nozzle-release
+  skipDeployAndTest: true
+
 windowsStemcells:
 - name: windows2012R2
   opsFile: windows2012R2-cell.yml

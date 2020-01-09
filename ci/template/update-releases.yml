@@ -36,6 +36,9 @@ groups:
   - #@ "acquire-{}-pre-dev-lock".format(r.name)
   - #@ "update-" + r.name
   #@ end
+  #@ for r in data.values.untestedOpsReleases:
+  - #@ "update-" + r.name
+  #@ end
 - name: update-windows-stemcells-and-releases
   jobs:
   #@ for s in data.values.windowsStemcells:
@@ -213,6 +216,13 @@ resources:
 #@ end
 
 #@ for r in data.values.opsReleases:
+- name: #@ r.name + "-release"
+  type: bosh-io-release
+  source:
+    repository: #@ r.repository
+#@ end
+
+#@ for r in data.values.untestedOpsReleases:
 - name: #@ r.name + "-release"
   type: bosh-io-release
   source:
@@ -648,6 +658,24 @@ jobs:
     passed:
     - #@ "update-" + r.name
 #@ end
+#@ end
+
+#@ for r in data.values.untestedOpsReleases:
+- name: #@ "update-" + r.name
+  public: true
+  plan:
+  - in_parallel:
+    - get: #@ r.name + "-release"
+      trigger: true
+      params:
+        tarball: false
+    - get: cf-deployment-develop
+    - get: runtime-ci
+  - #@ update_release(r, "opsfile", "develop")
+  - put: cf-deployment-develop
+    params:
+      rebase: true
+      repository: #@ "updated-cf-deployment-{}-develop".format(r.name)
 #@ end
 
 #@ for s in data.values.windowsStemcells:

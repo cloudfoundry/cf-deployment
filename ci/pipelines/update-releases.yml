@@ -122,6 +122,7 @@ groups:
   - update-envoy-nginx
   - acquire-metrics-discovery-pre-dev-lock
   - update-metrics-discovery
+  - update-datadog-firehose-nozzle
 - name: update-windows-stemcells-and-releases
   jobs:
   - update-windows2012R2-stemcell
@@ -489,6 +490,10 @@ resources:
   type: bosh-io-release
   source:
     repository: cloudfoundry/metrics-discovery-release
+- name: datadog-firehose-nozzle-release
+  type: bosh-io-release
+  source:
+    repository: DataDog/datadog-firehose-nozzle-release
 - name: binary-buildpack-release-gcs
   type: gcs-resource
   source:
@@ -15295,6 +15300,29 @@ jobs:
       - put: pre-dev-pool
         params:
           release: pre-dev-pool
+- name: update-datadog-firehose-nozzle
+  public: true
+  plan:
+  - in_parallel:
+    - get: datadog-firehose-nozzle-release
+      trigger: true
+      params:
+        tarball: false
+    - get: cf-deployment-develop
+    - get: runtime-ci
+  - task: update-additional-ops-files-datadog-firehose-nozzle-develop
+    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
+    input_mapping:
+      original-ops-file: cf-deployment-develop
+      release: datadog-firehose-nozzle-release
+    output_mapping:
+      updated-ops-file: updated-cf-deployment-datadog-firehose-nozzle-develop
+    params:
+      RELEASE_NAME: datadog-firehose-nozzle
+  - put: cf-deployment-develop
+    params:
+      rebase: true
+      repository: updated-cf-deployment-datadog-firehose-nozzle-develop
 - name: update-windows2012R2-stemcell
   public: true
   plan:
