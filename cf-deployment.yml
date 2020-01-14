@@ -75,6 +75,90 @@ addons:
         key: "((prom_scraper_metrics_tls.private_key))"
         server_name: prom_scraper_metrics
 
+- name: metrics-discovery-registrar
+  exclude:
+    jobs:
+    - name: smoke_tests
+      release: cf-smoke-tests
+  include:
+    stemcell:
+    - os: ubuntu-trusty
+    - os: ubuntu-xenial
+  jobs:
+  - name: metrics-discovery-registrar
+    properties:
+      metrics:
+        ca_cert: ((metrics_discovery_metrics_tls.ca))
+        cert: ((metrics_discovery_metrics_tls.certificate))
+        key: ((metrics_discovery_metrics_tls.private_key))
+        server_name: metrics_discovery_metrics
+    release: metrics-discovery
+
+- name: metrics-agent
+  exclude:
+    jobs:
+    - name: smoke_tests
+      release: cf-smoke-tests
+  include:
+    stemcell:
+    - os: ubuntu-xenial
+  jobs:
+  - name: metrics-agent
+    properties:
+      grpc:
+        ca_cert: ((loggregator_tls_agent.ca))
+        cert: ((loggregator_tls_agent.certificate))
+        key: ((loggregator_tls_agent.private_key))
+      metrics:
+        ca_cert: ((metrics_agent_tls.ca))
+        cert: ((metrics_agent_tls.certificate))
+        key: ((metrics_agent_tls.private_key))
+        server_name: metrics_agent
+      scrape:
+        tls:
+          ca_cert: ((prom_scraper_scrape_tls.ca))
+          cert: ((prom_scraper_scrape_tls.certificate))
+          key: ((prom_scraper_scrape_tls.private_key))
+    release: metrics-discovery
+
+- name: metrics-discovery-windows
+  include:
+    stemcell:
+    - os: windows2019
+    - os: windows1803
+  jobs:
+  - name: metrics-discovery-registrar-windows
+    release: metrics-discovery
+    properties:
+      metrics:
+        ca_cert: "((metrics_discovery_metrics_tls.ca))"
+        cert: "((metrics_discovery_metrics_tls.certificate))"
+        key: "((metrics_discovery_metrics_tls.private_key))"
+        server_name: metrics_discovery_metrics
+- name: metrics-agent-windows
+  include:
+    stemcell:
+      - os: windows2019
+      - os: windows1803
+  jobs:
+  - name: metrics-agent-windows
+    release: metrics-discovery
+    properties:
+      grpc:
+        ca_cert: "((loggregator_tls_agent.ca))"
+        cert: "((loggregator_tls_agent.certificate))"
+        key: "((loggregator_tls_agent.private_key))"
+      metrics:
+        ca_cert: "((metrics_agent_tls.ca))"
+        cert: "((metrics_agent_tls.certificate))"
+        key: "((metrics_agent_tls.private_key))"
+        server_name: metrics_agent
+      scrape:
+        tls:
+          ca_cert: "((prom_scraper_scrape_tls.ca))"
+          cert: "((prom_scraper_scrape_tls.certificate))"
+          key: "((prom_scraper_scrape_tls.private_key))"
+
 - name: bpm
   include:
     stemcell:
@@ -2267,6 +2351,28 @@ variables:
     is_ca: true
     common_name: metricScraperCA
 
+- name: metrics_agent_tls
+  options:
+    ca: metric_scraper_ca
+    common_name: metrics_agent
+    extended_key_usage:
+      - server_auth
+  type: certificate
+- name: metrics_discovery_metrics_tls
+  options:
+    ca: metric_scraper_ca
+    common_name: metrics_discovery_metrics
+    extended_key_usage:
+      - server_auth
+  type: certificate
+- name: scrape_config_generator_metrics_tls
+  options:
+    ca: metric_scraper_ca
+    common_name: scrape_config_generator_metrics
+    extended_key_usage:
+      - server_auth
+  type: certificate
+
 - name: log_cache_metrics_tls
   type: certificate
   options:
@@ -2396,6 +2502,10 @@ releases:
   url: https://bosh.io/d/github.com/cloudfoundry/loggregator-release?v=106.3.6
   version: 106.3.6
   sha1: ba64ea33a88429a1031f4041dcb7665519da4aa2
+- name: metrics-discovery
+  sha1: 024047f37cd1781a3eec46ec888e0dbdc356b759
+  url: https://bosh.io/d/github.com/cloudfoundry/metrics-discovery-release?v=2.0.9
+  version: 2.0.9
 - name: nats
   url: https://bosh.io/d/github.com/cloudfoundry/nats-release?v=32
   version: "32"
