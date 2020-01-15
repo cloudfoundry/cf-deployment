@@ -34,6 +34,11 @@ disable-uaa-client-redirect-uri-legacy-matching-mode.yml: {}
 enable-app-log-rate-limiting.yml:
   vars:
   - app_log_rate_limit=100
+enable-app-log-rate-limiting-windows2019.yml:
+  ops:
+  - ../windows2019-cell.yml
+  vars:
+  - app_log_rate_limit=100
 enable-bpm-garden.yml: {}
 enable-containerd-for-processes.yml: {}
 enable-iptables-logger.yml: {}

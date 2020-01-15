@@ -1,0 +1,4 @@
+---
+- type: replace
+  path: /instance_groups/name=windows2019-cell/jobs/name=rep_windows/properties/diego/executor/max_log_lines_per_second?
+  value: ((app_log_rate_limit))
