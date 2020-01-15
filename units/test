@@ -17,4 +17,6 @@ function suites() {
   echo "${suites}"
 }
 
-go test "$@" $(suites) -mod=vendor
+pushd "$(dirname "$0")" > /dev/null
+  go test "$@" $(suites) -mod=vendor
+popd > /dev/null
