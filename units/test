@@ -14,11 +14,6 @@ function suites() {
     ./tests/semantic_test
     "
 
-  # : "${RUN_SEMANTIC:="false"}"
-  # if [ ${RUN_SEMANTIC} = true ]; then
-  #   suites="${suites} ./semantic_test"
-  # fi
-
   echo "${suites}"
 }
 
