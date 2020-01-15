@@ -1,0 +1,4 @@
+---
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=rep/properties/diego/executor/max_log_lines_per_second?
+  value: ((app_log_rate_limit))
