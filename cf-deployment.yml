@@ -1,6 +1,6 @@
 ---
 name: cf
-manifest_version: v12.25.0
+manifest_version: v12.27.0
 update:
   canaries: 1
   canary_watch_time: 30000-1200000
@@ -848,6 +848,8 @@ instance_groups:
   vm_extensions:
   - 50GB_ephemeral_disk
   stemcell: default
+  update:
+    serial: true
   networks:
   - name: default
   jobs:
@@ -2471,9 +2473,9 @@ releases:
   version: 10.2.10
   sha1: f2d0910e7d3bffad4b037b93e0410b9fcd1f4ab4
 - name: cflinuxfs3
-  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs3-release?v=0.155.0
-  version: 0.155.0
-  sha1: aeb5e85861e7efb560791f20a8e97fb82ce97669
+  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs3-release?v=0.157.0
+  version: 0.157.0
+  sha1: 306128757f4289090f82e4fa88394e5e37d16feb
 - name: credhub
   url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=2.5.9
   version: 2.5.9
@@ -2487,9 +2489,9 @@ releases:
   version: 2.3.3
   sha1: 51ca401e07b5d7b5c0753af169930c6c0a68b731
 - name: garden-runc
-  url: https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.19.9
-  version: 1.19.9
-  sha1: 1c678e1c7a3506c0e408860571560081c15e3c6d
+  url: https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.19.10
+  version: 1.19.10
+  sha1: 6d3a30a5d90b0ab7bd89fddf7fa22b9a4cc08b0d
 - name: go-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/go-buildpack-release?v=1.9.4
   version: 1.9.4
@@ -2577,4 +2579,4 @@ releases:
 stemcells:
 - alias: default
   os: ubuntu-xenial
-  version: "621.41"
+  version: "621.50"
