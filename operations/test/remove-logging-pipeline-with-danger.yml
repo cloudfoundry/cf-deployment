@@ -40,6 +40,17 @@
     networks:
     - name: default
     jobs:
+    - name: log-cache-syslog-server
+      release: log-cache
+      properties:
+        tls:
+          cert: "((log_cache_syslog_tls.certificate))"
+          key: "((log_cache_syslog_tls.private_key))"
+        metrics:
+          ca_cert: "((log_cache_syslog_server_metrics_tls.ca))"
+          cert: "((log_cache_syslog_server_metrics_tls.certificate))"
+          key: "((log_cache_syslog_server_metrics_tls.private_key))"
+          server_name: log_cache_syslog_server_metrics
     - name: log-cache
       provides:
         log-cache: {shared: true}
@@ -99,3 +110,35 @@
           client_secret: ((uaa_clients_doppler_secret))
           internal_addr: https://uaa.service.cf.internal:8443
       release: log-cache
+
+# Variables
+- type: replace
+  path: /variables/name=log_cache_syslog_tls?
+  value:
+    name: log_cache_syslog_tls
+    type: certificate
+    options:
+      ca: loggregator_ca
+      common_name: q-s3.log-cache.default.cf.bosh
+      extended_key_usage:
+      - server_auth
+
+- type: replace
+  path: /variables/name=log_cache_syslog_server_metrics_tls?
+  value:
+    name: log_cache_syslog_server_metrics_tls
+    type: certificate
+    options:
+      ca: metric_scraper_ca
+      common_name: log_cache_syslog_server_metrics
+      extended_key_usage:
+      - server_auth
+
+# update syslog agents
+- type: replace
+  path: /addons/name=loggr-syslog-agent/jobs/name=loggr-syslog-agent/properties/aggregate_drains?
+  value: "syslog-tls://q-s3.log-cache.default.cf.bosh:6067"
+
+- type: replace
+  path: /addons/name=loggr-syslog-agent/jobs/name=loggr-syslog-agent/properties/drain_ca_cert?
+  value: "((log_cache_syslog_tls.ca))"
