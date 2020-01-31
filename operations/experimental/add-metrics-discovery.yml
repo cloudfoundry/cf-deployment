@@ -1,0 +1,97 @@
+- type: replace
+  path: /releases/name=metrics-discovery?
+  value:
+    name: metrics-discovery
+    sha1: 024047f37cd1781a3eec46ec888e0dbdc356b759
+    url: https://bosh.io/d/github.com/cloudfoundry/metrics-discovery-release?v=2.0.9
+    version: 2.0.9
+- type: replace
+  path: /addons/name=metrics-discovery-registrar?
+  value:
+    exclude:
+      jobs:
+      - name: smoke_tests
+        release: cf-smoke-tests
+    include:
+      stemcell:
+      - os: ubuntu-trusty
+      - os: ubuntu-xenial
+    jobs:
+    - name: metrics-discovery-registrar
+      properties:
+        metrics:
+          ca_cert: ((metrics_discovery_metrics_tls.ca))
+          cert: ((metrics_discovery_metrics_tls.certificate))
+          key: ((metrics_discovery_metrics_tls.private_key))
+          server_name: metrics_discovery_metrics
+      release: metrics-discovery
+    name: metrics-discovery-registrar
+- type: replace
+  path: /addons/name=metrics-agent?
+  value:
+    exclude:
+      jobs:
+      - name: smoke_tests
+        release: cf-smoke-tests
+    include:
+      stemcell:
+      - os: ubuntu-xenial
+    jobs:
+    - name: metrics-agent
+      properties:
+        grpc:
+          ca_cert: ((loggregator_tls_agent.ca))
+          cert: ((loggregator_tls_agent.certificate))
+          key: ((loggregator_tls_agent.private_key))
+        metrics:
+          ca_cert: ((metrics_agent_tls.ca))
+          cert: ((metrics_agent_tls.certificate))
+          key: ((metrics_agent_tls.private_key))
+          server_name: metrics_agent
+        scrape:
+          tls:
+            ca_cert: ((prom_scraper_scrape_tls.ca))
+            cert: ((prom_scraper_scrape_tls.certificate))
+            key: ((prom_scraper_scrape_tls.private_key))
+      release: metrics-discovery
+    name: metrics-agent
+- type: replace
+  path: /variables/name=metrics_agent_tls?
+  value:
+    name: metrics_agent_tls
+    options:
+      ca: metric_scraper_ca
+      common_name: metrics_agent
+      extended_key_usage:
+      - server_auth
+    type: certificate
+- type: replace
+  path: /variables/name=prom_scraper_scrape_tls?
+  value:
+    name: prom_scraper_scrape_tls
+    options:
+      ca: metric_scraper_ca
+      common_name: prom_scraper
+      extended_key_usage:
+      - client_auth
+    type: certificate
+- type: replace
+  path: /variables/name=metrics_discovery_metrics_tls?
+  value:
+    name: metrics_discovery_metrics_tls
+    options:
+      ca: metric_scraper_ca
+      common_name: metrics_discovery_metrics
+      extended_key_usage:
+      - server_auth
+    type: certificate
+- type: replace
+  path: /variables/name=scrape_config_generator_metrics_tls?
+  value:
+    name: scrape_config_generator_metrics_tls
+    options:
+      ca: metric_scraper_ca
+      common_name: scrape_config_generator_metrics
+      extended_key_usage:
+      - server_auth
+    type: certificate

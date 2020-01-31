@@ -1,0 +1,34 @@
+- type: replace
+  path: /addons/name=metrics-discovery-windows?
+  value:
+    name: metrics-discovery-windows2019
+    include:
+      stemcell:
+      - os: windows2019
+      - os: windows1803
+    jobs:
+    - name: metrics-discovery-registrar-windows
+      release: metrics-discovery
+      properties:
+        metrics:
+          ca_cert: "((metrics_discovery_metrics_tls.ca))"
+          cert: "((metrics_discovery_metrics_tls.certificate))"
+          key: "((metrics_discovery_metrics_tls.private_key))"
+          server_name: metrics_discovery_metrics
+    - name: metrics-agent-windows
+      release: metrics-discovery
+      properties:
+        grpc:
+          ca_cert: "((loggregator_tls_agent.ca))"
+          cert: "((loggregator_tls_agent.certificate))"
+          key: "((loggregator_tls_agent.private_key))"
+        metrics:
+          ca_cert: "((metrics_agent_tls.ca))"
+          cert: "((metrics_agent_tls.certificate))"
+          key: "((metrics_agent_tls.private_key))"
+          server_name: metrics_agent
+        scrape:
+          tls:
+            ca_cert: "((prom_scraper_scrape_tls.ca))"
+            cert: "((prom_scraper_scrape_tls.certificate))"
+            key: "((prom_scraper_scrape_tls.private_key))"

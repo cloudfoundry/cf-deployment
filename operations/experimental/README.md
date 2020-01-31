@@ -16,8 +16,8 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 |:---  |:---     |:---   |:---   |
 | [`add-credhub-lb.yml`](add-credhub-lb.yml) |  **[DEPRECATED]** Use load balancer to expose external address for CredHub. | | **NO** |
 | [`add-metric-store.yml`](add-metric-store.yml) |  **Add Metric Store node for persistence of metrics from Loggregator** | | **NO** |
-| [`add-metrics-discovery.yml`](add-metrics-discovery.yml) |  **[DEPRECATED]** Add Metrics Discovery Registrar and Metrics Agent to enable egress of metrics using Open Metrics standard | This feature has been promoted and inlined into the base manifest | **YES** |
-| [`add-metrics-discovery-windows.yml`](add-metrics-discovery-windows.yml) |  **[DEPRECATED]** Add Metrics Discovery Registrar and Metrics Agent to Windows VMs to enable egress of metrics using Open Metrics standard | This feature has been promoted and inlined into the base manifest | **YES** |
+| [`add-metrics-discovery.yml`](add-metrics-discovery.yml) |  **Add Metrics Discovery Registrar and Metrics Agent to enable egress of metrics using Open Metrics standard** | | **NO** |
+| [`add-metrics-discovery-windows.yml`](add-metrics-discovery-windows.yml) |  **Add Metrics Discovery Registrar and Metrics Agent to Windows VMs to enable egress of metrics using Open Metrics standard** | | **NO** |
 | [`add-syslog-agent.yml`](add-syslog-agent.yml) |  Add agent to all vms for the purpose of egressing application logs to syslog and disable cf-syslog-drain release | | **YES** |
 | [`add-syslog-agent-windows1803.yml`](add-syslog-agent-windows1803.yml) |  Add agent to windows1803 Diego cells for the purpose of egressing application logs to syslog | Requires `../windows1803-cell.yml` and `add-syslog-agent.yml` | **NO** |
 | [`add-syslog-agent-windows2019.yml`](add-syslog-agent-windows2019.yml) |  Add agent to windows2019 Diego cells for the purpose of egressing application logs to syslog | Requires `../windows2019-cell.yml` and `add-syslog-agent.yml` | **NO** |

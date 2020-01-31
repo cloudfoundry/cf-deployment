@@ -18,5 +18,5 @@ function suites() {
 }
 
 pushd "$(dirname "$0")" > /dev/null
-  go test "$@" $(suites) -mod=vendor -timeout 15m
+  go test "$@" $(suites) -mod=vendor
 popd > /dev/null
