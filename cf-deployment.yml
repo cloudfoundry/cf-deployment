@@ -862,6 +862,7 @@ instance_groups:
           keys:
             encryption_key_0: "((cc_db_encryption_key))"
         bulk_api_password: "((cc_bulk_api_password))"
+        internal_api_password: "((cc_internal_api_password))"
         staging_upload_user: staging_user
         staging_upload_password: "((cc_staging_upload_password))"
         temporary_use_logcache: true
@@ -1057,6 +1058,7 @@ instance_groups:
       cc:
         db_encryption_key: "((cc_db_encryption_key))"
         database_encryption: *cc-database-encryption
+        internal_api_password: "((cc_internal_api_password))"
         staging_upload_user: staging_user
         staging_upload_password: "((cc_staging_upload_password))"
         resource_pool: *blobstore-properties
@@ -1129,6 +1131,7 @@ instance_groups:
       cc:
         db_encryption_key: "((cc_db_encryption_key))"
         database_encryption: *cc-database-encryption
+        internal_api_password: "((cc_internal_api_password))"
         staging_upload_user: staging_user
         staging_upload_password: "((cc_staging_upload_password))"
         resource_pool: *blobstore-properties
@@ -1733,6 +1736,8 @@ variables:
 - name: cc_bulk_api_password
   type: password
 - name: cc_db_encryption_key
+  type: password
+- name: cc_internal_api_password
   type: password
 - name: cc_staging_upload_password
   type: password
