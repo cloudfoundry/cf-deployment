@@ -1,7 +1,7 @@
 - type: replace
   path: /releases/name=postgres
   value:
-    name:    postgres
+    name:    community-postgres
     version: "3.2.0"
     url:     https://github.com/cloudfoundry-community/postgres-boshrelease/releases/download/v3.2.0/postgres-3.2.0.tgz
     sha1:    470c2b6d98d988ad9dc36dedcd8133e247de63f7
@@ -17,7 +17,7 @@
   path: /instance_groups/name=database/jobs
   value:
   - name: postgres
-    release: postgres
+    release: community-postgres
     properties:
       postgres:
         config:
