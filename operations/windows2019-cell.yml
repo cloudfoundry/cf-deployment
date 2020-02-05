@@ -90,6 +90,7 @@
       release: diego
     - name: loggregator_agent_windows
       properties:
+        grpc_port: 3459
         loggregator:
           tls:
             agent:
@@ -104,6 +105,40 @@
         syslog_daemon_config:
           enable: false
       release: loggregator-agent
+    - name: loggr-syslog-agent-windows
+      release: loggregator-agent
+      properties:
+        port: 3460
+        tls:
+          ca_cert: "((loggregator_tls_agent.ca))"
+          cert: "((loggregator_tls_agent.certificate))"
+          key: "((loggregator_tls_agent.private_key))"
+        cache:
+          tls:
+            ca_cert: "((syslog_agent_api_tls.ca))"
+            cert: "((syslog_agent_api_tls.certificate))"
+            key: "((syslog_agent_api_tls.private_key))"
+            cn: "binding-cache"
+        metrics:
+          ca_cert: "((syslog_agent_metrics_tls.ca))"
+          cert: "((syslog_agent_metrics_tls.certificate))"
+          key: "((syslog_agent_metrics_tls.private_key))"
+          server_name: syslog_agent_metrics
+    - name: loggr-forwarder-agent-windows
+      release: loggregator-agent
+      properties:
+        downstream_ingress_ports:
+        - 3459
+        - 3460
+        tls:
+          ca_cert: "((loggregator_tls_agent.ca))"
+          cert: "((loggregator_tls_agent.certificate))"
+          key: "((loggregator_tls_agent.private_key))"
+        metrics:
+          ca_cert: "((forwarder_agent_metrics_tls.ca))"
+          cert: "((forwarder_agent_metrics_tls.certificate))"
+          key: "((forwarder_agent_metrics_tls.private_key))"
+          server_name: forwarder_agent_metrics
     - name: prom_scraper_windows
       properties:
         metrics:
