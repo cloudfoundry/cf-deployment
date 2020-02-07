@@ -22,10 +22,16 @@ enable-smb-test-server.yml:
   vars:
   - smb-password=FOO.PASS
   - smb-username=BAR.USER
-remove-logging-pipeline-with-danger.yml: {}
+remove-logging-pipeline-with-danger.yml:
+  ops:
+  - ../experimental/add-syslog-agent.yml
 remove-logging-pipeline-with-danger-windows1803.yml:
   ops:
   - ../windows1803-cell.yml
+  - ../experimental/add-syslog-agent.yml
+  - ../experimental/add-syslog-agent-windows1803.yml
 remove-logging-pipeline-with-danger-windows2019.yml:
   ops:
   - ../windows2019-cell.yml
+  - ../experimental/add-syslog-agent.yml
+  - ../experimental/add-syslog-agent-windows2019.yml
