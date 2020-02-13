@@ -102,6 +102,15 @@ use-haproxy-public-network.yml:
 use-haproxy.yml:
   vars:
   - haproxy_private_ip=10.0.10.10
+community/use-community-postgres.yml:
+  ops:
+  - use-postgres.yml
+  - community/use-community-postgres.yml
+community/use-community-postgres-ha.yml:
+  ops:
+  - use-postgres.yml
+  - community/use-community-postgres.yml
+  - community/use-community-postgres-ha.yml
 use-internal-lookup-for-route-services.yml: {}
 use-latest-stemcell.yml:
   pathvalidator:
