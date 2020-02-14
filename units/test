@@ -18,5 +18,11 @@ function suites() {
 }
 
 pushd "$(dirname "$0")" > /dev/null
+  if [ ! -f "test-vars-store.yml" ]; then
+    echo "Generating vars-store..."
+    bosh interpolate ../cf-deployment.yml --vars-store test-vars-store.yml > /dev/null
+  fi
+
+  echo "Starting unit tests..."
   go test "$@" $(suites) -mod=vendor
 popd > /dev/null

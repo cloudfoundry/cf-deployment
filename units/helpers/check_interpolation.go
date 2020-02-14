@@ -121,7 +121,7 @@ func checkInterpolate(cfDeploymentHome, operationsSubDir, opsFileName string, op
 }
 
 func createTempVarsStore(cfDeploymentHome string) (string, error) {
-	varsStorePath := filepath.Join(cfDeploymentHome, "scripts", "fixtures", "unit-test-vars-store.yml")
+	varsStorePath := filepath.Join(cfDeploymentHome, "units", "test-vars-store.yml")
 
 	varsStoreFile, err := os.Open(varsStorePath)
 	if err != nil {
