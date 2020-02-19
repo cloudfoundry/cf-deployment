@@ -746,6 +746,7 @@ jobs:
         environments/test/trelawney/add-external-ips-for-cloud-sql-db.yml
         environments/test/trelawney/increase-doppler-vm-type-from-minimal-to-small.yml
         environments/test/trelawney/scale-log-api-to-4.yml
+        environments/test/trelawney/scale-routers-to-3.yml
   - task: setup-external-ip-db-vars
     file: runtime-ci/tasks/generate-external-ip-db-vars/task.yml
     input_mapping:
@@ -779,6 +780,7 @@ jobs:
         operations/increase-doppler-vm-type-from-minimal-to-small.yml
         operations/scale-log-api-to-4.yml
         operations/use-internal-lookup-for-route-services.yml
+        operations/scale-routers-to-3.yml
       VARS_FILES: |
         environments/test/trelawney/external-db-vars.yml
         environments/test/trelawney/external-public-ip-vars.yml
@@ -810,6 +812,7 @@ jobs:
         environments/test/trelawney/add-external-ips-for-cloud-sql-db.yml
         environments/test/trelawney/increase-doppler-vm-type-from-minimal-to-small.yml
         environments/test/trelawney/scale-log-api-to-4.yml
+        environments/test/trelawney/scale-routers-to-3.yml
   - task: bosh-deploy-cf-develop
     file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
     input_mapping:
@@ -834,6 +837,7 @@ jobs:
         operations/increase-doppler-vm-type-from-minimal-to-small.yml
         operations/scale-log-api-to-4.yml
         operations/use-internal-lookup-for-route-services.yml
+        operations/scale-routers-to-3.yml
       VARS_FILES: |
         environments/test/trelawney/external-db-vars.yml
         environments/test/trelawney/external-public-ip-vars.yml
