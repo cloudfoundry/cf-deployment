@@ -1,0 +1,17 @@
+---
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=route_emitter/properties/diego/route_emitter/nats?
+  value:
+    tls:
+      enabled: true
+      client_cert: "((nats_client_cert.certificate))"
+      client_key: "((nats_client_cert.private_key))"
+      hostname: nats.service.cf.internal
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=route_emitter/consumes?
+  value:
+    nats:
+      ip_addresses: false
+    nats-tls:
+      ip_addresses: false

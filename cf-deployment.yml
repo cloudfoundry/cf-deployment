@@ -204,6 +204,13 @@ addons:
           deployment: cf
           network: default
           domain: bosh
+      - domain: nats.service.cf.internal
+        targets:
+        - query: '*'
+          instance_group: nats
+          deployment: cf
+          network: default
+          domain: bosh
       - domain: policy-server.service.cf.internal
         targets:
         - query: '*'

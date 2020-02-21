@@ -1,0 +1,101 @@
+---
+
+- type: replace
+  path: /instance_groups/name=nats/jobs/name=nats/properties/nats/internal?
+  value:
+    tls:
+      enabled: true
+      ca: "((nats_internal_cert.ca))"
+      certificate: "((nats_internal_cert.certificate))"
+      private_key: "((nats_internal_cert.private_key))"
+
+- type: replace
+  path: /instance_groups/name=nats/jobs/name=nats/consumes?
+  value:
+    nats:
+      ip_addresses: false
+    nats-tls:
+      ip_addresses: false
+
+- type: replace
+  path: /instance_groups/name=nats/jobs/-
+  value:
+    name: nats-tls
+    release: nats
+    consumes:
+      nats:
+        ip_addresses: false
+      nats-tls:
+        ip_addresses: false
+    properties:
+      nats:
+        user: nats
+        password: "((nats_password))"
+        internal:
+          tls:
+            ca: "((nats_internal_cert.ca))"
+            private_key: "((nats_internal_cert.private_key))"
+            certificate: "((nats_internal_cert.certificate))"
+            enabled: true
+        external:
+          tls:
+            ca: "((nats_client_cert.ca))"
+            private_key: "((nats_server_cert.private_key))"
+            certificate: "((nats_server_cert.certificate))"
+
+- type: replace
+  path: /variables/name=nats_internal_ca?
+  value:
+    name: nats_internal_ca
+    type: certificate
+    options:
+      is_ca: true
+      common_name: nats_internal
+
+- type: replace
+  path: /variables/name=nats_internal_cert?
+  value:
+    name: nats_internal_cert
+    type: certificate
+    options:
+      ca: nats_internal_ca
+      common_name: nats.service.cf.internal
+      alternative_names:
+      - nats.service.cf.internal
+      extended_key_usage:
+      - client_auth
+      - server_auth
+
+- type: replace
+  path: /variables/name=nats_ca?
+  value:
+    name: nats_ca
+    type: certificate
+    options:
+      is_ca: true
+      common_name: nats
+
+- type: replace
+  path: /variables/name=nats_client_cert?
+  value:
+    name: nats_client_cert
+    type: certificate
+    options:
+      ca: nats_ca
+      common_name: nats_client
+      extended_key_usage:
+      - client_auth
+
+- type: replace
+  path: /variables/name=nats_server_cert?
+  value:
+    name: nats_server_cert
+    type: certificate
+    options:
+      ca: nats_ca
+      common_name: nats.service.cf.internal
+      alternative_names:
+      - nats.service.cf.internal
+      extended_key_usage:
+      - server_auth
+
