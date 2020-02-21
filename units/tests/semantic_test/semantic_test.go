@@ -77,6 +77,42 @@ func TestSemantic(t *testing.T) {
 		}
 	})
 
+	t.Run("rename-isolation-segment-network.yml", func(t *testing.T) {
+		expectedNetworkName := "test_network"
+
+		manifest, err := boshInterpolateAndUnmarshal(
+			operationsSubDirectory,
+			manifestPath,
+			"-o", "test/add-persistent-isolation-segment-router.yml",
+			"-o", "test/add-persistent-isolation-segment-diego-cell.yml",
+			"-o", "rename-isolation-segment-network.yml",
+			"-v", fmt.Sprintf("network_name=%s", expectedNetworkName),
+		)
+
+		if err != nil {
+			t.Errorf("failed to get unmarshalled manifest: %v", err)
+		}
+
+		isolatedInstanceGroups := map[string]string{
+			"iso-seg-router":      "",
+			"isolated-diego-cell": "",
+		}
+		for _, ig := range manifest.InstanceGroups {
+			if _, ok := isolatedInstanceGroups[ig.Name]; !ok {
+				continue
+			}
+
+			if len(ig.Networks) != 1 {
+				t.Errorf("instance group '%s' should only have 1 network", ig.Name)
+			}
+
+			networkName := ig.Networks[0].Name
+			if networkName != expectedNetworkName {
+				t.Errorf("network name '%s' on instance '%s' does not match expected network name '%s'", networkName, ig.Name, expectedNetworkName)
+			}
+		}
+	})
+
 	t.Run("aws.yml", func(t *testing.T) {
 		manifest, err := boshInterpolateAndUnmarshal(
 			operationsSubDirectory,
