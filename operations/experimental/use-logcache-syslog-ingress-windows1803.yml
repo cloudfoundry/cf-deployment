@@ -1,8 +1,0 @@
----
-- type: replace
-  path: /instance_groups/name=windows1803-cell/jobs/name=loggr-syslog-agent-windows/properties/aggregate_drains?
-  value: "syslog-tls://doppler.service.cf.internal:6067"
-
-- type: replace
-  path: /instance_groups/name=windows1803-cell/jobs/name=loggr-syslog-agent-windows/properties/drain_ca_cert?
-  value: "((log_cache_syslog_tls.ca))"

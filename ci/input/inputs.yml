@@ -99,8 +99,6 @@ opsReleases:
   repository: cloudfoundry-incubator/garden-windows-bosh-release
 - name: winc
   repository: cloudfoundry-incubator/winc-release
-- name: windows1803fs
-  repository: cloudfoundry/windows1803fs-online-release
 - name: windows2016fs
   repository: cloudfoundry-incubator/windows2016fs-online-release
 - name: windowsfs
@@ -135,17 +133,11 @@ windowsStemcells:
 - name: windows2016
   opsFile: windows2016-cell.yml
   opsFileDir: operations
-- name: windows1803
-  opsFile: windows1803-cell.yml
-  opsFileDir: operations
 - name: windows2019
   opsFile: windows2019-cell.yml
   opsFileDir: operations
 
 windowsOfflineReleases:
-- name: windows1803fs
-  opsFile: use-offline-windows1803fs.yml
-  opsFileDir: operations
 - name: windows2016fs
   opsFile: use-offline-windows2016fs.yml
   opsFileDir: operations
