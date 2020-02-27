@@ -104,13 +104,6 @@ use-latest-windows1803-stemcell.yml:
   pathvalidator:
     path: /stemcells/alias=windows1803/version
     expectedvalue: latest
-use-latest-windows2012R2-stemcell.yml:
-  ops:
-  - windows2012R2-cell.yml
-  - use-latest-windows2012R2-stemcell.yml
-  pathvalidator:
-    path: /stemcells/alias=windows2012R2/version
-    expectedvalue: latest
 use-latest-windows2016-stemcell.yml:
   ops:
   - windows2016-cell.yml
@@ -162,10 +155,5 @@ use-trusted-ca-cert-for-apps.yml:
   varsfiles:
   - example-vars-files/vars-use-trusted-ca-cert-for-apps.yml
 windows1803-cell.yml: {}
-windows2012R2-cell.yml: {}
-windows2012R2-cell.yml windows2016-cell.yml:
-  ops:
-  - windows2012R2-cell.yml
-  - windows2016-cell.yml
 windows2016-cell.yml: {}
 windows2019-cell.yml: {}
