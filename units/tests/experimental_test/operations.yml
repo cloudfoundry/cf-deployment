@@ -1,5 +1,8 @@
 ---
 add-credhub-lb.yml: {}
+add-disabled-syslog-agent-for-upgrade.yml:
+  ops:
+  - add-disabled-syslog-agent-for-upgrade.yml
 add-metric-store.yml: {}
 add-metrics-discovery.yml: {}
 add-metrics-discovery-windows.yml:
@@ -17,7 +20,9 @@ add-syslog-agent-windows2019.yml:
   - ../windows2019-cell.yml
   - add-syslog-agent.yml
   - add-syslog-agent-windows2019.yml
-add-syslog-agent.yml: {}
+add-syslog-agent.yml:
+  ops:
+  - add-syslog-agent.yml
 add-system-metrics-agent-windows1803.yml:
   ops:
   - ../windows1803-cell.yml

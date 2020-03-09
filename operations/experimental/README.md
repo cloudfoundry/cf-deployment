@@ -15,6 +15,7 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 | Name | Purpose | Notes | Currently validated in Release Integration CI pipelines? |
 |:---  |:---     |:---   |:---   |
 | [`add-credhub-lb.yml`](add-credhub-lb.yml) |  **[DEPRECATED]** Use load balancer to expose external address for CredHub. | | **NO** |
+| [`add-disabled-syslog-agent-for-upgrade.yml`](add-disabled-syslog-agent-for-upgrade.yml) |  Add agents to all vms for the purpose of egressing application logs to syslog, but does not enable their use. **This should be applied as the first ops-file in a two step upgrade to add the syslog agent.** The second ops-file to be applied is `add-syslog-agent.yml`. The two-deploy upgrade is intended to decrease downtime. | | **NO** |
 | [`add-metric-store.yml`](add-metric-store.yml) |  **Add Metric Store node for persistence of metrics from Loggregator** | | **NO** |
 | [`add-metrics-discovery.yml`](add-metrics-discovery.yml) |  **Add Metrics Discovery Registrar and Metrics Agent to enable egress of metrics using Open Metrics standard** | | **NO** |
 | [`add-metrics-discovery-windows.yml`](add-metrics-discovery-windows.yml) |  **Add Metrics Discovery Registrar and Metrics Agent to Windows VMs to enable egress of metrics using Open Metrics standard** | | **NO** |
