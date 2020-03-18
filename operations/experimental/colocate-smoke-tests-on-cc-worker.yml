@@ -1,0 +1,28 @@
+- type: remove
+  path: /addons/name=loggregator_agent/exclude/jobs/name=smoke_tests
+- type: remove
+  path: /addons/name=prom_scraper/exclude/jobs/name=smoke_tests
+- type: remove
+  path: /instance_groups/name=smoke-tests
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/-
+  value:
+    name: smoke_tests
+    release: cf-smoke-tests
+    properties:
+      bpm:
+        enabled: true
+      smoke_tests:
+        api: "https://api.((system_domain))"
+        apps_domain: "((system_domain))"
+        client: cf_smoke_tests
+        client_secret: "((uaa_clients_cf_smoke_tests_secret))"
+        org: cf_smoke_tests_org
+        space: cf_smoke_tests_space
+        cf_dial_timeout_in_seconds: 300
+        skip_ssl_validation: true
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/-
+  value:
+    name: cf-cli-6-linux
+    release: cf-cli
