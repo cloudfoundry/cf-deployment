@@ -608,7 +608,7 @@ jobs:
     file: cf-deployment-concourse-tasks/run-errand/task.yml
     params:
       BBL_STATE_DIR: environments/test/luna/bbl-state
-      ERRAND_NAME: smoke-tests
+      ERRAND_NAME: smoke_tests
       DEPLOYMENT_NAME: luna-cf
     input_mapping:
       bbl-state: relint-envs
@@ -770,7 +770,8 @@ jobs:
         operations/use-external-dbs.yml
         operations/add-external-ips-for-cloud-sql-db.yml
         operations/windows2012R2-cell.yml
-        operations/windows1803-cell.yml
+        operations/windows2019-cell.yml
+        operations/use-online-windows2019fs.yml
         operations/experimental/use-compiled-releases-windows.yml
         operations/use-external-blobstore.yml
         operations/use-gcs-blobstore-service-account.yml
@@ -789,7 +790,7 @@ jobs:
     file: cf-deployment-concourse-tasks/run-errand/task.yml
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
-      ERRAND_NAME: smoke-tests
+      ERRAND_NAME: smoke_tests
     input_mapping:
       bbl-state: relint-envs
   - task: add-tcp-domain
@@ -825,7 +826,8 @@ jobs:
         operations/use-external-dbs.yml
         operations/add-external-ips-for-cloud-sql-db.yml
         operations/windows2012R2-cell.yml
-        operations/windows1803-cell.yml
+        operations/windows2019-cell.yml
+        operations/use-online-windows2019fs.yml
         operations/experimental/use-compiled-releases-windows.yml
         operations/use-external-blobstore.yml
         operations/use-gcs-blobstore-service-account.yml
@@ -1054,7 +1056,6 @@ jobs:
         operations/scale-database-cluster.yml
         operations/stop-skipping-tls-validation.yml
         operations/use-operator-provided-router-tls-certificates.yml
-        operations/experimental/colocate-smoke-tests-on-cc-worker.yml
         operations/experimental/enable-iptables-logger.yml
         operations/experimental/set-cpu-weight.yml
         operations/experimental/use-logcache-for-cloud-controller-app-stats.yml
@@ -1070,7 +1071,7 @@ jobs:
     file: cf-deployment-concourse-tasks/run-errand/task.yml
     params:
       BBL_STATE_DIR: environments/test/hermione/bbl-state
-      ERRAND_NAME: smoke-tests
+      ERRAND_NAME: smoke_tests
     input_mapping:
       bbl-state: relint-envs
   - task: add-tcp-domain
@@ -1107,6 +1108,7 @@ jobs:
         operations/scale-database-cluster.yml
         operations/stop-skipping-tls-validation.yml
         operations/use-operator-provided-router-tls-certificates.yml
+        operations/experimental/colocate-smoke-tests-on-cc-worker.yml
         operations/experimental/enable-iptables-logger.yml
         operations/experimental/set-cpu-weight.yml
         operations/experimental/use-logcache-for-cloud-controller-app-stats.yml
@@ -1184,7 +1186,7 @@ jobs:
     file: cf-deployment-concourse-tasks/run-errand/task.yml
     params:
       BBL_STATE_DIR: environments/test/hermione/bbl-state
-      ERRAND_NAME: smoke-tests
+      ERRAND_NAME: smoke_tests
     input_mapping:
       bbl-state: relint-envs
 
@@ -1679,7 +1681,7 @@ jobs:
       bbl-state: relint-envs
     params:
       BBL_STATE_DIR: environments/test/bellatrix/bbl-state
-      ERRAND_NAME: smoke-tests
+      ERRAND_NAME: smoke_tests
   - put: stable-pool
     params: {release: stable-pool}
 
@@ -1703,10 +1705,10 @@ jobs:
       put: stable-pool
       params: {release: stable-pool}
     do:
-    - get: stable-pool
-      trigger: true
-      passed: [ stable-semihourly-pool-acquisition ]
     - in_parallel:
+      - get: stable-pool
+        trigger: true
+        passed: [ stable-semihourly-pool-acquisition ]
       - get: cf-deployment-concourse-tasks
       - get: cf-acceptance-tests-rc
       - get: relint-envs
@@ -1723,6 +1725,24 @@ jobs:
           diego_docker
           task_creation
           service_instance_sharing
+    - task: download-latest-cf-cli
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: relintdockerhubpushbot/bosh-cli
+        outputs:
+        - name: cf-cli
+        run:
+          path: /bin/bash
+          args:
+          - -ec
+          - |
+            #!/bin/bash
+            wget -O cf.tgz "https://packages.cloudfoundry.org/edge?arch=linux64&source=github"
+            tar -C cf-cli -xf cf.tgz
+            cf-cli/cf version
     - task: update-integration-configs
       file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
       params:
@@ -1738,7 +1758,6 @@ jobs:
         cf-acceptance-tests: cf-acceptance-tests-rc
       params:
         CONFIG_FILE_PATH: environments/test/bellatrix/integration_config.json
-        REPORTER_CONFIG_FILE_PATH: environments/test/bellatrix/reporter_config.json
         FLAKE_ATTEMPTS: 0
         RELINT_VERBOSE_AUTH: "true"
 
