@@ -608,7 +608,7 @@ jobs:
     file: cf-deployment-concourse-tasks/run-errand/task.yml
     params:
       BBL_STATE_DIR: environments/test/luna/bbl-state
-      ERRAND_NAME: smoke-tests
+      ERRAND_NAME: smoke_tests
       DEPLOYMENT_NAME: luna-cf
     input_mapping:
       bbl-state: relint-envs
@@ -790,7 +790,7 @@ jobs:
     file: cf-deployment-concourse-tasks/run-errand/task.yml
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
-      ERRAND_NAME: smoke-tests
+      ERRAND_NAME: smoke_tests
     input_mapping:
       bbl-state: relint-envs
   - task: add-tcp-domain
@@ -1071,7 +1071,7 @@ jobs:
     file: cf-deployment-concourse-tasks/run-errand/task.yml
     params:
       BBL_STATE_DIR: environments/test/hermione/bbl-state
-      ERRAND_NAME: smoke-tests
+      ERRAND_NAME: smoke_tests
     input_mapping:
       bbl-state: relint-envs
   - task: add-tcp-domain
@@ -1186,7 +1186,7 @@ jobs:
     file: cf-deployment-concourse-tasks/run-errand/task.yml
     params:
       BBL_STATE_DIR: environments/test/hermione/bbl-state
-      ERRAND_NAME: smoke-tests
+      ERRAND_NAME: smoke_tests
     input_mapping:
       bbl-state: relint-envs
 
@@ -1681,7 +1681,7 @@ jobs:
       bbl-state: relint-envs
     params:
       BBL_STATE_DIR: environments/test/bellatrix/bbl-state
-      ERRAND_NAME: smoke-tests
+      ERRAND_NAME: smoke_tests
   - put: stable-pool
     params: {release: stable-pool}
 
