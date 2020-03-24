@@ -386,7 +386,7 @@ jobs:
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
-          ERRAND_NAME: smoke-tests
+          ERRAND_NAME: smoke_tests
       - task: #@ "export-compiled-release-" + r.name
         file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
         input_mapping:
@@ -576,7 +576,7 @@ jobs:
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
-          ERRAND_NAME: smoke-tests
+          ERRAND_NAME: smoke_tests
       #@ end
       on_success:
         do:
@@ -924,7 +924,7 @@ jobs:
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
-          ERRAND_NAME: smoke-tests
+          ERRAND_NAME: smoke_tests
       - task: generate-cf-deployment-release-notes-template
         file: runtime-ci/tasks/cf-deployment-minor-stemcell-bump-release-notes/task.yml
         input_mapping:
