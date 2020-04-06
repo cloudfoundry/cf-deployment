@@ -1061,6 +1061,7 @@ jobs:
         operations/experimental/colocate-smoke-tests-on-cc-worker.yml
         operations/experimental/enable-iptables-logger.yml
         operations/experimental/set-cpu-weight.yml
+        operations/experimental/enable-cpu-throttling.yml
         operations/experimental/use-logcache-for-cloud-controller-app-stats.yml
         operations/experimental/add-syslog-agent.yml
         operations/experimental/add-metrics-discovery.yml
@@ -1114,6 +1115,7 @@ jobs:
         operations/experimental/colocate-smoke-tests-on-cc-worker.yml
         operations/experimental/enable-iptables-logger.yml
         operations/experimental/set-cpu-weight.yml
+        operations/experimental/enable-cpu-throttling.yml
         operations/experimental/use-logcache-for-cloud-controller-app-stats.yml
         operations/experimental/add-syslog-agent.yml
         operations/experimental/enable-oci-phase-1.yml
@@ -1633,7 +1635,8 @@ jobs:
       SYSTEM_DOMAIN: bellatrix.cf-app.com
       OPS_FILES: |
         operations/scale-database-cluster.yml
-        operations/windows1803-cell.yml
+        operations/windows2019-cell.yml
+        operations/use-online-windows2019fs.yml
         operations/decrease-cc-event-retention.yml
         operations/use-internal-lookup-for-route-services.yml
         operations/use-compiled-releases.yml
@@ -1708,10 +1711,10 @@ jobs:
       put: stable-pool
       params: {release: stable-pool}
     do:
+    - get: stable-pool
+      trigger: true
+      passed: [ stable-semihourly-pool-acquisition ]
     - in_parallel:
-      - get: stable-pool
-        trigger: true
-        passed: [ stable-semihourly-pool-acquisition ]
       - get: cf-deployment-concourse-tasks
       - get: cf-acceptance-tests-rc
       - get: relint-envs
@@ -1728,24 +1731,6 @@ jobs:
           diego_docker
           task_creation
           service_instance_sharing
-    - task: download-latest-cf-cli
-      config:
-        platform: linux
-        image_resource:
-          type: docker-image
-          source:
-            repository: relintdockerhubpushbot/bosh-cli
-        outputs:
-        - name: cf-cli
-        run:
-          path: /bin/bash
-          args:
-          - -ec
-          - |
-            #!/bin/bash
-            wget -O cf.tgz "https://packages.cloudfoundry.org/edge?arch=linux64&source=github"
-            tar -C cf-cli -xf cf.tgz
-            cf-cli/cf version
     - task: update-integration-configs
       file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
       params:
@@ -1761,6 +1746,7 @@ jobs:
         cf-acceptance-tests: cf-acceptance-tests-rc
       params:
         CONFIG_FILE_PATH: environments/test/bellatrix/integration_config.json
+        REPORTER_CONFIG_FILE_PATH: environments/test/bellatrix/reporter_config.json
         FLAKE_ATTEMPTS: 0
         RELINT_VERBOSE_AUTH: "true"
 
