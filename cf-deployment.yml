@@ -260,6 +260,21 @@ addons:
           deployment: cf
           network: default
           domain: bosh
+      - domain: nats.service.cf.internal
+        targets:
+        - query: '*'
+          instance_group: nats
+          deployment: cf
+          network: default
+          domain: bosh
+      - domain: _.nats.service.cf.internal
+        targets:
+        - query: '_'
+          instance_group: nats
+          deployment: cf
+          network: default
+          domain: bosh
+
 
 instance_groups:
 - name: smoke-tests
@@ -308,6 +323,7 @@ instance_groups:
       nats:
         password: "((nats_password))"
         user: nats
+        hostname: nats.service.cf.internal
 - name: adapter
   azs:
   - z1
