@@ -190,6 +190,13 @@
       deployment: ((deployment_name))
       network: ((network_name))
       domain: bosh
+  - domain: nats.service.cf.internal
+    targets:
+    - query: '_'
+      instance_group: nats
+      deployment: ((deployment_name))
+      network: ((network_name))
+      domain: bosh
   - domain: policy-server.service.cf.internal
     targets:
     - query: '*'
