@@ -26,9 +26,6 @@
   path: /instance_groups/name=cc-worker/instances
   value: 1
 - type: replace
-  path: /instance_groups/name=adapter/instances
-  value: 1
-- type: replace
   path: /instance_groups/name=doppler/instances
   value: 1
 - type: replace
@@ -64,9 +61,6 @@
   value: [ z1 ]
 - type: replace
   path: /instance_groups/name=cc-worker/azs
-  value: [ z1 ]
-- type: replace
-  path: /instance_groups/name=adapter/azs
   value: [ z1 ]
 - type: replace
   path: /instance_groups/name=doppler/azs

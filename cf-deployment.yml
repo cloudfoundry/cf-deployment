@@ -52,6 +52,36 @@ addons:
         key: "((forwarder_agent_metrics_tls.private_key))"
         server_name: forwarder_agent_metrics
 
+- name: loggr-syslog-agent
+  include:
+    stemcell:
+    - os: ubuntu-trusty
+    - os: ubuntu-xenial
+  exclude:
+    jobs:
+    - name: smoke_tests
+      release: cf-smoke-tests
+  jobs:
+  - name: loggr-syslog-agent
+    release: loggregator-agent
+    properties:
+      port: 3460
+      tls:
+        ca_cert: "((loggregator_tls_agent.ca))"
+        cert: "((loggregator_tls_agent.certificate))"
+        key: "((loggregator_tls_agent.private_key))"
+      cache:
+        tls:
+          ca_cert: "((syslog_agent_api_tls.ca))"
+          cert: "((syslog_agent_api_tls.certificate))"
+          key: "((syslog_agent_api_tls.private_key))"
+          cn: "binding-cache"
+      metrics:
+        ca_cert: "((syslog_agent_metrics_tls.ca))"
+        cert: "((syslog_agent_metrics_tls.certificate))"
+        key: "((syslog_agent_metrics_tls.private_key))"
+        server_name: syslog_agent_metrics
+
 - name: prom_scraper
   include:
     stemcell:
@@ -324,32 +354,6 @@ instance_groups:
         password: "((nats_password))"
         user: nats
         hostname: nats.service.cf.internal
-- name: adapter
-  azs:
-  - z1
-  - z2
-  instances: 2
-  vm_type: minimal
-  stemcell: default
-  networks:
-  - name: default
-  jobs:
-  - name: adapter
-    release: cf-syslog-drain
-    properties:
-      scalablesyslog:
-        adapter:
-          tls:
-            ca: "((adapter_tls.ca))"
-            cert: "((adapter_tls.certificate))"
-            key: "((adapter_tls.private_key))"
-            cn: ss-adapter
-        adapter_rlp:
-          tls:
-            ca: "((adapter_rlp_tls.ca))"
-            cert: "((adapter_rlp_tls.certificate))"
-            key: "((adapter_rlp_tls.private_key))"
-            cn: reverselogproxy
 - name: database
   migrated_from:
   - name: mysql
@@ -1229,24 +1233,26 @@ instance_groups:
       logging:
         format:
           timestamp: "rfc3339"
-  - name: scheduler
-    release: cf-syslog-drain
+  - name: loggr-syslog-binding-cache
+    release: loggregator-agent
     properties:
-      scalablesyslog:
-        scheduler:
-          api:
-            url: https://cloud-controller-ng.service.cf.internal:9023
-          tls:
-            client:
-              ca: "((scheduler_client_tls.ca))"
-              cert: "((scheduler_client_tls.certificate))"
-              key: "((scheduler_client_tls.private_key))"
-              adapter_cn: "ss-adapter"
-            api:
-              ca: "((scheduler_api_tls.ca))"
-              cert: "((scheduler_api_tls.certificate))"
-              key: "((scheduler_api_tls.private_key))"
-              cn: "cloud-controller-ng.service.cf.internal"
+      external_port: 9000
+      tls:
+        ca_cert: "((binding_cache_tls.ca))"
+        cert: "((binding_cache_tls.certificate))"
+        key: "((binding_cache_tls.private_key))"
+        cn: "binding-cache"
+      api:
+        tls:
+          ca_cert: "((cc_tls.ca))"
+          cert: "((binding_cache_api_tls.certificate))"
+          key: "((binding_cache_api_tls.private_key))"
+          cn: "cloud-controller-ng.service.cf.internal"
+      metrics:
+        ca_cert: "((loggr_syslog_binding_cache_metrics_tls.ca))"
+        cert: "((loggr_syslog_binding_cache_metrics_tls.certificate))"
+        key: "((loggr_syslog_binding_cache_metrics_tls.private_key))"
+        server_name: loggr_syslog_binding_cache_metrics
   - name: loggr-udp-forwarder
     release: loggregator-agent
     properties:
@@ -2004,37 +2010,6 @@ variables:
     common_name: rlp_gateway
     extended_key_usage:
     - client_auth
-- name: adapter_rlp_tls
-  type: certificate
-  options:
-    ca: loggregator_ca
-    common_name: ss-adapter-rlp
-    extended_key_usage:
-    - client_auth
-    - server_auth
-- name: scheduler_api_tls
-  type: certificate
-  options:
-    ca: service_cf_internal_ca
-    common_name: ss-scheduler
-    extended_key_usage:
-    - client_auth
-    - server_auth
-- name: adapter_tls
-  type: certificate
-  options:
-    ca: loggregator_ca
-    common_name: ss-adapter
-    extended_key_usage:
-    - server_auth
-    - client_auth
-- name: scheduler_client_tls
-  type: certificate
-  options:
-    ca: loggregator_ca
-    common_name: ss-scheduler
-    extended_key_usage:
-    - client_auth
 - name: logs_provider
   options:
     ca: loggregator_ca
@@ -2331,6 +2306,46 @@ variables:
     extended_key_usage:
     - server_auth
 
+- name: syslog_agent_api_tls
+  type: certificate
+  options:
+    ca: loggregator_ca
+    common_name: syslog-agent
+    extended_key_usage:
+    - client_auth
+
+- name: binding_cache_api_tls
+  type: certificate
+  options:
+    ca: service_cf_internal_ca
+    common_name: binding-cache
+    extended_key_usage:
+    - client_auth
+
+- name: binding_cache_tls
+  type: certificate
+  options:
+    ca: loggregator_ca
+    common_name: binding-cache
+    extended_key_usage:
+    - server_auth
+
+- name: syslog_agent_metrics_tls
+  type: certificate
+  options:
+    ca: metric_scraper_ca
+    common_name: syslog_agent_metrics
+    extended_key_usage:
+    - server_auth
+
+- name: loggr_syslog_binding_cache_metrics_tls
+  type: certificate
+  options:
+    ca: metric_scraper_ca
+    common_name: loggr_syslog_binding_cache_metrics
+    extended_key_usage:
+    - server_auth
+
 - name: prom_scraper_scrape_tls
   type: certificate
   options:
@@ -2376,10 +2391,6 @@ releases:
   url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=40.0.127
   version: 40.0.127
   sha1: fa710d4fefd2bb03657cf6d889298a2b9dc682b4
-- name: cf-syslog-drain
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-syslog-drain-release?v=10.2.11
-  version: 10.2.11
-  sha1: 4f4c86ff6e4ab8d398f3e9705c9e01d1cd46b896
 - name: cflinuxfs3
   url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs3-release?v=0.177.0
   version: 0.177.0
