@@ -14,10 +14,6 @@ import (
 type Release string
 type Version string
 
-var cfDeploymentIgnoreFiles = []string{
-	"windows2016-cell.yml",
-}
-
 type VersionSet struct {
 	m map[Version]struct{}
 }
@@ -168,11 +164,6 @@ func operationsWalk(assignFn func(value)) filepath.WalkFunc {
 		}
 
 		if filepath.Ext(info.Name()) != ".yml" {
-			return nil
-		}
-
-		//TODO: remove me when windows2016 is removed
-		if isIgnored(info.Name(), cfDeploymentIgnoreFiles) {
 			return nil
 		}
 

@@ -987,7 +987,7 @@ jobs:
       trigger: true
       params:
         tarball: false
-    - get: windows2016-stemcell
+    - get: #@ r.stemcell
   - task: update-windows-releases
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -1114,7 +1114,6 @@ jobs:
         INFRASTRUCTURE: google
         OPS_FILES: |
           operations/windows2012R2-cell.yml
-          operations/windows2016-cell.yml
           operations/windows1803-cell.yml
           operations/windows2019-cell.yml
     - task: upload-bosh-dns-release
