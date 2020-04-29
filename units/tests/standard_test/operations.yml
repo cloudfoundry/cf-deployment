@@ -96,13 +96,6 @@ use-latest-stemcell.yml:
   pathvalidator:
     path: /stemcells/alias=default/version
     expectedvalue: latest
-use-latest-windows2012R2-stemcell.yml:
-  ops:
-  - windows2012R2-cell.yml
-  - use-latest-windows2012R2-stemcell.yml
-  pathvalidator:
-    path: /stemcells/alias=windows2012R2/version
-    expectedvalue: latest
 use-latest-windows2019-stemcell.yml:
   ops:
   - windows2019-cell.yml
@@ -138,5 +131,4 @@ use-swift-blobstore.yml:
 use-trusted-ca-cert-for-apps.yml:
   varsfiles:
   - example-vars-files/vars-use-trusted-ca-cert-for-apps.yml
-windows2012R2-cell.yml: {}
 windows2019-cell.yml: {}

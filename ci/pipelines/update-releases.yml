@@ -121,7 +121,6 @@ groups:
   - update-datadog-firehose-nozzle
 - name: update-windows-stemcells-and-releases
   jobs:
-  - update-windows2012R2-stemcell
   - update-windows2019-stemcell
   - update-windows2019fs-offline-release
 - name: debug
@@ -962,11 +961,6 @@ resources:
     bucket: component-bump-logs
     json_key: ((greengrass_gcp_service_account_json))
     regexp: metrics-discovery/cf-(\d+)-(\d+)-(\d+)\.tgz
-- name: windows2012R2-stemcell
-  type: bosh-io-stemcell
-  icon: dna
-  source:
-    name: bosh-google-kvm-windows2012R2-go_agent
 - name: windows2019-stemcell
   type: bosh-io-stemcell
   icon: dna
@@ -14799,28 +14793,6 @@ jobs:
     params:
       rebase: true
       repository: updated-cf-deployment-datadog-firehose-nozzle-develop
-- name: update-windows2012R2-stemcell
-  public: true
-  plan:
-  - in_parallel:
-    - get: runtime-ci
-    - get: cf-deployment-develop
-    - get: windows2012R2-stemcell
-      trigger: true
-      params:
-        tarball: false
-  - task: update-windows-stemcell-ops
-    file: runtime-ci/tasks/update-windows-stemcell-ops/task.yml
-    input_mapping:
-      ops-files: cf-deployment-develop
-      windows-stemcell: windows2012R2-stemcell
-    params:
-      ORIGINAL_WINDOWS_OPS_FILE_PATH: operations/windows2012R2-cell.yml
-      UPDATED_WINDOWS_OPS_FILE_PATH: operations/windows2012R2-cell.yml
-  - put: cf-deployment-develop
-    params:
-      rebase: true
-      repository: updated-stemcell-ops-file
 - name: update-windows2019-stemcell
   public: true
   plan:
@@ -15558,7 +15530,6 @@ jobs:
         BBL_STATE_DIR: environments/test/greengrass/bbl-state
         INFRASTRUCTURE: google
         OPS_FILES: |
-          operations/windows2012R2-cell.yml
           operations/windows2019-cell.yml
     - task: upload-bosh-dns-release
       config:
