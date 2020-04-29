@@ -47,7 +47,7 @@ from the operator. Following are examples of breaking changes. This is not a com
 > _If you're promoting an experimental Ops-file (or removing one), Please follow the [Ops-file workflows](https://github.com/cloudfoundry/cf-deployment/blob/master/ops-file-promotion-workflow.md)._
 
 > Ops files changes in the following folders are considered as NON BREAKING CHANGES
-> `./community`, `./example-vars-files`, `./test/`, `./workaround`
+> `./community`, `./example-vars-files`, `./test`
 
 
 As noted earlier,

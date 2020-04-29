@@ -66,8 +66,7 @@ main() {
 
   ops_directories=$(find operations \
                          -type d \
-                         -not -name 'example-vars-files' \
-                         -not -name 'workaround')
+                         -not -name 'example-vars-files')
   ops_directories_without_test="$(echo "${ops_directories}" | grep -v -e test)"
   ops_directories_without_community="$(echo "${ops_directories}" | grep -v -e community)"
 
