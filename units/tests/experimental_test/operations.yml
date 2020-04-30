@@ -55,16 +55,5 @@ use-logcache-syslog-ingress.yml:
   ops:
   - use-logcache-syslog-ingress.yml
 use-native-garden-runc-runner.yml: {}
-windows-component-syslog-ca.yml:
-  ops:
-  - windows-enable-component-syslog.yml
-  - windows-component-syslog-ca.yml
-  varsfiles:
-  - ../addons/example-vars-files/vars-enable-component-syslog.yml
-windows-enable-component-syslog.yml:
-  ops:
-  - windows-enable-component-syslog.yml
-  varsfiles:
-  - ../addons/example-vars-files/vars-enable-component-syslog.yml
 enable-cpu-throttling.yml: {}
 enable-direct-io-grootfs.yml: {}
