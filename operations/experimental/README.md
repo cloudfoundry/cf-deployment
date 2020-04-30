@@ -41,4 +41,6 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 | [`use-create-swap-delete-vm-strategy.yml`](use-create-swap-delete-vm-strategy.yml) | Configures the default [`vm_strategy`](https://bosh.io/docs/changing-deployment-vm-strategy/) to be `create-swap-delete`. | Requires BOSH director `v267.7+` | **NO** |
 | [`use-logcache-syslog-ingress.yml`](use-logcache-syslog-ingress.yml) | Uses syslog ingress for Log Cache in place of Loggregator | | **NO** |
 | [`use-logcache-syslog-ingress-windows2019.yml`](use-logcache-syslog-ingress-windows2019.yml) | Uses syslog ingress for Log Cache in place of Loggregator for Windows cells | Requires `use-logcache-syslog-ingress.yml` | **NO** |
+| [`disable-logs-in-firehose.yml`](disable-logs-in-firehose.yml) | Logs are not sent to dopplers, only metrics | | **NO** |
+| [`disable-logs-in-firehose-windows2019.yml`](disable-logs-in-firehose-windows-2019.yml) | Logs are not sent to dopplers, only metrics | | **NO** |
 | [`use-native-garden-runc-runner.yml`](use-native-garden-runc-runner.yml) | Configure Garden to **not** create containers via containerd, using the native runner instead. | | **NO** |
