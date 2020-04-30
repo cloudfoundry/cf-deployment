@@ -31,11 +31,10 @@
 > 4. modifies the name or deletes a property of a job or instance group in the main manifest
 > 5. changes the name of credentials in the main manifest
 > 6. requires out-of-band manual intervention on the part of the operator
-> 7. modifies the ops-file path, changes the type, changes the values or removes ops-files from the followning folders
+> 7. modifies the ops-file path, changes the type, changes the values or removes ops-files from the following folders
 >    - `./operations/` or `./operations/experimental`
 >    - `./addons`
 >    - `./backup-and-restore/`
->    - `./bits-service/`
 >
 > _If you're promoting an experimental Ops-file (or removing one), Please follow the [Ops-file workflows](https://github.com/cloudfoundry/cf-deployment/blob/master/ops-file-promotion-workflow.md)._
 

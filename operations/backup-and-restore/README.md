@@ -6,7 +6,6 @@ To learn more about `cf-deployment`, go to the main [README](../../README.md).
 
 - For General Ops-files, check out the [Ops-file README](../README.md).
 - For Addons Ops-files that can be applied to manifests or runtime configs, check out the [Addons Ops-file README](../addons/README.md).
-- For Bits Service Ops-files (for configuring your deployment for use with [Bits Service](https://github.com/cloudfoundry-incubator/bits-service)), checkout the [Bits Service Ops-files README](../bits-service/README.md).
 - For Community Ops-files, check out the [Community Ops-file README](../community/README.md).
 - For Experimental Ops-files, check out the [Experimental Ops-file README](../experimental/README.md).
 

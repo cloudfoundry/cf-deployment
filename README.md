@@ -232,10 +232,6 @@ In this case, the ops-file is an example.
 Contains all the ops files utilized to enable and configure [BOSH Backup and Restore](https://github.com/cloudfoundry-incubator/bosh-backup-and-restore) (BBR).
 BBR is a CLI utility for orchestrating the backup and restore of [BOSH](https://bosh.io/) deployments and BOSH directors. It orchestrates triggering the backup or restore process on the deployment or director, and transfers the backup artifact to and from the deployment or director.
 
-#### [Bits Service](operations/bits-service)
-Contains all the ops files utilized to enable and configure the [Bits-Service](https://github.com/cloudfoundry-incubator/bits-service).
-The bits-service is an extraction from existing functionality of the [cloud controller](https://github.com/cloudfoundry/cloud_controller_ng). It encapsulates all "bits operations" into its own, separately scalable service.
-
 ## <a name='ci'></a>CI
 The [ci](https://release-integration.ci.cf-app.com/teams/main/pipelines/cf-deployment) for `cf-deployment`
 automatically bumps to the latest versions of its component releases on the `develop` branch.
