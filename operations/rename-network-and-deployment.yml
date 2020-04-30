@@ -99,13 +99,6 @@
       deployment: ((deployment_name))
       network: ((network_name))
       domain: bosh
-  - domain: bits.service.cf.internal
-    targets:
-    - query: '*'
-      instance_group: bits
-      deployment: ((deployment_name))
-      network: ((network_name))
-      domain: bosh
   - domain: blobstore.service.cf.internal
     targets:
     - query: '*'

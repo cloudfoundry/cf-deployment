@@ -195,13 +195,6 @@ addons:
           deployment: cf
           network: default
           domain: bosh
-      - domain: bits.service.cf.internal
-        targets:
-        - query: '*'
-          instance_group: bits
-          deployment: cf
-          network: default
-          domain: bosh
       - domain: blobstore.service.cf.internal
         targets:
         - query: '*'
