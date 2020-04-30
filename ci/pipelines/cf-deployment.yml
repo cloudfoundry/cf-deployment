@@ -791,6 +791,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
       ERRAND_NAME: smoke_tests
+      INSTANCE: cc-worker/first
     input_mapping:
       bbl-state: relint-envs
   - task: add-tcp-domain
@@ -1071,6 +1072,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/hermione/bbl-state
       ERRAND_NAME: smoke_tests
+      INSTANCE: cc-worker/first
     input_mapping:
       bbl-state: relint-envs
   - task: add-tcp-domain
@@ -1184,6 +1186,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/hermione/bbl-state
       ERRAND_NAME: smoke_tests
+      INSTANCE: cc-worker/first
     input_mapping:
       bbl-state: relint-envs
 
