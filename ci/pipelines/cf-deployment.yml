@@ -24,7 +24,7 @@ groups:
   - experimental-delete-deployment
   - lite-acquire-pool
   - lite-deploy
-  - lite-cats
+  - lite-smoke-tests
   - lite-recreate-director
   - bbr-acquire-pool
   - bbr-deploy
@@ -82,8 +82,8 @@ groups:
   - unit-test-update-releases-coverage
   - lint-cf-deployment-manifest
   - lite-acquire-pool
-  - lite-cats
   - lite-deploy
+  - lite-smoke-tests
   - lite-recreate-director
   - lite-release-pool-manual
   - bless-manifest
@@ -1278,7 +1278,6 @@ jobs:
 
 - name: lite-deploy
   public: true
-  serial_groups: [ snitch-cats ]
   plan:
   - timeout: 4h
     do:
@@ -1320,12 +1319,11 @@ jobs:
         BBL_STATE_DIR: environments/test/snitch/bbl-state
         SYSTEM_DOMAIN: snitch.cf-app.com
         OPS_FILES: |
-          operations/use-default-route-registrar-timeout-for-api.yml
-          operations/experimental/fast-deploy-with-downtime-and-danger.yml
           operations/use-compiled-releases.yml
+          operations/scale-to-one-az.yml
           operations/bosh-lite.yml
-          operations/use-debug-level-logging.yml
           operations/use-internal-lookup-for-route-services.yml
+          operations/experimental/colocate-smoke-tests-on-cc-worker.yml
         REGENERATE_CREDENTIALS: true
         BOSH_LITE: true
     - task: ensure-api-healthy
@@ -1334,69 +1332,28 @@ jobs:
         cats-integration-config: relint-envs
       params:
         CONFIG_FILE_PATH: environments/test/snitch/integration_config.json
-    - in_parallel:
-      - task: open-asgs-for-credhub
-        file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-        params:
-          BBL_STATE_DIR: environments/test/snitch/bbl-state
-          INSTANCE_GROUP_NAME: credhub
-          SYSTEM_DOMAIN: snitch.cf-app.com
-          SECURITY_GROUP_NAME: credhub
-      - task: open-asgs-for-uaa
-        file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-        params:
-          BBL_STATE_DIR: environments/test/snitch/bbl-state
-          INSTANCE_GROUP_NAME: uaa
-          SYSTEM_DOMAIN: snitch.cf-app.com
-          SECURITY_GROUP_NAME: uaa
-      - task: enable-docker-and-tasks
-        file: cf-deployment-concourse-tasks/set-feature-flags/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-        params:
-          BBL_STATE_DIR: environments/test/snitch/bbl-state
-          SYSTEM_DOMAIN: snitch.cf-app.com
-          ENABLED_FEATURE_FLAGS: |
-            diego_docker
-            task_creation
 
-- name: lite-cats
-  serial_groups: [ snitch-cats ]
+- name: lite-smoke-tests
   public: true
   plan:
-  - timeout: 4h
-    do:
+  - do:
     - get: lite-pool
-      trigger: true
       passed: [ lite-deploy ]
+      trigger: true
     - in_parallel:
-      - get: cf-acceptance-tests-rc
+      - get: relint-envs
       - get: cf-deployment-develop
         passed: [ lite-deploy ]
-      - get: relint-envs
       - get: cf-deployment-concourse-tasks
-    - task: update-integration-configs
-      file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
-      params:
-        BBL_STATE_DIR: environments/test/snitch/bbl-state
-        CATS_INTEGRATION_CONFIG_FILE: environments/test/snitch/integration_config.json
-      input_mapping:
-        bbl-state: relint-envs
-        integration-configs: relint-envs
-    - task: run-cats
-      file: cf-deployment-concourse-tasks/run-cats/task.yml
-      input_mapping:
-        integration-config: updated-integration-configs
-        cf-acceptance-tests: cf-acceptance-tests-rc
-      params:
-        CONFIG_FILE_PATH: environments/test/snitch/integration_config.json
-        REPORTER_CONFIG_FILE_PATH: environments/test/snitch/reporter_config.json
-        NODES: 2
-        RELINT_VERBOSE_AUTH: "true"
+    timeout: 1h
+  - task: bosh-run-errand-smoke-tests
+    file: cf-deployment-concourse-tasks/run-errand/task.yml
+    params:
+      BBL_STATE_DIR: environments/test/snitch/bbl-state
+      ERRAND_NAME: smoke_tests
+      INSTANCE: cc-worker/first
+    input_mapping:
+      bbl-state: relint-envs
 
 - name: lite-recreate-director
   serial: true
@@ -1407,7 +1364,7 @@ jobs:
     - get: lite-pool
       trigger: true
       passed:
-      - lite-cats
+      - lite-smoke-tests
     - in_parallel:
       - get: cf-deployment-concourse-tasks
       - get: relint-envs
@@ -1808,7 +1765,7 @@ jobs:
     - upgrade-cats
     - upgrade-cats-windows
     - bbr-run-drats
-    - lite-cats
+    - lite-smoke-tests
   - put: cf-deployment-release-candidate
     params:
       repository: cf-deployment-develop
