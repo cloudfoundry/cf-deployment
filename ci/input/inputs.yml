@@ -64,6 +64,8 @@ baseReleases:
   repository: pivotal-cf/credhub-release
 - name: cf-cli
   repository: bosh-packages/cf-cli-release
+- name: metrics-discovery
+  repository: cloudfoundry/metrics-discovery-release
 
 opsReleases:
 - name: backup-and-restore-sdk
@@ -114,8 +116,6 @@ opsReleases:
   requiredOpsFiles:
   - operations/windows2019-cell.yml
   - operations/use-online-windows2019fs.yml
-- name: metrics-discovery
-  repository: cloudfoundry/metrics-discovery-release
 
 untestedOpsReleases:
 - name: datadog-firehose-nozzle
