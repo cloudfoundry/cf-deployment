@@ -561,6 +561,9 @@ jobs:
           #@ if hasattr(r, "varsFiles"):
           VARS_FILES: #@ r.varsFiles
           #@ end
+          #@ if hasattr(r, "prependOpsFileToList"):
+          PREPEND_OPS_FILE_TO_LIST: true
+          #@ end
       #@ if hasattr(r, "skipSmokeTests") == False:
       - task: ensure-api-healthy
         file: runtime-ci/tasks/ensure-api-healthy/task.yml
