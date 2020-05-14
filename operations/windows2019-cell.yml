@@ -1,38 +1,38 @@
 - type: replace
   path: /addons/name=metrics-discovery-windows2019?
   value:
-    name: metrics-discovery-windows2019
     include:
       stemcell:
       - os: windows2019
     jobs:
     - name: metrics-discovery-registrar-windows
-      release: metrics-discovery
       properties:
         metrics:
-          ca_cert: "((metrics_discovery_metrics_tls.ca))"
-          cert: "((metrics_discovery_metrics_tls.certificate))"
-          key: "((metrics_discovery_metrics_tls.private_key))"
+          ca_cert: ((metrics_discovery_metrics_tls.ca))
+          cert: ((metrics_discovery_metrics_tls.certificate))
+          key: ((metrics_discovery_metrics_tls.private_key))
           server_name: metrics_discovery_metrics
-    - name: metrics-agent-windows
       release: metrics-discovery
+    - name: metrics-agent-windows
       properties:
         grpc:
-          ca_cert: "((loggregator_tls_agent.ca))"
-          cert: "((loggregator_tls_agent.certificate))"
-          key: "((loggregator_tls_agent.private_key))"
+          ca_cert: ((loggregator_tls_agent.ca))
+          cert: ((loggregator_tls_agent.certificate))
+          key: ((loggregator_tls_agent.private_key))
         metrics:
-          ca_cert: "((metrics_agent_tls.ca))"
-          cert: "((metrics_agent_tls.certificate))"
-          key: "((metrics_agent_tls.private_key))"
+          ca_cert: ((metrics_agent_tls.ca))
+          cert: ((metrics_agent_tls.certificate))
+          key: ((metrics_agent_tls.private_key))
           server_name: metrics_agent
         scrape:
           tls:
-            ca_cert: "((prom_scraper_scrape_tls.ca))"
-            cert: "((prom_scraper_scrape_tls.certificate))"
-            key: "((prom_scraper_scrape_tls.private_key))"
-- path: /instance_groups/-
-  type: replace
+            ca_cert: ((prom_scraper_scrape_tls.ca))
+            cert: ((prom_scraper_scrape_tls.certificate))
+            key: ((prom_scraper_scrape_tls.private_key))
+      release: metrics-discovery
+    name: metrics-discovery-windows2019
+- type: replace
+  path: /instance_groups/-
   value:
     azs:
     - z1
@@ -139,39 +139,39 @@
           enable: false
       release: loggregator-agent
     - name: loggr-syslog-agent-windows
-      release: loggregator-agent
       properties:
-        port: 3460
-        tls:
-          ca_cert: "((loggregator_tls_agent.ca))"
-          cert: "((loggregator_tls_agent.certificate))"
-          key: "((loggregator_tls_agent.private_key))"
         cache:
           tls:
-            ca_cert: "((syslog_agent_api_tls.ca))"
-            cert: "((syslog_agent_api_tls.certificate))"
-            key: "((syslog_agent_api_tls.private_key))"
-            cn: "binding-cache"
+            ca_cert: ((syslog_agent_api_tls.ca))
+            cert: ((syslog_agent_api_tls.certificate))
+            cn: binding-cache
+            key: ((syslog_agent_api_tls.private_key))
         metrics:
-          ca_cert: "((syslog_agent_metrics_tls.ca))"
-          cert: "((syslog_agent_metrics_tls.certificate))"
-          key: "((syslog_agent_metrics_tls.private_key))"
+          ca_cert: ((syslog_agent_metrics_tls.ca))
+          cert: ((syslog_agent_metrics_tls.certificate))
+          key: ((syslog_agent_metrics_tls.private_key))
           server_name: syslog_agent_metrics
-    - name: loggr-forwarder-agent-windows
+        port: 3460
+        tls:
+          ca_cert: ((loggregator_tls_agent.ca))
+          cert: ((loggregator_tls_agent.certificate))
+          key: ((loggregator_tls_agent.private_key))
       release: loggregator-agent
+    - name: loggr-forwarder-agent-windows
       properties:
         downstream_ingress_ports:
         - 3459
         - 3460
-        tls:
-          ca_cert: "((loggregator_tls_agent.ca))"
-          cert: "((loggregator_tls_agent.certificate))"
-          key: "((loggregator_tls_agent.private_key))"
         metrics:
-          ca_cert: "((forwarder_agent_metrics_tls.ca))"
-          cert: "((forwarder_agent_metrics_tls.certificate))"
-          key: "((forwarder_agent_metrics_tls.private_key))"
+          ca_cert: ((forwarder_agent_metrics_tls.ca))
+          cert: ((forwarder_agent_metrics_tls.certificate))
+          key: ((forwarder_agent_metrics_tls.private_key))
           server_name: forwarder_agent_metrics
+        tls:
+          ca_cert: ((loggregator_tls_agent.ca))
+          cert: ((loggregator_tls_agent.certificate))
+          key: ((loggregator_tls_agent.private_key))
+      release: loggregator-agent
     - name: prom_scraper_windows
       properties:
         metrics:
@@ -194,63 +194,63 @@
     vm_extensions:
     - 100GB_ephemeral_disk
     vm_type: small-highmem
-- path: /stemcells/-
-  type: replace
+- type: replace
+  path: /stemcells/-
   value:
     alias: windows2019
     os: windows2019
     version: "2019.19"
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2016?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2016?
   value:
     description: Windows Server 2016
     name: windows2016
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows?
   value:
     description: Windows Server
     name: windows
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=hwc-buildpack-windows2016?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=hwc-buildpack-windows2016?
   value:
     name: hwc_buildpack
     package: hwc-buildpack-windows2016
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=hwc-buildpack-windows?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=hwc-buildpack-windows?
   value:
     name: hwc_buildpack
     package: hwc-buildpack-windows
-- path: /instance_groups/name=api/jobs/name=hwc-buildpack?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=hwc-buildpack?
   value:
     name: hwc-buildpack
     release: hwc-buildpack
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=binary-buildpack-windows2016?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=binary-buildpack-windows2016?
   value:
     name: binary_buildpack
     package: binary-buildpack-windows2016
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=binary-buildpack-windows?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=binary-buildpack-windows?
   value:
     name: binary_buildpack
     package: binary-buildpack-windows
-- path: /releases/name=hwc-buildpack?
-  type: replace
+- type: replace
+  path: /releases/name=hwc-buildpack?
   value:
     name: hwc-buildpack
     sha1: 432d7e24bb6285bd6d4efb4fb5f639d8f9cdbf75
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=3.1.14
     version: 3.1.14
-- path: /releases/name=winc?
-  type: replace
+- type: replace
+  path: /releases/name=winc?
   value:
     name: winc
-    sha1: c90d6dea4da3a9ca8044f9a61dbc67f5aa8ef1cb
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/winc-release?v=2.1.0
-    version: 2.1.0
-- path: /releases/name=windows-utilities?
-  type: replace
+    sha1: 476577f4e305b50645774e5b2fcaffa2f2512bca
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/winc-release?v=2.2.0
+    version: 2.2.0
+- type: replace
+  path: /releases/name=windows-utilities?
   value:
     name: windows-utilities
     sha1: 7886ffd43b84d4eced06560ba601ce1eb97c6616
