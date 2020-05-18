@@ -1,0 +1,13 @@
+# Autoscaler will use this ops file to create a autoscaler database.
+- type: replace
+  path: /variables/-
+  value:
+    name: autoscaler_database_password
+    type: password 
+    
+- type: replace
+  path: /instance_groups/name=database/jobs/name=pxc-mysql/properties/seeded_databases/-
+  value:
+    name: autoscaler
+    password: ((autoscaler_database_password))
+    username: autoscaler
