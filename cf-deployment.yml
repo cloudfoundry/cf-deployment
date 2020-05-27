@@ -122,6 +122,9 @@ addons:
         cert: ((metrics_discovery_metrics_tls.certificate))
         key: ((metrics_discovery_metrics_tls.private_key))
         server_name: metrics_discovery_metrics
+      nats_client:
+        cert: ((nats_client_cert.certificate))
+        key: ((nats_client_cert.private_key))
     release: metrics-discovery
 
 - name: metrics-agent
@@ -373,9 +376,35 @@ instance_groups:
       nats: {as: nats, shared: true}
     properties:
       nats:
-        password: "((nats_password))"
-        user: nats
         hostname: nats.service.cf.internal
+        user: nats
+        password: "((nats_password))"
+        internal:
+          tls:
+            ca: "((nats_internal_cert.ca))"
+            certificate: "((nats_internal_cert.certificate))"
+            enabled: true
+            private_key: "((nats_internal_cert.private_key))"
+  - name: nats-tls
+    release: nats
+    provides:
+      nats-tls: {as: nats-tls, shared: true}
+    properties:
+      nats:
+        hostname: nats.service.cf.internal
+        user: nats
+        password: "((nats_password))"
+        internal:
+          tls:
+            ca: "((nats_internal_cert.ca))"
+            private_key: "((nats_internal_cert.private_key))"
+            certificate: "((nats_internal_cert.certificate))"
+            enabled: true
+        external:
+          tls:
+            ca: "((nats_client_cert.ca))"
+            private_key: "((nats_server_cert.private_key))"
+            certificate: "((nats_server_cert.certificate))"
 - name: database
   migrated_from:
   - name: mysql
@@ -2403,6 +2432,48 @@ variables:
   options:
     ca: metric_scraper_ca
     common_name: rlp_gateway_metrics
+    extended_key_usage:
+    - server_auth
+
+- name: nats_internal_ca
+  type: certificate
+  options:
+    is_ca: true
+    common_name: nats_internal
+
+- name: nats_internal_cert
+  type: certificate
+  options:
+    ca: nats_internal_ca
+    common_name: "*.nats.service.cf.internal"
+    alternative_names:
+    - "*.nats.service.cf.internal"
+    - nats.service.cf.internal
+    extended_key_usage:
+    - client_auth
+    - server_auth
+
+- name: nats_ca
+  type: certificate
+  options:
+    is_ca: true
+    common_name: nats
+
+- name: nats_client_cert
+  type: certificate
+  options:
+    ca: nats_ca
+    common_name: "nats_client"
+    extended_key_usage:
+    - client_auth
+
+- name: nats_server_cert
+  type: certificate
+  options:
+    ca: nats_ca
+    common_name: nats.service.cf.internal
+    alternative_names:
+    - nats.service.cf.internal
     extended_key_usage:
     - server_auth
 
