@@ -99,6 +99,9 @@ opsReleases:
   repository: cloudfoundry-incubator/garden-windows-bosh-release
 - name: winc
   repository: cloudfoundry-incubator/winc-release
+  requiredOpsFiles:
+  - operations/use-online-windows2019fs.yml
+  prependOpsFileToList: true
 - name: windowsfs
   repository: cloudfoundry/windowsfs-online-release
   requiredOpsFiles:
