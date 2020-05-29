@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+set -eux
+
+ruby scripts/check-certs.rb --days-left="${DAYS_LEFT_THRESHOLD:-16}" --path="${PATH_TO_VERIFY}"

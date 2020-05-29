@@ -1,0 +1,20 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+
+inputs:
+- name: cf-deployment-develop
+- name: relint-envs
+
+params:
+  DAYS_LEFT_THRESHOLD: 16
+  PATH_TO_VERIFY: relint-envs
+
+
+run:
+  dir: cf-deployment
+  path: ci/tasks/check-certs/task
