@@ -12,6 +12,9 @@
           cert: ((metrics_discovery_metrics_tls.certificate))
           key: ((metrics_discovery_metrics_tls.private_key))
           server_name: metrics_discovery_metrics
+        nats_client:
+          cert: ((nats_client_cert.certificate))
+          key: ((nats_client_cert.private_key))
       release: metrics-discovery
     - name: metrics-agent-windows
       properties:
