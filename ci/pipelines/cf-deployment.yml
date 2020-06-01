@@ -197,6 +197,12 @@ resources:
   source:
     interval: 30m
 
+- name: daily
+  type: time
+  icon: clock-outline
+  source:
+    interval: 24h
+
 - name: cf-deployment-concourse-tasks
   type: git
   icon: github-box
@@ -374,6 +380,8 @@ jobs:
     - get: relint-envs
       trigger: true
     - get: runtime-ci
+      trigger: true
+    - get: daily
       trigger: true
   - task: validate-certs
     file: runtime-ci/tasks/check-certs/task.yml
