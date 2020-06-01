@@ -389,6 +389,9 @@ instance_groups:
     release: nats
     provides:
       nats-tls: {as: nats-tls, shared: true}
+    custom_provider_definitions:
+    - name: nats-tls-address
+      type: address
     properties:
       nats:
         hostname: nats.service.cf.internal
@@ -2472,10 +2475,12 @@ variables:
   options:
     ca: nats_ca
     common_name: nats.service.cf.internal
-    alternative_names:
-    - nats.service.cf.internal
     extended_key_usage:
     - server_auth
+  consumes:
+    alternative_name:
+      from: nats-tls-address
+      properties: { wildcard: true }
 
 releases:
 - name: binary-buildpack
