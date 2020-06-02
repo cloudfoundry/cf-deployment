@@ -107,6 +107,11 @@
           key: ((diego_rep_agent_v2.private_key))
       release: diego
     - name: route_emitter_windows
+      consumes:
+        nats:
+          ip_addresses: false
+        nats-tls:
+          ip_addresses: false
       properties:
         diego:
           route_emitter:
@@ -115,6 +120,11 @@
               client_cert: ((diego_bbs_client.certificate))
               client_key: ((diego_bbs_client.private_key))
             local_mode: true
+            nats:
+              tls:
+                enabled: true
+                client_cert: "((nats_client_cert.certificate))"
+                client_key: "((nats_client_cert.private_key))"
         logging:
           format:
             timestamp: rfc3339

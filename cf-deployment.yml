@@ -1577,6 +1577,11 @@ instance_groups:
       tls: *cfdot_tls_client_properties
   - name: route_emitter
     release: diego
+    consumes:
+      nats:
+        ip_addresses: false
+      nats-tls:
+        ip_addresses: false
     properties:
       bpm:
         enabled: true
@@ -1588,6 +1593,11 @@ instance_groups:
             ca_cert: "((diego_bbs_client.ca))"
             client_cert: "((diego_bbs_client.certificate))"
             client_key: "((diego_bbs_client.private_key))"
+          nats:
+            tls:
+              enabled: true
+              client_cert: "((nats_client_cert.certificate))"
+              client_key: "((nats_client_cert.private_key))"
       tcp:
         enabled: true
       uaa:

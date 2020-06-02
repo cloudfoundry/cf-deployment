@@ -18,15 +18,6 @@ enable-nfs-ldap.yml:
   - example-vars-files/vars-enable-nfs-ldap.yml
 enable-nfs-volume-service.yml: {}
 enable-privileged-container-support.yml: {}
-enable-route-emitter-nats-tls.yml:
-  ops:
-  - enable-nats-tls.yml
-  - enable-route-emitter-nats-tls.yml
-enable-route-emitter-nats-tls-windows2019.yml:
-  ops:
-  - enable-nats-tls.yml
-  - windows2019-cell.yml
-  - enable-route-emitter-nats-tls-windows2019.yml
 enable-service-discovery.yml: {}
 enable-smb-volume-service.yml: {}
 enable-tls-on-file-server.yml: {}
