@@ -1,6 +1,6 @@
 # cf-deployment
 
-## Groups
+## Groups
 
 * fr; tests a fresh install
 * up; test upgrade
@@ -10,7 +10,7 @@
 * st; tests stability of cf-d and CATs over time
 * ship-it; PM uses to ship cf-d
 
-## Notes
+## Notes
 
 * branch-freshness; ensure branches of cf-d don't go stale
 * *-release-pool-manual; jobs that will release the lock on the environment in question.  Only visible via group.  Used to reset the pipeline.
