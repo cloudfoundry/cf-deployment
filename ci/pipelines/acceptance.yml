@@ -1,12 +1,3 @@
-groups:
-- name: acceptance
-  jobs:
-  - setup-infrastructure
-  - deploy-cf
-  - smoke-tests
-  - delete-deployment
-  - destroy-infrastructure
-
 resources:
 - name: relint-envs
   type: git
@@ -160,7 +151,7 @@ jobs:
     input_mapping:
       bbl-state: relint-envs
 
-- name: delete-deployment
+- name: delete-cf
   serial: true
   public: true
   serial_groups:
@@ -170,7 +161,7 @@ jobs:
   - in_parallel:
     - get: cf-deployment-concourse-tasks
     - get: relint-envs
-  - task: delete-deployment
+  - task: delete-cf
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     params:
       BBL_STATE_DIR: environments/pm/acceptance/bbl-state
