@@ -33,6 +33,9 @@
         cert: ((loggr_metric_scraper_metrics_tls.certificate))
         key: ((loggr_metric_scraper_metrics_tls.private_key))
         server_name: loggr_metric_scraper_metrics
+      nats_client:
+        cert: ((nats_client_cert.certificate))
+        key: ((nats_client_cert.private_key))
       scrape_port: 53035
       system_metrics:
         tls:
@@ -81,9 +84,9 @@
   path: /releases/name=system-metrics-scraper?
   value:
     name: system-metrics-scraper
-    sha1: 7821fb979bdbc8533d9a397aa53948f1bd7e2640
-    url: https://bosh.io/d/github.com/cloudfoundry/system-metrics-scraper-release?v=2.0.10
-    version: 2.0.10
+    sha1: 1a126b036e1ba205e6a044e3bdd039ca2e12cfc2
+    url: https://bosh.io/d/github.com/cloudfoundry/system-metrics-scraper-release?v=3.1.0
+    version: 3.1.0
 - type: replace
   path: /variables/name=leadership_election_tls?
   value:

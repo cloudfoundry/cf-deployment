@@ -66,6 +66,7 @@ groups:
   - unit-test-ops-files
   - unit-test-golang-tests
   - unit-test-update-releases-coverage
+  - validate-certs
   - lint-cf-deployment-manifest
   - experimental-acquire-pool
   - experimental-cats
@@ -195,6 +196,12 @@ resources:
   icon: clock-outline
   source:
     interval: 30m
+
+- name: daily
+  type: time
+  icon: clock-outline
+  source:
+    interval: 24h
 
 - name: cf-deployment-concourse-tasks
   type: git
@@ -364,6 +371,23 @@ jobs:
       run:
         dir: cf-deployment-develop
         path: scripts/test
+
+- name: validate-certs
+  serial: true
+  public: true
+  plan:
+  - in_parallel:
+    - get: relint-envs
+      trigger: true
+    - get: runtime-ci
+      trigger: true
+    - get: daily
+      trigger: true
+  - task: validate-certs
+    file: runtime-ci/tasks/check-certs/task.yml
+    params:
+      DAYS_LEFT_THRESHOLD: 16
+      PATH_TO_VERIFY: relint-envs
 
 - name: unit-test-golang-tests
   serial: true
