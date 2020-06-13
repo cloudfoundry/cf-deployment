@@ -15,7 +15,6 @@ groups:
   - upgrade-acquire-pool
   - upgrade-deploy
   - upgrade-cats
-  - upgrade-cats-windows
   - upgrade-delete-deployment
   - experimental-acquire-pool
   - experimental-deploy
@@ -30,6 +29,10 @@ groups:
   - bbr-deploy
   - bbr-run-drats
   - bbr-release-pool
+  - windows-claim-env
+  - windows-deploy
+  - windows-cats
+  - windows-unclaim-env
   - bless-manifest
   - ship-it-patch
   - ship-it-minor
@@ -57,7 +60,6 @@ groups:
   - upgrade-acquire-pool
   - upgrade-deploy
   - upgrade-cats
-  - upgrade-cats-windows
   - upgrade-release-pool-manual
   - upgrade-delete-deployment
   - bless-manifest
@@ -100,6 +102,17 @@ groups:
   - bbr-release-pool
   - bbr-release-pool-manual
   - bless-manifest
+- name: wi
+  jobs:
+  - unit-test-ops-files
+  - unit-test-golang-tests
+  - unit-test-update-releases-coverage
+  - lint-cf-deployment-manifest
+  - windows-claim-env
+  - windows-deploy
+  - windows-cats
+  - windows-unclaim-env
+  - bless-manifest
 - name: st
   jobs:
   - stable-acquire-pool
@@ -122,6 +135,11 @@ resource_types:
   type: docker-image
   source:
     repository: ljfranklin/terraform-resource
+
+- name: toolsmiths-cf-pool
+  type: docker-image
+  source:
+    repository: cftoolsmiths/toolsmiths-envs-resource
 
 - name: bosh-deployment-v2
   type: docker-image
@@ -349,6 +367,15 @@ resources:
       project: "cf-relint-trelawney"
       region: "us-central1"
       service_account_key: ((trelawney_gcp_service_account_json))
+
+- name: toolsmiths-windows-env
+  type: toolsmiths-cf-pool
+  source:
+    api_token: ((toolsmiths_api_token))
+    hostname: environments.toolsmiths.cf-app.com
+    pool_name: cf-deployment
+  tags:
+  - vsphere-cf-release-integration
 
 jobs:
 - name: unit-test-ops-files
@@ -793,9 +820,6 @@ jobs:
         operations/use-compiled-releases.yml
         operations/use-external-dbs.yml
         operations/add-external-ips-for-cloud-sql-db.yml
-        operations/windows2019-cell.yml
-        operations/use-online-windows2019fs.yml
-        operations/experimental/use-compiled-releases-windows.yml
         operations/experimental/colocate-smoke-tests-on-cc-worker.yml
         operations/use-external-blobstore.yml
         operations/use-gcs-blobstore-service-account.yml
@@ -850,9 +874,6 @@ jobs:
         operations/use-compiled-releases.yml
         operations/use-external-dbs.yml
         operations/add-external-ips-for-cloud-sql-db.yml
-        operations/windows2019-cell.yml
-        operations/use-online-windows2019fs.yml
-        operations/experimental/use-compiled-releases-windows.yml
         operations/experimental/colocate-smoke-tests-on-cc-worker.yml
         operations/use-external-blobstore.yml
         operations/use-gcs-blobstore-service-account.yml
@@ -937,41 +958,6 @@ jobs:
         CAPTURE_LOGS: true
         RELINT_VERBOSE_AUTH: "true"
 
-- name: upgrade-cats-windows
-  serial: true
-  public: true
-  plan:
-  - timeout: 4h
-    do:
-    - get: upgrade-pool
-      trigger: true
-      passed: [upgrade-deploy]
-    - in_parallel:
-      - get: cf-deployment-concourse-tasks
-      - get: cf-acceptance-tests-rc
-      - get: relint-envs
-      - get: cf-deployment-develop
-        passed: [upgrade-deploy]
-    - task: update-cats-windows-integration-config
-      file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
-      params:
-        BBL_STATE_DIR: environments/test/trelawney/bbl-state
-        CATS_INTEGRATION_CONFIG_FILE: environments/test/trelawney/cats_windows_integration_config.json
-      input_mapping:
-        bbl-state: relint-envs
-        integration-configs: relint-envs
-    - task: run-cats
-      file: cf-deployment-concourse-tasks/run-cats/task.yml
-      input_mapping:
-        integration-config: updated-integration-configs
-        cf-acceptance-tests: cf-acceptance-tests-rc
-      params:
-        CAPTURE_LOGS: true
-        CONFIG_FILE_PATH: environments/test/trelawney/cats_windows_integration_config.json
-        REPORTER_CONFIG_FILE_PATH: environments/test/trelawney/reporter_config.json
-        NODES: 8
-        RELINT_VERBOSE_AUTH: "true"
-
 - name: upgrade-delete-deployment
   serial: true
   public: true
@@ -980,7 +966,6 @@ jobs:
     trigger: true
     passed:
     - upgrade-cats
-    - upgrade-cats-windows
   - in_parallel:
     - get: cf-deployment-concourse-tasks
     - get: relint-envs
@@ -1559,6 +1544,139 @@ jobs:
   - put: bbr-pool
     params: {release: bbr-pool}
 
+- name: windows-claim-env
+  serial: true
+  #public: true
+  plan:
+  - in_parallel:
+    - put: toolsmiths-windows-env
+      params:
+        action: claim
+      tags:
+      - vsphere-cf-release-integration
+    - get: cf-deployment-develop
+      trigger: true
+      passed:
+      - unit-test-ops-files
+      - lint-cf-deployment-manifest
+      - unit-test-golang-tests
+      - unit-test-update-releases-coverage
+    timeout: 4h
+
+- name: windows-deploy
+  serial: true
+  #public: true
+  plan:
+  - in_parallel:
+    - get: toolsmiths-windows-env
+      passed:
+      - windows-claim-env
+      tags:
+      - vsphere-cf-release-integration
+      trigger: true
+    - get: cf-deployment-concourse-tasks
+    - get: cf-deployment-develop
+      passed:
+      - windows-claim-env
+  - task: bosh-delete-cf-deployment
+    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    input_mapping:
+      toolsmiths-env: toolsmiths-windows-env
+    params:
+      IGNORE_ERRORS: true
+  - task: bosh-cleanup
+    file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
+    input_mapping:
+      toolsmiths-env: toolsmiths-windows-env
+  - task: bosh-deploy-cf-develop
+    file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+    input_mapping:
+      toolsmiths-env: toolsmiths-windows-env
+      cf-deployment: cf-deployment-develop
+      ops-files: cf-deployment-develop
+    params:
+      OPS_FILES: |
+        operations/use-compiled-releases.yml
+        operations/windows2019-cell.yml
+        operations/use-online-windows2019fs.yml
+        operations/experimental/use-compiled-releases-windows.yml
+        operations/use-internal-lookup-for-route-services.yml
+        operations/experimental/colocate-smoke-tests-on-cc-worker.yml
+  - in_parallel:
+    - task: open-asgs-for-credhub
+      file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
+      input_mapping:
+        toolsmiths-env: toolsmiths-windows-env
+      params:
+        INSTANCE_GROUP_NAME: credhub
+        SECURITY_GROUP_NAME: credhub
+    - task: open-asgs-for-uaa
+      file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
+      input_mapping:
+        toolsmiths-env: toolsmiths-windows-env
+      params:
+        INSTANCE_GROUP_NAME: uaa
+        SECURITY_GROUP_NAME: uaa
+    - task: enable-docker-and-tasks
+      file: cf-deployment-concourse-tasks/set-feature-flags/task.yml
+      input_mapping:
+        toolsmiths-env: toolsmiths-windows-env
+      params:
+        ENABLED_FEATURE_FLAGS: |
+          diego_docker
+          task_creation
+          service_instance_sharing
+
+- name: windows-cats
+  serial: true
+  #public: true
+  plan:
+  - in_parallel:
+    - get: toolsmiths-windows-env
+      passed:
+      - windows-deploy
+      tags:
+      - vsphere-cf-release-integration
+      trigger: true
+    - get: cf-deployment-concourse-tasks
+    - get: cf-acceptance-tests-rc
+    - get: cf-deployment-develop
+      passed:
+      - windows-deploy
+    - get: relint-envs
+  - task: update-integration-config
+    file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
+    params:
+      CATS_INTEGRATION_CONFIG_FILE: environments/test/trelawney/cats_windows_integration_config.json
+    input_mapping:
+      toolsmiths-env: toolsmiths-windows-env
+      integration-configs: relint-envs
+  - task: run-cats
+    file: cf-deployment-concourse-tasks/run-cats/task.yml
+    input_mapping:
+      integration-config: updated-integration-configs
+      cf-acceptance-tests: cf-acceptance-tests-rc
+    params:
+      CAPTURE_LOGS: true
+      CONFIG_FILE_PATH: environments/test/trelawney/cats_windows_integration_config.json
+
+- name: windows-unclaim-env
+  serial: true
+  #public: true
+  plan:
+  - get: toolsmiths-windows-env
+    passed:
+    - windows-cats
+    tags:
+    - vsphere-cf-release-integration
+    trigger: true
+  - put: toolsmiths-windows-env
+    params:
+      action: unclaim
+      env_file: toolsmiths-windows-env/metadata
+    tags:
+    - vsphere-cf-release-integration
+
 - name: stable-acquire-pool
   public: true
   serial: true
@@ -1787,9 +1905,9 @@ jobs:
     - experimental-cats
     - experimental-smoke-tests
     - upgrade-cats
-    - upgrade-cats-windows
     - bbr-run-drats
     - lite-smoke-tests
+    - windows-cats
   - put: cf-deployment-release-candidate
     params:
       repository: cf-deployment-develop
