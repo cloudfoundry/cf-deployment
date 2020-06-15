@@ -520,7 +520,7 @@ jobs:
       params: {release: fresh-pool}
 
 - name: fresh-deploy
-  serial_groups: [ luna-smokes ]
+  serial_groups: [ fresh-cats, fresh-smokes ]
   public: true
   plan:
   - get: fresh-pool
@@ -645,7 +645,7 @@ jobs:
 
 - name: fresh-smoke-tests
   public: true
-  serial_groups: [ luna-smokes ]
+  serial_groups: [ fresh-smokes ]
   plan:
   - do:
     - get: fresh-pool
@@ -667,8 +667,8 @@ jobs:
       bbl-state: relint-envs
 
 - name: fresh-cats
-  serial: true
   public: true
+  serial_groups: [ fresh-cats ]
   plan:
   - timeout: 4h
     do:
@@ -757,8 +757,8 @@ jobs:
       params: {release: upgrade-pool}
 
 - name: upgrade-deploy
-  serial: true
   public: true
+  serial_groups: [ upgrade-cats, upgrade-smokes ]
   plan:
   - get: upgrade-pool
     trigger: true
@@ -950,8 +950,8 @@ jobs:
       bbl-state: relint-envs
 
 - name: upgrade-cats
-  serial: true
   public: true
+  serial_groups: [ upgrade-cats ]
   plan:
   - timeout: 4h
     do:
@@ -1043,7 +1043,7 @@ jobs:
       params: {release: experimental-pool}
 
 - name: experimental-deploy
-  serial_groups: [ hermione-cats, hermione-smokes ]
+  serial_groups: [ experimental-cats, experimental-smokes ]
   public: true
   plan:
   - get: experimental-pool
@@ -1203,7 +1203,7 @@ jobs:
 
 - name: experimental-smoke-tests
   public: true
-  serial_groups: [ hermione-smokes ]
+  serial_groups: [ experimental-smokes ]
   plan:
   - do:
     - get: experimental-pool
@@ -1225,7 +1225,7 @@ jobs:
       bbl-state: relint-envs
 
 - name: experimental-cats
-  serial_groups: [ hermione-cats ]
+  serial_groups: [ experimental-cats ]
   public: true
   plan:
   - timeout: 4h
@@ -1312,6 +1312,7 @@ jobs:
 
 - name: lite-deploy
   public: true
+  serial_groups: [ lite-smokes ]
   plan:
   - timeout: 4h
     do:
@@ -1369,6 +1370,7 @@ jobs:
 
 - name: lite-smoke-tests
   public: true
+  serial_groups: [ lite-smokes ]
   plan:
   - do:
     - get: lite-pool
@@ -1474,6 +1476,7 @@ jobs:
 
 - name: bbr-deploy
   public: true
+  serial_groups: [ bbr-drats ]
   plan:
   - get: bbr-pool
     trigger: true
@@ -1533,6 +1536,7 @@ jobs:
 
 - name: bbr-run-drats
   public: true
+  serial_groups: [ bbr-drats ]
   plan:
   - get: bbr-pool
     trigger: true
@@ -1589,8 +1593,8 @@ jobs:
     timeout: 4h
 
 - name: windows-deploy
-  serial: true
   #public: true
+  serial_groups: [ windows-cats ]
   plan:
   - in_parallel:
     - get: toolsmiths-windows-env
@@ -1653,8 +1657,8 @@ jobs:
           service_instance_sharing
 
 - name: windows-cats
-  serial: true
   #public: true
+  serial_groups: [ windows-cats ]
   plan:
   - in_parallel:
     - get: toolsmiths-windows-env
@@ -1722,7 +1726,7 @@ jobs:
       params: {release: stable-pool}
 
 - name: stable-deploy
-  serial_groups: [ bellatrix-smokes ]
+  serial_groups: [ stable-smokes ]
   public: true
   plan:
   - get: stable-pool
@@ -1786,7 +1790,7 @@ jobs:
       SECURITY_GROUP_NAME: uaa
 
 - name: stable-smoke-tests
-  serial_groups: [bellatrix-smokes]
+  serial_groups: [ stable-smokes ]
   public: true
   plan:
   - timeout: 1h
