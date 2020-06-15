@@ -14,6 +14,7 @@ groups:
   - fresh-delete-deployment
   - upgrade-acquire-pool
   - upgrade-deploy
+  - upgrade-smoke-tests
   - upgrade-cats
   - upgrade-delete-deployment
   - experimental-acquire-pool
@@ -59,6 +60,7 @@ groups:
   - lint-cf-deployment-manifest
   - upgrade-acquire-pool
   - upgrade-deploy
+  - upgrade-smoke-tests
   - upgrade-cats
   - upgrade-release-pool-manual
   - upgrade-delete-deployment
@@ -923,6 +925,29 @@ jobs:
           diego_docker
           task_creation
           service_instance_sharing
+
+- name: upgrade-smoke-tests
+  public: true
+  serial_groups: [ upgrade-smokes ]
+  plan:
+  - do:
+    - get: upgrade-pool
+      passed: [ upgrade-deploy ]
+      trigger: true
+    - in_parallel:
+      - get: relint-envs
+      - get: cf-deployment-develop
+        passed: [ upgrade-deploy ]
+      - get: cf-deployment-concourse-tasks
+    timeout: 1h
+  - task: bosh-run-errand-smoke-tests
+    file: cf-deployment-concourse-tasks/run-errand/task.yml
+    params:
+      BBL_STATE_DIR: environments/test/trelawney/bbl-state
+      ERRAND_NAME: smoke_tests
+      INSTANCE: cc-worker/first
+    input_mapping:
+      bbl-state: relint-envs
 
 - name: upgrade-cats
   serial: true
