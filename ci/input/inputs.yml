@@ -93,6 +93,9 @@ opsReleases:
   varsFiles: "environments/test/pre-dev/windows-enable-component-syslog-vars.yml"
 - name: hwc-buildpack
   repository: cloudfoundry-incubator/hwc-buildpack-release
+  requiredOpsFiles:
+    - operations/use-online-windows2019fs.yml
+  prependOpsFileToList: true
 - name: windows-utilities
   repository: cloudfoundry-incubator/windows-utilities-release
 - name: garden-windows

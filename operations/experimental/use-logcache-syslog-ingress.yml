@@ -22,6 +22,8 @@
     options:
       ca: loggregator_ca
       common_name: doppler.service.cf.internal
+      alternative_names:
+        - "q-s3.doppler.default.cf.bosh"
       extended_key_usage:
         - server_auth
 
