@@ -13,7 +13,7 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 
 | Name | Purpose | Notes | Currently validated in Release Integration CI pipelines? |
 |:---  |:---     |:---   |:---   |
-| [`add-disabled-syslog-agent-for-upgrade.yml`](add-disabled-syslog-agent-for-upgrade.yml) |  Add agents to all vms for the purpose of egressing application logs to syslog, but does not enable their use. **This should be applied as the first ops-file in a two step upgrade to add the syslog agent.** The second ops-file to be applied is `add-syslog-agent.yml`. The two-deploy upgrade is intended to decrease downtime. | | **NO** |
+| [`add-disabled-syslog-agent-for-upgrade.yml`](add-disabled-syslog-agent-for-upgrade.yml) |  Deprecated: this opsfile is no longer needed in cf-d 13 | | **NO** |
 | [`add-metric-store.yml`](add-metric-store.yml) |  **Add Metric Store node for persistence of metrics from Loggregator** | | **NO** |
 | [`add-system-metrics-agent.yml`](add-system-metrics-agent.yml) | Add agent to all vms with the purpose of egressing system metrics | | **NO** |
 | [`add-system-metrics-agent-windows2019.yml`](add-system-metrics-agent-windows2019.yml) | Add agent to windows2019 Diego cells for the purpose of egressing system metrics | | **NO** |
