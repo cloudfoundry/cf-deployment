@@ -849,6 +849,8 @@ instance_groups:
       system_domain: "((system_domain))"
       app_domains:
       - "((system_domain))"
+      - name: apps.internal
+        internal: true
       app_ssh:
         host_key_fingerprint: "((diego_ssh_proxy_host_key.public_key_fingerprint))"
       routing_api: &routing_api
@@ -1240,6 +1242,14 @@ instance_groups:
         - name: cloud_controller
           password: ((cc_database_password))
           tag: admin
+  - name: service-discovery-controller
+    properties:
+      dnshttps:
+        client:
+          ca: ((cf_app_sd_server_tls.ca))
+        server:
+          tls: ((cf_app_sd_server_tls))
+    release: cf-networking
   - name: statsd_injector
     release: statsd-injector
     properties: *statsd_injector_properties
@@ -1510,6 +1520,15 @@ instance_groups:
   networks:
   - name: default
   jobs:
+  - name: bosh-dns-adapter
+    properties:
+      internal_domains: ["apps.internal."]
+      dnshttps:
+        client:
+          tls: ((cf_app_sd_client_tls))
+        server:
+          ca: ((cf_app_sd_client_tls.ca))
+    release: cf-networking
   - name: cflinuxfs3-rootfs-setup
     release: cflinuxfs3
     properties:
@@ -1606,6 +1625,8 @@ instance_groups:
       logging:
         format:
           timestamp: "rfc3339"
+      internal_routes:
+        enabled: true
   - name: garden-cni
     release: cf-networking
     properties:
@@ -1819,6 +1840,25 @@ variables:
   type: password
 - name: cc_staging_upload_password
   type: password
+- name: cf_app_sd_ca
+  options:
+    common_name: service-discovery-controller.service.cf.internal
+    is_ca: true
+  type: certificate
+- name: cf_app_sd_client_tls
+  options:
+    ca: cf_app_sd_ca
+    common_name: service-discovery-controller.service.cf.internal
+    extended_key_usage:
+    - client_auth
+  type: certificate
+- name: cf_app_sd_server_tls
+  options:
+    ca: cf_app_sd_ca
+    common_name: service-discovery-controller.service.cf.internal
+    extended_key_usage:
+    - server_auth
+  type: certificate
 - name: cf_mysql_mysql_admin_password
   type: password
 - name: cf_mysql_mysql_cluster_health_password
@@ -2510,13 +2550,13 @@ releases:
   version: 2.31.0
   sha1: f27406853aee40c38615d61cf648936c0ef63d2f
 - name: cf-smoke-tests
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=40.0.132
-  version: 40.0.132
-  sha1: c9c366568eb4907a965224561bb6d1df42c8dc25
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=40.0.134
+  version: 40.0.134
+  sha1: 0dd5720a87878cac9bb7c1f903f8cbf7ef0124ce
 - name: cflinuxfs3
-  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs3-release?v=0.198.0
-  version: 0.198.0
-  sha1: cdc4a110a0332b4f70905e94aeed5987417cb5f4
+  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs3-release?v=0.199.0
+  version: 0.199.0
+  sha1: 0dbf5b2b3ca44d71d57dd92adfe02e814c2065bd
 - name: credhub
   url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=2.7.0
   version: 2.7.0
@@ -2538,9 +2578,9 @@ releases:
   version: 1.9.14
   sha1: ebe497c9fe0a07bb86597fa500a3d3865ece18d6
 - name: java-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/java-buildpack-release?v=4.31.1
-  version: 4.31.1
-  sha1: 5be60f62f8f366d6b6467abc99cde2151da905e5
+  url: https://bosh.io/d/github.com/cloudfoundry/java-buildpack-release?v=4.32
+  version: "4.32"
+  sha1: 411b208b14f39c843da62c804e0850f860957b74
 - name: loggregator
   url: https://bosh.io/d/github.com/cloudfoundry/loggregator-release?v=106.3.10
   version: 106.3.10
@@ -2598,9 +2638,9 @@ releases:
   version: 1.11.15
   sha1: a0a2d33c6ab7d8fec8c017ea6f2c5a344af1407c
 - name: uaa
-  url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=74.22.0
-  version: 74.22.0
-  sha1: 19d62f7a6cfcf008f1a7c042fbfb7b3c5cc86d95
+  url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=74.23.0
+  version: 74.23.0
+  sha1: 7137d5b137b48c0f56bd76b49169595a9f4a9467
 - name: loggregator-agent
   url: https://bosh.io/d/github.com/cloudfoundry/loggregator-agent-release?v=6.0.2
   version: 6.0.2

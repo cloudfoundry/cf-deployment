@@ -127,3 +127,27 @@
 - type: replace
   path: /instance_groups/name=diego-api/jobs/name=locket/properties?/set_kernel_parameters
   value: false
+
+# ----- Disable service discovery ------
+- type: remove
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/app_domains/name=apps.internal
+
+- type: remove
+  path: /instance_groups/name=scheduler/jobs/name=service-discovery-controller
+
+- type: remove
+  path: /instance_groups/name=diego-cell/jobs/name=bosh-dns-adapter
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=route_emitter/properties/internal_routes?
+  value:
+    enabled: false
+
+- type: remove
+  path: /variables/name=cf_app_sd_ca
+
+- type: remove
+  path: /variables/name=cf_app_sd_client_tls
+
+- type: remove
+  path: /variables/name=cf_app_sd_server_tls
