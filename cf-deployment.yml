@@ -358,7 +358,7 @@ instance_groups:
         space: cf_smoke_tests_space
         cf_dial_timeout_in_seconds: 300
         skip_ssl_validation: true
-  - name: cf-cli-6-linux
+  - name: cf-cli-7-linux
     release: cf-cli
 - name: nats
   azs:
@@ -700,7 +700,7 @@ instance_groups:
             scope: network.admin,network.write,cloud_controller.read,cloud_controller.write,openid,password.write,cloud_controller.admin,scim.read,scim.write,doppler.firehose,uaa.user,routing.router_groups.read,routing.router_groups.write,cloud_controller.admin_read_only,cloud_controller.global_auditor,perm.admin,clients.read
             secret: ''
           cf_smoke_tests:
-            authorities: cloud_controller.admin
+            authorities: cloud_controller.admin,clients.read
             authorized-grant-types: client_credentials
             secret: "((uaa_clients_cf_smoke_tests_secret))"
           cloud_controller_username_lookup:
@@ -2550,13 +2550,13 @@ releases:
   version: 2.31.0
   sha1: f27406853aee40c38615d61cf648936c0ef63d2f
 - name: cf-smoke-tests
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=40.0.134
-  version: 40.0.134
-  sha1: 0dd5720a87878cac9bb7c1f903f8cbf7ef0124ce
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=41.0.0
+  version: 41.0.0
+  sha1: a61430335a44d27c1d7273659fd2848503c70ee2
 - name: cflinuxfs3
-  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs3-release?v=0.200.0
-  version: 0.200.0
-  sha1: 532e6a42ce290bdd5c0c1ef3a2366f26cf827c65
+  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs3-release?v=0.201.0
+  version: 0.201.0
+  sha1: d42ff6a62ec5a3e9d0e66bbfea5b40b9cb1196d0
 - name: credhub
   url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=2.8.0
   version: 2.8.0
@@ -2570,9 +2570,9 @@ releases:
   version: 2.3.12
   sha1: 8b19b70b8391b85bc796e7954fd8fe746bffa62f
 - name: garden-runc
-  url: https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.19.14
-  version: 1.19.14
-  sha1: b3a949f55d8e8514267cf48a242b8321183ace6c
+  url: https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.19.15
+  version: 1.19.15
+  sha1: 1130100c8b175ed22d2a0bc550d8929d04cad511
 - name: go-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/go-buildpack-release?v=1.9.14
   version: 1.9.14
@@ -2654,9 +2654,9 @@ releases:
   version: 0.0.3
   sha1: b0d0a0350ed87f1ded58b2ebb469acea0e026ccc
 - name: cf-cli
-  url: https://bosh.io/d/github.com/bosh-packages/cf-cli-release?v=1.27.0
-  version: 1.27.0
-  sha1: 24da44758b6a0c9211cf3fed4afbfb3380a8d7be
+  url: https://bosh.io/d/github.com/bosh-packages/cf-cli-release?v=1.28.0
+  version: 1.28.0
+  sha1: 3e8e9ead16b5688829484af391deb841fa37620b
 stemcells:
 - alias: default
   os: ubuntu-xenial
