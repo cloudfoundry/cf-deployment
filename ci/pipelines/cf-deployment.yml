@@ -1889,10 +1889,19 @@ jobs:
         passed: [ stable-periodic-cats ]
       - get: cf-acceptance-tests-rc
         passed: [ stable-periodic-cats ]
+      - get: cf-deployment-concourse-tasks
+    - task: update-integration-configs
+      file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/bellatrix/bbl-state
+        CATS_INTEGRATION_CONFIG_FILE: environments/test/bellatrix/integration_config.json
+      input_mapping:
+        bbl-state: relint-envs
+        integration-configs: relint-envs
     - task: cleanup-stable-periodic-cats
       file: runtime-ci/tasks/cleanup-after-cats/task.yml
       input_mapping:
-        integration-config: relint-envs
+        integration-config: updated-integration-configs
       params:
         CONFIG_FILE_PATH: environments/test/bellatrix/integration_config.json
 
