@@ -1232,16 +1232,7 @@ instance_groups:
           ca_cert: "((cc_tls.ca))"
           private_key: "((cc_tls.private_key))"
           public_cert: "((cc_tls.certificate))"
-      ccdb:
-        databases:
-        - name: cloud_controller
-          tag: cc
-        db_scheme: mysql
-        port: 3306
-        roles:
-        - name: cloud_controller
-          password: ((cc_database_password))
-          tag: admin
+      ccdb: *ccdb
   - name: service-discovery-controller
     properties:
       dnshttps:
