@@ -1232,16 +1232,7 @@ instance_groups:
           ca_cert: "((cc_tls.ca))"
           private_key: "((cc_tls.private_key))"
           public_cert: "((cc_tls.certificate))"
-      ccdb:
-        databases:
-        - name: cloud_controller
-          tag: cc
-        db_scheme: mysql
-        port: 3306
-        roles:
-        - name: cloud_controller
-          password: ((cc_database_password))
-          tag: admin
+      ccdb: *ccdb
   - name: service-discovery-controller
     properties:
       dnshttps:
@@ -2542,9 +2533,9 @@ releases:
   version: 1.1.8
   sha1: c956394fce7e74f741e4ae8c256b480904ad5942
 - name: capi
-  url: https://bosh.io/d/github.com/cloudfoundry/capi-release?v=1.97.0
-  version: 1.97.0
-  sha1: 876530fb5546f9d166ecaca55e5475f0ec5888d3
+  url: https://bosh.io/d/github.com/cloudfoundry/capi-release?v=1.96.0
+  version: 1.96.0
+  sha1: 879b50c2ba103826dd32c7e65d9eefc7797f67e7
 - name: cf-networking
   url: https://bosh.io/d/github.com/cloudfoundry/cf-networking-release?v=2.31.0
   version: 2.31.0

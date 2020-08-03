@@ -31,6 +31,14 @@
   value: "((postgres_tls.ca))"
 
 - type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties/ccdb/address?
+  value: sql-db.service.cf.internal
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties/ccdb/ca_cert?
+  value: "((postgres_tls.ca))"
+
+- type: replace
   path: /variables/name=postgres_ca?
   value:
     name: postgres_ca

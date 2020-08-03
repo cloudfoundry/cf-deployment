@@ -129,6 +129,27 @@
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/ccdb/ca_cert?
 
 - type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties/ccdb/db_scheme
+  value: *external_cc_database_scheme
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties/ccdb/port
+  value: *external_cc_database_port
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties/ccdb/databases/tag=cc/name
+  value: *external_cc_database_name
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties/ccdb/address?
+  value: *external_cc_database_address
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties/ccdb/roles/name=cloud_controller/password
+  value: *external_cc_database_password
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties/ccdb/roles/name=cloud_controller/name
+  value: *external_cc_database_username
+- type: remove
+  path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties/ccdb/ca_cert?
+
+- type: replace
   path: /instance_groups/name=diego-api/jobs/name=bbs/properties/diego/bbs/sql/db_driver
   value: ((external_database_type))
 - type: replace
@@ -279,26 +300,11 @@
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/consumes?
   value: {database: nil}
 - type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/consumes?
+  value: {database: nil}
+- type: replace
   path: /instance_groups/name=diego-api/jobs/name=silk-controller/consumes?
   value: {database: nil}
 - type: replace
   path: /instance_groups/name=api/jobs/name=policy-server/consumes?
   value: {database: nil}
-- type: replace
-  path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties/ccdb/db_scheme
-  value: "((external_database_type))"
-- type: replace
-  path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties/ccdb/port
-  value: "((external_database_port))"
-- type: replace
-  path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties/ccdb/databases/tag=cc/name
-  value: "((external_cc_database_name))"
-- type: replace
-  path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties/ccdb/address?
-  value: "((external_cc_database_address))"
-- type: replace
-  path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties/ccdb/roles/name=cloud_controller/password
-  value: "((external_cc_database_password))"
-- type: replace
-  path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties/ccdb/roles/name=cloud_controller/name
-  value: "((external_cc_database_username))"
