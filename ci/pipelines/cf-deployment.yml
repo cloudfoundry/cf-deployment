@@ -123,7 +123,6 @@ groups:
   - stable-smoke-tests
   - stable-semihourly-pool-acquisition
   - stable-periodic-cats
-  - cleanup-stable-periodic-cats
   - stable-update-cats-cfd-branch
 - name: ship-it
   jobs:
@@ -1842,6 +1841,7 @@ jobs:
       - get: cf-acceptance-tests-rc
       - get: relint-envs
       - get: cf-deployment-master
+      - get: runtime-ci
         passed: [ stable-deploy ]
     - task: enable-docker-and-tasks
       file: cf-deployment-concourse-tasks/set-feature-flags/task.yml
@@ -1862,48 +1862,25 @@ jobs:
       input_mapping:
         bbl-state: relint-envs
         integration-configs: relint-envs
-    - task: run-cats
-      file: cf-deployment-concourse-tasks/run-cats/task.yml
-      input_mapping:
-        integration-config: updated-integration-configs
-        cf-acceptance-tests: cf-acceptance-tests-rc
-      params:
-        CONFIG_FILE_PATH: environments/test/bellatrix/integration_config.json
-        REPORTER_CONFIG_FILE_PATH: environments/test/bellatrix/reporter_config.json
-        FLAKE_ATTEMPTS: 0
-        RELINT_VERBOSE_AUTH: "true"
-
-- name: cleanup-stable-periodic-cats
-  serial: true
-  public: true
-  plan:
-  - timeout: 4h
-    do:
-    - get: stable-pool
-      trigger: true
-      passed: [ stable-periodic-cats ]
-    - in_parallel:
-      - get: runtime-ci
-      - get: relint-envs
-      - get: cf-deployment-master
-        passed: [ stable-periodic-cats ]
-      - get: cf-acceptance-tests-rc
-        passed: [ stable-periodic-cats ]
-      - get: cf-deployment-concourse-tasks
-    - task: update-integration-configs
-      file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
-      params:
-        BBL_STATE_DIR: environments/test/bellatrix/bbl-state
-        CATS_INTEGRATION_CONFIG_FILE: environments/test/bellatrix/integration_config.json
-      input_mapping:
-        bbl-state: relint-envs
-        integration-configs: relint-envs
-    - task: cleanup-stable-periodic-cats
-      file: runtime-ci/tasks/cleanup-after-cats/task.yml
-      input_mapping:
-        integration-config: updated-integration-configs
-      params:
-        CONFIG_FILE_PATH: environments/test/bellatrix/integration_config.json
+    - do:
+      - task: run-cats
+        file: cf-deployment-concourse-tasks/run-cats/task.yml
+        input_mapping:
+          integration-config: updated-integration-configs
+          cf-acceptance-tests: cf-acceptance-tests-rc
+        params:
+          CONFIG_FILE_PATH: environments/test/bellatrix/integration_config.json
+          REPORTER_CONFIG_FILE_PATH: environments/test/bellatrix/reporter_config.json
+          FLAKE_ATTEMPTS: 0
+          RELINT_VERBOSE_AUTH: "true"
+      ensure:
+        do:
+        - task: cleanup-stable-periodic-cats
+          file: runtime-ci/tasks/cleanup-after-cats/task.yml
+          input_mapping:
+            integration-config: updated-integration-configs
+          params:
+            CONFIG_FILE_PATH: environments/test/bellatrix/integration_config.json
 
 - name: stable-update-cats-cfd-branch
   public: true
@@ -1915,13 +1892,13 @@ jobs:
     do:
     - get: stable-pool
       trigger: true
-      passed: [ cleanup-stable-periodic-cats ]
+      passed: [ stable-periodic-cats ]
     - in_parallel:
       - get: runtime-ci
       - get: cf-deployment-master
-        passed: [ cleanup-stable-periodic-cats ]
+        passed: [ stable-periodic-cats ]
       - get: cf-acceptance-tests-rc
-        passed: [ cleanup-stable-periodic-cats ]
+        passed: [ stable-periodic-cats ]
     - task: update-branch
       file: runtime-ci/tasks/update-cats-branch-with-cf-deployment-version/task.yml
       input_mapping:
