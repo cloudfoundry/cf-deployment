@@ -187,6 +187,7 @@
       release: loggregator-agent
     - name: prom_scraper_windows
       properties:
+        scrape_interval: 60s
         metrics:
           ca_cert: ((prom_scraper_metrics_tls.ca))
           cert: ((prom_scraper_metrics_tls.certificate))
