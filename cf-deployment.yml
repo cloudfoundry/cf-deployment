@@ -2204,6 +2204,8 @@ variables:
   options:
     ca: service_cf_internal_ca
     common_name: cloud-controller-ng.service.cf.internal
+    alternative_names:
+    - cloud-controller-ng.service.cf.internal
     extended_key_usage:
     - client_auth
     - server_auth
