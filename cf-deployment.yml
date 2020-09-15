@@ -2201,6 +2201,7 @@ variables:
     common_name: uaa_login_saml
 - name: cc_tls
   type: certificate
+  update_mode: converge
   options:
     ca: service_cf_internal_ca
     common_name: cloud-controller-ng.service.cf.internal
