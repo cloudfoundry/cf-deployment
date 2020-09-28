@@ -40,7 +40,7 @@ groups:
   - ship-it-minor
   - ship-it-major
   - release-notes-template
-- name: fr
+- name: fresh/luna
   jobs:
   - unit-test-ops-files
   - unit-test-golang-tests
@@ -53,7 +53,7 @@ groups:
   - fresh-cats
   - fresh-delete-deployment
   - bless-manifest
-- name: up
+- name: upgrade/trelawney
   jobs:
   - unit-test-ops-files
   - unit-test-golang-tests
@@ -66,7 +66,7 @@ groups:
   - upgrade-release-pool-manual
   - upgrade-delete-deployment
   - bless-manifest
-- name: ex
+- name: experimental/hermione
   jobs:
   - unit-test-ops-files
   - unit-test-golang-tests
@@ -80,7 +80,7 @@ groups:
   - experimental-smoke-tests
   - experimental-ops-files
   - bless-manifest
-- name: li
+- name: lite/snitch
   jobs:
   - unit-test-ops-files
   - unit-test-golang-tests
@@ -104,7 +104,7 @@ groups:
   - bbr-release-pool
   - bbr-release-pool-manual
   - bless-manifest
-- name: wi
+- name: windows
   jobs:
   - unit-test-ops-files
   - unit-test-golang-tests
@@ -115,7 +115,7 @@ groups:
   - windows-cats
   - windows-unclaim-env
   - bless-manifest
-- name: st
+- name: stable/bellatrix
   jobs:
   - stable-acquire-pool
   - stable-release-pool-manual
