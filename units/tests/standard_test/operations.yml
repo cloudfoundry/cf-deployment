@@ -10,6 +10,7 @@ enable-cc-rate-limiting.yml:
   vars:
   - cc_rate_limiter_general_limit=blah
   - cc_rate_limiter_unauthenticated_limit=something
+enable-cpu-throttling.yml: {}
 enable-nfs-ldap.yml:
   ops:
   - enable-nfs-volume-service.yml
@@ -34,6 +35,7 @@ scale-to-one-az.yml: {}
 set-bbs-active-key.yml:
   vars:
   - diego_bbs_active_key_label=my_key_name
+set-cpu-weight.yml: {}
 set-router-static-ips.yml:
   vars:
   - router_static_ips=[10.0.16.4,10.0.47.5]
