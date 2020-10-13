@@ -2520,8 +2520,12 @@ variables:
   options:
     ca: nats_ca
     common_name: nats.service.cf.internal
+    alternative_names:
+    - "*.nats.service.cf.internal"
+    - nats.service.cf.internal
     extended_key_usage:
     - server_auth
+  update_mode: converge
   consumes:
     alternative_name:
       from: nats-tls-address
