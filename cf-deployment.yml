@@ -2040,6 +2040,7 @@ variables:
     common_name: loggregatorCA
 - name: loggregator_tls_statsdinjector
   type: certificate
+  update_mode: converge
   options:
     ca: loggregator_ca
     common_name: statsdinjector
@@ -2049,6 +2050,7 @@ variables:
     - statsdinjector
 - name: loggregator_tls_agent
   type: certificate
+  update_mode: converge
   options:
     ca: loggregator_ca
     common_name: metron
@@ -2059,6 +2061,7 @@ variables:
     - metron
 - name: loggregator_tls_doppler
   type: certificate
+  update_mode: converge
   options:
     ca: loggregator_ca
     common_name: doppler
@@ -2069,6 +2072,7 @@ variables:
     - doppler
 - name: loggregator_tls_tc
   type: certificate
+  update_mode: converge
   options:
     ca: loggregator_ca
     common_name: trafficcontroller
@@ -2079,6 +2083,7 @@ variables:
     - trafficcontroller
 - name: loggregator_tls_cc_tc
   type: certificate
+  update_mode: converge
   options:
     ca: service_cf_internal_ca
     common_name: trafficcontroller
@@ -2088,6 +2093,7 @@ variables:
     - trafficcontroller
 - name: loggregator_rlp_gateway_tls_cc
   type: certificate
+  update_mode: converge
   options:
     ca: service_cf_internal_ca
     common_name: rlp-gateway
@@ -2097,6 +2103,7 @@ variables:
     - rlp-gateway
 - name: loggregator_tls_rlp
   type: certificate
+  update_mode: converge
   options:
     ca: loggregator_ca
     common_name: reverselogproxy
@@ -2107,6 +2114,7 @@ variables:
     - reverselogproxy
 - name: loggregator_rlp_gateway
   type: certificate
+  update_mode: converge
   options:
     ca: loggregator_ca
     common_name: rlp_gateway
@@ -2121,7 +2129,10 @@ variables:
     extended_key_usage:
     - client_auth
     - server_auth
+    alternative_names:
+    - log-cache
   type: certificate
+  update_mode: converge
 - name: log_cache_ca
   options:
     common_name: log-cache
@@ -2139,15 +2150,20 @@ variables:
     - client_auth
     - server_auth
   type: certificate
+  update_mode: converge
 - name: log_cache_to_loggregator_agent
   options:
     ca: loggregator_ca
     common_name: log-cache
+    alternative_names:
+    - log-cache
     extended_key_usage:
     - client_auth
   type: certificate
+  update_mode: converge
 - name: cc_logcache_tls
   type: certificate
+  update_mode: converge
   options:
     ca: log_cache_ca
     common_name: "api.((system_domain))"
@@ -2156,10 +2172,12 @@ variables:
     - cloud-controller-ng.service.cf.internal
 - name: logcache_ssl
   type: certificate
+  update_mode: converge
   options:
     ca: service_cf_internal_ca
     common_name: log-cache
     alternative_names:
+    - log-cache
     - log-cache.((system_domain))
     - "*.log-cache.((system_domain))"
 - name: log_cache_proxy_tls
@@ -2343,6 +2361,7 @@ variables:
 
 - name: loggregator_rlp_gateway_tls
   type: certificate
+  update_mode: converge
   options:
     alternative_names:
     - log-stream.((system_domain))
@@ -2352,6 +2371,7 @@ variables:
 
 - name: loggregator_trafficcontroller_tls
   type: certificate
+  update_mode: converge
   options:
     alternative_names:
     - doppler.((system_domain))
@@ -2374,6 +2394,7 @@ variables:
     alternative_names:
     - metrics_agent
   type: certificate
+  update_mode: converge
 - name: metrics_discovery_metrics_tls
   options:
     ca: metric_scraper_ca
@@ -2383,6 +2404,7 @@ variables:
     alternative_names:
     - metrics_discovery_metrics
   type: certificate
+  update_mode: converge
 - name: scrape_config_generator_metrics_tls
   options:
     ca: metric_scraper_ca
@@ -2390,9 +2412,11 @@ variables:
     extended_key_usage:
       - server_auth
   type: certificate
+  update_mode: converge
 
 - name: log_cache_metrics_tls
   type: certificate
+  update_mode: converge
   options:
     ca: metric_scraper_ca
     common_name: log_cache_metrics
@@ -2403,6 +2427,7 @@ variables:
 
 - name: log_cache_cf_auth_proxy_metrics_tls
   type: certificate
+  update_mode: converge
   options:
     ca: metric_scraper_ca
     common_name: log_cache_cf_auth_proxy_metrics
@@ -2413,6 +2438,7 @@ variables:
 
 - name: log_cache_gateway_metrics_tls
   type: certificate
+  update_mode: converge
   options:
     ca: metric_scraper_ca
     common_name: log_cache_gateway_metrics
@@ -2423,6 +2449,7 @@ variables:
 
 - name: forwarder_agent_metrics_tls
   type: certificate
+  update_mode: converge
   options:
     ca: metric_scraper_ca
     common_name: forwarder_agent_metrics
@@ -2433,6 +2460,7 @@ variables:
 
 - name: loggregator_agent_metrics_tls
   type: certificate
+  update_mode: converge
   options:
     ca: metric_scraper_ca
     common_name: loggregator_agent_metrics
@@ -2443,6 +2471,7 @@ variables:
 
 - name: loggr_udp_forwarder_tls
   type: certificate
+  update_mode: converge
   options:
     ca: metric_scraper_ca
     common_name: loggr_udp_forwarder_metrics
@@ -2453,30 +2482,40 @@ variables:
 
 - name: syslog_agent_api_tls
   type: certificate
+  update_mode: converge
   options:
     ca: loggregator_ca
     common_name: syslog-agent
     extended_key_usage:
     - client_auth
+    alternative_names:
+    - syslog-agent
 
 - name: binding_cache_api_tls
   type: certificate
+  update_mode: converge
   options:
     ca: service_cf_internal_ca
     common_name: binding-cache
     extended_key_usage:
     - client_auth
+    alternative_names:
+    - binding-cache
 
 - name: binding_cache_tls
   type: certificate
+  update_mode: converge
   options:
     ca: loggregator_ca
     common_name: binding-cache
     extended_key_usage:
     - server_auth
+    alternative_names:
+    - binding-cache
 
 - name: syslog_agent_metrics_tls
   type: certificate
+  update_mode: converge
   options:
     ca: metric_scraper_ca
     common_name: syslog_agent_metrics
@@ -2487,6 +2526,7 @@ variables:
 
 - name: loggr_syslog_binding_cache_metrics_tls
   type: certificate
+  update_mode: converge
   options:
     ca: metric_scraper_ca
     common_name: loggr_syslog_binding_cache_metrics
@@ -2498,6 +2538,7 @@ variables:
 
 - name: prom_scraper_scrape_tls
   type: certificate
+  update_mode: converge
   options:
     ca: metric_scraper_ca
     common_name: prom_scraper
@@ -2508,6 +2549,7 @@ variables:
 
 - name: prom_scraper_metrics_tls
   type: certificate
+  update_mode: converge
   options:
     ca: metric_scraper_ca
     common_name: prom_scraper_metrics
@@ -2518,6 +2560,7 @@ variables:
 
 - name: rlp_gateway_metrics_tls
   type: certificate
+  update_mode: converge
   options:
     ca: metric_scraper_ca
     common_name: rlp_gateway_metrics
