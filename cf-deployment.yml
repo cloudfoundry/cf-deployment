@@ -2045,6 +2045,8 @@ variables:
     common_name: statsdinjector
     extended_key_usage:
     - client_auth
+    alternative_names:
+    - statsdinjector
 - name: loggregator_tls_agent
   type: certificate
   options:
@@ -2053,6 +2055,8 @@ variables:
     extended_key_usage:
     - client_auth
     - server_auth
+    alternative_names:
+    - metron
 - name: loggregator_tls_doppler
   type: certificate
   options:
@@ -2061,6 +2065,8 @@ variables:
     extended_key_usage:
     - client_auth
     - server_auth
+    alternative_names:
+    - doppler
 - name: loggregator_tls_tc
   type: certificate
   options:
@@ -2069,6 +2075,8 @@ variables:
     extended_key_usage:
     - client_auth
     - server_auth
+    alternative_names:
+    - trafficcontroller
 - name: loggregator_tls_cc_tc
   type: certificate
   options:
@@ -2076,6 +2084,8 @@ variables:
     common_name: trafficcontroller
     extended_key_usage:
     - client_auth
+    alternative_names:
+    - trafficcontroller
 - name: loggregator_rlp_gateway_tls_cc
   type: certificate
   options:
@@ -2083,6 +2093,8 @@ variables:
     common_name: rlp-gateway
     extended_key_usage:
     - client_auth
+    alternative_names:
+    - rlp-gateway
 - name: loggregator_tls_rlp
   type: certificate
   options:
@@ -2091,6 +2103,8 @@ variables:
     extended_key_usage:
     - client_auth
     - server_auth
+    alternative_names:
+    - reverselogproxy
 - name: loggregator_rlp_gateway
   type: certificate
   options:
@@ -2098,6 +2112,8 @@ variables:
     common_name: rlp_gateway
     extended_key_usage:
     - client_auth
+    alternative_names:
+    - rlp_gateway
 - name: logs_provider
   options:
     ca: loggregator_ca
@@ -2355,6 +2371,8 @@ variables:
     common_name: metrics_agent
     extended_key_usage:
       - server_auth
+    alternative_names:
+    - metrics_agent
   type: certificate
 - name: metrics_discovery_metrics_tls
   options:
@@ -2362,6 +2380,8 @@ variables:
     common_name: metrics_discovery_metrics
     extended_key_usage:
       - server_auth
+    alternative_names:
+    - metrics_discovery_metrics
   type: certificate
 - name: scrape_config_generator_metrics_tls
   options:
@@ -2378,6 +2398,8 @@ variables:
     common_name: log_cache_metrics
     extended_key_usage:
     - server_auth
+    alternative_names:
+    - log_cache_metrics
 
 - name: log_cache_cf_auth_proxy_metrics_tls
   type: certificate
@@ -2386,6 +2408,8 @@ variables:
     common_name: log_cache_cf_auth_proxy_metrics
     extended_key_usage:
     - server_auth
+    alternative_names:
+    - log_cache_cf_auth_proxy_metrics
 
 - name: log_cache_gateway_metrics_tls
   type: certificate
@@ -2394,6 +2418,8 @@ variables:
     common_name: log_cache_gateway_metrics
     extended_key_usage:
     - server_auth
+    alternative_names:
+    - log_cache_gateway_metrics
 
 - name: forwarder_agent_metrics_tls
   type: certificate
@@ -2402,6 +2428,8 @@ variables:
     common_name: forwarder_agent_metrics
     extended_key_usage:
     - server_auth
+    alternative_names:
+    - forwarder_agent_metrics
 
 - name: loggregator_agent_metrics_tls
   type: certificate
@@ -2410,6 +2438,8 @@ variables:
     common_name: loggregator_agent_metrics
     extended_key_usage:
     - server_auth
+    alternative_names:
+    - loggregator_agent_metrics
 
 - name: loggr_udp_forwarder_tls
   type: certificate
@@ -2418,6 +2448,8 @@ variables:
     common_name: loggr_udp_forwarder_metrics
     extended_key_usage:
     - server_auth
+    alternative_names:
+    - loggr_udp_forwarder_metrics
 
 - name: syslog_agent_api_tls
   type: certificate
@@ -2450,6 +2482,8 @@ variables:
     common_name: syslog_agent_metrics
     extended_key_usage:
     - server_auth
+    alternative_names:
+    - syslog_agent_metrics
 
 - name: loggr_syslog_binding_cache_metrics_tls
   type: certificate
@@ -2458,6 +2492,9 @@ variables:
     common_name: loggr_syslog_binding_cache_metrics
     extended_key_usage:
     - server_auth
+    alternative_names:
+    - loggr_syslog_binding_cache_metrics
+
 
 - name: prom_scraper_scrape_tls
   type: certificate
@@ -2466,6 +2503,8 @@ variables:
     common_name: prom_scraper
     extended_key_usage:
     - client_auth
+    alternative_names:
+    - prom_scraper
 
 - name: prom_scraper_metrics_tls
   type: certificate
@@ -2474,6 +2513,8 @@ variables:
     common_name: prom_scraper_metrics
     extended_key_usage:
     - server_auth
+    alternative_names:
+    - prom_scraper_metrics
 
 - name: rlp_gateway_metrics_tls
   type: certificate
@@ -2482,6 +2523,8 @@ variables:
     common_name: rlp_gateway_metrics
     extended_key_usage:
     - server_auth
+    alternative_names:
+    - rlp_gateway_metrics
 
 - name: nats_internal_ca
   type: certificate
