@@ -40,7 +40,7 @@ groups:
   - ship-it-minor
   - ship-it-major
   - release-notes-template
-- name: fr
+- name: fresh/luna
   jobs:
   - unit-test-ops-files
   - unit-test-golang-tests
@@ -53,7 +53,7 @@ groups:
   - fresh-cats
   - fresh-delete-deployment
   - bless-manifest
-- name: up
+- name: upgrade/trelawney
   jobs:
   - unit-test-ops-files
   - unit-test-golang-tests
@@ -66,7 +66,7 @@ groups:
   - upgrade-release-pool-manual
   - upgrade-delete-deployment
   - bless-manifest
-- name: ex
+- name: experimental/hermione
   jobs:
   - unit-test-ops-files
   - unit-test-golang-tests
@@ -80,7 +80,7 @@ groups:
   - experimental-smoke-tests
   - experimental-ops-files
   - bless-manifest
-- name: li
+- name: lite/snitch
   jobs:
   - unit-test-ops-files
   - unit-test-golang-tests
@@ -104,7 +104,7 @@ groups:
   - bbr-release-pool
   - bbr-release-pool-manual
   - bless-manifest
-- name: wi
+- name: windows
   jobs:
   - unit-test-ops-files
   - unit-test-golang-tests
@@ -115,7 +115,7 @@ groups:
   - windows-cats
   - windows-unclaim-env
   - bless-manifest
-- name: st
+- name: stable/bellatrix
   jobs:
   - stable-acquire-pool
   - stable-release-pool-manual
@@ -363,11 +363,6 @@ resources:
       bucket: trelawney-upgrade-external-resource-state
       credentials: ((trelawney_gcp_service_account_json))
     env_name: trelawney
-    vars:
-      cf_db_name: "terraform-20200710002148588500000002"
-      project: "cf-relint-trelawney"
-      region: "us-central1"
-      service_account_key: ((trelawney_gcp_service_account_json))
 
 - name: toolsmiths-windows-env
   type: toolsmiths-cf-pool
@@ -776,17 +771,28 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
       IGNORE_ERRORS: true
+  - task: generate-external-db-vars-file
+    file: runtime-ci/tasks/generate-external-db-vars-file/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/trelawney/bbl-state
+      GCP_SERVICE_ACCOUNT_JSON: ((trelawney_gcp_service_account_json))
   - try:
       put: trelawney-external-resources
       params:
         action: destroy
         terraform_source: relint-envs/environments/test/trelawney/external-resource-templates
+        var_files:
+        - vars-file/db.tfvars
       get_params:
         action: destroy
   - put: trelawney-external-resources
     params:
       terraform_source: relint-envs/environments/test/trelawney/external-resource-templates
       delete_on_failure: true
+      var_files:
+      - vars-file/db.tfvars
   - task: collect-ops-files-latest-release
     file: cf-deployment-concourse-tasks/collect-ops-files/task.yml
     input_mapping:
@@ -993,6 +999,7 @@ jobs:
   - in_parallel:
     - get: cf-deployment-concourse-tasks
     - get: relint-envs
+    - get: runtime-ci
   - task: delete-deployment-cf
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
@@ -1006,13 +1013,21 @@ jobs:
       bbl-state: relint-envs
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
-  - try:
-      put: trelawney-external-resources
-      params:
-        action: destroy
-        terraform_source: relint-envs/environments/test/trelawney/external-resource-templates
-      get_params:
-        action: destroy
+  - task: generate-external-db-vars-file
+    file: runtime-ci/tasks/generate-external-db-vars-file/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/trelawney/bbl-state
+      GCP_SERVICE_ACCOUNT_JSON: ((trelawney_gcp_service_account_json))
+  - put: trelawney-external-resources
+    params:
+      action: destroy
+      terraform_source: relint-envs/environments/test/trelawney/external-resource-templates
+      var_files:
+      - vars-file/db.tfvars
+    get_params:
+      action: destroy
   - put: upgrade-pool
     params: {release: upgrade-pool}
 

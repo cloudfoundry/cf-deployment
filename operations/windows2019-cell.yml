@@ -187,6 +187,7 @@
       release: loggregator-agent
     - name: prom_scraper_windows
       properties:
+        scrape_interval: 60s
         metrics:
           ca_cert: ((prom_scraper_metrics_tls.ca))
           cert: ((prom_scraper_metrics_tls.certificate))
@@ -212,7 +213,7 @@
   value:
     alias: windows2019
     os: windows2019
-    version: "2019.25"
+    version: "2019.26"
 - path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2016?
   type: replace
   value:
