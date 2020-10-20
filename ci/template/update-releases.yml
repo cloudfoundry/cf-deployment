@@ -268,6 +268,12 @@ resources:
   source:
     url: ((relint_slack_incoming_webhook))
 
+- name: cf-d-slack-alert
+  type: slack-notification
+  icon: slack
+  source:
+    url: ((cf_deployment_slack_incoming_webhook))
+
 - name: daily
   type: time
   icon: clock-outline
@@ -955,7 +961,7 @@ jobs:
         params:
           repository: cf-deployment-master-with-updated-manifest-version
           merge: true
-      - put: slack-alert
+      - put: cf-d-slack-alert
         params:
           icon_emoji: ":cloudfoundrylogo:"
           text: |
