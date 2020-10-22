@@ -66,12 +66,15 @@
   path: /variables/name=system_metrics?
   value:
     name: system_metrics
+    update_mode: converge
     options:
       ca: loggregator_ca
       common_name: system-metrics
       extended_key_usage:
       - client_auth
       - server_auth
+      alternative_names:
+      - system-metrics
     type: certificate
 - type: replace
   path: /releases/name=system-metrics?
@@ -91,39 +94,51 @@
   path: /variables/name=leadership_election_tls?
   value:
     name: leadership_election_tls
+    update_mode: converge
     options:
       ca: loggregator_ca
       common_name: leadership_election
       extended_key_usage:
       - server_auth
+      alternative_names:
+      - leadership_election
     type: certificate
 - type: replace
   path: /variables/name=leadership_election_client_tls?
   value:
     name: leadership_election_client_tls
+    update_mode: converge
     options:
       ca: loggregator_ca
       common_name: leadership_election_client
       extended_key_usage:
       - client_auth
+      alternative_names:
+      - leadership_election_client
     type: certificate
 - type: replace
   path: /variables/name=loggr_metric_scraper_metrics_tls?
   value:
     name: loggr_metric_scraper_metrics_tls
+    update_mode: converge
     options:
       ca: metric_scraper_ca
       common_name: loggr_metric_scraper_metrics
       extended_key_usage:
       - server_auth
+      alternative_names:
+      - loggr_metric_scraper_metrics
     type: certificate
 - type: replace
   path: /variables/name=leadership_election_metrics_tls?
   value:
     name: leadership_election_metrics_tls
+    update_mode: converge
     options:
       ca: metric_scraper_ca
       common_name: leadership_election_metrics
       extended_key_usage:
       - server_auth
+      alternative_names:
+      - leadership_election_metrics
     type: certificate
