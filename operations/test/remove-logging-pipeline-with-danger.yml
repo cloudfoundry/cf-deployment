@@ -117,9 +117,12 @@
   value:
     name: log_cache_syslog_tls
     type: certificate
+    update_mode: converge
     options:
       ca: loggregator_ca
       common_name: q-s3.log-cache.default.cf.bosh
+      alternative_names:
+      - q-s3.log-cache.default.cf.bosh
       extended_key_usage:
       - server_auth
 
@@ -128,9 +131,12 @@
   value:
     name: log_cache_syslog_server_metrics_tls
     type: certificate
+    update_mode: converge
     options:
       ca: metric_scraper_ca
       common_name: log_cache_syslog_server_metrics
+      alternative_names:
+      - log_cache_syslog_server_metrics
       extended_key_usage:
       - server_auth
 

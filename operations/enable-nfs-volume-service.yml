@@ -114,32 +114,35 @@
   path: /variables/-
   value:
     name: nfs_ca
+    type: certificate
     options:
       common_name: nfs-ca
       is_ca: true
-    type: certificate
 - type: replace
   path: /variables/-
   value:
     name: nfsv3driver_cert
+    type: certificate
     options:
-      alternative_names:
-      - 127.0.0.1
       ca: nfs_ca
       common_name: 127.0.0.1
+      alternative_names:
+      - 127.0.0.1
       extended_key_usage:
       - server_auth
-    type: certificate
 - type: replace
   path: /variables/-
   value:
     name: nfsv3driver_client_cert
+    type: certificate
+    update_mode: converge
     options:
       ca: nfs_ca
       common_name: nfs-client
+      alternative_names:
+      - nfs-client
       extended_key_usage:
       - client_auth
-    type: certificate
 - type: replace
   path: /releases/-
   value:

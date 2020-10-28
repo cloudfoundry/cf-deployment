@@ -1833,24 +1833,30 @@ variables:
 - name: cc_staging_upload_password
   type: password
 - name: cf_app_sd_ca
+  type: certificate
   options:
     common_name: service-discovery-controller.service.cf.internal
     is_ca: true
-  type: certificate
 - name: cf_app_sd_client_tls
+  type: certificate
+  update_mode: converge
   options:
     ca: cf_app_sd_ca
     common_name: service-discovery-controller.service.cf.internal
+    alternative_names:
+    - service-discovery-controller.service.cf.internal
     extended_key_usage:
     - client_auth
-  type: certificate
 - name: cf_app_sd_server_tls
+  type: certificate
+  update_mode: converge
   options:
     ca: cf_app_sd_ca
     common_name: service-discovery-controller.service.cf.internal
+    alternative_names:
+    - service-discovery-controller.service.cf.internal
     extended_key_usage:
     - server_auth
-  type: certificate
 - name: cf_mysql_mysql_admin_password
   type: password
 - name: cf_mysql_mysql_cluster_health_password
@@ -1880,27 +1886,33 @@ variables:
 - name: silk_ca
   type: certificate
   options:
-    is_ca: true
     common_name: silk-ca
+    is_ca: true
 - name: silk_controller
   type: certificate
+  update_mode: converge
   options:
     ca: silk_ca
     common_name: silk-controller.service.cf.internal
+    alternative_names:
+    - silk-controller.service.cf.internal
     extended_key_usage:
     - server_auth
 - name: silk_daemon
   type: certificate
+  update_mode: converge
   options:
     ca: silk_ca
     common_name: silk-daemon
+    alternative_names:
+    - silk-daemon
     extended_key_usage:
     - client_auth
 - name: network_policy_ca
   type: certificate
   options:
-    is_ca: true
     common_name: networkPolicyCA
+    is_ca: true
 - name: network_policy_server_external
   type: certificate
   options:
@@ -1912,16 +1924,22 @@ variables:
     - server_auth
 - name: network_policy_server
   type: certificate
+  update_mode: converge
   options:
     ca: network_policy_ca
     common_name: policy-server.service.cf.internal
+    alternative_names:
+    - policy-server.service.cf.internal
     extended_key_usage:
     - server_auth
 - name: network_policy_client
   type: certificate
+  update_mode: converge
   options:
     ca: network_policy_ca
     common_name: clientName
+    alternative_names:
+    - clientName
     extended_key_usage:
     - client_auth
 - name: uaa_clients_routing_api_client_secret
@@ -1971,18 +1989,24 @@ variables:
 - name: service_cf_internal_ca
   type: certificate
   options:
-    is_ca: true
     common_name: internalCA
+    is_ca: true
 - name: blobstore_tls
   type: certificate
+  update_mode: converge
   options:
     ca: service_cf_internal_ca
     common_name: blobstore.service.cf.internal
+    alternative_names:
+    - blobstore.service.cf.internal
 - name: diego_auctioneer_client
   type: certificate
+  update_mode: converge
   options:
     ca: service_cf_internal_ca
-    common_name: auctioneer client
+    common_name: auctioneer-client
+    alternative_names:
+    - auctioneer-client
     extended_key_usage:
     - client_auth
 - name: diego_auctioneer_server
@@ -1990,16 +2014,19 @@ variables:
   options:
     ca: service_cf_internal_ca
     common_name: auctioneer.service.cf.internal
-    extended_key_usage:
-    - server_auth
     alternative_names:
     - "*.auctioneer.service.cf.internal"
     - auctioneer.service.cf.internal
+    extended_key_usage:
+    - server_auth
 - name: diego_bbs_client
   type: certificate
+  update_mode: converge
   options:
     ca: service_cf_internal_ca
-    common_name: bbs client
+    common_name: bbs-client
+    alternative_names:
+    - bbs-client
     extended_key_usage:
     - client_auth
 - name: diego_bbs_server
@@ -2007,17 +2034,20 @@ variables:
   options:
     ca: service_cf_internal_ca
     common_name: bbs.service.cf.internal
-    extended_key_usage:
-    - server_auth
-    - client_auth
     alternative_names:
     - "*.bbs.service.cf.internal"
     - bbs.service.cf.internal
+    extended_key_usage:
+    - server_auth
+    - client_auth
 - name: diego_rep_client
   type: certificate
+  update_mode: converge
   options:
     ca: service_cf_internal_ca
-    common_name: rep client
+    common_name: rep-client
+    alternative_names:
+    - rep-client
     extended_key_usage:
     - client_auth
 - name: diego_rep_agent_v2
@@ -2025,133 +2055,135 @@ variables:
   options:
     ca: service_cf_internal_ca
     common_name: cell.service.cf.internal
-    extended_key_usage:
-    - client_auth
-    - server_auth
     alternative_names:
     - "*.cell.service.cf.internal"
     - cell.service.cf.internal
     - 127.0.0.1
     - localhost
+    extended_key_usage:
+    - client_auth
+    - server_auth
 - name: loggregator_ca
   type: certificate
   options:
-    is_ca: true
     common_name: loggregatorCA
+    is_ca: true
 - name: loggregator_tls_statsdinjector
   type: certificate
   update_mode: converge
   options:
     ca: loggregator_ca
     common_name: statsdinjector
-    extended_key_usage:
-    - client_auth
     alternative_names:
     - statsdinjector
+    extended_key_usage:
+    - client_auth
 - name: loggregator_tls_agent
   type: certificate
   update_mode: converge
   options:
     ca: loggregator_ca
     common_name: metron
+    alternative_names:
+    - metron
     extended_key_usage:
     - client_auth
     - server_auth
-    alternative_names:
-    - metron
 - name: loggregator_tls_doppler
   type: certificate
   update_mode: converge
   options:
     ca: loggregator_ca
     common_name: doppler
+    alternative_names:
+    - doppler
     extended_key_usage:
     - client_auth
     - server_auth
-    alternative_names:
-    - doppler
 - name: loggregator_tls_tc
   type: certificate
   update_mode: converge
   options:
     ca: loggregator_ca
     common_name: trafficcontroller
+    alternative_names:
+    - trafficcontroller
     extended_key_usage:
     - client_auth
     - server_auth
-    alternative_names:
-    - trafficcontroller
 - name: loggregator_tls_cc_tc
   type: certificate
   update_mode: converge
   options:
     ca: service_cf_internal_ca
     common_name: trafficcontroller
-    extended_key_usage:
-    - client_auth
     alternative_names:
     - trafficcontroller
+    extended_key_usage:
+    - client_auth
 - name: loggregator_rlp_gateway_tls_cc
   type: certificate
   update_mode: converge
   options:
     ca: service_cf_internal_ca
     common_name: rlp-gateway
-    extended_key_usage:
-    - client_auth
     alternative_names:
     - rlp-gateway
+    extended_key_usage:
+    - client_auth
 - name: loggregator_tls_rlp
   type: certificate
   update_mode: converge
   options:
     ca: loggregator_ca
     common_name: reverselogproxy
+    alternative_names:
+    - reverselogproxy
     extended_key_usage:
     - client_auth
     - server_auth
-    alternative_names:
-    - reverselogproxy
 - name: loggregator_rlp_gateway
   type: certificate
   update_mode: converge
   options:
     ca: loggregator_ca
     common_name: rlp_gateway
-    extended_key_usage:
-    - client_auth
     alternative_names:
     - rlp_gateway
+    extended_key_usage:
+    - client_auth
 - name: logs_provider
+  type: certificate
+  update_mode: converge
   options:
     ca: loggregator_ca
     common_name: log-cache
+    alternative_names:
+    - log-cache
     extended_key_usage:
     - client_auth
     - server_auth
-    alternative_names:
-    - log-cache
-  type: certificate
-  update_mode: converge
 - name: log_cache_ca
+  type: certificate
   options:
     common_name: log-cache
     is_ca: true
-  type: certificate
 - name: log_cache
+  type: certificate
+  update_mode: converge
   options:
+    ca: log_cache_ca
+    common_name: log-cache
     alternative_names:
     - log_cache
     - log-cache
     - logcache
-    ca: log_cache_ca
-    common_name: log-cache
     extended_key_usage:
     - client_auth
     - server_auth
+- name: log_cache_to_loggregator_agent
   type: certificate
   update_mode: converge
-- name: log_cache_to_loggregator_agent
   options:
     ca: loggregator_ca
     common_name: log-cache
@@ -2159,8 +2191,6 @@ variables:
     - log-cache
     extended_key_usage:
     - client_auth
-  type: certificate
-  update_mode: converge
 - name: cc_logcache_tls
   type: certificate
   update_mode: converge
@@ -2182,14 +2212,17 @@ variables:
     - "*.log-cache.((system_domain))"
 - name: log_cache_proxy_tls
   type: certificate
+  update_mode: converge
   options:
     ca: log_cache_ca
     common_name: localhost
+    alternative_names:
+    - localhost
 - name: router_ca
   type: certificate
   options:
-    is_ca: true
     common_name: routerCA
+    is_ca: true
 - name: router_ssl
   type: certificate
   options:
@@ -2205,23 +2238,29 @@ variables:
     is_ca: true
 - name: routing_api_tls
   type: certificate
+  update_mode: converge
   options:
     ca: routing_api_ca
     common_name: routing-api.service.cf.internal
+    alternative_names:
+    - routing-api.service.cf.internal
     extended_key_usage:
       - server_auth
 - name: routing_api_tls_client
   type: certificate
+  update_mode: converge
   options:
     ca: routing_api_ca
     common_name: routing-api-client
+    alternative_names:
+    - routing-api-client
     extended_key_usage:
       - client_auth
 - name: uaa_ca
   type: certificate
   options:
-    is_ca: true
     common_name: uaaCA
+    is_ca: true
 - name: uaa_ssl
   type: certificate
   options:
@@ -2231,9 +2270,12 @@ variables:
     - uaa.service.cf.internal
 - name: uaa_login_saml
   type: certificate
+  update_mode: converge
   options:
     ca: uaa_ca
     common_name: uaa_login_saml
+    alternative_names:
+    - uaa_login_saml
 - name: cc_tls
   type: certificate
   update_mode: converge
@@ -2255,23 +2297,32 @@ variables:
     - cloud-controller-ng.service.cf.internal
 - name: cc_bridge_tps
   type: certificate
+  update_mode: converge
   options:
     ca: service_cf_internal_ca
     common_name: tps_watcher
+    alternative_names:
+    - tps_watcher
     extended_key_usage:
     - client_auth
 - name: cc_bridge_cc_uploader
   type: certificate
+  update_mode: converge
   options:
     ca: service_cf_internal_ca
     common_name: cc_uploader
+    alternative_names:
+    - cc_uploader
     extended_key_usage:
     - client_auth
 - name: cc_bridge_cc_uploader_server
   type: certificate
+  update_mode: converge
   options:
     ca: service_cf_internal_ca
     common_name: cc-uploader.service.cf.internal
+    alternative_names:
+    - cc-uploader.service.cf.internal
     extended_key_usage:
     - server_auth
 - name: diego_locket_server
@@ -2279,16 +2330,19 @@ variables:
   options:
     ca: service_cf_internal_ca
     common_name: locket.service.cf.internal
-    extended_key_usage:
-    - server_auth
     alternative_names:
     - "*.locket.service.cf.internal"
     - locket.service.cf.internal
+    extended_key_usage:
+    - server_auth
 - name: diego_locket_client
   type: certificate
+  update_mode: converge
   options:
     ca: service_cf_internal_ca
-    common_name: locket client
+    common_name: locket-client
+    alternative_names:
+    - locket-client
     extended_key_usage:
     - client_auth
 - name: locket_database_password
@@ -2308,11 +2362,11 @@ variables:
   type: certificate
   options:
     ca: service_cf_internal_ca
-    extended_key_usage:
-    - client_auth
     common_name: gorouter_backend_tls
     alternative_names:
     - gorouter.service.cf.internal
+    extended_key_usage:
+    - client_auth
 - name: credhub_ca
   type: certificate
   options:
@@ -2330,11 +2384,11 @@ variables:
   type: certificate
   options:
     ca: service_cf_internal_ca
-    extended_key_usage:
-    - client_auth
     common_name: ssh_proxy_backends_tls
     alternative_names:
     - ssh-proxy.service.cf.internal
+    extended_key_usage:
+    - client_auth
 - name: pxc_galera_ca
   type: certificate
   options:
@@ -2347,72 +2401,80 @@ variables:
     is_ca: true
 - name: galera_server_certificate
   type: certificate
+  update_mode: converge
   options:
     ca: pxc_galera_ca
     common_name: galera_server_certificate
+    alternative_names:
+    - galera_server_certificate
     extended_key_usage:
     - server_auth
     - client_auth
 - name: mysql_server_certificate
   type: certificate
+  update_mode: converge
   options:
     ca: pxc_server_ca
     common_name: sql-db.service.cf.internal
+    alternative_names:
+    - sql-db.service.cf.internal
 
 - name: loggregator_rlp_gateway_tls
   type: certificate
   update_mode: converge
   options:
+    ca: service_cf_internal_ca
+    common_name: log-stream.((system_domain))
     alternative_names:
     - log-stream.((system_domain))
     - log-api.service.cf.internal
-    ca: service_cf_internal_ca
-    common_name: log-stream.((system_domain))
 
 - name: loggregator_trafficcontroller_tls
   type: certificate
   update_mode: converge
   options:
+    ca: service_cf_internal_ca
+    common_name: doppler.((system_domain))
     alternative_names:
     - doppler.((system_domain))
     - log-api.service.cf.internal
-    ca: service_cf_internal_ca
-    common_name: doppler.((system_domain))
 
 - name: metric_scraper_ca
   type: certificate
   options:
-    is_ca: true
     common_name: metricScraperCA
+    is_ca: true
 
 - name: metrics_agent_tls
+  type: certificate
+  update_mode: converge
   options:
     ca: metric_scraper_ca
     common_name: metrics_agent
-    extended_key_usage:
-      - server_auth
     alternative_names:
     - metrics_agent
+    extended_key_usage:
+      - server_auth
+- name: metrics_discovery_metrics_tls
   type: certificate
   update_mode: converge
-- name: metrics_discovery_metrics_tls
   options:
     ca: metric_scraper_ca
     common_name: metrics_discovery_metrics
-    extended_key_usage:
-      - server_auth
     alternative_names:
     - metrics_discovery_metrics
+    extended_key_usage:
+      - server_auth
+- name: scrape_config_generator_metrics_tls
   type: certificate
   update_mode: converge
-- name: scrape_config_generator_metrics_tls
   options:
     ca: metric_scraper_ca
     common_name: scrape_config_generator_metrics
+    alternative_names:
+    - scrape_config_generator_metrics
     extended_key_usage:
       - server_auth
-  type: certificate
-  update_mode: converge
 
 - name: log_cache_metrics_tls
   type: certificate
@@ -2420,10 +2482,10 @@ variables:
   options:
     ca: metric_scraper_ca
     common_name: log_cache_metrics
-    extended_key_usage:
-    - server_auth
     alternative_names:
     - log_cache_metrics
+    extended_key_usage:
+    - server_auth
 
 - name: log_cache_cf_auth_proxy_metrics_tls
   type: certificate
@@ -2431,10 +2493,10 @@ variables:
   options:
     ca: metric_scraper_ca
     common_name: log_cache_cf_auth_proxy_metrics
-    extended_key_usage:
-    - server_auth
     alternative_names:
     - log_cache_cf_auth_proxy_metrics
+    extended_key_usage:
+    - server_auth
 
 - name: log_cache_gateway_metrics_tls
   type: certificate
@@ -2442,10 +2504,10 @@ variables:
   options:
     ca: metric_scraper_ca
     common_name: log_cache_gateway_metrics
-    extended_key_usage:
-    - server_auth
     alternative_names:
     - log_cache_gateway_metrics
+    extended_key_usage:
+    - server_auth
 
 - name: forwarder_agent_metrics_tls
   type: certificate
@@ -2453,10 +2515,10 @@ variables:
   options:
     ca: metric_scraper_ca
     common_name: forwarder_agent_metrics
-    extended_key_usage:
-    - server_auth
     alternative_names:
     - forwarder_agent_metrics
+    extended_key_usage:
+    - server_auth
 
 - name: loggregator_agent_metrics_tls
   type: certificate
@@ -2464,10 +2526,10 @@ variables:
   options:
     ca: metric_scraper_ca
     common_name: loggregator_agent_metrics
-    extended_key_usage:
-    - server_auth
     alternative_names:
     - loggregator_agent_metrics
+    extended_key_usage:
+    - server_auth
 
 - name: loggr_udp_forwarder_tls
   type: certificate
@@ -2475,10 +2537,10 @@ variables:
   options:
     ca: metric_scraper_ca
     common_name: loggr_udp_forwarder_metrics
-    extended_key_usage:
-    - server_auth
     alternative_names:
     - loggr_udp_forwarder_metrics
+    extended_key_usage:
+    - server_auth
 
 - name: syslog_agent_api_tls
   type: certificate
@@ -2486,10 +2548,10 @@ variables:
   options:
     ca: loggregator_ca
     common_name: syslog-agent
-    extended_key_usage:
-    - client_auth
     alternative_names:
     - syslog-agent
+    extended_key_usage:
+    - client_auth
 
 - name: binding_cache_api_tls
   type: certificate
@@ -2497,10 +2559,10 @@ variables:
   options:
     ca: service_cf_internal_ca
     common_name: binding-cache
-    extended_key_usage:
-    - client_auth
     alternative_names:
     - binding-cache
+    extended_key_usage:
+    - client_auth
 
 - name: binding_cache_tls
   type: certificate
@@ -2508,10 +2570,10 @@ variables:
   options:
     ca: loggregator_ca
     common_name: binding-cache
-    extended_key_usage:
-    - server_auth
     alternative_names:
     - binding-cache
+    extended_key_usage:
+    - server_auth
 
 - name: syslog_agent_metrics_tls
   type: certificate
@@ -2519,10 +2581,10 @@ variables:
   options:
     ca: metric_scraper_ca
     common_name: syslog_agent_metrics
-    extended_key_usage:
-    - server_auth
     alternative_names:
     - syslog_agent_metrics
+    extended_key_usage:
+    - server_auth
 
 - name: loggr_syslog_binding_cache_metrics_tls
   type: certificate
@@ -2530,11 +2592,10 @@ variables:
   options:
     ca: metric_scraper_ca
     common_name: loggr_syslog_binding_cache_metrics
-    extended_key_usage:
-    - server_auth
     alternative_names:
     - loggr_syslog_binding_cache_metrics
-
+    extended_key_usage:
+    - server_auth
 
 - name: prom_scraper_scrape_tls
   type: certificate
@@ -2542,10 +2603,10 @@ variables:
   options:
     ca: metric_scraper_ca
     common_name: prom_scraper
-    extended_key_usage:
-    - client_auth
     alternative_names:
     - prom_scraper
+    extended_key_usage:
+    - client_auth
 
 - name: prom_scraper_metrics_tls
   type: certificate
@@ -2553,10 +2614,10 @@ variables:
   options:
     ca: metric_scraper_ca
     common_name: prom_scraper_metrics
-    extended_key_usage:
-    - server_auth
     alternative_names:
     - prom_scraper_metrics
+    extended_key_usage:
+    - server_auth
 
 - name: rlp_gateway_metrics_tls
   type: certificate
@@ -2564,16 +2625,16 @@ variables:
   options:
     ca: metric_scraper_ca
     common_name: rlp_gateway_metrics
-    extended_key_usage:
-    - server_auth
     alternative_names:
     - rlp_gateway_metrics
+    extended_key_usage:
+    - server_auth
 
 - name: nats_internal_ca
   type: certificate
   options:
-    is_ca: true
     common_name: nats_internal
+    is_ca: true
 
 - name: nats_internal_cert
   type: certificate
@@ -2590,19 +2651,23 @@ variables:
 - name: nats_ca
   type: certificate
   options:
-    is_ca: true
     common_name: nats
+    is_ca: true
 
 - name: nats_client_cert
   type: certificate
+  update_mode: converge
   options:
     ca: nats_ca
-    common_name: "nats_client"
+    common_name: nats_client
+    alternative_names:
+    - nats_client
     extended_key_usage:
     - client_auth
 
 - name: nats_server_cert
   type: certificate
+  update_mode: converge
   options:
     ca: nats_ca
     common_name: nats.service.cf.internal
@@ -2611,7 +2676,6 @@ variables:
     - nats.service.cf.internal
     extended_key_usage:
     - server_auth
-  update_mode: converge
   consumes:
     alternative_name:
       from: nats-tls-address

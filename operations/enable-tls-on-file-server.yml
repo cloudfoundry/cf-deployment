@@ -11,9 +11,12 @@
   path: /variables/-
   value:
     name: file_server_cert
+    type: certificate
+    update_mode: converge
     options:
       ca: service_cf_internal_ca
       common_name: file-server.service.cf.internal
-    type: certificate
-    extended_key_usage:
-      - server_auth
+      alternative_names:
+      - file-server.service.cf.internal
+      extended_key_usage:
+        - server_auth

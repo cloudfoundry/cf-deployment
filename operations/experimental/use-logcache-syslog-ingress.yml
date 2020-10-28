@@ -44,8 +44,11 @@
   value:
     name: log_cache_syslog_server_metrics_tls
     type: certificate
+    update_mode: converge
     options:
       ca: metric_scraper_ca
       common_name: log_cache_syslog_server_metrics
+      alternative_names:
+      - log_cache_syslog_server_metrics
       extended_key_usage:
       - server_auth

@@ -137,104 +137,115 @@
   path: /variables/name=metric_store_to_logs_provider?
   value:
     name: metric_store_to_logs_provider
+    type: certificate
     options:
       ca: loggregator_ca
       common_name: metric-store
+      alternative_names:
+      - metric-store
       extended_key_usage:
       - client_auth
       - server_auth
-    type: certificate
 - type: replace
   path: /variables/name=metric_store_ca?
   value:
     name: metric_store_ca
+    type: certificate
     options:
       common_name: metric-store
       is_ca: true
-    type: certificate
 - type: replace
   path: /variables/name=metric_store?
   value:
     name: metric_store
+    type: certificate
     options:
+      ca: metric_store_ca
+      common_name: metric-store
       alternative_names:
       - metric-store
       - localhost
-      ca: metric_store_ca
-      common_name: metric-store
       extended_key_usage:
       - client_auth
       - server_auth
-    type: certificate
 - type: replace
   path: /variables/name=metric_store_server?
   value:
     name: metric_store_server
+    type: certificate
     options:
-      alternative_names:
-      - metric-store
       ca: metric_store_ca
       common_name: metric-store
+      alternative_names:
+      - metric-store
       extended_key_usage:
       - server_auth
-    type: certificate
 - type: replace
   path: /variables/name=nozzle_to_metric_store_client?
   value:
     name: nozzle_to_metric_store_client
+    type: certificate
     options:
-      alternative_names:
-      - metric-store
       ca: metric_store_ca
       common_name: metric-store
+      alternative_names:
+      - metric-store
       extended_key_usage:
       - client_auth
-    type: certificate
 - type: replace
   path: /variables/name=metricstore_ssl?
   value:
     name: metricstore_ssl
+    type: certificate
     options:
+      ca: service_cf_internal_ca
+      common_name: metric-store
       alternative_names:
       - metric-store.((system_domain))
       - '*.metric-store.((system_domain))'
-      ca: service_cf_internal_ca
-      common_name: metric-store
-    type: certificate
 - type: replace
   path: /variables/name=metric_store_internode?
   value:
     name: metric_store_internode
+    type: certificate
     options:
-      alternative_names:
-      - metric-store
       ca: metric_store_ca
       common_name: metric-store
+      alternative_names:
+      - metric-store
       extended_key_usage:
       - server_auth
       - client_auth
-    type: certificate
 - type: replace
   path: /variables/name=metric_store_proxy_tls?
   value:
     name: metric_store_proxy_tls
+    type: certificate
+    update_mode: converge
     options:
       ca: metric_store_ca
       common_name: localhost
-    type: certificate
+      alternative_names:
+      - localhost
 - type: replace
   path: /variables/name=metric_store_metrics_server?
   value:
     name: metric_store_metrics_server
+    type: certificate
+    update_mode: converge
     options:
       ca: metric_scraper_ca
       common_name: metric-store
-    type: certificate
+      alternative_names:
+      - metric-store
 - type: replace
   path: /variables/name=metric_store_metrics_client?
   value:
     name: metric_store_metrics_client
+    type: certificate
+    update_mode: converge
     options:
       ca: metric_scraper_ca
       common_name: metric-store-client
-    type: certificate
+      alternative_names:
+      - metric-store-client

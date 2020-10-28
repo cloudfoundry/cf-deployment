@@ -149,26 +149,32 @@
     name: uaa-oidc_ca
     type: certificate
     options:
-      is_ca: true
       common_name: uaa-oidc
       alternative_names: ["*.uaa-oidc.service.cf.internal"]
       extended_key_usage:
       - server_auth
+      is_ca: true
 
 - type: replace
   path: /variables/-
   value:
     name: saml_oidc-key1
     type: certificate
+    update_mode: converge
     options:
       ca: uaa-oidc_ca
       common_name: saml_oidc
+      alternative_names:
+      - saml_oidc
 
 - type: replace
   path: /variables/-
   value:
     name: uaa-oidc_tls
     type: certificate
+    update_mode: converge
     options:
       ca: uaa-oidc_ca
       common_name: uaa-oidc.service.cf.internal
+      alternative_names:
+      - uaa-oidc.service.cf.internal

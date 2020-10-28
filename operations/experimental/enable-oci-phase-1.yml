@@ -27,10 +27,13 @@
   value:
     name: grootfs_remote_layer_tls
     type: certificate
+    update_mode: converge
     options:
       ca: service_cf_internal_ca
       common_name: cell.service.cf.internal
+      alternative_names:
+      - cell.service.cf.internal
+      - "*.cell.service.cf.internal"
       extended_key_usage:
       - client_auth
       - server_auth
-      alternative_names: ["*.cell.service.cf.internal"]

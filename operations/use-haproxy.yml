@@ -38,18 +38,18 @@
   path: /variables/-
   value:
     name: haproxy_ca
+    type: certificate
     options:
       common_name: haproxyCA
       is_ca: true
-    type: certificate
 - type: replace
   path: /variables/-
   value:
     name: haproxy_ssl
+    type: certificate
     options:
+      ca: haproxy_ca
+      common_name: haproxySSL
       alternative_names:
       - ((system_domain))
       - '*.((system_domain))'
-      ca: haproxy_ca
-      common_name: haproxySSL
-    type: certificate

@@ -66,16 +66,16 @@
   path: /variables/name=system_metrics?
   value:
     name: system_metrics
+    type: certificate
     update_mode: converge
     options:
       ca: loggregator_ca
       common_name: system-metrics
+      alternative_names:
+      - system-metrics
       extended_key_usage:
       - client_auth
       - server_auth
-      alternative_names:
-      - system-metrics
-    type: certificate
 - type: replace
   path: /releases/name=system-metrics?
   value:
@@ -94,51 +94,51 @@
   path: /variables/name=leadership_election_tls?
   value:
     name: leadership_election_tls
+    type: certificate
     update_mode: converge
     options:
       ca: loggregator_ca
       common_name: leadership_election
-      extended_key_usage:
-      - server_auth
       alternative_names:
       - leadership_election
-    type: certificate
+      extended_key_usage:
+      - server_auth
 - type: replace
   path: /variables/name=leadership_election_client_tls?
   value:
     name: leadership_election_client_tls
+    type: certificate
     update_mode: converge
     options:
       ca: loggregator_ca
       common_name: leadership_election_client
-      extended_key_usage:
-      - client_auth
       alternative_names:
       - leadership_election_client
-    type: certificate
+      extended_key_usage:
+      - client_auth
 - type: replace
   path: /variables/name=loggr_metric_scraper_metrics_tls?
   value:
     name: loggr_metric_scraper_metrics_tls
+    type: certificate
     update_mode: converge
     options:
       ca: metric_scraper_ca
       common_name: loggr_metric_scraper_metrics
-      extended_key_usage:
-      - server_auth
       alternative_names:
       - loggr_metric_scraper_metrics
-    type: certificate
+      extended_key_usage:
+      - server_auth
 - type: replace
   path: /variables/name=leadership_election_metrics_tls?
   value:
     name: leadership_election_metrics_tls
+    type: certificate
     update_mode: converge
     options:
       ca: metric_scraper_ca
       common_name: leadership_election_metrics
-      extended_key_usage:
-      - server_auth
       alternative_names:
       - leadership_election_metrics
-    type: certificate
+      extended_key_usage:
+      - server_auth
