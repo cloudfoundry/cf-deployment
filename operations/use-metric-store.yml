@@ -2,9 +2,9 @@
   path: /releases/name=metric-store?
   value:
     name: metric-store
-    sha1: b960e17e673f5b0479b7260a94702bc58759ff63
-    url: https://bosh.io/d/github.com/cloudfoundry/metric-store-release?v=1.5.0
-    version: 1.5.0
+    sha1: 996e098a88673d614239a9e39a21c52a194ebe8e
+    url: https://bosh.io/d/github.com/cloudfoundry/metric-store-release?v=1.5.1
+    version: 1.5.1
 - type: replace
   path: /instance_groups/name=metric-store?
   value:
@@ -137,115 +137,115 @@
   path: /variables/name=metric_store_to_logs_provider?
   value:
     name: metric_store_to_logs_provider
-    type: certificate
     options:
-      ca: loggregator_ca
-      common_name: metric-store
       alternative_names:
       - metric-store
+      ca: loggregator_ca
+      common_name: metric-store
       extended_key_usage:
       - client_auth
       - server_auth
+    type: certificate
 - type: replace
   path: /variables/name=metric_store_ca?
   value:
     name: metric_store_ca
-    type: certificate
     options:
       common_name: metric-store
       is_ca: true
+    type: certificate
 - type: replace
   path: /variables/name=metric_store?
   value:
     name: metric_store
-    type: certificate
     options:
-      ca: metric_store_ca
-      common_name: metric-store
       alternative_names:
       - metric-store
       - localhost
+      ca: metric_store_ca
+      common_name: metric-store
       extended_key_usage:
       - client_auth
       - server_auth
+    type: certificate
 - type: replace
   path: /variables/name=metric_store_server?
   value:
     name: metric_store_server
-    type: certificate
     options:
-      ca: metric_store_ca
-      common_name: metric-store
       alternative_names:
       - metric-store
+      ca: metric_store_ca
+      common_name: metric-store
       extended_key_usage:
       - server_auth
+    type: certificate
 - type: replace
   path: /variables/name=nozzle_to_metric_store_client?
   value:
     name: nozzle_to_metric_store_client
-    type: certificate
     options:
-      ca: metric_store_ca
-      common_name: metric-store
       alternative_names:
       - metric-store
+      ca: metric_store_ca
+      common_name: metric-store
       extended_key_usage:
       - client_auth
+    type: certificate
 - type: replace
   path: /variables/name=metricstore_ssl?
   value:
     name: metricstore_ssl
-    type: certificate
     options:
-      ca: service_cf_internal_ca
-      common_name: metric-store
       alternative_names:
       - metric-store.((system_domain))
       - '*.metric-store.((system_domain))'
+      ca: service_cf_internal_ca
+      common_name: metric-store
+    type: certificate
 - type: replace
   path: /variables/name=metric_store_internode?
   value:
     name: metric_store_internode
-    type: certificate
     options:
-      ca: metric_store_ca
-      common_name: metric-store
       alternative_names:
       - metric-store
+      ca: metric_store_ca
+      common_name: metric-store
       extended_key_usage:
       - server_auth
       - client_auth
+    type: certificate
 - type: replace
   path: /variables/name=metric_store_proxy_tls?
   value:
     name: metric_store_proxy_tls
-    type: certificate
-    update_mode: converge
     options:
-      ca: metric_store_ca
-      common_name: localhost
       alternative_names:
       - localhost
+      ca: metric_store_ca
+      common_name: localhost
+    type: certificate
+    update_mode: converge
 - type: replace
   path: /variables/name=metric_store_metrics_server?
   value:
     name: metric_store_metrics_server
-    type: certificate
-    update_mode: converge
     options:
-      ca: metric_scraper_ca
-      common_name: metric-store
       alternative_names:
       - metric-store
+      ca: metric_scraper_ca
+      common_name: metric-store
+    type: certificate
+    update_mode: converge
 - type: replace
   path: /variables/name=metric_store_metrics_client?
   value:
     name: metric_store_metrics_client
-    type: certificate
-    update_mode: converge
     options:
-      ca: metric_scraper_ca
-      common_name: metric-store-client
       alternative_names:
       - metric-store-client
+      ca: metric_scraper_ca
+      common_name: metric-store-client
+    type: certificate
+    update_mode: converge
