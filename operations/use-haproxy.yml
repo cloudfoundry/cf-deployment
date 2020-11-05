@@ -2,9 +2,9 @@
   path: /releases/-
   value:
     name: haproxy
-    sha1: 97fbb573fc04d36c548915d8daef12a547e722d6
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/haproxy-boshrelease?v=10.1.0
-    version: 10.1.0
+    sha1: df522a60352f43432527e9fde3be795838f015b0
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/haproxy-boshrelease?v=10.1.1
+    version: 10.1.1
 - type: remove
   path: /instance_groups/name=router/vm_extensions
 - type: remove
@@ -38,18 +38,18 @@
   path: /variables/-
   value:
     name: haproxy_ca
-    type: certificate
     options:
       common_name: haproxyCA
       is_ca: true
+    type: certificate
 - type: replace
   path: /variables/-
   value:
     name: haproxy_ssl
-    type: certificate
     options:
-      ca: haproxy_ca
-      common_name: haproxySSL
       alternative_names:
       - ((system_domain))
       - '*.((system_domain))'
+      ca: haproxy_ca
+      common_name: haproxySSL
+    type: certificate
