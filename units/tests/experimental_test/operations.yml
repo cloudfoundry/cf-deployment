@@ -11,6 +11,14 @@ add-system-metrics-agent-windows2019.yml:
 add-system-metrics-agent.yml: {}
 colocate-smoke-tests-on-cc-worker.yml: {}
 disable-interpolate-service-bindings.yml: {}
+disable-logs-in-firehose.yml: {}
+disable-logs-in-firehose-windows2019.yml:
+  ops:
+  - ../windows2019-cell.yml
+disable-v2-api.yml:
+  pathvalidator:
+    path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/temporary_enable_v2
+    expectedvalue: false
 enable-app-log-rate-limiting.yml:
   vars:
   - app_log_rate_limit=100
@@ -21,6 +29,8 @@ enable-app-log-rate-limiting-windows2019.yml:
   - app_log_rate_limit=100
 enable-bpm-garden.yml: {}
 enable-containerd-for-processes.yml: {}
+enable-cpu-throttling.yml: {}
+enable-direct-io-grootfs.yml: {}
 enable-iptables-logger.yml: {}
 enable-nginx-routing-integrity-windows2019.yml:
   ops:
@@ -40,16 +50,13 @@ set-cpu-weight-windows2019.yml:
   ops:
   - ../windows2019-cell.yml
 set-cpu-weight.yml: {}
+use-bionic-stemcell.yml: {}
 use-compiled-releases-windows.yml:
   ops:
   - ../use-compiled-releases.yml
   - ../windows2019-cell.yml
   - use-compiled-releases-windows.yml
 use-create-swap-delete-vm-strategy.yml: {}
-disable-logs-in-firehose.yml: {}
-disable-logs-in-firehose-windows2019.yml:
-  ops:
-  - ../windows2019-cell.yml
 use-logcache-syslog-ingress-windows2019.yml:
   ops:
   - ../windows2019-cell.yml
@@ -59,9 +66,3 @@ use-logcache-syslog-ingress.yml:
   ops:
   - use-logcache-syslog-ingress.yml
 use-native-garden-runc-runner.yml: {}
-enable-cpu-throttling.yml: {}
-enable-direct-io-grootfs.yml: {}
-disable-v2-api.yml:
-  pathvalidator:
-    path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/temporary_enable_v2
-    expectedvalue: false
