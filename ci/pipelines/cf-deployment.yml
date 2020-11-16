@@ -153,7 +153,7 @@ resources:
   icon: pool
   source:
     uri: git@github.com:cloudfoundry/relint-ci-pools
-    branch: master
+    branch: main
     pool: cf-deployment/fresh
     private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
 
@@ -162,7 +162,7 @@ resources:
   icon: pool
   source:
     uri: git@github.com:cloudfoundry/relint-ci-pools
-    branch: master
+    branch: main
     pool: cf-deployment/upgrade
     private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
 
@@ -171,7 +171,7 @@ resources:
   icon: pool
   source:
     uri: git@github.com:cloudfoundry/relint-ci-pools
-    branch: master
+    branch: main
     pool: cf-deployment/experimental
     private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
 
@@ -180,7 +180,7 @@ resources:
   icon: pool
   source:
     uri: git@github.com:cloudfoundry/relint-ci-pools
-    branch: master
+    branch: main
     pool: cf-deployment/lite
     private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
 
@@ -189,7 +189,7 @@ resources:
   icon: pool
   source:
     uri: git@github.com:cloudfoundry/relint-ci-pools
-    branch: master
+    branch: main
     pool: bbr
     private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
 
@@ -198,15 +198,15 @@ resources:
   icon: pool
   source:
     uri: git@github.com:cloudfoundry/relint-ci-pools
-    branch: master
+    branch: main
     pool: cf-deployment/stable
     private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
 
 - name: relint-envs
   type: git
-  icon: github-box
+  icon: github
   source:
-    branch: master
+    branch: main
     uri: git@github.com:cloudfoundry/relint-envs.git
     private_key: ((hagrid_env_readwrite_deploy_key.private_key))
 
@@ -224,28 +224,28 @@ resources:
 
 - name: cf-deployment-concourse-tasks
   type: git
-  icon: github-box
+  icon: github
   source:
     branch: master
     uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
 
 - name: runtime-ci
   type: git
-  icon: github-box
+  icon: github
   source:
     branch: master
     uri: https://github.com/cloudfoundry/runtime-ci.git
 
 - name: bosh-bootloader
   type: git
-  icon: github-box
+  icon: github
   source:
     branch: master
     uri: https://github.com/cloudfoundry/bosh-bootloader
 
 - name: cf-deployment-develop
   type: git
-  icon: github-box
+  icon: github
   source:
     branch: develop
     uri: git@github.com:cloudfoundry/cf-deployment.git
@@ -260,7 +260,7 @@ resources:
 
 - name: cf-deployment-release-candidate
   type: git
-  icon: github-box
+  icon: github
   source:
     branch: release-candidate
     uri: git@github.com:cloudfoundry/cf-deployment.git
@@ -275,7 +275,7 @@ resources:
 
 - name: cf-deployment-master
   type: git
-  icon: github-box
+  icon: github
   source:
     branch: master
     uri: git@github.com:cloudfoundry/cf-deployment.git
@@ -290,7 +290,7 @@ resources:
 
 - name: cf-deployment-all-branches
   type: git
-  icon: github-box
+  icon: github
   source:
     branch: develop
     uri: https://github.com/cloudfoundry/cf-deployment.git
@@ -304,15 +304,22 @@ resources:
 
 - name: cf-acceptance-tests-rc
   type: git
-  icon: github-box
+  icon: github
   source:
     branch: release-candidate
     uri: git@github.com:cloudfoundry/cf-acceptance-tests.git
     private_key: ((cf_acceptance_tests_readwrite_deploy_key.private_key))
 
-- name: bosh-deployment
+- name: cf-smoke-tests
   type: git
   icon: github-box
+  source:
+    branch: main
+    uri: https://github.com/cloudfoundry/cf-smoke-tests
+
+- name: bosh-deployment
+  type: git
+  icon: github
   source:
     branch: master
     uri: https://github.com/cloudfoundry/bosh-deployment.git
@@ -336,7 +343,7 @@ resources:
 
 - name: drats-master
   type: git
-  icon: github-box
+  icon: github
   source:
     branch: master
     uri: https://github.com/cloudfoundry-incubator/disaster-recovery-acceptance-tests.git
@@ -519,6 +526,7 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: runtime-ci
     - get: relint-envs
+    - get: cf-smoke-tests
   - task: guarantee-no-existing-cf-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:

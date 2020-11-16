@@ -30,6 +30,12 @@ groups:
   - #@ "acquire-{}-pre-dev-lock".format(r.name)
   - #@ "update-" + r.name
   #@ end
+- name: update-buildpack-releases
+  jobs:
+  #@ for r in data.values.buildpackReleases:
+  - #@ "acquire-{}-pre-dev-lock".format(r.name)
+  - #@ "update-" + r.name
+  #@ end
 - name: update-ops-releases
   jobs:
   #@ for r in data.values.opsReleases:
@@ -55,6 +61,12 @@ groups:
   - #@ "destroy-" + r.name + "-debug-env"
   #@ end
   #@ end
+  #@ for r in data.values.buildpackReleases:
+  #@ if hasattr(r, "debug"):
+  - #@ "update-" + r.name
+  - #@ "destroy-" + r.name + "-debug-env"
+  #@ end
+  #@ end
   #@ for r in data.values.opsReleases:
   #@ if hasattr(r, "debug"):
   - #@ "update-" + r.name
@@ -69,6 +81,10 @@ groups:
   - setup-infrastructure-compilation
   - destroy-infrastructure-compilation
   - run-bosh-cleanup-compilation
+
+#! Combine all base releases for common handling
+#@ combinedBaseReleases = data.values.baseReleases
+#@ combinedBaseReleases.extend(data.values.buildpackReleases)
 
 resource_types:
 - name: stemcell-version-bump
@@ -155,7 +171,7 @@ resources:
   type: git
   icon: github-box
   source:
-    branch: master
+    branch: main
     uri: git@github.com:cloudfoundry/relint-team.git
     private_key: ((runtime_ci_private_read_deploy_key.private_key))
 
@@ -208,7 +224,7 @@ resources:
     access_token: ((release_integration_download_bot_access_token))
 #@ end
 
-#@ for r in data.values.baseReleases:
+#@ for r in combinedBaseReleases:
 - name: #@ r.name + "-release"
   type: bosh-io-release
   source:
@@ -229,7 +245,7 @@ resources:
     repository: #@ r.repository
 #@ end
 
-#@ for r in data.values.baseReleases:
+#@ for r in combinedBaseReleases:
 - name: #@ r.name + "-release-gcs"
   type: gcs-resource
   source:
@@ -287,7 +303,7 @@ resources:
   icon: pool
   source:
     uri: git@github.com:cloudfoundry/relint-ci-pools
-    branch: master
+    branch: main
     pool: update-release-pool
     private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
 
@@ -297,13 +313,13 @@ resources:
   icon: pool
   source:
     uri: git@github.com:cloudfoundry/relint-ci-pools
-    branch: master
+    branch: main
     pool: update-release-pool
     private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
 #@ end
 
 jobs:
-#@ for r in data.values.baseReleases:
+#@ for r in combinedBaseReleases:
 #@ if hasattr(r, "debug"):
   #@ env = "pre-dev-debug"
 #@ else:
@@ -825,7 +841,7 @@ jobs:
       input_mapping:
         cf-deployment: cf-deployment-develop
     - in_parallel:
-      #@ for r in data.values.baseReleases:
+      #@ for r in combinedBaseReleases:
       - put: #@ r.name + "-release-gcs"
         params:
           file: #@ "compiled-releases/" + r.name + "-[0-9]*.tgz"
