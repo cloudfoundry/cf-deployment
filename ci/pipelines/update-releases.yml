@@ -212,9 +212,9 @@ resources:
     private_key: ((runtime_ci_private_read_deploy_key.private_key))
 - name: runtime-ci
   type: git
-  icon: github-box
+  icon: github
   source:
-    branch: master
+    branch: main
     uri: https://github.com/cloudfoundry/runtime-ci.git
 - name: stemcell
   type: bosh-io-stemcell
