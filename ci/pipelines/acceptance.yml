@@ -2,7 +2,6 @@ resources:
 - name: relint-envs
   type: git
   source:
-    branch: main
     uri: git@github.com:cloudfoundry/relint-envs.git
     private_key: ((hagrid_env_readwrite_deploy_key.private_key))
 - name: cf-deployment-release-candidate
@@ -13,19 +12,16 @@ resources:
 - name: runtime-ci
   type: git
   source:
-    branch: main
     uri: https://github.com/cloudfoundry/runtime-ci
 - name: cf-deployment-concourse-tasks
   type: git
   source:
-    branch: master
     uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
 # Plan patches
 - name: bosh-bootloader
   type: git
   icon: github
   source:
-    branch: main
     uri: https://github.com/cloudfoundry/bosh-bootloader
 
 jobs:

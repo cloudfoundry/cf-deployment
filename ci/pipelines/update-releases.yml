@@ -150,29 +150,28 @@ resource_types:
 resources:
 - name: cf-deployment-all-branches
   type: git
-  icon: github-box
+  icon: github
   source:
     uri: git@github.com:cloudfoundry/cf-deployment.git
     private_key: ((cf_deployment_readwrite_deploy_key.private_key))
 - name: cf-deployment-develop
   type: git
-  icon: github-box
+  icon: github
   source:
     branch: develop
     uri: git@github.com:cloudfoundry/cf-deployment.git
     private_key: ((cf_deployment_readwrite_deploy_key.private_key))
 - name: cf-deployment-release-candidate
   type: git
-  icon: github-box
+  icon: github
   source:
     branch: release-candidate
     uri: git@github.com:cloudfoundry/cf-deployment.git
     private_key: ((cf_deployment_readwrite_deploy_key.private_key))
-- name: cf-deployment-master
+- name: cf-deployment-main
   type: git
-  icon: github-box
   source:
-    branch: master
+    branch: main
     uri: git@github.com:cloudfoundry/cf-deployment.git
     private_key: ((cf_deployment_readwrite_deploy_key.private_key))
 - name: cf-deployment-version
@@ -192,20 +191,20 @@ resources:
     access_token: ((cf_deployment_release_bot_access_token))
 - name: cf-deployment-concourse-tasks
   type: git
-  icon: github-box
+  icon: github
   source:
     branch: master
     uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
 - name: relint-envs
   type: git
-  icon: github-box
+  icon: github
   source:
     branch: main
     uri: git@github.com:cloudfoundry/relint-envs.git
     private_key: ((hagrid_env_readwrite_deploy_key.private_key))
 - name: relint-team
   type: git
-  icon: github-box
+  icon: github
   source:
     branch: main
     uri: git@github.com:cloudfoundry/relint-team.git
@@ -214,7 +213,6 @@ resources:
   type: git
   icon: github
   source:
-    branch: main
     uri: https://github.com/cloudfoundry/runtime-ci.git
 - name: stemcell
   type: bosh-io-stemcell
@@ -14637,12 +14635,12 @@ jobs:
   - in_parallel:
     - get: stemcell
       trigger: true
-    - get: cf-deployment-master
+    - get: cf-deployment-main
     - get: runtime-ci
   - task: detect-stemcell-bump
     file: runtime-ci/tasks/detect-stemcell-bump/task.yml
     input_mapping:
-      cf-deployment: cf-deployment-master
+      cf-deployment: cf-deployment-main
   - put: stemcell-version-bump-detect
     params:
       type_file: stemcell-bump-type/result
@@ -15031,7 +15029,7 @@ jobs:
       - acquire-pre-dev-lock-for-update-stemcell-minor
       trigger: true
     - get: cf-deployment-concourse-tasks
-    - get: cf-deployment-master
+    - get: cf-deployment-main
     - get: relint-envs
     - get: runtime-ci
     - get: stemcell
@@ -15045,9 +15043,9 @@ jobs:
   - task: update-stemcell-minor
     file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
     input_mapping:
-      cf-deployment: cf-deployment-master
+      cf-deployment: cf-deployment-main
     output_mapping:
-      updated-cf-deployment: updated-cf-deployment-master
+      updated-cf-deployment: updated-cf-deployment-main
   - do:
     - task: bbl-up
       file: cf-deployment-concourse-tasks/bbl-up/task.yml
@@ -15092,7 +15090,7 @@ jobs:
       - task: combine-vars-files
         file: runtime-ci/tasks/combine-inputs/task.yml
         input_mapping:
-          first-input: cf-deployment-master
+          first-input: cf-deployment-main
           second-input: relint-envs
         output_mapping:
           combined-inputs: combined-vars-files
@@ -15100,8 +15098,8 @@ jobs:
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-master
-          ops-files: updated-cf-deployment-master
+          cf-deployment: updated-cf-deployment-main
+          ops-files: updated-cf-deployment-main
           vars-files: combined-vars-files
           pool-lock: pre-dev-pool
         params:
@@ -15134,12 +15132,12 @@ jobs:
       - task: update-cf-deployment-manifest-version
         file: runtime-ci/tasks/record-cfd-version-in-manifest/task.yml
         input_mapping:
-          cf-deployment-release-candidate: updated-cf-deployment-master
+          cf-deployment-release-candidate: updated-cf-deployment-main
         output_mapping:
-          cf-deployment-rc-with-updated-version: cf-deployment-master-with-updated-manifest-version
-      - put: cf-deployment-master
+          cf-deployment-rc-with-updated-version: cf-deployment-main-with-updated-manifest-version
+      - put: cf-deployment-main
         params:
-          repository: cf-deployment-master-with-updated-manifest-version
+          repository: cf-deployment-main-with-updated-manifest-version
           tag: cf-deployment-version/version
           tag_prefix: v
       - put: cf-deployment-release
@@ -15153,7 +15151,7 @@ jobs:
           bump: minor
       - put: cf-deployment-develop
         params:
-          repository: cf-deployment-master-with-updated-manifest-version
+          repository: cf-deployment-main-with-updated-manifest-version
           merge: true
       - put: cf-d-slack-alert
         params:
