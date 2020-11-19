@@ -70,11 +70,11 @@ There's another example [here](https://github.com/cloudfoundry/cf-deployment/iss
 
 Another factor is that we want to provide ops-files that "just work",
 but we sometimes want to re-use logic from other ops-files to that.
-For example, the [bosh-lite ops-file](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/bosh-lite.yml)
+For example, the [bosh-lite ops-file](https://github.com/cloudfoundry/cf-deployment/blob/main/operations/bosh-lite.yml)
 tries to scale down the number of instances
 as well as make the necessary changes to work with the Warden CPI.
 It turns out that the scale-down logic is duplicated with
-the [single-AZ ops-file](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/scale-to-one-az.yml).
+the [single-AZ ops-file](https://github.com/cloudfoundry/cf-deployment/blob/main/operations/scale-to-one-az.yml).
 
 Could we "import" other ops-files?
 Define a list of ops-files that are applied in-order?

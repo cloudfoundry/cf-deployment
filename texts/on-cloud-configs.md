@@ -101,4 +101,4 @@ For example:
   which sends internet-bound traffic to it.
 
 [bosh-docs-cloud-config]: https://bosh.io/docs/cloud-config.html
-[cloud-config-fixtures]: https://github.com/cloudfoundry/bosh-bootloader/tree/master/cloudconfig/fixtures
+[cloud-config-fixtures]: https://github.com/cloudfoundry/bosh-bootloader/tree/main/cloudconfig/fixtures
