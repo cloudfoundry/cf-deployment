@@ -1,9 +1,6 @@
 #@data/values
 ---
 baseReleases:
-- name: binary-buildpack
-  repository: cloudfoundry/binary-buildpack-release
-  bootstrap: true
 - name: bosh-dns-aliases
   repository: cloudfoundry/bosh-dns-aliases-release
 - name: bpm
@@ -20,14 +17,8 @@ baseReleases:
   repository: cloudfoundry/cflinuxfs3-release
 - name: diego
   repository: cloudfoundry/diego-release
-- name: dotnet-core-buildpack
-  repository: cloudfoundry/dotnet-core-buildpack-release
 - name: garden-runc
   repository: cloudfoundry/garden-runc-release
-- name: go-buildpack
-  repository: cloudfoundry/go-buildpack-release
-- name: java-buildpack
-  repository: cloudfoundry/java-buildpack-release
 - name: log-cache
   repository: cloudfoundry/log-cache-release
 - name: loggregator
@@ -36,26 +27,12 @@ baseReleases:
   repository: cloudfoundry/loggregator-agent-release
 - name: nats
   repository: cloudfoundry/nats-release
-- name: nginx-buildpack
-  repository: cloudfoundry/nginx-buildpack-release
-- name: nodejs-buildpack
-  repository: cloudfoundry/nodejs-buildpack-release
-- name: php-buildpack
-  repository: cloudfoundry/php-buildpack-release
-- name: python-buildpack
-  repository: cloudfoundry/python-buildpack-release
 - name: pxc
   repository: cloudfoundry-incubator/pxc-release
-- name: r-buildpack
-  repository: cloudfoundry/r-buildpack-release
 - name: routing
   repository: cloudfoundry/routing-release
-- name: ruby-buildpack
-  repository: cloudfoundry/ruby-buildpack-release
 - name: silk
   repository: cloudfoundry/silk-release
-- name: staticfile-buildpack
-  repository: cloudfoundry/staticfile-buildpack-release
 - name: statsd-injector
   repository: cloudfoundry/statsd-injector-release
 - name: uaa
@@ -66,6 +43,30 @@ baseReleases:
   repository: bosh-packages/cf-cli-release
 - name: metrics-discovery
   repository: cloudfoundry/metrics-discovery-release
+
+buildpackReleases:
+- name: binary-buildpack
+  repository: cloudfoundry/binary-buildpack-release
+- name: dotnet-core-buildpack
+  repository: cloudfoundry/dotnet-core-buildpack-release
+- name: go-buildpack
+  repository: cloudfoundry/go-buildpack-release
+- name: java-buildpack
+  repository: cloudfoundry/java-buildpack-release
+- name: nginx-buildpack
+  repository: cloudfoundry/nginx-buildpack-release
+- name: nodejs-buildpack
+  repository: cloudfoundry/nodejs-buildpack-release
+- name: php-buildpack
+  repository: cloudfoundry/php-buildpack-release
+- name: python-buildpack
+  repository: cloudfoundry/python-buildpack-release
+- name: r-buildpack
+  repository: cloudfoundry/r-buildpack-release
+- name: ruby-buildpack
+  repository: cloudfoundry/ruby-buildpack-release
+- name: staticfile-buildpack
+  repository: cloudfoundry/staticfile-buildpack-release
 
 opsReleases:
 - name: backup-and-restore-sdk

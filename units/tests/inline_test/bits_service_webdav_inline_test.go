@@ -81,7 +81,7 @@ func gitSetup(tempDir string) error {
 		return err
 	}
 
-	err = runCommandInDirectory(tempDir, "git", "fetch", "origin", "master")
+	err = runCommandInDirectory(tempDir, "git", "fetch", "origin", "main")
 	if err != nil {
 		return err
 	}

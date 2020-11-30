@@ -1,6 +1,6 @@
 module github.com/cf-deployment/units
 
-go 1.12
+go 1.14
 
 require (
 	github.com/sergi/go-diff v1.0.0

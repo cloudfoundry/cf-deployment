@@ -4,7 +4,7 @@
 
 - You are using `GCP` or `AWS` - `bbl` only supports these
 - `bbl` is installed
-- You have set the required environment variables for your IaaS environment as documented in `bbl up --help` and also the [README](https://github.com/cloudfoundry/bosh-bootloader/blob/master/README.md) of bosh-bootloader
+- You have set the required environment variables for your IaaS environment as documented in `bbl up --help` and also the [README](https://github.com/cloudfoundry/bosh-bootloader/blob/main/README.md) of bosh-bootloader
 - You have both `cf-deployment` and `bosh-deployment` repos handy
 
 ## 1. Obtain the plan patch and bbl up
@@ -15,8 +15,8 @@ and the ops files it uses
 by passing it a `plan-patch.`
 
 To deploy BOSH lite to GCP
-you will need the [`bosh-lite-gcp`](https://github.com/cloudfoundry/bosh-bootloader/tree/master/plan-patches/bosh-lite-gcp) plan patch.
-More information about [plan-patches](https://github.com/cloudfoundry/bosh-bootloader/tree/master/plan-patches)
+you will need the [`bosh-lite-gcp`](https://github.com/cloudfoundry/bosh-bootloader/tree/main/plan-patches/bosh-lite-gcp) plan patch.
+More information about [plan-patches](https://github.com/cloudfoundry/bosh-bootloader/tree/main/plan-patches)
 can be found in the [BOSH Bootloader](https://github.com/cloudfoundry/bosh-bootloader) repository.
 
 You will need to run `bbl plan`
