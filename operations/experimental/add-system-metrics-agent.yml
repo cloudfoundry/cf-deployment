@@ -66,16 +66,16 @@
   path: /variables/name=system_metrics?
   value:
     name: system_metrics
-    type: certificate
-    update_mode: converge
     options:
-      ca: loggregator_ca
-      common_name: system-metrics
       alternative_names:
       - system-metrics
+      ca: loggregator_ca
+      common_name: system-metrics
       extended_key_usage:
       - client_auth
       - server_auth
+    type: certificate
+    update_mode: converge
 - type: replace
   path: /releases/name=system-metrics?
   value:
@@ -87,58 +87,58 @@
   path: /releases/name=system-metrics-scraper?
   value:
     name: system-metrics-scraper
-    sha1: 1aeae4da3f589b04d530ea32267838ed510aa4ca
-    url: https://bosh.io/d/github.com/cloudfoundry/system-metrics-scraper-release?v=3.2.0
-    version: 3.2.0
+    sha1: e56c17b24fcf74cd80f4ceb2fecd90fdf4a44b6b
+    url: https://bosh.io/d/github.com/cloudfoundry/system-metrics-scraper-release?v=3.2.2
+    version: 3.2.2
 - type: replace
   path: /variables/name=leadership_election_tls?
   value:
     name: leadership_election_tls
-    type: certificate
-    update_mode: converge
     options:
-      ca: loggregator_ca
-      common_name: leadership_election
       alternative_names:
       - leadership_election
+      ca: loggregator_ca
+      common_name: leadership_election
       extended_key_usage:
       - server_auth
+    type: certificate
+    update_mode: converge
 - type: replace
   path: /variables/name=leadership_election_client_tls?
   value:
     name: leadership_election_client_tls
-    type: certificate
-    update_mode: converge
     options:
-      ca: loggregator_ca
-      common_name: leadership_election_client
       alternative_names:
       - leadership_election_client
+      ca: loggregator_ca
+      common_name: leadership_election_client
       extended_key_usage:
       - client_auth
+    type: certificate
+    update_mode: converge
 - type: replace
   path: /variables/name=loggr_metric_scraper_metrics_tls?
   value:
     name: loggr_metric_scraper_metrics_tls
-    type: certificate
-    update_mode: converge
     options:
-      ca: metric_scraper_ca
-      common_name: loggr_metric_scraper_metrics
       alternative_names:
       - loggr_metric_scraper_metrics
+      ca: metric_scraper_ca
+      common_name: loggr_metric_scraper_metrics
       extended_key_usage:
       - server_auth
+    type: certificate
+    update_mode: converge
 - type: replace
   path: /variables/name=leadership_election_metrics_tls?
   value:
     name: leadership_election_metrics_tls
-    type: certificate
-    update_mode: converge
     options:
-      ca: metric_scraper_ca
-      common_name: leadership_election_metrics
       alternative_names:
       - leadership_election_metrics
+      ca: metric_scraper_ca
+      common_name: leadership_election_metrics
       extended_key_usage:
       - server_auth
+    type: certificate
+    update_mode: converge
