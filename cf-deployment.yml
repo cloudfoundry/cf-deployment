@@ -479,6 +479,11 @@ instance_groups:
   - name: route_registrar
     release: routing
     properties:
+      nats:
+        tls:
+          enabled: true
+          client_cert: "((nats_client_cert.certificate))"
+          client_key: "((nats_client_cert.private_key))"
       route_registrar:
         routes:
         - name: cf-mysql-proxy
@@ -757,6 +762,11 @@ instance_groups:
   - name: route_registrar
     release: routing
     properties:
+      nats:
+        tls:
+          enabled: true
+          client_cert: "((nats_client_cert.certificate))"
+          client_key: "((nats_client_cert.private_key))"
       route_registrar:
         routes:
         - health_check:
@@ -816,6 +826,11 @@ instance_groups:
   - name: route_registrar
     release: routing
     properties:
+      nats:
+        tls:
+          enabled: true
+          client_cert: "((nats_client_cert.certificate))"
+          client_key: "((nats_client_cert.private_key))"
       route_registrar:
         routes:
         - name: blobstore
@@ -996,6 +1011,11 @@ instance_groups:
   - name: route_registrar
     release: routing
     properties:
+      nats:
+        tls:
+          enabled: true
+          client_cert: "((nats_client_cert.certificate))"
+          client_key: "((nats_client_cert.private_key))"
       route_registrar:
         routes:
         - name: api
@@ -1733,6 +1753,11 @@ instance_groups:
   - name: route_registrar
     release: routing
     properties:
+      nats:
+        tls:
+          enabled: true
+          client_cert: "((nats_client_cert.certificate))"
+          client_key: "((nats_client_cert.private_key))"
       route_registrar:
         routes:
         - name: doppler
