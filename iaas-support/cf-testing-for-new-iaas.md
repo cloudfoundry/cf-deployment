@@ -11,5 +11,5 @@ Fulfilling the requirements outlined below will provide visibility into the matu
 
 **[1]** cf-deployment should be deployed with no modifications or ops-files, aside from IaaS-specific modifications such as using the IaaS’s blobstore or RDBMS service; the ops-files used for the above modifications must be publicly available for review by core CFF development teams.
 
-**[2]** A config file controls which CATs tests are run. The [example config](https://github.com/cloudfoundry/cf-acceptance-tests/blob/master/example-cats-config.json) in the CATs GitHub repo will configure CATs to run the subset of tests required here. 
+**[2]** A config file controls which CATs tests are run. The [example config](https://github.com/cloudfoundry/cf-acceptance-tests/blob/main/example-cats-config.json) in the CATs GitHub repo will configure CATs to run the subset of tests required here. 
 In addition to using the example configuration provided, CATs must be run via ginkgo with no flake attempts. 

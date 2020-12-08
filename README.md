@@ -66,10 +66,10 @@ The Semantic Versioning scheme has been adopted by cf-deployment.
 A detailed description of how [Semantic Versioning is applied to CF-Deployment can be found here](texts/versioning.md).
 
 ## <a name='contributing'></a>Contributing to CF-Deployment
-Although the default branch for the repository is [`master`](https://github.com/cloudfoundry/cf-deployment/tree/master),
+Although the default branch for the repository is [`main`](https://github.com/cloudfoundry/cf-deployment/tree/main),
 we ask that all pull requests be made against
 the [`develop`](https://github.com/cloudfoundry/cf-deployment/tree/develop) branch. 
-- **Please fill out the [PR Template](https://github.com/cloudfoundry/cf-deployment/blob/master/PULL_REQUEST_TEMPLATE.md)** when submitting pull requests. The information requested in the PR form provides important context for the team responsible for evaluating your submission.
+- **Please fill out the [PR Template](https://github.com/cloudfoundry/cf-deployment/blob/main/PULL_REQUEST_TEMPLATE.md)** when submitting pull requests. The information requested in the PR form provides important context for the team responsible for evaluating your submission.
 - Please also take a look at the ["style guide"](texts/style-guide.md),
 which lays out some guidelines for adding properties or jobs
 to the deployment manifest.
@@ -96,7 +96,7 @@ from the root of the repo.
 1. document it in its corresponding README.
 1. add it to the ops file tests in `units/test`.
 
-**If you're promoting or deprecating Ops-file, please follow [Ops-file workflows](https://github.com/cloudfoundry/cf-deployment/blob/master/ops-file-promotion-workflow.md)** 
+**If you're promoting or deprecating Ops-file, please follow [Ops-file workflows](https://github.com/cloudfoundry/cf-deployment/blob/main/ops-file-promotion-workflow.md)** 
 
 
 ## <a name='setup'></a>Setup and Prerequisites
@@ -116,7 +116,7 @@ you've uploaded a compatible [cloud-config](http://bosh.io/docs/cloud-config.htm
 
 The cloud-config produced by `bbl` covers GCP, AWS, and Azure, and is compatible by default.
 
-The [`iaas-support`](https://github.com/cloudfoundry/cf-deployment/tree/master/iaas-support) directory includes tools and templates for building cloud-configs for other IaaSes,
+The [`iaas-support`](https://github.com/cloudfoundry/cf-deployment/tree/main/iaas-support) directory includes tools and templates for building cloud-configs for other IaaSes,
 including bosh-lite, vSphere, Openstack, and Alibaba Cloud.
 
 For other IaaSes,
@@ -236,14 +236,14 @@ BBR is a CLI utility for orchestrating the backup and restore of [BOSH](https://
 The [ci](https://release-integration.ci.cf-app.com/teams/main/pipelines/cf-deployment) for `cf-deployment`
 automatically bumps to the latest versions of its component releases on the `develop` branch.
 These bumps, along with any other changes made to `develop`, are deployed to a single long-running environment
-and tested with CATs before being merged to master if CATs goes green.
+and tested with CATs before being merged to main if CATs goes green.
 
 Each version of cf-deployment is given a corresponding branch in the CATs repo,
 so that users can discover which version of CATs to run against their deployments.
 For example, if you've deployed cf-deployment v6.10.0,
 check out the `cf6.10` branch in cf-acceptance-tests to run CATs.
 
-The configuration for our pipeline can be found [here](https://github.com/cloudfoundry/runtime-ci/blob/master/pipelines/cf-deployment.yml).
+The configuration for our pipeline can be found [here](https://github.com/cloudfoundry/runtime-ci/blob/main/pipelines/cf-deployment.yml).
 
 [cf-deployment-concourse-url]: https://release-integration.ci.cf-app.com/teams/main/pipelines/cf-deployment
 
