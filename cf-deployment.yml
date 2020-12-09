@@ -1486,6 +1486,11 @@ instance_groups:
     release: log-cache
   - name: route_registrar
     properties:
+      nats:
+        tls:
+          enabled: true
+          client_cert: "((nats_client_cert.certificate))"
+          client_key: "((nats_client_cert.private_key))"
       route_registrar:
         routes:
         - name: log-cache-reverse-proxy
