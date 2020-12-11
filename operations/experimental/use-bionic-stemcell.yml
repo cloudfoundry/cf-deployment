@@ -1,0 +1,42 @@
+- path: /stemcells/alias=default
+  type: replace
+  value:
+    alias: default
+    os: ubuntu-bionic
+    version: latest
+
+# Update all the addons to apply to the ubuntu-bionic stemcell
+- path: /addons/name=loggregator_agent/include/stemcell/-
+  type: replace
+  value:
+    os: ubuntu-bionic
+
+- path: /addons/name=forwarder_agent/include/stemcell/-
+  type: replace
+  value:
+    os: ubuntu-bionic
+
+- path: /addons/name=loggr-syslog-agent/include/stemcell/-
+  type: replace
+  value:
+    os: ubuntu-bionic
+
+- path: /addons/name=prom_scraper/include/stemcell/-
+  type: replace
+  value:
+    os: ubuntu-bionic
+
+- path: /addons/name=metrics-discovery-registrar/include/stemcell/-
+  type: replace
+  value:
+    os: ubuntu-bionic
+
+- path: /addons/name=metrics-agent/include/stemcell/-
+  type: replace
+  value:
+    os: ubuntu-bionic
+
+- path: /addons/name=bpm/include/stemcell/-
+  type: replace
+  value:
+    os: ubuntu-bionic
