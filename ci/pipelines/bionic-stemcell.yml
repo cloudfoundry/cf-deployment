@@ -110,7 +110,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+          repository: cloudfoundry/cf-deployment-concourse-tasks
       inputs:
       - name: toolsmiths-env
       - name: cf-deployment-concourse-tasks
@@ -210,7 +210,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+          repository: cloudfoundry/cf-deployment-concourse-tasks
       inputs:
       - name: cf-deployment-concourse-tasks
       - name: toolsmiths-env

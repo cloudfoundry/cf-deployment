@@ -137,7 +137,7 @@ resource_types:
 - name: stemcell-version-bump
   type: docker-image
   source:
-    repository: relintdockerhubpushbot/stemcell-version-bump-resource
+    repository: cloudfoundry/stemcell-version-bump-resource
 - name: gcs-resource
   type: docker-image
   source:
@@ -15358,7 +15358,7 @@ jobs:
         image_resource:
           type: docker-image
           source:
-            repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+            repository: cloudfoundry/cf-deployment-concourse-tasks
             tag: latest
         inputs:
         - name: relint-envs
