@@ -8,26 +8,26 @@ resource_types:
 resources:
 - name: relint-envs
   type: git
-  icon: github-box
+  icon: github
   source:
     uri: git@github.com:cloudfoundry/relint-envs.git
     private_key: ((hagrid_env_readwrite_deploy_key.private_key))
 
 - name: cf-deployment-concourse-tasks
   type: git
-  icon: github-box
+  icon: github
   source:
     uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
 
 - name: runtime-ci
   type: git
-  icon: github-box
+  icon: github
   source:
     uri: https://github.com/cloudfoundry/runtime-ci.git
 
 - name: cf-acceptance-tests
   type: git
-  icon: github-box
+  icon: github
   source:
     branch: release-candidate
     uri: git@github.com:cloudfoundry/cf-acceptance-tests.git
@@ -35,7 +35,7 @@ resources:
 
 - name: cf-deployment
   type: git
-  icon: github-box
+  icon: github
   source:
     branch: add-bionic-stemcell-ops-file
     uri: git@github.com:cloudfoundry/cf-deployment.git
