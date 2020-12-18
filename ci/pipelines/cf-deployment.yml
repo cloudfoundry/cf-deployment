@@ -121,7 +121,7 @@ groups:
   - stable-release-pool-manual
   - stable-deploy
   - stable-smoke-tests
-  - stable-semihourly-pool-acquisition
+  - stable-pool-acquisition
   - stable-periodic-cats
   - stable-update-cats-cfd-branch
 - name: ship-it
@@ -210,11 +210,11 @@ resources:
     uri: git@github.com:cloudfoundry/relint-envs.git
     private_key: ((hagrid_env_readwrite_deploy_key.private_key))
 
-- name: half-hourly
+- name: every-6-hours
   type: time
   icon: clock-outline
   source:
-    interval: 30m
+    interval: 6h
 
 - name: daily
   type: time
@@ -1826,13 +1826,13 @@ jobs:
   - put: stable-pool
     params: {release: stable-pool}
 
-- name: stable-semihourly-pool-acquisition
+- name: stable-pool-acquisition
   serial: true
   public: true
   plan:
   - timeout: 4h
     do:
-    - get: half-hourly
+    - get: every-6-hours
       trigger: true
     - put: stable-pool
       params: {claim: bellatrix}
@@ -1848,7 +1848,7 @@ jobs:
     do:
     - get: stable-pool
       trigger: true
-      passed: [ stable-semihourly-pool-acquisition ]
+      passed: [ stable-pool-acquisition ]
     - in_parallel:
       - get: cf-deployment-concourse-tasks
       - get: cf-acceptance-tests-rc
