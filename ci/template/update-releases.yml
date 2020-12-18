@@ -214,7 +214,7 @@ resources:
 #@ for r in data.values.windowsOfflineReleases:
 - name: #@ r.name + "-offline-release"
   type: github-release
-  icon: github-face
+  icon: github
   source:
     owner: cloudfoundry
     repository: #@ r.name + "-release"
