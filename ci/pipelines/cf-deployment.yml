@@ -348,7 +348,7 @@ resources:
 
 - name: bbr-github-release
   type: github-release
-  icon: github-face
+  icon: github
   source:
     owner: cloudfoundry-incubator
     repository: bosh-backup-and-restore
@@ -384,7 +384,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: relintdockerhubpushbot/bosh-cli
+          repository: cloudfoundry/bosh-cli
       inputs:
       - name: cf-deployment-develop
       params:
@@ -422,7 +422,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: relintdockerhubpushbot/bosh-cli
+          repository: cloudfoundry/bosh-cli
       inputs:
       - name: cf-deployment-develop
       # params:
@@ -444,7 +444,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: relintdockerhubpushbot/bosh-cli
+          repository: cloudfoundry/bosh-cli
       inputs:
       - name: cf-deployment-develop
       - name: runtime-ci
@@ -464,7 +464,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+          repository: cloudfoundry/cf-deployment-concourse-tasks
       inputs:
       - name: cf-deployment-develop
       run:
