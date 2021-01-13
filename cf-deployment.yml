@@ -55,7 +55,6 @@ addons:
 - name: loggr-syslog-agent
   include:
     stemcell:
-    - os: ubuntu-trusty
     - os: ubuntu-xenial
   exclude:
     jobs:
@@ -113,7 +112,6 @@ addons:
       release: cf-smoke-tests
   include:
     stemcell:
-    - os: ubuntu-trusty
     - os: ubuntu-xenial
   jobs:
   - name: metrics-discovery-registrar
