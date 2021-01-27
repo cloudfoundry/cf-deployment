@@ -137,7 +137,7 @@ jobs:
             image_resource:
               type: docker-image
               source:
-                repository: relintdockerhubpushbot/bosh-cli
+                repository: cloudfoundry/bosh-cli
             inputs:
             - name: cf-deployment-all-branches
             params:
@@ -174,7 +174,7 @@ jobs:
               image_resource:
                 type: docker-image
                 source:
-                  repository: relintdockerhubpushbot/bosh-cli
+                  repository: cloudfoundry/bosh-cli
               inputs:
               - name: cf-deployment-all-branches
               params:
@@ -189,7 +189,7 @@ jobs:
               image_resource:
                 type: docker-image
                 source:
-                  repository: relintdockerhubpushbot/bosh-cli
+                  repository: cloudfoundry/bosh-cli
               inputs:
               - name: cf-deployment-all-branches
               run:
