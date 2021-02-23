@@ -1570,7 +1570,7 @@ jobs:
       SYSTEM_DOMAIN: baba-yaga.cf-app.com
   - task: run-drats
     privileged: true
-    file: drats-master/ci/drats-with-integration-config/task.yml
+    file: drats-master/ci/tasks/drats-with-integration-config/task.yml
     input_mapping:
       disaster-recovery-acceptance-tests: drats-master
       bbr-binary-release: bbr-github-release
