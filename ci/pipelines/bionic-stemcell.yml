@@ -29,27 +29,25 @@ resources:
   type: git
   icon: github
   source:
-    branch: release-candidate
     uri: git@github.com:cloudfoundry/cf-acceptance-tests.git
+    branch: release-candidate
     private_key: ((cf_acceptance_tests_readwrite_deploy_key.private_key))
 
 - name: cf-deployment
   type: git
   icon: github
   source:
-    branch: add-bionic-stemcell-ops-file
     uri: git@github.com:cloudfoundry/cf-deployment.git
+    branch: release-candidate
     private_key: ((cf_deployment_readwrite_deploy_key.private_key))
 
 - name: toolsmiths-env
   type: toolsmiths-cf-pool
   icon: pool
   source:
-    api_token: ((toolsmiths_api_token))
     hostname: environments.toolsmiths.cf-app.com
+    api_token: ((toolsmiths_api_token))
     pool_name: cf-deployment
-  tags:
-  - vsphere-cf-release-integration
 
 - name: bionic-stemcell
   type: bosh-io-stemcell
@@ -69,8 +67,6 @@ jobs:
   - put: toolsmiths-env
     params:
       action: claim
-    tags:
-    - vsphere-cf-release-integration
     timeout: 4h
 
 - name: deploy-cf
@@ -81,8 +77,6 @@ jobs:
     - get: toolsmiths-env
       passed:
       - claim-env
-      tags:
-      - vsphere-cf-release-integration
       trigger: true
     - get: bionic-stemcell
       passed:
@@ -176,8 +170,6 @@ jobs:
     - get: toolsmiths-env
       passed:
       - deploy-cf
-      tags:
-      - vsphere-cf-release-integration
       trigger: true
     - get: cf-deployment-concourse-tasks
 
@@ -197,8 +189,6 @@ jobs:
     - get: toolsmiths-env
       passed:
       - run-smoke-tests
-      tags:
-      - vsphere-cf-release-integration
       trigger: true
     - get: cf-deployment-concourse-tasks
     - get: cf-acceptance-tests
@@ -292,13 +282,9 @@ jobs:
   - get: toolsmiths-env
     passed:
     - run-cats
-    tags:
-    - vsphere-cf-release-integration
     trigger: true
 
   - put: toolsmiths-env
     params:
       action: unclaim
       env_file: toolsmiths-env/metadata
-    tags:
-    - vsphere-cf-release-integration
