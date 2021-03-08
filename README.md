@@ -173,7 +173,7 @@ such additional variables:
    This is the recommended method for configuring
    external persistence services.
 3. They can be stored in CredHub directly
-   with the [CredHub CLI](https://credhub-api.cfapps.io/#introduction).
+   with the [CredHub CLI](https://docs.cloudfoundry.org/api/credhub/).
    If you do this, then you need follow variable namespacing
    rules respected by BOSH described [here](https://github.com/cloudfoundry-incubator/credhub/blob/master/docs/operator-quick-start.md#variable-namespacing).
 
