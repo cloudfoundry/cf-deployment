@@ -552,7 +552,6 @@ jobs:
       BBL_STATE_DIR: environments/test/luna/bbl-state
       SYSTEM_DOMAIN: luna.cf-app.com
       OPS_FILES: |
-        operations/experimental/fast-deploy-with-downtime-and-danger.yml
         operations/rename-network-and-deployment.yml
         operations/set-bbs-active-key.yml
         operations/test/add-persistent-isolation-segment-diego-cell.yml
@@ -1093,7 +1092,6 @@ jobs:
       BBL_STATE_DIR: environments/test/hermione/bbl-state
       SYSTEM_DOMAIN: hermione.cf-app.com
       OPS_FILES: |
-        operations/experimental/fast-deploy-with-downtime-and-danger.yml
         operations/aws.yml
         operations/use-compiled-releases.yml
         operations/use-external-blobstore.yml
