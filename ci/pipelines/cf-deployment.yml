@@ -1841,7 +1841,6 @@ jobs:
       - get: relint-envs
       - get: cf-deployment-main
       - get: runtime-ci
-        passed: [ stable-deploy ]
     - task: enable-docker-and-tasks
       file: cf-deployment-concourse-tasks/set-feature-flags/task.yml
       input_mapping:
