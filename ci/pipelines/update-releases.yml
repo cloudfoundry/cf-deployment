@@ -1030,6 +1030,7 @@ jobs:
       acquire: true
 - name: update-bosh-dns-aliases
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -1313,6 +1314,7 @@ jobs:
       acquire: true
 - name: update-bpm
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -1596,6 +1598,7 @@ jobs:
       acquire: true
 - name: update-capi
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -1879,6 +1882,7 @@ jobs:
       acquire: true
 - name: update-cf-networking
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -2162,6 +2166,7 @@ jobs:
       acquire: true
 - name: update-cf-smoke-tests
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -2445,6 +2450,7 @@ jobs:
       acquire: true
 - name: update-cf-syslog-drain
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -2728,6 +2734,7 @@ jobs:
       acquire: true
 - name: update-cflinuxfs3
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -3011,6 +3018,7 @@ jobs:
       acquire: true
 - name: update-diego
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -3294,6 +3302,7 @@ jobs:
       acquire: true
 - name: update-garden-runc
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -3577,6 +3586,7 @@ jobs:
       acquire: true
 - name: update-log-cache
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -3860,6 +3870,7 @@ jobs:
       acquire: true
 - name: update-loggregator
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -4143,6 +4154,7 @@ jobs:
       acquire: true
 - name: update-loggregator-agent
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -4426,6 +4438,7 @@ jobs:
       acquire: true
 - name: update-nats
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -4709,6 +4722,7 @@ jobs:
       acquire: true
 - name: update-pxc
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -4992,6 +5006,7 @@ jobs:
       acquire: true
 - name: update-routing
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -5275,6 +5290,7 @@ jobs:
       acquire: true
 - name: update-silk
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -5558,6 +5574,7 @@ jobs:
       acquire: true
 - name: update-statsd-injector
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -5841,6 +5858,7 @@ jobs:
       acquire: true
 - name: update-uaa
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -6124,6 +6142,7 @@ jobs:
       acquire: true
 - name: update-credhub
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -6407,6 +6426,7 @@ jobs:
       acquire: true
 - name: update-cf-cli
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -6690,6 +6710,7 @@ jobs:
       acquire: true
 - name: update-metrics-discovery
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -6973,6 +6994,7 @@ jobs:
       acquire: true
 - name: update-binary-buildpack
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -7256,6 +7278,7 @@ jobs:
       acquire: true
 - name: update-dotnet-core-buildpack
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -7539,6 +7562,7 @@ jobs:
       acquire: true
 - name: update-go-buildpack
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -7822,6 +7846,7 @@ jobs:
       acquire: true
 - name: update-java-buildpack
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -8105,6 +8130,7 @@ jobs:
       acquire: true
 - name: update-nginx-buildpack
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -8388,6 +8414,7 @@ jobs:
       acquire: true
 - name: update-nodejs-buildpack
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -8671,6 +8698,7 @@ jobs:
       acquire: true
 - name: update-php-buildpack
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -8954,6 +8982,7 @@ jobs:
       acquire: true
 - name: update-python-buildpack
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -9237,6 +9266,7 @@ jobs:
       acquire: true
 - name: update-r-buildpack
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -9520,6 +9550,7 @@ jobs:
       acquire: true
 - name: update-ruby-buildpack
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -9803,6 +9834,7 @@ jobs:
       acquire: true
 - name: update-staticfile-buildpack
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -10086,6 +10118,7 @@ jobs:
       acquire: true
 - name: update-backup-and-restore-sdk
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -10321,6 +10354,7 @@ jobs:
       acquire: true
 - name: update-cf-app-sd
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -10556,6 +10590,7 @@ jobs:
       acquire: true
 - name: update-haproxy
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -10777,6 +10812,7 @@ jobs:
       acquire: true
 - name: update-mapfs
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -11012,6 +11048,7 @@ jobs:
       acquire: true
 - name: update-nfs-volume
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -11247,6 +11284,7 @@ jobs:
       acquire: true
 - name: update-smb-volume
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -11482,6 +11520,7 @@ jobs:
       acquire: true
 - name: update-postgres
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -11717,6 +11756,7 @@ jobs:
       acquire: true
 - name: update-syslog
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -11953,6 +11993,7 @@ jobs:
       acquire: true
 - name: update-windows-syslog
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -12189,6 +12230,7 @@ jobs:
       acquire: true
 - name: update-hwc-buildpack
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -12426,6 +12468,7 @@ jobs:
       acquire: true
 - name: update-windows-utilities
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -12661,6 +12704,7 @@ jobs:
       acquire: true
 - name: update-garden-windows
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -12896,6 +12940,7 @@ jobs:
       acquire: true
 - name: update-winc
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -13133,6 +13178,7 @@ jobs:
       acquire: true
 - name: update-windowsfs
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -13369,6 +13415,7 @@ jobs:
       acquire: true
 - name: update-node-exporter
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -13604,6 +13651,7 @@ jobs:
       acquire: true
 - name: update-system-metrics
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -13839,6 +13887,7 @@ jobs:
       acquire: true
 - name: update-system-metrics-scraper
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -14074,6 +14123,7 @@ jobs:
       acquire: true
 - name: update-metric-store
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -14309,6 +14359,7 @@ jobs:
       acquire: true
 - name: update-envoy-nginx
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -14535,6 +14586,7 @@ jobs:
           release: pre-dev-pool
 - name: update-datadog-firehose-nozzle
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: datadog-firehose-nozzle-release
@@ -14558,6 +14610,7 @@ jobs:
       repository: updated-cf-deployment-datadog-firehose-nozzle-develop
 - name: update-windows2019-stemcell
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: runtime-ci
@@ -14626,6 +14679,7 @@ jobs:
       username: Release Integration
 - name: update-stemcell-and-recompile-releases
   public: true
+  serial: true
   plan:
   - do:
     - in_parallel:
@@ -14970,6 +15024,7 @@ jobs:
       username: Release Integration
 - name: update-stemcell-minor
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -15164,8 +15219,8 @@ jobs:
         params:
           release: pre-dev-pool
 - name: update-windows2019fs-offline-release
-  serial: true
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: runtime-ci

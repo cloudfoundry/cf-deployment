@@ -335,6 +335,7 @@ jobs:
 
 - name: #@ "update-" + r.name
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -531,6 +532,7 @@ jobs:
 
 - name: #@ "update-" + r.name
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -684,6 +686,7 @@ jobs:
 #@ for r in data.values.untestedOpsReleases:
 - name: #@ "update-" + r.name
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: #@ r.name + "-release"
@@ -702,6 +705,7 @@ jobs:
 #@ for s in data.values.windowsStemcells:
 - name: #@ "update-" + s.name + "-stemcell"
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: runtime-ci
@@ -767,6 +771,7 @@ jobs:
 
 - name: update-stemcell-and-recompile-releases
   public: true
+  serial: true
   plan:
   - do:
     - in_parallel:
@@ -881,6 +886,7 @@ jobs:
 #@ env = "pre-dev"
 - name: update-stemcell-minor
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: pre-dev-pool
@@ -993,8 +999,8 @@ jobs:
 
 #@ for r in data.values.windowsOfflineReleases:
 - name: #@ "update-" + r.name + "-offline-release"
-  serial: true
   public: true
+  serial: true
   plan:
   - in_parallel:
     - get: runtime-ci
