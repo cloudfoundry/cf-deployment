@@ -741,7 +741,7 @@ instance_groups:
             authorized-grant-types: client_credentials
             secret: "((uaa_clients_tcp_emitter_secret))"
           tcp_router:
-            authorities: routing.routes.read
+            authorities: routing.routes.read,routing.router_groups.read
             authorized-grant-types: client_credentials
             secret: "((uaa_clients_tcp_router_secret))"
         ca_certs:
