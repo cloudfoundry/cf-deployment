@@ -142,7 +142,7 @@
 
 # update syslog agents
 - type: replace
-  path: /addons/name=loggr-syslog-agent/jobs/name=loggr-syslog-agent/properties/aggregate_drains?
+  path: /instance_groups/name=scheduler/jobs/name=loggr-syslog-binding-cache/properties/aggregate_drains?
   value: "syslog-tls://q-s3.log-cache.default.cf.bosh:6067"
 
 - type: replace

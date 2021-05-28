@@ -1,8 +1,4 @@
 ---
 - type: replace
-  path: /instance_groups/name=windows2019-cell/jobs/name=loggr-syslog-agent-windows/properties/aggregate_drains?
-  value: "syslog-tls://doppler.service.cf.internal:6067?include-metrics-deprecated=true&ssl-strict-internal=true"
-
-- type: replace
   path: /instance_groups/name=windows2019-cell/jobs/name=loggr-syslog-agent-windows/properties/drain_ca_cert?
   value: "((log_cache_syslog_tls.ca))"
