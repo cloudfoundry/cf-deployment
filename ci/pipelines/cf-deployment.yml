@@ -339,11 +339,10 @@ resources:
     project_id: "1382120"
     tracker_url: https://www.pivotaltracker.com
 
-- name: drats-master
+- name: disaster-recovery-acceptance-tests
   type: git
   icon: github
   source:
-    branch: master
     uri: https://github.com/cloudfoundry-incubator/disaster-recovery-acceptance-tests.git
 
 - name: bbr-github-release
@@ -1555,7 +1554,7 @@ jobs:
     - get: bbr-github-release
     - get: relint-envs
     - get: cf-deployment-concourse-tasks
-    - get: drats-master
+    - get: disaster-recovery-acceptance-tests
     - get: runtime-ci
   - task: generate-drats-config
     file: runtime-ci/tasks/generate-drats-config/task.yml
@@ -1566,9 +1565,8 @@ jobs:
       SYSTEM_DOMAIN: baba-yaga.cf-app.com
   - task: run-drats
     privileged: true
-    file: drats-master/ci/tasks/drats-with-integration-config/task.yml
+    file: disaster-recovery-acceptance-tests/ci/tasks/drats-with-integration-config/task.yml
     input_mapping:
-      disaster-recovery-acceptance-tests: drats-master
       bbr-binary-release: bbr-github-release
       drats-integration-config: drats-config
 

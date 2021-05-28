@@ -8,6 +8,7 @@
     include:
       stemcell:
       - os: ubuntu-xenial
+      - os: ubuntu-bionic
     jobs:
     - name: loggr-system-metrics-agent
       properties:
@@ -80,9 +81,9 @@
   path: /releases/name=system-metrics?
   value:
     name: system-metrics
-    sha1: 0df7bc23e01ee26c9314df7098ed95f52ffa7898
-    url: https://bosh.io/d/github.com/cloudfoundry/system-metrics-release?v=2.0.11
-    version: 2.0.11
+    sha1: 6609de9f327e5088c7b80ee39d7009e615db043c
+    url: https://bosh.io/d/github.com/cloudfoundry/system-metrics-release?v=2.0.12
+    version: 2.0.12
 - type: replace
   path: /releases/name=system-metrics-scraper?
   value:
