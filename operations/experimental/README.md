@@ -38,7 +38,7 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 | [`set-cpu-weight-windows2019.yml`](set-cpu-weight-windows2019.yml) | CPU shares for each garden container are proportional to its memory limits. | Requires `../windows2019-cell.yml` and `../use-online-windows2019fs.yml` | **NO** |
 | [`use-compiled-releases-windows.yml`](use-compiled-releases-windows.yml) | Reverts to source version of releases required for Windows cells | Intended for use with `use-compiled-releases.yml` and any of `windows*-cell.yml` | **YES** |
 | [`use-create-swap-delete-vm-strategy.yml`](use-create-swap-delete-vm-strategy.yml) | Configures the default [`vm_strategy`](https://bosh.io/docs/changing-deployment-vm-strategy/) to be `create-swap-delete`. | Requires BOSH director `v267.7+` | **NO** |
-| [`use-logcache-syslog-ingress.yml`](use-logcache-syslog-ingress.yml) | Uses syslog ingress for Log Cache in place of Loggregator | | **NO** |
+| [`use-logcache-syslog-ingress.yml`](use-logcache-syslog-ingress.yml) | Uses syslog ingress for Log Cache in place of Loggregator | | **YES** |
 | [`use-logcache-syslog-ingress-windows2019.yml`](use-logcache-syslog-ingress-windows2019.yml) | Uses syslog ingress for Log Cache in place of Loggregator for Windows cells | Requires `use-logcache-syslog-ingress.yml` | **NO** |
 | [`disable-v2-api.yml`](disable-v2-api.yml) | Disable v2 Cloud Controller API endpoints | | **NO** |
 | [`disable-logs-in-firehose.yml`](disable-logs-in-firehose.yml) | Logs are not sent to dopplers, only metrics | | **NO** |
