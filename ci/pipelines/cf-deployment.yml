@@ -30,7 +30,7 @@ groups:
   - bbr-acquire-pool
   - bbr-deploy
   - bbr-run-drats
-  - bbr-release-pool
+  - bbr-delete-deployment
   - windows-claim-env
   - windows-deploy
   - windows-cats
@@ -101,7 +101,7 @@ groups:
   - bbr-acquire-pool
   - bbr-deploy
   - bbr-run-drats
-  - bbr-release-pool
+  - bbr-delete-deployment
   - bbr-release-pool-manual
   - bless-manifest
 - name: windows
@@ -1487,6 +1487,7 @@ jobs:
         operations/backup-and-restore/enable-backup-restore.yml
         operations/enable-nfs-volume-service.yml
         operations/backup-and-restore/enable-restore-nfs-broker.yml
+      REGENERATE_CREDENTIALS: true
   - in_parallel:
     - task: enable-docker
       attempts: 2
@@ -1559,12 +1560,28 @@ jobs:
       bbr-binary-release: bbr-github-release
       drats-integration-config: drats-config
 
-- name: bbr-release-pool
+- name: bbr-delete-deployment
   public: true
   plan:
   - get: bbr-pool
     passed: [ bbr-run-drats ]
     trigger: true
+  - in_parallel:
+    - get: cf-deployment-concourse-tasks
+    - get: relint-envs
+  - task: delete-deployment-cf
+    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/bbr/bbl-state
+      IGNORE_ERRORS: true
+  - task: run-bosh-cleanup
+    file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/bbr/bbl-state
   - put: bbr-pool
     params: {release: bbr-pool}
 
