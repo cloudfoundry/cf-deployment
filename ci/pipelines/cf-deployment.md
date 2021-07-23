@@ -13,7 +13,6 @@ This pipeline validates changes to cf-deployment and automates the creation of a
 * `experimental-hermione`: tests experimental ops files and upgrades from the latest release
 * `lite-snitch`: tests a fresh installation on a dynamically provisioned bosh-lite director
 * `windows`: tests windows functionality on a fresh install with windows diego cells using the windows suites from cf-acceptance-tests
-* `stable-bellatrix`: observes stability of cf-d and CATs over time using the latest release of cf-deployment on a frequent cadence (at the time of writing this job also blocks the creation of a version-locked cf-acceptance-tests branch)
 * `ship-it`: jobs for use in the manual release process of cf-deployment
 
 ## Validation Strategy
@@ -66,4 +65,3 @@ This pipeline is managed directly by the `ci/pipelines/cf-deployment.yml` file a
 * `validate-certs`: warns of upcoming expiration of the certs of the bosh directors we use for acceptance testing
 * `branch-freshness`: warns of branches of cf-d that go stale
 * `*-release-pool-manual`: jobs that will release the lock on the environment in question.  Only visible via group. Used to reset the pipeline when an environment remains claimed after a build failure.
-* The `cf-acceptance-tests` repository depends on the `stable-bellatrix` group in this pipeline for the creation of new version-locked release branches. See the `stable-update-cats-cfd-branch` job. The goal here is to be able to answer the question: "For a particular release of cf-deployment, which version of cf-acceptance-tests was used for validation?"
