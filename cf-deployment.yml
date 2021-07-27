@@ -1624,11 +1624,6 @@ instance_groups:
       tls: *cfdot_tls_client_properties
   - name: route_emitter
     release: diego
-    consumes:
-      nats:
-        ip_addresses: false
-      nats-tls:
-        ip_addresses: false
     properties:
       bpm:
         enabled: true
