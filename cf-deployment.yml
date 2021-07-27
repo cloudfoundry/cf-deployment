@@ -1264,6 +1264,10 @@ instance_groups:
           ca: ((cf_app_sd_server_tls.ca))
         server:
           tls: ((cf_app_sd_server_tls))
+      nats:
+        tls_enabled: true
+        cert_chain: ((nats_client_cert.certificate))
+        private_key: ((nats_client_cert.private_key))
     release: cf-networking
   - name: statsd_injector
     release: statsd-injector
