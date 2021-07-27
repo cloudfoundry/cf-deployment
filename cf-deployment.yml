@@ -701,7 +701,7 @@ instance_groups:
             authorized-grant-types: client_credentials
             secret: "((uaa_clients_cc_service_key_client_secret))"
           cf:
-            access-token-validity: 600
+            access-token-validity: 1200
             authorities: uaa.none
             authorized-grant-types: password,refresh_token
             override: true
