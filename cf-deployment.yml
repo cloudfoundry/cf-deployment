@@ -377,21 +377,6 @@ instance_groups:
   networks:
   - name: default
   jobs:
-  - name: nats
-    release: nats
-    provides:
-      nats: {as: nats, shared: true}
-    properties:
-      nats:
-        hostname: nats.service.cf.internal
-        user: nats
-        password: "((nats_password))"
-        internal:
-          tls:
-            ca: "((nats_internal_cert.ca))"
-            certificate: "((nats_internal_cert.certificate))"
-            enabled: true
-            private_key: "((nats_internal_cert.private_key))"
   - name: nats-tls
     release: nats
     provides:
