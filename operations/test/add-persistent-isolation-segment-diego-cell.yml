@@ -94,6 +94,13 @@
               ca_cert: "((diego_bbs_client.ca))"
               client_cert: "((diego_bbs_client.certificate))"
               client_key: "((diego_bbs_client.private_key))"
+        internal_routes:
+          enabled: true
         logging:
           format:
             timestamp: "rfc3339"
+        tcp:
+          enabled: true
+        uaa:
+          ca_cert: "((uaa_ssl.ca))"
+          client_secret: "((uaa_clients_tcp_emitter_secret))"
