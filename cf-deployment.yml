@@ -1492,6 +1492,11 @@ instance_groups:
       reverse_log_proxy: {from: reverse_log_proxy}
     name: log-cache-nozzle
     properties:
+      metrics:
+        ca_cert: ((log_cache_nozzle_metrics_tls.ca))
+        cert: ((log_cache_nozzle_metrics_tls.certificate))
+        key: ((log_cache_nozzle_metrics_tls.private_key))
+        server_name: log_cache_nozzle_metrics
       logs_provider:
         tls:
           ca_cert: ((logs_provider.ca))
@@ -2525,6 +2530,17 @@ variables:
     common_name: log_cache_metrics
     alternative_names:
     - log_cache_metrics
+    extended_key_usage:
+    - server_auth
+
+- name: log_cache_nozzle_metrics_tls
+  type: certificate
+  update_mode: converge
+  options:
+    ca: metric_scraper_ca
+    common_name: log_cache_nozzle_metrics
+    alternative_names:
+    - log_cache_nozzle_metrics
     extended_key_usage:
     - server_auth
 
