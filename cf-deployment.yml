@@ -1347,6 +1347,10 @@ instance_groups:
   - name: gorouter
     release: routing
     properties:
+      nats:
+        tls_enabled: true
+        cert_chain: "((nats_client_cert.certificate))"
+        private_key: "((nats_client_cert.private_key))"
       router:
         enable_ssl: true
         tls_pem:
@@ -1366,10 +1370,6 @@ instance_groups:
         route_services_secret: "((router_route_services_secret))"
         tracing:
           enable_zipkin: true
-      nats:
-        tls_enabled: true
-        cert_chain: "((nats_client_cert.certificate))"
-        private_key: "((nats_client_cert.private_key))"
       routing_api:
         enabled: true
       uaa:

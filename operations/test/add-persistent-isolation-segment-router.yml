@@ -31,6 +31,10 @@
     - name: gorouter
       release: routing
       properties:
+        nats:
+          tls_enabled: true
+          cert_chain: "((nats_client_cert.certificate))"
+          private_key: "((nats_client_cert.private_key))"
         router:
           isolation_segments:
           - persistent_isolation_segment
