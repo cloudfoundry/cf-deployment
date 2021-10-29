@@ -94,6 +94,11 @@
               ca_cert: "((diego_bbs_client.ca))"
               client_cert: "((diego_bbs_client.certificate))"
               client_key: "((diego_bbs_client.private_key))"
+            nats:
+              tls:
+                enabled: true
+                client_cert: "((nats_client_cert.certificate))"
+                client_key: "((nats_client_cert.private_key))"
         internal_routes:
           enabled: true
         logging:
