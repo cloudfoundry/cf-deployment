@@ -106,12 +106,7 @@
           cert: ((diego_rep_agent_v2.certificate))
           key: ((diego_rep_agent_v2.private_key))
       release: diego
-    - consumes:
-        nats:
-          ip_addresses: false
-        nats-tls:
-          ip_addresses: false
-      name: route_emitter_windows
+    - name: route_emitter_windows
       properties:
         diego:
           route_emitter:
