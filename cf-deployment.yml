@@ -13,6 +13,7 @@ addons:
     stemcell:
     - os: ubuntu-xenial
     - os: ubuntu-bionic
+    - os: ubuntu-jammy
   exclude:
     jobs:
     - name: smoke_tests
@@ -40,6 +41,7 @@ addons:
     stemcell:
     - os: ubuntu-xenial
     - os: ubuntu-bionic
+    - os: ubuntu-jammy
   jobs:
   - name: loggr-forwarder-agent
     release: loggregator-agent
@@ -59,6 +61,7 @@ addons:
     stemcell:
     - os: ubuntu-xenial
     - os: ubuntu-bionic
+    - os: ubuntu-jammy
   exclude:
     jobs:
     - name: smoke_tests
@@ -89,6 +92,7 @@ addons:
     stemcell:
       - os: ubuntu-xenial
       - os: ubuntu-bionic
+      - os: ubuntu-jammy
   exclude:
     jobs:
     - name: smoke_tests
@@ -118,6 +122,7 @@ addons:
     stemcell:
     - os: ubuntu-xenial
     - os: ubuntu-bionic
+    - os: ubuntu-jammy
   jobs:
   - name: metrics-discovery-registrar
     properties:
@@ -140,6 +145,7 @@ addons:
     stemcell:
     - os: ubuntu-xenial
     - os: ubuntu-bionic
+    - os: ubuntu-jammy
   jobs:
   - name: metrics-agent
     properties:
@@ -164,6 +170,7 @@ addons:
     stemcell:
     - os: ubuntu-xenial
     - os: ubuntu-bionic
+    - os: ubuntu-jammy
   jobs:
   - name: bpm
     release: bpm
