@@ -1,4 +1,4 @@
+# Has been integrated into cf-deployment.yml
+#
+# Please delete this file in the future
 ---
-- type: replace
-  path: /instance_groups/name=windows2019-cell/jobs/name=loggr-syslog-agent-windows/properties/drain_ca_cert?
-  value: "((log_cache_syslog_tls.ca))"

@@ -164,6 +164,7 @@
           ca_cert: ((loggregator_tls_agent.ca))
           cert: ((loggregator_tls_agent.certificate))
           key: ((loggregator_tls_agent.private_key))
+        drain_ca_cert: ((log_cache_syslog_tls.ca))
       release: loggregator-agent
     - name: loggr-forwarder-agent-windows
       properties:

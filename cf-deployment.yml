@@ -83,6 +83,7 @@ addons:
         cert: "((syslog_agent_metrics_tls.certificate))"
         key: "((syslog_agent_metrics_tls.private_key))"
         server_name: syslog_agent_metrics
+      drain_ca_cert: "((log_cache_syslog_tls.ca))"
 
 - name: prom_scraper
   include:
@@ -338,7 +339,13 @@ addons:
           deployment: cf
           network: default
           domain: bosh
-
+      - domain: log-cache.service.cf.internal
+        targets:
+        - deployment: cf
+          domain: bosh
+          instance_group: log-cache
+          network: default
+          query: '*'
 
 instance_groups:
 - name: smoke-tests
@@ -1317,6 +1324,7 @@ instance_groups:
         cert: "((loggr_syslog_binding_cache_metrics_tls.certificate))"
         key: "((loggr_syslog_binding_cache_metrics_tls.private_key))"
         server_name: loggr_syslog_binding_cache_metrics
+      aggregate_drains: "syslog-tls://log-cache.service.cf.internal:6067?include-metrics-deprecated=true&ssl-strict-internal=true"
   - name: loggr-udp-forwarder
     release: loggregator-agent
     properties:
@@ -1426,27 +1434,16 @@ instance_groups:
         cert: "((loggr_udp_forwarder_tls.certificate))"
         key: "((loggr_udp_forwarder_tls.private_key))"
         server_name: loggr_udp_forwarder_metrics
-- name: doppler
+- name: log-cache
   azs:
   - z1
   - z2
-  instances: 4
-  vm_type: minimal
+  instances: 1
+  vm_type: small-highmem
   stemcell: default
   networks:
   - name: default
   jobs:
-  - name: doppler
-    release: loggregator
-    provides:
-      doppler: {as: doppler, shared: true}
-    properties:
-      loggregator:
-        tls:
-          ca_cert: "((loggregator_tls_doppler.ca))"
-          doppler:
-            cert: "((loggregator_tls_doppler.certificate))"
-            key: "((loggregator_tls_doppler.private_key))"
   - name: log-cache
     provides:
       log-cache: {shared: true}
@@ -1473,21 +1470,17 @@ instance_groups:
         key: "((log_cache_gateway_metrics_tls.private_key))"
         server_name: log_cache_gateway_metrics
     release: log-cache
-  - consumes:
-      reverse_log_proxy: {from: reverse_log_proxy}
-    name: log-cache-nozzle
-    properties:
-      metrics:
-        ca_cert: ((log_cache_nozzle_metrics_tls.ca))
-        cert: ((log_cache_nozzle_metrics_tls.certificate))
-        key: ((log_cache_nozzle_metrics_tls.private_key))
-        server_name: log_cache_nozzle_metrics
-      logs_provider:
-        tls:
-          ca_cert: ((logs_provider.ca))
-          cert: ((logs_provider.certificate))
-          key: ((logs_provider.private_key))
+  - name: log-cache-syslog-server
     release: log-cache
+    properties:
+      tls:
+        cert: "((log_cache_syslog_tls.certificate))"
+        key: "((log_cache_syslog_tls.private_key))"
+      metrics:
+        ca_cert: "((log_cache_syslog_server_metrics_tls.ca))"
+        cert: "((log_cache_syslog_server_metrics_tls.certificate))"
+        key: "((log_cache_syslog_server_metrics_tls.private_key))"
+        server_name: log_cache_syslog_server_metrics
   - name: route_registrar
     properties:
       nats:
@@ -1526,6 +1519,27 @@ instance_groups:
         client_secret: ((uaa_clients_doppler_secret))
         internal_addr: https://uaa.service.cf.internal:8443
     release: log-cache
+- name: doppler
+  azs:
+  - z1
+  - z2
+  instances: 4
+  vm_type: minimal
+  stemcell: default
+  networks:
+  - name: default
+  jobs:
+  - name: doppler
+    release: loggregator
+    provides:
+      doppler: {as: doppler, shared: true}
+    properties:
+      loggregator:
+        tls:
+          ca_cert: "((loggregator_tls_doppler.ca))"
+          doppler:
+            cert: "((loggregator_tls_doppler.certificate))"
+            key: "((loggregator_tls_doppler.private_key))"
 - name: diego-cell
   azs:
   - z1
@@ -2244,6 +2258,16 @@ variables:
     common_name: localhost
     alternative_names:
     - localhost
+- name: log_cache_syslog_tls
+  type: certificate
+  options:
+    ca: loggregator_ca
+    common_name: log-cache.service.cf.internal
+    alternative_names:
+      - "q-s3.log-cache.default.cf.bosh"
+      - "log-cache.service.cf.internal"
+    extended_key_usage:
+      - server_auth
 - name: router_ca
   type: certificate
   options:
@@ -2471,6 +2495,16 @@ variables:
     common_name: metricScraperCA
     is_ca: true
 
+- name: log_cache_syslog_server_metrics_tls
+  type: certificate
+  update_mode: converge
+  options:
+    ca: metric_scraper_ca
+    common_name: log_cache_syslog_server_metrics
+    alternative_names:
+    - log_cache_syslog_server_metrics
+    extended_key_usage:
+    - server_auth
 - name: metrics_agent_tls
   type: certificate
   update_mode: converge
@@ -2510,17 +2544,6 @@ variables:
     common_name: log_cache_metrics
     alternative_names:
     - log_cache_metrics
-    extended_key_usage:
-    - server_auth
-
-- name: log_cache_nozzle_metrics_tls
-  type: certificate
-  update_mode: converge
-  options:
-    ca: metric_scraper_ca
-    common_name: log_cache_nozzle_metrics
-    alternative_names:
-    - log_cache_nozzle_metrics
     extended_key_usage:
     - server_auth
 
