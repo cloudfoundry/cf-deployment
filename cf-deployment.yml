@@ -404,6 +404,10 @@ instance_groups:
             ca: "((nats_client_cert.ca))"
             private_key: "((nats_server_cert.private_key))"
             certificate: "((nats_server_cert.certificate))"
+        client:
+          tls:
+            private_key: "((nats_client_cert.private_key))"
+            certificate: "((nats_client_cert.certificate))"
 - name: database
   migrated_from:
   - name: mysql
