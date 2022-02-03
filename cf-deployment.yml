@@ -1709,8 +1709,6 @@ instance_groups:
         uaa:
           client_secret: "((uaa_clients_doppler_secret))"
       system_domain: "((system_domain))"
-      ssl:
-        skip_cert_verify: true
       cc:
         internal_service_hostname: "cloud-controller-ng.service.cf.internal"
         tls_port: 9023
