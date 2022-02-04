@@ -949,6 +949,8 @@ instance_groups:
         staging_upload_user: staging_user
         staging_upload_password: "((cc_staging_upload_password))"
         temporary_use_logcache: true
+        logcache:
+          host: log-cache.service.cf.internal
         logcache_tls:
           private_key: "((cc_logcache_tls.private_key))"
           certificate: "((cc_logcache_tls.certificate))"
