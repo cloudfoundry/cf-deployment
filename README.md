@@ -43,20 +43,10 @@ or an external deployment.
 
 ## <a name='tls'></a> TLS validation
 
-Many test, development, and "getting started" environments
-do not have valid `TLS` certificates
-installed in their load balancers. For ease of use in such environments,
-`cf-deployment` skips `TLS` validation
-on some components
-that access each other via the "front door"
-of the Cloud Foundry load balancer.
-
-Deployers who have valid
-or otherwise trusted
-load balancer certificates should use the
-[stop-skipping-tls-validation.yml](operations/stop-skipping-tls-validation.yml) opsfile
-to force the validation of `TLS` certificates
-for all components.
+Deployers who do not have a certificate issued by a trusted certificate authority on their load balancers
+should use the
+[disable-smoke-test-tls-validation.yml](operations/disable-smoke-test-tls-validation.yml) opsfile
+to disable the validation of TLS certificates for the smoke tests.
 
 ## <a name='deploying-cf'></a>Deploying CF
 Deployment instructions are verbose so we've moved them into a [dedicated deployment guide here](texts/deployment-guide.md).
