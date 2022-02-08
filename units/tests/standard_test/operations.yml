@@ -7,7 +7,6 @@ configure-default-router-group.yml:
   - default_router_group_reservable_ports=1234-2024
 disable-router-tls-termination.yml: {}
 disable-http2.yml: {}
-disable-smoke-test-tls-validation.yml: {}
 enable-cc-rate-limiting.yml:
   vars:
   - cc_rate_limiter_general_limit=blah
@@ -41,6 +40,7 @@ set-cpu-weight.yml: {}
 set-router-static-ips.yml:
   vars:
   - router_static_ips=[10.0.16.4,10.0.47.5]
+stop-skipping-tls-validation.yml: {}
 use-alicloud-oss-blobstore-to-multi-bucket.yml:
   ops:
   - use-external-blobstore.yml
