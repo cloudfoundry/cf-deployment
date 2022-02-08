@@ -371,6 +371,7 @@ instance_groups:
         org: cf_smoke_tests_org
         space: cf_smoke_tests_space
         cf_dial_timeout_in_seconds: 300
+        skip_ssl_validation: true
   - name: cf-cli-7-linux
     release: cf-cli
 - name: nats
@@ -871,6 +872,8 @@ instance_groups:
         enabled: true
       credhub_api:
         ca_cert: ((credhub_tls.ca))
+      ssl:
+        skip_cert_verify: true
       uaa:
         ca_cert: "((uaa_ssl.ca))"
         clients:
@@ -1158,6 +1161,8 @@ instance_groups:
       ccdb: *ccdb
       system_domain: "((system_domain))"
       routing_api: *routing_api
+      ssl:
+        skip_cert_verify: true
       uaa:
         ca_cert: "((uaa_ssl.ca))"
         clients:
@@ -1227,6 +1232,8 @@ instance_groups:
       ccdb: *ccdb
       system_domain: "((system_domain))"
       routing_api: *routing_api
+      ssl:
+        skip_cert_verify: true
       uaa:
         ca_cert: "((uaa_ssl.ca))"
         clients:
@@ -1713,6 +1720,8 @@ instance_groups:
         uaa:
           client_secret: "((uaa_clients_doppler_secret))"
       system_domain: "((system_domain))"
+      ssl:
+        skip_cert_verify: true
       cc:
         internal_service_hostname: "cloud-controller-ng.service.cf.internal"
         tls_port: 9023
