@@ -341,11 +341,11 @@ addons:
           domain: bosh
       - domain: log-cache.service.cf.internal
         targets:
-        - deployment: cf
-          domain: bosh
+        - query: '*'
           instance_group: log-cache
+          deployment: cf
           network: default
-          query: '*'
+          domain: bosh
 
 instance_groups:
 - name: smoke-tests
@@ -1525,7 +1525,7 @@ instance_groups:
   azs:
   - z1
   - z2
-  instances: 4
+  instances: 3
   vm_type: minimal
   stemcell: default
   networks:
@@ -2194,17 +2194,6 @@ variables:
     - rlp_gateway
     extended_key_usage:
     - client_auth
-- name: logs_provider
-  type: certificate
-  update_mode: converge
-  options:
-    ca: loggregator_ca
-    common_name: log-cache
-    alternative_names:
-    - log-cache
-    extended_key_usage:
-    - client_auth
-    - server_auth
 - name: log_cache_ca
   type: certificate
   options:
