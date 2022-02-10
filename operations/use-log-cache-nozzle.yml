@@ -1,0 +1,64 @@
+---
+- type: replace
+  path: /instance_groups/name=log-cache/jobs/name=log-cache-nozzle?
+  value:
+    consumes:
+      reverse_log_proxy: {from: reverse_log_proxy}
+    name: log-cache-nozzle
+    properties:
+      metrics:
+        ca_cert: ((log_cache_nozzle_metrics_tls.ca))
+        cert: ((log_cache_nozzle_metrics_tls.certificate))
+        key: ((log_cache_nozzle_metrics_tls.private_key))
+        server_name: log_cache_nozzle_metrics
+      logs_provider:
+        tls:
+          ca_cert: ((logs_provider.ca))
+          cert: ((logs_provider.certificate))
+          key: ((logs_provider.private_key))
+    release: log-cache
+
+- type: replace
+  path: /variables/name=log_cache_nozzle_metrics_tls?
+  value:
+    name: log_cache_nozzle_metrics_tls
+    type: certificate
+    update_mode: converge
+    options:
+      ca: metric_scraper_ca
+      common_name: log_cache_nozzle_metrics
+      alternative_names:
+      - log_cache_nozzle_metrics
+      extended_key_usage:
+      - server_auth
+
+- type: replace
+  path: /variables/name=logs_provider?
+  value:
+    name: logs_provider
+    type: certificate
+    update_mode: converge
+    options:
+      ca: loggregator_ca
+      common_name: log-cache
+      alternative_names:
+      - log-cache
+      extended_key_usage:
+      - client_auth
+      - server_auth
+
+- type: remove
+  path: /variables/name=log_cache_syslog_tls?
+
+- type: remove
+  path: /instance_groups/name=log-cache/jobs/name=log-cache-syslog-server?
+
+- type: remove
+  path: /instance_groups/name=scheduler/jobs/name=loggr-syslog-binding-cache/properties/aggregate_drains?
+
+- type: remove
+  path: /addons/name=loggr-syslog-agent/jobs/name=loggr-syslog-agent/properties/drain_ca_cert?
+
+- type: remove
+  path: /variables/name=log_cache_syslog_server_metrics_tls?
+
