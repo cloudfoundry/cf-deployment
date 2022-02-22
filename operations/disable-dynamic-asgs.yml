@@ -1,0 +1,8 @@
+---
+- type: replace
+  path: /instance_groups/name=api/jobs/name=policy-server-asg-syncer/properties/disable?
+  value: true
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=vxlan-policy-agent/properties/enable_asg_syncing?
+  value: false
