@@ -937,7 +937,6 @@ instance_groups:
           current_key_label: "encryption_key_0"
           keys:
             encryption_key_0: "((cc_db_encryption_key))"
-        bulk_api_password: "((cc_bulk_api_password))"
         internal_api_password: "((cc_internal_api_password))"
         staging_upload_user: staging_user
         staging_upload_password: "((cc_staging_upload_password))"
@@ -1849,8 +1848,6 @@ variables:
 - name: blobstore_admin_users_password
   type: password
 - name: blobstore_secure_link_secret
-  type: password
-- name: cc_bulk_api_password
   type: password
 - name: cc_db_encryption_key
   type: password
