@@ -1116,6 +1116,16 @@ instance_groups:
       ca_cert: ((network_policy_server.ca))
       server_cert: ((network_policy_server.certificate))
       server_key: ((network_policy_server.private_key))
+  - name: policy-server-asg-syncer
+    release: cf-networking
+    properties:
+      uaa_client_secret: ((uaa_clients_network_policy_secret))
+      uaa_ca: ((uaa_ssl.ca))
+      locket:
+        address: "locket.service.cf.internal:8891"
+        ca_cert: "((asg_syncer_locket_client.ca))"
+        client_cert: "((asg_syncer_locket_client.certificate))"
+        client_key: "((asg_syncer_locket_client.private_key))"
   - name: cc_uploader
     release: capi
     properties:
@@ -2042,6 +2052,16 @@ variables:
   options:
     common_name: internalCA
     is_ca: true
+- name: asg_syncer_locket_client
+  type: certificate
+  update_mode: converge
+  options:
+    ca: service_cf_internal_ca
+    common_name: locket-client
+    alternative_names:
+    - locket-client
+    extended_key_usage:
+    - client_auth
 - name: blobstore_tls
   type: certificate
   update_mode: converge
