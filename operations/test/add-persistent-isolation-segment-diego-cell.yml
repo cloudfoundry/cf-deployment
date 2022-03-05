@@ -23,6 +23,8 @@
           - ((uaa_ssl.ca))
     - name: garden
       release: garden-runc
+      provides:
+        iptables: nil
       properties:
         garden:
           containerd_mode: true
