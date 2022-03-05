@@ -2262,6 +2262,7 @@ variables:
     - localhost
 - name: log_cache_syslog_tls
   type: certificate
+  update_mode: converge
   options:
     ca: loggregator_ca
     common_name: log-cache.service.cf.internal
