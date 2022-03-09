@@ -1256,6 +1256,7 @@ instance_groups:
     properties:
       cc:
         db_encryption_key: ((cc_db_encryption_key))
+        database_encryption: *cc-database-encryption
         mutual_tls:
           ca_cert: "((cc_tls.ca))"
           private_key: "((cc_tls.private_key))"
