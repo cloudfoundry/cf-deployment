@@ -154,6 +154,7 @@
             cert: ((syslog_agent_api_tls.certificate))
             cn: binding-cache
             key: ((syslog_agent_api_tls.private_key))
+        drain_ca_cert: ((log_cache_syslog_tls.ca))
         metrics:
           ca_cert: ((syslog_agent_metrics_tls.ca))
           cert: ((syslog_agent_metrics_tls.certificate))
@@ -164,7 +165,6 @@
           ca_cert: ((loggregator_tls_agent.ca))
           cert: ((loggregator_tls_agent.certificate))
           key: ((loggregator_tls_agent.private_key))
-        drain_ca_cert: ((log_cache_syslog_tls.ca))
       release: loggregator-agent
     - name: loggr-forwarder-agent-windows
       properties:
@@ -249,9 +249,9 @@
   path: /releases/name=hwc-buildpack?
   value:
     name: hwc-buildpack
-    sha1: d823cbc7f892a993ba158d2820e51d7d6ef7bb61
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=3.1.22
-    version: 3.1.22
+    sha1: b3bce8c04e4e8dc375a64bbce61e78fd15d35aa0
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=3.1.23
+    version: 3.1.23
 - type: replace
   path: /releases/name=winc?
   value:
