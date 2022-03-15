@@ -22,8 +22,6 @@ groups:
   - update-cf-networking
   - acquire-cf-smoke-tests-pre-dev-lock
   - update-cf-smoke-tests
-  - acquire-cf-syslog-drain-pre-dev-lock
-  - update-cf-syslog-drain
   - acquire-cflinuxfs3-pre-dev-lock
   - update-cflinuxfs3
   - acquire-diego-pre-dev-lock
@@ -217,7 +215,7 @@ resources:
   type: bosh-io-stemcell
   icon: dna
   source:
-    name: bosh-google-kvm-ubuntu-xenial-go_agent
+    name: bosh-google-kvm-ubuntu-bionic-go_agent
 - name: stemcell-version-bump-detect
   type: stemcell-version-bump
   icon: dna
@@ -268,10 +266,6 @@ resources:
   type: bosh-io-release
   source:
     repository: cloudfoundry/cf-smoke-tests-release
-- name: cf-syslog-drain-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/cf-syslog-drain-release
 - name: cflinuxfs3-release
   type: bosh-io-release
   source:
@@ -461,7 +455,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: bosh-dns-aliases-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: bosh-dns-aliases-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: bosh-dns-aliases-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -473,7 +467,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: bpm-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: bpm-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: bpm-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -485,7 +479,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: capi-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: capi-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: capi-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -497,7 +491,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: cf-networking-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: cf-networking-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: cf-networking-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -509,31 +503,19 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: cf-smoke-tests-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: cf-smoke-tests-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: cf-smoke-tests-component-bump-logs-gcs
   type: gcs-resource
   source:
     bucket: component-bump-logs
     json_key: ((greengrass_gcp_service_account_json))
     regexp: cf-smoke-tests/cf-(\d+)-(\d+)-(\d+)\.tgz
-- name: cf-syslog-drain-release-gcs
-  type: gcs-resource
-  source:
-    bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
-    regexp: cf-syslog-drain-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
-- name: cf-syslog-drain-component-bump-logs-gcs
-  type: gcs-resource
-  source:
-    bucket: component-bump-logs
-    json_key: ((greengrass_gcp_service_account_json))
-    regexp: cf-syslog-drain/cf-(\d+)-(\d+)-(\d+)\.tgz
 - name: cflinuxfs3-release-gcs
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: cflinuxfs3-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: cflinuxfs3-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: cflinuxfs3-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -545,7 +527,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: diego-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: diego-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: diego-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -557,7 +539,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: garden-runc-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: garden-runc-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: garden-runc-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -569,7 +551,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: log-cache-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: log-cache-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: log-cache-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -581,7 +563,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: loggregator-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: loggregator-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: loggregator-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -593,7 +575,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: loggregator-agent-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: loggregator-agent-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: loggregator-agent-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -605,7 +587,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: nats-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: nats-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: nats-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -617,7 +599,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: pxc-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: pxc-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: pxc-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -629,7 +611,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: routing-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: routing-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: routing-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -641,7 +623,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: silk-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: silk-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: silk-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -653,7 +635,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: statsd-injector-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: statsd-injector-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: statsd-injector-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -665,7 +647,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: uaa-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: uaa-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: uaa-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -677,7 +659,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: credhub-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: credhub-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: credhub-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -689,7 +671,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: cf-cli-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: cf-cli-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: cf-cli-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -701,7 +683,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: metrics-discovery-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: metrics-discovery-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: metrics-discovery-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -713,7 +695,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: binary-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: binary-buildpack-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: binary-buildpack-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -725,7 +707,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: dotnet-core-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: dotnet-core-buildpack-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: dotnet-core-buildpack-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -737,7 +719,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: go-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: go-buildpack-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: go-buildpack-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -749,7 +731,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: java-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: java-buildpack-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: java-buildpack-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -761,7 +743,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: nginx-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: nginx-buildpack-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: nginx-buildpack-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -773,7 +755,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: nodejs-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: nodejs-buildpack-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: nodejs-buildpack-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -785,7 +767,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: php-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: php-buildpack-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: php-buildpack-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -797,7 +779,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: python-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: python-buildpack-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: python-buildpack-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -809,7 +791,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: r-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: r-buildpack-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: r-buildpack-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -821,7 +803,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: ruby-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: ruby-buildpack-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: ruby-buildpack-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -833,7 +815,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((concourse_gcp_service_account_json))
-    regexp: staticfile-buildpack-[^-]+-ubuntu-xenial-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
+    regexp: staticfile-buildpack-[^-]+-ubuntu-bionic-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: staticfile-buildpack-component-bump-logs-gcs
   type: gcs-resource
   source:
@@ -2371,290 +2353,6 @@ jobs:
             file: runtime-ci/tasks/lookup-slack-channel-for-release-owner/task.yml
             params:
               RELEASE_REPOSITORY: cloudfoundry/cf-smoke-tests-release
-          - put: slack-alert
-            params:
-              channel_file: slack-channel/channel.txt
-              icon_emoji: ':cloudfoundrylogo:'
-              text: |
-                $TEXT_FILE_CONTENT
-
-                CI job: https://release-integration.ci.cf-app.com/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
-
-                If you're unfamiliar with the update-release pre-validation, please review the following FAQ: https://docs.google.com/document/d/1dUIk2HWbUzdxWs-pNZ-cCqH7CuSNDBixIUoXIFkFpz0
-              text_file: slack-message/message.txt
-              username: Release Integration
-      ensure:
-        do:
-        - task: delete-deployment
-          file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
-          input_mapping:
-            bbl-state: relint-envs
-            pool-lock: pre-dev-pool
-          params:
-            BBL_JSON_CONFIG: pool-lock/metadata
-            IGNORE_ERRORS: true
-          attempts: 3
-        - task: remove-gcp-dns
-          file: runtime-ci/tasks/manage-gcp-dns/task.yml
-          input_mapping:
-            bbl-state: relint-envs
-            pool-lock: pre-dev-pool
-          params:
-            BBL_JSON_CONFIG: pool-lock/metadata
-            GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-            GCP_DNS_ZONE_NAME: test-relint-rocks
-            ACTION: remove
-        - task: bbl-down
-          file: cf-deployment-concourse-tasks/bbl-destroy/task.yml
-          input_mapping:
-            bbl-state: relint-envs
-            pool-lock: pre-dev-pool
-          params:
-            BBL_JSON_CONFIG: pool-lock/metadata
-          on_failure:
-            do:
-            - task: bbl-cleanup-leftovers
-              file: runtime-ci/tasks/bbl-cleanup-leftovers/task.yml
-              input_mapping:
-                bbl-state: updated-bbl-state
-                pool-lock: pre-dev-pool
-              output_mapping:
-                updated-bbl-state: clean-bbl-state
-              params:
-                BBL_JSON_CONFIG: pool-lock/metadata
-            ensure:
-              put: relint-envs
-              params:
-                repository: clean-bbl-state
-                rebase: true
-          on_success:
-            put: relint-envs
-            params:
-              repository: updated-bbl-state
-              rebase: true
-    ensure:
-      do:
-      - put: pre-dev-pool
-        params:
-          release: pre-dev-pool
-- name: acquire-cf-syslog-drain-pre-dev-lock
-  public: true
-  plan:
-  - in_parallel:
-    - get: cf-syslog-drain-release
-      trigger: true
-      params:
-        tarball: false
-  - put: pre-dev-pool
-    params:
-      acquire: true
-- name: update-cf-syslog-drain
-  public: true
-  serial: true
-  plan:
-  - in_parallel:
-    - get: pre-dev-pool
-      passed:
-      - acquire-cf-syslog-drain-pre-dev-lock
-      trigger: true
-    - get: cf-syslog-drain-release
-      params:
-        tarball: false
-      passed:
-      - acquire-cf-syslog-drain-pre-dev-lock
-    - get: cf-deployment-release-candidate
-    - get: cf-deployment-develop
-    - get: stemcell
-      params:
-        tarball: false
-      passed:
-      - update-stemcell-and-recompile-releases
-    - get: cf-deployment-concourse-tasks
-    - get: runtime-ci
-    - get: relint-envs
-    - get: relint-team
-  - task: update-release-cf-syslog-drain-release-candidate
-    file: runtime-ci/tasks/update-single-manifest-release/task.yml
-    input_mapping:
-      cf-deployment: cf-deployment-release-candidate
-      release: cf-syslog-drain-release
-    output_mapping:
-      updated-cf-deployment: updated-cf-deployment-cf-syslog-drain-release-candidate
-    params:
-      RELEASE_NAME: cf-syslog-drain
-  - task: update-additional-ops-files-cf-syslog-drain-release-candidate
-    file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-    input_mapping:
-      original-ops-file: updated-cf-deployment-cf-syslog-drain-release-candidate
-      release: cf-syslog-drain-release
-    output_mapping:
-      updated-ops-file: updated-cf-deployment-cf-syslog-drain-release-candidate
-    params:
-      RELEASE_NAME: cf-syslog-drain
-  - do:
-    - task: bbl-up
-      file: cf-deployment-concourse-tasks/bbl-up/task.yml
-      params:
-        BBL_JSON_CONFIG: pool-lock/metadata
-      input_mapping:
-        bbl-state: relint-envs
-        bbl-config: relint-envs
-        pool-lock: pre-dev-pool
-      on_failure:
-        do:
-        - task: bbl-cleanup-leftovers
-          file: runtime-ci/tasks/bbl-cleanup-leftovers/task.yml
-          input_mapping:
-            bbl-state: updated-bbl-state
-            pool-lock: pre-dev-pool
-          output_mapping:
-            updated-bbl-state: clean-bbl-state
-          params:
-            BBL_JSON_CONFIG: pool-lock/metadata
-        ensure:
-          put: relint-envs
-          params:
-            repository: clean-bbl-state
-            rebase: true
-      on_success:
-        put: relint-envs
-        params:
-          repository: updated-bbl-state
-          rebase: true
-    - task: add-gcp-dns
-      file: runtime-ci/tasks/manage-gcp-dns/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-        pool-lock: pre-dev-pool
-      params:
-        BBL_JSON_CONFIG: pool-lock/metadata
-        GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-        GCP_DNS_ZONE_NAME: test-relint-rocks
-        ACTION: add
-    - do:
-      - task: combine-vars-files
-        file: runtime-ci/tasks/combine-inputs/task.yml
-        input_mapping:
-          first-input: cf-deployment-release-candidate
-          second-input: relint-envs
-        output_mapping:
-          combined-inputs: combined-vars-files
-      - task: update-stemcell-for-deploy
-        file: runtime-ci/tasks/update-base-manifest-stemcell/task.yml
-        input_mapping:
-          cf-deployment: updated-cf-deployment-cf-syslog-drain-release-candidate
-        output_mapping:
-          updated-cf-deployment: updated-cf-deployment-cf-syslog-drain-release-candidate-with-stemcell
-      - task: deploy-cf
-        file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          cf-deployment: updated-cf-deployment-cf-syslog-drain-release-candidate-with-stemcell
-          ops-files: updated-cf-deployment-cf-syslog-drain-release-candidate-with-stemcell
-          vars-files: combined-vars-files
-          pool-lock: pre-dev-pool
-        params:
-          BBL_JSON_CONFIG: pool-lock/metadata
-          OPS_FILES: |
-            operations/scale-to-one-az.yml
-          REGENERATE_CREDENTIALS: false
-          BOSH_DEPLOY_ARGS: --parallel 50
-      - task: ensure-api-healthy
-        file: runtime-ci/tasks/ensure-api-healthy/task.yml
-        input_mapping:
-          pool-lock: pre-dev-pool
-          cats-integration-config: relint-envs
-        params:
-          BBL_JSON_CONFIG: pool-lock/metadata
-      - task: run-errand-smoke-tests
-        file: cf-deployment-concourse-tasks/run-errand/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          pool-lock: pre-dev-pool
-        params:
-          BBL_JSON_CONFIG: pool-lock/metadata
-          ERRAND_NAME: smoke_tests
-      - task: export-compiled-release-cf-syslog-drain
-        file: runtime-ci/tasks/export-compiled-release-tarball/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-          manifest: updated-cf-deployment-cf-syslog-drain-release-candidate-with-stemcell
-          pool-lock: pre-dev-pool
-        params:
-          BBL_JSON_CONFIG: pool-lock/metadata
-          RELEASE_NAME: cf-syslog-drain
-      on_success:
-        do:
-        - task: update-release-cf-syslog-drain-develop
-          file: runtime-ci/tasks/update-single-manifest-release/task.yml
-          input_mapping:
-            cf-deployment: cf-deployment-develop
-            release: cf-syslog-drain-release
-          output_mapping:
-            updated-cf-deployment: updated-cf-deployment-cf-syslog-drain-develop
-          params:
-            RELEASE_NAME: cf-syslog-drain
-        - task: update-additional-ops-files-cf-syslog-drain-develop
-          file: runtime-ci/tasks/update-single-opsfile-release/task.yml
-          input_mapping:
-            original-ops-file: updated-cf-deployment-cf-syslog-drain-develop
-            release: cf-syslog-drain-release
-          output_mapping:
-            updated-ops-file: updated-cf-deployment-cf-syslog-drain-develop
-          params:
-            RELEASE_NAME: cf-syslog-drain
-        - task: update-compiled-releases-ops-file-cf-syslog-drain-develop
-          file: runtime-ci/tasks/update-single-compiled-release/task.yml
-          input_mapping:
-            original-compiled-releases-ops-file: updated-cf-deployment-cf-syslog-drain-develop
-            release: cf-syslog-drain-release
-          output_mapping:
-            updated-compiled-releases-ops-file: updated-cf-deployment-cf-syslog-drain-develop
-          params:
-            RELEASE_NAME: cf-syslog-drain
-            ORIGINAL_OPS_FILE_PATH: operations/use-compiled-releases.yml
-            UPDATED_OPS_FILE_PATH: operations/use-compiled-releases.yml
-        - put: cf-syslog-drain-release-gcs
-          params:
-            file: compiled-release-tarball/*.tgz
-            predefined_acl: publicRead
-        - put: cf-deployment-develop
-          params:
-            rebase: true
-            repository: updated-cf-deployment-cf-syslog-drain-develop
-      on_failure:
-        do:
-        - task: push-to-release-branch
-          file: runtime-ci/tasks/push-to-release-branch/task.yml
-          input_mapping:
-            updated-cf-deployment: updated-cf-deployment-cf-syslog-drain-release-candidate
-            release: cf-syslog-drain-release
-          params:
-            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
-            RELEASE_NAME: cf-syslog-drain
-        - task: retrieve-bosh-logs
-          file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
-          input_mapping:
-            bbl-state: relint-envs
-            pool-lock: pre-dev-pool
-          params:
-            BBL_JSON_CONFIG: pool-lock/metadata
-        - put: cf-syslog-drain-component-bump-logs-gcs
-          params:
-            file: bosh-logs/cf-*.tgz
-        ensure:
-          do:
-          - task: create-slack-message
-            file: runtime-ci/tasks/create-slack-message/task.yml
-            input_mapping:
-              release: cf-syslog-drain-release
-            params:
-              BOSH_LOGS_PREFIX: https://storage.cloud.google.com/component-bump-logs/cf-syslog-drain
-              RELEASE_NAME: cf-syslog-drain
-          - task: lookup-slack-channel-for-release-owner
-            file: runtime-ci/tasks/lookup-slack-channel-for-release-owner/task.yml
-            params:
-              RELEASE_REPOSITORY: cloudfoundry/cf-syslog-drain-release
           - put: slack-alert
             params:
               channel_file: slack-channel/channel.txt
@@ -14765,224 +14463,217 @@ jobs:
           file: compiled-releases/bosh-dns-aliases-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: bpm-release-gcs
         params:
           file: compiled-releases/bpm-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: capi-release-gcs
         params:
           file: compiled-releases/capi-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: cf-networking-release-gcs
         params:
           file: compiled-releases/cf-networking-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: cf-smoke-tests-release-gcs
         params:
           file: compiled-releases/cf-smoke-tests-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
-        attempts: 3
-      - put: cf-syslog-drain-release-gcs
-        params:
-          file: compiled-releases/cf-syslog-drain-[0-9]*.tgz
-          predefined_acl: publicRead
-        get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: cflinuxfs3-release-gcs
         params:
           file: compiled-releases/cflinuxfs3-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: diego-release-gcs
         params:
           file: compiled-releases/diego-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: garden-runc-release-gcs
         params:
           file: compiled-releases/garden-runc-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: log-cache-release-gcs
         params:
           file: compiled-releases/log-cache-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: loggregator-release-gcs
         params:
           file: compiled-releases/loggregator-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: loggregator-agent-release-gcs
         params:
           file: compiled-releases/loggregator-agent-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: nats-release-gcs
         params:
           file: compiled-releases/nats-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: pxc-release-gcs
         params:
           file: compiled-releases/pxc-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: routing-release-gcs
         params:
           file: compiled-releases/routing-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: silk-release-gcs
         params:
           file: compiled-releases/silk-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: statsd-injector-release-gcs
         params:
           file: compiled-releases/statsd-injector-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: uaa-release-gcs
         params:
           file: compiled-releases/uaa-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: credhub-release-gcs
         params:
           file: compiled-releases/credhub-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: cf-cli-release-gcs
         params:
           file: compiled-releases/cf-cli-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: metrics-discovery-release-gcs
         params:
           file: compiled-releases/metrics-discovery-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: binary-buildpack-release-gcs
         params:
           file: compiled-releases/binary-buildpack-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: dotnet-core-buildpack-release-gcs
         params:
           file: compiled-releases/dotnet-core-buildpack-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: go-buildpack-release-gcs
         params:
           file: compiled-releases/go-buildpack-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: java-buildpack-release-gcs
         params:
           file: compiled-releases/java-buildpack-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: nginx-buildpack-release-gcs
         params:
           file: compiled-releases/nginx-buildpack-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: nodejs-buildpack-release-gcs
         params:
           file: compiled-releases/nodejs-buildpack-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: php-buildpack-release-gcs
         params:
           file: compiled-releases/php-buildpack-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: python-buildpack-release-gcs
         params:
           file: compiled-releases/python-buildpack-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: r-buildpack-release-gcs
         params:
           file: compiled-releases/r-buildpack-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: ruby-buildpack-release-gcs
         params:
           file: compiled-releases/ruby-buildpack-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
       - put: staticfile-buildpack-release-gcs
         params:
           file: compiled-releases/staticfile-buildpack-[0-9]*.tgz
           predefined_acl: publicRead
         get_params:
-          skip_download: true
+          skip_download: "true"
         attempts: 3
     - put: cf-deployment-develop
       params:
