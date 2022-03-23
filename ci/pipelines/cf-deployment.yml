@@ -1630,6 +1630,40 @@ jobs:
     file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
     input_mapping:
       toolsmiths-env: toolsmiths-windows-env
+  - task: update-dns-runtime-config
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: cloudfoundry/cf-deployment-concourse-tasks
+      inputs:
+      - name: toolsmiths-env
+      - name: cf-deployment-concourse-tasks
+      run:
+        dir: ""
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          source cf-deployment-concourse-tasks/shared-functions
+          setup_bosh_env_vars
+
+          cat <<EOT > /tmp/add-bionic.yml
+          ---
+          - type: replace
+            path: /addons/name=bosh-dns/include/stemcell/-
+            value:
+              os: ubuntu-bionic
+          EOT
+
+          bosh runtime-config --name=dns > /tmp/dns.yml
+          bosh interpolate -o /tmp/add-bionic.yml /tmp/dns.yml > /tmp/updated-dns.yml
+          bosh -n update-runtime-config --name=dns /tmp/updated-dns.yml
+    input_mapping:
+      toolsmiths-env: toolsmiths-windows-env
   - task: bosh-deploy-cf-develop
     file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
     input_mapping:
