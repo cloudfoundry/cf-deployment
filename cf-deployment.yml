@@ -950,6 +950,8 @@ instance_groups:
           package: r-buildpack-cflinuxfs3
         - name: binary_buildpack
           package: binary-buildpack-cflinuxfs3
+        - name: yapp-buildpack
+          package: yapp-buildpack-cflinuxfs3
         db_encryption_key: "((cc_db_encryption_key))"
         database_encryption: &cc-database-encryption
           current_key_label: "encryption_key_0"
@@ -1018,6 +1020,8 @@ instance_groups:
     release: ruby-buildpack
   - name: staticfile-buildpack
     release: staticfile-buildpack
+  - name: yapp-buildpack
+    release: yapp-buildpack
   - name: route_registrar
     release: routing
     properties:
@@ -2862,6 +2866,9 @@ releases:
   url: https://bosh.io/d/github.com/bosh-packages/cf-cli-release?v=1.38.0
   version: 1.38.0
   sha1: 0ae902bb6b42d28a534c5a69c231430b204098a4
+- name: yapp-buildpack
+  url: https://github.com/0401-7r011/yapp-buildpack/releases/download/v4.1/yapp-buildpack-4.1.tgz
+  version: 4.1
 stemcells:
 - alias: default
   os: ubuntu-bionic
