@@ -72,8 +72,8 @@ For example, given the following manifest snippet:
 ```
 stemcells:
 - alias: default
-  os: ubuntu-xenial
-  version: "456.16"
+  os: ubuntu-bionic
+  version: "1.1"
 ```
 
 and the following ops-file:
