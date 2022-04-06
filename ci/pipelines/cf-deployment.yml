@@ -319,13 +319,13 @@ resources:
   type: git
   icon: github
   source:
-    uri: https://github.com/cloudfoundry-incubator/disaster-recovery-acceptance-tests.git
+    uri: https://github.com/cloudfoundry/disaster-recovery-acceptance-tests.git
 
 - name: bbr-github-release
   type: github-release
   icon: github
   source:
-    owner: cloudfoundry-incubator
+    owner: cloudfoundry
     repository: bosh-backup-and-restore
 
 - name: trelawney-external-resources
@@ -1492,6 +1492,8 @@ jobs:
         operations/backup-and-restore/enable-backup-restore.yml
         operations/enable-nfs-volume-service.yml
         operations/backup-and-restore/enable-restore-nfs-broker.yml
+        operations/enable-smb-volume-service.yml
+        operations/backup-and-restore/enable-restore-smb-broker.yml
       REGENERATE_CREDENTIALS: true
   - in_parallel:
     - task: enable-docker
@@ -1522,13 +1524,21 @@ jobs:
         INSTANCE_GROUP_NAME: uaa
         SYSTEM_DOMAIN: baba-yaga.cf-app.com
         SECURITY_GROUP_NAME: uaa
-    - task: run-nfs-broker-push-errand
-      file: cf-deployment-concourse-tasks/run-errand/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-      params:
-        BBL_STATE_DIR: environments/test/bbr/bbl-state
-        ERRAND_NAME: nfs-broker-push
+    - do:
+      - task: run-nfs-broker-push-errand
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/bbr/bbl-state
+          ERRAND_NAME: nfs-broker-push
+      - task: run-smb-broker-push-errand
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/bbr/bbl-state
+          ERRAND_NAME: smb-broker-push
     - task: run-bosh-cleanup
       file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
       input_mapping:

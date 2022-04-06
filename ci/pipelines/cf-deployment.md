@@ -7,7 +7,7 @@ This pipeline validates changes to cf-deployment and automates the creation of a
 ## Groups
 
 * `cf-deployment`: test commits to the `develop` branch of cf-deployment and promotes them to the `release-candidate` branch where they are subsequently used in the manual release process.
-* `bbr`: tests bbr (bosh backup and restore) using DRATs (disaster recover acceptance tests)
+* `bbr`: tests BBR (bosh backup and restore) using DRATs (disaster recover acceptance tests)
 * `fresh-luna`: tests a fresh install with mostly default configuration
 * `upgrade-trelawney`: tests an upgrade from the latest release with an external db
 * `experimental-hermione`: tests experimental ops files and upgrades from the latest release
