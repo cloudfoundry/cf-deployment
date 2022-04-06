@@ -96,39 +96,39 @@
   path: /variables/-
   value:
     name: smb_ca
-    type: certificate
     options:
       common_name: smb-ca
       is_ca: true
+    type: certificate
 - type: replace
   path: /variables/-
   value:
     name: smbdriver_cert
-    type: certificate
     options:
-      ca: smb_ca
-      common_name: 127.0.0.1
       alternative_names:
       - 127.0.0.1
+      ca: smb_ca
+      common_name: 127.0.0.1
       extended_key_usage:
       - server_auth
+    type: certificate
 - type: replace
   path: /variables/-
   value:
     name: smbdriver_client_cert
-    type: certificate
-    update_mode: converge
     options:
-      ca: smb_ca
-      common_name: smb-client
       alternative_names:
       - smb-client
+      ca: smb_ca
+      common_name: smb-client
       extended_key_usage:
       - client_auth
+    type: certificate
+    update_mode: converge
 - type: replace
   path: /releases/-
   value:
     name: smb-volume
-    sha1: a73587cd607cf44f8c5acf191616cdb8d4d5cda7
-    url: https://bosh.io/d/github.com/cloudfoundry/smb-volume-release?v=3.1.0
-    version: 3.1.0
+    sha1: 30ea8ac351d3c4161b2d492a9ed8e92df3648abc
+    url: https://bosh.io/d/github.com/cloudfoundry/smb-volume-release?v=3.1.1
+    version: 3.1.1
