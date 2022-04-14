@@ -1690,6 +1690,7 @@ instance_groups:
       ca_cert: ((network_policy_client.ca))
       client_cert: ((network_policy_client.certificate))
       client_key: ((network_policy_client.private_key))
+      loggregator: *diego_loggregator_client_properties
   - name: silk-daemon
     release: silk
     properties:
