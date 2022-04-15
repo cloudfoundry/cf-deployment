@@ -1,0 +1,7 @@
+---
+- type: replace
+  path: /instance_groups/name=api/jobs/name=policy-server-asg-syncer/properties/asg_poll_interval_seconds?
+  value: 1
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=vxlan-policy-agent/properties/asg_poll_interval_seconds?
+  value: 1
