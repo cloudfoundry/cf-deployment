@@ -980,6 +980,10 @@ instance_groups:
           ca_cert: "((cc_tls.ca))"
           public_cert: "((cc_tls.certificate))"
           private_key: "((cc_tls.private_key))"
+        prom_scraper_tls:
+          ca_cert: ((cc_prom_scraper_scrape_tls.ca))
+          private_key: ((cc_prom_scraper_scrape_tls.private_key))
+          public_cert: ((cc_prom_scraper_scrape_tls.certificate))
         public_tls:
           ca_cert: "((cc_public_tls.ca))"
           certificate: "((cc_public_tls.certificate))"
@@ -2699,6 +2703,18 @@ variables:
     - prom_scraper_metrics
     extended_key_usage:
     - server_auth
+
+- name: cc_prom_scraper_scrape_tls
+  options:
+    alternative_names:
+    - cloud-controller-ng.service.cf.internal
+    ca: metric_scraper_ca
+    common_name: cloud-controller-ng.service.cf.internal
+    extended_key_usage:
+    - client_auth
+    - server_auth
+  type: certificate
+  update_mode: converge
 
 - name: rlp_gateway_metrics_tls
   type: certificate
