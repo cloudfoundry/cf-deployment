@@ -2,9 +2,9 @@
   path: /releases/name=metric-store?
   value:
     name: metric-store
-    sha1: 546a96e8c1505577fa0f7fa199d3a5636831bd2b
-    url: https://bosh.io/d/github.com/cloudfoundry/metric-store-release?v=1.5.4
-    version: 1.5.4
+    sha1: 02728340296c120c31bd0075588752c3961f2ba3
+    url: https://bosh.io/d/github.com/cloudfoundry/metric-store-release?v=1.5.5
+    version: 1.5.5
 - type: replace
   path: /instance_groups/name=metric-store?
   value:
@@ -81,6 +81,11 @@
       release: metric-store
     - name: route_registrar
       properties:
+        nats:
+          tls:
+            client_cert: ((nats_client_cert.certificate))
+            client_key: ((nats_client_cert.private_key))
+            enabled: true
         route_registrar:
           routes:
           - name: metric-store-reverse-proxy
