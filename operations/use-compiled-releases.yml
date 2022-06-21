@@ -32,12 +32,12 @@
   path: /releases/name=capi
   value:
     name: capi
-    sha1: 0f0e2b31b46e8f52a29844704b34d35723d3c2ed
+    sha1: 86d4f683795bc1bf56a71bf6d3c06000c570ef81
     stemcell:
       os: ubuntu-bionic
       version: "1.76"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/capi-1.129.0-ubuntu-bionic-1.76-20220506-092308-086860406.tgz
-    version: 1.129.0
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/capi-1.130.0-ubuntu-bionic-1.76-20220615-223827-231910088.tgz
+    version: 1.130.0
 - type: replace
   path: /releases/name=cf-cli
   value:
@@ -52,12 +52,12 @@
   path: /releases/name=cf-networking
   value:
     name: cf-networking
-    sha1: 7141e503f1e77594b7092229735322c6599725c5
+    sha1: e85f4e146466d4f39aa3bcad844137ddf18a4b6c
     stemcell:
       os: ubuntu-bionic
       version: "1.76"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/cf-networking-3.6.0-ubuntu-bionic-1.76-20220513-022911-891152543.tgz
-    version: 3.6.0
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/cf-networking-3.8.0-ubuntu-bionic-1.76-20220610-214709-624642986.tgz
+    version: 3.8.0
 - type: replace
   path: /releases/name=cf-smoke-tests
   value:
@@ -72,22 +72,22 @@
   path: /releases/name=cflinuxfs3
   value:
     name: cflinuxfs3
-    sha1: 07726221c502754431d511651fb45089c66ad0e9
+    sha1: d87ad839b737b87aac3d97ceb23753440c3c713f
     stemcell:
       os: ubuntu-bionic
       version: "1.76"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/cflinuxfs3-0.301.0-ubuntu-bionic-1.76-20220526-162238-400082085.tgz
-    version: 0.301.0
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/cflinuxfs3-0.306.0-ubuntu-bionic-1.76-20220608-231716-447648013.tgz
+    version: 0.306.0
 - type: replace
   path: /releases/name=credhub
   value:
     name: credhub
-    sha1: 1d265e7f809a6b22f62652725b1ad6d1de91b612
+    sha1: c28ed11ee09f009804188b39df669494414780fd
     stemcell:
       os: ubuntu-bionic
       version: "1.76"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/credhub-2.12.4-ubuntu-bionic-1.76-20220409-075541-336815635.tgz
-    version: 2.12.4
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/credhub-2.12.5-ubuntu-bionic-1.76-20220618-140846-946428159.tgz
+    version: 2.12.5
 - type: replace
   path: /releases/name=diego
   value:
@@ -102,12 +102,12 @@
   path: /releases/name=dotnet-core-buildpack
   value:
     name: dotnet-core-buildpack
-    sha1: 3c816108b0ef1f6461b06b6d819e042e618c2c43
+    sha1: dbf4ffce3d4c62237233019acd201543c0523567
     stemcell:
       os: ubuntu-bionic
       version: "1.76"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/dotnet-core-buildpack-2.3.42-ubuntu-bionic-1.76-20220514-010731-132890457.tgz
-    version: 2.3.42
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/dotnet-core-buildpack-2.3.43-ubuntu-bionic-1.76-20220614-190642-493939385.tgz
+    version: 2.3.43
 - type: replace
   path: /releases/name=garden-runc
   value:
@@ -122,12 +122,12 @@
   path: /releases/name=go-buildpack
   value:
     name: go-buildpack
-    sha1: e4d5a5dc1759e80a10b389816f266d7339f24129
+    sha1: a16b4ae54f9c160b7ae8e0e236671ad601b9bf8d
     stemcell:
       os: ubuntu-bionic
       version: "1.76"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/go-buildpack-1.9.46-ubuntu-bionic-1.76-20220513-230453-664979214.tgz
-    version: 1.9.46
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/go-buildpack-1.9.47-ubuntu-bionic-1.76-20220613-181843-202418994.tgz
+    version: 1.9.47
 - type: replace
   path: /releases/name=java-buildpack
   value:
@@ -172,52 +172,52 @@
   path: /releases/name=metrics-discovery
   value:
     name: metrics-discovery
-    sha1: 32cd2affd2a8a4b5cea564dd42fda5d02a71add9
+    sha1: 5282a4afa47bcfd2532269a7cc53074d74ae2ec8
     stemcell:
       os: ubuntu-bionic
       version: "1.76"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/metrics-discovery-3.0.13-ubuntu-bionic-1.76-20220415-224817-296562502.tgz
-    version: 3.0.13
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/metrics-discovery-3.1.0-ubuntu-bionic-1.76-20220617-211652-561876747.tgz
+    version: 3.1.0
 - type: replace
   path: /releases/name=nats
   value:
     name: nats
-    sha1: dfc1ccc9f1aef7007ab599cdac7395317fad748d
+    sha1: a20356caff5f03f67d5cbcbe4920451a600f393b
     stemcell:
       os: ubuntu-bionic
       version: "1.76"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/nats-44-ubuntu-bionic-1.76-20220429-182940-389431099.tgz
-    version: "44"
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/nats-45-ubuntu-bionic-1.76-20220603-145702-393273356.tgz
+    version: "45"
 - type: replace
   path: /releases/name=nginx-buildpack
   value:
     name: nginx-buildpack
-    sha1: d71eaac18b373d68529d5bfd006ebe0c67b471ad
+    sha1: c5c9c32dbf3a140e7b29ce34287756263d6bed37
     stemcell:
       os: ubuntu-bionic
       version: "1.76"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/nginx-buildpack-1.1.38-ubuntu-bionic-1.76-20220514-015705-616312514.tgz
-    version: 1.1.38
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/nginx-buildpack-1.1.39-ubuntu-bionic-1.76-20220614-194848-24302503.tgz
+    version: 1.1.39
 - type: replace
   path: /releases/name=nodejs-buildpack
   value:
     name: nodejs-buildpack
-    sha1: b4fe569ad786da0ec112d2fe43fa98e77444d50b
+    sha1: 20b66cfff881681a2571538cdd56848bc669aec9
     stemcell:
       os: ubuntu-bionic
       version: "1.76"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/nodejs-buildpack-1.7.70-ubuntu-bionic-1.76-20220516-214805-971490343.tgz
-    version: 1.7.70
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/nodejs-buildpack-1.7.71-ubuntu-bionic-1.76-20220614-194531-72161647.tgz
+    version: 1.7.71
 - type: replace
   path: /releases/name=php-buildpack
   value:
     name: php-buildpack
-    sha1: a44a0c2ebe2e463f2e02b119cc1629430e20b1fe
+    sha1: ab5accdc38be773315ae1b9079a642921345a27e
     stemcell:
       os: ubuntu-bionic
       version: "1.76"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/php-buildpack-4.4.61-ubuntu-bionic-1.76-20220513-232730-197767085.tgz
-    version: 4.4.61
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/php-buildpack-4.4.62-ubuntu-bionic-1.76-20220613-182010-908630354.tgz
+    version: 4.4.62
 - type: replace
   path: /releases/name=pxc
   value:
@@ -232,62 +232,62 @@
   path: /releases/name=python-buildpack
   value:
     name: python-buildpack
-    sha1: 8e39e09ab92949560a47dcb8d7f4801dc0fdf477
+    sha1: a0a8703e0848b5d46932eba7b43057f35e8cfe46
     stemcell:
       os: ubuntu-bionic
       version: "1.76"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/python-buildpack-1.7.54-ubuntu-bionic-1.76-20220514-002932-053974296.tgz
-    version: 1.7.54
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/python-buildpack-1.7.55-ubuntu-bionic-1.76-20220613-165258-737197342.tgz
+    version: 1.7.55
 - type: replace
   path: /releases/name=r-buildpack
   value:
     name: r-buildpack
-    sha1: 72577dd6cb423921f476fc0ecad99df2c42cff52
+    sha1: aedd64f827d4ebc6adaf70717ef2b57346f61ecc
     stemcell:
       os: ubuntu-bionic
       version: "1.76"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/r-buildpack-1.1.29-ubuntu-bionic-1.76-20220513-230423-122216062.tgz
-    version: 1.1.29
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/r-buildpack-1.1.30-ubuntu-bionic-1.76-20220613-165752-54969583.tgz
+    version: 1.1.30
 - type: replace
   path: /releases/name=routing
   value:
     name: routing
-    sha1: 35f84b15b52b7469c3583a69438858b1493c0646
+    sha1: 44750f8ad6bb1ff5aeff5d7861c2387ac57ae5f9
     stemcell:
       os: ubuntu-bionic
       version: "1.76"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/routing-0.233.0-ubuntu-bionic-1.76-20220531-144932-676915812.tgz
-    version: 0.233.0
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/routing-0.235.0-ubuntu-bionic-1.76-20220608-222158-837164386.tgz
+    version: 0.235.0
 - type: replace
   path: /releases/name=ruby-buildpack
   value:
     name: ruby-buildpack
-    sha1: 578ad0c45983a0e3dd6236e2254e0ec312adeccf
+    sha1: 4446fb0f577da0ad4fdc2de42d644bcb35c48d93
     stemcell:
       os: ubuntu-bionic
       version: "1.76"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/ruby-buildpack-1.8.54-ubuntu-bionic-1.76-20220514-003122-799735423.tgz
-    version: 1.8.54
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/ruby-buildpack-1.8.55-ubuntu-bionic-1.76-20220613-165353-703255297.tgz
+    version: 1.8.55
 - type: replace
   path: /releases/name=silk
   value:
     name: silk
-    sha1: 8c84e7d5ba1491afa97020958cc2f94a93bd5162
+    sha1: 3357d2492c4659b119ccc9c0cb0eee5bf3b02465
     stemcell:
       os: ubuntu-bionic
       version: "1.76"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/silk-3.6.0-ubuntu-bionic-1.76-20220513-022845-170376349.tgz
-    version: 3.6.0
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/silk-3.8.0-ubuntu-bionic-1.76-20220610-214433-516951431.tgz
+    version: 3.8.0
 - type: replace
   path: /releases/name=staticfile-buildpack
   value:
     name: staticfile-buildpack
-    sha1: d8eb735fb3387a697b20c75984536d99774b98bf
+    sha1: 2e39e12e83ad8774b7cc58b1549c0892341e670a
     stemcell:
       os: ubuntu-bionic
       version: "1.76"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/staticfile-buildpack-1.5.30-ubuntu-bionic-1.76-20220513-234146-085822971.tgz
-    version: 1.5.30
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/staticfile-buildpack-1.5.31-ubuntu-bionic-1.76-20220613-182240-597057253.tgz
+    version: 1.5.31
 - type: replace
   path: /releases/name=statsd-injector
   value:
