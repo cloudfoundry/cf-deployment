@@ -408,11 +408,12 @@ instance_groups:
             enabled: true
         external:
           tls:
-            ca: "((nats_client_cert.ca))"
+            ca: "((nats_server_cert.ca))"
             private_key: "((nats_server_cert.private_key))"
             certificate: "((nats_server_cert.certificate))"
         client:
           tls:
+            ca: "((nats_client_cert.ca))"
             private_key: "((nats_client_cert.private_key))"
             certificate: "((nats_client_cert.certificate))"
 - name: database
