@@ -42,3 +42,4 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 | [`disable-logs-in-firehose.yml`](disable-logs-in-firehose.yml) | Logs are not sent to dopplers, only metrics | | **NO** |
 | [`disable-logs-in-firehose-windows2019.yml`](disable-logs-in-firehose-windows-2019.yml) | Logs are not sent to dopplers, only metrics | | **NO** |
 | [`use-native-garden-runc-runner.yml`](use-native-garden-runc-runner.yml) | Configure Garden to **not** create containers via containerd, using the native runner instead. | | **NO** |
+| [`use-jammy.yml`](use-jammy.yml) | Use the new beta Jammy stemcell | This is incompatible with `../use-compiled-releases.yml` | **NO** |
