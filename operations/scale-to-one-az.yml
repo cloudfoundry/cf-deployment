@@ -1,6 +1,9 @@
 ---
 # Use this override to only deploy single instance of each job,
-# in a single Availability Zone.
+# in a single Availability Zone. This configuration is unlikely to 
+# pass CATS with much parallelism. If you plan to run CATS, 
+# consider deploying with the additional addon (scale-to-one-az-addon-parallel-cats.yml) 
+# to scale CF to the minimum size required to pass CATS with 12 parallel threads.
 - type: replace
   path: /instance_groups/name=nats/instances
   value: 1
