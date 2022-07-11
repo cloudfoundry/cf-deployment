@@ -1,0 +1,13 @@
+---
+# Use this after the scale-to-one-az ops file to scale up to minimal size
+# in order to run CATS quickly without flakes and 12 threads
+- type: replace
+  path: /instance_groups/name=diego-cell/instances
+  value: 2
+- type: replace
+  path: /instance_groups/name=diego-cell/vm_type
+  value: medium
+- type: replace
+  path: /instance_groups/name=api/instances
+  value: 2
+
