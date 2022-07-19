@@ -1124,6 +1124,9 @@ instance_groups:
   - name: policy-server-asg-syncer
     release: cf-networking
     properties:
+      cc_internal:
+        client_cert: "((policy_server_asg_syncer_cc_client.certificate))"
+        client_key: "((policy_server_asg_syncer_cc_client.private_key))"
       uaa_client_secret: ((uaa_clients_network_policy_secret))
       uaa_ca: ((uaa_ssl.ca))
       locket:
@@ -2389,6 +2392,14 @@ variables:
     common_name: cc_uploader
     alternative_names:
     - cc_uploader
+    extended_key_usage:
+    - client_auth
+- name: policy_server_asg_syncer_cc_client
+  type: certificate
+  update_mode: converge
+  options:
+    ca: service_cf_internal_ca
+    common_name: policy_server_asg_syncer_cc_client
     extended_key_usage:
     - client_auth
 - name: cc_bridge_cc_uploader_server
