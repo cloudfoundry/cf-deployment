@@ -664,7 +664,7 @@ jobs:
         REPORTER_CONFIG_FILE_PATH: environments/test/luna/reporter_config.json
         CAPTURE_LOGS: true
         RELINT_VERBOSE_AUTH: "true"
-        NODES: 1
+        NODES: 12
 
 - name: fresh-delete-deployment
   serial: true
@@ -1749,7 +1749,7 @@ jobs:
     params:
       CAPTURE_LOGS: true
       CONFIG_FILE_PATH: environments/test/trelawney/cats_windows_integration_config.json
-      NODES: 1
+      NODES: 5
 
 - name: windows-unclaim-env
   serial: true
