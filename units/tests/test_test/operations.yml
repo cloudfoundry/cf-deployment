@@ -22,4 +22,8 @@ enable-smb-test-server.yml:
   vars:
   - smb-password=FOO.PASS
   - smb-username=BAR.USER
+scale-to-one-az-addon-parallel-cats.yml:
+  ops:
+  - ../scale-to-one-az.yml
+  - scale-to-one-az-addon-parallel-cats.yml
 speed-up-dynamic-asgs.yml: {}

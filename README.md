@@ -243,7 +243,7 @@ so that users can discover which version of CATs to run against their deployment
 For example, if you've deployed cf-deployment v6.10.0,
 check out the `cf6.10` branch in cf-acceptance-tests to run CATs.
 
-The configuration for our pipeline can be found [here](https://github.com/cloudfoundry/runtime-ci/blob/main/pipelines/cf-deployment.yml).
+The configuration for our pipeline can be found [here](https://github.com/cloudfoundry/cf-deployment/blob/develop/ci/pipelines/cf-deployment.yml).
 
 [cf-deployment-concourse-url]: https://release-integration.ci.cf-app.com/teams/main/pipelines/cf-deployment
 
