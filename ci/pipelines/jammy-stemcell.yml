@@ -70,6 +70,7 @@ jobs:
     params:
       OPS_FILES: |
         operations/experimental/use-jammy.yml
+        operations/use-internal-lookup-for-route-services.yml
         operations/experimental/colocate-smoke-tests-on-cc-worker.yml
     task: deploy-cf
   - in_parallel:
