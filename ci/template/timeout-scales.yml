@@ -1,0 +1,526 @@
+#@ load("@ytt:data", "data")
+
+---
+resource_types:
+- name: toolsmiths-cf-pool
+  type: docker-image
+  source:
+    repository: cftoolsmiths/toolsmiths-envs-resource
+
+resources:
+- icon: github
+  name: cf-deployment
+  type: git
+  source:
+    branch: release-candidate
+    private_key: ((cf_deployment_readwrite_deploy_key.private_key))
+    uri: git@github.com:cloudfoundry/cf-deployment.git
+
+- icon: github
+  name: cf-deployment-concourse-tasks
+  source:
+    uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
+  type: git
+
+- icon: github
+  name: runtime-ci
+  source:
+    uri: https://github.com/cloudfoundry/runtime-ci.git
+  type: git
+
+- icon: github
+  name: cf-acceptance-tests
+  source:
+    branch: release-candidate
+    private_key: ((cf_acceptance_tests_readwrite_deploy_key.private_key))
+    uri: git@github.com:cloudfoundry/cf-acceptance-tests.git
+  type: git
+
+#@ for t in data.values.timeoutScales:
+- icon: pool
+  name: #@ "env-{}".format(t)
+  type: toolsmiths-cf-pool
+  source:
+    api_token: ((toolsmiths_api_token))
+    hostname: environments.toolsmiths.cf-app.com
+    pool_name: cf-deployment
+#@ end
+
+groups:
+#@ for t in data.values.timeoutScales:
+- name: #@ "scale-{}".format(t)
+  jobs:
+  - #@ "claim-env-{}".format(t)
+  - #@ "deploy-cf-{}".format(t)
+  - #@ "run-smoke-tests-{}".format(t)
+  #@ for n in data.values.nodes:
+  - #@ "run-cats-{}-{}".format(t, n)
+  #@ end
+  - #@ "unclaim-env-{}".format(t)
+  - #@ "unclaim-env-manual-{}".format(t)
+#@ end
+
+jobs:
+#@ for t in data.values.timeoutScales:
+- name: #@ "claim-env-{}".format(t)
+  serial: true
+  plan:
+  - params:
+      action: claim
+    put: #@ "env-{}".format(t)
+    timeout: 4h
+
+- name: #@ "deploy-cf-{}".format(t)
+  serial: true
+  public: true
+  plan:
+  - in_parallel:
+      steps:
+      - get: #@ "env-{}".format(t)
+        trigger: true
+        passed:
+        - #@ "claim-env-{}".format(t)
+      - get: cf-deployment
+      - get: cf-deployment-concourse-tasks
+      - get: runtime-ci
+  - file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    input_mapping:
+      toolsmiths-env: #@ "env-{}".format(t)
+    params:
+      IGNORE_ERRORS: "true"
+    task: bosh-delete-cf-deployment
+  - file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
+    input_mapping:
+      toolsmiths-env: #@ "env-{}".format(t)
+    task: bosh-cleanup
+  - task: update-cloud-config
+    input_mapping:
+      toolsmiths-env: #@ "env-{}".format(t)
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: cloudfoundry/cf-deployment-concourse-tasks
+      inputs:
+      - name: toolsmiths-env
+      - name: cf-deployment-concourse-tasks
+      run:
+        dir: ""
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+          source cf-deployment-concourse-tasks/shared-functions
+          setup_bosh_env_vars
+          cat <<EOT > /tmp/update-vm-types.yml
+          ---
+          - type: replace
+            path: /vm_types
+            value:
+            - cloud_properties:
+                machine_type: n1-standard-1
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: default
+            - cloud_properties:
+                machine_type: e2-small
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: minimal
+            - cloud_properties:
+                machine_type: g1-small
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: sharedcpu
+            - cloud_properties:
+                machine_type: e2-medium
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: small
+            - cloud_properties:
+                machine_type: e2-highmem-2
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: small-highmem
+            - cloud_properties:
+                machine_type: e2-standard-4
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: medium
+            - cloud_properties:
+                machine_type: e2-standard-8
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: large
+            - cloud_properties:
+                machine_type: e2-standard-16
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: extra-large
+            - cloud_properties:
+                machine_type: e2-highcpu-2
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: small-highcpu
+            - cloud_properties:
+                machine_type: e2-highmem-4
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: medium-highmem
+            - cloud_properties:
+                machine_type: n1-standard-1
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: n1-standard-1
+            - cloud_properties:
+                machine_type: n1-standard-2
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: n1-standard-2
+            - cloud_properties:
+                machine_type: n1-standard-4
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: n1-standard-4
+            - cloud_properties:
+                machine_type: n1-standard-8
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: n1-standard-8
+            - cloud_properties:
+                machine_type: n1-standard-16
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: n1-standard-16
+            - cloud_properties:
+                machine_type: n1-standard-32
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: n1-standard-32
+            - cloud_properties:
+                machine_type: n1-highmem-2
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: n1-highmem-2
+            - cloud_properties:
+                machine_type: n1-highmem-4
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: n1-highmem-4
+            - cloud_properties:
+                machine_type: n1-highmem-8
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: n1-highmem-8
+            - cloud_properties:
+                machine_type: n1-highmem-16
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: n1-highmem-16
+            - cloud_properties:
+                machine_type: n1-highmem-32
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: n1-highmem-32
+            - cloud_properties:
+                machine_type: n1-highcpu-2
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: n1-highcpu-2
+            - cloud_properties:
+                machine_type: n1-highcpu-4
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: n1-highcpu-4
+            - cloud_properties:
+                machine_type: n1-highcpu-8
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: n1-highcpu-8
+            - cloud_properties:
+                machine_type: n1-highcpu-16
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: n1-highcpu-16
+            - cloud_properties:
+                machine_type: n1-highcpu-32
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: n1-highcpu-32
+            - cloud_properties:
+                machine_type: e2-standard-2
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: e2-standard-2
+            - cloud_properties:
+                machine_type: e2-standard-4
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: e2-standard-4
+            - cloud_properties:
+                machine_type: e2-standard-8
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: e2-standard-8
+            - cloud_properties:
+                machine_type: e2-standard-16
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: e2-standard-16
+            - cloud_properties:
+                machine_type: e2-standard-32
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: e2-standard-32
+            - cloud_properties:
+                machine_type: e2-highmem-2
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: e2-highmem-2
+            - cloud_properties:
+                machine_type: e2-highmem-4
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: e2-highmem-4
+            - cloud_properties:
+                machine_type: e2-highmem-8
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: e2-highmem-8
+            - cloud_properties:
+                machine_type: e2-highmem-16
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: e2-highmem-16
+            - cloud_properties:
+                machine_type: e2-highcpu-2
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: e2-highcpu-2
+            - cloud_properties:
+                machine_type: e2-highcpu-4
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: e2-highcpu-4
+            - cloud_properties:
+                machine_type: e2-highcpu-8
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: e2-highcpu-8
+            - cloud_properties:
+                machine_type: e2-highcpu-16
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: e2-highcpu-16
+            - cloud_properties:
+                machine_type: e2-highcpu-32
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: e2-highcpu-32
+            - cloud_properties:
+                machine_type: f1-micro
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: f1-micro
+            - cloud_properties:
+                machine_type: g1-small
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: g1-small
+            - cloud_properties:
+                machine_type: n1-standard-1
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: m3.medium
+            - cloud_properties:
+                machine_type: n1-standard-2
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: m3.large
+            - cloud_properties:
+                machine_type: n1-highcpu-2
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: c3.large
+            - cloud_properties:
+                machine_type: n1-highmem-4
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: r3.xlarge
+            - cloud_properties:
+                machine_type: g1-small
+                root_disk_size_gb: 10
+                root_disk_type: pd-balanced
+              name: t2.small
+          EOT
+          bosh cloud-config > /tmp/cloud-config.yml
+          bosh interpolate -o /tmp/update-vm-types.yml /tmp/cloud-config.yml > /tmp/updated-cloud-config.yml
+          bosh -n update-cloud-config /tmp/updated-cloud-config.yml
+  - file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+    input_mapping:
+      ops-files: cf-deployment
+      toolsmiths-env: #@ "env-{}".format(t)
+    params:
+      OPS_FILES: |
+        operations/use-internal-lookup-for-route-services.yml
+        operations/use-compiled-releases.yml
+        operations/experimental/colocate-smoke-tests-on-cc-worker.yml
+    task: deploy-cf
+  - in_parallel:
+      steps:
+      - file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
+        input_mapping:
+          toolsmiths-env: #@ "env-{}".format(t)
+        params:
+          INSTANCE_GROUP_NAME: credhub
+          SECURITY_GROUP_NAME: credhub
+        task: open-asgs-for-credhub
+      - file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
+        input_mapping:
+          toolsmiths-env: #@ "env-{}".format(t)
+        params:
+          INSTANCE_GROUP_NAME: uaa
+          SECURITY_GROUP_NAME: uaa
+        task: open-asgs-for-uaa
+      - file: cf-deployment-concourse-tasks/set-feature-flags/task.yml
+        input_mapping:
+          toolsmiths-env: #@ "env-{}".format(t)
+        params:
+          ENABLED_FEATURE_FLAGS: |
+            diego_docker
+            task_creation
+            service_instance_sharing
+        task: enable-docker-and-tasks
+
+- name: #@ "run-smoke-tests-{}".format(t)
+  public: true
+  serial: true
+  plan:
+  - in_parallel:
+      steps:
+      - get: #@ "env-{}".format(t)
+        passed:
+        - #@ "deploy-cf-{}".format(t)
+        trigger: true
+      - get: cf-deployment-concourse-tasks
+  - file: cf-deployment-concourse-tasks/run-errand/task.yml
+    input_mapping:
+      toolsmiths-env: #@ "env-{}".format(t)
+    params:
+      ERRAND_NAME: smoke_tests
+      INSTANCE: cc-worker/first
+    task: bosh-run-errand-smoke-tests
+
+#@ for n in data.values.nodes:
+- name: #@ "run-cats-{}-{}".format(t, n)
+  public: true
+  serial: true
+  plan:
+  - in_parallel:
+      steps:
+      - get: #@ "env-{}".format(t)
+        passed:
+        #@ if n == 5:
+        - #@ "run-smoke-tests-{}".format(t)
+        #@ else:
+        - #@ "run-cats-{}-{}".format(t, n-1)
+        #@ end
+        trigger: true
+      - get: cf-deployment-concourse-tasks
+      - get: cf-acceptance-tests
+  - config:
+      image_resource:
+        source:
+          repository: cloudfoundry/cf-deployment-concourse-tasks
+        type: docker-image
+      inputs:
+      - name: cf-deployment-concourse-tasks
+      - name: #@ "env-{}".format(t)
+      outputs:
+      - name: integration-configs
+      params:
+        TOOLSMITHS_ENV_METADATA: #@ "env-{}/metadata".format(t)
+        TIMEOUT_SCALE: #@ t
+      platform: linux
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+          source cf-deployment-concourse-tasks/shared-functions
+          DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
+          cd integration-configs
+          cat <<EOT > integration-config.json
+          {
+            "api": "api.${DOMAIN}",
+            "admin_user": "admin",
+            "admin_password": "",
+            "apps_domain": "${DOMAIN}",
+            "artifacts_directory": "logs",
+            "skip_ssl_validation": true,
+            "use_http": true,
+            "timeout_scale": $TIMEOUT_SCALE,
+            "include_apps": true,
+            "include_backend_compatibility": true,
+            "include_capi_no_bridge": true,
+            "include_container_networking": true,
+            "include_detect": true,
+            "include_docker": true,
+            "include_internet_dependent": true,
+            "include_route_services": true,
+            "include_routing": true,
+            "include_security_groups": true,
+            "include_service_instance_sharing": true,
+            "include_services": true,
+            "include_ssh": true,
+            "include_sso": true,
+            "include_tasks": true,
+            "include_tcp_routing": true,
+            "include_v3": true,
+            "include_zipkin": true,
+            "credhub_client": "credhub_admin_client",
+            "credhub_secret": "",
+            "credhub_mode": "assisted"
+          }
+          EOT
+    task: create-integration-config
+  - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
+    input_mapping:
+      toolsmiths-env: #@ "env-{}".format(t)
+    params:
+      CATS_INTEGRATION_CONFIG_FILE: integration-config.json
+    task: update-integration-configs
+  - file: cf-deployment-concourse-tasks/run-cats/task.yml
+    input_mapping:
+      integration-config: updated-integration-configs
+      toolsmiths-env: #@ "env-{}".format(t)
+    params:
+      CONFIG_FILE_PATH: integration-config.json
+      NODES: #@ n
+    task: run-cats
+#@ end
+
+- name: #@ "unclaim-env-{}".format(t)
+  plan:
+  - get: #@ "env-{}".format(t)
+    passed:
+    - #@ "run-cats-{}-15".format(t)
+    trigger: true
+  - params:
+      action: unclaim
+      env_file: #@ "env-{}/metadata".format(t)
+    put: #@ "env-{}".format(t)
+  serial: true
+
+- name: #@ "unclaim-env-manual-{}".format(t)
+  plan:
+  - get: #@ "env-{}".format(t)
+  - params:
+      action: unclaim
+      env_file: #@ "env-{}/metadata".format(t)
+    put: #@ "env-{}".format(t)
+  serial: true
+#@ end
