@@ -717,8 +717,9 @@ instance_groups:
             authorized-grant-types: client_credentials
             secret: "((uaa_clients_cf_smoke_tests_secret))"
           cloud_controller_username_lookup:
-            authorities: scim.userids
+            authorities: scim.userids,scim.read
             authorized-grant-types: client_credentials
+            override: true
             secret: "((uaa_clients_cloud_controller_username_lookup_secret))"
           credhub_admin_client:
             authorities: credhub.read,credhub.write
