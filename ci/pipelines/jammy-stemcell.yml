@@ -1,0 +1,267 @@
+jobs:
+- name: claim-env
+  plan:
+  - get: jammy-stemcell
+    trigger: true
+  - get: cf-deployment
+    trigger: true
+  - params:
+      action: claim
+    put: toolsmiths-env
+    timeout: 4h
+  serial: true
+
+- name: deploy-cf
+  plan:
+  - in_parallel:
+      steps:
+      - get: toolsmiths-env
+        passed:
+        - claim-env
+        trigger: true
+      - get: jammy-stemcell
+        passed:
+        - claim-env
+      - get: cf-deployment
+      - get: cf-deployment-concourse-tasks
+      - get: runtime-ci
+  - file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+    params:
+      IGNORE_ERRORS: "true"
+    task: bosh-delete-cf-deployment
+  - file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
+    task: bosh-cleanup
+  - file: runtime-ci/tasks/bosh-upload-stemcell/task.yml
+    input_mapping:
+      stemcell: jammy-stemcell
+    task: upload-jammy-stemcell
+  - task: update-dns-runtime-config
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: cloudfoundry/cf-deployment-concourse-tasks
+      inputs:
+      - name: toolsmiths-env
+      - name: cf-deployment-concourse-tasks
+      run:
+        dir: ""
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+          source cf-deployment-concourse-tasks/shared-functions
+          setup_bosh_env_vars
+          cat <<EOT > /tmp/add-jammy.yml
+          ---
+          - type: replace
+            path: /addons/name=bosh-dns/include/stemcell/-
+            value:
+              os: ubuntu-jammy
+          EOT
+          bosh runtime-config --name=dns > /tmp/dns.yml
+          bosh interpolate -o /tmp/add-jammy.yml /tmp/dns.yml > /tmp/updated-dns.yml
+          bosh -n update-runtime-config --name=dns /tmp/updated-dns.yml
+  - file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+    input_mapping:
+      ops-files: cf-deployment
+    params:
+      OPS_FILES: |
+        operations/experimental/use-jammy.yml
+        operations/use-internal-lookup-for-route-services.yml
+        operations/experimental/colocate-smoke-tests-on-cc-worker.yml
+    task: deploy-cf
+  - in_parallel:
+      steps:
+      - file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
+        params:
+          INSTANCE_GROUP_NAME: credhub
+          SECURITY_GROUP_NAME: credhub
+        task: open-asgs-for-credhub
+      - file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
+        params:
+          INSTANCE_GROUP_NAME: uaa
+          SECURITY_GROUP_NAME: uaa
+        task: open-asgs-for-uaa
+      - file: cf-deployment-concourse-tasks/set-feature-flags/task.yml
+        params:
+          ENABLED_FEATURE_FLAGS: |
+            diego_docker
+            task_creation
+            service_instance_sharing
+        task: enable-docker-and-tasks
+  public: true
+  serial: true
+
+- name: run-smoke-tests
+  plan:
+  - in_parallel:
+      steps:
+      - get: toolsmiths-env
+        passed:
+        - deploy-cf
+        trigger: true
+      - get: cf-deployment-concourse-tasks
+  - file: cf-deployment-concourse-tasks/run-errand/task.yml
+    params:
+      ERRAND_NAME: smoke_tests
+      INSTANCE: cc-worker/first
+    task: bosh-run-errand-smoke-tests
+  public: true
+  serial: true
+
+- name: run-cats
+  plan:
+  - in_parallel:
+      steps:
+      - get: toolsmiths-env
+        passed:
+        - run-smoke-tests
+        trigger: true
+      - get: cf-deployment-concourse-tasks
+      - get: cf-acceptance-tests
+  - config:
+      image_resource:
+        source:
+          repository: cloudfoundry/cf-deployment-concourse-tasks
+        type: docker-image
+      inputs:
+      - name: cf-deployment-concourse-tasks
+      - name: toolsmiths-env
+      outputs:
+      - name: integration-configs
+      params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
+      platform: linux
+      run:
+        args:
+        - -c
+        - |
+          #!/bin/bash
+          source cf-deployment-concourse-tasks/shared-functions
+          DOMAIN="$(jq -r '.cf.api_url' toolsmiths-env/metadata | cut -d. -f2-)"
+          pushd integration-configs > /dev/null
+          git init
+          set_git_config
+          cat <<EOT > integration-config.json
+          {
+            "api": "api.${DOMAIN}",
+            "admin_user": "admin",
+            "admin_password": "",
+            "apps_domain": "${DOMAIN}",
+            "artifacts_directory": "logs",
+            "skip_ssl_validation": true,
+            "use_http": true,
+            "timeout_scale": 1,
+            "include_apps": true,
+            "include_backend_compatibility": true,
+            "include_capi_no_bridge": true,
+            "include_container_networking": true,
+            "include_detect": true,
+            "include_docker": true,
+            "include_internet_dependent": true,
+            "include_route_services": true,
+            "include_routing": true,
+            "include_security_groups": true,
+            "include_service_instance_sharing": true,
+            "include_services": true,
+            "include_ssh": true,
+            "include_sso": true,
+            "include_tasks": true,
+            "include_tcp_routing": true,
+            "include_v3": true,
+            "include_zipkin": true,
+            "credhub_client": "credhub_admin_client",
+            "credhub_secret": "",
+            "credhub_mode": "assisted"
+          }
+          EOT
+          git add .
+          git commit -m "Create integration config"
+        path: bash
+    task: create-integration-config
+  - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
+    params:
+      CATS_INTEGRATION_CONFIG_FILE: integration-config.json
+    task: update-integration-configs
+  - file: cf-deployment-concourse-tasks/run-cats/task.yml
+    input_mapping:
+      integration-config: updated-integration-configs
+    params:
+      CONFIG_FILE_PATH: integration-config.json
+    task: run-cats
+  public: true
+  serial: true
+
+- name: unclaim-env
+  plan:
+  - get: toolsmiths-env
+    passed:
+    - run-cats
+    trigger: true
+  - params:
+      action: unclaim
+      env_file: toolsmiths-env/metadata
+    put: toolsmiths-env
+  serial: true
+
+- name: unclaim-env-manual
+  plan:
+  - get: toolsmiths-env
+  - params:
+      action: unclaim
+      env_file: toolsmiths-env/metadata
+    put: toolsmiths-env
+  serial: true
+
+resource_types:
+- name: toolsmiths-cf-pool
+  source:
+    repository: cftoolsmiths/toolsmiths-envs-resource
+  type: docker-image
+
+resources:
+- icon: github
+  name: cf-acceptance-tests
+  source:
+    branch: release-candidate
+    private_key: ((cf_acceptance_tests_readwrite_deploy_key.private_key))
+    uri: git@github.com:cloudfoundry/cf-acceptance-tests.git
+  type: git
+
+- icon: github
+  name: cf-deployment
+  source:
+    branch: release-candidate
+    private_key: ((cf_deployment_readwrite_deploy_key.private_key))
+    uri: git@github.com:cloudfoundry/cf-deployment.git
+  type: git
+
+- icon: github
+  name: cf-deployment-concourse-tasks
+  source:
+    uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
+  type: git
+
+- icon: dna
+  name: jammy-stemcell
+  source:
+    name: bosh-google-kvm-ubuntu-jammy-go_agent
+  type: bosh-io-stemcell
+
+- icon: github
+  name: runtime-ci
+  source:
+    uri: https://github.com/cloudfoundry/runtime-ci.git
+  type: git
+
+- icon: pool
+  name: toolsmiths-env
+  source:
+    api_token: ((toolsmiths_api_token))
+    hostname: environments.toolsmiths.cf-app.com
+    pool_name: cf-deployment
+  type: toolsmiths-cf-pool
