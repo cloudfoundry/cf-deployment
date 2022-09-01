@@ -1637,13 +1637,12 @@ jobs:
   plan:
   - in_parallel:
     - get: windows-pool
-      passed:
-      - windows-acquire-pool
+      passed: [windows-acquire-pool]
       trigger: true
     - get: cf-deployment-concourse-tasks
+    - get: relint-envs
     - get: cf-deployment-develop
-      passed:
-      - windows-acquire-pool
+      passed: [windows-acquire-pool]
   - task: guarantee-no-existing-cf-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
