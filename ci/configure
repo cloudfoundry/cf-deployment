@@ -1,4 +1,6 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
+
+set -euo pipefail
 
 main() {
   local CF_D_PIPELINES=(cf-deployment update-releases pull-requests stemcell-bump)
@@ -19,8 +21,8 @@ EOF
       >> "${PROJECT_DIR}/ci/pipelines/${PIPELINE}.yml"
   fi
 
-  set -ex
-  fly -t relint-ci sp -p "${PIPELINE}" -c "${PROJECT_DIR}/ci/pipelines/${PIPELINE}.yml"
+  set -x
+  fly -t ard sp -p "${PIPELINE}" -c "${PROJECT_DIR}/ci/pipelines/${PIPELINE}.yml"
 }
 
 main "$@"
