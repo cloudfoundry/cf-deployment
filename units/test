@@ -23,5 +23,5 @@ pushd "$(dirname "$0")" > /dev/null
   fi
 
   echo "Starting unit tests..."
-  go test "$@" $(suites) -timeout=20m
+  go test "$@" $(suites)
 popd > /dev/null
