@@ -93,11 +93,13 @@ opsReleases:
 - name: hwc-buildpack
   repository: cloudfoundry-incubator/hwc-buildpack-release
   requiredOpsFiles:
+  - operations/windows2019-cell.yml
   - operations/use-online-windows2019fs.yml
   prependOpsFileToList: true
 - name: windows-utilities
   repository: cloudfoundry-incubator/windows-utilities-release
   requiredOpsFiles:
+  - operations/windows2019-cell.yml
   - operations/use-online-windows2019fs.yml
   prependOpsFileToList: true
 - name: garden-windows
@@ -105,6 +107,7 @@ opsReleases:
 - name: winc
   repository: cloudfoundry-incubator/winc-release
   requiredOpsFiles:
+  - operations/windows2019-cell.yml
   - operations/use-online-windows2019fs.yml
   prependOpsFileToList: true
 - name: windowsfs
