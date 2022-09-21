@@ -2437,15 +2437,9 @@ variables:
     - client_auth
 - name: locket_database_password
   type: password
-- name: application_ca
-  type: certificate
-  options:
-    common_name: appRootCA
-    is_ca: true
 - name: diego_instance_identity_ca
   type: certificate
   options:
-    ca: application_ca
     common_name: instanceIdentityCA
     is_ca: true
 - name: gorouter_backend_tls
