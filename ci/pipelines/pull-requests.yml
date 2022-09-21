@@ -184,7 +184,6 @@ jobs:
                 path: scripts/test
           - task: unit-test-golang-ops-files
             config:
-
               platform: linux
               image_resource:
                 type: docker-image
@@ -195,6 +194,9 @@ jobs:
               run:
                 dir: cf-deployment-all-branches/units
                 path: ./test
+                args:
+                - -timeout
+                - 20m
         on_failure:
           do:
           - task: write-pr-check-failure-comment

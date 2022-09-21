@@ -403,6 +403,9 @@ jobs:
       run:
         dir: cf-deployment-develop/units
         path: ./test
+        args:
+        - -timeout
+        - 1h
 
 - name: unit-test-update-releases-coverage
   serial: true
