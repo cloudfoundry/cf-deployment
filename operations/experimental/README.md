@@ -25,7 +25,7 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 | [`enable-containerd-for-processes.yml`](enable-containerd-for-processes.yml) | Configure Garden to run processes via containerd. | This ops file **cannot** be deployed in conjunction with `rootless-containers.yml`. | **YES** |
 | [`enable-cpu-throttling.yml`](enable-cpu-throttling.yml) | Configure Garden containers with CPU entitlement. | This ops file requires `set-cpu-weight.yml`. | **YES** |
 | [`enable-direct-io-grootfs.yml`](enable-direct-io-grootfs.yml) | Configure Garden to enable directIO for grootfs. | | **NO** |
-| [`enable-iptables-logger.yml`](enable-iptables-logger.yml) | Enables iptables logger. | | **YES** |
+| [`enable-iptables-logger.yml`](enable-iptables-logger.yml) | Enables iptables logger. | Does not yet work on AWS Jammy stemcells, see https://github.com/cloudfoundry/bosh-linux-stemcell-builder/issues/241 | **NO** |
 | [`enable-nginx-routing-integrity-windows2019.yml`](enable-nginx-routing-integrity-windows2019.yml) | Enables container proxy on the Windows 2019 Diego Cell `rep` and configures gorouter to opt into TLS-enabled connections to the backend. | **Warning: this is very experimental** Requires `../windows2019-cell.yml` | **NO** |
 | [`enable-oci-phase-1.yml`](enable-oci-phase-1.yml) | Configure CC, Diego, and Garden to create app and task containers more efficiently via OCI image specs. | This ops file **cannot** be deployed in conjunction with `rootless-containers.yml`. | **NO** |
 | [`enable-smb-volume-service.yml`](enable-smb-volume-service.yml) | **DEPRECATED: use `../enable-smb-volume-service.yml`** | | **NO** |
@@ -42,4 +42,3 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 | [`disable-logs-in-firehose.yml`](disable-logs-in-firehose.yml) | Logs are not sent to dopplers, only metrics | | **NO** |
 | [`disable-logs-in-firehose-windows2019.yml`](disable-logs-in-firehose-windows-2019.yml) | Logs are not sent to dopplers, only metrics | | **NO** |
 | [`use-native-garden-runc-runner.yml`](use-native-garden-runc-runner.yml) | Configure Garden to **not** create containers via containerd, using the native runner instead. | | **NO** |
-| [`use-jammy.yml`](use-jammy.yml) | Use the new beta Jammy stemcell | This is incompatible with `../use-compiled-releases.yml` | **NO** |
