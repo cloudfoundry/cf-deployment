@@ -699,8 +699,8 @@ instance_groups:
             authorities: clients.read,clients.write,clients.admin
             authorized-grant-types: client_credentials
             scopes:
-              - openid
-              - cloud_controller_service_permissions.read
+            - openid
+            - cloud_controller_service_permissions.read
             secret: "((uaa_clients_cc-service-dashboards_secret))"
           cc_service_key_client:
             authorities: credhub.read,credhub.write
@@ -713,23 +713,23 @@ instance_groups:
             override: true
             refresh-token-validity: 2592000
             scopes:
-              - network.admin
-              - network.write
-              - cloud_controller.read
-              - cloud_controller.write
-              - openid
-              - password.write
-              - cloud_controller.admin
-              - scim.read
-              - scim.write
-              - doppler.firehose
-              - uaa.user
-              - routing.router_groups.read
-              - routing.router_groups.write
-              - cloud_controller.admin_read_only
-              - cloud_controller.global_auditor
-              - perm.admin
-              - clients.read
+            - network.admin
+            - network.write
+            - cloud_controller.read
+            - cloud_controller.write
+            - openid
+            - password.write
+            - cloud_controller.admin
+            - scim.read
+            - scim.write
+            - doppler.firehose
+            - uaa.user
+            - routing.router_groups.read
+            - routing.router_groups.write
+            - cloud_controller.admin_read_only
+            - cloud_controller.global_auditor
+            - perm.admin
+            - clients.read
             secret: ''
           cf_smoke_tests:
             authorities: cloud_controller.admin,clients.read
@@ -759,10 +759,10 @@ instance_groups:
             override: true
             redirect-uri: "https://uaa.((system_domain))/login"
             scopes:
-              - openid
-              - cloud_controller.read
-              - cloud_controller.write
-              - cloud_controller.admin
+            - openid
+            - cloud_controller.read
+            - cloud_controller.write
+            - cloud_controller.admin
             secret: "((uaa_clients_ssh-proxy_secret))"
           routing_api_client:
             authorities: routing.routes.write,routing.routes.read,routing.router_groups.read
