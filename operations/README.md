@@ -38,6 +38,7 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 | [`disable-http2.yml`](disable-http2.yml) | Prevent gorouter from accepting and forwarding HTTP/2 requests. | | **NO** |
 | [`disable-dynamic-asgs.yml`](disable-dynamic-asgs.yml) | Disable dynamic updates for security groups. | | **NO** |
 | [`enable-cc-rate-limiting.yml`](enable-cc-rate-limiting.yml) | Enable rate limiting for UAA-authenticated endpoints. | Introduces variables `cc_rate_limiter_general_limit` and `cc_rate_limiter_unauthenticated_limit` | **NO** |
+| [`enable-cc-v2-rate-limiting.yml`](enable-cc-rate-limiting.yml) | Enable V2 API rate limiting for UAA-authenticated endpoints. | Introduces variables `cc_v2_rate_limiter_general_limit`, `cc_v2_rate_limiter_admin_limit` and `cc_v2_rate_limiter_reset_interval_in_minutes` | **NO** |
 | [`enable-cpu-throttling.yml`](enable-cpu-throttling.yml) | Configure Garden containers with CPU entitlement. | This ops file requires `set-cpu-weight.yml`. | **YES** |
 | [`enable-nfs-ldap.yml`](enable-nfs-ldap.yml) | Enables LDAP authentication for NFS volume services | Requires `enable-nfs-volume-service.yml`. Introduces [new variables](example-vars-files/vars-enable-nfs-ldap.yml) | **NO** |
 | [`enable-nfs-volume-service.yml`](enable-nfs-volume-service.yml) | Enables volume support and deploys an NFS broker and volume driver | As of cf-deployment v2, you must use the `nfsbrokerpush` errand to cf push the nfs broker after `bosh deploy` completes. | **YES** |
