@@ -33,7 +33,45 @@ resources:
     uri: https://github.com/cloudfoundry/runtime-ci.git
   type: git
 
+- name: bbl-state
+  type: s3
+  source:
+    region_name: eu-central-1
+    bucket: bionic-stemcell-test
+    versioned_file: bbl-state.tar.gz
+    access_key_id: #TODO
+    secret_access_key: #TODO
+    initial_version: '0'
+
 jobs:
+- name: bbl-up
+  serial: true
+  plan:
+  - in_parallel:
+    - get: cf-deployment-concourse-tasks
+    - get: bbl-state
+      params:
+        unpack: true
+    - task: bbl-up
+      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      input_mapping:
+        bbl-config: cf-load-test-pipeline
+      params:
+        BBL_AWS_ACCESS_KEY_ID: #TODO
+        BBL_AWS_SECRET_ACCESS_KEY: #TODO
+        BBL_AWS_REGION: eu-west-1
+        BBL_IAAS: aws
+        BBL_CONFIG_DIR: bbl-patches
+        BBL_LB_CERT: ../cert.pem
+        BBL_LB_KEY: ../key
+        SKIP_LB_CREATION: false
+        LB_DOMAIN: ((sys_domain))
+        STORE_BBL_STATE_AS_TARBALL: true
+      ensure:
+        put: bbl-state
+        params:
+          file: updated-bbl-state/bbl-state.tgz
+
 - name: deploy-cf
   plan:
   - in_parallel:
@@ -42,6 +80,9 @@ jobs:
       - get: cf-deployment
       - get: cf-deployment-concourse-tasks
       - get: runtime-ci
+      - get: bbl-state
+        passed:
+        - bbl-up
   - file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     params:
       IGNORE_ERRORS: "true"
