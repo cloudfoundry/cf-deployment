@@ -1,25 +1,19 @@
-resource_types:
-- name: toolsmiths-cf-pool
-  source:
-    repository: cftoolsmiths/toolsmiths-envs-resource
-  type: docker-image
-
 resources:
 - icon: github
   name: cf-acceptance-tests
   source:
     branch: release-candidate
-    private_key: ((cf_acceptance_tests_readwrite_deploy_key.private_key))
-    uri: git@github.com:cloudfoundry/cf-acceptance-tests.git
+    uri: https://github.com/sap-contributions/cf-acceptance-tests.git
   type: git
+  check_every: 1m
 
 - icon: github
   name: cf-deployment
   source:
     branch: release-candidate
-    private_key: ((cf_deployment_readwrite_deploy_key.private_key))
-    uri: git@github.com:cloudfoundry/cf-deployment.git
+    uri: https://github.com/sap-contributions/cf-deployment.git
   type: git
+  check_every: 1m
 
 - icon: github
   name: cf-deployment-concourse-tasks
@@ -28,9 +22,9 @@ resources:
   type: git
 
 - icon: dna
-  name: jammy-stemcell
+  name: bionic-stemcell
   source:
-    name: bosh-google-kvm-ubuntu-jammy-go_agent
+    name: bosh-google-kvm-ubuntu-bionic-go_agent
   type: bosh-io-stemcell
 
 - icon: github
@@ -39,38 +33,12 @@ resources:
     uri: https://github.com/cloudfoundry/runtime-ci.git
   type: git
 
-- icon: pool
-  name: toolsmiths-env
-  source:
-    api_token: ((toolsmiths_api_token))
-    hostname: environments.toolsmiths.cf-app.com
-    pool_name: cf-deployment
-  type: toolsmiths-cf-pool
-
 jobs:
-- name: claim-env
-  plan:
-  - get: jammy-stemcell
-    trigger: true
-  - get: cf-deployment
-    trigger: true
-  - params:
-      action: claim
-    put: toolsmiths-env
-    timeout: 4h
-  serial: true
-
 - name: deploy-cf
   plan:
   - in_parallel:
       steps:
-      - get: toolsmiths-env
-        passed:
-        - claim-env
-        trigger: true
-      - get: jammy-stemcell
-        passed:
-        - claim-env
+      - get: bionic-stemcell
       - get: cf-deployment
       - get: cf-deployment-concourse-tasks
       - get: runtime-ci
@@ -82,8 +50,8 @@ jobs:
     task: bosh-cleanup
   - file: runtime-ci/tasks/bosh-upload-stemcell/task.yml
     input_mapping:
-      stemcell: jammy-stemcell
-    task: upload-jammy-stemcell
+      stemcell: bionic-stemcell
+    task: upload-bionic-stemcell
   - task: update-dns-runtime-config
     config:
       platform: linux
@@ -92,7 +60,6 @@ jobs:
         source:
           repository: cloudfoundry/cf-deployment-concourse-tasks
       inputs:
-      - name: toolsmiths-env
       - name: cf-deployment-concourse-tasks
       run:
         dir: ""
@@ -103,22 +70,22 @@ jobs:
           #!/bin/bash
           source cf-deployment-concourse-tasks/shared-functions
           setup_bosh_env_vars
-          cat <<EOT > /tmp/add-jammy.yml
+          cat <<EOT > /tmp/add-bionic.yml
           ---
           - type: replace
             path: /addons/name=bosh-dns/include/stemcell/-
             value:
-              os: ubuntu-jammy
+              os: ubuntu-bionic
           EOT
           bosh runtime-config --name=dns > /tmp/dns.yml
-          bosh interpolate -o /tmp/add-jammy.yml /tmp/dns.yml > /tmp/updated-dns.yml
+          bosh interpolate -o /tmp/add-bionic.yml /tmp/dns.yml > /tmp/updated-dns.yml
           bosh -n update-runtime-config --name=dns /tmp/updated-dns.yml
   - file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
     input_mapping:
       ops-files: cf-deployment
     params:
       OPS_FILES: |
-        operations/experimental/use-jammy.yml
+        operations/use-bionic-stemcell.yml
         operations/use-internal-lookup-for-route-services.yml
         operations/experimental/colocate-smoke-tests-on-cc-worker.yml
     task: deploy-cf
@@ -148,11 +115,10 @@ jobs:
   plan:
   - in_parallel:
       steps:
-      - get: toolsmiths-env
+      - get: cf-deployment-concourse-tasks
+      - get: cf-deployment # remove in PR | replace with toolsmiths env 
         passed:
         - deploy-cf
-        trigger: true
-      - get: cf-deployment-concourse-tasks
   - file: cf-deployment-concourse-tasks/run-errand/task.yml
     params:
       ERRAND_NAME: smoke_tests
@@ -165,12 +131,11 @@ jobs:
   plan:
   - in_parallel:
       steps:
-      - get: toolsmiths-env
-        passed:
-        - run-smoke-tests
-        trigger: true
       - get: cf-deployment-concourse-tasks
       - get: cf-acceptance-tests
+      - get: cf-deployment # remove in PR | replace with toolsmiths env 
+        passed:
+        - run-smoke-tests
   - config:
       image_resource:
         source:
@@ -178,7 +143,6 @@ jobs:
         type: docker-image
       inputs:
       - name: cf-deployment-concourse-tasks
-      - name: toolsmiths-env
       outputs:
       - name: integration-configs
       params:
@@ -243,25 +207,4 @@ jobs:
       CONFIG_FILE_PATH: integration-config.json
     task: run-cats
   public: true
-  serial: true
-
-- name: unclaim-env
-  plan:
-  - get: toolsmiths-env
-    passed:
-    - run-cats
-    trigger: true
-  - params:
-      action: unclaim
-      env_file: toolsmiths-env/metadata
-    put: toolsmiths-env
-  serial: true
-
-- name: unclaim-env-manual
-  plan:
-  - get: toolsmiths-env
-  - params:
-      action: unclaim
-      env_file: toolsmiths-env/metadata
-    put: toolsmiths-env
   serial: true
