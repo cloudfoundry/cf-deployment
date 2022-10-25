@@ -1,88 +1,30 @@
-resources:
-- icon: github
-  name: cf-acceptance-tests
-  source:
-    branch: release-candidate
-    uri: https://github.com/sap-contributions/cf-acceptance-tests.git
-  type: git
-  check_every: 1m
-
-- icon: github
-  name: cf-deployment
-  source:
-    branch: release-candidate
-    uri: https://github.com/sap-contributions/cf-deployment.git
-  type: git
-  check_every: 1m
-
-- icon: github
-  name: cf-deployment-concourse-tasks
-  source:
-    uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
-  type: git
-
-- icon: dna
-  name: bionic-stemcell
-  source:
-    name: bosh-google-kvm-ubuntu-bionic-go_agent
-  type: bosh-io-stemcell
-
-- icon: github
-  name: runtime-ci
-  source:
-    uri: https://github.com/cloudfoundry/runtime-ci.git
-  type: git
-
-- name: bbl-state
-  type: s3
-  source:
-    region_name: eu-central-1
-    bucket: bionic-stemcell-test
-    versioned_file: bbl-state.tar.gz
-    access_key_id: #TODO
-    secret_access_key: #TODO
-    initial_version: '0'
-
 jobs:
-- name: bbl-up
-  serial: true
+- name: claim-env
   plan:
-  - in_parallel:
-    - get: cf-deployment-concourse-tasks
-    - get: bbl-state
-      params:
-        unpack: true
-    - task: bbl-up
-      file: cf-deployment-concourse-tasks/bbl-up/task.yml
-      input_mapping:
-        bbl-config: cf-load-test-pipeline
-      params:
-        BBL_AWS_ACCESS_KEY_ID: #TODO
-        BBL_AWS_SECRET_ACCESS_KEY: #TODO
-        BBL_AWS_REGION: eu-west-1
-        BBL_IAAS: aws
-        BBL_CONFIG_DIR: bbl-patches
-        BBL_LB_CERT: ../cert.pem
-        BBL_LB_KEY: ../key
-        SKIP_LB_CREATION: false
-        LB_DOMAIN: ((sys_domain))
-        STORE_BBL_STATE_AS_TARBALL: true
-      ensure:
-        put: bbl-state
-        params:
-          file: updated-bbl-state/bbl-state.tgz
+  - get: bionic-stemcell
+    trigger: true
+  - get: cf-deployment
+    trigger: true
+  - params:
+      action: claim
+    put: toolsmiths-env
+    timeout: 4h
+  serial: true
 
 - name: deploy-cf
   plan:
   - in_parallel:
       steps:
+      - get: toolsmiths-env
+        passed:
+        - claim-env
+        trigger: true
       - get: bionic-stemcell
+        passed:
+        - claim-env
       - get: cf-deployment
       - get: cf-deployment-concourse-tasks
       - get: runtime-ci
-      - get: bbl-state
-        passed:
-        - bbl-up
   - file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     params:
       IGNORE_ERRORS: "true"
@@ -101,6 +43,7 @@ jobs:
         source:
           repository: cloudfoundry/cf-deployment-concourse-tasks
       inputs:
+      - name: toolsmiths-env
       - name: cf-deployment-concourse-tasks
       run:
         dir: ""
@@ -156,10 +99,11 @@ jobs:
   plan:
   - in_parallel:
       steps:
-      - get: cf-deployment-concourse-tasks
-      - get: cf-deployment # remove in PR | replace with toolsmiths env 
+      - get: toolsmiths-env
         passed:
         - deploy-cf
+        trigger: true
+      - get: cf-deployment-concourse-tasks
   - file: cf-deployment-concourse-tasks/run-errand/task.yml
     params:
       ERRAND_NAME: smoke_tests
@@ -172,11 +116,12 @@ jobs:
   plan:
   - in_parallel:
       steps:
-      - get: cf-deployment-concourse-tasks
-      - get: cf-acceptance-tests
-      - get: cf-deployment # remove in PR | replace with toolsmiths env 
+      - get: toolsmiths-env
         passed:
         - run-smoke-tests
+        trigger: true
+      - get: cf-deployment-concourse-tasks
+      - get: cf-acceptance-tests
   - config:
       image_resource:
         source:
@@ -184,6 +129,7 @@ jobs:
         type: docker-image
       inputs:
       - name: cf-deployment-concourse-tasks
+      - name: toolsmiths-env
       outputs:
       - name: integration-configs
       params:
@@ -249,3 +195,73 @@ jobs:
     task: run-cats
   public: true
   serial: true
+
+- name: unclaim-env
+  plan:
+  - get: toolsmiths-env
+    passed:
+    - run-cats
+    trigger: true
+  - params:
+      action: unclaim
+      env_file: toolsmiths-env/metadata
+    put: toolsmiths-env
+  serial: true
+
+- name: unclaim-env-manual
+  plan:
+  - get: toolsmiths-env
+  - params:
+      action: unclaim
+      env_file: toolsmiths-env/metadata
+    put: toolsmiths-env
+  serial: true
+
+resource_types:
+- name: toolsmiths-cf-pool
+  source:
+    repository: cftoolsmiths/toolsmiths-envs-resource
+  type: docker-image
+
+resources:
+- icon: github
+  name: cf-acceptance-tests
+  source:
+    branch: release-candidate
+    private_key: ((cf_acceptance_tests_readwrite_deploy_key.private_key))
+    uri: git@github.com:cloudfoundry/cf-acceptance-tests.git
+  type: git
+
+- icon: github
+  name: cf-deployment
+  source:
+    branch: release-candidate
+    private_key: ((cf_deployment_readwrite_deploy_key.private_key))
+    uri: git@github.com:cloudfoundry/cf-deployment.git
+  type: git
+
+- icon: github
+  name: cf-deployment-concourse-tasks
+  source:
+    uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
+  type: git
+
+- icon: dna
+  name: bionic-stemcell
+  source:
+    name: bosh-google-kvm-ubuntu-bionic-go_agent
+  type: bosh-io-stemcell
+
+- icon: github
+  name: runtime-ci
+  source:
+    uri: https://github.com/cloudfoundry/runtime-ci.git
+  type: git
+
+- icon: pool
+  name: toolsmiths-env
+  source:
+    api_token: ((toolsmiths_api_token))
+    hostname: environments.toolsmiths.cf-app.com
+    pool_name: cf-deployment
+  type: toolsmiths-cf-pool
