@@ -1,0 +1,11 @@
+---
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/rate_limiter_v2_api?
+  value:
+    enabled: true
+    general_limit: "((cc_v2_rate_limiter_general_limit))"
+    admin_limit: "((cc_v2_rate_limiter_admin_limit))"
+    reset_interval_in_minutes: "((cc_v2_rate_limiter_reset_interval_in_minutes))"
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/cf/scopes/-
+  value: "cloud_controller.v2_api_rate_limit_exempt"
