@@ -206,13 +206,13 @@ stable-bbl-up-task: &stable-bbl-up-task-config
   params:
     BBL_CONFIG_DIR: .
     BBL_ENV_NAME: bellatrix-stable
-    BBL_GCP_REGION: us-central1
-    BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/bellatrix/google_account_creds.json
+    BBL_GCP_REGION: europe-west3
+    BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/bellatrix/bellatrix.key.json
     BBL_IAAS: gcp
-    BBL_LB_CERT: ((bellatrix_cf_lb_cert.certificate))
-    BBL_LB_KEY: ((bellatrix_cf_lb_cert.private_key))
+    BBL_LB_CERT: ../lb-certs/cert.pem
+    BBL_LB_KEY: ../lb-certs/key.pem
     BBL_STATE_DIR: environments/test/bellatrix/bbl-state
-    LB_DOMAIN: bellatrix.cf-app.com
+    LB_DOMAIN: cf.bellatrix.env.wg-ard.ci.cloudfoundry.org
   ensure:
     put: relint-envs
     params:
@@ -1036,7 +1036,7 @@ jobs:
     input_mapping:
       bbl-state: relint-envs
     params:
-      BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/bellatrix/google_account_creds.json
+      BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/bellatrix/bellatrix.key.json
       BBL_STATE_DIR: environments/test/bellatrix/bbl-state
     ensure:
       put: relint-envs
