@@ -1396,11 +1396,11 @@ instance_groups:
         tls_pem:
         - cert_chain: "((router_ssl.certificate))"
           private_key: "((router_ssl.private_key))"
-        ca_certs: |
-          ((diego_instance_identity_ca.ca))
-          ((cc_tls.ca))
-          ((uaa_ssl.ca))
-          ((network_policy_server_external.ca))
+        ca_certs:
+          - ((diego_instance_identity_ca.ca))
+          - ((cc_tls.ca))
+          - ((uaa_ssl.ca))
+          - ((network_policy_server_external.ca))
         backends:
           cert_chain: ((gorouter_backend_tls.certificate))
           private_key: ((gorouter_backend_tls.private_key))
