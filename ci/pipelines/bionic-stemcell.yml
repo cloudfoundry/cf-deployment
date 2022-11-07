@@ -188,6 +188,7 @@ jobs:
     - get: stable-pool
       passed:
       - run-cats
+      trigger: true
     - in_parallel:
         steps:
         - get: cf-deployment-concourse-tasks
