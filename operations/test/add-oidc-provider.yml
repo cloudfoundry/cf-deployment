@@ -68,7 +68,16 @@
             rp_oidc_admin:
               authorized-grant-types: authorization_code,client_credentials,refresh_token,user_token,password,urn:ietf:params:oauth:grant-type:saml2-bearer,implicit
               redirect-uri: https://uaa.service.cf.internal:8443/login/callback/cli-oidc-provider
-              scope: openid,uaa.admin,clients.read,clients.write,clients.secret,scim.read,scim.write,clients.admin,uaa.user
+              scopes:
+                - openid
+                - uaa.admin
+                - clients.read
+                - clients.write
+                - clients.secret
+                - scim.read
+                - scim.write
+                - clients.admin
+                - uaa.user
               authorities: uaa.admin,clients.admin
               secret: ((rp_oidc_provider_admin_secret))
           scim:
