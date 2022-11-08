@@ -621,7 +621,7 @@ instance_groups:
           timestamp: "rfc3339"
   - name: loggr-udp-forwarder
     release: loggregator-agent
-    properties:
+    properties: &loggr-udp-forwarder-properties
       loggregator:
         tls:
           ca: "((loggregator_tls_agent.ca))"
@@ -1178,17 +1178,7 @@ instance_groups:
             server_key: "((cc_bridge_cc_uploader_server.private_key))"
   - name: loggr-udp-forwarder
     release: loggregator-agent
-    properties:
-      loggregator:
-        tls:
-          ca: "((loggregator_tls_agent.ca))"
-          cert: "((loggregator_tls_agent.certificate))"
-          key: "((loggregator_tls_agent.private_key))"
-      metrics:
-        ca_cert: "((loggr_udp_forwarder_tls.ca))"
-        cert: "((loggr_udp_forwarder_tls.certificate))"
-        key: "((loggr_udp_forwarder_tls.private_key))"
-        server_name: loggr_udp_forwarder_metrics
+    properties: *loggr-udp-forwarder-properties
 - name: cc-worker
   azs:
   - z1
@@ -1224,6 +1214,9 @@ instance_groups:
             secret: "((uaa_clients_cc-service-dashboards_secret))"
           cc_routing:
             secret: "((uaa_clients_cc-routing_secret))"
+  - name: loggr-udp-forwarder
+    release: loggregator-agent
+    properties: *loggr-udp-forwarder-properties
 - name: scheduler
   azs:
   - z1
@@ -1385,17 +1378,7 @@ instance_groups:
       aggregate_drains: "syslog-tls://log-cache.service.cf.internal:6067?include-metrics-deprecated=true&ssl-strict-internal=true"
   - name: loggr-udp-forwarder
     release: loggregator-agent
-    properties:
-      loggregator:
-        tls:
-          ca: "((loggregator_tls_agent.ca))"
-          cert: "((loggregator_tls_agent.certificate))"
-          key: "((loggregator_tls_agent.private_key))"
-      metrics:
-        ca_cert: "((loggr_udp_forwarder_tls.ca))"
-        cert: "((loggr_udp_forwarder_tls.certificate))"
-        key: "((loggr_udp_forwarder_tls.private_key))"
-        server_name: loggr_udp_forwarder_metrics
+    properties: *loggr-udp-forwarder-properties
 - name: router
   azs:
   - z1
@@ -1449,17 +1432,7 @@ instance_groups:
           port: 8443
   - name: loggr-udp-forwarder
     release: loggregator-agent
-    properties:
-      loggregator:
-        tls:
-          ca: "((loggregator_tls_agent.ca))"
-          cert: "((loggregator_tls_agent.certificate))"
-          key: "((loggregator_tls_agent.private_key))"
-      metrics:
-        ca_cert: "((loggr_udp_forwarder_tls.ca))"
-        cert: "((loggr_udp_forwarder_tls.certificate))"
-        key: "((loggr_udp_forwarder_tls.private_key))"
-        server_name: loggr_udp_forwarder_metrics
+    properties: *loggr-udp-forwarder-properties
 - name: tcp-router
   azs:
   - z1
@@ -1483,17 +1456,7 @@ instance_groups:
         tls_port: 8443
   - name: loggr-udp-forwarder
     release: loggregator-agent
-    properties:
-      loggregator:
-        tls:
-          ca: "((loggregator_tls_agent.ca))"
-          cert: "((loggregator_tls_agent.certificate))"
-          key: "((loggregator_tls_agent.private_key))"
-      metrics:
-        ca_cert: "((loggr_udp_forwarder_tls.ca))"
-        cert: "((loggr_udp_forwarder_tls.certificate))"
-        key: "((loggr_udp_forwarder_tls.private_key))"
-        server_name: loggr_udp_forwarder_metrics
+    properties: *loggr-udp-forwarder-properties
 - name: log-cache
   azs:
   - z1
@@ -1741,17 +1704,7 @@ instance_groups:
       - 169.254.0.2
   - name: loggr-udp-forwarder
     release: loggregator-agent
-    properties:
-      loggregator:
-        tls:
-          ca: "((loggregator_tls_agent.ca))"
-          cert: "((loggregator_tls_agent.certificate))"
-          key: "((loggregator_tls_agent.private_key))"
-      metrics:
-        ca_cert: "((loggr_udp_forwarder_tls.ca))"
-        cert: "((loggr_udp_forwarder_tls.certificate))"
-        key: "((loggr_udp_forwarder_tls.private_key))"
-        server_name: loggr_udp_forwarder_metrics
+    properties: *loggr-udp-forwarder-properties
 - name: log-api
   azs:
   - z1
