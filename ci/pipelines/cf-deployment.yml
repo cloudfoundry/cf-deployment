@@ -1494,7 +1494,7 @@ jobs:
       vars-files: relint-envs
     params:
       BBL_STATE_DIR: environments/test/bbr/bbl-state
-      SYSTEM_DOMAIN: baba-yaga.cf-app.com
+      SYSTEM_DOMAIN: cf.baba-yaga.env.wg-ard.ci.cloudfoundry.org
       OPS_FILES: |
         operations/use-compiled-releases.yml
         operations/backup-and-restore/enable-backup-restore.yml
@@ -1511,7 +1511,7 @@ jobs:
         bbl-state: relint-envs
       params:
         BBL_STATE_DIR: environments/test/bbr/bbl-state
-        SYSTEM_DOMAIN: baba-yaga.cf-app.com
+        SYSTEM_DOMAIN: cf.baba-yaga.env.wg-ard.ci.cloudfoundry.org
         ENABLED_FEATURE_FLAGS: |
           diego_docker
     - task: open-asgs-for-credhub
@@ -1521,7 +1521,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/bbr/bbl-state
         INSTANCE_GROUP_NAME: credhub
-        SYSTEM_DOMAIN: baba-yaga.cf-app.com
+        SYSTEM_DOMAIN: cf.baba-yaga.env.wg-ard.ci.cloudfoundry.org
         SECURITY_GROUP_NAME: credhub
     - task: open-asgs-for-uaa
       file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
@@ -1530,7 +1530,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/bbr/bbl-state
         INSTANCE_GROUP_NAME: uaa
-        SYSTEM_DOMAIN: baba-yaga.cf-app.com
+        SYSTEM_DOMAIN: cf.baba-yaga.env.wg-ard.ci.cloudfoundry.org
         SECURITY_GROUP_NAME: uaa
     - do:
       - task: run-nfs-broker-push-errand
@@ -1575,7 +1575,7 @@ jobs:
       bbl-state: relint-envs
     params:
       BBL_STATE_DIR: environments/test/bbr/bbl-state
-      SYSTEM_DOMAIN: baba-yaga.cf-app.com
+      SYSTEM_DOMAIN: cf.baba-yaga.env.wg-ard.ci.cloudfoundry.org
   - task: run-drats
     privileged: true
     file: disaster-recovery-acceptance-tests/ci/tasks/drats-with-integration-config/task.yml

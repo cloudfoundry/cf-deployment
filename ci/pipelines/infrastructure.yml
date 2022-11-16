@@ -146,9 +146,9 @@ bbr-bbl-up-task: &bbr-bbl-up-task-config
     BBL_IAAS: gcp
     BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/bbr/baba-yaga.key.json
     BBL_GCP_REGION: europe-west3
-    BBL_LB_CERT: ((baba_yaga_cf_lb_cert.certificate))
-    BBL_LB_KEY: ((baba_yaga_cf_lb_cert.private_key))
-    LB_DOMAIN: baba-yaga.cf-app.com
+    BBL_LB_CERT: ../lb-certs/baba-yaga.crt
+    BBL_LB_KEY: ../lb-certs/baba-yaga.key
+    LB_DOMAIN: cf.baba-yaga.env.wg-ard.ci.cloudfoundry.org
     BBL_ENV_NAME: baba-yaga-bbr
     BBL_CONFIG_DIR: plan-patches/network-lb-gcp
   ensure:
