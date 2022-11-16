@@ -225,15 +225,15 @@ cats-bbl-up-task: &cats-bbl-up-task-config
     bbl-state: relint-envs
     bbl-config: bosh-bootloader
   params:
-    BBL_STATE_DIR: environments/test/cats/bbl-state
-    BBL_IAAS: gcp
-    BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/cats/google_account_creds.json
-    BBL_GCP_REGION: us-central1
-    BBL_LB_CERT: ((cats_cf_lb_cert.certificate))
-    BBL_LB_KEY: ((cats_cf_lb_cert.private_key))
-    LB_DOMAIN: cats.cf-app.com
     BBL_CONFIG_DIR: plan-patches/network-lb-gcp
     BBL_ENV_NAME: cats
+    BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/cats/ard-cats.key.json
+    BBL_GCP_REGION: europe-west3
+    BBL_IAAS: gcp
+    BBL_LB_CERT: ../lb-certs/cats.crt
+    BBL_LB_KEY: ../lb-certs/cats.key
+    BBL_STATE_DIR: environments/test/cats/bbl-state
+    LB_DOMAIN: cf.cats.env.wg-ard.ci.cloudfoundry.org
   ensure:
     put: relint-envs
     params:
@@ -992,7 +992,7 @@ jobs:
     input_mapping:
       bbl-state: relint-envs
     params:
-      BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/cats/google_account_creds.json
+      BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/cats/ard-cats.key.json
       BBL_STATE_DIR: environments/test/cats/bbl-state
     ensure:
       put: relint-envs
