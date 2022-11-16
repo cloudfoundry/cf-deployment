@@ -619,19 +619,18 @@ jobs:
     - get: bosh-bootloader
   - task: setup-infrastructure
     file: cf-deployment-concourse-tasks/bbl-up/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+      bbl-config: bosh-bootloader
     params:
       BBL_STATE_DIR: environments/dev/maxime/bbl-state
       BBL_IAAS: gcp
       BBL_ENV_NAME: maxime
-      BBL_GCP_SERVICE_ACCOUNT_KEY: environments/dev/maxime/google_account_creds.json
-      # This is us-west1 because the bbl isoseg patch has us-west1 hardcoded
-      BBL_GCP_REGION: us-west1
-      BBL_LB_CERT: ((maxime_cf_lb_cert.certificate))
-      BBL_LB_KEY: ((maxime_cf_lb_cert.private_key))
-      LB_DOMAIN: maxime.cf-app.com
-    input_mapping:
-      bbl-state: relint-envs
-      bbl-config: bosh-bootloader
+      BBL_GCP_SERVICE_ACCOUNT_KEY: environments/dev/maxime/maxime.key.json
+      BBL_GCP_REGION: europe-west3
+      BBL_LB_CERT: ../certs/maxime.crt
+      BBL_LB_KEY: ../certs/maxime.key
+      LB_DOMAIN: cf.maxime.env.wg-ard.ci.cloudfoundry.org
     ensure:
       put: relint-envs
       params:
@@ -1051,7 +1050,7 @@ jobs:
         input_mapping:
           bbl-state: relint-envs
         params:
-          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/dev/maxime/google_account_creds.json
+          BBL_GCP_SERVICE_ACCOUNT_KEY: environments/dev/maxime/maxime.key.json
           BBL_STATE_DIR: environments/dev/maxime/bbl-state
         ensure:
           put: relint-envs
