@@ -47,6 +47,9 @@ enable-traffic-to-internal-networks.yml: {}
 fast-deploy-with-downtime-and-danger.yml: {}
 infrastructure-metrics.yml: {}
 rootless-containers.yml: {}
+set-cflinuxfs4-default-stack.yml:
+  ops:
+  - ./add-cflinuxfs4.yml
 set-cpu-weight-windows2019.yml:
   ops:
   - ../windows2019-cell.yml
