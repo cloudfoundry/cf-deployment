@@ -165,10 +165,9 @@ lite-bbl-up-task: &lite-bbl-up-task-config
   params:
     BBL_CONFIG_DIR: .
     BBL_ENV_NAME: snitch-lite
-    BBL_GCP_REGION: us-central1
-    BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/snitch/google_account_creds.json
+    BBL_GCP_REGION: europe-west3
+    BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/snitch/snitch-lite.key.json
     BBL_IAAS: gcp
-    BBL_RECREATE_DIRECTOR: true
     BBL_STATE_DIR: environments/test/snitch/bbl-state
     SKIP_LB_CREATION: true
   ensure:
@@ -964,7 +963,7 @@ jobs:
     input_mapping:
       bbl-state: relint-envs
     params:
-      BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/snitch/google_account_creds.json
+      BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/snitch/snitch-lite.key.json
       BBL_STATE_DIR: environments/test/snitch/bbl-state
     ensure:
       put: relint-envs
