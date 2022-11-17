@@ -6,9 +6,9 @@
     authorized-grant-types: client_credentials,refresh_token
     override: true
     scopes:
-      - openid
-      - oauth.approvals
-      - doppler.firehose
+    - openid
+    - oauth.approvals
+    - doppler.firehose
     secret: ((uaa_clients_datadog-firehose-nozzle_secret))
 - type: replace
   path: /instance_groups/-
@@ -49,6 +49,6 @@
   path: /releases/-
   value:
     name: datadog-firehose-nozzle
-    sha1: c7d5288526c68773b48bdf2e6d4346aefdd3ac0f
-    url: https://bosh.io/d/github.com/DataDog/datadog-firehose-nozzle-release?v=85
-    version: "85"
+    sha1: ace5a14697472ff24ada394ac32a3d5d5a1fe13b
+    url: https://bosh.io/d/github.com/DataDog/datadog-firehose-nozzle-release?v=86
+    version: "86"
