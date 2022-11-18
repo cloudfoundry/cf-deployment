@@ -528,7 +528,7 @@ jobs:
       vars-files: relint-envs
     params:
       BBL_STATE_DIR: environments/test/luna/bbl-state
-      SYSTEM_DOMAIN: luna.cf-app.com
+      SYSTEM_DOMAIN: cf.luna.env.wg-ard.ci.cloudfoundry.org
       OPS_FILES: |
         operations/rename-network-and-deployment.yml
         operations/set-bbs-active-key.yml
@@ -548,14 +548,6 @@ jobs:
         environments/test/luna/bbs-key-label.yml
         environments/test/luna/syslog-vars.yml
       REGENERATE_CREDENTIALS: true
-  - task: ensure-gcloud-backend-service-healthy
-    file: runtime-ci/tasks/ensure-gcloud-backend-service-healthy/task.yml
-    input_mapping:
-      google-creds-dir: relint-envs
-    params:
-      GCP_PROJECT_ID: ((luna_gcp_project))
-      GCP_BACKEND_SERVICE: ((luna_router_backend_service))
-      GOOGLE_ACCOUNT_CREDS_PATH: environments/test/luna/google_account_creds.json
   - task: update-integration-configs
     file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     params:
@@ -587,7 +579,7 @@ jobs:
         BBL_STATE_DIR: environments/test/luna/bbl-state
         BOSH_DEPLOYMENT: luna-cf
         INSTANCE_GROUP_NAME: credhub
-        SYSTEM_DOMAIN: luna.cf-app.com
+        SYSTEM_DOMAIN: cf.luna.env.wg-ard.ci.cloudfoundry.org
         SECURITY_GROUP_NAME: credhub
     - task: open-asgs-for-uaa
       file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
@@ -597,7 +589,7 @@ jobs:
         BBL_STATE_DIR: environments/test/luna/bbl-state
         BOSH_DEPLOYMENT: luna-cf
         INSTANCE_GROUP_NAME: uaa
-        SYSTEM_DOMAIN: luna.cf-app.com
+        SYSTEM_DOMAIN: cf.luna.env.wg-ard.ci.cloudfoundry.org
         SECURITY_GROUP_NAME: uaa
     - task: enable-docker-and-tasks
       attempts: 2
@@ -606,7 +598,7 @@ jobs:
         bbl-state: relint-envs
       params:
         BBL_STATE_DIR: environments/test/luna/bbl-state
-        SYSTEM_DOMAIN: luna.cf-app.com
+        SYSTEM_DOMAIN: cf.luna.env.wg-ard.ci.cloudfoundry.org
         ENABLED_FEATURE_FLAGS: |
           diego_docker
           task_creation
@@ -664,7 +656,6 @@ jobs:
         cf-acceptance-tests: cf-acceptance-tests-rc
       params:
         CONFIG_FILE_PATH: environments/test/luna/integration_config.json
-        REPORTER_CONFIG_FILE_PATH: environments/test/luna/reporter_config.json
         CAPTURE_LOGS: true
         RELINT_VERBOSE_AUTH: "true"
         NODES: 12
