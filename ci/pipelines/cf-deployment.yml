@@ -768,7 +768,6 @@ jobs:
       BASE_OPS_FILE_DIR: operations
       NEW_OPS_FILES: |
         environments/test/trelawney/add-external-ips-for-cloud-sql-db.yml
-        environments/test/trelawney/increase-doppler-vm-type-from-minimal-to-small.yml
         environments/test/trelawney/scale-log-api-to-4.yml
   - task: setup-external-ip-db-vars
     file: runtime-ci/tasks/generate-external-ip-db-vars/task.yml
@@ -788,7 +787,7 @@ jobs:
       vars-files: updated-bbl-state-with-db-vars
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
-      SYSTEM_DOMAIN: trelawney.cf-app.com
+      SYSTEM_DOMAIN: cf.trelawney.env.wg-ard.ci.cloudfoundry.org
       OPS_FILES: |
         operations/use-compiled-releases.yml
         operations/use-external-dbs.yml
@@ -798,7 +797,6 @@ jobs:
         operations/use-gcs-blobstore-service-account.yml
         operations/enable-service-discovery.yml
         operations/test/add-persistent-isolation-segment-diego-cell.yml
-        operations/increase-doppler-vm-type-from-minimal-to-small.yml
         operations/scale-log-api-to-4.yml
         operations/use-internal-lookup-for-route-services.yml
       VARS_FILES: |
@@ -821,7 +819,7 @@ jobs:
       bbl-state: relint-envs
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
-      SYSTEM_DOMAIN: trelawney.cf-app.com
+      SYSTEM_DOMAIN: cf.trelawney.env.wg-ard.ci.cloudfoundry.org
   - task: collect-ops-files-develop
     file: cf-deployment-concourse-tasks/collect-ops-files/task.yml
     input_mapping:
@@ -831,7 +829,6 @@ jobs:
       BASE_OPS_FILE_DIR: operations
       NEW_OPS_FILES: |
         environments/test/trelawney/add-external-ips-for-cloud-sql-db.yml
-        environments/test/trelawney/increase-doppler-vm-type-from-minimal-to-small.yml
         environments/test/trelawney/scale-log-api-to-4.yml
   - task: bosh-deploy-cf-develop
     file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
@@ -842,7 +839,7 @@ jobs:
       vars-files: updated-bbl-state-with-db-vars
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
-      SYSTEM_DOMAIN: trelawney.cf-app.com
+      SYSTEM_DOMAIN: cf.trelawney.env.wg-ard.ci.cloudfoundry.org
       OPS_FILES: |
         operations/use-compiled-releases.yml
         operations/use-external-dbs.yml
@@ -852,7 +849,6 @@ jobs:
         operations/use-gcs-blobstore-service-account.yml
         operations/enable-service-discovery.yml
         operations/test/add-persistent-isolation-segment-diego-cell.yml
-        operations/increase-doppler-vm-type-from-minimal-to-small.yml
         operations/scale-log-api-to-4.yml
         operations/use-internal-lookup-for-route-services.yml
         operations/test/speed-up-dynamic-asgs.yml
@@ -875,7 +871,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/trelawney/bbl-state
         INSTANCE_GROUP_NAME: credhub
-        SYSTEM_DOMAIN: trelawney.cf-app.com
+        SYSTEM_DOMAIN: cf.trelawney.env.wg-ard.ci.cloudfoundry.org
         SECURITY_GROUP_NAME: credhub
     - task: open-asgs-for-uaa
       file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
@@ -884,7 +880,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/trelawney/bbl-state
         INSTANCE_GROUP_NAME: uaa
-        SYSTEM_DOMAIN: trelawney.cf-app.com
+        SYSTEM_DOMAIN: cf.trelawney.env.wg-ard.ci.cloudfoundry.org
         SECURITY_GROUP_NAME: uaa
     - task: enable-docker-and-tasks
       file: cf-deployment-concourse-tasks/set-feature-flags/task.yml
@@ -892,7 +888,7 @@ jobs:
         bbl-state: relint-envs
       params:
         BBL_STATE_DIR: environments/test/trelawney/bbl-state
-        SYSTEM_DOMAIN: trelawney.cf-app.com
+        SYSTEM_DOMAIN: cf.trelawney.env.wg-ard.ci.cloudfoundry.org
         ENABLED_FEATURE_FLAGS: |
           diego_docker
           task_creation
@@ -951,7 +947,6 @@ jobs:
         cf-acceptance-tests: cf-acceptance-tests-rc
       params:
         CONFIG_FILE_PATH: environments/test/trelawney/integration_config.json
-        REPORTER_CONFIG_FILE_PATH: environments/test/trelawney/reporter_config.json
         CAPTURE_LOGS: true
         RELINT_VERBOSE_AUTH: "true"
 

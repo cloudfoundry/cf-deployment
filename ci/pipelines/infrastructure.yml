@@ -98,13 +98,13 @@ upgrade-bbl-up-task: &upgrade-bbl-up-task-config
   params:
     BBL_CONFIG_DIR: environments/test/trelawney/bbl-config
     BBL_ENV_NAME: trelawney-upgrade
-    BBL_GCP_REGION: us-central1
-    BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/trelawney/google_account_creds.json
+    BBL_GCP_REGION: europe-west3
+    BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/trelawney/trelawney.key.json
     BBL_IAAS: gcp
-    BBL_LB_CERT: ((trelawney_cf_lb_cert.certificate))
-    BBL_LB_KEY: ((trelawney_cf_lb_cert.private_key))
+    BBL_LB_CERT: ../lb-certs/trelawney.crt
+    BBL_LB_KEY: ../lb-certs/trelawney.key
     BBL_STATE_DIR: environments/test/trelawney/bbl-state
-    LB_DOMAIN: trelawney.cf-app.com
+    LB_DOMAIN: cf.trelawney.env.wg-ard.ci.cloudfoundry.org
   ensure:
     put: relint-envs
     params:
@@ -876,7 +876,7 @@ jobs:
       bbl-state: relint-envs
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
-      BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/trelawney/google_account_creds.json
+      BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/trelawney/trelawney.key.json
     ensure:
       put: relint-envs
       params:
