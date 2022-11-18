@@ -743,6 +743,8 @@ jobs:
       bbl-state: relint-envs
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
+      GCP_PROJECT_ID: cf-deployments-wg
+      GCP_REGION: europe-west3
       GCP_SERVICE_ACCOUNT_JSON: ((trelawney_gcp_service_account_json))
   - try:
       put: trelawney-external-resources
@@ -981,6 +983,8 @@ jobs:
       bbl-state: relint-envs
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
+      GCP_PROJECT_ID: cf-deployments-wg
+      GCP_REGION: europe-west3
       GCP_SERVICE_ACCOUNT_JSON: ((trelawney_gcp_service_account_json))
   - put: trelawney-external-resources
     params:
