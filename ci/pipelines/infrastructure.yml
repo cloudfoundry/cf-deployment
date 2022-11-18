@@ -140,7 +140,7 @@ bbr-bbl-up-task: &bbr-bbl-up-task-config
   file: cf-deployment-concourse-tasks/bbl-up/task.yml
   input_mapping:
     bbl-state: relint-envs
-    bbl-config: bosh-bootloader
+    bbl-config: combined-inputs
   params:
     BBL_STATE_DIR: environments/test/bbr/bbl-state
     BBL_IAAS: gcp
@@ -150,7 +150,7 @@ bbr-bbl-up-task: &bbr-bbl-up-task-config
     BBL_LB_KEY: ((baba_yaga_cf_lb_cert.private_key))
     LB_DOMAIN: baba-yaga.cf-app.com
     BBL_ENV_NAME: baba-yaga-bbr
-    BBL_CONFIG_DIR: plan-patches/network-lb-gcp
+    BBL_CONFIG_DIR: .
   ensure:
     put: relint-envs
     params:
@@ -515,6 +515,15 @@ jobs:
     - get: cf-deployment-concourse-tasks
     - get: relint-envs
     - get: bosh-bootloader
+    - get: runtime-ci
+  - task: combine-bbl-configs
+    file: runtime-ci/tasks/combine-inputs/task.yml
+    input_mapping:
+      first-input: bosh-bootloader
+      second-input: relint-envs
+    params:
+      FIRST_DIR: plan-patches/bosh-lite-gcp
+      SECOND_DIR: environments/test/bbr/bbl-config
   - task: setup-infrastructure
     <<: *bbr-bbl-up-task-config
   - put: bbr-pool
@@ -720,6 +729,14 @@ jobs:
       - get: bosh-bootloader
       - get: every-tuesday-morning
         trigger: true
+    - task: combine-bbl-configs
+      file: runtime-ci/tasks/combine-inputs/task.yml
+      input_mapping:
+        first-input: bosh-bootloader
+        second-input: relint-envs
+      params:
+        FIRST_DIR: plan-patches/bosh-lite-gcp
+        SECOND_DIR: environments/test/bbr/bbl-config
     - task: update-infrastructure
       <<: *bbr-bbl-up-task-config
     - put: bbr-pool
