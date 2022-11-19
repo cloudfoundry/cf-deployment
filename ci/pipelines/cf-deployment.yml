@@ -528,7 +528,7 @@ jobs:
       vars-files: relint-envs
     params:
       BBL_STATE_DIR: environments/test/luna/bbl-state
-      SYSTEM_DOMAIN: luna.cf-app.com
+      SYSTEM_DOMAIN: cf.luna.env.wg-ard.ci.cloudfoundry.org
       OPS_FILES: |
         operations/rename-network-and-deployment.yml
         operations/set-bbs-active-key.yml
@@ -548,14 +548,6 @@ jobs:
         environments/test/luna/bbs-key-label.yml
         environments/test/luna/syslog-vars.yml
       REGENERATE_CREDENTIALS: true
-  - task: ensure-gcloud-backend-service-healthy
-    file: runtime-ci/tasks/ensure-gcloud-backend-service-healthy/task.yml
-    input_mapping:
-      google-creds-dir: relint-envs
-    params:
-      GCP_PROJECT_ID: ((luna_gcp_project))
-      GCP_BACKEND_SERVICE: ((luna_router_backend_service))
-      GOOGLE_ACCOUNT_CREDS_PATH: environments/test/luna/google_account_creds.json
   - task: update-integration-configs
     file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     params:
@@ -587,7 +579,7 @@ jobs:
         BBL_STATE_DIR: environments/test/luna/bbl-state
         BOSH_DEPLOYMENT: luna-cf
         INSTANCE_GROUP_NAME: credhub
-        SYSTEM_DOMAIN: luna.cf-app.com
+        SYSTEM_DOMAIN: cf.luna.env.wg-ard.ci.cloudfoundry.org
         SECURITY_GROUP_NAME: credhub
     - task: open-asgs-for-uaa
       file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
@@ -597,7 +589,7 @@ jobs:
         BBL_STATE_DIR: environments/test/luna/bbl-state
         BOSH_DEPLOYMENT: luna-cf
         INSTANCE_GROUP_NAME: uaa
-        SYSTEM_DOMAIN: luna.cf-app.com
+        SYSTEM_DOMAIN: cf.luna.env.wg-ard.ci.cloudfoundry.org
         SECURITY_GROUP_NAME: uaa
     - task: enable-docker-and-tasks
       attempts: 2
@@ -606,7 +598,7 @@ jobs:
         bbl-state: relint-envs
       params:
         BBL_STATE_DIR: environments/test/luna/bbl-state
-        SYSTEM_DOMAIN: luna.cf-app.com
+        SYSTEM_DOMAIN: cf.luna.env.wg-ard.ci.cloudfoundry.org
         ENABLED_FEATURE_FLAGS: |
           diego_docker
           task_creation
@@ -664,7 +656,6 @@ jobs:
         cf-acceptance-tests: cf-acceptance-tests-rc
       params:
         CONFIG_FILE_PATH: environments/test/luna/integration_config.json
-        REPORTER_CONFIG_FILE_PATH: environments/test/luna/reporter_config.json
         CAPTURE_LOGS: true
         RELINT_VERBOSE_AUTH: "true"
         NODES: 12
@@ -752,6 +743,8 @@ jobs:
       bbl-state: relint-envs
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
+      GCP_PROJECT_ID: cf-deployments-wg
+      GCP_REGION: europe-west3
       GCP_SERVICE_ACCOUNT_JSON: ((trelawney_gcp_service_account_json))
   - try:
       put: trelawney-external-resources
@@ -777,7 +770,6 @@ jobs:
       BASE_OPS_FILE_DIR: operations
       NEW_OPS_FILES: |
         environments/test/trelawney/add-external-ips-for-cloud-sql-db.yml
-        environments/test/trelawney/increase-doppler-vm-type-from-minimal-to-small.yml
         environments/test/trelawney/scale-log-api-to-4.yml
   - task: setup-external-ip-db-vars
     file: runtime-ci/tasks/generate-external-ip-db-vars/task.yml
@@ -797,7 +789,7 @@ jobs:
       vars-files: updated-bbl-state-with-db-vars
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
-      SYSTEM_DOMAIN: trelawney.cf-app.com
+      SYSTEM_DOMAIN: cf.trelawney.env.wg-ard.ci.cloudfoundry.org
       OPS_FILES: |
         operations/use-compiled-releases.yml
         operations/use-external-dbs.yml
@@ -807,7 +799,6 @@ jobs:
         operations/use-gcs-blobstore-service-account.yml
         operations/enable-service-discovery.yml
         operations/test/add-persistent-isolation-segment-diego-cell.yml
-        operations/increase-doppler-vm-type-from-minimal-to-small.yml
         operations/scale-log-api-to-4.yml
         operations/use-internal-lookup-for-route-services.yml
       VARS_FILES: |
@@ -830,7 +821,7 @@ jobs:
       bbl-state: relint-envs
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
-      SYSTEM_DOMAIN: trelawney.cf-app.com
+      SYSTEM_DOMAIN: cf.trelawney.env.wg-ard.ci.cloudfoundry.org
   - task: collect-ops-files-develop
     file: cf-deployment-concourse-tasks/collect-ops-files/task.yml
     input_mapping:
@@ -840,7 +831,6 @@ jobs:
       BASE_OPS_FILE_DIR: operations
       NEW_OPS_FILES: |
         environments/test/trelawney/add-external-ips-for-cloud-sql-db.yml
-        environments/test/trelawney/increase-doppler-vm-type-from-minimal-to-small.yml
         environments/test/trelawney/scale-log-api-to-4.yml
   - task: bosh-deploy-cf-develop
     file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
@@ -851,7 +841,7 @@ jobs:
       vars-files: updated-bbl-state-with-db-vars
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
-      SYSTEM_DOMAIN: trelawney.cf-app.com
+      SYSTEM_DOMAIN: cf.trelawney.env.wg-ard.ci.cloudfoundry.org
       OPS_FILES: |
         operations/use-compiled-releases.yml
         operations/use-external-dbs.yml
@@ -861,7 +851,6 @@ jobs:
         operations/use-gcs-blobstore-service-account.yml
         operations/enable-service-discovery.yml
         operations/test/add-persistent-isolation-segment-diego-cell.yml
-        operations/increase-doppler-vm-type-from-minimal-to-small.yml
         operations/scale-log-api-to-4.yml
         operations/use-internal-lookup-for-route-services.yml
         operations/test/speed-up-dynamic-asgs.yml
@@ -884,7 +873,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/trelawney/bbl-state
         INSTANCE_GROUP_NAME: credhub
-        SYSTEM_DOMAIN: trelawney.cf-app.com
+        SYSTEM_DOMAIN: cf.trelawney.env.wg-ard.ci.cloudfoundry.org
         SECURITY_GROUP_NAME: credhub
     - task: open-asgs-for-uaa
       file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
@@ -893,7 +882,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/trelawney/bbl-state
         INSTANCE_GROUP_NAME: uaa
-        SYSTEM_DOMAIN: trelawney.cf-app.com
+        SYSTEM_DOMAIN: cf.trelawney.env.wg-ard.ci.cloudfoundry.org
         SECURITY_GROUP_NAME: uaa
     - task: enable-docker-and-tasks
       file: cf-deployment-concourse-tasks/set-feature-flags/task.yml
@@ -901,7 +890,7 @@ jobs:
         bbl-state: relint-envs
       params:
         BBL_STATE_DIR: environments/test/trelawney/bbl-state
-        SYSTEM_DOMAIN: trelawney.cf-app.com
+        SYSTEM_DOMAIN: cf.trelawney.env.wg-ard.ci.cloudfoundry.org
         ENABLED_FEATURE_FLAGS: |
           diego_docker
           task_creation
@@ -960,7 +949,6 @@ jobs:
         cf-acceptance-tests: cf-acceptance-tests-rc
       params:
         CONFIG_FILE_PATH: environments/test/trelawney/integration_config.json
-        REPORTER_CONFIG_FILE_PATH: environments/test/trelawney/reporter_config.json
         CAPTURE_LOGS: true
         RELINT_VERBOSE_AUTH: "true"
 
@@ -995,6 +983,8 @@ jobs:
       bbl-state: relint-envs
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
+      GCP_PROJECT_ID: cf-deployments-wg
+      GCP_REGION: europe-west3
       GCP_SERVICE_ACCOUNT_JSON: ((trelawney_gcp_service_account_json))
   - put: trelawney-external-resources
     params:
@@ -1343,7 +1333,7 @@ jobs:
         vars-files: relint-envs
       params:
         BBL_STATE_DIR: environments/test/snitch/bbl-state
-        SYSTEM_DOMAIN: snitch.cf-app.com
+        SYSTEM_DOMAIN: cf.snitch.env.wg-ard.ci.cloudfoundry.org
         OPS_FILES: |
           operations/use-compiled-releases.yml
           operations/scale-to-one-az.yml
@@ -1421,14 +1411,13 @@ jobs:
     - task: update-infrastructure
       file: cf-deployment-concourse-tasks/bbl-up/task.yml
       params:
-        BBL_STATE_DIR: environments/test/snitch/bbl-state
-        BBL_IAAS: gcp
-        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/snitch/google_account_creds.json
-        BBL_GCP_REGION: us-central1
-        BBL_ENV_NAME: snitch-lite
-        SKIP_LB_CREATION: true
         BBL_CONFIG_DIR: .
-        BBL_RECREATE_DIRECTOR: true
+        BBL_ENV_NAME: snitch-lite
+        BBL_GCP_REGION: europe-west3
+        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/snitch/snitch-lite.key.json
+        BBL_IAAS: gcp
+        BBL_STATE_DIR: environments/test/snitch/bbl-state
+        SKIP_LB_CREATION: true
       input_mapping:
         bbl-state: relint-envs
         bbl-config: combined-inputs
@@ -1494,7 +1483,7 @@ jobs:
       vars-files: relint-envs
     params:
       BBL_STATE_DIR: environments/test/bbr/bbl-state
-      SYSTEM_DOMAIN: baba-yaga.cf-app.com
+      SYSTEM_DOMAIN: cf.baba-yaga.env.wg-ard.ci.cloudfoundry.org
       OPS_FILES: |
         operations/use-compiled-releases.yml
         operations/backup-and-restore/enable-backup-restore.yml
@@ -1511,7 +1500,7 @@ jobs:
         bbl-state: relint-envs
       params:
         BBL_STATE_DIR: environments/test/bbr/bbl-state
-        SYSTEM_DOMAIN: baba-yaga.cf-app.com
+        SYSTEM_DOMAIN: cf.baba-yaga.env.wg-ard.ci.cloudfoundry.org
         ENABLED_FEATURE_FLAGS: |
           diego_docker
     - task: open-asgs-for-credhub
@@ -1521,7 +1510,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/bbr/bbl-state
         INSTANCE_GROUP_NAME: credhub
-        SYSTEM_DOMAIN: baba-yaga.cf-app.com
+        SYSTEM_DOMAIN: cf.baba-yaga.env.wg-ard.ci.cloudfoundry.org
         SECURITY_GROUP_NAME: credhub
     - task: open-asgs-for-uaa
       file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
@@ -1530,7 +1519,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/bbr/bbl-state
         INSTANCE_GROUP_NAME: uaa
-        SYSTEM_DOMAIN: baba-yaga.cf-app.com
+        SYSTEM_DOMAIN: cf.baba-yaga.env.wg-ard.ci.cloudfoundry.org
         SECURITY_GROUP_NAME: uaa
     - do:
       - task: run-nfs-broker-push-errand
@@ -1575,7 +1564,7 @@ jobs:
       bbl-state: relint-envs
     params:
       BBL_STATE_DIR: environments/test/bbr/bbl-state
-      SYSTEM_DOMAIN: baba-yaga.cf-app.com
+      SYSTEM_DOMAIN: cf.baba-yaga.env.wg-ard.ci.cloudfoundry.org
   - task: run-drats
     privileged: true
     file: disaster-recovery-acceptance-tests/ci/tasks/drats-with-integration-config/task.yml

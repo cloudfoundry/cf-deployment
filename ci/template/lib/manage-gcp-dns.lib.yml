@@ -6,7 +6,7 @@ input_mapping:
   pool-lock: pre-dev-pool
 params:
   BBL_JSON_CONFIG: pool-lock/metadata
-  GCP_DNS_SERVICE_ACCOUNT_KEY: ((concourse_gcp_service_account_json))
-  GCP_DNS_ZONE_NAME: test-relint-rocks
+  GCP_DNS_SERVICE_ACCOUNT_KEY: ((ci_dns_admin_gcp_service_account_json))
+  GCP_DNS_ZONE_NAME: wg-ard
   ACTION: #@ action
 #@ end
