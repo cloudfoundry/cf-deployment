@@ -522,7 +522,7 @@ jobs:
       first-input: bosh-bootloader
       second-input: relint-envs
     params:
-      FIRST_DIR: plan-patches/bosh-lite-gcp
+      FIRST_DIR: plan-patches/network-lb-gcp
       SECOND_DIR: environments/test/bbr/bbl-config
   - task: setup-infrastructure
     <<: *bbr-bbl-up-task-config
@@ -735,7 +735,7 @@ jobs:
         first-input: bosh-bootloader
         second-input: relint-envs
       params:
-        FIRST_DIR: plan-patches/bosh-lite-gcp
+        FIRST_DIR: plan-patches/network-lb-gcp
         SECOND_DIR: environments/test/bbr/bbl-config
     - task: update-infrastructure
       <<: *bbr-bbl-up-task-config
