@@ -729,6 +729,7 @@ jobs:
       - get: bosh-bootloader
       - get: every-tuesday-morning
         trigger: true
+      - get: runtime-ci
     - task: combine-bbl-configs
       file: runtime-ci/tasks/combine-inputs/task.yml
       input_mapping:
