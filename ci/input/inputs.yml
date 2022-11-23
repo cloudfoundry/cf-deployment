@@ -125,6 +125,10 @@ opsReleases:
   requiredOpsFiles:
   - operations/windows2019-cell.yml
   - operations/use-online-windows2019fs.yml
+- name: cflinuxfs4
+  repository: cloudfoundry/cflinuxfs4-release
+  requiredOpsFiles:
+  - operations/experimental/add-cflinuxfs4.yml
 
 untestedOpsReleases:
 - name: datadog-firehose-nozzle
