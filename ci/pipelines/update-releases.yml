@@ -14398,11 +14398,10 @@ jobs:
           pool-lock: pre-dev-pool
         params:
           BBL_JSON_CONFIG: pool-lock/metadata
-          OPS_FILES: |-
+          OPS_FILES: |
             operations/scale-to-one-az.yml
             operations/use-compiled-releases.yml
             operations/experimental/use-compiled-releases-windows.yml
-            operations/experimental/add-cflinuxfs4.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
       - task: ensure-api-healthy
