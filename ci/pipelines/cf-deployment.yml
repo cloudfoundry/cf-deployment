@@ -1189,8 +1189,13 @@ jobs:
       trigger: true
       passed: [ experimental-acquire-pool ]
     - get: runtime-ci
+    - get: cf-deployment-main
   - task: experimental-ops-files
     file: runtime-ci/tasks/summarize-ops-files/task.yml
+    input_mapping:
+      cf-deployment: cf-deployment-main
+    params:
+      TASK_LIST: "bosh-deploy-cf-latest-release bosh-deploy-cf-develop"
 
 - name: experimental-smoke-tests
   public: true
