@@ -29,6 +29,10 @@ baseReleases:
   repository: cloudfoundry-incubator/pxc-release
 - name: routing
   repository: cloudfoundry/routing-release
+  requiredOpsFiles:
+  # this file is only required until routing-release and its breaking config change are consumed
+  # (PR https://github.com/cloudfoundry/cf-deployment/pull/1005). It can be removed afterwards.
+  - operations/test/temp-gorouter-certs-as-list.yml
 - name: silk
   repository: cloudfoundry/silk-release
 - name: statsd-injector
