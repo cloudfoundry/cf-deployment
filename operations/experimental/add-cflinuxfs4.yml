@@ -1,16 +1,15 @@
----
 - type: replace
   path: /releases/-
   value:
     name: cflinuxfs4
-    url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs4-release?v=0.41.0
-    version: 0.41.0
-    sha1: 1c23d7a73dc50f49e92892527350e3c7e2b0e61a
+    sha1: c89dc10479b630f9545886f0ca71467b6d7efed4
+    url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs4-release?v=0.48.0
+    version: 0.48.0
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/-
   value:
-    name: cflinuxfs4
     description: Cloud Foundry Linux-based filesystem (Ubuntu 22.04)
+    name: cflinuxfs4
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
   value:
@@ -29,40 +28,45 @@
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
   value:
+    name: go_buildpack
+    package: go-buildpack-cflinuxfs4
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
+  value:
     name: dotnet_core_buildpack
     package: dotnet-core-buildpack-cflinuxfs4
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/diego/droplet_destinations?
   value:
-      cflinuxfs3: /home/vcap
-      cflinuxfs4: /home/vcap
-      windows: /Users/vcap
-      windows2012R2: /
-      windows2016: /Users/vcap
+    cflinuxfs3: /home/vcap
+    cflinuxfs4: /home/vcap
+    windows: /Users/vcap
+    windows2012R2: /
+    windows2016: /Users/vcap
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/diego?/droplet_destinations
   value:
-      cflinuxfs3: /home/vcap
-      cflinuxfs4: /home/vcap
-      windows: /Users/vcap
-      windows2012R2: /
-      windows2016: /Users/vcap
+    cflinuxfs3: /home/vcap
+    cflinuxfs4: /home/vcap
+    windows: /Users/vcap
+    windows2012R2: /
+    windows2016: /Users/vcap
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties/cc/diego?/droplet_destinations
   value:
-      cflinuxfs3: /home/vcap
-      cflinuxfs4: /home/vcap
-      windows: /Users/vcap
-      windows2012R2: /
-      windows2016: /Users/vcap
+    cflinuxfs3: /home/vcap
+    cflinuxfs4: /home/vcap
+    windows: /Users/vcap
+    windows2012R2: /
+    windows2016: /Users/vcap
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/diego?/droplet_destinations
   value:
-      cflinuxfs3: /home/vcap
-      cflinuxfs4: /home/vcap
-      windows: /Users/vcap
-      windows2012R2: /
-      windows2016: /Users/vcap
+    cflinuxfs3: /home/vcap
+    cflinuxfs4: /home/vcap
+    windows: /Users/vcap
+    windows2012R2: /
+    windows2016: /Users/vcap
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/diego/lifecycle_bundles?
   value:
@@ -103,14 +107,13 @@
   path: /instance_groups/name=diego-cell/jobs/-
   value:
     name: cflinuxfs4-rootfs-setup
-    release: cflinuxfs4
     properties:
       cflinuxfs4-rootfs:
         trusted_certs:
         - ((diego_instance_identity_ca.ca))
         - ((credhub_tls.ca))
         - ((uaa_ssl.ca))
+    release: cflinuxfs4
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=rep/properties/diego/rep/preloaded_rootfses/-
-  value:
-    cflinuxfs4:/var/vcap/packages/cflinuxfs4/rootfs.tar
+  value: cflinuxfs4:/var/vcap/packages/cflinuxfs4/rootfs.tar
