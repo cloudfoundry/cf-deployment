@@ -1054,6 +1054,7 @@ jobs:
       BASE_OPS_FILE_DIR: operations
       NEW_OPS_FILES: |
         environments/test/hermione/increase-doppler-vm-type-from-minimal-to-small.yml
+        environments/test/hermione/scale-diego-cell-to-6.yml
   - task: bosh-deploy-cf-latest-release
     file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
     input_mapping:
@@ -1078,6 +1079,7 @@ jobs:
         operations/experimental/enable-oci-phase-1.yml
         operations/experimental/enable-containerd-for-processes.yml
         operations/increase-doppler-vm-type-from-minimal-to-small.yml
+        operations/scale-diego-cell-to-6.yml
         operations/test/speed-up-dynamic-asgs.yml
       VARS_FILES: |
         environments/test/hermione/bbl-state/vars/director-vars-file.yml
@@ -1107,6 +1109,7 @@ jobs:
       BASE_OPS_FILE_DIR: operations
       NEW_OPS_FILES: |
         environments/test/hermione/increase-doppler-vm-type-from-minimal-to-small.yml
+        environments/test/hermione/scale-diego-cell-to-6.yml
   - task: bosh-deploy-cf-develop
     file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
     input_mapping:
@@ -1133,6 +1136,7 @@ jobs:
         operations/experimental/enable-containerd-for-processes.yml
         operations/experimental/disable-v2-api.yml
         operations/increase-doppler-vm-type-from-minimal-to-small.yml
+        operations/scale-diego-cell-to-6.yml
         operations/test/speed-up-dynamic-asgs.yml
       VARS_FILES: |
         environments/test/hermione/bbl-state/vars/director-vars-file.yml
@@ -1182,8 +1186,13 @@ jobs:
       trigger: true
       passed: [ experimental-acquire-pool ]
     - get: runtime-ci
+    - get: cf-deployment-main
   - task: experimental-ops-files
     file: runtime-ci/tasks/summarize-ops-files/task.yml
+    input_mapping:
+      cf-deployment: cf-deployment-main
+    params:
+      TASK_LIST: "bosh-deploy-cf-latest-release bosh-deploy-cf-develop"
 
 - name: experimental-smoke-tests
   public: true
