@@ -870,8 +870,10 @@ instance_groups:
         - name: blobstore
           port: 8080
           registration_interval: 20s
+          server_cert_domain_san: "blobstore.((system_domain))"
           tags:
             component: blobstore
+          tls_port: 4443
           uris:
           - blobstore.((system_domain))
 - name: api
@@ -2102,6 +2104,7 @@ variables:
     ca: service_cf_internal_ca
     common_name: blobstore.service.cf.internal
     alternative_names:
+    - "blobstore.((system_domain))"
     - blobstore.service.cf.internal
 - name: diego_auctioneer_client
   type: certificate
