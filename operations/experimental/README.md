@@ -13,6 +13,7 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 
 | Name | Purpose | Notes | Currently validated in Release Integration CI pipelines? |
 |:---  |:---     |:---   |:---   |
+| [`add-cflinuxfs4.yml`](add-cflinuxfs4.yml) | Add [cflinuxfs4](https://github.com/cloudfoundry/cflinuxfs4) stack. | | **NO** |
 | [`add-disabled-syslog-agent-for-upgrade.yml`](add-disabled-syslog-agent-for-upgrade.yml) |  Deprecated: this opsfile is no longer needed in cf-d 13 | | **NO** |
 | [`add-metric-store.yml`](add-metric-store.yml) |  **Add Metric Store node for persistence of metrics from Loggregator** | | **NO** |
 | [`add-system-metrics-agent.yml`](add-system-metrics-agent.yml) | Add agent to all vms with the purpose of egressing system metrics | | **NO** |

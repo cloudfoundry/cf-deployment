@@ -1,0 +1,119 @@
+- type: replace
+  path: /releases/-
+  value:
+    name: cflinuxfs4
+    sha1: 8adb7cb792aecb6d8ba70c3d3e2d1520eab4ba58
+    url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs4-release?v=0.53.0
+    version: 0.53.0
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/-
+  value:
+    description: Cloud Foundry Linux-based filesystem (Ubuntu 22.04)
+    name: cflinuxfs4
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
+  value:
+    name: java_buildpack
+    package: java-buildpack-cflinuxfs4
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
+  value:
+    name: python_buildpack
+    package: python-buildpack-cflinuxfs4
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
+  value:
+    name: nodejs_buildpack
+    package: nodejs-buildpack-cflinuxfs4
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
+  value:
+    name: go_buildpack
+    package: go-buildpack-cflinuxfs4
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
+  value:
+    name: dotnet_core_buildpack
+    package: dotnet-core-buildpack-cflinuxfs4
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/diego/droplet_destinations?
+  value:
+    cflinuxfs3: /home/vcap
+    cflinuxfs4: /home/vcap
+    windows: /Users/vcap
+    windows2012R2: /
+    windows2016: /Users/vcap
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/diego?/droplet_destinations
+  value:
+    cflinuxfs3: /home/vcap
+    cflinuxfs4: /home/vcap
+    windows: /Users/vcap
+    windows2012R2: /
+    windows2016: /Users/vcap
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties/cc/diego?/droplet_destinations
+  value:
+    cflinuxfs3: /home/vcap
+    cflinuxfs4: /home/vcap
+    windows: /Users/vcap
+    windows2012R2: /
+    windows2016: /Users/vcap
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/diego?/droplet_destinations
+  value:
+    cflinuxfs3: /home/vcap
+    cflinuxfs4: /home/vcap
+    windows: /Users/vcap
+    windows2012R2: /
+    windows2016: /Users/vcap
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/diego/lifecycle_bundles?
+  value:
+    buildpack/cflinuxfs3: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+    buildpack/cflinuxfs4: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+    buildpack/windows: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+    buildpack/windows2012R2: windows_app_lifecycle/windows_app_lifecycle.tgz
+    buildpack/windows2016: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+    docker: docker_app_lifecycle/docker_app_lifecycle.tgz
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/diego?/lifecycle_bundles
+  value:
+    buildpack/cflinuxfs3: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+    buildpack/cflinuxfs4: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+    buildpack/windows: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+    buildpack/windows2012R2: windows_app_lifecycle/windows_app_lifecycle.tgz
+    buildpack/windows2016: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+    docker: docker_app_lifecycle/docker_app_lifecycle.tgz
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties/cc/diego?/lifecycle_bundles
+  value:
+    buildpack/cflinuxfs3: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+    buildpack/cflinuxfs4: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+    buildpack/windows: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+    buildpack/windows2012R2: windows_app_lifecycle/windows_app_lifecycle.tgz
+    buildpack/windows2016: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+    docker: docker_app_lifecycle/docker_app_lifecycle.tgz
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/diego?/lifecycle_bundles
+  value:
+    buildpack/cflinuxfs3: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+    buildpack/cflinuxfs4: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+    buildpack/windows: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+    buildpack/windows2012R2: windows_app_lifecycle/windows_app_lifecycle.tgz
+    buildpack/windows2016: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+    docker: docker_app_lifecycle/docker_app_lifecycle.tgz
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/-
+  value:
+    name: cflinuxfs4-rootfs-setup
+    properties:
+      cflinuxfs4-rootfs:
+        trusted_certs:
+        - ((diego_instance_identity_ca.ca))
+        - ((credhub_tls.ca))
+        - ((uaa_ssl.ca))
+    release: cflinuxfs4
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=rep/properties/diego/rep/preloaded_rootfses/-
+  value: cflinuxfs4:/var/vcap/packages/cflinuxfs4/rootfs.tar

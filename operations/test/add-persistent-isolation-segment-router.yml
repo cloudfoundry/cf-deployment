@@ -41,11 +41,10 @@
           routing_table_sharding_mode: segments
           ssl_skip_validation: true
           enable_ssl: true
-          ca_certs: |
-            ((diego_instance_identity_ca.ca))
-            ((cc_tls.ca))
-            ((uaa_ssl.ca))
-            ((routing_api_tls.ca))
+          ca_certs:
+          - ((diego_instance_identity_ca.ca))
+          - ((cc_tls.ca))
+          - ((uaa_ssl.ca))
           backends:
             ((routing_api_tls.ca))
             cert_chain: ((gorouter_backend_tls.certificate))
@@ -75,6 +74,10 @@
 
 - type: replace
   path: /instance_groups/name=router/jobs/name=gorouter/provides?/gorouter/as
+  value: router_primary
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=routing-api/consumes?/gorouter/from
   value: router_primary
 
 - type: replace
