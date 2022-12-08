@@ -58,3 +58,8 @@ use-compiled-releases-windows.yml:
   - use-compiled-releases-windows.yml
 use-create-swap-delete-vm-strategy.yml: {}
 use-native-garden-runc-runner.yml: {}
+use-trusted-ca-cert-for-apps-cflinuxfs4.yml:
+  ops:
+    - add-cflinuxfs4.yml
+  varsfiles:
+    - ../example-vars-files/vars-use-trusted-ca-cert-for-apps.yml
