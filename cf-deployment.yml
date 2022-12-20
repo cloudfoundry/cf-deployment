@@ -1076,6 +1076,12 @@ instance_groups:
           registration_interval: 20s
           uris:
           - api.((system_domain))/networking
+        - name: routing-api
+          tls_port: 3001
+          server_cert_domain_san: routing-api.service.cf.internal
+          registration_interval: 20s
+          uris:
+          - api.((system_domain))/routing
   - name: statsd_injector
     release: statsd-injector
     properties: *statsd_injector_properties
@@ -1424,7 +1430,9 @@ instance_groups:
         - ((cc_tls.ca))
         - ((uaa_ssl.ca))
         - ((network_policy_server_external.ca))
+        - ((routing_api_tls.ca))
         backends:
+          ca: ((gorouter_backend_tls.ca))
           cert_chain: ((gorouter_backend_tls.certificate))
           private_key: ((gorouter_backend_tls.private_key))
         status:
