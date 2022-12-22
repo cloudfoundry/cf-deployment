@@ -1064,7 +1064,7 @@ jobs:
       vars-files: relint-envs
     params:
       BBL_STATE_DIR: environments/test/hermione/bbl-state
-      SYSTEM_DOMAIN: hermione.cf-app.com
+      SYSTEM_DOMAIN: hermione.env.wg-ard.ci.cloudfoundry.org
       OPS_FILES: |
         operations/aws.yml
         operations/use-compiled-releases.yml
@@ -1099,7 +1099,7 @@ jobs:
       bbl-state: relint-envs
     params:
       BBL_STATE_DIR: environments/test/hermione/bbl-state
-      SYSTEM_DOMAIN: hermione.cf-app.com
+      SYSTEM_DOMAIN: hermione.env.wg-ard.ci.cloudfoundry.org
   - task: collect-ops-files-develop
     file: cf-deployment-concourse-tasks/collect-ops-files/task.yml
     input_mapping:
@@ -1119,7 +1119,7 @@ jobs:
       vars-files: relint-envs
     params:
       BBL_STATE_DIR: environments/test/hermione/bbl-state
-      SYSTEM_DOMAIN: hermione.cf-app.com
+      SYSTEM_DOMAIN: hermione.env.wg-ard.ci.cloudfoundry.org
       OPS_FILES: |
         operations/aws.yml
         operations/use-compiled-releases.yml
@@ -1155,7 +1155,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/hermione/bbl-state
         INSTANCE_GROUP_NAME: credhub
-        SYSTEM_DOMAIN: hermione.cf-app.com
+        SYSTEM_DOMAIN: hermione.env.wg-ard.ci.cloudfoundry.org
         SECURITY_GROUP_NAME: credhub
     - task: open-asgs-for-uaa
       file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
@@ -1164,7 +1164,7 @@ jobs:
       params:
         BBL_STATE_DIR: environments/test/hermione/bbl-state
         INSTANCE_GROUP_NAME: uaa
-        SYSTEM_DOMAIN: hermione.cf-app.com
+        SYSTEM_DOMAIN: hermione.env.wg-ard.ci.cloudfoundry.org
         SECURITY_GROUP_NAME: uaa
     - task: set-feature-flags
       file: cf-deployment-concourse-tasks/set-feature-flags/task.yml
@@ -1172,7 +1172,7 @@ jobs:
         bbl-state: relint-envs
       params:
         BBL_STATE_DIR: environments/test/hermione/bbl-state
-        SYSTEM_DOMAIN: hermione.cf-app.com
+        SYSTEM_DOMAIN: hermione.env.wg-ard.ci.cloudfoundry.org
         ENABLED_FEATURE_FLAGS: |
           diego_docker
           task_creation
