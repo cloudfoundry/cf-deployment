@@ -127,7 +127,7 @@ experimental-bbl-up-task: &experimental-bbl-up-task-config
     BBL_LB_CERT_CHAIN: ((hermione_lb.ca))
     BBL_LB_KEY: ((hermione_lb.private_key))
     BBL_STATE_DIR: environments/test/hermione/bbl-state
-    LB_DOMAIN: hermione.env.wg-ard.ci.cloudfoundry.org
+    LB_DOMAIN: cf.hermione.env.wg-ard.ci.cloudfoundry.org
     TRUSTED_CA: ((relint_ca.certificate))
   ensure:
     put: relint-envs
