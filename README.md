@@ -255,3 +255,4 @@ We have a [utility](https://github.com/ishustava/migrator) to help you migrate.
 ## <a name='migrating'></a>Can I Transition from `cf-release`?
 CF-Deployment replaces the [manifest generation scripts in cf-release][cf-release-url] which have been deprecated and are no longer supported by the Release Integration team.
 Although the team is no longer working on or supporting migrations from `cf-release` to `cf-deployment`, you can still find the tooling and documentation in the [cf-deployment-transition repo](https://github.com/cloudfoundry/cf-deployment-transition).
+
