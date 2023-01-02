@@ -836,6 +836,7 @@ jobs:
         environments/test/trelawney/add-external-ips-for-cloud-sql-db.yml
         environments/test/trelawney/scale-log-api-to-4.yml
   - task: bosh-deploy-cf-develop
+    attempts: 2
     file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
     input_mapping:
       bbl-state: relint-envs
@@ -1112,6 +1113,7 @@ jobs:
         environments/test/hermione/increase-doppler-vm-type-from-minimal-to-small.yml
         environments/test/hermione/scale-diego-cell-to-6.yml
   - task: bosh-deploy-cf-develop
+    attempts: 2
     file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
     input_mapping:
       bbl-state: relint-envs
