@@ -18,8 +18,13 @@
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
   value:
-    name: python_buildpack
-    package: python-buildpack-cflinuxfs4
+    name: ruby_buildpack
+    package: ruby-buildpack-cflinuxfs4
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
+  value:
+    name: dotnet_core_buildpack
+    package: dotnet-core-buildpack-cflinuxfs4
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
   value:
@@ -33,8 +38,13 @@
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
   value:
-    name: dotnet_core_buildpack
-    package: dotnet-core-buildpack-cflinuxfs4
+    name: python_buildpack
+    package: python-buildpack-cflinuxfs4
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
+  value:
+    name: binary_buildpack
+    package: binary-buildpack-cflinuxfs4
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/diego/droplet_destinations?
   value:
