@@ -118,7 +118,7 @@ experimental-bbl-up-task: &experimental-bbl-up-task-config
     bbl-state: relint-envs
   params:
     BBL_AWS_ACCESS_KEY_ID: ((hermione_aws_access_key_id))
-    BBL_AWS_REGION: us-west-2
+    BBL_AWS_REGION: eu-central-1
     BBL_AWS_SECRET_ACCESS_KEY: ((hermione_aws_secret_access_key))
     BBL_CONFIG_DIR: environments/test/hermione/bbl-config
     BBL_ENV_NAME: hermione-experimental
@@ -127,7 +127,7 @@ experimental-bbl-up-task: &experimental-bbl-up-task-config
     BBL_LB_CERT_CHAIN: ((hermione_lb.ca))
     BBL_LB_KEY: ((hermione_lb.private_key))
     BBL_STATE_DIR: environments/test/hermione/bbl-state
-    LB_DOMAIN: hermione.cf-app.com
+    LB_DOMAIN: cf.hermione.env.wg-ard.ci.cloudfoundry.org
     TRUSTED_CA: ((relint_ca.certificate))
   ensure:
     put: relint-envs
