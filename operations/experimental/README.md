@@ -14,7 +14,7 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 | Name | Purpose | Notes | Currently validated in Release Integration CI pipelines? |
 |:---  |:---     |:---   |:---   |
 | [`add-cflinuxfs4.yml`](add-cflinuxfs4.yml) | Add [cflinuxfs4](https://github.com/cloudfoundry/cflinuxfs4) stack. | | **NO** |
-| [`add-metric-store.yml`](add-metric-store.yml) |  **Add Metric Store node for persistence of metrics from Loggregator** | | **NO** |
+| [`add-metric-store.yml`](add-metric-store.yml) | **PROMOTED: use `../use-metric-store.yml`** | | **NO** |
 | [`add-system-metrics-agent.yml`](add-system-metrics-agent.yml) | Add agent to all vms with the purpose of egressing system metrics | | **NO** |
 | [`add-system-metrics-agent-windows2019.yml`](add-system-metrics-agent-windows2019.yml) | Add agent to windows2019 Diego cells for the purpose of egressing system metrics | | **NO** |
 | [`colocate-smoke-tests-on-cc-worker.yml`](colocate-smoke-tests-on-cc-worker.yml) | Colocate the smoke_tests job on the cc-worker instance | A number of other operations files reference this instance group and may be incompatible with this operations file.  Use `find ./operations/ -name "*.yml" | xargs grep "/instance_groups/name=smoke-tests"` to locate said files. | **YES** |
