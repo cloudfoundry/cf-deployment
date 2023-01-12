@@ -1,8 +1,5 @@
 ---
 add-cflinuxfs4.yml: {}
-add-disabled-syslog-agent-for-upgrade.yml:
-  ops:
-  - add-disabled-syslog-agent-for-upgrade.yml
 add-metric-store.yml: {}
 add-system-metrics-agent-windows2019.yml:
   ops:
@@ -38,7 +35,6 @@ enable-nginx-routing-integrity-windows2019.yml:
   - ../windows2019-cell.yml
   - enable-nginx-routing-integrity-windows2019.yml
 enable-oci-phase-1.yml: {}
-enable-smb-volume-service.yml: {}
 enable-tls-cloud-controller-postgres.yml:
   ops:
   - ../use-postgres.yml
