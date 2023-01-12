@@ -14,7 +14,6 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 | Name | Purpose | Notes | Currently validated in Release Integration CI pipelines? |
 |:---  |:---     |:---   |:---   |
 | [`add-cflinuxfs4.yml`](add-cflinuxfs4.yml) | Add [cflinuxfs4](https://github.com/cloudfoundry/cflinuxfs4) stack. | | **NO** |
-| [`add-disabled-syslog-agent-for-upgrade.yml`](add-disabled-syslog-agent-for-upgrade.yml) |  Deprecated: this opsfile is no longer needed in cf-d 13 | | **NO** |
 | [`add-metric-store.yml`](add-metric-store.yml) |  **Add Metric Store node for persistence of metrics from Loggregator** | | **NO** |
 | [`add-system-metrics-agent.yml`](add-system-metrics-agent.yml) | Add agent to all vms with the purpose of egressing system metrics | | **NO** |
 | [`add-system-metrics-agent-windows2019.yml`](add-system-metrics-agent-windows2019.yml) | Add agent to windows2019 Diego cells for the purpose of egressing system metrics | | **NO** |
@@ -29,7 +28,6 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 | [`enable-iptables-logger.yml`](enable-iptables-logger.yml) | Enables iptables logger. | Does not yet work on AWS Jammy stemcells, see https://github.com/cloudfoundry/bosh-linux-stemcell-builder/issues/241 | **NO** |
 | [`enable-nginx-routing-integrity-windows2019.yml`](enable-nginx-routing-integrity-windows2019.yml) | Enables container proxy on the Windows 2019 Diego Cell `rep` and configures gorouter to opt into TLS-enabled connections to the backend. | **Warning: this is very experimental** Requires `../windows2019-cell.yml` | **NO** |
 | [`enable-oci-phase-1.yml`](enable-oci-phase-1.yml) | Configure CC, Diego, and Garden to create app and task containers more efficiently via OCI image specs. | This ops file **cannot** be deployed in conjunction with `rootless-containers.yml`. | **NO** |
-| [`enable-smb-volume-service.yml`](enable-smb-volume-service.yml) | **PROMOTED: use `../enable-smb-volume-service.yml`** | | **NO** |
 | [`enable-tls-cloud-controller-postgres.yml`](enable-tls-cloud-controller-postgres.yml) | Enables the usage of TLS to secure the connection between Cloud Controller and its Postgres database | Requires capi-release >= 1.41.0 and `use-postgres.yml` | **NO** |
 | [`enable-traffic-to-internal-networks.yml`](enable-traffic-to-internal-networks.yml) | Allows traffic from app containers to internal networks. Required to allow applications to communicate with the running CredHub in non-assisted mode. | | **NO** |
 | [`fast-deploy-with-downtime-and-danger.yml`](fast-deploy-with-downtime-and-danger.yml) | Risky, but fast. Disable canaries, increase the max number of vms bosh will update simultaneously, and remove `serial: true` from most instance groups to enable faster, but probably downtimeful, deploys. | | **NO** |
