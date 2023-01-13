@@ -784,6 +784,7 @@ jobs:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
       VARS_DIR: environments/test/trelawney
   - task: bosh-deploy-cf-latest-release
+    attempts: 2
     file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
     input_mapping:
       bbl-state: relint-envs
@@ -1058,6 +1059,7 @@ jobs:
         environments/test/hermione/increase-doppler-vm-type-from-minimal-to-small.yml
         environments/test/hermione/scale-diego-cell-to-6.yml
   - task: bosh-deploy-cf-latest-release
+    attempts: 2
     file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
     input_mapping:
       bbl-state: relint-envs
