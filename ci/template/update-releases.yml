@@ -1062,11 +1062,9 @@ jobs:
       BBL_CONFIG_DIR: environments/test/greengrass/bbl-config
       BBL_IAAS: gcp
       BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/greengrass/google_account_creds.json
-      BBL_GCP_REGION: us-central1
-      BBL_LB_CERT: ((greengrass_cf_lb_cert.certificate))
-      BBL_LB_KEY: ((greengrass_cf_lb_cert.private_key))
-      LB_DOMAIN: greengrass.cf-app.com
+      BBL_GCP_REGION: europe-west3
       BBL_ENV_NAME: greengrass-compile
+      SKIP_LB_CREATION: true
     input_mapping:
       bbl-state: relint-envs
       bbl-config: relint-envs
