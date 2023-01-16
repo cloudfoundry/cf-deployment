@@ -385,6 +385,8 @@ jobs:
     params:
       DAYS_LEFT_THRESHOLD: 16
       PATH_TO_VERIFY: relint-envs
+      PATHS_TO_IGNORE:
+        - environments/ci/concourse/bbl-state/vars
 
 - name: unit-test-golang-tests
   serial: true
