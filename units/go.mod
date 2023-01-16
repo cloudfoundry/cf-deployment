@@ -3,7 +3,7 @@ module github.com/cf-deployment/units
 go 1.18
 
 require (
-	github.com/sergi/go-diff v1.0.0
+	github.com/sergi/go-diff v1.3.1
 	github.com/stretchr/testify v1.8.1
 	gopkg.in/yaml.v2 v2.4.0
 )
