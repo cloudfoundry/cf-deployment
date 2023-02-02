@@ -317,13 +317,6 @@ resources:
     git_user: "CF MEGA BOT <cf-mega@pivotal.io>"
     file: cf-deployment-version
 
-- name: deliver-tracker-story
-  type: tracker
-  source:
-    token: ((cf_relint_tracker_api_token))
-    project_id: "1382120"
-    tracker_url: https://www.pivotaltracker.com
-
 - name: disaster-recovery-acceptance-tests
   type: git
   icon: github
@@ -1848,10 +1841,6 @@ jobs:
   - put: cf-deployment-release-candidate
     params:
       repository: cf-deployment-develop
-  - put: deliver-tracker-story
-    params:
-      repos:
-        - cf-deployment-develop
 
 - name: ship-it-patch
   public: true
