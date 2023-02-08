@@ -9,7 +9,7 @@ This pipeline is automatically triggered when new Bionic stemcells are published
 ## Cleanup
 
 If the pipeline succeeds, then it will clean up the CF BOSH deployment after itself. The bbl environment is "stable-bellatrix" and is managed by the "infrastructure" pipeline:
-https://app-runtime-deployments.ci.cloudfoundry.org/teams/main/pipelines/infrastructure?group=stable-bellatrix
+https://concourse.wg-ard.ci.cloudfoundry.org/teams/main/pipelines/infrastructure?group=stable-bellatrix
 
 ## Pipeline Management
 
