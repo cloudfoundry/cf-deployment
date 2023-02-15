@@ -434,6 +434,7 @@ instance_groups:
   - name: pxc-mysql
     release: pxc
     properties:
+      mysql_version: "5.7"
       admin_password: ((cf_mysql_mysql_admin_password))
       engine_config:
         binlog:
