@@ -299,7 +299,7 @@ resources:
 - name: pxc-release
   type: bosh-io-release
   source:
-    repository: cloudfoundry-incubator/pxc-release
+    repository: cloudfoundry/pxc-release
 - name: routing-release
   type: bosh-io-release
   source:
@@ -4636,7 +4636,7 @@ jobs:
           - task: lookup-slack-channel-for-release-owner
             file: runtime-ci/tasks/lookup-slack-channel-for-release-owner/task.yml
             params:
-              RELEASE_REPOSITORY: cloudfoundry-incubator/pxc-release
+              RELEASE_REPOSITORY: cloudfoundry/pxc-release
           - put: slack-alert
             params:
               channel_file: slack-channel/channel.txt
