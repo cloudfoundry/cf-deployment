@@ -113,14 +113,6 @@ use-latest-windows2019-stemcell.yml:
   pathvalidator:
     path: /stemcells/alias=windows2019/version
     expectedvalue: latest
-use-log-cache-nozzle-windows2019.yml:
-  ops:
-  - windows2019-cell.yml
-  - use-log-cache-nozzle.yml
-  - use-log-cache-nozzle-windows2019.yml
-use-log-cache-nozzle.yml:
-  ops:
-  - use-log-cache-nozzle.yml
 use-metric-store.yml: {}
 use-offline-windows2019fs.yml:
   ops:
