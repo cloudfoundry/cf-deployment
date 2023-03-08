@@ -48,6 +48,11 @@
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
   value:
+    name: php_buildpack
+    package: php-buildpack-cflinuxfs4
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/-
+  value:
     name: nginx_buildpack
     package: nginx-buildpack-cflinuxfs4
 - type: replace
