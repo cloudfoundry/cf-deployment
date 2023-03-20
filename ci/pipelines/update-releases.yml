@@ -12270,7 +12270,6 @@ jobs:
             operations/scale-to-one-az.yml
             operations/use-compiled-releases.yml
             operations/experimental/use-compiled-releases-windows.yml
-            operations/windows2019-cell.yml
             operations/use-online-windows2019fs.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
@@ -15220,7 +15219,7 @@ jobs:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       BBL_CONFIG_DIR: environments/test/greengrass/bbl-config
       BBL_IAAS: gcp
-      BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/greengrass/google_account_creds.json
+      BBL_GCP_SERVICE_ACCOUNT_KEY: ((greengrass_gcp_service_account_json))
       BBL_GCP_REGION: europe-west3
       BBL_ENV_NAME: greengrass-compile
       SKIP_LB_CREATION: true
@@ -15260,7 +15259,7 @@ jobs:
       bbl-state: relint-envs
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
-      BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/greengrass/google_account_creds.json
+      BBL_GCP_SERVICE_ACCOUNT_KEY: ((greengrass_gcp_service_account_json))
     ensure:
       put: relint-envs
       params:
