@@ -184,15 +184,6 @@ func operationsWalk(assignFn func(value)) filepath.WalkFunc {
 	}
 }
 
-func isIgnored(name string, ignoreList []string) bool {
-	for _, ignoreName := range ignoreList {
-		if name == ignoreName {
-			return true
-		}
-	}
-	return false
-}
-
 func readOpsFile(r io.Reader) ([]value, error) {
 	var opsfile opsfile
 
