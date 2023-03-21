@@ -132,7 +132,7 @@ func (suite SuiteTest) ensureOpsFileFromReadmeExists(fileInReadme string) func(t
 }
 
 func findOpsFilesInReadme(readmeContents []byte) ([]string, error) {
-	rowsInReadmeRegexString := fmt.Sprintf("\\|\\s*\\[`([\\d\\w\\.\\-]*\\.yml)`\\]")
+	rowsInReadmeRegexString := "\\|\\s*\\[`([\\d\\w\\.\\-]*\\.yml)`\\]"
 	rowsInReadmeRegex, err := regexp.Compile(rowsInReadmeRegexString)
 	if err != nil {
 		return nil, err
