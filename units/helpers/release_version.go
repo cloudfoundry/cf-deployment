@@ -8,7 +8,7 @@ import (
 	"regexp"
 	"strings"
 
-	yaml "gopkg.in/yaml.v2"
+	yaml "gopkg.in/yaml.v3"
 )
 
 type Release string
@@ -182,15 +182,6 @@ func operationsWalk(assignFn func(value)) filepath.WalkFunc {
 
 		return nil
 	}
-}
-
-func isIgnored(name string, ignoreList []string) bool {
-	for _, ignoreName := range ignoreList {
-		if name == ignoreName {
-			return true
-		}
-	}
-	return false
 }
 
 func readOpsFile(r io.Reader) ([]value, error) {

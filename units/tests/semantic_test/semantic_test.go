@@ -12,7 +12,7 @@ import (
 	"github.com/cf-deployment/units/helpers"
 
 	"github.com/sergi/go-diff/diffmatchpatch"
-	yaml "gopkg.in/yaml.v2"
+	yaml "gopkg.in/yaml.v3"
 )
 
 type instanceGroup struct {

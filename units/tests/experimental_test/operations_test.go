@@ -8,8 +8,6 @@ import (
 
 const testDirectory = "operations/experimental"
 
-var experimentalTests = map[string]helpers.OpsFileTestParams{}
-
 func TestExperimental(t *testing.T) {
 	cfDeploymentHome, err := helpers.SetPath()
 	if err != nil {

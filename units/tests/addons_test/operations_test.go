@@ -8,8 +8,6 @@ import (
 
 const testDirectory = "operations/addons"
 
-var addonsTests = map[string]helpers.OpsFileTestParams{}
-
 func TestAddons(t *testing.T) {
 	cfDeploymentHome, err := helpers.SetPath()
 	if err != nil {
