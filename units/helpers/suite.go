@@ -8,7 +8,7 @@ import (
 	"regexp"
 	"testing"
 
-	yaml "gopkg.in/yaml.v2"
+	yaml "gopkg.in/yaml.v3"
 )
 
 type SuiteTest struct {
