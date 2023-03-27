@@ -28,42 +28,42 @@ resources:
   - name: cf-deployment-all-branches
     type: pull-request
     source:
-      access_token: ((github_status_bot_repo_access_token))
+      access_token: ((ard_wg_gitbot_token))
       repository: cloudfoundry/cf-deployment
   - name: cf-deployment-main
     type: pull-request
     source:
-      access_token: ((github_status_bot_repo_access_token))
+      access_token: ((ard_wg_gitbot_token))
       repository: cloudfoundry/cf-deployment
       base_branch: main
   - name: cf-deployment-rc
     type: pull-request
     source:
-      access_token: ((github_status_bot_repo_access_token))
+      access_token: ((ard_wg_gitbot_token))
       repository: cloudfoundry/cf-deployment
       base_branch: release-candidate
   - name: cf-deployment-develop
     type: pull-request
     source:
-      access_token: ((github_status_bot_repo_access_token))
+      access_token: ((ard_wg_gitbot_token))
       repository: cloudfoundry/cf-deployment
       base_branch: develop
 
   - name: cats-all-branches
     type: pull-request
     source:
-      access_token: ((github_status_bot_repo_access_token))
+      access_token: ((ard_wg_gitbot_token))
       repository: cloudfoundry/cf-acceptance-tests
   - name: cats-main
     type: pull-request
     source:
-      access_token: ((github_status_bot_repo_access_token))
+      access_token: ((ard_wg_gitbot_token))
       repository: cloudfoundry/cf-acceptance-tests
       base_branch: main
   - name: cats-develop
     type: pull-request
     source:
-      access_token: ((github_status_bot_repo_access_token))
+      access_token: ((ard_wg_gitbot_token))
       repository: cloudfoundry/cf-acceptance-tests
       base_branch: develop
 

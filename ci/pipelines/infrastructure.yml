@@ -247,7 +247,7 @@ resources:
     uri: git@github.com:cloudfoundry/relint-ci-pools
     branch: main
     pool: cf-deployment/fresh
-    private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
 
 - name: lite-pool
   type: pool
@@ -256,7 +256,7 @@ resources:
     uri: git@github.com:cloudfoundry/relint-ci-pools
     branch: main
     pool: cf-deployment/lite
-    private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
 
 - name: upgrade-pool
   type: pool
@@ -265,7 +265,7 @@ resources:
     uri: git@github.com:cloudfoundry/relint-ci-pools
     branch: main
     pool: cf-deployment/upgrade
-    private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
 
 - name: stable-pool
   type: pool
@@ -274,7 +274,7 @@ resources:
     uri: git@github.com:cloudfoundry/relint-ci-pools
     branch: main
     pool: cf-deployment/stable
-    private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
 
 - name: experimental-pool
   type: pool
@@ -283,7 +283,7 @@ resources:
     uri: git@github.com:cloudfoundry/relint-ci-pools
     branch: main
     pool: cf-deployment/experimental
-    private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
 
 - name: cats-pool
   type: pool
@@ -292,7 +292,7 @@ resources:
     uri: git@github.com:cloudfoundry/relint-ci-pools
     branch: main
     pool: cats
-    private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
 
 - name: bbr-pool
   type: pool
@@ -301,7 +301,7 @@ resources:
     uri: git@github.com:cloudfoundry/relint-ci-pools
     branch: main
     pool: bbr
-    private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
 
 - name: windows-pool
   type: pool
@@ -310,7 +310,7 @@ resources:
     uri: git@github.com:cloudfoundry/relint-ci-pools
     branch: main
     pool: cf-deployment/windows
-    private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
 
 # Plan patches
 - name: bosh-bootloader
@@ -340,7 +340,7 @@ resources:
   source:
     branch: main
     uri: git@github.com:cloudfoundry/relint-envs.git
-    private_key: ((hagrid_env_readwrite_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
 
 # Time
 - name: every-tuesday-morning

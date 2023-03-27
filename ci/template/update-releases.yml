@@ -117,7 +117,7 @@ resources:
   source:
     branch: develop
     uri: git@github.com:cloudfoundry/cf-deployment.git
-    private_key: ((cf_deployment_readwrite_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
 
 - name: cf-deployment-release-candidate
   type: git
@@ -125,14 +125,14 @@ resources:
   source:
     branch: release-candidate
     uri: git@github.com:cloudfoundry/cf-deployment.git
-    private_key: ((cf_deployment_readwrite_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
 
 - name: cf-deployment-main
   type: git  
   source:
     branch: main
     uri: git@github.com:cloudfoundry/cf-deployment.git
-    private_key: ((cf_deployment_readwrite_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
 
 - name: cf-deployment-version
   type: semver
@@ -140,8 +140,7 @@ resources:
     driver: git
     uri: git@github.com:cloudfoundry/cf-relint-ci-semver.git
     branch: main
-    private_key: ((cf_relint_ci_semver_readwrite_deploy_key.private_key))
-    git_user: "CF MEGA BOT <cf-mega@pivotal.io>"
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
     file: cf-deployment-version
 
 - name: cf-deployment-release
@@ -149,7 +148,7 @@ resources:
   source:
     owner: cloudfoundry
     repository: cf-deployment
-    access_token: ((cf_deployment_release_bot_access_token))
+    access_token: ((ard_wg_gitbot_token))
 
 - name: cf-deployment-concourse-tasks
   type: git
@@ -163,7 +162,7 @@ resources:
   source:
     branch: main
     uri: git@github.com:cloudfoundry/relint-envs.git
-    private_key: ((hagrid_env_readwrite_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
 
 - name: relint-team
   type: git
@@ -171,7 +170,7 @@ resources:
   source:
     branch: main
     uri: git@github.com:cloudfoundry/relint-team.git
-    private_key: ((runtime_ci_private_read_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
 
 - name: runtime-ci
   type: git
@@ -302,7 +301,7 @@ resources:
     uri: git@github.com:cloudfoundry/relint-ci-pools
     branch: main
     pool: update-release-pool
-    private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
 
 #@ for e in data.values.preDevEnvs:
 - name: #@ "pre-dev-" + e.name
@@ -312,7 +311,7 @@ resources:
     uri: git@github.com:cloudfoundry/relint-ci-pools
     branch: main
     pool: update-release-pool
-    private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
 #@ end
 
 jobs:
