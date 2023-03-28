@@ -1082,6 +1082,10 @@ instance_groups:
           registration_interval: 20s
           uris:
           - api.((system_domain))/routing
+          health_check:
+            name: routing-api-health-check
+            script_path: "/var/vcap/jobs/routing-api/bin/routing_api_health_check"
+            timeout: 6s
   - name: statsd_injector
     release: statsd-injector
     properties: *statsd_injector_properties
