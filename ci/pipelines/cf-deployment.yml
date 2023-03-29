@@ -146,7 +146,7 @@ resources:
     uri: git@github.com:cloudfoundry/relint-ci-pools
     branch: main
     pool: cf-deployment/fresh
-    private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
 
 - name: upgrade-pool
   type: pool
@@ -155,7 +155,7 @@ resources:
     uri: git@github.com:cloudfoundry/relint-ci-pools
     branch: main
     pool: cf-deployment/upgrade
-    private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
 
 - name: experimental-pool
   type: pool
@@ -164,7 +164,7 @@ resources:
     uri: git@github.com:cloudfoundry/relint-ci-pools
     branch: main
     pool: cf-deployment/experimental
-    private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
 
 - name: lite-pool
   type: pool
@@ -173,7 +173,7 @@ resources:
     uri: git@github.com:cloudfoundry/relint-ci-pools
     branch: main
     pool: cf-deployment/lite
-    private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
 
 - name: bbr-pool
   type: pool
@@ -182,7 +182,7 @@ resources:
     uri: git@github.com:cloudfoundry/relint-ci-pools
     branch: main
     pool: bbr
-    private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
 
 - name: windows-pool
   type: pool
@@ -191,7 +191,7 @@ resources:
     uri: git@github.com:cloudfoundry/relint-ci-pools
     branch: main
     pool: cf-deployment/windows
-    private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
 
 - name: relint-envs
   type: git
@@ -199,7 +199,7 @@ resources:
   source:
     branch: main
     uri: git@github.com:cloudfoundry/relint-envs.git
-    private_key: ((hagrid_env_readwrite_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
 
 - name: daily
   type: time
@@ -233,7 +233,7 @@ resources:
   source:
     branch: develop
     uri: git@github.com:cloudfoundry/cf-deployment.git
-    private_key: ((cf_deployment_readwrite_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
     ignore_paths:
     - .envrc
     - .overcommit.yml
@@ -248,7 +248,7 @@ resources:
   source:
     branch: release-candidate
     uri: git@github.com:cloudfoundry/cf-deployment.git
-    private_key: ((cf_deployment_readwrite_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
     ignore_paths:
     - .envrc
     - .overcommit.yml
@@ -263,7 +263,7 @@ resources:
   source:
     branch: main
     uri: git@github.com:cloudfoundry/cf-deployment.git
-    private_key: ((cf_deployment_readwrite_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
     ignore_paths:
     - .envrc
     - .overcommit.yml
@@ -291,8 +291,7 @@ resources:
   icon: github
   source:
     branch: release-candidate
-    uri: git@github.com:cloudfoundry/cf-acceptance-tests.git
-    private_key: ((cf_acceptance_tests_readwrite_deploy_key.private_key))
+    uri: https://github.com/cloudfoundry/cf-acceptance-tests.git
 
 - name: cf-smoke-tests
   type: git
@@ -313,8 +312,7 @@ resources:
     driver: git
     uri: git@github.com:cloudfoundry/cf-relint-ci-semver.git
     branch: main
-    private_key: ((cf_relint_ci_semver_readwrite_deploy_key.private_key))
-    git_user: "CF MEGA BOT <cf-mega@pivotal.io>"
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
     file: cf-deployment-version
 
 - name: disaster-recovery-acceptance-tests
