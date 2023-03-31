@@ -15221,6 +15221,8 @@ jobs:
       BBL_GCP_SERVICE_ACCOUNT_KEY: ((greengrass_gcp_service_account_json))
       BBL_GCP_REGION: europe-west3
       BBL_ENV_NAME: greengrass-compile
+      GIT_COMMIT_EMAIL: app-deployments@cloudfoundry.org
+      GIT_COMMIT_USERNAME: ARD WG Bot
       SKIP_LB_CREATION: true
     input_mapping:
       bbl-state: relint-envs
@@ -15259,6 +15261,8 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/greengrass/bbl-state
       BBL_GCP_SERVICE_ACCOUNT_KEY: ((greengrass_gcp_service_account_json))
+      GIT_COMMIT_EMAIL: app-deployments@cloudfoundry.org
+      GIT_COMMIT_USERNAME: ARD WG Bot
     ensure:
       put: relint-envs
       params:
