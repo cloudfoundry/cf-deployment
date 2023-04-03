@@ -1462,6 +1462,8 @@ jobs:
         BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/snitch/snitch-lite.key.json
         BBL_IAAS: gcp
         BBL_STATE_DIR: environments/test/snitch/bbl-state
+        GIT_COMMIT_EMAIL: "app-deployments@cloudfoundry.org"
+        GIT_COMMIT_USERNAME: "ARD WG Bot"
         SKIP_LB_CREATION: true
       input_mapping:
         bbl-state: relint-envs

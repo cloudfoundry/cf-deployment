@@ -83,6 +83,8 @@ fresh-bbl-up-task: &fresh-bbl-up-task-config
     BBL_LB_CERT: ../lb-certs/luna.crt
     BBL_LB_KEY: ../lb-certs/luna.key
     BBL_STATE_DIR: environments/test/luna/bbl-state
+    GIT_COMMIT_EMAIL: "app-deployments@cloudfoundry.org"
+    GIT_COMMIT_USERNAME: "ARD WG Bot"
     LB_DOMAIN: cf.luna.env.wg-ard.ci.cloudfoundry.org
   ensure:
     put: relint-envs
@@ -104,6 +106,8 @@ upgrade-bbl-up-task: &upgrade-bbl-up-task-config
     BBL_LB_CERT: ../lb-certs/trelawney.crt
     BBL_LB_KEY: ../lb-certs/trelawney.key
     BBL_STATE_DIR: environments/test/trelawney/bbl-state
+    GIT_COMMIT_EMAIL: "app-deployments@cloudfoundry.org"
+    GIT_COMMIT_USERNAME: "ARD WG Bot"
     LB_DOMAIN: cf.trelawney.env.wg-ard.ci.cloudfoundry.org
   ensure:
     put: relint-envs
@@ -127,6 +131,8 @@ experimental-bbl-up-task: &experimental-bbl-up-task-config
     BBL_LB_CERT_CHAIN: ((hermione_lb.ca))
     BBL_LB_KEY: ((hermione_lb.private_key))
     BBL_STATE_DIR: environments/test/hermione/bbl-state
+    GIT_COMMIT_EMAIL: "app-deployments@cloudfoundry.org"
+    GIT_COMMIT_USERNAME: "ARD WG Bot"
     LB_DOMAIN: cf.hermione.env.wg-ard.ci.cloudfoundry.org
     TRUSTED_CA: ((relint_ca.certificate))
   ensure:
@@ -147,6 +153,8 @@ bbr-bbl-up-task: &bbr-bbl-up-task-config
     BBL_GCP_REGION: europe-west3
     BBL_LB_CERT: ../lb-certs/baba-yaga.crt
     BBL_LB_KEY: ../lb-certs/baba-yaga.key
+    GIT_COMMIT_EMAIL: "app-deployments@cloudfoundry.org"
+    GIT_COMMIT_USERNAME: "ARD WG Bot"
     LB_DOMAIN: cf.baba-yaga.env.wg-ard.ci.cloudfoundry.org
     BBL_ENV_NAME: baba-yaga-bbr
     BBL_CONFIG_DIR: .
@@ -168,6 +176,8 @@ lite-bbl-up-task: &lite-bbl-up-task-config
     BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/snitch/snitch-lite.key.json
     BBL_IAAS: gcp
     BBL_STATE_DIR: environments/test/snitch/bbl-state
+    GIT_COMMIT_EMAIL: "app-deployments@cloudfoundry.org"
+    GIT_COMMIT_USERNAME: "ARD WG Bot"
     SKIP_LB_CREATION: true
   ensure:
     put: relint-envs
@@ -189,6 +199,8 @@ windows-bbl-up-task: &windows-bbl-up-task-config
     BBL_LB_CERT: ../cert.pem
     BBL_LB_KEY: ../key.pem
     BBL_STATE_DIR: environments/test/cedric/bbl-state
+    GIT_COMMIT_EMAIL: "app-deployments@cloudfoundry.org"
+    GIT_COMMIT_USERNAME: "ARD WG Bot"
     LB_DOMAIN: cf.cedric.env.wg-ard.ci.cloudfoundry.org
   ensure:
     put: relint-envs
@@ -210,6 +222,8 @@ stable-bbl-up-task: &stable-bbl-up-task-config
     BBL_LB_CERT: ../lb-certs/cert.pem
     BBL_LB_KEY: ../lb-certs/key.pem
     BBL_STATE_DIR: environments/test/bellatrix/bbl-state
+    GIT_COMMIT_EMAIL: "app-deployments@cloudfoundry.org"
+    GIT_COMMIT_USERNAME: "ARD WG Bot"
     LB_DOMAIN: cf.bellatrix.env.wg-ard.ci.cloudfoundry.org
   ensure:
     put: relint-envs
@@ -231,6 +245,8 @@ cats-bbl-up-task: &cats-bbl-up-task-config
     BBL_LB_CERT: ../lb-certs/cats.crt
     BBL_LB_KEY: ../lb-certs/cats.key
     BBL_STATE_DIR: environments/test/cats/bbl-state
+    GIT_COMMIT_EMAIL: "app-deployments@cloudfoundry.org"
+    GIT_COMMIT_USERNAME: "ARD WG Bot"
     LB_DOMAIN: cf.cats.env.wg-ard.ci.cloudfoundry.org
   ensure:
     put: relint-envs
@@ -637,6 +653,8 @@ jobs:
       BBL_GCP_REGION: europe-west3
       BBL_LB_CERT: ../certs/maxime.crt
       BBL_LB_KEY: ../certs/maxime.key
+      GIT_COMMIT_EMAIL: "app-deployments@cloudfoundry.org"
+      GIT_COMMIT_USERNAME: "ARD WG Bot"
       LB_DOMAIN: cf.maxime.env.wg-ard.ci.cloudfoundry.org
     ensure:
       put: relint-envs
@@ -867,6 +885,8 @@ jobs:
     params:
       BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/luna/luna-fresh.key.json
       BBL_STATE_DIR: environments/test/luna/bbl-state
+      GIT_COMMIT_EMAIL: "app-deployments@cloudfoundry.org"
+      GIT_COMMIT_USERNAME: "ARD WG Bot"
     ensure:
       put: relint-envs
       params:
@@ -895,6 +915,8 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
       BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/trelawney/trelawney.key.json
+      GIT_COMMIT_EMAIL: "app-deployments@cloudfoundry.org"
+      GIT_COMMIT_USERNAME: "ARD WG Bot"
     ensure:
       put: relint-envs
       params:
@@ -922,6 +944,8 @@ jobs:
       BBL_STATE_DIR: environments/test/hermione/bbl-state
       BBL_AWS_ACCESS_KEY_ID: ((hermione_aws_access_key_id))
       BBL_AWS_SECRET_ACCESS_KEY: ((hermione_aws_secret_access_key))
+      GIT_COMMIT_EMAIL: "app-deployments@cloudfoundry.org"
+      GIT_COMMIT_USERNAME: "ARD WG Bot"
     input_mapping:
       bbl-state: relint-envs
     ensure:
@@ -952,6 +976,8 @@ jobs:
     params:
       BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/bbr/baba-yaga.key.json
       BBL_STATE_DIR: environments/test/bbr/bbl-state
+      GIT_COMMIT_EMAIL: "app-deployments@cloudfoundry.org"
+      GIT_COMMIT_USERNAME: "ARD WG Bot"
     ensure:
       put: relint-envs
       params:
@@ -982,6 +1008,8 @@ jobs:
     params:
       BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/snitch/snitch-lite.key.json
       BBL_STATE_DIR: environments/test/snitch/bbl-state
+      GIT_COMMIT_EMAIL: "app-deployments@cloudfoundry.org"
+      GIT_COMMIT_USERNAME: "ARD WG Bot"
     ensure:
       put: relint-envs
       params:
@@ -1010,6 +1038,8 @@ jobs:
     params:
       BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/cats/ard-cats.key.json
       BBL_STATE_DIR: environments/test/cats/bbl-state
+      GIT_COMMIT_EMAIL: "app-deployments@cloudfoundry.org"
+      GIT_COMMIT_USERNAME: "ARD WG Bot"
     ensure:
       put: relint-envs
       params:
@@ -1038,6 +1068,8 @@ jobs:
     params:
       BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/bellatrix/bellatrix.key.json
       BBL_STATE_DIR: environments/test/bellatrix/bbl-state
+      GIT_COMMIT_EMAIL: "app-deployments@cloudfoundry.org"
+      GIT_COMMIT_USERNAME: "ARD WG Bot"
     ensure:
       put: relint-envs
       params:
@@ -1068,6 +1100,8 @@ jobs:
         params:
           BBL_GCP_SERVICE_ACCOUNT_KEY: environments/dev/maxime/maxime.key.json
           BBL_STATE_DIR: environments/dev/maxime/bbl-state
+          GIT_COMMIT_EMAIL: "app-deployments@cloudfoundry.org"
+          GIT_COMMIT_USERNAME: "ARD WG Bot"
         ensure:
           put: relint-envs
           params:
@@ -1096,6 +1130,8 @@ jobs:
     params:
       BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/cedric/cedric.key.json
       BBL_STATE_DIR: environments/test/cedric/bbl-state
+      GIT_COMMIT_EMAIL: "app-deployments@cloudfoundry.org"
+      GIT_COMMIT_USERNAME: "ARD WG Bot"
     ensure:
       put: relint-envs
       params:
