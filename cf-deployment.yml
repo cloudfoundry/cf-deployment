@@ -86,7 +86,6 @@ addons:
         cert: "((syslog_agent_metrics_tls.certificate))"
         key: "((syslog_agent_metrics_tls.private_key))"
         server_name: syslog_agent_metrics
-      drain_ca_cert: "((log_cache_syslog_tls.ca))"
 
 - name: prom_scraper
   include:
@@ -1378,7 +1377,7 @@ instance_groups:
         server_name: loggr_syslog_binding_cache_metrics
       aggregate_drains:
       - url: "syslog-tls://log-cache.service.cf.internal:6067?include-metrics-deprecated=true&ssl-strict-internal=true"
-        ca: "((syslog_agent_log_cache_tls.ca))"
+        ca: "((log_cache_syslog_tls.ca))"
         cert: "((syslog_agent_log_cache_tls.certificate))"
         key: "((syslog_agent_log_cache_tls.private_key))"
   - name: loggr-udp-forwarder
