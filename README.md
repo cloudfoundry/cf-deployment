@@ -233,7 +233,7 @@ Contains all the ops files utilized to enable and configure [BOSH Backup and Res
 BBR is a CLI utility for orchestrating the backup and restore of [BOSH](https://bosh.io/) deployments and BOSH directors. It orchestrates triggering the backup or restore process on the deployment or director, and transfers the backup artifact to and from the deployment or director.
 
 ## <a name='ci'></a>CI
-The [ci](https://release-integration.ci.cf-app.com/teams/main/pipelines/cf-deployment) for `cf-deployment`
+The [ci](https://concourse.wg-ard.ci.cloudfoundry.org) for `cf-deployment`
 automatically bumps to the latest versions of its component releases on the `develop` branch.
 These bumps, along with any other changes made to `develop`, are deployed to a single long-running environment
 and tested with CATs before being merged to main if CATs goes green.
@@ -245,7 +245,7 @@ check out the `cf6.10` branch in cf-acceptance-tests to run CATs.
 
 The configuration for our pipeline can be found [here](https://github.com/cloudfoundry/cf-deployment/blob/develop/ci/pipelines/cf-deployment.yml).
 
-[cf-deployment-concourse-url]: https://release-integration.ci.cf-app.com/teams/main/pipelines/cf-deployment
+[cf-deployment-concourse-url]: https://concourse.wg-ard.ci.cloudfoundry.org
 
 ## <a name='vars-store'></a>Migrating from Vars Store to CredHub
 CredHub is default as of cf-deployment release v
