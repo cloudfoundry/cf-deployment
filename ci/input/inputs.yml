@@ -13,6 +13,8 @@ baseReleases:
   repository: cloudfoundry/cf-smoke-tests-release
 - name: cflinuxfs3
   repository: cloudfoundry/cflinuxfs3-release
+- name: cflinuxfs4
+  repository: cloudfoundry/cflinuxfs4-release
 - name: diego
   repository: cloudfoundry/diego-release
 - name: garden-runc
@@ -124,8 +126,6 @@ opsReleases:
   requiredOpsFiles:
   - operations/windows2019-cell.yml
   - operations/use-online-windows2019fs.yml
-- name: cflinuxfs4
-  repository: cloudfoundry/cflinuxfs4-release
 
 untestedOpsReleases:
 - name: datadog-firehose-nozzle

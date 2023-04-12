@@ -921,10 +921,26 @@ instance_groups:
         url: https://uaa.((system_domain))
       cc:
         diego:
-          docker_staging_stack: cflinuxfs3
+          docker_staging_stack: cflinuxfs4
+          droplet_destinations:
+            cflinuxfs3: /home/vcap
+            cflinuxfs4: /home/vcap
+            windows: /Users/vcap
+            windows2012R2: /
+            windows2016: /Users/vcap
+          lifecycle_bundles:
+            buildpack/cflinuxfs3: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+            buildpack/cflinuxfs4: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+            buildpack/windows: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+            buildpack/windows2012R2: windows_app_lifecycle/windows_app_lifecycle.tgz
+            buildpack/windows2016: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+            docker: docker_app_lifecycle/docker_app_lifecycle.tgz
+        default_stack: cflinuxfs4
         stacks:
         - name: cflinuxfs3
           description: Cloud Foundry Linux-based filesystem (Ubuntu 18.04)
+        - name: cflinuxfs4
+          description: Cloud Foundry Linux-based filesystem (Ubuntu 22.04)
         default_running_security_groups:
         - public_networks
         - dns
@@ -976,6 +992,28 @@ instance_groups:
           package: r-buildpack-cflinuxfs3
         - name: binary_buildpack
           package: binary-buildpack-cflinuxfs3
+        - name: staticfile_buildpack
+          package: staticfile-buildpack-cflinuxfs4
+        - name: java_buildpack
+          package: java-buildpack-cflinuxfs4
+        - name: ruby_buildpack
+          package: ruby-buildpack-cflinuxfs4
+        - name: dotnet_core_buildpack
+          package: dotnet-core-buildpack-cflinuxfs4
+        - name: nodejs_buildpack
+          package: nodejs-buildpack-cflinuxfs4
+        - name: go_buildpack
+          package: go-buildpack-cflinuxfs4
+        - name: python_buildpack
+          package: python-buildpack-cflinuxfs4
+        - name: php_buildpack
+          package: php-buildpack-cflinuxfs4
+        - name: nginx_buildpack
+          package: nginx-buildpack-cflinuxfs4
+        - name: r_buildpack
+          package: r-buildpack-cflinuxfs4
+        - name: binary_buildpack
+          package: binary-buildpack-cflinuxfs4
         db_encryption_key: "((cc_db_encryption_key))"
         database_encryption: &cc-database-encryption
           current_key_label: "encryption_key_0"
@@ -1199,6 +1237,20 @@ instance_groups:
     properties:
       cc:
         db_encryption_key: "((cc_db_encryption_key))"
+        diego:
+          droplet_destinations:
+            cflinuxfs3: /home/vcap
+            cflinuxfs4: /home/vcap
+            windows: /Users/vcap
+            windows2012R2: /
+            windows2016: /Users/vcap
+          lifecycle_bundles:
+            buildpack/cflinuxfs3: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+            buildpack/cflinuxfs4: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+            buildpack/windows: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+            buildpack/windows2012R2: windows_app_lifecycle/windows_app_lifecycle.tgz
+            buildpack/windows2016: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+            docker: docker_app_lifecycle/docker_app_lifecycle.tgz
         database_encryption: *cc-database-encryption
         staging_upload_user: staging_user
         staging_upload_password: "((cc_staging_upload_password))"
@@ -1273,6 +1325,20 @@ instance_groups:
       cc:
         db_encryption_key: "((cc_db_encryption_key))"
         database_encryption: *cc-database-encryption
+        diego:
+          droplet_destinations:
+            cflinuxfs3: /home/vcap
+            cflinuxfs4: /home/vcap
+            windows: /Users/vcap
+            windows2012R2: /
+            windows2016: /Users/vcap
+          lifecycle_bundles:
+            buildpack/cflinuxfs3: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+            buildpack/cflinuxfs4: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+            buildpack/windows: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+            buildpack/windows2012R2: windows_app_lifecycle/windows_app_lifecycle.tgz
+            buildpack/windows2016: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+            docker: docker_app_lifecycle/docker_app_lifecycle.tgz
         staging_upload_user: staging_user
         staging_upload_password: "((cc_staging_upload_password))"
         resource_pool: *blobstore-properties
@@ -1300,6 +1366,20 @@ instance_groups:
       cc:
         db_encryption_key: ((cc_db_encryption_key))
         database_encryption: *cc-database-encryption
+        diego:
+          droplet_destinations:
+            cflinuxfs3: /home/vcap
+            cflinuxfs4: /home/vcap
+            windows: /Users/vcap
+            windows2012R2: /
+            windows2016: /Users/vcap
+          lifecycle_bundles:
+            buildpack/cflinuxfs3: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+            buildpack/cflinuxfs4: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+            buildpack/windows: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+            buildpack/windows2012R2: windows_app_lifecycle/windows_app_lifecycle.tgz
+            buildpack/windows2016: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
+            docker: docker_app_lifecycle/docker_app_lifecycle.tgz
         mutual_tls:
           ca_cert: "((cc_tls.ca))"
           private_key: "((cc_tls.private_key))"
@@ -1597,6 +1677,14 @@ instance_groups:
         - ((diego_instance_identity_ca.ca))
         - ((credhub_tls.ca))
         - ((uaa_ssl.ca))
+  - name: cflinuxfs4-rootfs-setup
+    release: cflinuxfs4
+    properties:
+      cflinuxfs4-rootfs:
+        trusted_certs:
+        - ((diego_instance_identity_ca.ca))
+        - ((credhub_tls.ca))
+        - ((uaa_ssl.ca))
   - name: garden
     release: garden-runc
     properties:
@@ -1626,6 +1714,7 @@ instance_groups:
         rep:
           preloaded_rootfses:
           - cflinuxfs3:/var/vcap/packages/cflinuxfs3/rootfs.tar
+          - cflinuxfs4:/var/vcap/packages/cflinuxfs4/rootfs.tar
       containers:
         proxy:
           enabled: true
@@ -2798,6 +2887,10 @@ releases:
   url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs3-release?v=0.361.0
   version: 0.361.0
   sha1: 67c5a2120f86b8d307d78a7a071e337bc41ae4ed
+- name: cflinuxfs4
+  sha1: 7550642871b27607237ce6e2d54ffa048d0069f0
+  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs4-release?v=1.5.0
+  version: 1.5.0
 - name: credhub
   url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=2.12.25
   version: 2.12.25

@@ -13,7 +13,7 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 
 | Name | Purpose | Notes | Currently validated in Release Integration CI pipelines? |
 |:---  |:---     |:---   |:---   |
-| [`add-cflinuxfs4.yml`](add-cflinuxfs4.yml) | Add [cflinuxfs4](https://github.com/cloudfoundry/cflinuxfs4) stack. | | **NO** |
+| [`add-cflinuxfs4.yml`](add-cflinuxfs4.yml) | Add [cflinuxfs4](https://github.com/cloudfoundry/cflinuxfs4) stack. | ***Deprecated as we integrate cflinuxfs4 directly into cf-deployment.yml*** | **NO** |
 | [`add-metric-store.yml`](add-metric-store.yml) | **PROMOTED: use `../use-metric-store.yml`** | | **NO** |
 | [`add-system-metrics-agent.yml`](add-system-metrics-agent.yml) | Add agent to all vms with the purpose of egressing system metrics | | **NO** |
 | [`add-system-metrics-agent-windows2019.yml`](add-system-metrics-agent-windows2019.yml) | Add agent to windows2019 Diego cells for the purpose of egressing system metrics | | **NO** |
@@ -33,7 +33,7 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 | [`fast-deploy-with-downtime-and-danger.yml`](fast-deploy-with-downtime-and-danger.yml) | Risky, but fast. Disable canaries, increase the max number of vms bosh will update simultaneously, and remove `serial: true` from most instance groups to enable faster, but probably downtimeful, deploys. | | **NO** |
 | [`infrastructure-metrics.yml`](infrastructure-metrics.yml) | Add the Prometheus node exporter and Loggregator Prom Scraper to addons. This puts infrastructure metrics into Loggregator's metric stream. | | **NO** |
 | [`rootless-containers.yml`](rootless-containers.yml) | Enable rootless garden-runc containers. | Requires garden-runc 1.9.5 or later and grootfs 0.27.0 or later. This ops file **cannot** be deployed in conjunction with `enable-oci-phase-1.yml`. | **NO** |
-| [`set-cflinuxfs4-default-stack.yml`](set-cflinuxfs4-default-stack.yml) | Set the default stack to [cflinuxfs4](https://github.com/cloudfoundry/cflinuxfs4). | Requires `./add-cflinuxfs4.yml`. | **NO** |
+| [`set-cflinuxfs4-default-stack.yml`](set-cflinuxfs4-default-stack.yml) | Set the default stack to [cflinuxfs4](https://github.com/cloudfoundry/cflinuxfs4). | ***Deprecated as we integrate cflinuxfs4 directly into cf-deployment.yml*** Requires `./add-cflinuxfs4.yml`.  | **NO** |
 | [`set-cpu-weight.yml`](set-cpu-weight.yml) | **PROMOTED: use `../set-cpu-weight.yml`** | | **NO** |
 | [`set-cpu-weight-windows2019.yml`](set-cpu-weight-windows2019.yml) | CPU shares for each garden container are proportional to its memory limits. | Requires `../windows2019-cell.yml` and `../use-online-windows2019fs.yml` | **NO** |
 | [`use-compiled-releases-windows.yml`](use-compiled-releases-windows.yml) | Reverts to source version of releases required for Windows cells | Intended for use with `use-compiled-releases.yml` and any of `windows*-cell.yml` | **YES** |
@@ -43,4 +43,4 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 | [`disable-logs-in-firehose-windows2019.yml`](disable-logs-in-firehose-windows-2019.yml) | Logs are not sent to dopplers, only metrics | | **NO** |
 | [`use-native-garden-runc-runner.yml`](use-native-garden-runc-runner.yml) | Configure Garden to **not** create containers via containerd, using the native runner instead. | | **NO** |
 | [`use-mysql-version-8.0.yml`](use-mysql-version-8.0.yml) | Deploys or upgrades Percona 8.0 as the internal database. | When used in conjunction with [pxc-release](https://github.com/cloudfoundry/pxc-release) v1.0.0 or greater will deploy Percona 8.0 or upgrade Percona 5.7 to Percona 8.0| **YES** |
-| [`use-trusted-ca-cert-for-apps-cflinuxfs4.yml`](use-trusted-ca-cert-for-apps-cflinuxfs4.yml) | Same as [`use-trusted-ca-cert-for-apps.yml`](../use-trusted-ca-cert-for-apps.yml), but for cflinuxfs4 stack | | **NO** |
+| [`use-trusted-ca-cert-for-apps-cflinuxfs4.yml`](use-trusted-ca-cert-for-apps-cflinuxfs4.yml) | Same as [`use-trusted-ca-cert-for-apps.yml`](../use-trusted-ca-cert-for-apps.yml), but for cflinuxfs4 stack | ***Deprecated as we integrate cflinuxfs4 directly into cf-deployment.yml*** | **NO** |

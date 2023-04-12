@@ -149,7 +149,7 @@ func TestSemantic(t *testing.T) {
 	t.Run("use-trusted-ca-cert-for-apps.yml", func(t *testing.T) {
 		certPaths := []string{
 			"/instance_groups/name=diego-cell/jobs/name=cflinuxfs3-rootfs-setup/properties/cflinuxfs3-rootfs/trusted_certs",
-			"/instance_groups/name=diego-cell/jobs/name=cflinuxfs3-rootfs-setup/properties/cflinuxfs3-rootfs/trusted_certs",
+			"/instance_groups/name=diego-cell/jobs/name=cflinuxfs4-rootfs-setup/properties/cflinuxfs4-rootfs/trusted_certs",
 		}
 
 		for _, certPath := range certPaths {
