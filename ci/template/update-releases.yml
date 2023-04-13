@@ -109,7 +109,7 @@ resources:
   icon: github
   source:
     uri: git@github.com:cloudfoundry/cf-deployment.git
-    private_key: ((cf_deployment_readwrite_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
 
 - name: cf-deployment-develop
   type: git
@@ -445,7 +445,7 @@ jobs:
             updated-cf-deployment: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
             release: #@ r.name + "-release"
           params:
-            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            DEPLOY_KEY: ((ard_wg_gitbot_ssh_key.private_key))
             RELEASE_NAME: #@ r.name
         - task: retrieve-bosh-logs
           file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
@@ -615,7 +615,7 @@ jobs:
             updated-cf-deployment: #@ "updated-cf-deployment-{}-release-candidate".format(r.name)
             release: #@ r.name + "-release"
           params:
-            DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+            DEPLOY_KEY: ((ard_wg_gitbot_ssh_key.private_key))
             RELEASE_NAME: #@ r.name
         - task: retrieve-bosh-logs
           file: runtime-ci/tasks/retrieve-bosh-logs/task.yml
@@ -1044,7 +1044,7 @@ jobs:
       BRANCH_REGEXP: "update-.*-release-.*"
       MONTHS: 1
       DELETE_STALE_BRANCHES: true
-      DEPLOY_KEY: ((cf_deployment_readwrite_deploy_key.private_key))
+      DEPLOY_KEY: ((ard_wg_gitbot_ssh_key.private_key))
 
 - name: setup-infrastructure-compilation
   serial: true

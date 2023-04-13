@@ -236,7 +236,7 @@ resources:
   name: cf-deployment
   source:
     branch: release-candidate
-    private_key: ((cf_deployment_readwrite_deploy_key.private_key))
+    private_key: ((ard_wg_gitbot_ssh_key.private_key))
     uri: git@github.com:cloudfoundry/cf-deployment.git
   type: git
 
