@@ -1055,7 +1055,7 @@ jobs:
       BASE_OPS_FILE_DIR: operations
       NEW_OPS_FILES: |
         environments/test/hermione/increase-doppler-vm-type-from-minimal-to-small.yml
-        environments/test/hermione/scale-diego-cell-to-6.yml
+        environments/test/hermione/scale-diego-cell-to-8.yml
   - task: bosh-deploy-cf-latest-release
     attempts: 2
     file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
@@ -1079,7 +1079,7 @@ jobs:
         operations/experimental/enable-oci-phase-1.yml
         operations/experimental/enable-containerd-for-processes.yml
         operations/increase-doppler-vm-type-from-minimal-to-small.yml
-        operations/scale-diego-cell-to-6.yml
+        operations/scale-diego-cell-to-8.yml
         operations/test/speed-up-dynamic-asgs.yml
       VARS_FILES: |
         environments/test/hermione/bbl-state/vars/director-vars-file.yml
@@ -1109,7 +1109,7 @@ jobs:
       BASE_OPS_FILE_DIR: operations
       NEW_OPS_FILES: |
         environments/test/hermione/increase-doppler-vm-type-from-minimal-to-small.yml
-        environments/test/hermione/scale-diego-cell-to-6.yml
+        environments/test/hermione/scale-diego-cell-to-8.yml
   - task: bosh-deploy-cf-develop
     attempts: 2
     file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
@@ -1136,7 +1136,7 @@ jobs:
         operations/experimental/disable-v2-api.yml
         operations/experimental/use-mysql-version-8.0.yml
         operations/increase-doppler-vm-type-from-minimal-to-small.yml
-        operations/scale-diego-cell-to-6.yml
+        operations/scale-diego-cell-to-8.yml
         operations/test/speed-up-dynamic-asgs.yml
       VARS_FILES: |
         environments/test/hermione/bbl-state/vars/director-vars-file.yml
