@@ -84,6 +84,7 @@ jobs:
       BBL_STATE_DIR: environments/test/bellatrix/bbl-state
       OPS_FILES: |
         operations/use-bionic-stemcell.yml
+        operations/set-cflinuxfs3-default-stack.yml
         operations/use-internal-lookup-for-route-services.yml
         operations/experimental/colocate-smoke-tests-on-cc-worker.yml
       SYSTEM_DOMAIN: cf.bellatrix.env.wg-ard.ci.cloudfoundry.org
