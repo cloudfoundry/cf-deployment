@@ -22,7 +22,6 @@ groups:
   - experimental-deploy
   - experimental-smoke-tests
   - experimental-cats
-  - experimental-cats-cflinuxfs4
   - experimental-delete-deployment
   - lite-acquire-pool
   - lite-deploy
@@ -76,7 +75,6 @@ groups:
   - lint-cf-deployment-manifest
   - experimental-acquire-pool
   - experimental-cats
-  - experimental-cats-cflinuxfs4
   - experimental-deploy
   - experimental-delete-deployment
   - experimental-release-pool-manual
@@ -1026,7 +1024,7 @@ jobs:
       params: {release: experimental-pool}
 
 - name: experimental-deploy
-  serial_groups: [ experimental-cats, experimental-cats-cflinuxfs4, experimental-smokes ]
+  serial_groups: [ experimental-cats, experimental-smokes ]
   public: true
   plan:
   - get: experimental-pool
@@ -1249,39 +1247,6 @@ jobs:
         CONFIG_FILE_PATH: environments/test/hermione/integration_config.json
         REPORTER_CONFIG_FILE_PATH: environments/test/hermione/reporter_config.json
         RELINT_VERBOSE_AUTH: "true"
-
-- name: experimental-cats-cflinuxfs4
-  serial_groups: [ experimental-cats-cflinuxfs4 ]
-  public: true
-  plan:
-    - timeout: 4h
-      do:
-        - get: experimental-pool
-          trigger: true
-          passed: [ experimental-deploy ]
-        - in_parallel:
-            - get: cf-acceptance-tests-rc
-            - get: relint-envs
-            - get: cf-deployment-develop
-              passed: [ experimental-deploy ]
-            - get: cf-deployment-concourse-tasks
-        - task: update-integration-configs
-          file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
-          params:
-            BBL_STATE_DIR: environments/test/hermione/bbl-state
-            CATS_INTEGRATION_CONFIG_FILE: environments/test/hermione/cflinuxfs4_integration_config.json
-          input_mapping:
-            bbl-state: relint-envs
-            integration-configs: relint-envs
-        - task: run-cats
-          input_mapping:
-            integration-config: updated-integration-configs
-            cf-acceptance-tests: cf-acceptance-tests-rc
-          file: cf-deployment-concourse-tasks/run-cats/task.yml
-          params:
-            CONFIG_FILE_PATH: environments/test/hermione/cflinuxfs4_integration_config.json
-            REPORTER_CONFIG_FILE_PATH: environments/test/hermione/reporter_config.json
-            RELINT_VERBOSE_AUTH: "true"
 
 - name: experimental-delete-deployment
   serial: true
