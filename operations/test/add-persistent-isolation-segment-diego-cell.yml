@@ -21,6 +21,14 @@
           - ((diego_instance_identity_ca.ca))
           - ((credhub_tls.ca))
           - ((uaa_ssl.ca))
+    - name: cflinuxfs4-rootfs-setup
+      release: cflinuxfs4
+      properties:
+        cflinuxfs4-rootfs:
+          trusted_certs:
+          - ((diego_instance_identity_ca.ca))
+          - ((credhub_tls.ca))
+          - ((uaa_ssl.ca))
     - name: garden
       release: garden-runc
       provides:
@@ -49,6 +57,7 @@
           rep:
             preloaded_rootfses:
             - cflinuxfs3:/var/vcap/packages/cflinuxfs3/rootfs.tar
+            - cflinuxfs4:/var/vcap/packages/cflinuxfs4/rootfs.tar
             placement_tags:
             - persistent_isolation_segment
         containers:
