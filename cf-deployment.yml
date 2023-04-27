@@ -691,6 +691,8 @@ instance_groups:
             keys:
               key-1:
                 signingKey: "((uaa_jwt_signing_key.private_key))"
+                signingAlg: RS256
+                signingCert: "((uaa_jwt_signing_key.certificate))"
         clients:
           cc_routing:
             authorities: routing.router_groups.read
@@ -2128,8 +2130,6 @@ variables:
   type: password
 - name: diego_ssh_proxy_host_key
   type: ssh
-- name: uaa_jwt_signing_key
-  type: rsa
 - name: service_cf_internal_ca
   type: certificate
   options:
@@ -2429,6 +2429,14 @@ variables:
     common_name: uaa_login_saml
     alternative_names:
     - uaa_login_saml
+- name: uaa_jwt_signing_key
+  type: certificate
+  update_mode: converge
+  options:
+    ca: uaa_ca
+    common_name: uaa_jwt_signing_key
+    alternative_names:
+    - uaa_jwt_signing_key
 - name: cc_tls
   type: certificate
   update_mode: converge

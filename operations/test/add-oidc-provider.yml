@@ -62,6 +62,8 @@
               keys:
                 key-1:
                   signingKey: ((uaa-oidc-key1.private_key))
+                  signingAlg: RS256
+                  signingCert: ((uaa-oidc-key1.certificate))
           sslCertificate: ((uaa-oidc_tls.certificate))
           sslPrivateKey: ((uaa-oidc_tls.private_key))
           clients:
@@ -149,12 +151,6 @@
 - type: replace
   path: /variables/-
   value:
-    name: uaa-oidc-key1
-    type: rsa
-
-- type: replace
-  path: /variables/-
-  value:
     name: uaa-oidc_ca
     type: certificate
     options:
@@ -175,6 +171,18 @@
       common_name: saml_oidc
       alternative_names:
       - saml_oidc
+
+- type: replace
+  path: /variables/-
+  value:
+    name: uaa-oidc-key1
+    type: certificate
+    update_mode: converge
+    options:
+      ca: uaa-oidc_ca
+      common_name: jwt_oidc
+      alternative_names:
+      - uaa-oidc.service.cf.internal
 
 - type: replace
   path: /variables/-
