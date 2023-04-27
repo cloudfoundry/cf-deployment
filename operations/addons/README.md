@@ -25,6 +25,8 @@ to VMs via the use of [addons][addons-docs].
 
 | Name | Purpose | Notes |
 |:---  |:---     |:---   |
+| [`add-system-metrics-agent.yml`](add-system-metrics-agent.yml) | Adds an agent to all vms with the purpose of egressing system metrics. | |
+| [`add-system-metrics-agent-windows2019.yml`](add-system-metrics-agent-windows2019.yml) | Adds an agent to all windows2019 Diego cells for the purpose of egressing system metrics. | Must be used in conjunction with `add-system-metrics-agent.yml`. |
 | [`component-syslog-custom-ca.yml`](component-syslog-custom-ca.yml) | The syslog_forwarder job will only trust certs signed by the provided cert chain. | Requires `enable-component-syslog.yml`. Not necessary if syslog target has a cert signed by a public CA. |
 | [`enable-component-syslog.yml`](enable-component-syslog.yml) | This collocates a job from [syslog release][syslog-release-repo] to forward local syslog events in RFC5424 format to a remote syslog endpoint. | Uses rsyslog, which is available on the stemcell. Further documentation of the `custom_rule` property can be found [here][syslog-custom-rule-examples]. For the windows equivalent, see `operations/experimental/windows-enable-component-syslog.yml`. Requires that target have a valid cert. To configure a custom CA, use `component-syslog-custom-ca.yml`. |
 

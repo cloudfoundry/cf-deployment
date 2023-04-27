@@ -1,0 +1,17 @@
+- type: replace
+  path: /addons?/name=loggr-system-metrics-agent-windows2019
+  value:
+    name: loggr-system-metrics-agent-windows2019
+    include:
+      stemcell:
+      - os: windows2019
+    jobs:
+    - name: loggr-system-metrics-agent-windows
+      release: system-metrics
+      properties:
+        metrics_port: 53035
+        system_metrics:
+          tls:
+            ca_cert: "((system_metrics.ca))"
+            cert: "((system_metrics.certificate))"
+            key: "((system_metrics.private_key))"
