@@ -2472,15 +2472,6 @@ jobs:
     - get: runtime-ci
     - get: relint-envs
     - get: relint-team
-  - task: update-release-cflinuxfs3-release-candidate
-    file: runtime-ci/tasks/update-single-manifest-release/task.yml
-    input_mapping:
-      cf-deployment: cf-deployment-release-candidate
-      release: cflinuxfs3-release
-    output_mapping:
-      updated-cf-deployment: updated-cf-deployment-cflinuxfs3-release-candidate
-    params:
-      RELEASE_NAME: cflinuxfs3
   - task: update-additional-ops-files-cflinuxfs3-release-candidate
     file: runtime-ci/tasks/update-single-opsfile-release/task.yml
     input_mapping:
@@ -2556,6 +2547,7 @@ jobs:
           BBL_JSON_CONFIG: pool-lock/metadata
           OPS_FILES: |
             operations/scale-to-one-az.yml
+            operations/use-cflinuxfs3.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
       - task: ensure-api-healthy
@@ -2584,15 +2576,6 @@ jobs:
           RELEASE_NAME: cflinuxfs3
       on_success:
         do:
-        - task: update-release-cflinuxfs3-develop
-          file: runtime-ci/tasks/update-single-manifest-release/task.yml
-          input_mapping:
-            cf-deployment: cf-deployment-develop
-            release: cflinuxfs3-release
-          output_mapping:
-            updated-cf-deployment: updated-cf-deployment-cflinuxfs3-develop
-          params:
-            RELEASE_NAME: cflinuxfs3
         - task: update-additional-ops-files-cflinuxfs3-develop
           file: runtime-ci/tasks/update-single-opsfile-release/task.yml
           input_mapping:
