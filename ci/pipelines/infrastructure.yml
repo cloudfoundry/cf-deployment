@@ -434,7 +434,7 @@ jobs:
     output_mapping:
       pool-resource: bbr-pool
   - put: bbr-pool
-    params: {add_claimed: bbr-pool}
+    params: {acquire: true}
 
 - name: add-claimed-lock-lite
   serial: true
@@ -1202,7 +1202,7 @@ jobs:
     output_mapping:
       pool-resource: bbr-pool
   - put: bbr-pool
-    params: {remove: bbr-pool}
+    params: {release: bbr-pool}
 
 - name: remove-claimed-lock-lite
   serial: true
