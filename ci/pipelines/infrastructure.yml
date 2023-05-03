@@ -158,6 +158,7 @@ bbr-bbl-up-task: &bbr-bbl-up-task-config
     LB_DOMAIN: cf.baba-yaga.env.wg-ard.ci.cloudfoundry.org
     BBL_ENV_NAME: baba-yaga-bbr
     BBL_CONFIG_DIR: environments/test/bbr/bbl-config
+    DELETE_TERRAFORM_PLUGINS: false
   ensure:
     put: relint-envs
     params:
