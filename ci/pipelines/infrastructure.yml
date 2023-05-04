@@ -212,10 +212,10 @@ windows-bbl-up-task: &windows-bbl-up-task-config
 stable-bbl-up-task: &stable-bbl-up-task-config
   file: cf-deployment-concourse-tasks/bbl-up/task.yml
   input_mapping:
-    bbl-config: combined-plan-patches
+    bbl-config: relint-envs
     bbl-state: relint-envs
   params:
-    BBL_CONFIG_DIR: .
+    BBL_CONFIG_DIR: environments/test/bellatrix/bbl-config
     BBL_ENV_NAME: bellatrix-stable
     BBL_GCP_REGION: europe-west3
     BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/bellatrix/bellatrix.key.json
@@ -590,18 +590,6 @@ jobs:
   - in_parallel:
     - get: relint-envs
     - get: cf-deployment-concourse-tasks
-    - get: runtime-ci
-    - get: bosh-bootloader
-  - task: combine-bbl-plan-patches
-    file: runtime-ci/tasks/combine-inputs/task.yml
-    input_mapping:
-      first-input: relint-envs
-      second-input: bosh-bootloader
-    params:
-      FIRST_DIR: environments/test/bellatrix/bbl-config
-      SECOND_DIR: plan-patches/network-lb-gcp
-    output_mapping:
-      combined-inputs: combined-plan-patches
   - task: setup-infrastructure
     <<: *stable-bbl-up-task-config
   - put: stable-pool
@@ -808,18 +796,6 @@ jobs:
       - get: cf-deployment-concourse-tasks
       - get: every-tuesday-morning
         trigger: true
-      - get: runtime-ci
-      - get: bosh-bootloader
-    - task: combine-bbl-plan-patches
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: relint-envs
-        second-input: bosh-bootloader
-      params:
-        FIRST_DIR: environments/test/bellatrix/bbl-config
-        SECOND_DIR: plan-patches/network-lb-gcp
-      output_mapping:
-        combined-inputs: combined-plan-patches
     - task: update-infrastructure
       <<: *stable-bbl-up-task-config
     - put: stable-pool
