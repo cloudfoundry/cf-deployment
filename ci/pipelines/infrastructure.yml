@@ -235,9 +235,8 @@ cats-bbl-up-task: &cats-bbl-up-task-config
   file: cf-deployment-concourse-tasks/bbl-up/task.yml
   input_mapping:
     bbl-state: relint-envs
-    bbl-config: bosh-bootloader
+    bbl-config: relint-envs
   params:
-    BBL_CONFIG_DIR: plan-patches/network-lb-gcp
     BBL_ENV_NAME: cats
     BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/cats/ard-cats.key.json
     BBL_GCP_REGION: europe-west3
@@ -626,7 +625,6 @@ jobs:
   - in_parallel:
     - get: cf-deployment-concourse-tasks
     - get: relint-envs
-    - get: bosh-bootloader
   - task: setup-infrastructure
     <<: *cats-bbl-up-task-config
   - put: cats-pool
@@ -806,7 +804,6 @@ jobs:
         params: {acquire: true}
       - get: relint-envs
       - get: cf-deployment-concourse-tasks
-      - get: bosh-bootloader
       - get: every-tuesday-morning
         trigger: true
     - task: update-infrastructure
