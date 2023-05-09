@@ -531,6 +531,7 @@ jobs:
         operations/test/add-persistent-isolation-segment-router.yml
         operations/rename-isolation-segment-network.yml
         operations/addons/enable-component-syslog.yml
+        operations/addons/add-system-metrics-agent.yml
         operations/use-postgres.yml
         operations/experimental/enable-tls-cloud-controller-postgres.yml
         operations/change-postgres-max-connections.yml
@@ -1409,34 +1410,34 @@ jobs:
         bbl-state: relint-envs
       params:
         BBL_STATE_DIR: environments/test/snitch/bbl-state
-    - task: combine-bbl-configs
-      file: runtime-ci/tasks/combine-inputs/task.yml
-      input_mapping:
-        first-input: bosh-bootloader
-        second-input: relint-envs
-      params:
-        FIRST_DIR: plan-patches/bosh-lite-gcp
-        SECOND_DIR: environments/test/snitch/bbl-config
-    - task: update-infrastructure
-      file: cf-deployment-concourse-tasks/bbl-up/task.yml
-      params:
-        BBL_CONFIG_DIR: .
-        BBL_ENV_NAME: snitch-lite
-        BBL_GCP_REGION: europe-west3
-        BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/snitch/snitch-lite.key.json
-        BBL_IAAS: gcp
-        BBL_STATE_DIR: environments/test/snitch/bbl-state
-        GIT_COMMIT_EMAIL: "app-deployments@cloudfoundry.org"
-        GIT_COMMIT_USERNAME: "ARD WG Bot"
-        SKIP_LB_CREATION: true
-      input_mapping:
-        bbl-state: relint-envs
-        bbl-config: combined-inputs
-      ensure:
-        put: relint-envs
-        params:
-          repository: updated-bbl-state
-          rebase: true
+    # - task: combine-bbl-configs
+    #   file: runtime-ci/tasks/combine-inputs/task.yml
+    #   input_mapping:
+    #     first-input: bosh-bootloader
+    #     second-input: relint-envs
+    #   params:
+    #     FIRST_DIR: plan-patches/bosh-lite-gcp
+    #     SECOND_DIR: environments/test/snitch/bbl-config
+    # - task: update-infrastructure
+    #   file: cf-deployment-concourse-tasks/bbl-up/task.yml
+    #   params:
+    #     BBL_CONFIG_DIR: .
+    #     BBL_ENV_NAME: snitch-lite
+    #     BBL_GCP_REGION: europe-west3
+    #     BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/snitch/snitch-lite.key.json
+    #     BBL_IAAS: gcp
+    #     BBL_STATE_DIR: environments/test/snitch/bbl-state
+    #     GIT_COMMIT_EMAIL: "app-deployments@cloudfoundry.org"
+    #     GIT_COMMIT_USERNAME: "ARD WG Bot"
+    #     SKIP_LB_CREATION: true
+    #   input_mapping:
+    #     bbl-state: relint-envs
+    #     bbl-config: combined-inputs
+    #   ensure:
+    #     put: relint-envs
+    #     params:
+    #       repository: updated-bbl-state
+    #       rebase: true
     - put: lite-pool
       params: {release: lite-pool}
 
@@ -1668,6 +1669,8 @@ jobs:
         operations/experimental/use-compiled-releases-windows.yml
         operations/use-internal-lookup-for-route-services.yml
         operations/experimental/colocate-smoke-tests-on-cc-worker.yml
+        operations/addons/add-system-metrics-agent.yml
+        operations/addons/add-system-metrics-agent-windows2019.yml
       REGENERATE_CREDENTIALS: true
   - in_parallel:
     - task: open-asgs-for-credhub
