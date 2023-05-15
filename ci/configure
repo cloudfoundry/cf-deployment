@@ -3,7 +3,7 @@
 set -euo pipefail
 
 main() {
-  local CF_D_PIPELINES=(cf-deployment update-releases pull-requests stemcell-bump infrastructure)
+  local CF_D_PIPELINES=(cf-deployment update-releases pull-requests stemcell-bump)
   local PIPELINE=${1?"Valid input ${CF_D_PIPELINES[@]}"}
 
   if [[ -r "${PROJECT_DIR}/ci/template/${PIPELINE}.yml" ]]; then

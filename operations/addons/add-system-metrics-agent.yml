@@ -1,0 +1,146 @@
+- type: replace
+  path: /addons/name=loggr-system-metrics-agent?
+  value:
+    exclude:
+      jobs:
+      - name: smoke_tests
+        release: cf-smoke-tests
+    include:
+      stemcell:
+      - os: ubuntu-xenial
+      - os: ubuntu-bionic
+      - os: ubuntu-jammy
+    jobs:
+    - name: loggr-system-metrics-agent
+      properties:
+        metrics_port: 53035
+        system_metrics:
+          tls:
+            ca_cert: ((system_metrics.ca))
+            cert: ((system_metrics.certificate))
+            key: ((system_metrics.private_key))
+      release: system-metrics
+    name: loggr-system-metrics-agent
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=loggr-system-metric-scraper?
+  value:
+    name: loggr-system-metric-scraper
+    properties:
+      leadership_election:
+        ca_cert: ((leadership_election_client_tls.ca))
+        cert: ((leadership_election_client_tls.certificate))
+        key: ((leadership_election_client_tls.private_key))
+      metrics:
+        ca_cert: ((loggr_metric_scraper_metrics_tls.ca))
+        cert: ((loggr_metric_scraper_metrics_tls.certificate))
+        key: ((loggr_metric_scraper_metrics_tls.private_key))
+        server_name: loggr_metric_scraper_metrics
+      nats_client:
+        cert: ((nats_client_cert.certificate))
+        key: ((nats_client_cert.private_key))
+      scrape_port: 53035
+      system_metrics:
+        tls:
+          ca_cert: ((system_metrics.ca))
+          cert: ((system_metrics.certificate))
+          key: ((system_metrics.private_key))
+    release: system-metrics-scraper
+- type: replace
+  path: /instance_groups/name=scheduler/instances
+  value: 3
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=leadership-election?
+  value:
+    name: leadership-election
+    properties:
+      metrics:
+        ca_cert: ((leadership_election_metrics_tls.ca))
+        cert: ((leadership_election_metrics_tls.certificate))
+        key: ((leadership_election_metrics_tls.private_key))
+        server_name: leadership_election_metrics
+      port: 7100
+      tls:
+        ca_cert: ((leadership_election_tls.ca))
+        cert: ((leadership_election_tls.certificate))
+        key: ((leadership_election_tls.private_key))
+    release: system-metrics-scraper
+- type: replace
+  path: /variables/name=system_metrics?
+  value:
+    name: system_metrics
+    options:
+      alternative_names:
+      - system-metrics
+      ca: loggregator_ca
+      common_name: system-metrics
+      extended_key_usage:
+      - client_auth
+      - server_auth
+    type: certificate
+    update_mode: converge
+- type: replace
+  path: /releases/name=system-metrics?
+  value:
+    name: system-metrics
+    sha1: 2104028a5155832d5e64054d28ecbc0c41603d99
+    url: https://bosh.io/d/github.com/cloudfoundry/system-metrics-release?v=2.3.1
+    version: 2.3.1
+- type: replace
+  path: /releases/name=system-metrics-scraper?
+  value:
+    name: system-metrics-scraper
+    sha1: 19e812c706f7cd8be6cbd072955c6050f9ab9f80
+    url: https://bosh.io/d/github.com/cloudfoundry/system-metrics-scraper-release?v=3.3.7
+    version: 3.3.7
+- type: replace
+  path: /variables/name=leadership_election_tls?
+  value:
+    name: leadership_election_tls
+    options:
+      alternative_names:
+      - leadership_election
+      ca: loggregator_ca
+      common_name: leadership_election
+      extended_key_usage:
+      - server_auth
+    type: certificate
+    update_mode: converge
+- type: replace
+  path: /variables/name=leadership_election_client_tls?
+  value:
+    name: leadership_election_client_tls
+    options:
+      alternative_names:
+      - leadership_election_client
+      ca: loggregator_ca
+      common_name: leadership_election_client
+      extended_key_usage:
+      - client_auth
+    type: certificate
+    update_mode: converge
+- type: replace
+  path: /variables/name=loggr_metric_scraper_metrics_tls?
+  value:
+    name: loggr_metric_scraper_metrics_tls
+    options:
+      alternative_names:
+      - loggr_metric_scraper_metrics
+      ca: metric_scraper_ca
+      common_name: loggr_metric_scraper_metrics
+      extended_key_usage:
+      - server_auth
+    type: certificate
+    update_mode: converge
+- type: replace
+  path: /variables/name=leadership_election_metrics_tls?
+  value:
+    name: leadership_election_metrics_tls
+    options:
+      alternative_names:
+      - leadership_election_metrics
+      ca: metric_scraper_ca
+      common_name: leadership_election_metrics
+      extended_key_usage:
+      - server_auth
+    type: certificate
+    update_mode: converge

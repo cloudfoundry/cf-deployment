@@ -531,6 +531,7 @@ jobs:
         operations/test/add-persistent-isolation-segment-router.yml
         operations/rename-isolation-segment-network.yml
         operations/addons/enable-component-syslog.yml
+        operations/addons/add-system-metrics-agent.yml
         operations/use-postgres.yml
         operations/experimental/enable-tls-cloud-controller-postgres.yml
         operations/change-postgres-max-connections.yml
@@ -1668,6 +1669,8 @@ jobs:
         operations/experimental/use-compiled-releases-windows.yml
         operations/use-internal-lookup-for-route-services.yml
         operations/experimental/colocate-smoke-tests-on-cc-worker.yml
+        operations/addons/add-system-metrics-agent.yml
+        operations/addons/add-system-metrics-agent-windows2019.yml
       REGENERATE_CREDENTIALS: true
   - in_parallel:
     - task: open-asgs-for-credhub
