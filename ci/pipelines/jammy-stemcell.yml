@@ -69,6 +69,7 @@ jobs:
       ops-files: cf-deployment
     params:
       OPS_FILES: |
+        operations/use-cflinuxfs3.yml
         operations/experimental/use-jammy.yml
         operations/use-internal-lookup-for-route-services.yml
         operations/experimental/colocate-smoke-tests-on-cc-worker.yml
