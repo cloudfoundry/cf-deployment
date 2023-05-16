@@ -69,6 +69,16 @@
     url: https://storage.googleapis.com/cf-deployment-compiled-releases/cf-smoke-tests-42.0.69-ubuntu-jammy-1.80-20230510-103600-453753599.tgz
     version: 42.0.69
 - type: replace
+  path: /releases/name=cflinuxfs3?
+  value:
+    name: cflinuxfs3
+    sha1: e18a9f8c7735497b75b7249a884410675cf7bc5a
+    stemcell:
+      os: ubuntu-jammy
+      version: "1.80"
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/cflinuxfs3-0.364.0-ubuntu-jammy-1.80-20230425-234815-624315892.tgz
+    version: 0.364.0
+- type: replace
   path: /releases/name=credhub
   value:
     name: credhub
