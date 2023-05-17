@@ -69,7 +69,9 @@ use-bionic-stemcell.yml: {}
 use-blobstore-cdn.yml:
   varsfiles:
   - example-vars-files/vars-use-blobstore-cdn.yml
-use-compiled-releases.yml: {}
+use-compiled-releases.yml:
+  ops:
+   - use-compiled-releases.yml
 use-external-blobstore.yml:
   varsfiles:
   - example-vars-files/vars-use-external-blobstore.yml
@@ -142,6 +144,16 @@ use-trusted-ca-cert-for-apps.yml:
   varsfiles:
   - example-vars-files/vars-use-trusted-ca-cert-for-apps.yml
 windows2019-cell.yml: {}
+use-cflinuxfs3.yml:
+  ops:
+  - use-cflinuxfs3.yml
 set-cflinuxfs3-default-stack.yml:
   ops:
-  - ./set-cflinuxfs3-default-stack.yml
+  - use-cflinuxfs3.yml
+  - set-cflinuxfs3-default-stack.yml
+use-cflinuxfs3-with-trusted-ca-cert-for-apps.yml:
+  ops:
+  - use-cflinuxfs3.yml
+  - use-cflinuxfs3-with-trusted-ca-cert-for-apps.yml
+  varsfiles:
+  - example-vars-files/vars-use-trusted-ca-cert-for-apps.yml
