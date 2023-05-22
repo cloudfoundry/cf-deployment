@@ -923,13 +923,11 @@ instance_groups:
         diego:
           docker_staging_stack: cflinuxfs4
           droplet_destinations:
-            cflinuxfs3: /home/vcap
             cflinuxfs4: /home/vcap
             windows: /Users/vcap
             windows2012R2: /
             windows2016: /Users/vcap
           lifecycle_bundles:
-            buildpack/cflinuxfs3: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
             buildpack/cflinuxfs4: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
             buildpack/windows: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
             buildpack/windows2012R2: windows_app_lifecycle/windows_app_lifecycle.tgz
@@ -937,8 +935,6 @@ instance_groups:
             docker: docker_app_lifecycle/docker_app_lifecycle.tgz
         default_stack: cflinuxfs4
         stacks:
-        - name: cflinuxfs3
-          description: Cloud Foundry Linux-based filesystem (Ubuntu 18.04)
         - name: cflinuxfs4
           description: Cloud Foundry Linux-based filesystem (Ubuntu 22.04)
         default_running_security_groups:
@@ -970,28 +966,6 @@ instance_groups:
             protocol: udp
         install_buildpacks:
         ## Order is important here
-        - name: staticfile_buildpack
-          package: staticfile-buildpack-cflinuxfs3
-        - name: java_buildpack
-          package: java-buildpack-cflinuxfs3
-        - name: ruby_buildpack
-          package: ruby-buildpack-cflinuxfs3
-        - name: dotnet_core_buildpack
-          package: dotnet-core-buildpack-cflinuxfs3
-        - name: nodejs_buildpack
-          package: nodejs-buildpack-cflinuxfs3
-        - name: go_buildpack
-          package: go-buildpack-cflinuxfs3
-        - name: python_buildpack
-          package: python-buildpack-cflinuxfs3
-        - name: php_buildpack
-          package: php-buildpack-cflinuxfs3
-        - name: nginx_buildpack
-          package: nginx-buildpack-cflinuxfs3
-        - name: r_buildpack
-          package: r-buildpack-cflinuxfs3
-        - name: binary_buildpack
-          package: binary-buildpack-cflinuxfs3
         - name: staticfile_buildpack
           package: staticfile-buildpack-cflinuxfs4
         - name: java_buildpack
@@ -1239,13 +1213,11 @@ instance_groups:
         db_encryption_key: "((cc_db_encryption_key))"
         diego:
           droplet_destinations:
-            cflinuxfs3: /home/vcap
             cflinuxfs4: /home/vcap
             windows: /Users/vcap
             windows2012R2: /
             windows2016: /Users/vcap
           lifecycle_bundles:
-            buildpack/cflinuxfs3: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
             buildpack/cflinuxfs4: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
             buildpack/windows: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
             buildpack/windows2012R2: windows_app_lifecycle/windows_app_lifecycle.tgz
@@ -1327,13 +1299,11 @@ instance_groups:
         database_encryption: *cc-database-encryption
         diego:
           droplet_destinations:
-            cflinuxfs3: /home/vcap
             cflinuxfs4: /home/vcap
             windows: /Users/vcap
             windows2012R2: /
             windows2016: /Users/vcap
           lifecycle_bundles:
-            buildpack/cflinuxfs3: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
             buildpack/cflinuxfs4: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
             buildpack/windows: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
             buildpack/windows2012R2: windows_app_lifecycle/windows_app_lifecycle.tgz
@@ -1368,13 +1338,11 @@ instance_groups:
         database_encryption: *cc-database-encryption
         diego:
           droplet_destinations:
-            cflinuxfs3: /home/vcap
             cflinuxfs4: /home/vcap
             windows: /Users/vcap
             windows2012R2: /
             windows2016: /Users/vcap
           lifecycle_bundles:
-            buildpack/cflinuxfs3: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
             buildpack/cflinuxfs4: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
             buildpack/windows: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
             buildpack/windows2012R2: windows_app_lifecycle/windows_app_lifecycle.tgz
@@ -1669,14 +1637,6 @@ instance_groups:
         server:
           ca: ((cf_app_sd_client_tls.ca))
     release: cf-networking
-  - name: cflinuxfs3-rootfs-setup
-    release: cflinuxfs3
-    properties:
-      cflinuxfs3-rootfs:
-        trusted_certs:
-        - ((diego_instance_identity_ca.ca))
-        - ((credhub_tls.ca))
-        - ((uaa_ssl.ca))
   - name: cflinuxfs4-rootfs-setup
     release: cflinuxfs4
     properties:
@@ -1713,7 +1673,6 @@ instance_groups:
           instance_identity_key: ((diego_instance_identity_ca.private_key))
         rep:
           preloaded_rootfses:
-          - cflinuxfs3:/var/vcap/packages/cflinuxfs3/rootfs.tar
           - cflinuxfs4:/var/vcap/packages/cflinuxfs4/rootfs.tar
       containers:
         proxy:
@@ -2868,9 +2827,9 @@ releases:
   version: 1.1.4
   sha1: 76f9bf726fa944d6b68e3a40cbd91ff422d4ba84
 - name: bpm
-  url: https://bosh.io/d/github.com/cloudfoundry/bpm-release?v=1.2.1
-  version: 1.2.1
-  sha1: 36299a55c00d28cfe54bbb4772ca617f52d76adb
+  url: https://bosh.io/d/github.com/cloudfoundry/bpm-release?v=1.2.2
+  version: 1.2.2
+  sha1: 8000e1875637e82b96f3e497c45238dfcb3dec45
 - name: capi
   url: https://bosh.io/d/github.com/cloudfoundry/capi-release?v=1.152.0
   version: 1.152.0
@@ -2880,21 +2839,17 @@ releases:
   version: 3.25.1
   sha1: 2346f8dffecba6340d5318779afa797ff6a367f5
 - name: cf-smoke-tests
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=42.0.69
-  version: 42.0.69
-  sha1: f9749a077cb75b9c1a20799ce888ee1989df1df7
-- name: cflinuxfs3
-  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs3-release?v=0.364.0
-  version: 0.364.0
-  sha1: 575fe120f1767625be78f694bd9a8c210a107d8c
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=42.0.71
+  version: 42.0.71
+  sha1: ac5c2652d087b4118aec1ec5251a1a9373a79207
 - name: cflinuxfs4
-  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs4-release?v=1.8.0
-  version: 1.8.0
-  sha1: 9000fa6e1ad949add45304c45adc695b6200a59d
+  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs4-release?v=1.9.0
+  version: 1.9.0
+  sha1: 21d07c2dcfb527c7110387b8a8e824db89b800e4
 - name: credhub
-  url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=2.12.27
-  version: 2.12.27
-  sha1: 3717ef633086e455eb3e06c01111284ad528a1e4
+  url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=2.12.28
+  version: 2.12.28
+  sha1: 257914a41d5c08f86cb3d8fafb5b3b8295df320d
 - name: diego
   url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=2.76.0
   version: 2.76.0
@@ -2944,17 +2899,17 @@ releases:
   version: 4.6.4
   sha1: 4cb40d9da80bb0de0a92309fe5a39358cbf3c6a0
 - name: pxc
-  url: https://bosh.io/d/github.com/cloudfoundry/pxc-release?v=1.0.11
-  version: 1.0.11
-  sha1: 4a3e6bfd72a9442e33bb27f5e0c9ddc062577f5a
+  url: https://bosh.io/d/github.com/cloudfoundry/pxc-release?v=1.0.12
+  version: 1.0.12
+  sha1: ea541d986e606512424a030e815ca08c286a5135
 - name: python-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/python-buildpack-release?v=1.8.9
   version: 1.8.9
   sha1: 1942ee9b8dd0af458bc03add1dd54dc3090082d2
 - name: routing
-  url: https://bosh.io/d/github.com/cloudfoundry/routing-release?v=0.266.0
-  version: 0.266.0
-  sha1: d57ae8fe0d0d8a9b040cea254a782d1d5e8fa2e3
+  url: https://bosh.io/d/github.com/cloudfoundry/routing-release?v=0.268.0
+  version: 0.268.0
+  sha1: 97f129733fdf98dab9a35a382838ebeea3110fc4
 - name: ruby-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/ruby-buildpack-release?v=1.10.1
   version: 1.10.1
@@ -2972,9 +2927,9 @@ releases:
   version: 1.11.30
   sha1: c965593bb6d1655d6d6068c666e2485ea4f544d3
 - name: uaa
-  url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=76.11.0
-  version: 76.11.0
-  sha1: 5cb4a87fca890d8602ef7e10da2ddb27325a7fb4
+  url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=76.13.0
+  version: 76.13.0
+  sha1: da05b867a0a0d9313e7c4c6ca150ba01bd32a826
 - name: loggregator-agent
   url: https://bosh.io/d/github.com/cloudfoundry/loggregator-agent-release?v=7.2.1
   version: 7.2.1
