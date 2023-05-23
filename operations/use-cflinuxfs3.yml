@@ -1,5 +1,3 @@
----
-# CC
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/diego/droplet_destinations/cflinuxfs3?
   value: /home/vcap
@@ -9,8 +7,8 @@
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=cflinuxfs4:before
   value:
-      name: cflinuxfs3
-      description: Cloud Foundry Linux-based filesystem (Ubuntu 18.04)
+    description: Cloud Foundry Linux-based filesystem (Ubuntu 18.04)
+    name: cflinuxfs3
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/0:before
   value:
@@ -66,52 +64,42 @@
   value:
     name: binary_buildpack
     package: binary-buildpack-cflinuxfs3
-
-# CC Worker
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/diego/droplet_destinations/cflinuxfs3?
   value: /home/vcap
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/diego/lifecycle_bundles/buildpack~1cflinuxfs3?
   value: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
-
-# CC Clock
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/diego/droplet_destinations/cflinuxfs3?
   value: /home/vcap
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/diego/lifecycle_bundles/buildpack~1cflinuxfs3?
   value: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
-
-# CC Deployment Updater
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties/cc/diego/droplet_destinations/cflinuxfs3?
   value: /home/vcap
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties/cc/diego/lifecycle_bundles/buildpack~1cflinuxfs3?
   value: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
-
-# Diego
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=cflinuxfs3-rootfs-setup?
-  value: 
+  value:
     name: cflinuxfs3-rootfs-setup
-    release: cflinuxfs3
     properties:
       cflinuxfs3-rootfs:
         trusted_certs:
         - ((diego_instance_identity_ca.ca))
         - ((credhub_tls.ca))
         - ((uaa_ssl.ca))
+    release: cflinuxfs3
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=rep/properties/diego/rep/preloaded_rootfses/0:before
   value: cflinuxfs3:/var/vcap/packages/cflinuxfs3/rootfs.tar
-
-# Releases
 - type: replace
   path: /releases/name=cflinuxfs4:before
   value:
-      name: cflinuxfs3
-      url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs3-release?v=0.362.0
-      version: 0.362.0
-      sha1: 0102d3d73d050ce8b0f201d16a1a418b82b1bd51 
+    name: cflinuxfs3
+    sha1: 587a444718bb33fe08c4c18c121d5484330d04f5
+    url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs3-release?v=0.366.0
+    version: 0.366.0
