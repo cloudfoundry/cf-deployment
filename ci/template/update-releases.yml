@@ -188,7 +188,7 @@ resources:
   type: stemcell-version-bump
   icon: dna
   source:
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     bucket_name: cf-deployment-stemcell-bump
     file_name: stemcell-version
 
@@ -196,7 +196,7 @@ resources:
   type: stemcell-version-bump
   icon: dna
   source:
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     bucket_name: cf-deployment-stemcell-bump
     file_name: stemcell-version
     type_filter: major
@@ -205,7 +205,7 @@ resources:
   type: stemcell-version-bump
   icon: dna
   source:
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     bucket_name: cf-deployment-stemcell-bump
     file_name: stemcell-version
     type_filter: minor
@@ -246,7 +246,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: #@ r.name + "-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz"
 
 - name: #@ r.name + "-component-bump-logs-gcs"
