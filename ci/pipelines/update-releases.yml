@@ -221,14 +221,14 @@ resources:
   type: stemcell-version-bump
   icon: dna
   source:
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     bucket_name: cf-deployment-stemcell-bump
     file_name: stemcell-version
 - name: stemcell-version-bump-major
   type: stemcell-version-bump
   icon: dna
   source:
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     bucket_name: cf-deployment-stemcell-bump
     file_name: stemcell-version
     type_filter: major
@@ -236,7 +236,7 @@ resources:
   type: stemcell-version-bump
   icon: dna
   source:
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     bucket_name: cf-deployment-stemcell-bump
     file_name: stemcell-version
     type_filter: minor
@@ -459,7 +459,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: bosh-dns-aliases-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: bosh-dns-aliases-component-bump-logs-gcs
   type: gcs-resource
@@ -471,7 +471,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: bpm-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: bpm-component-bump-logs-gcs
   type: gcs-resource
@@ -483,7 +483,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: capi-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: capi-component-bump-logs-gcs
   type: gcs-resource
@@ -495,7 +495,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: cf-networking-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: cf-networking-component-bump-logs-gcs
   type: gcs-resource
@@ -507,7 +507,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: cf-smoke-tests-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: cf-smoke-tests-component-bump-logs-gcs
   type: gcs-resource
@@ -519,7 +519,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: cflinuxfs4-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: cflinuxfs4-component-bump-logs-gcs
   type: gcs-resource
@@ -531,7 +531,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: diego-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: diego-component-bump-logs-gcs
   type: gcs-resource
@@ -543,7 +543,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: garden-runc-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: garden-runc-component-bump-logs-gcs
   type: gcs-resource
@@ -555,7 +555,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: log-cache-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: log-cache-component-bump-logs-gcs
   type: gcs-resource
@@ -567,7 +567,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: loggregator-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: loggregator-component-bump-logs-gcs
   type: gcs-resource
@@ -579,7 +579,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: loggregator-agent-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: loggregator-agent-component-bump-logs-gcs
   type: gcs-resource
@@ -591,7 +591,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: nats-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: nats-component-bump-logs-gcs
   type: gcs-resource
@@ -603,7 +603,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: pxc-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: pxc-component-bump-logs-gcs
   type: gcs-resource
@@ -615,7 +615,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: routing-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: routing-component-bump-logs-gcs
   type: gcs-resource
@@ -627,7 +627,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: silk-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: silk-component-bump-logs-gcs
   type: gcs-resource
@@ -639,7 +639,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: statsd-injector-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: statsd-injector-component-bump-logs-gcs
   type: gcs-resource
@@ -651,7 +651,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: uaa-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: uaa-component-bump-logs-gcs
   type: gcs-resource
@@ -663,7 +663,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: credhub-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: credhub-component-bump-logs-gcs
   type: gcs-resource
@@ -675,7 +675,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: cf-cli-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: cf-cli-component-bump-logs-gcs
   type: gcs-resource
@@ -687,7 +687,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: metrics-discovery-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: metrics-discovery-component-bump-logs-gcs
   type: gcs-resource
@@ -699,7 +699,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: binary-buildpack-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: binary-buildpack-component-bump-logs-gcs
   type: gcs-resource
@@ -711,7 +711,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: dotnet-core-buildpack-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: dotnet-core-buildpack-component-bump-logs-gcs
   type: gcs-resource
@@ -723,7 +723,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: go-buildpack-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: go-buildpack-component-bump-logs-gcs
   type: gcs-resource
@@ -735,7 +735,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: java-buildpack-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: java-buildpack-component-bump-logs-gcs
   type: gcs-resource
@@ -747,7 +747,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: nginx-buildpack-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: nginx-buildpack-component-bump-logs-gcs
   type: gcs-resource
@@ -759,7 +759,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: nodejs-buildpack-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: nodejs-buildpack-component-bump-logs-gcs
   type: gcs-resource
@@ -771,7 +771,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: php-buildpack-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: php-buildpack-component-bump-logs-gcs
   type: gcs-resource
@@ -783,7 +783,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: python-buildpack-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: python-buildpack-component-bump-logs-gcs
   type: gcs-resource
@@ -795,7 +795,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: r-buildpack-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: r-buildpack-component-bump-logs-gcs
   type: gcs-resource
@@ -807,7 +807,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: ruby-buildpack-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: ruby-buildpack-component-bump-logs-gcs
   type: gcs-resource
@@ -819,7 +819,7 @@ resources:
   type: gcs-resource
   source:
     bucket: cf-deployment-compiled-releases
-    json_key: ((concourse_gcp_service_account_json))
+    json_key: ((ci_dev_gcp_service_account_json))
     regexp: staticfile-buildpack-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz
 - name: staticfile-buildpack-component-bump-logs-gcs
   type: gcs-resource
