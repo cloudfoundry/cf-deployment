@@ -1,0 +1,18 @@
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=cflinuxfs4-rootfs-setup?
+  value:
+    name: cflinuxfs4-rootfs-setup
+    properties:
+      cflinuxfs4-rootfs:
+        trusted_certs:
+          - ((diego_instance_identity_ca.ca))
+          - ((credhub_tls.ca))
+          - ((uaa_ssl.ca))
+    release: cflinuxfs4-compat
+- type: replace
+  path: /releases/name=cflinuxfs4
+  value:
+    name: cflinuxfs4-compat
+    sha1: 14967d8e7ff1319445aed595dbb5a280eb62c75a
+    url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs4-compat-release?v=1.13.0
+    version: 1.13.0
