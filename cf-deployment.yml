@@ -86,7 +86,6 @@ addons:
         cert: "((syslog_agent_metrics_tls.certificate))"
         key: "((syslog_agent_metrics_tls.private_key))"
         server_name: syslog_agent_metrics
-      drain_ca_cert: "((log_cache_syslog_tls.ca))"
 
 - name: prom_scraper
   include:
@@ -1428,7 +1427,11 @@ instance_groups:
         cert: "((loggr_syslog_binding_cache_metrics_tls.certificate))"
         key: "((loggr_syslog_binding_cache_metrics_tls.private_key))"
         server_name: loggr_syslog_binding_cache_metrics
-      aggregate_drains: "syslog-tls://log-cache.service.cf.internal:6067?include-metrics-deprecated=true&ssl-strict-internal=true"
+      aggregate_drains:
+      - url: "syslog-tls://log-cache.service.cf.internal:6067?include-metrics-deprecated=true&ssl-strict-internal=true"
+        ca: "((log_cache_syslog_tls.ca))"
+        cert: "((syslog_agent_log_cache_tls.certificate))"
+        key: "((syslog_agent_log_cache_tls.private_key))"
   - name: loggr-udp-forwarder
     release: loggregator-agent
     properties: *loggr-udp-forwarder-properties
@@ -1549,6 +1552,7 @@ instance_groups:
   - name: log-cache-syslog-server
     release: log-cache
     properties:
+      syslog_client_ca_cert: "((syslog_agent_log_cache_tls.ca))"
       tls:
         cert: "((log_cache_syslog_tls.certificate))"
         key: "((log_cache_syslog_tls.private_key))"
@@ -2322,6 +2326,16 @@ variables:
     common_name: localhost
     alternative_names:
     - localhost
+- name: syslog_agent_log_cache_tls
+  type: certificate
+  update_mode: converge
+  options:
+    ca: loggregator_ca
+    common_name: syslog_agent
+    alternative_names:
+    - "syslog_agent"
+    extended_key_usage:
+    - client_auth
 - name: log_cache_syslog_tls
   type: certificate
   update_mode: converge
@@ -2329,9 +2343,9 @@ variables:
     ca: loggregator_ca
     common_name: log-cache.service.cf.internal
     alternative_names:
-      - "log-cache.service.cf.internal"
+    - "log-cache.service.cf.internal"
     extended_key_usage:
-      - server_auth
+    - server_auth
 - name: router_ca
   type: certificate
   options:
@@ -2359,7 +2373,7 @@ variables:
     alternative_names:
     - routing-api.service.cf.internal
     extended_key_usage:
-      - server_auth
+    - server_auth
 - name: routing_api_tls_client
   type: certificate
   update_mode: converge
@@ -2369,7 +2383,7 @@ variables:
     alternative_names:
     - routing-api-client
     extended_key_usage:
-      - client_auth
+    - client_auth
 - name: uaa_ca
   type: certificate
   options:
@@ -2436,7 +2450,7 @@ variables:
     ca: service_cf_internal_ca
     common_name: policy_server_asg_syncer_cc_client
     alternative_names:
-      - policy_server_asg_syncer_cc_client
+    - policy_server_asg_syncer_cc_client
     extended_key_usage:
     - client_auth
 - name: cc_bridge_cc_uploader_server
@@ -2588,7 +2602,7 @@ variables:
     alternative_names:
     - metrics_agent
     extended_key_usage:
-      - server_auth
+    - server_auth
 - name: metrics_discovery_metrics_tls
   type: certificate
   update_mode: converge
@@ -2598,7 +2612,7 @@ variables:
     alternative_names:
     - metrics_discovery_metrics
     extended_key_usage:
-      - server_auth
+    - server_auth
 - name: scrape_config_generator_metrics_tls
   type: certificate
   update_mode: converge
@@ -2608,7 +2622,7 @@ variables:
     alternative_names:
     - scrape_config_generator_metrics
     extended_key_usage:
-      - server_auth
+    - server_auth
 
 - name: log_cache_metrics_tls
   type: certificate
