@@ -11,7 +11,6 @@ addons:
 - name: loggregator_agent
   include:
     stemcell:
-    - os: ubuntu-xenial
     - os: ubuntu-bionic
     - os: ubuntu-jammy
   exclude:
@@ -39,7 +38,6 @@ addons:
 - name: forwarder_agent
   include:
     stemcell:
-    - os: ubuntu-xenial
     - os: ubuntu-bionic
     - os: ubuntu-jammy
   jobs:
@@ -59,7 +57,6 @@ addons:
 - name: loggr-syslog-agent
   include:
     stemcell:
-    - os: ubuntu-xenial
     - os: ubuntu-bionic
     - os: ubuntu-jammy
   exclude:
@@ -90,7 +87,6 @@ addons:
 - name: prom_scraper
   include:
     stemcell:
-      - os: ubuntu-xenial
       - os: ubuntu-bionic
       - os: ubuntu-jammy
   exclude:
@@ -120,7 +116,6 @@ addons:
       release: cf-smoke-tests
   include:
     stemcell:
-    - os: ubuntu-xenial
     - os: ubuntu-bionic
     - os: ubuntu-jammy
   jobs:
@@ -143,7 +138,6 @@ addons:
       release: cf-smoke-tests
   include:
     stemcell:
-    - os: ubuntu-xenial
     - os: ubuntu-bionic
     - os: ubuntu-jammy
   jobs:
@@ -168,7 +162,6 @@ addons:
 - name: bpm
   include:
     stemcell:
-    - os: ubuntu-xenial
     - os: ubuntu-bionic
     - os: ubuntu-jammy
   jobs:
