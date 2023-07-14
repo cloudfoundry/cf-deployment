@@ -879,6 +879,8 @@ instance_groups:
   networks:
   - name: default
   jobs:
+  - name: redis
+    release: capi
   - name: cloud_controller_ng
     release: capi
     provides:
