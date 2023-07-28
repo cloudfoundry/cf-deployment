@@ -138,6 +138,7 @@
       release: cf-networking
       properties:
         cni_plugin_dir: /var/vcap/packages/silk-cni/bin
+        cni_config_dir: /var/vcap/jobs/silk-cni/config/cni
     - name: netmon
       release: silk
     - name: vxlan-policy-agent
@@ -182,4 +183,3 @@
           cert: "((loggr_udp_forwarder_tls.certificate))"
           key: "((loggr_udp_forwarder_tls.private_key))"
           server_name: loggr_udp_forwarder_metrics
-    cni_config_dir: /var/vcap/jobs/silk-cni/config/cni
