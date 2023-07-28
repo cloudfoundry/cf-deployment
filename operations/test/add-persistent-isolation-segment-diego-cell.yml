@@ -77,17 +77,17 @@
             verify_subject_alt_name:
             - gorouter.service.cf.internal
             - ssh-proxy.service.cf.internal
-        trusted_ca_certificates:
-        - ((diego_instance_identity_ca.ca))
-        - ((credhub_tls.ca))
-        - ((uaa_ssl.ca))
+          trusted_ca_certificates:
+          - ((diego_instance_identity_ca.ca))
+          - ((credhub_tls.ca))
+          - ((uaa_ssl.ca))
         enable_consul_service_registration: false
         enable_declarative_healthcheck: true
         loggregator:
-          tls:
-            ca_cert: "((diego_rep_agent_v2.ca))"
-            cert: "((diego_rep_agent_v2.certificate))"
-            key: "((diego_rep_agent_v2.private_key))"
+          use_v2_api: true
+          ca_cert: "((loggregator_tls_agent.ca))"
+          cert: "((loggregator_tls_agent.certificate))"
+          key: "((loggregator_tls_agent.private_key))"
         tls:
           ca_cert: "((diego_rep_agent_v2.ca))"
           cert: "((diego_rep_agent_v2.certificate))"
