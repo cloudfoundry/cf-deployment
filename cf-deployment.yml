@@ -408,6 +408,7 @@ instance_groups:
             ca: "((nats_client_cert.ca))"
             private_key: "((nats_client_cert.private_key))"
             certificate: "((nats_client_cert.certificate))"
+        fail_deployment_if_v1: true
 - name: database
   migrated_from:
   - name: mysql
