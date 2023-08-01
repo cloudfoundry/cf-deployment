@@ -1,0 +1,185 @@
+---
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: isolated-diego-cell
+    azs:
+    - z1
+    instances: 1
+    vm_type: small-highmem
+    vm_extensions:
+    - 100GB_ephemeral_disk
+    stemcell: default
+    networks:
+    - name: default
+    jobs:
+    - name: bosh-dns-adapter
+      properties:
+        internal_domains: ["apps.internal."]
+        dnshttps:
+          client:
+            tls: ((cf_app_sd_client_tls))
+          server:
+            ca: ((cf_app_sd_client_tls.ca))
+      release: cf-networking
+    - name: cflinuxfs4-rootfs-setup
+      release: cflinuxfs4
+      properties:
+        cflinuxfs4-rootfs:
+          trusted_certs:
+          - ((diego_instance_identity_ca.ca))
+          - ((credhub_tls.ca))
+          - ((uaa_ssl.ca))
+    - name: garden
+      release: garden-runc
+      provides:
+        iptables: nil
+      properties:
+        garden:
+          containerd_mode: true
+          cleanup_process_dirs_on_wait: true
+          debug_listen_address: 127.0.0.1:17019
+          default_container_grace_time: 0
+          destroy_containers_on_start: true
+          deny_networks:
+          - 0.0.0.0/0
+          network_plugin: /var/vcap/packages/runc-cni/bin/garden-external-networker
+          network_plugin_extra_args:
+          - --configFile=/var/vcap/jobs/garden-cni/config/adapter.json
+        logging:
+          format:
+            timestamp: "rfc3339"
+    - name: rep
+      release: diego
+      properties:
+        bpm:
+          enabled: true
+        diego:
+          executor:
+            instance_identity_ca_cert: ((diego_instance_identity_ca.certificate))
+            instance_identity_key: ((diego_instance_identity_ca.private_key))
+          rep:
+            preloaded_rootfses:
+            - cflinuxfs4:/var/vcap/packages/cflinuxfs4/rootfs.tar
+            placement_tags:
+            - persistent_isolation_segment
+        trusted_ca_certificates:
+        - ((diego_instance_identity_ca.ca))
+        - ((credhub_tls.ca))
+        - ((uaa_ssl.ca))
+        containers:
+          proxy:
+            enabled: true
+            require_and_verify_client_certificates: true
+            trusted_ca_certificates:
+            - ((gorouter_backend_tls.ca))
+            - ((ssh_proxy_backends_tls.ca))
+            verify_subject_alt_name:
+            - gorouter.service.cf.internal
+            - ssh-proxy.service.cf.internal
+          trusted_ca_certificates:
+          - ((diego_instance_identity_ca.ca))
+          - ((credhub_tls.ca))
+          - ((uaa_ssl.ca))
+        enable_consul_service_registration: false
+        enable_declarative_healthcheck: true
+        loggregator:
+          use_v2_api: true
+          ca_cert: "((loggregator_tls_agent.ca))"
+          cert: "((loggregator_tls_agent.certificate))"
+          key: "((loggregator_tls_agent.private_key))"
+        tls:
+          ca_cert: "((diego_rep_agent_v2.ca))"
+          cert: "((diego_rep_agent_v2.certificate))"
+          key: "((diego_rep_agent_v2.private_key))"
+        logging:
+          format:
+            timestamp: "rfc3339"
+    - name: cfdot
+      release: diego
+      properties:
+        tls: &cfdot_tls_client_properties
+          ca_certificate: "((diego_rep_client.ca))"
+          certificate: "((diego_rep_client.certificate))"
+          private_key: "((diego_rep_client.private_key))"
+    - name: route_emitter
+      release: diego
+      properties:
+        bpm:
+          enabled: true
+        loggregator:
+          use_v2_api: true
+          ca_cert: "((loggregator_tls_agent.ca))"
+          cert: "((loggregator_tls_agent.certificate))"
+          key: "((loggregator_tls_agent.private_key))"
+        diego:
+          route_emitter:
+            local_mode: true
+            bbs:
+              ca_cert: "((diego_bbs_client.ca))"
+              client_cert: "((diego_bbs_client.certificate))"
+              client_key: "((diego_bbs_client.private_key))"
+            nats:
+              tls:
+                enabled: true
+                client_cert: "((nats_client_cert.certificate))"
+                client_key: "((nats_client_cert.private_key))"
+        internal_routes:
+          enabled: true
+        logging:
+          format:
+            timestamp: "rfc3339"
+        tcp:
+          enabled: true
+        uaa:
+          ca_cert: "((uaa_ssl.ca))"
+          client_secret: "((uaa_clients_tcp_emitter_secret))"
+    - name: garden-cni
+      release: cf-networking
+      properties:
+        cni_plugin_dir: /var/vcap/packages/silk-cni/bin
+        cni_config_dir: /var/vcap/jobs/silk-cni/config/cni
+    - name: netmon
+      release: silk
+    - name: vxlan-policy-agent
+      release: silk
+      properties:
+        ca_cert: ((network_policy_client.ca))
+        client_cert: ((network_policy_client.certificate))
+        client_key: ((network_policy_client.private_key))
+      provides:
+        vpa: nil
+      loggregator: 
+        use_v2_api: true
+        ca_cert: "((loggregator_tls_agent.ca))"
+        cert: "((loggregator_tls_agent.certificate))"
+        key: "((loggregator_tls_agent.private_key))"
+    - name: silk-daemon
+      release: silk
+      properties:
+        ca_cert: ((silk_daemon.ca))
+        client_cert: ((silk_daemon.certificate))
+        client_key: ((silk_daemon.private_key))
+    - name: silk-cni
+      release: silk
+      properties:
+        dns_servers:
+        - 169.254.0.2
+      provides: 
+        cni_config:
+          nil
+    - name: silk-datastore-syncer
+      release: silk
+    - name: loggr-udp-forwarder
+      release: loggregator-agent
+      properties: &loggr-udp-forwarder-properties
+        loggregator:
+          tls:
+            ca: "((loggregator_tls_agent.ca))"
+            cert: "((loggregator_tls_agent.certificate))"
+            key: "((loggregator_tls_agent.private_key))"
+        metrics:
+          ca_cert: "((loggr_udp_forwarder_tls.ca))"
+          cert: "((loggr_udp_forwarder_tls.certificate))"
+          key: "((loggr_udp_forwarder_tls.private_key))"
+          server_name: loggr_udp_forwarder_metrics
