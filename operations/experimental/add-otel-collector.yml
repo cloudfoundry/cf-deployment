@@ -21,7 +21,6 @@
           #     endpoint: otelcol2:4317
         ingress:
           grpc:
-            port: 4319
             tls:
               ca_cert: ((otel_collector_tls.ca))
               cert: ((otel_collector_tls.certificate))
