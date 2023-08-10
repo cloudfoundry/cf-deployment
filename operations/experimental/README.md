@@ -15,6 +15,8 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 |:---  |:---     |:---   |:---   |
 | [`add-cflinuxfs4.yml`](add-cflinuxfs4.yml) | Add [cflinuxfs4](https://github.com/cloudfoundry/cflinuxfs4) stack. | ***Deprecated as we integrate cflinuxfs4 directly into cf-deployment.yml*** | **NO** |
 | [`add-metric-store.yml`](add-metric-store.yml) | **PROMOTED: use `../use-metric-store.yml`** | | **NO** |
+| [`add-otel-collector.yml`](add-otel-collector.yml) | Adds an OTel Collector to all Linux VMs to egress metrics through the provided exporters. | `metric_exporters` must be filled in with valid OTel Collector Exporter configuration. | **NO** |
+| [`add-otel-collector-windows.yml`](add-otel-collector-windows.yml) | Adds an OTel Collector to all Windows 2019 VMs to egress metrics through the provided exporters. | `metric_exporters` must be filled in with valid OTel Collector Exporter configuration.. Requires `./add-otel-collector.yml` and `../windows2019-cell.yml`.  | **NO** |
 | [`add-system-metrics-agent.yml`](add-system-metrics-agent.yml) | **PROMOTED: use `../addons/add-system-metrics-agent.yml`** | | **NO** |
 | [`add-system-metrics-agent-windows2019.yml`](add-system-metrics-agent-windows2019.yml) | **PROMOTED: use `../addons/add-system-metrics-agent-windows2019.yml`** | | **NO** |
 | [`colocate-smoke-tests-on-cc-worker.yml`](colocate-smoke-tests-on-cc-worker.yml) | Colocate the smoke_tests job on the cc-worker instance | A number of other operations files reference this instance group and may be incompatible with this operations file.  Use `find ./operations/ -name "*.yml" | xargs grep "/instance_groups/name=smoke-tests"` to locate said files. | **YES** |
