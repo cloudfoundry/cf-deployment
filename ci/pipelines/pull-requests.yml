@@ -260,6 +260,7 @@ jobs:
         - get: runtime-ci
         - get: cats-all-branches
           trigger: true
+          version: every
       - put: cats-all-branches
         params:
           path: cats-all-branches
