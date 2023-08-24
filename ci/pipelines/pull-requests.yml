@@ -37,7 +37,6 @@ resources:
       access_token: ((ard_wg_gitbot_token))
       repository: cloudfoundry/cf-deployment
       base_branch: main
-      required_review_approvals: 1
   - name: cf-deployment-rc
     type: pull-request
     source:
@@ -65,7 +64,6 @@ resources:
       access_token: ((ard_wg_gitbot_token))
       repository: cloudfoundry/cf-acceptance-tests
       base_branch: main
-      required_review_approvals: 1
   - name: cats-develop
     type: pull-request
     source:
