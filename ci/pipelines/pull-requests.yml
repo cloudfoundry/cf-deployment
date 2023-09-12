@@ -16,7 +16,7 @@ resource_types:
   - name: pull-request
     type: docker-image
     source:
-      repository: teliaoss/github-pr-resource
+      repository: loggregatorbot/github-pr-resource
 
 resources:
   - name: runtime-ci
@@ -30,6 +30,7 @@ resources:
     source:
       access_token: ((ard_wg_gitbot_token))
       repository: cloudfoundry/cf-deployment
+      required_review_approvals: 1
   - name: cf-deployment-main
     type: pull-request
     source:
@@ -42,18 +43,21 @@ resources:
       access_token: ((ard_wg_gitbot_token))
       repository: cloudfoundry/cf-deployment
       base_branch: release-candidate
+      required_review_approvals: 1
   - name: cf-deployment-develop
     type: pull-request
     source:
       access_token: ((ard_wg_gitbot_token))
       repository: cloudfoundry/cf-deployment
       base_branch: develop
+      required_review_approvals: 1
 
   - name: cats-all-branches
     type: pull-request
     source:
       access_token: ((ard_wg_gitbot_token))
       repository: cloudfoundry/cf-acceptance-tests
+      required_review_approvals: 1
   - name: cats-main
     type: pull-request
     source:
@@ -66,6 +70,7 @@ resources:
       access_token: ((ard_wg_gitbot_token))
       repository: cloudfoundry/cf-acceptance-tests
       base_branch: develop
+      required_review_approvals: 1
 
 jobs:
   - name: fail-prs-to-cf-deployment-main
@@ -255,6 +260,7 @@ jobs:
         - get: runtime-ci
         - get: cats-all-branches
           trigger: true
+          version: every
       - put: cats-all-branches
         params:
           path: cats-all-branches

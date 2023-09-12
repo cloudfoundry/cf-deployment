@@ -1,0 +1,23 @@
+- type: replace
+  path: /addons?/name=otel-collector-windows2019
+  value:
+    name: otel-collector-windows2019
+    include:
+      stemcell:
+      - os: windows2019
+    jobs:
+    - name: otel-collector-windows
+      release: loggregator-agent
+      properties:
+        # Insert OTel Collector Exporter configuration
+        # See https://opentelemetry.io/docs/collector/configuration/#exporters
+        # For example:
+        #   otlp:
+        #     endpoint: otelcol2:4317
+        metric_exporters: ((otel_collector_metric_exporters))
+        ingress:
+          grpc:
+            tls:
+              ca_cert: ((otel_collector_tls.ca))
+              cert: ((otel_collector_tls.certificate))
+              key: ((otel_collector_tls.private_key))

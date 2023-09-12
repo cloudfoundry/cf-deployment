@@ -528,15 +528,18 @@ jobs:
         operations/rename-network-and-deployment.yml
         operations/set-bbs-active-key.yml
         operations/test/add-persistent-isolation-segment-diego-cell.yml
+        operations/test/use-cflinuxfs4-compat-isolation-segment-diego-cell.yml
         operations/test/add-persistent-isolation-segment-router.yml
         operations/rename-isolation-segment-network.yml
         operations/addons/enable-component-syslog.yml
+        operations/addons/add-system-metrics-agent.yml
         operations/use-postgres.yml
         operations/experimental/enable-tls-cloud-controller-postgres.yml
         operations/change-postgres-max-connections.yml
         operations/use-internal-lookup-for-route-services.yml
         operations/enable-tls-on-file-server.yml
         operations/test/speed-up-dynamic-asgs.yml
+        operations/use-cflinuxfs4-compat.yml
       VARS_FILES: |
         environments/test/luna/deployment-name.yml
         environments/test/luna/network-name.yml
@@ -1668,6 +1671,8 @@ jobs:
         operations/experimental/use-compiled-releases-windows.yml
         operations/use-internal-lookup-for-route-services.yml
         operations/experimental/colocate-smoke-tests-on-cc-worker.yml
+        operations/addons/add-system-metrics-agent.yml
+        operations/addons/add-system-metrics-agent-windows2019.yml
       REGENERATE_CREDENTIALS: true
   - in_parallel:
     - task: open-asgs-for-credhub

@@ -1,6 +1,15 @@
 ---
 add-cflinuxfs4.yml: {}
 add-metric-store.yml: {}
+add-otel-collector-windows.yml:
+  ops:
+  - ../windows2019-cell.yml
+  - add-otel-collector.yml
+  varsfiles:
+  - example-vars-files/vars-override-otel-collector-exporters.yml
+add-otel-collector.yml:
+  varsfiles:
+  - example-vars-files/vars-override-otel-collector-exporters.yml
 add-system-metrics-agent-windows2019.yml:
   ops:
   - ../windows2019-cell.yml

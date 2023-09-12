@@ -1,0 +1,11 @@
+- type: replace
+  path: /instance_groups/name=isolated-diego-cell/jobs/name=cflinuxfs4-rootfs-setup?
+  value:
+    name: cflinuxfs4-rootfs-setup
+    properties:
+      cflinuxfs4-rootfs:
+        trusted_certs:
+        - ((diego_instance_identity_ca.ca))
+        - ((credhub_tls.ca))
+        - ((uaa_ssl.ca))
+    release: cflinuxfs4-compat
