@@ -684,6 +684,10 @@ instance_groups:
             keys:
               key-1:
                 signingKey: "((uaa_jwt_signing_key.private_key))"
+              key-2:
+                signingKey: "((uaa_jwt_signing_cert.private_key))"
+                signingAlg: RS256
+                signingCert: "((uaa_jwt_signing_cert.certificate))"
         clients:
           cc_routing:
             authorities: routing.router_groups.read
@@ -2402,6 +2406,14 @@ variables:
     common_name: uaa_login_saml
     alternative_names:
     - uaa_login_saml
+- name: uaa_jwt_signing_cert
+  type: certificate
+  update_mode: converge
+  options:
+    ca: uaa_ca
+    common_name: uaa_jwt_signing_cert
+    alternative_names:
+    - uaa_jwt_signing_cert
 - name: cc_tls
   type: certificate
   update_mode: converge
