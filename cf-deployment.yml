@@ -684,6 +684,10 @@ instance_groups:
             keys:
               key-1:
                 signingKey: "((uaa_jwt_signing_key.private_key))"
+              key-2:
+                signingKey: "((uaa_jwt_signing_cert.private_key))"
+                signingAlg: RS256
+                signingCert: "((uaa_jwt_signing_cert.certificate))"
         clients:
           cc_routing:
             authorities: routing.router_groups.read
@@ -2402,6 +2406,14 @@ variables:
     common_name: uaa_login_saml
     alternative_names:
     - uaa_login_saml
+- name: uaa_jwt_signing_cert
+  type: certificate
+  update_mode: converge
+  options:
+    ca: uaa_ca
+    common_name: uaa_jwt_signing_cert
+    alternative_names:
+    - uaa_jwt_signing_cert
 - name: cc_tls
   type: certificate
   update_mode: converge
@@ -2857,9 +2869,9 @@ releases:
   version: 42.0.97
   sha1: 54c60bef18426a97ebffd0d64cebbe5f2399cf5f
 - name: cflinuxfs4
-  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs4-release?v=1.36.0
-  version: 1.36.0
-  sha1: 0028a2d78b8046c7370dbc2cec9d0d848d380a1a
+  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs4-release?v=1.38.0
+  version: 1.38.0
+  sha1: 024a010f27deff2a1fc2c4a5edd73c20840e820d
 - name: credhub
   url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=2.12.44
   version: 2.12.44
@@ -2873,9 +2885,9 @@ releases:
   version: 2.4.16
   sha1: f45af7f9bd504180255f22790e154f0cb3843e01
 - name: garden-runc
-  url: https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.38.0
-  version: 1.38.0
-  sha1: 591022f51dba6a90d7fa00c96c684126bc373e05
+  url: https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.39.0
+  version: 1.39.0
+  sha1: e2250dcc01106cd203a831edac7f97ff9f5f6d29
 - name: go-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/go-buildpack-release?v=1.10.12
   version: 1.10.12
@@ -2921,9 +2933,9 @@ releases:
   version: 1.8.14
   sha1: 15aa7d79345ab5e99bf5a49efd7903b72380f535
 - name: routing
-  url: https://bosh.io/d/github.com/cloudfoundry/routing-release?v=0.280.0
-  version: 0.280.0
-  sha1: d4d0a34daec011a11691b92b4c60be5cf7d44a03
+  url: https://bosh.io/d/github.com/cloudfoundry/routing-release?v=0.281.0
+  version: 0.281.0
+  sha1: 31caaf7cdae198e86f9b3818b543a07f4d976036
 - name: ruby-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/ruby-buildpack-release?v=1.10.4
   version: 1.10.4
