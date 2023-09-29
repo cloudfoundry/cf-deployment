@@ -69,8 +69,6 @@ buildpackReleases:
 opsReleases:
 - name: backup-and-restore-sdk
   repository: cloudfoundry-incubator/backup-and-restore-sdk-release
-- name: cf-app-sd
-  repository: cloudfoundry/cf-app-sd-release
 - name: cflinuxfs4-compat
   repository: cloudfoundry/cflinuxfs4-compat-release
 - name: haproxy
@@ -102,8 +100,6 @@ opsReleases:
   requiredOpsFiles:
   - operations/use-online-windows2019fs.yml
   prependOpsFileToList: true
-- name: garden-windows
-  repository: cloudfoundry-incubator/garden-windows-bosh-release
 - name: winc
   repository: cloudfoundry-incubator/winc-release
   requiredOpsFiles:
