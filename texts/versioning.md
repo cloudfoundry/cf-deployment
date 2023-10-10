@@ -5,13 +5,13 @@ is to provide a meaningful versioning scheme
 for Cloud Foundry operators.
 
 ## Version Scheme
-cf-deployment uses [semantic versioning](https://server.org),
+cf-deployment uses [semantic versioning](https://semver.org/),
 insofar as that scheme makes sense for a deployment manifest.
 In this doc, we'd like to lay out
 how we intend to use semantic versioning for cf-deployment.
 
 One of the goals of cf-deployment
-is promote the idea of continuous deployment.
+is to promote the idea of continuous deployment.
 That is, operators should grow comfortable
 with the idea that they can update their deployments
 without much process or pomp.
@@ -30,7 +30,7 @@ For cf-deployment,
 the "API" we consider
 is the ability of the operator to deploy.
 If updates to cf-deployment require manual steps
-from the operator. Following are examples of breaking changes. This is not a comprehensive list and will revised in the future.
+from the operator. Following are examples of breaking changes. This is not a comprehensive list and will be revised in the future.
 
 > **Types of breaking changes:**
 > - **causes app or operator downtime**
@@ -43,11 +43,14 @@ from the operator. Following are examples of breaking changes. This is not a com
 >    - `./addons`
 >    - `./backup-and-restore/`
 >
-> _If you're promoting an experimental Ops-file (or removing one), Please follow the [Ops-file workflows](https://github.com/cloudfoundry/cf-deployment/blob/main/ops-file-promotion-workflow.md)._
+> _If you're promoting an experimental ops-file (or removing one), Please follow the [Ops-file workflows](https://github.com/cloudfoundry/cf-deployment/blob/main/ops-file-promotion-workflow.md)._
 
-> Ops files changes in the following folders are considered as NON BREAKING CHANGES
+> Ops files changes in the following folders are considered as NON-BREAKING CHANGES
 > `./community`, `./example-vars-files`, `./test`
 
+From release v32.x.x on we are introducing the following additional semantics: No major version must be skipped when
+updating cf-deployment. If an operator skips a major version, a seamless update is no longer guaranteed. This additional
+constraint is necessary for features which must be rolled out step-by-step, e.g. complex database migrations.
 
 As noted earlier,
 the Cloud Foundry team values the ability
@@ -78,7 +81,6 @@ most bug fixes will likely be included with changes that add functionality.
 As such, bug fixes will often be published in minor releases rather than patch releases.
 Although we may use patch versions
 to encode small fixes that don't include new functionality, so far our precedent is to include in minor version bumps.
-
 
 ### Versioning and Ops-files
 Maintaining a stable interface for user-defined, custom, ops-files is not a realistic contract to uphold.
