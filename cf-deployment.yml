@@ -1,6 +1,6 @@
 ---
 name: cf
-manifest_version: v32.15.0
+manifest_version: v32.16.0
 update:
   canaries: 1
   canary_watch_time: 30000-1200000
@@ -892,7 +892,7 @@ instance_groups:
       cloud_controller: {as: cloud_controller, shared: true}
     properties:
       name: cf-deployment
-      build: v32.15.0 # AUTO-POPULATED; DO NOT EDIT
+      build: v32.16.0 # AUTO-POPULATED; DO NOT EDIT
       version: 32 # AUTO-POPULATED; DO NOT EDIT
       router:
         route_services_secret: "((router_route_services_secret))"
