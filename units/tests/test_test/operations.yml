@@ -5,15 +5,9 @@ add-datadog-firehose-nozzle.yml:
   - datadog_metric_prefix=foo.bar
   - traffic_controller_external_port=8443
 add-oidc-provider.yml: {}
-add-persistent-isolation-segment-diego-cell-bosh-lite.yml:
-  ops:
-  - add-persistent-isolation-segment-diego-cell.yml
-  - add-persistent-isolation-segment-diego-cell-bosh-lite.yml
-add-persistent-isolation-segment-diego-cell.yml: {}
 use-cflinuxfs4-compat-isolation-segment-diego-cell.yml:
   ops:
   - add-persistent-isolation-segment-diego-cell.yml
-add-persistent-isolation-segment-router.yml: {}
 alter-ssh-proxy-redirect-uri.yml: {}
 enable-nfs-test-ldapserver.yml:
   ops:
