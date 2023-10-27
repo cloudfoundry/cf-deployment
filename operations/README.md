@@ -32,6 +32,8 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 
 | Name | Purpose | Notes | Currently validated in Release Integration CI pipelines? |
 |:---  |:---     |:---   |:---   |
+| [`add-persistent-isolation-segment-diego-cell.yml`](add-persistent-isolation-segment-diego-cell.yml) | Deployes an isolation segment Diego cell. | See [isolation segment](https://docs.cloudfoundry.org/adminguide/isolation-segments.html) documentation. | **YES** |
+| [`add-persistent-isolation-segment-router.yml`](add-persistent-isolation-segment-router.yml) | Deployes an isolation segment router. | See [isolation segment](https://docs.cloudfoundry.org/adminguide/isolation-segments.html) documentation. | **YES** |
 | [`bosh-lite.yml`](bosh-lite.yml) | Enables `cf-deployment` to be deployed on `bosh-lite`. | See [bosh-lite](../iaas-support/bosh-lite/README.md) documentation. | **YES** |
 | [`configure-default-router-group.yml`](configure-default-router-group.yml) | Allows deployer to configure reservable ports for default tcp router group by passing variable `default_router_group_ reservable_ports`. |  | **NO** |
 | [`disable-router-tls-termination.yml`](disable-router-tls-termination.yml) | Eliminates keys related to performing TLS termination within the gorouter job. | Useful for deployments where TLS termination is performed prior to the gorouter - for instance, on AWS, such termination is commonly done at the ELB. This also eliminates the need to specify `((router_ssl.certificate))` and `((router_ssl.private_key))` in the var files. | **NO** |

@@ -215,18 +215,6 @@ For details, see the [Experimental Ops-file README](operations/experimental/READ
 "Test" ops-files are configurations
 that we run in our testing pipeline
 to enable certain features.
-We include them in the public repository
-(rather than in our private CI repositories)
-for a few reasons,
-depending on the particular ops-file.
-
-Some files are included
-because we suspect that the configurations will be commonly needed
-but not easily generalized.
-For example,
-`add-persistent-isolation-segment.yml` shows how a deployer can add an isolated Diego cell,
-but the ops-file is hard to apply repeatably.
-In this case, the ops-file is an example.
 
 #### [Backup and Restore](operations/backup-and-restore)
 Contains all the ops files utilized to enable and configure [BOSH Backup and Restore](https://github.com/cloudfoundry-incubator/bosh-backup-and-restore) (BBR).
