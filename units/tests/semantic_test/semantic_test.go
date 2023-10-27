@@ -195,7 +195,7 @@ func TestSemantic(t *testing.T) {
 			manifestPath,
 			"",
 			"--path", "/instance_groups/name=isolated-diego-cell/jobs/name=rep/properties",
-			"-o", "test/add-persistent-isolation-segment-diego-cell.yml",
+			"-o", "add-persistent-isolation-segment-diego-cell.yml",
 		)
 
 		if err != nil {
@@ -203,7 +203,7 @@ func TestSemantic(t *testing.T) {
 		}
 
 		if diff, same := diffLeft(string(diegoCellRepProperties), string(isoSegDiegoCellRepProperties)); !same {
-			t.Errorf("rep properties on diego-cell have diverged between cf-deployment.yml and test/add-persistent-isolation-segment-diego-cell.yml.\n%s", diff)
+			t.Errorf("rep properties on diego-cell have diverged between cf-deployment.yml and add-persistent-isolation-segment-diego-cell.yml.\n%s", diff)
 		}
 	})
 
