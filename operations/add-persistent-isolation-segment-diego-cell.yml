@@ -147,13 +147,13 @@
         ca_cert: ((network_policy_client.ca))
         client_cert: ((network_policy_client.certificate))
         client_key: ((network_policy_client.private_key))
+        loggregator:
+          use_v2_api: true
+          ca_cert: "((loggregator_tls_agent.ca))"
+          cert: "((loggregator_tls_agent.certificate))"
+          key: "((loggregator_tls_agent.private_key))"
       provides:
         vpa: nil
-      loggregator: 
-        use_v2_api: true
-        ca_cert: "((loggregator_tls_agent.ca))"
-        cert: "((loggregator_tls_agent.certificate))"
-        key: "((loggregator_tls_agent.private_key))"
     - name: silk-daemon
       release: silk
       properties:
