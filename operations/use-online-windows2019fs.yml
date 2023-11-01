@@ -3,6 +3,12 @@
   value:
     name: windows2019fs
     release: windowsfs
+    properties:
+      windows-rootfs:
+        trusted_certs: |
+          ((diego_instance_identity_ca.ca))
+          ((credhub_tls.ca))
+          ((uaa_ssl.ca))
 - type: replace
   path: /releases/name=windowsfs?
   value:
