@@ -2,15 +2,15 @@
   path: /instance_groups/name=windows2019-cell/jobs/name=windows2019fs?
   value:
     name: windows2019fs
-    release: windows2019fs
     properties:
       windows-rootfs:
         trusted_certs: |
           ((diego_instance_identity_ca.ca))
           ((credhub_tls.ca))
           ((uaa_ssl.ca))
+    release: windows2019fs
 - type: replace
   path: /releases/name=windows2019fs?
   value:
     name: windows2019fs
-    version: 2.59.0
+    version: 2.60.0
