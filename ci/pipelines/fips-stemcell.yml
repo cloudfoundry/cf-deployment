@@ -110,6 +110,7 @@ jobs:
           BBL_STATE_DIR: environments/test/snape/bbl-state
           SYSTEM_DOMAIN: cf.snape.env.wg-ard.ci.cloudfoundry.org
           OPS_FILES: |
+            operations/aws.yml
             operations/addons/enable-component-syslog.yml
             operations/addons/add-system-metrics-agent.yml
             operations/use-postgres.yml
