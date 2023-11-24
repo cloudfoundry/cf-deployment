@@ -514,6 +514,7 @@ jobs:
       NEW_OPS_FILES: |
         environments/test/luna/rename-isolation-segment-network.yml
         environments/test/luna/change-postgres-max-connections.yml
+        environments/test/luna/smoke-tests-timeout-scale.yml
   - task: bosh-deploy-cf
     file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
     input_mapping:
