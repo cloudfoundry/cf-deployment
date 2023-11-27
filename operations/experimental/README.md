@@ -44,5 +44,5 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 | [`disable-logs-in-firehose.yml`](disable-logs-in-firehose.yml) | Logs are not sent to dopplers, only metrics | | **NO** |
 | [`disable-logs-in-firehose-windows2019.yml`](disable-logs-in-firehose-windows-2019.yml) | Logs are not sent to dopplers, only metrics | | **NO** |
 | [`use-native-garden-runc-runner.yml`](use-native-garden-runc-runner.yml) | Configure Garden to **not** create containers via containerd, using the native runner instead. | | **NO** |
-| [`use-mysql-version-8.0.yml`](use-mysql-version-8.0.yml) | Deploys or upgrades Percona 8.0 as the internal database. | When used in conjunction with [pxc-release](https://github.com/cloudfoundry/pxc-release) v1.0.0 or greater will deploy Percona 8.0 or upgrade Percona 5.7 to Percona 8.0| **YES** |
+| [`use-mysql-version-8.0.yml`](use-mysql-version-8.0.yml) | Deploys or upgrades Percona 8.0 as the internal database. | ***Deprecated as we now use MySQL version 8.0 by default.*** | **NO** |
 | [`use-trusted-ca-cert-for-apps-cflinuxfs4.yml`](use-trusted-ca-cert-for-apps-cflinuxfs4.yml) | Same as [`use-trusted-ca-cert-for-apps.yml`](../use-trusted-ca-cert-for-apps.yml), but for cflinuxfs4 stack | ***Deprecated as we integrate cflinuxfs4 directly into cf-deployment.yml*** | **NO** |
