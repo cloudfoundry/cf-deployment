@@ -8,6 +8,17 @@ resources:
       pool: cf-deployment/fips
       private_key: ((ard_wg_gitbot_ssh_key.private_key))
 
+  - name: fips-stemcell
+    type: bosh-io-stemcell
+    icon: dna
+    source:
+      repository: foundationalinfrastructure/bosh-io-stemcell-resource
+      tag: latest
+      name: bosh-aws-xen-hvm-ubuntu-jammy-fips-go_agent
+      auth:
+        access_key: ((ci_dev_gcp_service_account_hmac_access_key))
+        secret_key: ((ci_dev_gcp_service_account_hmac_secret))
+
   - name: cf-deployment-concourse-tasks
     type: git
     icon: github
@@ -64,6 +75,8 @@ jobs:
     plan:
       - in_parallel:
           - get: cf-deployment-main
+            trigger: true
+          - get: fips-stemcell
             trigger: true
           - put: fips-pool
             params: { acquire: true }
