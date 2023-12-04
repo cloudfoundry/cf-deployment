@@ -151,27 +151,17 @@ jobs:
                 ln -s relint-envs bbl-state
                 setup_bosh_env_vars
                 bosh upload-stemcell ./fips-stemcell/stemcell.tgz
-      - task: collect-ops-files
-        file: cf-deployment-concourse-tasks/collect-ops-files/task.yml
-        input_mapping:
-          base-ops-files: cf-deployment-main
-          new-ops-files: relint-envs
-        params:
-          BASE_OPS_FILE_DIR: operations
-          NEW_OPS_FILES: |
-            environments/test/snape/use-fips-stemcell.yml
       - task: bosh-deploy-cf
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
           cf-deployment: cf-deployment-main
-          ops-files: collected-ops-files
+          ops-files: cf-deployment-main
           vars-files: relint-envs
         params:
           BBL_STATE_DIR: environments/test/snape/bbl-state
           SYSTEM_DOMAIN: cf.snape.env.wg-ard.ci.cloudfoundry.org
           OPS_FILES: |
-            operations/use-fips-stemcell.yml
             operations/aws.yml
             operations/addons/enable-component-syslog.yml
             operations/addons/add-system-metrics-agent.yml
