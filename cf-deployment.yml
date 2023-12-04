@@ -109,56 +109,6 @@ addons:
         key: "((prom_scraper_metrics_tls.private_key))"
         server_name: prom_scraper_metrics
 
-- name: metrics-discovery-registrar
-  exclude:
-    jobs:
-    - name: smoke_tests
-      release: cf-smoke-tests
-  include:
-    stemcell:
-    - os: ubuntu-bionic
-    - os: ubuntu-jammy
-  jobs:
-  - name: metrics-discovery-registrar
-    properties:
-      metrics:
-        ca_cert: ((metrics_discovery_metrics_tls.ca))
-        cert: ((metrics_discovery_metrics_tls.certificate))
-        key: ((metrics_discovery_metrics_tls.private_key))
-        server_name: metrics_discovery_metrics
-      nats_client:
-        cert: ((nats_client_cert.certificate))
-        key: ((nats_client_cert.private_key))
-    release: metrics-discovery
-
-- name: metrics-agent
-  exclude:
-    jobs:
-    - name: smoke_tests
-      release: cf-smoke-tests
-  include:
-    stemcell:
-    - os: ubuntu-bionic
-    - os: ubuntu-jammy
-  jobs:
-  - name: metrics-agent
-    properties:
-      grpc:
-        ca_cert: ((loggregator_tls_agent.ca))
-        cert: ((loggregator_tls_agent.certificate))
-        key: ((loggregator_tls_agent.private_key))
-      metrics:
-        ca_cert: ((metrics_agent_tls.ca))
-        cert: ((metrics_agent_tls.certificate))
-        key: ((metrics_agent_tls.private_key))
-        server_name: metrics_agent
-      scrape:
-        tls:
-          ca_cert: ((prom_scraper_scrape_tls.ca))
-          cert: ((prom_scraper_scrape_tls.certificate))
-          key: ((prom_scraper_scrape_tls.private_key))
-    release: metrics-discovery
-
 - name: bpm
   include:
     stemcell:
@@ -2598,26 +2548,7 @@ variables:
     - log_cache_syslog_server_metrics
     extended_key_usage:
     - server_auth
-- name: metrics_agent_tls
-  type: certificate
-  update_mode: converge
-  options:
-    ca: metric_scraper_ca
-    common_name: metrics_agent
-    alternative_names:
-    - metrics_agent
-    extended_key_usage:
-    - server_auth
-- name: metrics_discovery_metrics_tls
-  type: certificate
-  update_mode: converge
-  options:
-    ca: metric_scraper_ca
-    common_name: metrics_discovery_metrics
-    alternative_names:
-    - metrics_discovery_metrics
-    extended_key_usage:
-    - server_auth
+
 - name: scrape_config_generator_metrics_tls
   type: certificate
   update_mode: converge
@@ -2895,10 +2826,6 @@ releases:
   url: https://bosh.io/d/github.com/cloudfoundry/loggregator-release?v=107.0.10
   version: 107.0.10
   sha1: 76b406734e07c616f7ab62547ec50829a10b482a
-- name: metrics-discovery
-  url: https://bosh.io/d/github.com/cloudfoundry/metrics-discovery-release?v=3.2.20
-  version: 3.2.20
-  sha1: 03ed116246fc94e0a3d4c4a6fdb00ac14b362c70
 - name: nats
   url: https://bosh.io/d/github.com/cloudfoundry/nats-release?v=56.12.0
   version: 56.12.0

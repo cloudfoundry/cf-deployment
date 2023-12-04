@@ -159,16 +159,6 @@
     url: https://storage.googleapis.com/cf-deployment-compiled-releases/loggregator-agent-7.7.2-ubuntu-jammy-1.80-20231124-205311-333559149.tgz
     version: 7.7.2
 - type: replace
-  path: /releases/name=metrics-discovery
-  value:
-    name: metrics-discovery
-    sha1: f3f5bdde3224bab16b3763cc45e1d229d12c6ea6
-    stemcell:
-      os: ubuntu-jammy
-      version: "1.80"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/metrics-discovery-3.2.20-ubuntu-jammy-1.80-20231108-102049-882007364.tgz
-    version: 3.2.20
-- type: replace
   path: /releases/name=nats
   value:
     name: nats
