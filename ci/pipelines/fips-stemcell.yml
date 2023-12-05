@@ -167,9 +167,11 @@ jobs:
             operations/addons/add-system-metrics-agent.yml
             operations/use-postgres.yml
             operations/experimental/enable-tls-cloud-controller-postgres.yml
+            operations/use-latest-stemcell.yml
           VARS_FILES: |
             environments/test/snape/syslog-vars.yml
           REGENERATE_CREDENTIALS: true
+          SKIP_STEMCELL_UPLOAD: true
       - task: update-integration-configs
         file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
         params:
