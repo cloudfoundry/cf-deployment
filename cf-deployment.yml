@@ -1419,6 +1419,10 @@ instance_groups:
         status:
           password: "((router_status_password))"
           user: router-status
+          tls:
+            port: 8443
+            certificate: ((gorouter_lb_health_tls.certificate))
+            key: ((gorouter_lb_health_tls.private_key))
         route_services_secret: "((router_route_services_secret))"
         tracing:
           enable_zipkin: true
@@ -2460,6 +2464,13 @@ variables:
     - gorouter.service.cf.internal
     extended_key_usage:
     - client_auth
+- name: gorouter_lb_health_tls
+  type: certificate
+  options:
+    ca: service_cf_internal_ca
+    common_name: gorouter_lb_health_tls
+    alternative_names:
+    - gorouter.service.cf.internal
 - name: credhub_ca
   type: certificate
   options:
