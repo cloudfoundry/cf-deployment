@@ -36,9 +36,20 @@
           nstar_bin: /var/vcap/packages/nstar/nstar.exe
           runtime_plugin: /var/vcap/packages/winc/winc.exe
       release: garden-runc
+    - name: envoy_windows
+      release: envoy-nginx
     - name: rep_windows
       properties:
         containers:
+          proxy:
+            enabled: true
+            require_and_verify_client_certificates: true
+            trusted_ca_certificates:
+            - ((gorouter_backend_tls.ca))
+            - ((ssh_proxy_backends_tls.ca))
+            verify_subject_alt_name:
+            - gorouter.service.cf.internal
+            - ssh-proxy.service.cf.internal
           trusted_ca_certificates:
           - ((diego_instance_identity_ca.ca))
           - ((credhub_tls.ca))
@@ -230,3 +241,10 @@
     sha1: 52f489fe0806ee8915f5613f79c9173773871e8b
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.20.0
     version: 0.20.0
+- type: replace
+  path: /releases/name=envoy-nginx?
+  value:
+    name: envoy-nginx
+    sha1: 5e70bd6e58b632df3249c6ce42a3e42388427bb0
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/envoy-nginx-release?v=0.22.0
+    version: 0.22.0
