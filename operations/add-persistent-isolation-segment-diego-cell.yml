@@ -34,6 +34,7 @@
       release: garden-runc
       provides:
         iptables: nil
+        max_containers: { as: max_containers_isolated_diego_cell }
       properties:
         garden:
           containerd_mode: true
@@ -51,6 +52,8 @@
             timestamp: "rfc3339"
     - name: rep
       release: diego
+      consumes:
+        max_containers: { from: max_containers_isolated_diego_cell }
       properties:
         bpm:
           enabled: true
