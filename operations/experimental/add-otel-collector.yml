@@ -11,7 +11,7 @@
         release: cf-smoke-tests
     jobs:
     - name: otel-collector
-      release: loggregator-agent
+      release: otel-collector
       properties:
         # Insert OTel Collector Exporter configuration
         # See https://opentelemetry.io/docs/collector/configuration/#exporters
@@ -39,3 +39,10 @@
       extended_key_usage:
       - client_auth
       - server_auth
+- type: replace
+  path: /releases/name=otel-collector?
+  value:
+    name: "otel-collector"
+    version: "0.3.0"
+    url: "https://bosh.io/d/github.com/cloudfoundry/otel-collector-release?v=0.3.0"
+    sha1: "5f6f1aca2712e9de0b4049a51ece99a6c70938fe"
