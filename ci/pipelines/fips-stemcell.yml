@@ -1,0 +1,306 @@
+# TODO remove this resource type declaration when a final release of the resource is available
+resource_types:
+  - name: bosh-io-stemcell
+    source:
+      repository: foundationalinfrastructure/bosh-io-stemcell-resource
+      tag: v1.2.1
+    type: docker-image
+
+resources:
+  - name: fips-pool
+    type: pool
+    icon: pool
+    source:
+      uri: git@github.com:cloudfoundry/relint-ci-pools
+      branch: main
+      pool: cf-deployment/fips
+      private_key: ((ard_wg_gitbot_ssh_key.private_key))
+
+  - name: fips-stemcell
+    type: bosh-io-stemcell
+    icon: dna
+    source:
+      name: bosh-aws-xen-hvm-ubuntu-jammy-fips-go_agent
+      auth:
+        access_key: ((ci_dev_gcp_service_account_hmac_access_key))
+        secret_key: ((ci_dev_gcp_service_account_hmac_secret))
+
+  - name: cf-deployment-concourse-tasks
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
+
+  - name: runtime-ci
+    type: git
+    icon: github
+    source:
+      branch: main
+      uri: https://github.com/cloudfoundry/runtime-ci.git
+
+  - name: relint-envs
+    type: git
+    icon: github
+    source:
+      branch: main
+      uri: git@github.com:cloudfoundry/relint-envs.git
+      private_key: ((ard_wg_gitbot_ssh_key.private_key))
+
+  - name: cf-smoke-tests
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/cloudfoundry/cf-smoke-tests
+
+  - name: cf-deployment-main
+    type: git
+    icon: github
+    source:
+      branch: main
+      uri: git@github.com:cloudfoundry/cf-deployment.git
+      private_key: ((ard_wg_gitbot_ssh_key.private_key))
+      ignore_paths:
+        - .envrc
+        - .overcommit.yml
+        - ISSUE_TEMPLATE.md
+        - PULL_REQUEST_TEMPLATE.md
+        - ci/**
+        - texts/**
+
+  - name: cf-acceptance-tests-rc
+    type: git
+    icon: github
+    source:
+      branch: release-candidate
+      uri: https://github.com/cloudfoundry/cf-acceptance-tests.git
+
+jobs:
+  - name: fips-acquire-pool
+    serial: true
+    public: true
+    plan:
+      - in_parallel:
+          - get: cf-deployment-main
+            trigger: true
+          - get: fips-stemcell
+            trigger: true
+          - put: fips-pool
+            params: { acquire: true }
+        timeout: 4h
+
+  - name: fips-release-pool-manual
+    public: true
+    plan:
+      - get: fips-pool
+    ensure:
+      try:
+        put: fips-pool
+        params: {release: fips-pool}
+
+  - name: fips-deploy
+    serial_groups: [ fips-cats, fips-smokes ]
+    public: true
+    plan:
+      - get: fips-pool
+        trigger: true
+        passed: [fips-acquire-pool]
+      - in_parallel:
+          - get: cf-deployment-main
+            passed: [fips-acquire-pool]
+          - get: fips-stemcell
+          - get: cf-deployment-concourse-tasks
+          - get: runtime-ci
+          - get: relint-envs
+          - get: cf-smoke-tests
+      - task: guarantee-no-existing-cf-deployment
+        file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/snape/bbl-state
+          IGNORE_ERRORS: true
+      - task: bosh-cleanup
+        file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/snape/bbl-state
+      # existing upload-stemcell tasks don't work as they are trying to upload the stemcell from the given (protected) URL
+      # instead, we must upload the stemcell from the local file of the "fips-stemcell" resource
+      - task: upload-fips-stemcell
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: cloudfoundry/cf-deployment-concourse-tasks
+          inputs:
+            - name: cf-deployment-concourse-tasks
+            - name: fips-stemcell
+            - name: relint-envs
+          params:
+            BBL_STATE_DIR: environments/test/snape/bbl-state
+          run:
+            path: bash
+            dir: ""
+            args:
+              - -c
+              - |
+                #!/bin/bash
+                source cf-deployment-concourse-tasks/shared-functions
+                ln -s relint-envs bbl-state
+                setup_bosh_env_vars
+                bosh upload-stemcell ./fips-stemcell/stemcell.tgz
+      - task: bosh-deploy-cf
+        file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          cf-deployment: cf-deployment-main
+          ops-files: cf-deployment-main
+          vars-files: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/snape/bbl-state
+          SYSTEM_DOMAIN: cf.snape.env.wg-ard.ci.cloudfoundry.org
+          OPS_FILES: |
+            operations/aws.yml
+            operations/addons/enable-component-syslog.yml
+            operations/addons/add-system-metrics-agent.yml
+            operations/use-postgres.yml
+            operations/experimental/enable-tls-cloud-controller-postgres.yml
+            operations/use-latest-stemcell.yml
+          VARS_FILES: |
+            environments/test/snape/syslog-vars.yml
+          REGENERATE_CREDENTIALS: true
+          SKIP_STEMCELL_UPLOAD: true
+      - task: update-integration-configs
+        file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
+        params:
+          BBL_STATE_DIR: environments/test/snape/bbl-state
+          CATS_INTEGRATION_CONFIG_FILE: environments/test/snape/integration_config.json
+        input_mapping:
+          bbl-state: relint-envs
+          integration-configs: relint-envs
+      - in_parallel:
+          - task: ensure-api-healthy
+            file: runtime-ci/tasks/ensure-api-healthy/task.yml
+            input_mapping:
+              cats-integration-config: relint-envs
+            params:
+              CONFIG_FILE_PATH: environments/test/snape/integration_config.json
+      - in_parallel:
+          - task: open-asgs-for-credhub
+            file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
+            input_mapping:
+              bbl-state: relint-envs
+            params:
+              BBL_STATE_DIR: environments/test/snape/bbl-state
+              INSTANCE_GROUP_NAME: credhub
+              SYSTEM_DOMAIN: cf.snape.env.wg-ard.ci.cloudfoundry.org
+              SECURITY_GROUP_NAME: credhub
+          - task: open-asgs-for-uaa
+            file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
+            input_mapping:
+              bbl-state: relint-envs
+            params:
+              BBL_STATE_DIR: environments/test/snape/bbl-state
+              INSTANCE_GROUP_NAME: uaa
+              SYSTEM_DOMAIN: cf.snape.env.wg-ard.ci.cloudfoundry.org
+              SECURITY_GROUP_NAME: uaa
+          - task: enable-docker-and-tasks
+            attempts: 2
+            file: cf-deployment-concourse-tasks/set-feature-flags/task.yml
+            input_mapping:
+              bbl-state: relint-envs
+            params:
+              BBL_STATE_DIR: environments/test/snape/bbl-state
+              SYSTEM_DOMAIN: cf.snape.env.wg-ard.ci.cloudfoundry.org
+              ENABLED_FEATURE_FLAGS: |
+                diego_docker
+                task_creation
+                service_instance_sharing
+
+  - name: fips-smoke-tests
+    public: true
+    serial_groups: [ fips-smokes ]
+    plan:
+      - do:
+          - get: fips-pool
+            passed: [ fips-deploy ]
+            trigger: true
+          - in_parallel:
+              - get: relint-envs
+              - get: cf-deployment-main
+                passed: [ fips-deploy ]
+              - get: cf-deployment-concourse-tasks
+        timeout: 1h
+      - task: bosh-run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        params:
+          BBL_STATE_DIR: environments/test/snape/bbl-state
+          ERRAND_NAME: smoke_tests
+        input_mapping:
+          bbl-state: relint-envs
+
+  - name: fips-cats
+    public: true
+    serial_groups: [ fips-cats ]
+    plan:
+      - timeout: 4h
+        do:
+          - get: fips-pool
+            trigger: true
+            passed: [ fips-deploy ]
+          - in_parallel:
+              - get: cf-deployment-concourse-tasks
+              - get: cf-acceptance-tests-rc
+              - get: relint-envs
+              - get: cf-deployment-main
+                passed: [ fips-deploy ]
+          - task: update-integration-configs
+            file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
+            params:
+              BBL_STATE_DIR: environments/test/snape/bbl-state
+              CATS_INTEGRATION_CONFIG_FILE: environments/test/snape/integration_config.json
+            input_mapping:
+              bbl-state: relint-envs
+              integration-configs: relint-envs
+          - task: run-cats
+            file: cf-deployment-concourse-tasks/run-cats/task.yml
+            input_mapping:
+              integration-config: updated-integration-configs
+              cf-acceptance-tests: cf-acceptance-tests-rc
+            params:
+              CONFIG_FILE_PATH: environments/test/snape/integration_config.json
+              CAPTURE_LOGS: true
+              RELINT_VERBOSE_AUTH: "true"
+              NODES: 12
+
+  - name: fips-delete-deployment
+    serial: true
+    public: true
+    plan:
+      - timeout: 4h
+        do:
+          - get: fips-pool
+            trigger: true
+            passed:
+              - fips-cats
+              - fips-smoke-tests
+          - in_parallel:
+              - get: cf-deployment-concourse-tasks
+              - get: relint-envs
+          - task: delete-deployment-cf
+            file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+            input_mapping:
+              bbl-state: relint-envs
+            params:
+              BBL_STATE_DIR: environments/test/snape/bbl-state
+              IGNORE_ERRORS: true
+          - task: run-bosh-cleanup
+            file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
+            input_mapping:
+              bbl-state: relint-envs
+            params:
+              BBL_STATE_DIR: environments/test/snape/bbl-state
+          - put: fips-pool
+            params: {release: fips-pool}
