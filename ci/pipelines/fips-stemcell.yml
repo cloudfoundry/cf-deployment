@@ -52,11 +52,11 @@ resources:
     source:
       uri: https://github.com/cloudfoundry/cf-smoke-tests
 
-  - name: cf-deployment-main
+  - name: cf-deployment-release-candidate
     type: git
     icon: github
     source:
-      branch: main
+      branch: release-candidate
       uri: git@github.com:cloudfoundry/cf-deployment.git
       private_key: ((ard_wg_gitbot_ssh_key.private_key))
       ignore_paths:
@@ -80,7 +80,7 @@ jobs:
     public: true
     plan:
       - in_parallel:
-          - get: cf-deployment-main
+          - get: cf-deployment-release-candidate
             trigger: true
           - get: fips-stemcell
             trigger: true
@@ -105,7 +105,7 @@ jobs:
         trigger: true
         passed: [fips-acquire-pool]
       - in_parallel:
-          - get: cf-deployment-main
+          - get: cf-deployment-release-candidate
             passed: [fips-acquire-pool]
           - get: fips-stemcell
           - get: cf-deployment-concourse-tasks
@@ -155,8 +155,8 @@ jobs:
         file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
-          cf-deployment: cf-deployment-main
-          ops-files: cf-deployment-main
+          cf-deployment: cf-deployment-release-candidate
+          ops-files: cf-deployment-release-candidate
           vars-files: relint-envs
         params:
           BBL_STATE_DIR: environments/test/snape/bbl-state
@@ -229,7 +229,7 @@ jobs:
             trigger: true
           - in_parallel:
               - get: relint-envs
-              - get: cf-deployment-main
+              - get: cf-deployment-release-candidate
                 passed: [ fips-deploy ]
               - get: cf-deployment-concourse-tasks
         timeout: 1h
@@ -254,7 +254,7 @@ jobs:
               - get: cf-deployment-concourse-tasks
               - get: cf-acceptance-tests-rc
               - get: relint-envs
-              - get: cf-deployment-main
+              - get: cf-deployment-release-candidate
                 passed: [ fips-deploy ]
           - task: update-integration-configs
             file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
