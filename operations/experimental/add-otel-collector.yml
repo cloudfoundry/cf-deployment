@@ -1,36 +1,29 @@
 - type: replace
   path: /addons?/name=otel-collector
   value:
-    name: otel-collector
-    include:
-      stemcell:
-      - os: ubuntu-jammy
     exclude:
       jobs:
       - name: smoke_tests
         release: cf-smoke-tests
+    include:
+      stemcell:
+      - os: ubuntu-jammy
     jobs:
     - name: otel-collector
-      release: otel-collector
       properties:
-        # Insert OTel Collector Exporter configuration
-        # See https://opentelemetry.io/docs/collector/configuration/#exporters
-        # For example:
-        #   otlp:
-        #     endpoint: otelcol2:4317
-        metric_exporters: ((otel_collector_metric_exporters))
         ingress:
           grpc:
             tls:
               ca_cert: ((otel_collector_tls.ca))
               cert: ((otel_collector_tls.certificate))
               key: ((otel_collector_tls.private_key))
+        metric_exporters: ((otel_collector_metric_exporters))
+      release: otel-collector
+    name: otel-collector
 - type: replace
   path: /variables/name=otel_collector_tls?
   value:
     name: otel_collector_tls
-    type: certificate
-    update_mode: converge
     options:
       alternative_names:
       - otel-collector
@@ -39,10 +32,12 @@
       extended_key_usage:
       - client_auth
       - server_auth
+    type: certificate
+    update_mode: converge
 - type: replace
   path: /releases/name=otel-collector?
   value:
-    name: "otel-collector"
-    version: "0.3.0"
-    url: "https://bosh.io/d/github.com/cloudfoundry/otel-collector-release?v=0.3.0"
-    sha1: "5f6f1aca2712e9de0b4049a51ece99a6c70938fe"
+    name: otel-collector
+    sha1: 0a320425fca175790ff7f53a0b75d8910967df44
+    url: https://bosh.io/d/github.com/cloudfoundry/otel-collector-release?v=0.3.1
+    version: 0.3.1
