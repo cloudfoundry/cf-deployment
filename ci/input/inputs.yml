@@ -25,8 +25,6 @@ baseReleases:
   repository: cloudfoundry/loggregator-agent-release
 - name: nats
   repository: cloudfoundry/nats-release
-- name: otel-collector
-  repository: cloudfoundry/otel-collector-release
 - name: pxc
   repository: cloudfoundry/pxc-release
 - name: routing
@@ -122,6 +120,9 @@ opsReleases:
   requiredOpsFiles:
   - operations/windows2019-cell.yml
   - operations/use-online-windows2019fs.yml
+- name: otel-collector
+  repository: cloudfoundry/otel-collector-release
+  varsFiles: "operations/experimental/example-vars-files/vars-override-otel-collector-exporters.yml"
 
 untestedOpsReleases:
 - name: datadog-firehose-nozzle
