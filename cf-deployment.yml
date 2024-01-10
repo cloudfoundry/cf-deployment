@@ -1456,6 +1456,8 @@ instance_groups:
       tcp_router:
         oauth_secret: "((uaa_clients_tcp_router_secret))"
         router_group: default-tcp
+        tls_health_check_cert: ((tcp_router_lb_health_tls.certificate))
+        tls_health_check_key:  ((tcp_router_lb_health_tls.private_key))
       uaa:
         ca_cert: "((uaa_ssl.ca))"
         tls_port: 8443
@@ -2471,6 +2473,13 @@ variables:
     common_name: gorouter_lb_health_tls
     alternative_names:
     - gorouter.service.cf.internal
+- name: tcp_router_lb_health_tls
+  type: certificate
+  options:
+    ca: service_cf_internal_ca
+    common_name: tcp_router_lb_health_tls
+    alternative_names:
+    - tcp-router.service.cf.internal
 - name: credhub_ca
   type: certificate
   options:
@@ -2779,9 +2788,9 @@ releases:
   version: 1.1.9
   sha1: 6ac21133590da52ddc247f9871c54dff57346985
 - name: bpm
-  url: https://bosh.io/d/github.com/cloudfoundry/bpm-release?v=1.2.12
-  version: 1.2.12
-  sha1: aff9f4397c931c7b9cdb992c62d3f3f629756198
+  url: https://bosh.io/d/github.com/cloudfoundry/bpm-release?v=1.2.13
+  version: 1.2.13
+  sha1: cb6e428906b702129754c32988f42857678ccc08
 - name: capi
   url: https://bosh.io/d/github.com/cloudfoundry/capi-release?v=1.168.0
   version: 1.168.0
@@ -2791,9 +2800,9 @@ releases:
   version: 3.40.0
   sha1: eb6e9749a3ad5e7a352bdbf64b8a6bbbb0339df8
 - name: cf-smoke-tests
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=42.0.121
-  version: 42.0.121
-  sha1: beacc5bff38e4843c7e88f33fba3bc02ac4f563f
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=42.0.122
+  version: 42.0.122
+  sha1: d5c56398d76288302409303890dfb1a5a92f1d05
 - name: cflinuxfs4
   url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs4-release?v=1.63.0
   version: 1.63.0
@@ -2847,17 +2856,17 @@ releases:
   version: 4.6.13
   sha1: e1f6d9c520c83f8cef54c8b476bafe759451e6ec
 - name: pxc
-  url: https://bosh.io/d/github.com/cloudfoundry/pxc-release?v=1.0.21
-  version: 1.0.21
-  sha1: ed84a099dc0a70c910d2cdb57b4c53ce225d434f
+  url: https://bosh.io/d/github.com/cloudfoundry/pxc-release?v=1.0.22
+  version: 1.0.22
+  sha1: 52fb1d07c5cfd6d9a537d8a641f21b899aa45447
 - name: python-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/python-buildpack-release?v=1.8.17
   version: 1.8.17
   sha1: 914b939653ef2e6b9f2419e56251666fb1155187
 - name: routing
-  url: https://bosh.io/d/github.com/cloudfoundry/routing-release?v=0.285.0
-  version: 0.285.0
-  sha1: 6aa8f4ec29b9aac34c5f2f14157a929d315bb833
+  url: https://bosh.io/d/github.com/cloudfoundry/routing-release?v=0.286.0
+  version: 0.286.0
+  sha1: 146a39bdec97e734a402b3945912ce822a590b3f
 - name: ruby-buildpack
   url: https://bosh.io/d/github.com/cloudfoundry/ruby-buildpack-release?v=1.10.7
   version: 1.10.7

@@ -54,6 +54,10 @@
           status:
             password: "((router_status_password))"
             user: router-status
+            tls:
+              port: 8443
+              certificate: ((gorouter_lb_health_tls.certificate))
+              key: ((gorouter_lb_health_tls.private_key))
           route_services_secret: "((router_route_services_secret))"
           tracing:
             enable_zipkin: true
