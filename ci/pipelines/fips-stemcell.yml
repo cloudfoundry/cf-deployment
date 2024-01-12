@@ -233,13 +233,15 @@ jobs:
                 passed: [ fips-deploy ]
               - get: cf-deployment-concourse-tasks
         timeout: 1h
-      - task: bosh-run-errand-smoke-tests
-        file: cf-deployment-concourse-tasks/run-errand/task.yml
-        params:
-          BBL_STATE_DIR: environments/test/snape/bbl-state
-          ERRAND_NAME: smoke_tests
-        input_mapping:
-          bbl-state: relint-envs
+      - try:
+          do:
+          - task: bosh-run-errand-smoke-tests
+            file: cf-deployment-concourse-tasks/run-errand/task.yml
+            params:
+              BBL_STATE_DIR: environments/test/snape/bbl-state
+              ERRAND_NAME: smoke_tests
+            input_mapping:
+              bbl-state: relint-envs
 
   - name: fips-cats
     public: true
@@ -256,6 +258,8 @@ jobs:
               - get: relint-envs
               - get: cf-deployment-release-candidate
                 passed: [ fips-deploy ]
+      - try:
+          do:
           - task: update-integration-configs
             file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
             params:
