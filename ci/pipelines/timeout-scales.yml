@@ -655,6 +655,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.1/metadata
         TIMEOUT_SCALE: 1.1
       platform: linux
@@ -667,6 +669,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -700,6 +704,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -738,6 +744,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.1/metadata
         TIMEOUT_SCALE: 1.1
       platform: linux
@@ -750,6 +758,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -783,6 +793,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -821,6 +833,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.1/metadata
         TIMEOUT_SCALE: 1.1
       platform: linux
@@ -833,6 +847,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -866,6 +882,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -904,6 +922,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.1/metadata
         TIMEOUT_SCALE: 1.1
       platform: linux
@@ -916,6 +936,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -949,6 +971,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -987,6 +1011,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.1/metadata
         TIMEOUT_SCALE: 1.1
       platform: linux
@@ -999,6 +1025,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -1032,6 +1060,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -1070,6 +1100,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.1/metadata
         TIMEOUT_SCALE: 1.1
       platform: linux
@@ -1082,6 +1114,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -1115,6 +1149,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -1153,6 +1189,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.1/metadata
         TIMEOUT_SCALE: 1.1
       platform: linux
@@ -1165,6 +1203,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -1198,6 +1238,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -1236,6 +1278,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.1/metadata
         TIMEOUT_SCALE: 1.1
       platform: linux
@@ -1248,6 +1292,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -1281,6 +1327,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -1319,6 +1367,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.1/metadata
         TIMEOUT_SCALE: 1.1
       platform: linux
@@ -1331,6 +1381,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -1364,6 +1416,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -1402,6 +1456,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.1/metadata
         TIMEOUT_SCALE: 1.1
       platform: linux
@@ -1414,6 +1470,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -1447,6 +1505,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -1485,6 +1545,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.1/metadata
         TIMEOUT_SCALE: 1.1
       platform: linux
@@ -1497,6 +1559,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -1530,6 +1594,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -1935,6 +2001,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.2/metadata
         TIMEOUT_SCALE: 1.2
       platform: linux
@@ -1947,6 +2015,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -1980,6 +2050,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -2018,6 +2090,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.2/metadata
         TIMEOUT_SCALE: 1.2
       platform: linux
@@ -2030,6 +2104,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -2063,6 +2139,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -2101,6 +2179,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.2/metadata
         TIMEOUT_SCALE: 1.2
       platform: linux
@@ -2113,6 +2193,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -2146,6 +2228,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -2184,6 +2268,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.2/metadata
         TIMEOUT_SCALE: 1.2
       platform: linux
@@ -2196,6 +2282,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -2229,6 +2317,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -2267,6 +2357,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.2/metadata
         TIMEOUT_SCALE: 1.2
       platform: linux
@@ -2279,6 +2371,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -2312,6 +2406,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -2350,6 +2446,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.2/metadata
         TIMEOUT_SCALE: 1.2
       platform: linux
@@ -2362,6 +2460,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -2395,6 +2495,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -2433,6 +2535,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.2/metadata
         TIMEOUT_SCALE: 1.2
       platform: linux
@@ -2445,6 +2549,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -2478,6 +2584,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -2516,6 +2624,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.2/metadata
         TIMEOUT_SCALE: 1.2
       platform: linux
@@ -2528,6 +2638,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -2561,6 +2673,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -2599,6 +2713,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.2/metadata
         TIMEOUT_SCALE: 1.2
       platform: linux
@@ -2611,6 +2727,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -2644,6 +2762,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -2682,6 +2802,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.2/metadata
         TIMEOUT_SCALE: 1.2
       platform: linux
@@ -2694,6 +2816,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -2727,6 +2851,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -2765,6 +2891,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.2/metadata
         TIMEOUT_SCALE: 1.2
       platform: linux
@@ -2777,6 +2905,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -2810,6 +2940,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -3215,6 +3347,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.3/metadata
         TIMEOUT_SCALE: 1.3
       platform: linux
@@ -3227,6 +3361,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -3260,6 +3396,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -3298,6 +3436,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.3/metadata
         TIMEOUT_SCALE: 1.3
       platform: linux
@@ -3310,6 +3450,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -3343,6 +3485,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -3381,6 +3525,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.3/metadata
         TIMEOUT_SCALE: 1.3
       platform: linux
@@ -3393,6 +3539,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -3426,6 +3574,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -3464,6 +3614,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.3/metadata
         TIMEOUT_SCALE: 1.3
       platform: linux
@@ -3476,6 +3628,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -3509,6 +3663,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -3547,6 +3703,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.3/metadata
         TIMEOUT_SCALE: 1.3
       platform: linux
@@ -3559,6 +3717,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -3592,6 +3752,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -3630,6 +3792,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.3/metadata
         TIMEOUT_SCALE: 1.3
       platform: linux
@@ -3642,6 +3806,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -3675,6 +3841,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -3713,6 +3881,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.3/metadata
         TIMEOUT_SCALE: 1.3
       platform: linux
@@ -3725,6 +3895,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -3758,6 +3930,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -3796,6 +3970,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.3/metadata
         TIMEOUT_SCALE: 1.3
       platform: linux
@@ -3808,6 +3984,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -3841,6 +4019,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -3879,6 +4059,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.3/metadata
         TIMEOUT_SCALE: 1.3
       platform: linux
@@ -3891,6 +4073,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -3924,6 +4108,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -3962,6 +4148,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.3/metadata
         TIMEOUT_SCALE: 1.3
       platform: linux
@@ -3974,6 +4162,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -4007,6 +4197,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -4045,6 +4237,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.3/metadata
         TIMEOUT_SCALE: 1.3
       platform: linux
@@ -4057,6 +4251,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -4090,6 +4286,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -4495,6 +4693,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.4/metadata
         TIMEOUT_SCALE: 1.4
       platform: linux
@@ -4507,6 +4707,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -4540,6 +4742,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -4578,6 +4782,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.4/metadata
         TIMEOUT_SCALE: 1.4
       platform: linux
@@ -4590,6 +4796,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -4623,6 +4831,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -4661,6 +4871,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.4/metadata
         TIMEOUT_SCALE: 1.4
       platform: linux
@@ -4673,6 +4885,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -4706,6 +4920,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -4744,6 +4960,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.4/metadata
         TIMEOUT_SCALE: 1.4
       platform: linux
@@ -4756,6 +4974,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -4789,6 +5009,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -4827,6 +5049,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.4/metadata
         TIMEOUT_SCALE: 1.4
       platform: linux
@@ -4839,6 +5063,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -4872,6 +5098,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -4910,6 +5138,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.4/metadata
         TIMEOUT_SCALE: 1.4
       platform: linux
@@ -4922,6 +5152,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -4955,6 +5187,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -4993,6 +5227,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.4/metadata
         TIMEOUT_SCALE: 1.4
       platform: linux
@@ -5005,6 +5241,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -5038,6 +5276,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -5076,6 +5316,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.4/metadata
         TIMEOUT_SCALE: 1.4
       platform: linux
@@ -5088,6 +5330,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -5121,6 +5365,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -5159,6 +5405,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.4/metadata
         TIMEOUT_SCALE: 1.4
       platform: linux
@@ -5171,6 +5419,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -5204,6 +5454,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -5242,6 +5494,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.4/metadata
         TIMEOUT_SCALE: 1.4
       platform: linux
@@ -5254,6 +5508,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -5287,6 +5543,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -5325,6 +5583,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.4/metadata
         TIMEOUT_SCALE: 1.4
       platform: linux
@@ -5337,6 +5597,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -5370,6 +5632,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -5775,6 +6039,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.5/metadata
         TIMEOUT_SCALE: 1.5
       platform: linux
@@ -5787,6 +6053,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -5820,6 +6088,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -5858,6 +6128,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.5/metadata
         TIMEOUT_SCALE: 1.5
       platform: linux
@@ -5870,6 +6142,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -5903,6 +6177,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -5941,6 +6217,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.5/metadata
         TIMEOUT_SCALE: 1.5
       platform: linux
@@ -5953,6 +6231,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -5986,6 +6266,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -6024,6 +6306,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.5/metadata
         TIMEOUT_SCALE: 1.5
       platform: linux
@@ -6036,6 +6320,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -6069,6 +6355,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -6107,6 +6395,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.5/metadata
         TIMEOUT_SCALE: 1.5
       platform: linux
@@ -6119,6 +6409,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -6152,6 +6444,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -6190,6 +6484,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.5/metadata
         TIMEOUT_SCALE: 1.5
       platform: linux
@@ -6202,6 +6498,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -6235,6 +6533,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -6273,6 +6573,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.5/metadata
         TIMEOUT_SCALE: 1.5
       platform: linux
@@ -6285,6 +6587,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -6318,6 +6622,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -6356,6 +6662,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.5/metadata
         TIMEOUT_SCALE: 1.5
       platform: linux
@@ -6368,6 +6676,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -6401,6 +6711,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -6439,6 +6751,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.5/metadata
         TIMEOUT_SCALE: 1.5
       platform: linux
@@ -6451,6 +6765,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -6484,6 +6800,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -6522,6 +6840,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.5/metadata
         TIMEOUT_SCALE: 1.5
       platform: linux
@@ -6534,6 +6854,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -6567,6 +6889,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -6605,6 +6929,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.5/metadata
         TIMEOUT_SCALE: 1.5
       platform: linux
@@ -6617,6 +6943,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -6650,6 +6978,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -7055,6 +7385,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.6/metadata
         TIMEOUT_SCALE: 1.6
       platform: linux
@@ -7067,6 +7399,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -7100,6 +7434,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -7138,6 +7474,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.6/metadata
         TIMEOUT_SCALE: 1.6
       platform: linux
@@ -7150,6 +7488,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -7183,6 +7523,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -7221,6 +7563,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.6/metadata
         TIMEOUT_SCALE: 1.6
       platform: linux
@@ -7233,6 +7577,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -7266,6 +7612,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -7304,6 +7652,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.6/metadata
         TIMEOUT_SCALE: 1.6
       platform: linux
@@ -7316,6 +7666,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -7349,6 +7701,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -7387,6 +7741,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.6/metadata
         TIMEOUT_SCALE: 1.6
       platform: linux
@@ -7399,6 +7755,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -7432,6 +7790,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -7470,6 +7830,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.6/metadata
         TIMEOUT_SCALE: 1.6
       platform: linux
@@ -7482,6 +7844,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -7515,6 +7879,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -7553,6 +7919,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.6/metadata
         TIMEOUT_SCALE: 1.6
       platform: linux
@@ -7565,6 +7933,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -7598,6 +7968,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -7636,6 +8008,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.6/metadata
         TIMEOUT_SCALE: 1.6
       platform: linux
@@ -7648,6 +8022,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -7681,6 +8057,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -7719,6 +8097,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.6/metadata
         TIMEOUT_SCALE: 1.6
       platform: linux
@@ -7731,6 +8111,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -7764,6 +8146,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -7802,6 +8186,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.6/metadata
         TIMEOUT_SCALE: 1.6
       platform: linux
@@ -7814,6 +8200,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -7847,6 +8235,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -7885,6 +8275,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.6/metadata
         TIMEOUT_SCALE: 1.6
       platform: linux
@@ -7897,6 +8289,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -7930,6 +8324,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -8335,6 +8731,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.7/metadata
         TIMEOUT_SCALE: 1.7
       platform: linux
@@ -8347,6 +8745,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -8380,6 +8780,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -8418,6 +8820,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.7/metadata
         TIMEOUT_SCALE: 1.7
       platform: linux
@@ -8430,6 +8834,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -8463,6 +8869,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -8501,6 +8909,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.7/metadata
         TIMEOUT_SCALE: 1.7
       platform: linux
@@ -8513,6 +8923,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -8546,6 +8958,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -8584,6 +8998,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.7/metadata
         TIMEOUT_SCALE: 1.7
       platform: linux
@@ -8596,6 +9012,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -8629,6 +9047,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -8667,6 +9087,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.7/metadata
         TIMEOUT_SCALE: 1.7
       platform: linux
@@ -8679,6 +9101,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -8712,6 +9136,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -8750,6 +9176,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.7/metadata
         TIMEOUT_SCALE: 1.7
       platform: linux
@@ -8762,6 +9190,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -8795,6 +9225,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -8833,6 +9265,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.7/metadata
         TIMEOUT_SCALE: 1.7
       platform: linux
@@ -8845,6 +9279,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -8878,6 +9314,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -8916,6 +9354,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.7/metadata
         TIMEOUT_SCALE: 1.7
       platform: linux
@@ -8928,6 +9368,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -8961,6 +9403,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -8999,6 +9443,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.7/metadata
         TIMEOUT_SCALE: 1.7
       platform: linux
@@ -9011,6 +9457,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -9044,6 +9492,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -9082,6 +9532,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.7/metadata
         TIMEOUT_SCALE: 1.7
       platform: linux
@@ -9094,6 +9546,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -9127,6 +9581,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -9165,6 +9621,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.7/metadata
         TIMEOUT_SCALE: 1.7
       platform: linux
@@ -9177,6 +9635,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -9210,6 +9670,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -9615,6 +10077,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.8/metadata
         TIMEOUT_SCALE: 1.8
       platform: linux
@@ -9627,6 +10091,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -9660,6 +10126,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -9698,6 +10166,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.8/metadata
         TIMEOUT_SCALE: 1.8
       platform: linux
@@ -9710,6 +10180,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -9743,6 +10215,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -9781,6 +10255,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.8/metadata
         TIMEOUT_SCALE: 1.8
       platform: linux
@@ -9793,6 +10269,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -9826,6 +10304,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -9864,6 +10344,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.8/metadata
         TIMEOUT_SCALE: 1.8
       platform: linux
@@ -9876,6 +10358,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -9909,6 +10393,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -9947,6 +10433,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.8/metadata
         TIMEOUT_SCALE: 1.8
       platform: linux
@@ -9959,6 +10447,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -9992,6 +10482,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -10030,6 +10522,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.8/metadata
         TIMEOUT_SCALE: 1.8
       platform: linux
@@ -10042,6 +10536,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -10075,6 +10571,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -10113,6 +10611,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.8/metadata
         TIMEOUT_SCALE: 1.8
       platform: linux
@@ -10125,6 +10625,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -10158,6 +10660,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -10196,6 +10700,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.8/metadata
         TIMEOUT_SCALE: 1.8
       platform: linux
@@ -10208,6 +10714,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -10241,6 +10749,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -10279,6 +10789,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.8/metadata
         TIMEOUT_SCALE: 1.8
       platform: linux
@@ -10291,6 +10803,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -10324,6 +10838,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -10362,6 +10878,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.8/metadata
         TIMEOUT_SCALE: 1.8
       platform: linux
@@ -10374,6 +10892,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -10407,6 +10927,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -10445,6 +10967,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.8/metadata
         TIMEOUT_SCALE: 1.8
       platform: linux
@@ -10457,6 +10981,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -10490,6 +11016,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -10895,6 +11423,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.9/metadata
         TIMEOUT_SCALE: 1.9
       platform: linux
@@ -10907,6 +11437,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -10940,6 +11472,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -10978,6 +11512,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.9/metadata
         TIMEOUT_SCALE: 1.9
       platform: linux
@@ -10990,6 +11526,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -11023,6 +11561,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -11061,6 +11601,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.9/metadata
         TIMEOUT_SCALE: 1.9
       platform: linux
@@ -11073,6 +11615,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -11106,6 +11650,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -11144,6 +11690,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.9/metadata
         TIMEOUT_SCALE: 1.9
       platform: linux
@@ -11156,6 +11704,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -11189,6 +11739,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -11227,6 +11779,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.9/metadata
         TIMEOUT_SCALE: 1.9
       platform: linux
@@ -11239,6 +11793,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -11272,6 +11828,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -11310,6 +11868,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.9/metadata
         TIMEOUT_SCALE: 1.9
       platform: linux
@@ -11322,6 +11882,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -11355,6 +11917,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -11393,6 +11957,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.9/metadata
         TIMEOUT_SCALE: 1.9
       platform: linux
@@ -11405,6 +11971,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -11438,6 +12006,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -11476,6 +12046,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.9/metadata
         TIMEOUT_SCALE: 1.9
       platform: linux
@@ -11488,6 +12060,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -11521,6 +12095,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -11559,6 +12135,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.9/metadata
         TIMEOUT_SCALE: 1.9
       platform: linux
@@ -11571,6 +12149,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -11604,6 +12184,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -11642,6 +12224,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.9/metadata
         TIMEOUT_SCALE: 1.9
       platform: linux
@@ -11654,6 +12238,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -11687,6 +12273,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -11725,6 +12313,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-1.9/metadata
         TIMEOUT_SCALE: 1.9
       platform: linux
@@ -11737,6 +12327,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -11770,6 +12362,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -12175,6 +12769,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-2/metadata
         TIMEOUT_SCALE: 2
       platform: linux
@@ -12187,6 +12783,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -12220,6 +12818,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -12258,6 +12858,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-2/metadata
         TIMEOUT_SCALE: 2
       platform: linux
@@ -12270,6 +12872,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -12303,6 +12907,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -12341,6 +12947,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-2/metadata
         TIMEOUT_SCALE: 2
       platform: linux
@@ -12353,6 +12961,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -12386,6 +12996,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -12424,6 +13036,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-2/metadata
         TIMEOUT_SCALE: 2
       platform: linux
@@ -12436,6 +13050,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -12469,6 +13085,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -12507,6 +13125,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-2/metadata
         TIMEOUT_SCALE: 2
       platform: linux
@@ -12519,6 +13139,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -12552,6 +13174,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -12590,6 +13214,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-2/metadata
         TIMEOUT_SCALE: 2
       platform: linux
@@ -12602,6 +13228,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -12635,6 +13263,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -12673,6 +13303,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-2/metadata
         TIMEOUT_SCALE: 2
       platform: linux
@@ -12685,6 +13317,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -12718,6 +13352,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -12756,6 +13392,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-2/metadata
         TIMEOUT_SCALE: 2
       platform: linux
@@ -12768,6 +13406,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -12801,6 +13441,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -12839,6 +13481,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-2/metadata
         TIMEOUT_SCALE: 2
       platform: linux
@@ -12851,6 +13495,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -12884,6 +13530,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -12922,6 +13570,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-2/metadata
         TIMEOUT_SCALE: 2
       platform: linux
@@ -12934,6 +13584,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -12967,6 +13619,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
@@ -13005,6 +13659,8 @@ jobs:
       outputs:
       - name: integration-configs
       params:
+        GIT_COMMIT_EMAIL: cf-release-integration@pivotal.io
+        GIT_COMMIT_USERNAME: CI Bot
         TOOLSMITHS_ENV_METADATA: env-2/metadata
         TIMEOUT_SCALE: 2
       platform: linux
@@ -13017,6 +13673,8 @@ jobs:
           source cf-deployment-concourse-tasks/shared-functions
           DOMAIN="$(jq -r '.cf.api_url' $TOOLSMITHS_ENV_METADATA | cut -d. -f2-)"
           cd integration-configs
+          git init
+          set_git_config
           cat <<EOT > integration-config.json
           {
             "api": "api.${DOMAIN}",
@@ -13050,6 +13708,8 @@ jobs:
             "credhub_mode": "assisted"
           }
           EOT
+          git add .
+          git commit -m "Create integration config"
     task: create-integration-config
   - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
     input_mapping:
