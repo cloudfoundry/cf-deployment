@@ -51,7 +51,6 @@
           rep:
             open_bindmounts_acl: true
             preloaded_rootfses:
-            - windows2016:oci:///C:/var/vcap/packages/windows2019fs
             - windows:oci:///C:/var/vcap/packages/windows2019fs
         enable_consul_service_registration: false
         enable_declarative_healthcheck: true
@@ -174,21 +173,11 @@
     alias: windows2019
     os: windows2019
     version: "2019.69"
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows2016?
-  type: replace
-  value:
-    description: Windows Server 2016
-    name: windows2016
 - path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows?
   type: replace
   value:
     description: Windows Server
     name: windows
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=hwc-buildpack-windows2016?
-  type: replace
-  value:
-    name: hwc_buildpack
-    package: hwc-buildpack-windows2016
 - path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=hwc-buildpack-windows?
   type: replace
   value:
@@ -199,11 +188,6 @@
   value:
     name: hwc-buildpack
     release: hwc-buildpack
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=binary-buildpack-windows2016?
-  type: replace
-  value:
-    name: binary_buildpack
-    package: binary-buildpack-windows2016
 - path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=binary-buildpack-windows?
   type: replace
   value:

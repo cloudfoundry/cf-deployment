@@ -877,11 +877,9 @@ instance_groups:
           droplet_destinations:
             cflinuxfs4: /home/vcap
             windows: /Users/vcap
-            windows2016: /Users/vcap
           lifecycle_bundles:
             buildpack/cflinuxfs4: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
             buildpack/windows: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
-            buildpack/windows2016: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
             docker: docker_app_lifecycle/docker_app_lifecycle.tgz
         default_stack: cflinuxfs4
         stacks:
@@ -1165,11 +1163,9 @@ instance_groups:
           droplet_destinations:
             cflinuxfs4: /home/vcap
             windows: /Users/vcap
-            windows2016: /Users/vcap
           lifecycle_bundles:
             buildpack/cflinuxfs4: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
             buildpack/windows: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
-            buildpack/windows2016: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
             docker: docker_app_lifecycle/docker_app_lifecycle.tgz
         database_encryption: *cc-database-encryption
         staging_upload_user: staging_user
@@ -1249,11 +1245,9 @@ instance_groups:
           droplet_destinations:
             cflinuxfs4: /home/vcap
             windows: /Users/vcap
-            windows2016: /Users/vcap
           lifecycle_bundles:
             buildpack/cflinuxfs4: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
             buildpack/windows: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
-            buildpack/windows2016: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
             docker: docker_app_lifecycle/docker_app_lifecycle.tgz
         staging_upload_user: staging_user
         staging_upload_password: "((cc_staging_upload_password))"
@@ -1286,11 +1280,9 @@ instance_groups:
           droplet_destinations:
             cflinuxfs4: /home/vcap
             windows: /Users/vcap
-            windows2016: /Users/vcap
           lifecycle_bundles:
             buildpack/cflinuxfs4: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
             buildpack/windows: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
-            buildpack/windows2016: buildpack_app_lifecycle/buildpack_app_lifecycle.tgz
             docker: docker_app_lifecycle/docker_app_lifecycle.tgz
         mutual_tls:
           ca_cert: "((cc_tls.ca))"
