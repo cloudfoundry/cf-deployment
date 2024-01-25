@@ -816,7 +816,8 @@ instance_groups:
       route_registrar:
         routes:
         - name: blobstore
-          port: 8080
+          tls_port: 8081
+          server_cert_domain_san: "blobstore.((system_domain))"
           registration_interval: 20s
           tags:
             component: blobstore
