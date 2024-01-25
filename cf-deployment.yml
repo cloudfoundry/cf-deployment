@@ -805,6 +805,9 @@ instance_groups:
         tls:
           cert: "((blobstore_tls.certificate))"
           private_key: "((blobstore_tls.private_key))"
+        public_tls:
+          cert: "((blobstore_public.certificate))"
+          private_key: "((blobstore_public.private_key))"
   - name: route_registrar
     release: routing
     properties:
@@ -2067,6 +2070,14 @@ variables:
     common_name: blobstore.service.cf.internal
     alternative_names:
     - blobstore.service.cf.internal
+- name: blobstore_public
+  type: certificate
+  update_mode: converge
+  options:
+    common_name: "blobstore.((system_domain))"
+    alternative_names:
+    - "blobstore.((system_domain))"
+    ca: service_cf_internal_ca
 - name: diego_auctioneer_client
   type: certificate
   update_mode: converge
