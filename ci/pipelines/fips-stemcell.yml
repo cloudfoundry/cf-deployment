@@ -167,6 +167,7 @@ jobs:
             operations/addons/add-system-metrics-agent.yml
             operations/use-postgres.yml
             operations/experimental/enable-tls-cloud-controller-postgres.yml
+            operations/experimental/fips-compliance.yml
             operations/use-latest-stemcell.yml
           VARS_FILES: |
             environments/test/snape/syslog-vars.yml
@@ -233,15 +234,13 @@ jobs:
                 passed: [ fips-deploy ]
               - get: cf-deployment-concourse-tasks
         timeout: 1h
-      - try:
-          do:
-          - task: bosh-run-errand-smoke-tests
-            file: cf-deployment-concourse-tasks/run-errand/task.yml
-            params:
-              BBL_STATE_DIR: environments/test/snape/bbl-state
-              ERRAND_NAME: smoke_tests
-            input_mapping:
-              bbl-state: relint-envs
+      - task: bosh-run-errand-smoke-tests
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        params:
+          BBL_STATE_DIR: environments/test/snape/bbl-state
+          ERRAND_NAME: smoke_tests
+        input_mapping:
+          bbl-state: relint-envs
 
   - name: fips-cats
     public: true
