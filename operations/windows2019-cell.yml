@@ -62,6 +62,9 @@
           cert: ((loggregator_tls_agent.certificate))
           key: ((loggregator_tls_agent.private_key))
           use_v2_api: true
+          app_metric_exclusion_filter:
+          - absolute_entitlement
+          - absolute_usage
         syslog_daemon_config:
           enable: false
         tls:
