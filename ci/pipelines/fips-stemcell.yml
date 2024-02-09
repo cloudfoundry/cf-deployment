@@ -257,8 +257,6 @@ jobs:
               - get: relint-envs
               - get: cf-deployment-release-candidate
                 passed: [ fips-deploy ]
-      - try:
-          do:
           - task: update-integration-configs
             file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
             params:
