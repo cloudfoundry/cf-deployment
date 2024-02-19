@@ -49,6 +49,13 @@ set-router-static-ips.yml:
   vars:
   - router_static_ips=[10.0.16.4,10.0.47.5]
 stop-skipping-tls-validation.yml: {}
+use-absolute-cpu-entitlement-persistent-isolation-segment.yml:
+  ops:
+  - add-persistent-isolation-segment-diego-cell.yml
+use-absolute-cpu-entitlement-windows2019.yml:
+  ops:
+  - windows2019-cell.yml
+use-absolute-cpu-entitlement.yml: {}
 use-alicloud-oss-blobstore-to-multi-bucket.yml:
   ops:
   - use-external-blobstore.yml

@@ -88,6 +88,9 @@
           ca_cert: "((loggregator_tls_agent.ca))"
           cert: "((loggregator_tls_agent.certificate))"
           key: "((loggregator_tls_agent.private_key))"
+          app_metric_exclusion_filter:
+          - absolute_entitlement
+          - absolute_usage
         tls:
           ca_cert: "((diego_rep_agent_v2.ca))"
           cert: "((diego_rep_agent_v2.certificate))"
