@@ -512,6 +512,9 @@ instance_groups:
         ca_cert: "((loggregator_tls_agent.ca))"
         cert: "((loggregator_tls_agent.certificate))"
         key: "((loggregator_tls_agent.private_key))"
+        app_metric_exclusion_filter:
+        - absolute_entitlement
+        - absolute_usage
       logging:
         format:
           timestamp: "rfc3339"
@@ -2813,17 +2816,17 @@ releases:
   version: 1.72.0
   sha1: 75f60a13423e7f33b9f61808226fe2ef812930c9
 - name: credhub
-  url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=2.12.61
-  version: 2.12.61
-  sha1: 14f6d760c427ee73c9baa25700289165ad1a9c95
+  url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=2.12.62
+  version: 2.12.62
+  sha1: dc4b1aa636cf1c0bc813b50fe1e096bc3d147750
 - name: diego
   url: https://bosh.io/d/github.com/cloudfoundry/diego-release?v=2.93.0
   version: 2.93.0
   sha1: aabdf0d18c2296501270c99ee51a97722980823a
 - name: dotnet-core-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/dotnet-core-buildpack-release?v=2.4.23
-  version: 2.4.23
-  sha1: 51962809d34e7619505362d36b63a87cdf60ef50
+  url: https://bosh.io/d/github.com/cloudfoundry/dotnet-core-buildpack-release?v=2.4.24
+  version: 2.4.24
+  sha1: e121f092e6ffb2817f8439430570897fde8179c9
 - name: garden-runc
   url: https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.49.0
   version: 1.49.0
@@ -2857,9 +2860,9 @@ releases:
   version: 1.8.22
   sha1: 74301407170b54a7481cce739b0ef2b21f8ace64
 - name: php-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/php-buildpack-release?v=4.6.14
-  version: 4.6.14
-  sha1: 934ee06b1d7d7d84a95d56f0c0b6638a4e2fe065
+  url: https://bosh.io/d/github.com/cloudfoundry/php-buildpack-release?v=4.6.15
+  version: 4.6.15
+  sha1: ed3b843a4b0541b1f2b67580ec8e10b07bdf92eb
 - name: pxc
   url: https://bosh.io/d/github.com/cloudfoundry/pxc-release?v=1.0.24
   version: 1.0.24

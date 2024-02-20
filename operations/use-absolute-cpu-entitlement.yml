@@ -1,0 +1,5 @@
+---
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=rep/properties/loggregator/app_metric_exclusion_filter?
+  value:
+  - cpu_entitlement
