@@ -878,6 +878,8 @@ instance_groups:
           cc_service_key_client:
             secret: "((uaa_clients_cc_service_key_client_secret))"
         url: https://uaa.((system_domain))
+      dea_next:
+        staging_memory_limit_mb: 2560
       cc:
         diego:
           docker_staging_stack: cflinuxfs4
