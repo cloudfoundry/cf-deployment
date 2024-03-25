@@ -46,4 +46,3 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 | [`use-native-garden-runc-runner.yml`](use-native-garden-runc-runner.yml) | Configure Garden to **not** create containers via containerd, using the native runner instead. | | **NO** |
 | [`use-mysql-version-8.0.yml`](use-mysql-version-8.0.yml) | Deploys or upgrades Percona 8.0 as the internal database. | ***Deprecated as we now use MySQL version 8.0 by default.*** | **NO** |
 | [`use-trusted-ca-cert-for-apps-cflinuxfs4.yml`](use-trusted-ca-cert-for-apps-cflinuxfs4.yml) | Same as [`use-trusted-ca-cert-for-apps.yml`](../use-trusted-ca-cert-for-apps.yml), but for cflinuxfs4 stack | ***Deprecated as we integrate cflinuxfs4 directly into cf-deployment.yml*** | **NO** |
-| [`fips-compliance.yml`](fips-compliance.yml) | Adapt cf-deployment to use FIPS compliant configuration, i.e. disable unsupported hash algorithms like MD5 | | **NO** |
