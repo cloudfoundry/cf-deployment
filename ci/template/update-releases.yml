@@ -773,9 +773,10 @@ jobs:
           params:
             tarball: false
     - task: update-stemcell-ops
-      file: runtime-ci/tasks/update-stemcell-ops/task.yml
+      file: runtime-ci-fips-branch/tasks/update-stemcell-ops/task.yml
       input_mapping:
-        ops-files: cf-deployment-develop
+        runtime-ci: runtime-ci-fips-branch
+        ops-files: cf-deployment-fips
         stemcell: fips-stemcell
       params:
         STEMCELL_STACK: ubuntu-jammy
