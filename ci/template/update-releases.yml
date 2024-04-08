@@ -144,14 +144,6 @@ resources:
     uri: git@github.com:cloudfoundry/cf-deployment.git
     private_key: ((ard_wg_gitbot_ssh_key.private_key))
 
-- name: cf-deployment-fips
-  type: git
-  icon: github
-  source:
-    branch: integrate_fips_validation
-    uri: git@github.com:cloudfoundry/cf-deployment.git
-    private_key: ((ard_wg_gitbot_ssh_key.private_key))
-
 - name: cf-deployment-version
   type: semver
   source:
@@ -195,13 +187,6 @@ resources:
   icon: github
   source:
     uri: https://github.com/cloudfoundry/runtime-ci.git
-
-- name: runtime-ci-fips-branch
-  type: git
-  icon: github
-  source:
-    uri: https://github.com/cloudfoundry/runtime-ci.git
-    branch: refactor_update_stemcell_task
 
 - name: stemcell
   type: bosh-io-stemcell
@@ -748,13 +733,14 @@ jobs:
       params:
         tarball: false
   - task: update-windows-stemcell-ops
-    file: runtime-ci/tasks/update-windows-stemcell-ops/task.yml
+    file: runtime-ci/tasks/update-stemcell-ops/task.yml
     input_mapping:
       ops-files: cf-deployment-develop
-      windows-stemcell: #@ s.name + "-stemcell"
+      stemcell: #@ s.name + "-stemcell"
     params:
-      ORIGINAL_WINDOWS_OPS_FILE_PATH: #@ "{}/{}".format(s.opsFileDir, s.opsFile)
-      UPDATED_WINDOWS_OPS_FILE_PATH: #@ "{}/{}".format(s.opsFileDir, s.opsFile)
+      STEMCELL_STACK: #@ s.stack
+      ORIGINAL_OPS_FILE_PATH: #@ "{}/{}".format(s.opsFileDir, s.opsFile)
+      UPDATED_OPS_FILE_PATH: #@ "{}/{}".format(s.opsFileDir, s.opsFile)
   - put: cf-deployment-develop
     params:
       rebase: true
@@ -766,23 +752,22 @@ jobs:
   serial: true
   plan:
     - in_parallel:
-        - get: runtime-ci-fips-branch
-        - get: cf-deployment-fips
+        - get: runtime-ci
+        - get: cf-deployment-develop
         - get: fips-stemcell
           trigger: true
           params:
             tarball: false
     - task: update-stemcell-ops
-      file: runtime-ci-fips-branch/tasks/update-stemcell-ops/task.yml
+      file: runtime-ci/tasks/update-stemcell-ops/task.yml
       input_mapping:
-        runtime-ci: runtime-ci-fips-branch
-        ops-files: cf-deployment-fips
+        ops-files: cf-deployment-develop
         stemcell: fips-stemcell
       params:
         STEMCELL_STACK: ubuntu-jammy
         ORIGINAL_OPS_FILE_PATH: operations/fips-stemcell.yml
         UPDATED_OPS_FILE_PATH: operations/fips-stemcell.yml
-    - put: cf-deployment-fips
+    - put: cf-deployment-develop
       params:
         rebase: true
         repository: updated-stemcell-ops-file
