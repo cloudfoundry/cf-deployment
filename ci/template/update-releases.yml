@@ -350,6 +350,7 @@ jobs:
         tarball: false
   - put: pre-dev-pool
     params: {acquire: true}
+    timeout: 4h
 
 - name: #@ "update-" + r.name
   public: true
@@ -547,6 +548,7 @@ jobs:
         tarball: false
   - put: pre-dev-pool
     params: {acquire: true}
+    timeout: 4h
 
 - name: #@ "update-" + r.name
   public: true
