@@ -119,6 +119,9 @@ groups:
   jobs:
   - update-windows2019-stemcell
   - update-windows2019fs-offline-release
+- name: update-fips-stemcell
+  jobs:
+  - update-fips-stemcell
 - name: debug
   jobs: []
 - name: cleanup
@@ -143,6 +146,11 @@ resource_types:
   source:
     repository: cfcommunity/slack-notification-resource
     tag: latest
+- name: bosh-io-stemcell
+  source:
+    repository: foundationalinfrastructure/bosh-io-stemcell-resource
+    tag: v1.2.1
+  type: docker-image
 resources:
 - name: cf-deployment-all-branches
   type: git
@@ -213,6 +221,14 @@ resources:
   icon: dna
   source:
     name: bosh-google-kvm-ubuntu-jammy-go_agent
+- name: fips-stemcell
+  type: bosh-io-stemcell
+  icon: dna
+  source:
+    name: bosh-aws-xen-hvm-ubuntu-jammy-fips-go_agent
+    auth:
+      access_key: ((ci_dev_gcp_service_account_hmac_access_key))
+      secret_key: ((ci_dev_gcp_service_account_hmac_secret))
 - name: stemcell-version-bump-detect
   type: stemcell-version-bump
   icon: dna
@@ -14067,13 +14083,38 @@ jobs:
       params:
         tarball: false
   - task: update-windows-stemcell-ops
-    file: runtime-ci/tasks/update-windows-stemcell-ops/task.yml
+    file: runtime-ci/tasks/update-stemcell-ops/task.yml
     input_mapping:
       ops-files: cf-deployment-develop
-      windows-stemcell: windows2019-stemcell
+      stemcell: windows2019-stemcell
     params:
-      ORIGINAL_WINDOWS_OPS_FILE_PATH: operations/windows2019-cell.yml
-      UPDATED_WINDOWS_OPS_FILE_PATH: operations/windows2019-cell.yml
+      STEMCELL_STACK: windows2019
+      ORIGINAL_OPS_FILE_PATH: operations/windows2019-cell.yml
+      UPDATED_OPS_FILE_PATH: operations/windows2019-cell.yml
+  - put: cf-deployment-develop
+    params:
+      rebase: true
+      repository: updated-stemcell-ops-file
+- name: update-fips-stemcell
+  public: true
+  serial: true
+  plan:
+  - in_parallel:
+    - get: runtime-ci
+    - get: cf-deployment-develop
+    - get: fips-stemcell
+      trigger: true
+      params:
+        tarball: false
+  - task: update-stemcell-ops
+    file: runtime-ci/tasks/update-stemcell-ops/task.yml
+    input_mapping:
+      ops-files: cf-deployment-develop
+      stemcell: fips-stemcell
+    params:
+      STEMCELL_STACK: ubuntu-jammy
+      ORIGINAL_OPS_FILE_PATH: operations/test/fips-stemcell.yml
+      UPDATED_OPS_FILE_PATH: operations/test/fips-stemcell.yml
   - put: cf-deployment-develop
     params:
       rebase: true

@@ -53,6 +53,9 @@ groups:
   #@ for r in data.values.windowsOfflineReleases:
   - #@ "update-" + r.name + "-offline-release"
   #@ end
+- name: update-fips-stemcell
+  jobs:
+    - update-fips-stemcell
 - name: debug
   jobs:
   #@ for r in data.values.baseReleases:
@@ -102,6 +105,13 @@ resource_types:
   source:
     repository: cfcommunity/slack-notification-resource
     tag: latest
+
+#! TODO remove this resource type declaration when a final release of the resource is available
+- name: bosh-io-stemcell
+  source:
+    repository: foundationalinfrastructure/bosh-io-stemcell-resource
+    tag: v1.2.1
+  type: docker-image
 
 resources:
 - name: cf-deployment-all-branches
@@ -183,6 +193,15 @@ resources:
   icon: dna
   source:
     name: bosh-google-kvm-ubuntu-jammy-go_agent
+
+- name: fips-stemcell
+  type: bosh-io-stemcell
+  icon: dna
+  source:
+    name: bosh-aws-xen-hvm-ubuntu-jammy-fips-go_agent
+    auth:
+      access_key: ((ci_dev_gcp_service_account_hmac_access_key))
+      secret_key: ((ci_dev_gcp_service_account_hmac_secret))
 
 - name: stemcell-version-bump-detect
   type: stemcell-version-bump
@@ -716,18 +735,44 @@ jobs:
       params:
         tarball: false
   - task: update-windows-stemcell-ops
-    file: runtime-ci/tasks/update-windows-stemcell-ops/task.yml
+    file: runtime-ci/tasks/update-stemcell-ops/task.yml
     input_mapping:
       ops-files: cf-deployment-develop
-      windows-stemcell: #@ s.name + "-stemcell"
+      stemcell: #@ s.name + "-stemcell"
     params:
-      ORIGINAL_WINDOWS_OPS_FILE_PATH: #@ "{}/{}".format(s.opsFileDir, s.opsFile)
-      UPDATED_WINDOWS_OPS_FILE_PATH: #@ "{}/{}".format(s.opsFileDir, s.opsFile)
+      STEMCELL_STACK: #@ s.stack
+      ORIGINAL_OPS_FILE_PATH: #@ "{}/{}".format(s.opsFileDir, s.opsFile)
+      UPDATED_OPS_FILE_PATH: #@ "{}/{}".format(s.opsFileDir, s.opsFile)
   - put: cf-deployment-develop
     params:
       rebase: true
       repository: updated-stemcell-ops-file
 #@ end
+
+- name: update-fips-stemcell
+  public: true
+  serial: true
+  plan:
+    - in_parallel:
+        - get: runtime-ci
+        - get: cf-deployment-develop
+        - get: fips-stemcell
+          trigger: true
+          params:
+            tarball: false
+    - task: update-stemcell-ops
+      file: runtime-ci/tasks/update-stemcell-ops/task.yml
+      input_mapping:
+        ops-files: cf-deployment-develop
+        stemcell: fips-stemcell
+      params:
+        STEMCELL_STACK: ubuntu-jammy
+        ORIGINAL_OPS_FILE_PATH: operations/test/fips-stemcell.yml
+        UPDATED_OPS_FILE_PATH: operations/test/fips-stemcell.yml
+    - put: cf-deployment-develop
+      params:
+        rebase: true
+        repository: updated-stemcell-ops-file
 
 - name: detect-stemcell-bump
   plan:
