@@ -1843,6 +1843,11 @@ jobs:
     - in_parallel:
         - get: cf-deployment-develop
           trigger: true
+          passed:
+            - unit-test-ops-files
+            - lint-cf-deployment-manifest
+            - unit-test-golang-tests
+            - unit-test-update-releases-coverage
         - put: fips-pool
           params: { acquire: true }
       timeout: 4h
