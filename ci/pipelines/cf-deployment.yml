@@ -879,7 +879,7 @@ jobs:
         environments/test/trelawney/add-external-ips-for-cloud-sql-db.yml
         environments/test/trelawney/scale-log-api-to-4.yml
   - task: bosh-deploy-cf-develop
-    attempts: 2
+    attempts: 1
     file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
     input_mapping:
       bbl-state: relint-envs
@@ -914,6 +914,7 @@ jobs:
       APP_PUSHABILITY_THRESHOLD: 10
       RECENT_LOGS_THRESHOLD: 10000
       STREAMING_LOGS_THRESHOLD: 10000
+      APP_STATS_THRESHOLD: 5
   - in_parallel:
     - task: open-asgs-for-credhub
       file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
@@ -1157,7 +1158,7 @@ jobs:
         environments/test/hermione/increase-doppler-vm-type-from-minimal-to-small.yml
         environments/test/hermione/scale-diego-cell-to-8.yml
   - task: bosh-deploy-cf-develop
-    attempts: 2
+    attempts: 1
     file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
     input_mapping:
       bbl-state: relint-envs
@@ -1192,6 +1193,7 @@ jobs:
       APP_PUSHABILITY_THRESHOLD: 10
       RECENT_LOGS_THRESHOLD: 10000
       STREAMING_LOGS_THRESHOLD: 10000
+      APP_STATS_THRESHOLD: 5
   - in_parallel:
     - task: open-asgs-for-credhub
       file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
