@@ -294,11 +294,11 @@ will require the use of the [`use-external-dbs.yml`](/operations/use-external-db
 
 The following databases are tested as part of the cf-deployment pipeline:
 - MySQL 8.0 using [pxc-release](https://github.com/cloudfoundry/pxc-release) as singleton and as Galera cluster
-- PostgreSQL 15 using [postgres-release](https://github.com/cloudfoundry/postgres-release)
+- PostgreSQL 16 using [postgres-release](https://github.com/cloudfoundry/postgres-release)
 - GCP Cloud SQL for MySQL 8.0 as external database
 
 The following databases should work (not tested):
-- PostgreSQL 12..14
+- PostgreSQL 12..15
 
 The following databases are not supported:
 - MySQL <8.0
