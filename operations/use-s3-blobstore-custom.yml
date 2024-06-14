@@ -1,0 +1,52 @@
+---
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks/fog_connection/provider
+  error: "Please apply 'use-external-blobstore.yml' and 'use-s3-blobstore.yml' before applying 'use-s3-blobstore-custom.yml'."
+  value: AWS
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks?/fog_connection?/endpoint?
+  value: ((blobstore_endpoint))
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks?/fog_connection?/path_style?
+  value: ((blobstore_path_style))
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/droplets?/fog_connection?/endpoint?
+  value: ((blobstore_endpoint))
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/droplets?/fog_connection?/path_style?
+  value: ((blobstore_path_style))
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/packages?/fog_connection?/endpoint?
+  value: ((blobstore_endpoint))
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/packages?/fog_connection?/path_style?
+  value: ((blobstore_path_style))
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/resource_pool?/fog_connection?/endpoint?
+  value: ((blobstore_endpoint))
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/resource_pool?/fog_connection?/path_style?
+  value: ((blobstore_path_style))
+
+#
+# You can use a bosh deployment with a bosh-dns-alias as the endpoint host:
+#
+# - type: replace
+#   path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/-
+#   value:
+#     domain: ((blobstore_host)) # for example:  s3-blobstore.service.bosh
+#     targets:
+#       - query: 'q-s0'
+#         deployment: s3-blobstore
+#         instance_group: minio
+#         network: default
+#         domain: bosh
+#
