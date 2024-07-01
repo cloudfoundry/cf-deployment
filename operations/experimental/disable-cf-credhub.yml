@@ -1,0 +1,36 @@
+# Instance Group
+- type: remove
+  path: /instance_groups/name=credhub
+
+# Release
+- type: remove
+  path: /releases/name=credhub
+
+# UAA clients
+- type: remove
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/cc_service_key_client?
+- type: remove
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/credhub_admin_client
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/uaa/clients/cc_service_key_client/secret
+  value: x
+
+# Properties
+- type: remove
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/credhub_api
+- type: remove
+  path: /instance_groups/name=diego-cell/jobs/name=cflinuxfs4-rootfs-setup/properties/cflinuxfs4-rootfs/trusted_certs/1
+- type: remove
+  path: /instance_groups/name=diego-cell/jobs/name=rep/properties/containers/trusted_ca_certificates/1
+
+# Vars
+- type: remove
+  path: /variables/name=credhub_encryption_password
+- type: remove
+  path: /variables/name=credhub_admin_client_secret
+- type: remove
+  path: /variables/name=credhub_ca
+- type: remove
+  path: /variables/name=credhub_tls
+- type: remove
+  path: /variables/name=uaa_clients_cc_service_key_client_secret
