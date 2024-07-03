@@ -1199,15 +1199,6 @@ jobs:
       STREAMING_LOGS_THRESHOLD: 10000
       APP_STATS_THRESHOLD: 10
   - in_parallel:
-    - task: open-asgs-for-credhub
-      file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-      params:
-        BBL_STATE_DIR: environments/test/hermione/bbl-state
-        INSTANCE_GROUP_NAME: credhub
-        SYSTEM_DOMAIN: cf.hermione.env.wg-ard.ci.cloudfoundry.org
-        SECURITY_GROUP_NAME: credhub
     - task: open-asgs-for-uaa
       file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
       input_mapping:
