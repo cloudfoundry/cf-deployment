@@ -9,12 +9,8 @@
     - name: otel-collector-windows
       release: otel-collector
       properties:
-        # Insert OTel Collector Exporter configuration
-        # See https://opentelemetry.io/docs/collector/configuration/#exporters
-        # For example:
-        #   otlp:
-        #     endpoint: otelcol2:4317
-        metric_exporters: ((otel_collector_metric_exporters))
+        # https://opentelemetry.io/docs/collector/configuration/
+        config: ((otel_collector_config))
         ingress:
           grpc:
             tls:

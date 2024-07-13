@@ -11,13 +11,14 @@
     jobs:
     - name: otel-collector
       properties:
+        # https://opentelemetry.io/docs/collector/configuration/
+        config: ((otel_collector_config))
         ingress:
           grpc:
             tls:
               ca_cert: ((otel_collector_tls.ca))
               cert: ((otel_collector_tls.certificate))
               key: ((otel_collector_tls.private_key))
-        metric_exporters: ((otel_collector_metric_exporters))
       release: otel-collector
     name: otel-collector
 - type: replace
