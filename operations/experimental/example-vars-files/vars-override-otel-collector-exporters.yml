@@ -1,7 +1,7 @@
 ---
 otel_collector_config:
   receivers:
-    otlp/placeholder:
+    otlp/placeholder: # no need to change, receivers are filled in automatically by the release
 
   processors:
     batch:
@@ -15,10 +15,10 @@ otel_collector_config:
   service:
     pipelines:
       traces:
-        receivers: [otlp/placeholder]
+        receivers: [otlp/placeholder] # no need to change, receivers are filled in automatically by the release
         processors: [batch]
         exporters: [file/test, otlp/test]
       metrics:
-        receivers: [otlp/placeholder]
+        receivers: [otlp/placeholder] # no need to change, receivers are filled in automatically by the release
         processors: [batch]
         exporters: [file/test, otlp/test]
