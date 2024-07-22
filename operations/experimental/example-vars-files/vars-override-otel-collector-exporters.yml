@@ -1,6 +1,24 @@
 ---
-otel_collector_metric_exporters:
-  file/test:
-    path: /tmp/otel-collector-file.log
-  otlp/test:
-    endpoint: otelcol:4317
+otel_collector_config:
+  receivers:
+    otlp/placeholder: # no need to change, receivers are filled in automatically by the release
+
+  processors:
+    batch:
+
+  exporters:
+    file/test:
+      path: /tmp/otel-collector-file.log
+    otlp/test:
+      endpoint: otelcol:4317
+
+  service:
+    pipelines:
+      traces:
+        receivers: [otlp/placeholder] # no need to change, receivers are filled in automatically by the release
+        processors: [batch]
+        exporters: [file/test, otlp/test]
+      metrics:
+        receivers: [otlp/placeholder] # no need to change, receivers are filled in automatically by the release
+        processors: [batch]
+        exporters: [file/test, otlp/test]
