@@ -11,7 +11,6 @@
     jobs:
     - name: otel-collector
       properties:
-        # https://opentelemetry.io/docs/collector/configuration/
         config: ((otel_collector_config))
         ingress:
           grpc:
@@ -39,6 +38,6 @@
   path: /releases/name=otel-collector?
   value:
     name: otel-collector
-    sha1: e466b7901a60881d905d41f542bc1ad70a048e4c
-    url: https://bosh.io/d/github.com/cloudfoundry/otel-collector-release?v=0.6.0
-    version: 0.6.0
+    sha1: 03051b04fbd37010c5d9be074ddcab0c0fd96f24
+    url: https://bosh.io/d/github.com/cloudfoundry/otel-collector-release?v=0.6.1
+    version: 0.6.1
