@@ -70,13 +70,16 @@
         containers:
           proxy:
             enabled: true
+            enable_unproxied_port_mappings: false
             require_and_verify_client_certificates: true
             trusted_ca_certificates:
             - ((gorouter_backend_tls.ca))
             - ((ssh_proxy_backends_tls.ca))
+            - ((tcp_router_backend_tls.ca))
             verify_subject_alt_name:
             - gorouter.service.cf.internal
             - ssh-proxy.service.cf.internal
+            - tcp-router.service.cf.internal
           trusted_ca_certificates:
           - ((diego_instance_identity_ca.ca))
           - ((credhub_tls.ca))
@@ -134,6 +137,7 @@
             timestamp: "rfc3339"
         tcp:
           enabled: true
+          enable_tls: true
         uaa:
           ca_cert: "((uaa_ssl.ca))"
           client_secret: "((uaa_clients_tcp_emitter_secret))"

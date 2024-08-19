@@ -2,6 +2,9 @@
   path: /instance_groups/name=windows2019-cell/jobs/name=rep_windows/properties/containers?/proxy/enabled
   value: true
 - type: replace
+  path: /instance_groups/name=windows2019-cell/jobs/name=rep_windows/properties/containers?/proxy/enable_unproxied_port_mappings
+  value: false
+- type: replace
   path: /instance_groups/name=windows2019-cell/jobs/name=rep_windows/properties/containers?/proxy/require_and_verify_client_certificates
   value: true
 - type: replace
@@ -9,11 +12,16 @@
   value:
   - ((gorouter_backend_tls.ca))
   - ((ssh_proxy_backends_tls.ca))
+    ((tcp_router_backend_tls.ca))
 - type: replace
   path: /instance_groups/name=windows2019-cell/jobs/name=rep_windows/properties/containers?/proxy/verify_subject_alt_name
   value:
   - gorouter.service.cf.internal
   - ssh-proxy.service.cf.internal
+  - tcp-router.service.cf.internal
+- type: replace
+  path: /instance_groups/name=windows2019-cell/jobs/name=route_emitter_windows/properties/tcp?/enable_tls
+  value: true
 - type: replace
   path: /instance_groups/name=windows2019-cell/jobs/-
   value:

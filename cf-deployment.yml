@@ -1463,6 +1463,11 @@ instance_groups:
         router_group: default-tcp
         tls_health_check_cert: ((tcp_router_lb_health_tls.certificate))
         tls_health_check_key:  ((tcp_router_lb_health_tls.private_key))
+        backend_tls:
+          enabled: true
+          client_cert: ((tcp_router_backend_tls.certificate))
+          client_key: ((tcp_router_backend_tls.private_key))
+          ca_cert: ((diego_instance_identity_ca.ca))
       uaa:
         ca_cert: "((uaa_ssl.ca))"
         tls_port: 8443
@@ -1637,13 +1642,16 @@ instance_groups:
       containers:
         proxy:
           enabled: true
+          enable_unproxied_port_mappings: false
           require_and_verify_client_certificates: true
           trusted_ca_certificates:
           - ((gorouter_backend_tls.ca))
           - ((ssh_proxy_backends_tls.ca))
+          - ((tcp_router_backend_tls.ca))
           verify_subject_alt_name:
           - gorouter.service.cf.internal
           - ssh-proxy.service.cf.internal
+          - tcp-router.service.cf.internal
         trusted_ca_certificates:
         - ((diego_instance_identity_ca.ca))
         - ((credhub_tls.ca))
@@ -1682,6 +1690,7 @@ instance_groups:
               client_key: "((nats_client_cert.private_key))"
       tcp:
         enabled: true
+        enable_tls: true
       uaa:
         ca_cert: "((uaa_ssl.ca))"
         client_secret: "((uaa_clients_tcp_emitter_secret))"
@@ -2486,6 +2495,15 @@ variables:
     common_name: gorouter_lb_health_tls
     alternative_names:
     - gorouter.service.cf.internal
+- name: tcp_router_backend_tls
+  type: certificate
+  options:
+    ca: service_cf_internal_ca
+    common_name: tcp-router_backend_tls
+    alternative_names:
+    - tcp-router.service.cf.internal
+    extended_key_usage:
+    - client_auth
 - name: tcp_router_lb_health_tls
   type: certificate
   options:

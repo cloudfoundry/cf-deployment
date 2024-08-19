@@ -86,6 +86,13 @@
                 client_cert: ((nats_client_cert.certificate))
                 client_key: ((nats_client_cert.private_key))
                 enabled: true
+        internal_routes:
+          enabled: true
+        uaa:
+          ca_cert: "((uaa_ssl.ca))"
+          client_secret: "((uaa_clients_tcp_emitter_secret))"
+        tcp:
+          enabled: true
         logging:
           format:
             timestamp: rfc3339

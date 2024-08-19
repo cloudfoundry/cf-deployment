@@ -1,0 +1,8 @@
+---
+- type: replace
+  path: /instance_groups/name=tcp-router/jobs/name=tcp_router/properties/tcp_router/backend_tls?/enabled
+  value: false
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=route_emitter/properties/tcp/enable_tls?
+  value: false
