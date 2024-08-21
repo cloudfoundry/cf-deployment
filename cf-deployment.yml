@@ -899,6 +899,8 @@ instance_groups:
         default_staging_security_groups:
         - public_networks
         - dns
+        security_groups:
+          enable_comma_delimited_destinations: true
         security_group_definitions:
         - name: public_networks
           rules:
