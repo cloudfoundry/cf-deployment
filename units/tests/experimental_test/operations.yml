@@ -76,3 +76,12 @@ use-mysql-version-8.0.yml:
   pathvalidator:
     path: /instance_groups/name=database/jobs/name=pxc-mysql/properties/mysql_version?
     expectedvalue: "8.0"
+disable-tls-tcp-routing-windows-stage-1-unproxied-ports.yml:
+  ops:
+  - ../windows2019-cell.yml
+  - enable-nginx-routing-integrity-windows2019.yml
+disable-tls-tcp-routing-windows-stage-2-route-emitter.yml:
+  ops:
+  - ../windows2019-cell.yml
+  - enable-nginx-routing-integrity-windows2019.yml
+  - disable-tls-tcp-routing-windows-stage-1-unproxied-ports.yml

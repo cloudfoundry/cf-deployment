@@ -155,3 +155,14 @@ windows2019-cell.yml: {}
 use-cflinuxfs4-compat.yml:
   ops:
     - use-cflinuxfs4-compat.yml
+disable-tls-tcp-routing-isolation-segment-stage-1-unproxied-ports.yml:
+  ops:
+  - add-persistent-isolation-segment-diego-cell.yml
+disable-tls-tcp-routing-isolation-segment-stage-2-route-emitter.yml:
+  ops:
+  - add-persistent-isolation-segment-diego-cell.yml
+  - disable-tls-tcp-routing-isolation-segment-stage-1-unproxied-ports.yml
+disable-tls-tcp-routing-stage-1-unproxied-ports.yml: {}
+disable-tls-tcp-routing-stage-2-tcp-router-and-route-emitter.yml:
+  ops:
+  - disable-tls-tcp-routing-stage-1-unproxied-ports.yml
