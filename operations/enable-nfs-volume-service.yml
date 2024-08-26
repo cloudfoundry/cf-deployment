@@ -85,11 +85,15 @@
           server_cert: ((nfsv3driver_cert.certificate))
           server_key: ((nfsv3driver_cert.private_key))
     release: nfs-volume
+    consumes:
+      mapfs: {from: mapfs-diego-cell}
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=mapfs?
   value:
     name: mapfs
     release: mapfs
+    provides:
+      mapfs: {as: mapfs-diego-cell}
 - type: replace
   path: /variables/-
   value:
