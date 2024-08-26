@@ -106,6 +106,11 @@
   path: /instance_groups/name=credhub/instances
   value: 1
 
+# ----- Change VM type "medium" to "small" ------
+- type: replace
+  path: /instance_groups/name=nats/vm_type?
+  value: small
+
 # ----- Reduce default app memory to 256M ------
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/default_app_memory?
