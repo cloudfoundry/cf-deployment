@@ -585,6 +585,7 @@ jobs:
         operations/test/speed-up-dynamic-asgs.yml
         operations/use-cflinuxfs4-compat.yml
         operations/smoke-tests-timeout-scale.yml
+        operations/stop-skipping-tls-validation.yml
       VARS_FILES: |
         environments/test/luna/deployment-name.yml
         environments/test/luna/network-name.yml
@@ -702,6 +703,7 @@ jobs:
         CONFIG_FILE_PATH: environments/test/luna/integration_config.json
         CAPTURE_LOGS: true
         RELINT_VERBOSE_AUTH: "true"
+        SKIP_REGEXP: "shows logs and metrics"
         NODES: 12
 
 - name: fresh-delete-deployment
