@@ -558,6 +558,7 @@ jobs:
         environments/test/luna/rename-isolation-segment-network.yml
         environments/test/luna/change-postgres-max-connections.yml
         environments/test/luna/smoke-tests-timeout-scale.yml
+        environments/test/luna/use-operator-provided-router-tls-certificate.yml
   - task: bosh-deploy-cf
     file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
     input_mapping:
@@ -568,6 +569,8 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/luna/bbl-state
       SYSTEM_DOMAIN: cf.luna.env.wg-ard.ci.cloudfoundry.org
+      BOSHENV_iso_seg_tls_cert: ((luna-iso_lb))
+      BOSH_DEPLOY_ARGS: "--vars-env=BOSHENV"
       OPS_FILES: |
         operations/rename-network-and-deployment.yml
         operations/set-bbs-active-key.yml
@@ -585,6 +588,8 @@ jobs:
         operations/test/speed-up-dynamic-asgs.yml
         operations/use-cflinuxfs4-compat.yml
         operations/smoke-tests-timeout-scale.yml
+        operations/stop-skipping-tls-validation.yml
+        operations/use-operator-provided-router-tls-certificate.yml
       VARS_FILES: |
         environments/test/luna/deployment-name.yml
         environments/test/luna/network-name.yml
@@ -702,6 +707,7 @@ jobs:
         CONFIG_FILE_PATH: environments/test/luna/integration_config.json
         CAPTURE_LOGS: true
         RELINT_VERBOSE_AUTH: "true"
+        SKIP_REGEXP: "shows logs and metrics"
         NODES: 12
 
 - name: fresh-delete-deployment
