@@ -21,5 +21,8 @@
   path: /instance_groups/name=diego-cell/jobs/name=nfsv3driver/properties/nfsv3driver/allowed-in-source?
   value: ""
 - type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=nfsv3driver/properties/nfsv3driver/ldap_ca_cert?
+  value: ((ldap_server_ssl.ca))
+- type: replace
   path: /instance_groups/name=nfs-broker-push/jobs/name=nfsbrokerpush/properties/nfsbrokerpush/ldap_enabled?
   value: true

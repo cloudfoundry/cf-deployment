@@ -7,9 +7,9 @@
       ldap:
         ssl:
           active: true
-          ca_cert: ((ldap_test_server_ssl.ca))
-          server_cert: ((ldap_test_server_ssl.certificate))
-          server_key: ((ldap_test_server_ssl.private_key))
+          ca_cert: ((ldap_server_ssl.ca))
+          server_cert: ((ldap_server_ssl.certificate))
+          server_key: ((ldap_server_ssl.private_key))
 
 - type: replace
   path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/domain=nfstestldapserver.service.cf.internal?
@@ -24,7 +24,7 @@
 
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=nfsv3driver/properties/nfsv3driver/ldap_ca_cert?
-  value: ((ldap_test_server_ssl.ca))
+  value: ((ldap_server_ssl.ca))
 
 - type: replace
   path: /variables/-
@@ -38,7 +38,7 @@
 - type: replace
   path: /variables/-
   value:
-    name: ldap_test_server_ssl
+    name: ldap_server_ssl
     type: certificate
     update_mode: converge
     options:
