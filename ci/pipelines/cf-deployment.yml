@@ -658,7 +658,8 @@ jobs:
       input_mapping:
         bbl-state: relint-envs
       params:
-        BBL_STATE_DIR: environments/test/bbr/bbl-state
+        BBL_STATE_DIR: environments/test/luna/bbl-state
+        DEPLOYMENT_NAME: luna-cf
         ERRAND_NAME: nfs-broker-push
 
 - name: fresh-smoke-tests
