@@ -60,6 +60,11 @@
           from: reverse_log_proxy
       name: metric-store-nozzle
       properties:
+        otel_provider:
+          tls:
+            ca_cert: ((metric_store_otel_provider.ca))
+            cert: ((metric_store_otel_provider.certificate))
+            key: ((metric_store_otel_provider.private_key))
         logs_provider:
           tls:
             ca_cert: ((metric_store_to_logs_provider.ca))
@@ -146,6 +151,21 @@
       alternative_names:
       - metric-store
       ca: loggregator_ca
+      common_name: metric-store
+      extended_key_usage:
+      - client_auth
+      - server_auth
+    type: certificate
+- type: replace
+  path: /variables/name=metric_store_otel_provider?
+  value:
+    name: metric_store_otel_provider
+    options:
+      alternative_names:
+      - metric-store
+      - metric-store.service.internal
+      - localhost
+      ca: service_cf_internal_ca
       common_name: metric-store
       extended_key_usage:
       - client_auth
