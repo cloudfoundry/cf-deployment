@@ -590,6 +590,8 @@ jobs:
         operations/smoke-tests-timeout-scale.yml
         operations/stop-skipping-tls-validation.yml
         operations/use-operator-provided-router-tls-certificate.yml
+        operations/enable-nfs-volume-service.yml
+        operations/test/enable-nfs-test-server.yml
       VARS_FILES: |
         environments/test/luna/deployment-name.yml
         environments/test/luna/network-name.yml
@@ -651,6 +653,13 @@ jobs:
           diego_cnb
           diego_docker
           task_creation
+    - task: run-nfs-broker-push-errand
+      file: cf-deployment-concourse-tasks/run-errand/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/bbr/bbl-state
+        ERRAND_NAME: nfs-broker-push
 
 - name: fresh-smoke-tests
   public: true
