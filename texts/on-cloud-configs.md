@@ -83,7 +83,7 @@ disk_types:
   name: 5GB
 - disk_size: 10240
   name: 10GB
-- disk_size: 100240
+- disk_size: 102400
   name: 100GB
 ```
 
