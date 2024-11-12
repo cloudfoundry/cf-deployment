@@ -583,6 +583,7 @@ jobs:
         operations/addons/add-system-metrics-agent.yml
         operations/use-postgres.yml
         operations/experimental/enable-tls-cloud-controller-postgres.yml
+        operations/experimental/disable-v2-api.yml
         operations/change-postgres-max-connections.yml
         operations/use-internal-lookup-for-route-services.yml
         operations/enable-tls-on-file-server.yml
@@ -858,6 +859,7 @@ jobs:
         operations/use-external-dbs.yml
         operations/add-external-ips-for-cloud-sql-db.yml
         operations/experimental/colocate-smoke-tests-on-cc-worker.yml
+        operations/experimental/disable-v2-api.yml
         operations/set-cpu-weight.yml
         operations/enable-cpu-throttling.yml
         operations/use-external-blobstore.yml
@@ -913,6 +915,7 @@ jobs:
         operations/use-external-dbs.yml
         operations/add-external-ips-for-cloud-sql-db.yml
         operations/experimental/colocate-smoke-tests-on-cc-worker.yml
+        operations/experimental/disable-v2-api.yml
         operations/set-cpu-weight.yml
         operations/enable-cpu-throttling.yml
         operations/use-external-blobstore.yml
@@ -1146,6 +1149,7 @@ jobs:
         operations/experimental/enable-containerd-for-processes.yml
         operations/experimental/disable-cf-credhub.yml
         operations/experimental/disable-interpolate-service-bindings.yml
+        operations/experimental/disable-v2-api.yml
         operations/increase-doppler-vm-type-from-minimal-to-small.yml
         operations/scale-diego-cell-to-8.yml
         operations/test/speed-up-dynamic-asgs.yml
@@ -1413,6 +1417,7 @@ jobs:
           operations/bosh-lite.yml
           operations/use-internal-lookup-for-route-services.yml
           operations/experimental/colocate-smoke-tests-on-cc-worker.yml
+          operations/experimental/disable-v2-api.yml
         REGENERATE_CREDENTIALS: true
         BOSH_LITE: true
     - task: ensure-api-healthy
@@ -1566,6 +1571,7 @@ jobs:
         operations/backup-and-restore/enable-restore-nfs-broker.yml
         operations/enable-smb-volume-service.yml
         operations/backup-and-restore/enable-restore-smb-broker.yml
+        operations/experimental/disable-v2-api.yml
       REGENERATE_CREDENTIALS: true
   - in_parallel:
     - task: enable-docker
@@ -1730,6 +1736,7 @@ jobs:
         operations/windows2019-cell.yml
         operations/use-online-windows2019fs.yml
         operations/experimental/use-compiled-releases-windows.yml
+        operations/experimental/disable-v2-api.yml
         operations/use-internal-lookup-for-route-services.yml
         operations/experimental/colocate-smoke-tests-on-cc-worker.yml
         operations/addons/add-system-metrics-agent.yml
@@ -1974,6 +1981,7 @@ jobs:
           operations/use-postgres.yml
           operations/stop-skipping-tls-validation.yml
           operations/experimental/enable-tls-cloud-controller-postgres.yml
+          operations/experimental/disable-v2-api.yml
           operations/use-latest-stemcell.yml
         VARS_FILES: |
           environments/test/snape/syslog-vars.yml
