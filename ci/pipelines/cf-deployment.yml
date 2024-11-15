@@ -793,6 +793,34 @@ jobs:
     - get: cf-deployment-develop
       passed: [upgrade-acquire-pool]
     - get: relint-envs
+  - task: check-stemcell-versions
+    config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: cloudfoundry/cf-deployment-concourse-tasks
+        inputs:
+          - name: cf-deployment-main
+          - name: cf-deployment-develop
+        run:
+          path: bash
+          dir: ""
+          args:
+            - -c
+            - |
+              #!/bin/bash
+              version_from_develop_branch="$(yq '.stemcells[] | select(.alias == "default") | .version' < cf-deployment-develop/cf-deployment.yml)"
+              version_from_main_branch="$(yq '.stemcells[] | select(.alias == "default") | .version' < cf-deployment-main/cf-deployment.yml)"
+
+              if [ "$version_from_develop_branch" = "$version_from_main_branch" ]; then
+                echo "Version ${version_from_develop_branch} from develop branch matches version from main branch. Proceeding."
+              else
+                echo "Version ${version_from_develop_branch} from develop branch differs from version ${version_from_main_branch} from main branch."
+                echo "This can happen if two stemcell versions are released at short intervals. Aborting."
+                echo "Solution: Release lock for this group manually and triggered it with the latest "develop" commit (that also contains the latest stemcell version)"
+                exit 1
+              fi
   - task: guarantee-no-existing-cf-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
@@ -1108,6 +1136,34 @@ jobs:
     - get: cf-deployment-develop
       passed: [ experimental-acquire-pool ]
     - get: relint-envs
+  - task: check-stemcell-versions
+    config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: cloudfoundry/cf-deployment-concourse-tasks
+        inputs:
+          - name: cf-deployment-main
+          - name: cf-deployment-develop
+        run:
+          path: bash
+          dir: ""
+          args:
+            - -c
+            - |
+              #!/bin/bash
+              version_from_develop_branch="$(yq '.stemcells[] | select(.alias == "default") | .version' < cf-deployment-develop/cf-deployment.yml)"
+              version_from_main_branch="$(yq '.stemcells[] | select(.alias == "default") | .version' < cf-deployment-main/cf-deployment.yml)"
+
+              if [ "$version_from_develop_branch" = "$version_from_main_branch" ]; then
+                echo "Version ${version_from_develop_branch} from develop branch matches version from main branch. Proceeding."
+              else
+                echo "Version ${version_from_develop_branch} from develop branch differs from version ${version_from_main_branch} from main branch."
+                echo "This can happen if two stemcell versions are released at short intervals. Aborting."
+                echo "Solution: Release lock for this group manually and triggered it with the latest "develop" commit (that also contains the latest stemcell version)"
+                exit 1
+              fi
   - task: guarantee-no-existing-cf-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
