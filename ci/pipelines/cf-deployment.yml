@@ -486,7 +486,7 @@ jobs:
         args:
         - -exc
         - |
-          ruby -e "require 'yaml'; YAML.load_file('./cf-deployment-develop/cf-deployment.yml')"
+          ruby -e "require 'yaml'; YAML.load_file('./cf-deployment-develop/cf-deployment.yml', aliases: true)"
 
 - name: branch-freshness
   public: true
