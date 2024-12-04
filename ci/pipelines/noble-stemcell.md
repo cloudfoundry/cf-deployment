@@ -12,4 +12,4 @@ If the pipeline succeeds, then it will clean up the CF BOSH deployment after its
 
 ## Pipeline Management
 
-This pipeline is managed directly by the `ci/pipelines/noble-stemcell.yml` file and the `ci/configure` script. To update the pipeline, run `ci/configure nobleF-stemcell`.
+This pipeline is managed directly by the `ci/pipelines/noble-stemcell.yml` file and the `ci/configure` script. To update the pipeline, run `ci/configure noble-stemcell`.
