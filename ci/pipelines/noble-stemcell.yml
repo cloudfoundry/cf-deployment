@@ -43,39 +43,6 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/bellatrix/bbl-state
         task: upload-noble-stemcell
-      - config:
-          image_resource:
-            name: ""
-            source:
-              repository: cloudfoundry/cf-deployment-concourse-tasks
-            type: docker-image
-          inputs:
-            - name: bbl-state
-            - name: cf-deployment-concourse-tasks
-          params:
-            BBL_STATE_DIR: environments/test/bellatrix/bbl-state
-          platform: linux
-          run:
-            args:
-              - -c
-              - |
-                #!/bin/bash
-                source cf-deployment-concourse-tasks/shared-functions
-                setup_bosh_env_vars
-                cat <<EOT > /tmp/add-noble.yml
-                ---
-                - type: replace
-                  path: /addons/name=bosh-dns/include/stemcell/-
-                  value:
-                    os: ubuntu-noble
-                EOT
-                bosh runtime-config --name=dns > /tmp/dns.yml
-                bosh interpolate -o /tmp/add-noble.yml /tmp/dns.yml > /tmp/updated-dns.yml
-                bosh -n update-runtime-config --name=dns /tmp/updated-dns.yml
-            path: bash
-        input_mapping:
-          bbl-state: relint-envs
-        task: update-dns-runtime-config
       - file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
@@ -87,6 +54,7 @@ jobs:
             operations/use-internal-lookup-for-route-services.yml
             operations/experimental/colocate-smoke-tests-on-cc-worker.yml
           SYSTEM_DOMAIN: cf.bellatrix.env.wg-ard.ci.cloudfoundry.org
+          SKIP_STEMCELL_UPLOAD: true
         task: deploy-cf
       - in_parallel:
           steps:
