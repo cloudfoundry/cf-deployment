@@ -224,44 +224,42 @@ resources:
   - icon: dna
     name: noble-stemcell
     source:
-      name: bosh-google-kvm-ubuntu-noble-go_agent
+      name: bosh-google-kvm-ubuntu-noble
     type: bosh-io-stemcell
   - icon: github
     name: cf-acceptance-tests-rc
     source:
       branch: release-candidate
-      private_key: ((cf_acceptance_tests_readwrite_deploy_key.private_key))
-      uri: git@github.com:cloudfoundry/cf-acceptance-tests.git
+      uri: https://github.com/cloudfoundry/cf-acceptance-tests.git
     type: git
   - icon: github
     name: cf-deployment
     source:
       branch: release-candidate
-      private_key: ((cf_deployment_readwrite_deploy_key.private_key))
-      uri: git@github.com:cloudfoundry/cf-deployment.git
+      uri: https://github.com/cloudfoundry/cf-deployment.git
     type: git
   - icon: github
     name: cf-deployment-concourse-tasks
     source:
       uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
     type: git
-  - icon: github
-    name: relint-envs
+  - name: relint-envs
+    type: git
+    icon: github
     source:
       branch: main
-      private_key: ((hagrid_env_readwrite_deploy_key.private_key))
       uri: git@github.com:cloudfoundry/relint-envs.git
-    type: git
+      private_key: ((ard_wg_gitbot_ssh_key.private_key))
   - icon: github
     name: runtime-ci
     source:
       uri: https://github.com/cloudfoundry/runtime-ci.git
     type: git
-  - icon: pool
-    name: stable-pool
+  - name: stable-pool
+    type: pool
+    icon: pool
     source:
+      uri: git@github.com:cloudfoundry/relint-ci-pools
       branch: main
       pool: cf-deployment/stable
-      private_key: ((relint_ci_pools_readwrite_deploy_key.private_key))
-      uri: git@github.com:cloudfoundry/relint-ci-pools
-    type: pool
+      private_key: ((ard_wg_gitbot_ssh_key.private_key))
