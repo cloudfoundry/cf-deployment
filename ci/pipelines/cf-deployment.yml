@@ -793,6 +793,10 @@ jobs:
     - get: cf-deployment-develop
       passed: [upgrade-acquire-pool]
     - get: relint-envs
+  - task: check-stemcell-versions
+    file: runtime-ci/tasks/check-stemcell-versions/task.yml
+    params:
+      BRANCH_TO_COMPARE: develop
   - task: guarantee-no-existing-cf-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
@@ -1108,6 +1112,10 @@ jobs:
     - get: cf-deployment-develop
       passed: [ experimental-acquire-pool ]
     - get: relint-envs
+  - task: check-stemcell-versions
+    file: runtime-ci/tasks/check-stemcell-versions/task.yml
+    params:
+      BRANCH_TO_COMPARE: develop
   - task: guarantee-no-existing-cf-deployment
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
@@ -2155,7 +2163,7 @@ jobs:
     - get: cf-deployment-release-candidate
       passed: [bless-manifest]
   - task: check-stemcell-versions
-    file: runtime-ci/tasks/check-stemcell-versions-for-ship-it/task.yml
+    file: runtime-ci/tasks/check-stemcell-versions/task.yml
   - task: update-cf-deployment-manifest-version
     file: runtime-ci/tasks/record-cfd-version-in-manifest/task.yml
   - put: cf-deployment-main
@@ -2182,7 +2190,7 @@ jobs:
     - get: cf-deployment-release-candidate
       passed: [bless-manifest]
   - task: check-stemcell-versions
-    file: runtime-ci/tasks/check-stemcell-versions-for-ship-it/task.yml
+    file: runtime-ci/tasks/check-stemcell-versions/task.yml
   - task: update-cf-deployment-manifest-version
     file: runtime-ci/tasks/record-cfd-version-in-manifest/task.yml
   - put: cf-deployment-main
@@ -2209,7 +2217,7 @@ jobs:
     - get: cf-deployment-release-candidate
       passed: [bless-manifest]
   - task: check-stemcell-versions
-    file: runtime-ci/tasks/check-stemcell-versions-for-ship-it/task.yml
+    file: runtime-ci/tasks/check-stemcell-versions/task.yml
   - task: update-cf-deployment-manifest-version
     file: runtime-ci/tasks/record-cfd-version-in-manifest/task.yml
   - put: cf-deployment-main
