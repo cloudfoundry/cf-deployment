@@ -6,11 +6,6 @@ groups:
   - fail-prs-to-cf-deployment-release-candidate
   - pass-prs-to-cf-deployment-develop
   - run-unit-tests-on-all-cf-deployment-prs
-- name: cats
-  jobs:
-  - fail-prs-to-cats-main
-  - pass-prs-to-cats-develop
-  - run-unit-tests-on-all-cats-prs
 
 resource_types:
   - name: pull-request
@@ -49,26 +44,6 @@ resources:
     source:
       access_token: ((ard_wg_gitbot_token))
       repository: cloudfoundry/cf-deployment
-      base_branch: develop
-      required_review_approvals: 1
-
-  - name: cats-all-branches
-    type: pull-request
-    source:
-      access_token: ((ard_wg_gitbot_token))
-      repository: cloudfoundry/cf-acceptance-tests
-      required_review_approvals: 1
-  - name: cats-main
-    type: pull-request
-    source:
-      access_token: ((ard_wg_gitbot_token))
-      repository: cloudfoundry/cf-acceptance-tests
-      base_branch: main
-  - name: cats-develop
-    type: pull-request
-    source:
-      access_token: ((ard_wg_gitbot_token))
-      repository: cloudfoundry/cf-acceptance-tests
       base_branch: develop
       required_review_approvals: 1
 
@@ -218,73 +193,5 @@ jobs:
           put: cf-deployment-all-branches
           params:
             path: cf-deployment-all-branches
-            status: success
-            context: ((unit_tests_context))
-
-
-  - name: fail-prs-to-cats-main
-    public: true
-    plan:
-      - get: runtime-ci
-      - get: cats-main
-        trigger: true
-        version: every
-      - task: write-pr-check-failure-comment
-        file: runtime-ci/tasks/write-pr-check-failure-comment/task.yml
-        input_mapping:
-          pull-request: cats-main
-      - put: cats-main
-        params:
-          path: cats-main
-          status: failure
-          context: ((pr_context))
-          comment_file: pull-request-comment/comment
-  - name: pass-prs-to-cats-develop
-    public: true
-    plan:
-      - get: cats-develop
-        trigger: true
-        version: every
-      - put: cats-develop
-        params:
-          path: cats-develop
-          status: success
-          context: ((pr_context))
-
-  - name: run-unit-tests-on-all-cats-prs
-    public: true
-    plan:
-    - timeout: 4h
-      do:
-      - in_parallel:
-        - get: runtime-ci
-        - get: cats-all-branches
-          trigger: true
-          version: every
-      - put: cats-all-branches
-        params:
-          path: cats-all-branches
-          status: pending
-          context: ((unit_tests_context))
-      - task: run-cats-unit-tests
-        file: runtime-ci/tasks/run-cats-unit-tests/task.yml
-        input_mapping:
-          cf-acceptance-tests: cats-all-branches
-        on_failure:
-          do:
-          - task: write-pr-check-failure-comment
-            file: runtime-ci/tasks/write-pr-check-failure-comment/task.yml
-            input_mapping:
-              pull-request: cats-all-branches
-          - put: cats-all-branches
-            params:
-              path: cats-all-branches
-              status: failure
-              context: ((unit_tests_context))
-              comment_file: pull-request-comment/comment
-        on_success:
-          put: cats-all-branches
-          params:
-            path: cats-all-branches
             status: success
             context: ((unit_tests_context))
