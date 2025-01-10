@@ -1,0 +1,24 @@
+---
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/allow_user_creation_by_org_manager?
+  value: true
+
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/cloud_controller_shadow_user_creation?
+  value:
+    authorities: scim.create
+    authorized-grant-types: client_credentials
+    override: true
+    scope: uaa.none
+    secret: "((uaa_clients_cloud_controller_shadow_user_creation_secret))"
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/uaa/clients/cloud_controller_shadow_user_creation?
+  value:
+    secret: "((uaa_clients_cloud_controller_shadow_user_creation_secret))"
+
+- type: replace
+  path: /variables/-
+  value:
+    name: uaa_clients_cloud_controller_shadow_user_creation_secret
+    type: password
