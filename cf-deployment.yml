@@ -660,7 +660,7 @@ instance_groups:
           cf:
             access-token-validity: 1200
             authorities: uaa.none
-            authorized-grant-types: password,refresh_token
+            authorized-grant-types: password,refresh_token,urn:ietf:params:oauth:grant-type:jwt-bearer
             override: true
             refresh-token-validity: 2592000
             scopes:
