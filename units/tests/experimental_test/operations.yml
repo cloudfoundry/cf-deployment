@@ -23,10 +23,7 @@ disable-logs-in-firehose.yml: {}
 disable-logs-in-firehose-windows2019.yml:
   ops:
   - ../windows2019-cell.yml
-disable-v2-api.yml:
-  pathvalidator:
-    path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/temporary_enable_v2
-    expectedvalue: false
+disable-v2-api.yml: {}
 enable-app-log-rate-limiting.yml:
   vars:
   - app_log_rate_limit=100
