@@ -1,0 +1,26 @@
+---
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/publish_metrics?
+  value: true
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/prom_scraper_tls?
+  value:
+    ca_cert: ((cc_worker_prom_scraper_scrape_tls.ca))
+    private_key: ((cc_worker_prom_scraper_scrape_tls.private_key))
+    public_cert: ((cc_worker_prom_scraper_scrape_tls.certificate))
+
+- type: replace
+  path: /variables/-
+  value:
+    name: cc_worker_prom_scraper_scrape_tls
+    options:
+      alternative_names:
+        - cc_worker_metrics
+      ca: metric_scraper_ca
+      common_name: cc_worker_metrics
+      extended_key_usage:
+        - client_auth
+        - server_auth
+    type: certificate
+    update_mode: converge
