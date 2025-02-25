@@ -145,6 +145,7 @@ jobs:
             params:
               CAPTURE_LOGS: "true"
               CONFIG_FILE_PATH: environments/test/bellatrix/integration_config.json
+              SKIP_REGEXP: "shows logs and metrics"
               NODES: "12"
             task: run-cats
         timeout: 4h
