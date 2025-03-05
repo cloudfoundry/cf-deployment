@@ -24,4 +24,7 @@
   type: replace
   value:
     os: ubuntu-noble
+- path: /instance_groups/name=diego-cell/jobs/name=silk-cni/properties/dns_servers/0
+  type: replace
+  value: 169.254.0.53
 
