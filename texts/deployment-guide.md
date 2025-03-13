@@ -298,11 +298,11 @@ The following databases are tested as part of the cf-deployment pipeline:
 - GCP Cloud SQL for MySQL 8.0 as external database
 
 The following databases should work (not tested):
-- PostgreSQL 12..15
+- PostgreSQL 13..15
 
 The following databases are not supported:
 - MySQL <8.0
-- PostgreSQL <12
+- PostgreSQL <13
 - MariaDB
 - any other database system
 
