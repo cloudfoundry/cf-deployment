@@ -1,0 +1,216 @@
+jobs:
+  - name: ipv6-acquire-pool
+    plan:
+      - in_parallel:
+          steps:
+            - get: cf-deployment
+              trigger: true
+            - params:
+                acquire: true
+              put: ipv6-pool
+        timeout: 4h
+    serial: true
+  - name: deploy-cf
+    plan:
+      - in_parallel:
+          steps:
+            - get: ipv6-pool
+              passed:
+                - ipv6-acquire-pool
+              trigger: true
+            - get: cf-deployment
+              passed:
+                - ipv6-acquire-pool
+            - get: cf-deployment-concourse-tasks
+            - get: runtime-ci
+            - get: relint-envs
+      - file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/dobby/bbl-state
+          IGNORE_ERRORS: "true"
+        task: guarantee-no-existing-cf-deployment
+      - file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          ops-files: cf-deployment
+        params:
+          BBL_STATE_DIR: environments/test/dobby/bbl-state
+          OPS_FILES: |
+            operations/stop-skipping-tls-validation.yml
+            operations/experimental/colocate-smoke-tests-on-cc-worker.yml
+            operations/use-postgres.yml
+          SYSTEM_DOMAIN: cf.dobby.env.wg-ard.ci.cloudfoundry.org
+        task: deploy-cf
+      - in_parallel:
+          steps:
+            - file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
+              input_mapping:
+                bbl-state: relint-envs
+              params:
+                BBL_STATE_DIR: environments/test/dobby/bbl-state
+                INSTANCE_GROUP_NAME: credhub
+                SECURITY_GROUP_NAME: credhub
+                SYSTEM_DOMAIN: cf.dobby.env.wg-ard.ci.cloudfoundry.org
+              task: open-asgs-for-credhub
+            - file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
+              input_mapping:
+                bbl-state: relint-envs
+              params:
+                BBL_STATE_DIR: environments/test/dobby/bbl-state
+                INSTANCE_GROUP_NAME: uaa
+                SECURITY_GROUP_NAME: uaa
+                SYSTEM_DOMAIN: cf.dobby.env.wg-ard.ci.cloudfoundry.org
+              task: open-asgs-for-uaa
+            - file: cf-deployment-concourse-tasks/set-feature-flags/task.yml
+              input_mapping:
+                bbl-state: relint-envs
+              params:
+                BBL_STATE_DIR: environments/test/dobby/bbl-state
+                ENABLED_FEATURE_FLAGS: |
+                  diego_docker
+                  task_creation
+                  service_instance_sharing
+                SYSTEM_DOMAIN: cf.dobby.env.wg-ard.ci.cloudfoundry.org
+              task: enable-docker-and-tasks
+    public: true
+    serial: true
+    serial_groups:
+      - ipv6-smokes
+      - ipv6-cats
+  - name: run-smoke-tests
+    plan:
+      - do:
+          - get: ipv6-pool
+            passed:
+              - deploy-cf
+            trigger: true
+          - in_parallel:
+              steps:
+                - get: relint-envs
+                - get: cf-deployment-concourse-tasks
+      - file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/dobby/bbl-state
+          ERRAND_NAME: smoke_tests
+          INSTANCE: cc-worker/first
+        task: bosh-run-errand-smoke-tests
+    public: true
+    serial: true
+    serial_groups:
+      - ipv6-smokes
+  - name: run-cats
+    plan:
+      - do:
+          - get: ipv6-pool
+            passed:
+              - run-smoke-tests
+            trigger: true
+          - in_parallel:
+              steps:
+                - get: relint-envs
+                - get: cf-deployment-concourse-tasks
+                - get: cf-acceptance-tests-rc
+          - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
+            input_mapping:
+              bbl-state: relint-envs
+              cf-acceptance-tests: cf-acceptance-tests-rc
+              integration-configs: relint-envs
+            params:
+              BBL_STATE_DIR: environments/test/dobby/bbl-state
+              CATS_INTEGRATION_CONFIG_FILE: environments/test/dobby/integration_config.json
+            task: update-integration-configs
+          - file: cf-deployment-concourse-tasks/run-cats/task.yml
+            input_mapping:
+              cf-acceptance-tests: cf-acceptance-tests-rc
+              integration-config: updated-integration-configs
+            params:
+              CAPTURE_LOGS: "true"
+              CONFIG_FILE_PATH: environments/test/dobby/integration_config.json
+              SKIP_REGEXP: "shows logs and metrics"
+              NODES: "12"
+            task: run-cats
+        timeout: 4h
+    public: true
+    serial: true
+    serial_groups:
+      - ipv6-cats
+  - name: ipv6-delete-deployment
+    plan:
+      - do:
+          - get: ipv6-pool
+            passed:
+              - run-cats
+            trigger: true
+          - in_parallel:
+              steps:
+                - get: cf-deployment-concourse-tasks
+                - get: relint-envs
+          - file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
+            input_mapping:
+              bbl-state: relint-envs
+            params:
+              BBL_STATE_DIR: environments/test/dobby/bbl-state
+              IGNORE_ERRORS: "true"
+            task: delete-deployment-cf
+          - file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
+            input_mapping:
+              bbl-state: relint-envs
+            params:
+              BBL_STATE_DIR: environments/test/dobby/bbl-state
+            task: run-bosh-cleanup
+          - params:
+              release: ipv6-pool
+            put: ipv6-pool
+        timeout: 4h
+    public: true
+    serial: true
+  - ensure:
+      try:
+        params:
+          release: ipv6-pool
+        put: ipv6-pool
+    name: ipv6-release-pool-manual
+    plan:
+      - get: ipv6-pool
+resources:
+  - icon: github
+    name: cf-acceptance-tests-rc
+    source:
+      branch: release-candidate
+      uri: https://github.com/cloudfoundry/cf-acceptance-tests.git
+    type: git
+  - icon: github
+    name: cf-deployment
+    source:
+      branch: develop
+      uri: https://github.com/cloudfoundry/cf-deployment.git
+    type: git
+  - icon: github
+    name: cf-deployment-concourse-tasks
+    source:
+      uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
+    type: git
+  - name: relint-envs
+    type: git
+    icon: github
+    source:
+      branch: main
+      uri: git@github.com:cloudfoundry/relint-envs.git
+      private_key: ((ard_wg_gitbot_ssh_key.private_key))
+  - icon: github
+    name: runtime-ci
+    source:
+      uri: https://github.com/cloudfoundry/runtime-ci.git
+    type: git
+  - name: ipv6-pool
+    type: pool
+    icon: pool
+    source:
+      uri: git@github.com:cloudfoundry/relint-ci-pools
+      branch: main
+      pool: ipv6
+      private_key: ((ard_wg_gitbot_ssh_key.private_key))
