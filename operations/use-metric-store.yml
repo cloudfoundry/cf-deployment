@@ -2,9 +2,9 @@
   path: /releases/name=metric-store?
   value:
     name: metric-store
-    sha1: 476413ba8645c4fd28ea02dcbbe6291d2b485c7f
-    url: https://bosh.io/d/github.com/cloudfoundry/metric-store-release?v=1.7.0
-    version: 1.7.0
+    sha1: d15df3db7db1692ca6854ffa12e967be31089119
+    url: https://bosh.io/d/github.com/cloudfoundry/metric-store-release?v=1.7.1
+    version: 1.7.1
 - type: replace
   path: /instance_groups/name=metric-store?
   value:
@@ -60,11 +60,6 @@
           from: reverse_log_proxy
       name: metric-store-nozzle
       properties:
-        otel_provider:
-          tls:
-            ca_cert: ((metric_store_otel_provider.ca))
-            cert: ((metric_store_otel_provider.certificate))
-            key: ((metric_store_otel_provider.private_key))
         logs_provider:
           tls:
             ca_cert: ((metric_store_to_logs_provider.ca))
@@ -80,6 +75,11 @@
             ca_cert: ((metric_store_metrics_server.ca))
             cert: ((metric_store_metrics_server.certificate))
             key: ((metric_store_metrics_server.private_key))
+        otel_provider:
+          tls:
+            ca_cert: ((metric_store_otel_provider.ca))
+            cert: ((metric_store_otel_provider.certificate))
+            key: ((metric_store_otel_provider.private_key))
       provides:
         metric-store-nozzle:
           as: metric-store-nozzle
