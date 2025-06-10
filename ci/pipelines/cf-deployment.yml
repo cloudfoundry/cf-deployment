@@ -384,8 +384,9 @@ jobs:
   serial: true
   public: true
   plan:
-  - get: cf-deployment-develop
+  - get: daily
     trigger: true
+  - get: cf-deployment-develop
   - task: unit-test-ops-files
     config:
       platform: linux
@@ -425,8 +426,9 @@ jobs:
   serial: true
   public: true
   plan:
-  - get: cf-deployment-develop
+  - get: daily
     trigger: true
+  - get: cf-deployment-develop
   - task: unit-test-golang-ops-files
     config:
       platform: linux
@@ -449,8 +451,9 @@ jobs:
   serial: true
   public: true
   plan:
-  - get: cf-deployment-develop
+  - get: daily
     trigger: true
+  - get: cf-deployment-develop
   - get: runtime-ci
   - task: unit-test-update-releases-coverage
     config:
@@ -470,8 +473,9 @@ jobs:
   serial: false
   public: true
   plan:
-  - get: cf-deployment-develop
+  - get: daily
     trigger: true
+  - get: cf-deployment-develop
   - task: lint-manifest
     config:
       platform: linux
