@@ -1626,9 +1626,6 @@ instance_groups:
         network_plugin: /var/vcap/packages/runc-cni/bin/garden-external-networker
         network_plugin_extra_args:
         - --configFile=/var/vcap/jobs/garden-cni/config/adapter.json
-      logging:
-        format:
-          timestamp: "rfc3339"
   - name: rep
     release: diego
     properties:
