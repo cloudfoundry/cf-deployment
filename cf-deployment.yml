@@ -475,8 +475,6 @@ instance_groups:
   - name: bbs
     release: diego
     properties:
-      bpm:
-        enabled: true
       diego:
         bbs:
           active_key_label: key-2016-06
@@ -540,8 +538,6 @@ instance_groups:
   - name: locket
     release: diego
     properties:
-      bpm:
-        enabled: true
       tls:
         ca_cert: "((diego_locket_server.ca))"
         cert: "((diego_locket_server.certificate))"
@@ -1062,8 +1058,6 @@ instance_groups:
   - name: file_server
     release: diego
     properties:
-      bpm:
-        enabled: true
       enable_consul_service_registration: false
       logging:
         format:
@@ -1224,8 +1218,6 @@ instance_groups:
   - name: auctioneer
     release: diego
     properties:
-      bpm:
-        enabled: true
       diego:
         auctioneer:
           bbs: &diego_bbs_client_properties
@@ -1334,8 +1326,6 @@ instance_groups:
   - name: ssh_proxy
     release: diego
     properties:
-      bpm:
-        enabled: true
       diego:
         ssh_proxy:
           enable_cf_auth: true
@@ -1632,8 +1622,6 @@ instance_groups:
   - name: rep
     release: diego
     properties:
-      bpm:
-        enabled: true
       diego:
         executor:
           instance_identity_ca_cert: ((diego_instance_identity_ca.certificate))
@@ -1675,8 +1663,6 @@ instance_groups:
   - name: route_emitter
     release: diego
     properties:
-      bpm:
-        enabled: true
       loggregator: *diego_loggregator_client_properties
       diego:
         route_emitter:
