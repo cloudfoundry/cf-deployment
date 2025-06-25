@@ -98,9 +98,6 @@
           ca_cert: "((diego_rep_agent_v2.ca))"
           cert: "((diego_rep_agent_v2.certificate))"
           key: "((diego_rep_agent_v2.private_key))"
-        logging:
-          format:
-            timestamp: "rfc3339"
     - name: cfdot
       release: diego
       properties:
@@ -132,9 +129,6 @@
                 client_key: "((nats_client_cert.private_key))"
         internal_routes:
           enabled: true
-        logging:
-          format:
-            timestamp: "rfc3339"
         tcp:
           enabled: true
           enable_tls: true

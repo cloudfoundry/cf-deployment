@@ -54,9 +54,6 @@
             - windows:oci:///C:/var/vcap/packages/windows2019fs
         enable_consul_service_registration: false
         enable_declarative_healthcheck: true
-        logging:
-          format:
-            timestamp: rfc3339
         loggregator:
           app_metric_exclusion_filter:
           - absolute_entitlement
@@ -88,9 +85,6 @@
                 enabled: true
         internal_routes:
           enabled: true
-        logging:
-          format:
-            timestamp: rfc3339
         loggregator:
           ca_cert: ((loggregator_tls_agent.ca))
           cert: ((loggregator_tls_agent.certificate))
