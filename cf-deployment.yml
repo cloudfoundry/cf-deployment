@@ -515,9 +515,6 @@ instance_groups:
         app_metric_exclusion_filter:
         - absolute_entitlement
         - absolute_usage
-      logging:
-        format:
-          timestamp: "rfc3339"
   - name: silk-controller
     release: silk
     properties:
@@ -563,9 +560,6 @@ instance_groups:
         ca_cert: "((loggregator_tls_agent.ca))"
         cert: "((loggregator_tls_agent.certificate))"
         key: "((loggregator_tls_agent.private_key))"
-      logging:
-        format:
-          timestamp: "rfc3339"
   - name: loggr-udp-forwarder
     release: loggregator-agent
     properties: &loggr-udp-forwarder-properties
@@ -1065,9 +1059,6 @@ instance_groups:
       bpm:
         enabled: true
       enable_consul_service_registration: false
-      logging:
-        format:
-          timestamp: "rfc3339"
       loggregator: *diego_loggregator_client_properties
   - name: routing-api
     release: routing
@@ -1243,9 +1234,6 @@ instance_groups:
           skip_consul_lock: true
       enable_consul_service_registration: false
       loggregator: *diego_loggregator_client_properties
-      logging:
-        format:
-          timestamp: "rfc3339"
   - name: cloud_controller_clock
     release: capi
     properties:
@@ -1354,9 +1342,6 @@ instance_groups:
           client_private_key: ((ssh_proxy_backends_tls.private_key))
       enable_consul_service_registration: false
       loggregator: *diego_loggregator_client_properties
-      logging:
-        format:
-          timestamp: "rfc3339"
   - name: loggr-syslog-binding-cache
     release: loggregator-agent
     properties:
@@ -1665,9 +1650,6 @@ instance_groups:
         ca_cert: "((diego_rep_agent_v2.ca))"
         cert: "((diego_rep_agent_v2.certificate))"
         key: "((diego_rep_agent_v2.private_key))"
-      logging:
-        format:
-          timestamp: "rfc3339"
   - name: cfdot
     release: diego
     properties:
@@ -1696,9 +1678,6 @@ instance_groups:
       uaa:
         ca_cert: "((uaa_ssl.ca))"
         client_secret: "((uaa_clients_tcp_emitter_secret))"
-      logging:
-        format:
-          timestamp: "rfc3339"
       internal_routes:
         enabled: true
   - name: garden-cni

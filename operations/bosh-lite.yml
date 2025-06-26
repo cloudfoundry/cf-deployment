@@ -56,9 +56,6 @@
           client_certificate: ((ssh_proxy_backends_tls.certificate))
           client_private_key: ((ssh_proxy_backends_tls.private_key))
       enable_consul_service_registration: false
-      logging:
-        format:
-          timestamp: "rfc3339"
       loggregator: &diego_loggregator_client_properties
         ca_cert: "((loggregator_tls_agent.ca))"
         cert: "((loggregator_tls_agent.certificate))"
