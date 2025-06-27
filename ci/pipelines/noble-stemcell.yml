@@ -4,8 +4,8 @@ jobs:
       - in_parallel:
           steps:
             - get: noble-stemcell
-              trigger: true
             - get: cf-deployment
+            - get: daily
               trigger: true
             - params:
                 acquire: true
@@ -192,6 +192,11 @@ jobs:
     plan:
       - get: stable-pool
 resources:
+  - name: daily
+    type: time
+    icon: clock-outline
+    source:
+      interval: 24h
   - icon: dna
     name: noble-stemcell
     source:

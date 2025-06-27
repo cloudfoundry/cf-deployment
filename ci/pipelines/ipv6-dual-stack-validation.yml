@@ -4,6 +4,7 @@ jobs:
       - in_parallel:
           steps:
             - get: cf-deployment
+            - get: daily
               trigger: true
             - params:
                 acquire: true
@@ -177,6 +178,11 @@ jobs:
     plan:
       - get: ipv6-pool
 resources:
+  - name: daily
+    type: time
+    icon: clock-outline
+    source:
+      interval: 24h
   - icon: github
     name: cf-acceptance-tests-rc
     source:
