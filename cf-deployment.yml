@@ -480,7 +480,6 @@ instance_groups:
       diego:
         bbs:
           active_key_label: key-2016-06
-          detect_consul_cell_registrations: false
           encryption_keys:
           - label: key-2016-06
             passphrase: "((diego_bbs_encryption_keys_passphrase))"
@@ -500,13 +499,11 @@ instance_groups:
             client_key: "((diego_auctioneer_client.private_key))"
           server_cert: "((diego_bbs_server.certificate))"
           server_key: "((diego_bbs_server.private_key))"
-          skip_consul_lock: true
           rep:
             require_tls: true
             ca_cert: "((diego_rep_client.ca))"
             client_cert: "((diego_rep_client.certificate))"
             client_key: "((diego_rep_client.private_key))"
-      enable_consul_service_registration: false
       loggregator: &diego_loggregator_client_properties
         use_v2_api: true
         ca_cert: "((loggregator_tls_agent.ca))"
@@ -554,7 +551,6 @@ instance_groups:
             db_driver: mysql
             ca_cert: "((mysql_server_certificate.ca))"
             require_ssl: true
-      enable_consul_service_registration: false
       loggregator:
         use_v2_api: true
         ca_cert: "((loggregator_tls_agent.ca))"
@@ -1070,7 +1066,6 @@ instance_groups:
         mtls_server_key: "((routing_api_tls.private_key))"
         mtls_client_cert: "((routing_api_tls_client.certificate))"
         mtls_client_key: "((routing_api_tls_client.private_key))"
-        skip_consul_lock: true
         system_domain: "((system_domain))"
         router_groups:
         - name: default-tcp
@@ -1231,8 +1226,6 @@ instance_groups:
             client_key: "((diego_rep_client.private_key))"
           server_cert: "((diego_auctioneer_server.certificate))"
           server_key: "((diego_auctioneer_server.private_key))"
-          skip_consul_lock: true
-      enable_consul_service_registration: false
       loggregator: *diego_loggregator_client_properties
   - name: cloud_controller_clock
     release: capi
@@ -1314,7 +1307,6 @@ instance_groups:
           watcher:
             locket:
               api_location: "locket.service.cf.internal:8891"
-            skip_consul_lock: true
           cc:
             ca_cert: "((cc_bridge_tps.ca))"
             client_cert: "((cc_bridge_tps.certificate))"
@@ -1340,7 +1332,6 @@ instance_groups:
           - ((diego_instance_identity_ca.ca))
           client_certificate: ((ssh_proxy_backends_tls.certificate))
           client_private_key: ((ssh_proxy_backends_tls.private_key))
-      enable_consul_service_registration: false
       loggregator: *diego_loggregator_client_properties
   - name: loggr-syslog-binding-cache
     release: loggregator-agent
@@ -1643,7 +1634,6 @@ instance_groups:
         - ((diego_instance_identity_ca.ca))
         - ((credhub_tls.ca))
         - ((uaa_ssl.ca))
-      enable_consul_service_registration: false
       enable_declarative_healthcheck: true
       loggregator: *diego_loggregator_client_properties
       tls:
