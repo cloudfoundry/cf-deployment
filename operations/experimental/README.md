@@ -51,4 +51,4 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 | [`use-mysql-version-8.0.yml`](use-mysql-version-8.0.yml) | Deploys or upgrades Percona 8.0 as the internal database. | ***Deprecated as we now use MySQL version 8.0 by default.*** | **NO** |
 | [`use-trusted-ca-cert-for-apps-cflinuxfs4.yml`](use-trusted-ca-cert-for-apps-cflinuxfs4.yml) | Same as [`use-trusted-ca-cert-for-apps.yml`](../use-trusted-ca-cert-for-apps.yml), but for cflinuxfs4 stack | ***Deprecated as we integrate cflinuxfs4 directly into cf-deployment.yml*** | **NO** |
 | [`use-noble-stemcell.yml`](use-noble-stemcell.yml) | Use the new beta Noble stemcell | This is incompatible with `../use-compiled-releases.yml` | **NO** |
-| [`enable-ipv6-egress.yml`](enable-ipv6-egress.yml) | Use the new beta Noble stemcell | Notes will be updated once all components are ready. | **NO** |
+| [`enable-ipv6-egress.yml`](enable-ipv6-egress.yml) | Configure IPv6 egress enablement, consolidating all component-specific settings. | The experimental ops file remains a work in progress until contributions from additional teams are received.| **NO** |
