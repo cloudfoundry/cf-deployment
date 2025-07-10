@@ -886,9 +886,11 @@ instance_groups:
         default_running_security_groups:
         - public_networks
         - dns
+        - ipv6_public_networks
         default_staging_security_groups:
         - public_networks
         - dns
+        - ipv6_public_networks
         security_groups:
           enable_comma_delimited_destinations: true
         security_group_definitions:
@@ -912,6 +914,10 @@ instance_groups:
           - destination: 0.0.0.0/0
             ports: '53'
             protocol: udp
+        - name: ipv6_public_networks
+          rules:
+          - destination: 2000::-3fff:ffff:ffff:ffff:ffff:ffff:ffff:ffff
+            protocol: all
         install_buildpacks:
         ## Order is important here
         - name: staticfile_buildpack
