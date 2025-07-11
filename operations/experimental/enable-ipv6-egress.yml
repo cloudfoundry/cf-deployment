@@ -1,0 +1,27 @@
+---
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/enable_ipv6?
+  value: true
+
+# --- Add IPv6 Security Groups ---
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/default_running_security_groups
+  value:
+  - public_networks
+  - dns
+  - ipv6_public_networks
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/default_staging_security_groups
+  value:
+  - public_networks
+  - dns
+  - ipv6_public_networks
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/security_group_definitions/-
+  value:
+    name: ipv6_public_networks
+    rules:
+    - destination: 2000::-3fff:ffff:ffff:ffff:ffff:ffff:ffff:ffff
+      protocol: all
