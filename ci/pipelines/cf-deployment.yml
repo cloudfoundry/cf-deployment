@@ -814,7 +814,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
       GCP_PROJECT_ID: cf-deployments-wg
-      GCP_REGION: europe-west3
+      GCP_REGION: us-east1
       GCP_SERVICE_ACCOUNT_JSON: ((trelawney_gcp_service_account_json))
   - try:
       put: trelawney-external-resources
@@ -1061,7 +1061,7 @@ jobs:
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
       GCP_PROJECT_ID: cf-deployments-wg
-      GCP_REGION: europe-west3
+      GCP_REGION: us-east1
       GCP_SERVICE_ACCOUNT_JSON: ((trelawney_gcp_service_account_json))
   - put: trelawney-external-resources
     params:
@@ -1497,7 +1497,7 @@ jobs:
       params:
         BBL_CONFIG_DIR: .
         BBL_ENV_NAME: snitch-lite
-        BBL_GCP_REGION: europe-west3
+        BBL_GCP_REGION: us-east1
         BBL_GCP_SERVICE_ACCOUNT_KEY: environments/test/snitch/snitch-lite.key.json
         BBL_IAAS: gcp
         BBL_STATE_DIR: environments/test/snitch/bbl-state
