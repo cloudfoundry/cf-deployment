@@ -43,6 +43,7 @@ jobs:
             operations/experimental/colocate-smoke-tests-on-cc-worker.yml
             operations/use-postgres.yml
             operations/experimental/enable-ipv6-egress.yml
+            operations/experimental/add-ipv6-security-group.yml
           SYSTEM_DOMAIN: cf.dobby.env.wg-ard.ci.cloudfoundry.org
         task: deploy-cf
       - in_parallel:
