@@ -1,22 +1,23 @@
 # --- Add IPv6 Security Groups ---
 - type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/default_running_security_groups
-  value:
-  - public_networks
-  - dns
-  - ipv6_public_networks
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/default_running_security_groups/-
+  value: public_networks_ipv6
 
 - type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/default_staging_security_groups
-  value:
-  - public_networks
-  - dns
-  - ipv6_public_networks
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/default_staging_security_groups/-
+  value: public_networks_ipv6
 
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/security_group_definitions/-
   value:
-    name: ipv6_public_networks
+      # This is a sample IPv6 allowlist that allows the entirety 
+      # of the public IPv6 address space. Please note that this
+      # may include the Diego cells and other nodes managed by BOSH, 
+      # which might be considered "internal" and are protected from 
+      # external requests via global firewall rules that apply for 
+      # the CF foundation. Please exclude any addresses from the range 
+      # that should not be accessible from app containers.
+    name: public_networks_ipv6
     rules:
     - destination: 2000::/3
       protocol: all
