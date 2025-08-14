@@ -269,10 +269,24 @@ func TestSemantic(t *testing.T) {
 				return nil
 			}
 
-			contents, err := ioutil.ReadFile(path)
-			if err != nil {
-				t.Errorf("file read error: %v", err)
-				return nil
+			var contents []byte
+			if info.Mode()&os.ModeSymlink != 0 {
+				resolvedPath, err := filepath.EvalSymlinks(path)
+				if err != nil {
+					t.Errorf("failed to resolve symlink for %s: %v", path, err)
+					return nil
+				}
+				contents, err = os.ReadFile(resolvedPath)
+				if err != nil {
+					t.Errorf("file read error (path: %s): %v", resolvedPath, err)
+					return nil
+				}
+			} else {
+				contents, err = os.ReadFile(path)
+				if err != nil {
+					t.Errorf("file read error (path: %s): %v", path, err)
+					return nil
+				}
 			}
 
 			badPaths := invalid_question_marks.FindAllString(string(contents), -1)
