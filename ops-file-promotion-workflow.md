@@ -53,6 +53,12 @@ _Please do not remove the file or it's content._
                                         +------------------------+
 ```
 
+> How to correctly generate symlink.
+Move the experimental ops file to the operations folder and create a symlink in the experimental folder pointing to the moved ops file. The symlink should be named the same as the original ops file.
+Navigate to the experimental folder and run the following command:
+```
+ln -s ../use-noble-stemcell.yml use-noble-stemcell.yml
+```
 
 > It is critical that you do not remove the experimental ops file during your promotion.
 
