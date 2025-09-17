@@ -500,7 +500,6 @@ instance_groups:
           server_cert: "((diego_bbs_server.certificate))"
           server_key: "((diego_bbs_server.private_key))"
           rep:
-            require_tls: true
             ca_cert: "((diego_rep_client.ca))"
             client_cert: "((diego_rep_client.certificate))"
             client_key: "((diego_rep_client.private_key))"
@@ -1220,7 +1219,6 @@ instance_groups:
             client_key: "((diego_bbs_client.private_key))"
           ca_cert: "((diego_auctioneer_server.ca))"
           rep:
-            require_tls: true
             ca_cert: "((diego_rep_client.ca))"
             client_cert: "((diego_rep_client.certificate))"
             client_key: "((diego_rep_client.private_key))"
