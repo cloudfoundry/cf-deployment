@@ -1631,7 +1631,6 @@ instance_groups:
         - ((diego_instance_identity_ca.ca))
         - ((credhub_tls.ca))
         - ((uaa_ssl.ca))
-      enable_declarative_healthcheck: true
       loggregator: *diego_loggregator_client_properties
       tls:
         ca_cert: "((diego_rep_agent_v2.ca))"
