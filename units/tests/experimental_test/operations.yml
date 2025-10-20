@@ -39,10 +39,6 @@ enable-cpu-throttling.yml: {}
 enable-direct-io-grootfs.yml: {}
 enable-iptables-logger.yml: {}
 enable-ipv6-egress.yml: {}
-enable-nginx-routing-integrity-windows2019.yml:
-  ops:
-  - ../windows2019-cell.yml
-  - enable-nginx-routing-integrity-windows2019.yml
 enable-oci-phase-1.yml: {}
 enable-shadow-user-creation-by-org-managers.yml: {}
 enable-tls-cloud-controller-postgres.yml:
@@ -79,10 +75,8 @@ use-mysql-version-8.4.yml:
 disable-tls-tcp-routing-windows-stage-1-unproxied-ports.yml:
   ops:
   - ../windows2019-cell.yml
-  - enable-nginx-routing-integrity-windows2019.yml
 disable-tls-tcp-routing-windows-stage-2-route-emitter.yml:
   ops:
   - ../windows2019-cell.yml
-  - enable-nginx-routing-integrity-windows2019.yml
   - disable-tls-tcp-routing-windows-stage-1-unproxied-ports.yml
 use-noble-stemcell.yml: {}
