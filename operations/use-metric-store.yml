@@ -227,6 +227,8 @@
       - '*.metric-store.((system_domain))'
       ca: service_cf_internal_ca
       common_name: metric-store
+      extended_key_usage:
+      - server_auth
     type: certificate
 - type: replace
   path: /variables/name=metric_store_internode?
@@ -250,6 +252,8 @@
       - localhost
       ca: metric_store_ca
       common_name: localhost
+      extended_key_usage:
+      - server_auth
     type: certificate
     update_mode: converge
 - type: replace
@@ -261,6 +265,8 @@
       - metric-store
       ca: metric_scraper_ca
       common_name: metric-store
+      extended_key_usage:
+      - server_auth
     type: certificate
     update_mode: converge
 - type: replace
@@ -272,5 +278,7 @@
       - metric-store-client
       ca: metric_scraper_ca
       common_name: metric-store-client
+      extended_key_usage:
+      - client_auth
     type: certificate
     update_mode: converge

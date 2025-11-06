@@ -164,8 +164,6 @@
     options:
       common_name: uaa-oidc
       alternative_names: ["*.uaa-oidc.service.cf.internal"]
-      extended_key_usage:
-      - server_auth
       is_ca: true
 
 - type: replace
@@ -179,6 +177,8 @@
       common_name: saml_oidc
       alternative_names:
       - saml_oidc
+      extended_key_usage:
+      - digital_signature
 
 - type: replace
   path: /variables/-
@@ -191,6 +191,8 @@
       common_name: jwt_oidc
       alternative_names:
       - uaa-oidc.service.cf.internal
+      extended_key_usage:
+      - digital_signature
 
 - type: replace
   path: /variables/-
@@ -203,3 +205,5 @@
       common_name: uaa-oidc.service.cf.internal
       alternative_names:
       - uaa-oidc.service.cf.internal
+      extended_key_usage:
+      - server_auth

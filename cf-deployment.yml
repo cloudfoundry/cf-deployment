@@ -2048,6 +2048,8 @@ variables:
     common_name: blobstore.service.cf.internal
     alternative_names:
     - blobstore.service.cf.internal
+    extended_key_usage:
+    - server_auth
 - name: blobstore_public
   type: certificate
   update_mode: converge
@@ -2056,6 +2058,8 @@ variables:
     alternative_names:
     - "blobstore.((system_domain))"
     ca: service_cf_internal_ca
+    extended_key_usage:
+    - server_auth
 - name: diego_auctioneer_client
   type: certificate
   update_mode: converge
@@ -2258,6 +2262,8 @@ variables:
     - log-cache
     - log-cache.((system_domain))
     - "*.log-cache.((system_domain))"
+    extended_key_usage:
+    - server_auth
 - name: log_cache_proxy_tls
   type: certificate
   update_mode: converge
@@ -2266,6 +2272,9 @@ variables:
     common_name: localhost
     alternative_names:
     - localhost
+    extended_key_usage:
+    - client_auth
+    - server_auth
 - name: syslog_agent_log_cache_tls
   type: certificate
   update_mode: converge
@@ -2299,6 +2308,8 @@ variables:
     alternative_names:
     - "((system_domain))"
     - "*.((system_domain))"
+    extended_key_usage:
+    - server_auth
 - name: routing_api_ca
   type: certificate
   options:
@@ -2336,6 +2347,8 @@ variables:
     common_name: uaa.service.cf.internal
     alternative_names:
     - uaa.service.cf.internal
+    extended_key_usage:
+    - server_auth
 - name: uaa_login_saml
   type: certificate
   update_mode: converge
@@ -2344,6 +2357,8 @@ variables:
     common_name: uaa_login_saml
     alternative_names:
     - uaa_login_saml
+    extended_key_usage:
+    - digital_signature
 - name: uaa_jwt_signing_cert
   type: certificate
   update_mode: converge
@@ -2352,6 +2367,8 @@ variables:
     common_name: uaa_jwt_signing_cert
     alternative_names:
     - uaa_jwt_signing_cert
+    extended_key_usage:
+    - digital_signature
 - name: cc_tls
   type: certificate
   update_mode: converge
@@ -2371,6 +2388,8 @@ variables:
     alternative_names:
     - "api.((system_domain))"
     - cloud-controller-ng.service.cf.internal
+    extended_key_usage:
+    - server_auth
 - name: cc_bridge_tps
   type: certificate
   update_mode: converge
@@ -2460,6 +2479,8 @@ variables:
     common_name: gorouter_lb_health_tls
     alternative_names:
     - gorouter.service.cf.internal
+    extended_key_usage:
+    - client_auth
 - name: tcp_router_backend_tls
   type: certificate
   options:
@@ -2476,6 +2497,8 @@ variables:
     common_name: tcp_router_lb_health_tls
     alternative_names:
     - tcp-router.service.cf.internal
+    extended_key_usage:
+    - client_auth
 - name: credhub_ca
   type: certificate
   options:
@@ -2489,6 +2512,8 @@ variables:
     alternative_names:
     - credhub.service.cf.internal
     - credhub.((system_domain))
+    extended_key_usage:
+    - server_auth
 - name: ssh_proxy_backends_tls
   type: certificate
   options:
@@ -2527,6 +2552,8 @@ variables:
     common_name: sql-db.service.cf.internal
     alternative_names:
     - sql-db.service.cf.internal
+    extended_key_usage:
+    - server_auth
 
 - name: loggregator_rlp_gateway_tls
   type: certificate
@@ -2537,6 +2564,9 @@ variables:
     alternative_names:
     - log-stream.((system_domain))
     - log-api.service.cf.internal
+    extended_key_usage:
+    - client_auth
+    - server_auth
 
 - name: loggregator_trafficcontroller_tls
   type: certificate
@@ -2547,6 +2577,9 @@ variables:
     alternative_names:
     - doppler.((system_domain))
     - log-api.service.cf.internal
+    extended_key_usage:
+    - client_auth
+    - server_auth
 
 - name: metric_scraper_ca
   type: certificate
