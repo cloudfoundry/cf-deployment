@@ -1,0 +1,111 @@
+---
+# Add spot vm_extension to all instance groups
+# This ops file adds the 'spot' vm_extension to all instance groups in cf-deployment.yml
+# Use this when deploying to cloud providers that support spot/preemptible instances
+#
+# Usage:
+#   bosh deploy cf-deployment.yml -o operations/experimental/use-spot-instances.yml
+#
+# Prerequisites:
+#   You must define the 'spot' vm_extension in your cloud-config.
+#   The exact configuration depends on your IaaS:
+#
+#   AWS Example:
+#     vm_extensions:
+#     - name: spot
+#       cloud_properties:
+#         spot_bid_price: 0.10  # or spot_ondemand_fallback: true
+#
+#   GCP Example:
+#     vm_extensions:
+#     - name: spot
+#       cloud_properties:
+#         provisioning_model: SPOT
+#
+#   Azure Example:
+#     vm_extensions:
+#     - name: spot
+#       cloud_properties:
+#         spot_bid_max_price: 0.10
+
+# Instance groups without existing vm_extensions - create vm_extensions array with 'spot'
+- type: replace
+  path: /instance_groups/name=smoke-tests/vm_extensions?
+  value:
+  - spot
+
+- type: replace
+  path: /instance_groups/name=nats/vm_extensions?
+  value:
+  - spot
+
+- type: replace
+  path: /instance_groups/name=database/vm_extensions?
+  value:
+  - spot
+
+- type: replace
+  path: /instance_groups/name=diego-api/vm_extensions?
+  value:
+  - spot
+
+- type: replace
+  path: /instance_groups/name=uaa/vm_extensions?
+  value:
+  - spot
+
+- type: replace
+  path: /instance_groups/name=singleton-blobstore/vm_extensions?
+  value:
+  - spot
+
+- type: replace
+  path: /instance_groups/name=cc-worker/vm_extensions?
+  value:
+  - spot
+
+- type: replace
+  path: /instance_groups/name=log-cache/vm_extensions?
+  value:
+  - spot
+
+- type: replace
+  path: /instance_groups/name=doppler/vm_extensions?
+  value:
+  - spot
+
+- type: replace
+  path: /instance_groups/name=log-api/vm_extensions?
+  value:
+  - spot
+
+- type: replace
+  path: /instance_groups/name=credhub/vm_extensions?
+  value:
+  - spot
+
+- type: replace
+  path: /instance_groups/name=rotate-cc-database-key/vm_extensions?
+  value:
+  - spot
+
+# Instance groups with existing vm_extensions - append 'spot' to the array
+- type: replace
+  path: /instance_groups/name=api/vm_extensions/-
+  value: spot
+
+- type: replace
+  path: /instance_groups/name=scheduler/vm_extensions/-
+  value: spot
+
+- type: replace
+  path: /instance_groups/name=router/vm_extensions/-
+  value: spot
+
+- type: replace
+  path: /instance_groups/name=tcp-router/vm_extensions/-
+  value: spot
+
+- type: replace
+  path: /instance_groups/name=diego-cell/vm_extensions/-
+  value: spot
