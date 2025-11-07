@@ -116,8 +116,8 @@ opsReleases:
 - name: envoy-nginx
   repository: cloudfoundry-incubator/envoy-nginx-release
   requiredOpsFiles:
-  - operations/windows2019-cell.yml
   - operations/use-online-windows2019fs.yml
+  prependOpsFileToList: true
 - name: otel-collector
   repository: cloudfoundry/otel-collector-release
   varsFiles: "operations/experimental/example-vars-files/vars-override-otel-collector-exporters.yml"
