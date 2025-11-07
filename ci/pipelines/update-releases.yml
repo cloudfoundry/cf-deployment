@@ -13427,10 +13427,10 @@ jobs:
             operations/scale-to-one-az.yml
             operations/use-compiled-releases.yml
             operations/experimental/use-compiled-releases-windows.yml
-            operations/windows2019-cell.yml
             operations/use-online-windows2019fs.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+          PREPEND_OPS_FILE_TO_LIST: true
       - task: ensure-api-healthy
         file: runtime-ci/tasks/ensure-api-healthy/task.yml
         input_mapping:
