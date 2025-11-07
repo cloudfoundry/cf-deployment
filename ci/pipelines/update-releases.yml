@@ -13430,6 +13430,7 @@ jobs:
             operations/use-online-windows2019fs.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
+          PREPEND_OPS_FILE_TO_LIST: true
       - task: ensure-api-healthy
         file: runtime-ci/tasks/ensure-api-healthy/task.yml
         input_mapping:
