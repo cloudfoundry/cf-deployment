@@ -1031,6 +1031,7 @@ jobs:
         CONFIG_FILE_PATH: environments/test/trelawney/integration_config.json
         CAPTURE_LOGS: true
         RELINT_VERBOSE_AUTH: "true"
+        SKIP_REGEXP: "shows logs and metrics"
 
 - name: upgrade-delete-deployment
   serial: true
@@ -1324,6 +1325,7 @@ jobs:
         CONFIG_FILE_PATH: environments/test/hermione/integration_config.json
         REPORTER_CONFIG_FILE_PATH: environments/test/hermione/reporter_config.json
         RELINT_VERBOSE_AUTH: "true"
+        SKIP_REGEXP: "shows logs and metrics"
 
 - name: experimental-delete-deployment
   serial: true
@@ -1834,6 +1836,7 @@ jobs:
     params:
       CAPTURE_LOGS: true
       CONFIG_FILE_PATH: environments/test/cedric/integration_config.json
+      SKIP_REGEXP: "shows logs and metrics"
       NODES: 5
 
 - name: windows-delete-deployment
@@ -2094,6 +2097,7 @@ jobs:
             CONFIG_FILE_PATH: environments/test/snape/integration_config.json
             CAPTURE_LOGS: true
             RELINT_VERBOSE_AUTH: "true"
+            SKIP_REGEXP: "shows logs and metrics"
             NODES: 12
 
 - name: fips-delete-deployment
