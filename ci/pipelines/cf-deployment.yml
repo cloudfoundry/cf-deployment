@@ -257,6 +257,13 @@ resources:
   source:
     uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
 
+- name: cf-deployment-concourse-tasks-bbl-9.0.36
+  type: git
+  icon: github
+  source:
+    uri: https://github.com/cloudfoundry/cf-deployment-concourse-tasks.git
+    branch: bbl-9.0.36
+
 - name: runtime-ci
   type: git
   icon: github
@@ -1473,6 +1480,7 @@ jobs:
       - lite-smoke-tests
     - in_parallel:
       - get: cf-deployment-concourse-tasks
+      - get: cf-deployment-concourse-tasks-bbl-9.0.36
       - get: relint-envs
       - get: runtime-ci
       - get: bosh-bootloader
@@ -1498,7 +1506,8 @@ jobs:
         FIRST_DIR: plan-patches/bosh-lite-gcp
         SECOND_DIR: environments/test/snitch/bbl-config
     - task: update-infrastructure
-      file: cf-deployment-concourse-tasks/bbl-up/task.yml
+      # temporary workaround for https://github.com/cloudfoundry/bosh-bootloader/issues/672
+      file: cf-deployment-concourse-tasks-bbl-9.0.36/bbl-up/task.yml
       params:
         BBL_CONFIG_DIR: .
         BBL_ENV_NAME: snitch-lite
