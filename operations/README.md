@@ -83,3 +83,4 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 | [`windows2019-cell.yml`](windows2019-cell.yml) | Deploys a windows2019 cell. | Requires that a windows2019 stemcell is uploaded to the Bosh director, and be used together with `use-online-windows2019fs.yml` or a suitable opsfile. | **YES** |
 | [`use-cflinuxfs4-compat.yml`](use-cflinuxfs4-compat.yml) | Use the [cflinuxfs4 compatibility release](https://github.com/cloudfoundry/cflinuxfs4-compat-release) instead of the default [cflinuxfs4 release](https://github.com/cloudfoundry/cflinuxfs4-release).  | **YES** |
 | [`use-noble-stemcell.yml`](use-noble-stemcell.yml) | Use Noble stemcell instead of Jammy | This is incompatible with `use-compiled-releases.yml` | **NO** |
+| [`use-jammy-stemcell.yml`](use-jammy-stemcell.yml) | Use Jammy stemcell for backwards compatibility after stemcell migration to Noble | This is incompatible with `use-compiled-releases.yml` | **NO** |
