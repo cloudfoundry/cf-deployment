@@ -192,13 +192,13 @@ resources:
   type: bosh-io-stemcell
   icon: dna
   source:
-    name: bosh-google-kvm-ubuntu-jammy-go_agent
+    name: bosh-google-kvm-ubuntu-noble-go_agent
 
 - name: fips-stemcell
   type: bosh-io-stemcell
   icon: dna
   source:
-    name: bosh-aws-xen-hvm-ubuntu-jammy-fips-go_agent
+    name: bosh-aws-xen-hvm-ubuntu-noble-fips-go_agent
     auth:
       access_key: ((ci_dev_gcp_service_account_hmac_access_key))
       secret_key: ((ci_dev_gcp_service_account_hmac_secret))
@@ -266,7 +266,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((ci_dev_gcp_service_account_json))
-    regexp: #@ r.name + "-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz"
+    regexp: #@ r.name + "-[^-]+-ubuntu-noble-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz"
 
 - name: #@ r.name + "-component-bump-logs-gcs"
   type: gcs-resource
@@ -766,7 +766,7 @@ jobs:
         ops-files: cf-deployment-develop
         stemcell: fips-stemcell
       params:
-        STEMCELL_STACK: ubuntu-jammy
+        STEMCELL_STACK: ubuntu-noble
         ORIGINAL_OPS_FILE_PATH: operations/test/fips-stemcell.yml
         UPDATED_OPS_FILE_PATH: operations/test/fips-stemcell.yml
     - put: cf-deployment-develop
