@@ -192,7 +192,7 @@ resources:
   type: bosh-io-stemcell
   icon: dna
   source:
-    name: bosh-google-kvm-ubuntu-jammy-go_agent
+    name: bosh-google-kvm-ubuntu-noble-go_agent
 
 - name: fips-stemcell
   type: bosh-io-stemcell
@@ -266,7 +266,7 @@ resources:
   source:
     bucket: cf-deployment-compiled-releases
     json_key: ((ci_dev_gcp_service_account_json))
-    regexp: #@ r.name + "-[^-]+-ubuntu-jammy-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz"
+    regexp: #@ r.name + "-[^-]+-ubuntu-noble-[^-]+-(\d+)-(\d+)-(\d+).*\.tgz"
 
 - name: #@ r.name + "-component-bump-logs-gcs"
   type: gcs-resource
