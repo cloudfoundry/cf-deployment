@@ -6,6 +6,8 @@
     url: https://bosh.io/d/github.com/cloudfoundry/postgres-release?v=53.0.3
     version: 53.0.3
 - type: remove
+  path: /releases/name=pxc
+- type: remove
   path: /instance_groups/name=database/jobs/name=route_registrar
 - type: remove
   path: /instance_groups/name=database/jobs/name=pxc-mysql
