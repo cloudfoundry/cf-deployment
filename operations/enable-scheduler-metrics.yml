@@ -1,0 +1,56 @@
+---
+# This ops file enables the publishing of scheduler VM metrics for cloud_controller_clock and cc_deployment_updater jobs.
+
+# cloud_controller_clock metrics
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/publish_metrics?
+  value: true
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/prom_scraper_tls?
+  value:
+    ca_cert: ((cc_clock_prom_scraper_scrape_tls.ca))
+    private_key: ((cc_clock_prom_scraper_scrape_tls.private_key))
+    public_cert: ((cc_clock_prom_scraper_scrape_tls.certificate))
+
+- type: replace
+  path: /variables/-
+  value:
+    name: cc_clock_prom_scraper_scrape_tls
+    options:
+      alternative_names:
+        - cc_clock_metrics
+      ca: metric_scraper_ca
+      common_name: cc_clock_metrics
+      extended_key_usage:
+        - client_auth
+        - server_auth
+    type: certificate
+    update_mode: converge
+
+# cc_deployment_updater metrics
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties/cc/publish_metrics?
+  value: true
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cc_deployment_updater/properties/cc/prom_scraper_tls?
+  value:
+    ca_cert: ((cc_deployment_updater_prom_scraper_scrape_tls.ca))
+    private_key: ((cc_deployment_updater_prom_scraper_scrape_tls.private_key))
+    public_cert: ((cc_deployment_updater_prom_scraper_scrape_tls.certificate))
+
+- type: replace
+  path: /variables/-
+  value:
+    name: cc_deployment_updater_prom_scraper_scrape_tls
+    options:
+      alternative_names:
+        - cc_deployment_updater_metrics
+      ca: metric_scraper_ca
+      common_name: cc_deployment_updater_metrics
+      extended_key_usage:
+        - client_auth
+        - server_auth
+    type: certificate
+    update_mode: converge  
