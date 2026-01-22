@@ -1431,11 +1431,11 @@ jobs:
         BBL_STATE_DIR: environments/test/snitch/bbl-state
         SYSTEM_DOMAIN: cf.snitch.env.wg-ard.ci.cloudfoundry.org
         OPS_FILES: |
-          operations/use-compiled-releases.yml
           operations/scale-to-one-az.yml
           operations/bosh-lite.yml
           operations/use-internal-lookup-for-route-services.yml
           operations/experimental/colocate-smoke-tests-on-cc-worker.yml
+          operations/use-noble-stemcell.yml
         REGENERATE_CREDENTIALS: true
         BOSH_LITE: true
     - task: ensure-api-healthy
