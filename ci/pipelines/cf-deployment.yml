@@ -872,7 +872,6 @@ jobs:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
       SYSTEM_DOMAIN: cf.trelawney.env.wg-ard.ci.cloudfoundry.org
       OPS_FILES: |
-        operations/use-compiled-releases.yml
         operations/use-external-dbs.yml
         operations/add-external-ips-for-cloud-sql-db.yml
         operations/experimental/colocate-smoke-tests-on-cc-worker.yml
@@ -884,6 +883,7 @@ jobs:
         operations/add-persistent-isolation-segment-diego-cell.yml
         operations/scale-log-api-to-4.yml
         operations/use-internal-lookup-for-route-services.yml
+        operations/use-noble-stemcell.yml
       VARS_FILES: |
         environments/test/trelawney/external-db-vars.yml
         environments/test/trelawney/external-public-ip-vars.yml
@@ -927,7 +927,6 @@ jobs:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
       SYSTEM_DOMAIN: cf.trelawney.env.wg-ard.ci.cloudfoundry.org
       OPS_FILES: |
-        operations/use-compiled-releases.yml
         operations/use-external-dbs.yml
         operations/add-external-ips-for-cloud-sql-db.yml
         operations/experimental/colocate-smoke-tests-on-cc-worker.yml
@@ -940,6 +939,7 @@ jobs:
         operations/scale-log-api-to-4.yml
         operations/use-internal-lookup-for-route-services.yml
         operations/test/speed-up-dynamic-asgs.yml
+        operations/use-noble-stemcell.yml
       VARS_FILES: |
         environments/test/trelawney/external-db-vars.yml
         environments/test/trelawney/external-public-ip-vars.yml
