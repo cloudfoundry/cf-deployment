@@ -1751,7 +1751,6 @@ jobs:
       BBL_STATE_DIR: environments/test/cedric/bbl-state
       SYSTEM_DOMAIN: cf.cedric.env.wg-ard.ci.cloudfoundry.org
       OPS_FILES: |
-        operations/use-compiled-releases.yml
         operations/windows2019-cell.yml
         operations/use-online-windows2019fs.yml
         operations/experimental/use-compiled-releases-windows.yml
@@ -1759,6 +1758,7 @@ jobs:
         operations/experimental/colocate-smoke-tests-on-cc-worker.yml
         operations/addons/add-system-metrics-agent.yml
         operations/addons/add-system-metrics-agent-windows2019.yml
+        operations/use-noble-stemcell.yml
       REGENERATE_CREDENTIALS: true
   - in_parallel:
     - task: open-asgs-for-credhub
