@@ -1586,12 +1586,12 @@ jobs:
       BBL_STATE_DIR: environments/test/bbr/bbl-state
       SYSTEM_DOMAIN: cf.baba-yaga.env.wg-ard.ci.cloudfoundry.org
       OPS_FILES: |
-        operations/use-compiled-releases.yml
         operations/backup-and-restore/enable-backup-restore.yml
         operations/enable-nfs-volume-service.yml
         operations/backup-and-restore/enable-restore-nfs-broker.yml
         operations/enable-smb-volume-service.yml
         operations/backup-and-restore/enable-restore-smb-broker.yml
+        operations/use-noble-stemcell.yml
       REGENERATE_CREDENTIALS: true
   - in_parallel:
     - task: enable-docker
