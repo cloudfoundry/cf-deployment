@@ -608,6 +608,7 @@ jobs:
         operations/enable-nfs-volume-service.yml
         operations/test/enable-nfs-test-server.yml
         operations/change-deployment-name-for-nfs-test-server.yml
+        operations/use-noble-stemcell.yml
       VARS_FILES: |
         environments/test/luna/deployment-name.yml
         environments/test/luna/network-name.yml
@@ -872,7 +873,6 @@ jobs:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
       SYSTEM_DOMAIN: cf.trelawney.env.wg-ard.ci.cloudfoundry.org
       OPS_FILES: |
-        operations/use-compiled-releases.yml
         operations/use-external-dbs.yml
         operations/add-external-ips-for-cloud-sql-db.yml
         operations/experimental/colocate-smoke-tests-on-cc-worker.yml
@@ -884,6 +884,7 @@ jobs:
         operations/add-persistent-isolation-segment-diego-cell.yml
         operations/scale-log-api-to-4.yml
         operations/use-internal-lookup-for-route-services.yml
+        operations/use-noble-stemcell.yml
       VARS_FILES: |
         environments/test/trelawney/external-db-vars.yml
         environments/test/trelawney/external-public-ip-vars.yml
@@ -927,7 +928,6 @@ jobs:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
       SYSTEM_DOMAIN: cf.trelawney.env.wg-ard.ci.cloudfoundry.org
       OPS_FILES: |
-        operations/use-compiled-releases.yml
         operations/use-external-dbs.yml
         operations/add-external-ips-for-cloud-sql-db.yml
         operations/experimental/colocate-smoke-tests-on-cc-worker.yml
@@ -940,6 +940,7 @@ jobs:
         operations/scale-log-api-to-4.yml
         operations/use-internal-lookup-for-route-services.yml
         operations/test/speed-up-dynamic-asgs.yml
+        operations/use-noble-stemcell.yml
       VARS_FILES: |
         environments/test/trelawney/external-db-vars.yml
         environments/test/trelawney/external-public-ip-vars.yml
@@ -1585,12 +1586,12 @@ jobs:
       BBL_STATE_DIR: environments/test/bbr/bbl-state
       SYSTEM_DOMAIN: cf.baba-yaga.env.wg-ard.ci.cloudfoundry.org
       OPS_FILES: |
-        operations/use-compiled-releases.yml
         operations/backup-and-restore/enable-backup-restore.yml
         operations/enable-nfs-volume-service.yml
         operations/backup-and-restore/enable-restore-nfs-broker.yml
         operations/enable-smb-volume-service.yml
         operations/backup-and-restore/enable-restore-smb-broker.yml
+        operations/use-noble-stemcell.yml
       REGENERATE_CREDENTIALS: true
   - in_parallel:
     - task: enable-docker
@@ -1751,7 +1752,6 @@ jobs:
       BBL_STATE_DIR: environments/test/cedric/bbl-state
       SYSTEM_DOMAIN: cf.cedric.env.wg-ard.ci.cloudfoundry.org
       OPS_FILES: |
-        operations/use-compiled-releases.yml
         operations/windows2019-cell.yml
         operations/use-online-windows2019fs.yml
         operations/experimental/use-compiled-releases-windows.yml
@@ -1759,6 +1759,7 @@ jobs:
         operations/experimental/colocate-smoke-tests-on-cc-worker.yml
         operations/addons/add-system-metrics-agent.yml
         operations/addons/add-system-metrics-agent-windows2019.yml
+        operations/use-noble-stemcell.yml
       REGENERATE_CREDENTIALS: true
   - in_parallel:
     - task: open-asgs-for-credhub
