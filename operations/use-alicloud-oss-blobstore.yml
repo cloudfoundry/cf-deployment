@@ -1,56 +1,154 @@
 ---
-# Note: Capi release version 1.61.0 or more is required to use Alibaba Cloud OSS as CF blobstore.
+# Note: You must apply "use-external-blobstore.yml" before applying this ops file.
 
+# ========= api =========
 - type: replace
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks/fog_connection
-  error: "Please apply 'use-external-blobstore.yml' before applying 'use-alicloud-oss-blobstore.yml'."
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks/blobstore_type?
+  value: storage-cli
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks/blobstore_provider?
+  value: aliyun
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks/connection_config?
   value: &blobstore-properties
-    provider: aliyun
     aliyun_accesskey_id: ((blobstore_access_key_id))
     aliyun_accesskey_secret: ((blobstore_secret_access_key))
-    aliyun_region_id: ((blobstore_region))
     aliyun_oss_bucket: ((blobstore_bucket_name))
+    aliyun_oss_endpoint: ((blobstore_endpoint))
+    aliyun_region_id: ((blobstore_region))
+- type: remove
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks/fog_connection
 
 - type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/droplets/blobstore_type?
+  value: storage-cli
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/droplets/blobstore_provider?
+  value: aliyun
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/droplets/connection_config?
+  value: *blobstore-properties
+- type: remove
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/droplets/fog_connection
-  value: *blobstore-properties
 
 - type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/packages/blobstore_type?
+  value: storage-cli
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/packages/blobstore_provider?
+  value: aliyun
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/packages/connection_config?
+  value: *blobstore-properties
+- type: remove
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/packages/fog_connection
-  value: *blobstore-properties
 
 - type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/resource_pool/blobstore_type?
+  value: storage-cli
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/resource_pool/blobstore_provider?
+  value: aliyun
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/resource_pool/connection_config?
+  value: *blobstore-properties
+- type: remove
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/resource_pool/fog_connection
-  value: *blobstore-properties
 
+# ========= cc-worker =========
 - type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/buildpacks/blobstore_type?
+  value: storage-cli
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/buildpacks/blobstore_provider?
+  value: aliyun
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/buildpacks/connection_config?
+  value: *blobstore-properties
+- type: remove
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/buildpacks/fog_connection
-  value: *blobstore-properties
 
 - type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/droplets/blobstore_type?
+  value: storage-cli
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/droplets/blobstore_provider?
+  value: aliyun
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/droplets/connection_config?
+  value: *blobstore-properties
+- type: remove
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/droplets/fog_connection
-  value: *blobstore-properties
 
 - type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/packages/blobstore_type?
+  value: storage-cli
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/packages/blobstore_provider?
+  value: aliyun
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/packages/connection_config?
+  value: *blobstore-properties
+- type: remove
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/packages/fog_connection
-  value: *blobstore-properties
 
 - type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/resource_pool/blobstore_type?
+  value: storage-cli
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/resource_pool/blobstore_provider?
+  value: aliyun
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/resource_pool/connection_config?
+  value: *blobstore-properties
+- type: remove
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/resource_pool/fog_connection
-  value: *blobstore-properties
 
+# ========= scheduler (clock) =========
 - type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/buildpacks/blobstore_type?
+  value: storage-cli
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/buildpacks/blobstore_provider?
+  value: aliyun
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/buildpacks/connection_config?
+  value: *blobstore-properties
+- type: remove
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/buildpacks/fog_connection
-  value: *blobstore-properties
 
 - type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/droplets/blobstore_type?
+  value: storage-cli
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/droplets/blobstore_provider?
+  value: aliyun
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/droplets/connection_config?
+  value: *blobstore-properties
+- type: remove
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/droplets/fog_connection
-  value: *blobstore-properties
 
 - type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/packages/blobstore_type?
+  value: storage-cli
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/packages/blobstore_provider?
+  value: aliyun
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/packages/connection_config?
+  value: *blobstore-properties
+- type: remove
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/packages/fog_connection
-  value: *blobstore-properties
 
 - type: replace
-  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/resource_pool/fog_connection
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/resource_pool/blobstore_type?
+  value: storage-cli
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/resource_pool/blobstore_provider?
+  value: aliyun
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/resource_pool/connection_config?
   value: *blobstore-properties
+- type: remove
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/resource_pool/fog_connection
