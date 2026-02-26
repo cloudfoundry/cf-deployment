@@ -1356,6 +1356,10 @@ instance_groups:
         ca: "((log_cache_syslog_tls.ca))"
         cert: "((syslog_agent_log_cache_tls.certificate))"
         key: "((syslog_agent_log_cache_tls.private_key))"
+      agent:
+        ca_cert: ((loggregator_tls_agent.ca))
+        cert: ((loggregator_tls_agent.certificate))
+        key: ((loggregator_tls_agent.private_key))
   - name: loggr-udp-forwarder
     release: loggregator-agent
     properties: *loggr-udp-forwarder-properties
