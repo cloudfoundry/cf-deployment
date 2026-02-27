@@ -1054,6 +1054,11 @@ instance_groups:
       bpm:
         enabled: true
       enable_consul_service_registration: false
+      https_server_enabled: true
+      tls:
+        cert: ((file_server_cert.certificate))
+        key: ((file_server_cert.private_key))
+        client_ca_cert: ((file_server_cert.ca))
       loggregator: *diego_loggregator_client_properties
   - name: routing-api
     release: routing
@@ -2801,6 +2806,17 @@ variables:
     alternative_names:
     - "*.nats.service.cf.internal"
     - nats.service.cf.internal
+    extended_key_usage:
+    - server_auth
+
+- name: file_server_cert
+  type: certificate
+  update_mode: converge
+  options:
+    ca: service_cf_internal_ca
+    common_name: file-server.service.cf.internal
+    alternative_names:
+    - file-server.service.cf.internal
     extended_key_usage:
     - server_auth
 

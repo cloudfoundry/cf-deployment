@@ -287,6 +287,54 @@ func TestSemantic(t *testing.T) {
 			t.Errorf("walk error: %v", err)
 		}
 	})
+
+	t.Run("file-server-mtls-enabled-by-default", func(t *testing.T) {
+		// Test 1: Verify https_server_enabled is true
+		httpsEnabled, err := helpers.BoshInterpolate(
+			operationsSubDirectory,
+			manifestPath,
+			"",
+			"--path", "/instance_groups/name=api/jobs/name=file_server/properties/https_server_enabled",
+		)
+		if err != nil {
+			t.Fatalf("failed to get https_server_enabled: %v", err)
+		}
+
+		if strings.TrimSpace(string(httpsEnabled)) != "true" {
+			t.Errorf("expected https_server_enabled to be 'true', got '%s'", strings.TrimSpace(string(httpsEnabled)))
+		}
+
+		// Test 2: Verify tls.client_ca_cert is configured
+		clientCaCert, err := helpers.BoshInterpolate(
+			operationsSubDirectory,
+			manifestPath,
+			"",
+			"--path", "/instance_groups/name=api/jobs/name=file_server/properties/tls/client_ca_cert",
+		)
+		if err != nil {
+			t.Fatalf("failed to get tls.client_ca_cert: %v", err)
+		}
+
+		expectedCaCert := "((file_server_cert.ca))"
+		if strings.TrimSpace(string(clientCaCert)) != expectedCaCert {
+			t.Errorf("expected client_ca_cert to be '%s', got '%s'", expectedCaCert, strings.TrimSpace(string(clientCaCert)))
+		}
+
+		// Test 3: Verify certificate variable exists
+		certVariable, err := helpers.BoshInterpolate(
+			operationsSubDirectory,
+			manifestPath,
+			"",
+			"--path", "/variables/name=file_server_cert",
+		)
+		if err != nil {
+			t.Fatalf("failed to get file_server_cert variable: %v", err)
+		}
+
+		if len(certVariable) == 0 {
+			t.Error("file_server_cert variable not found in manifest")
+		}
+	})
 }
 
 func TestReleaseVersions(t *testing.T) {
