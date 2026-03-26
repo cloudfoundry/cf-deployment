@@ -13,7 +13,7 @@
 * <a href='#migrating'>Migrating from cf-release to cf-deployment</a>
 
 ## <a name='purpose'></a>Purpose
-This repo contains a canonical [BOSH](http://bosh.io/docs) deployment manifest
+This repo contains a canonical [BOSH](https://bosh.io/docs) deployment manifest
 for deploying the Cloud Foundry Application Runtime by relying individual component releases.
 It uses several newer features
 of the BOSH director and CLI.
@@ -31,7 +31,7 @@ It:
   There are no default credentials, even in bosh-lite.
   - TLS/SSL features are enabled on every job which supports TLS.
 - uses two AZs to provide redundancy for most instance groups.
-- uses [Diego](http://docs.cloudfoundry.org/concepts/diego/diego-architecture.html) ([source code](https://github.com/cloudfoundry/diego-release)) by default.
+- uses [Diego](https://docs.cloudfoundry.org/concepts/diego/diego-architecture.html) ([source code](https://github.com/cloudfoundry/diego-release)) by default.
 - deploys jobs to handle platform data persistence
 using singleton versions of the `PXC` release for databases
 and the CAPI release's singleton WebDAV job for blob storage.
@@ -112,7 +112,7 @@ which it relies on to generate and fill-in needed variables.
 
 ### BOSH `cloud-config`
 `cf-deployment` assumes that
-you've uploaded a compatible [cloud-config](http://bosh.io/docs/cloud-config.html) to the BOSH director prior to deploying your foundation.
+you've uploaded a compatible [cloud-config](https://bosh.io/docs/cloud-config.html) to the BOSH director prior to deploying your foundation.
 
 The cloud-config produced by `bbl` covers GCP, AWS, and Azure, and is compatible by default.
 
@@ -175,7 +175,7 @@ such additional variables:
 3. They can be stored in CredHub directly
    with the [CredHub CLI](https://docs.cloudfoundry.org/api/credhub/).
    If you do this, then you need follow variable namespacing
-   rules respected by BOSH described [here](https://github.com/cloudfoundry-incubator/credhub/blob/master/docs/operator-quick-start.md#variable-namespacing).
+   rules respected by BOSH described [here](https://github.com/cloudfoundry/credhub/blob/master/docs/operator-quick-start.md#variable-namespacing).
 
 ## <a name='ops-files'></a>Ops Files
 The configuration of CF represented by `cf-deployment.yml` is a workable, secure, fully-featured default.
@@ -217,7 +217,7 @@ that we run in our testing pipeline
 to enable certain features.
 
 #### [Backup and Restore](operations/backup-and-restore)
-Contains all the ops files utilized to enable and configure [BOSH Backup and Restore](https://github.com/cloudfoundry-incubator/bosh-backup-and-restore) (BBR).
+Contains all the ops files utilized to enable and configure [BOSH Backup and Restore](https://github.com/cloudfoundry/bosh-backup-and-restore) (BBR).
 BBR is a CLI utility for orchestrating the backup and restore of [BOSH](https://bosh.io/) deployments and BOSH directors. It orchestrates triggering the backup or restore process on the deployment or director, and transfers the backup artifact to and from the deployment or director.
 
 ## <a name='ci'></a>CI

@@ -5,7 +5,7 @@ can be applied to both
 manifests.
 
 - For General Ops-files, check out the [Ops-file README](../README.md).
-- For Backup and Restore Ops-files (for configuring your deployment for use with [BBR](https://github.com/cloudfoundry-incubator/bosh-backup-and-restore)), checkout the [Backup and Restore Ops-files README](../backup-and-restore/README.md).
+- For Backup and Restore Ops-files (for configuring your deployment for use with [BBR](https://github.com/cloudfoundry/bosh-backup-and-restore)), checkout the [Backup and Restore Ops-files README](../backup-and-restore/README.md).
 - For Community Ops-files, check out the [Community Ops-file README](../community/README.md).
 - For Experimental Ops-files, check out the [Experimental Ops-file README](../experimental/README.md).
 
@@ -64,4 +64,4 @@ with an empty runtime config.
 [runtime-config-docs]: https://bosh.io/docs/runtime-config.html
 [syslog-custom-rule-examples]: https://github.com/cloudfoundry/syslog-release/blob/develop/examples/example-custom-rules.md
 [syslog-release-repo]: https://github.com/cloudfoundry/syslog-release
-[addons-docs]: http://bosh.io/docs/runtime-config.html#addons
+[addons-docs]: https://bosh.io/docs/runtime-config.html#addons

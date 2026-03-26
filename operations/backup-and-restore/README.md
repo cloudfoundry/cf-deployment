@@ -1,6 +1,6 @@
 # Backup and Restore ops-files
 
-This is the README for Backup and Restore Ops-files. Use these to configure your deployment for use with [BBR](https://github.com/cloudfoundry-incubator/bosh-backup-and-restore).
+This is the README for Backup and Restore Ops-files. Use these to configure your deployment for use with [BBR](https://github.com/cloudfoundry/bosh-backup-and-restore).
 For more information about using these ops-files, see [the Cloud Foundry docs](https://docs.cloudfoundry.org/bbr/cf-backup.html).
 To learn more about `cf-deployment`, go to the main [README](../../README.md).
 
