@@ -19,11 +19,11 @@ You'll need to following to proceed:
 
 ### BOSH
 
-To setup an OpenStack project to install BOSH please use the following [Terraform module](https://github.com/cloudfoundry/bosh-openstack-environment-templates/tree/master/bosh-init-tf). Adapt `terraform.tfvars.template` to your needs.
+To setup an OpenStack project to install BOSH please use the following [Terraform module](https://github.com/cloudfoundry-attic/bosh-openstack-environment-templates/tree/master/bosh-init-tf) (archived). Adapt `terraform.tfvars.template` to your needs.
 
 ### Cloud Foundry
 
-To setup the project to install Cloud Foundry please use the following [Terraform module](https://github.com/cloudfoundry/bosh-openstack-environment-templates/tree/master/cf-deployment-tf). Adapt `terraform.tfvars.template` to your needs. Variable `bosh_router_id` is output of the previous BOSH terraform module.
+To setup the project to install Cloud Foundry please use the following [Terraform module](https://github.com/cloudfoundry-attic/bosh-openstack-environment-templates/tree/master/cf-deployment-tf) (archived). Adapt `terraform.tfvars.template` to your needs. Variable `bosh_router_id` is output of the previous BOSH terraform module.
 
 ## Install BOSH
 
