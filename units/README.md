@@ -72,7 +72,7 @@ For example, given the following manifest snippet:
 ```
 stemcells:
 - alias: default
-  os: ubuntu-bionic
+  os: ubuntu-jammy
   version: "1.1"
 ```
 
