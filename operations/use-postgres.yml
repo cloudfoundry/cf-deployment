@@ -1,11 +1,10 @@
-# Note: If combined with `use-compiled-releases.yml`, you must apply `use-postgres.yml` after applying `use-compiled-releases.yml`.
 - type: replace
   path: /releases/-
   value:
     name: postgres
-    sha1: e5655af2b766900cd65f859703d7fdce44805a9b
-    url: https://bosh.io/d/github.com/cloudfoundry/postgres-release?v=53.0.3
-    version: 53.0.3
+    sha1: sha256:4c0a41401135751a9c007612d35ff3d8c6c063a224576550f68400dd4f3e000a
+    url: https://bosh.io/d/github.com/cloudfoundry/postgres-release?v=53.1.2
+    version: 53.1.2
 - type: remove
   path: /releases/name=pxc
 - type: remove
