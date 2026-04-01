@@ -7,7 +7,7 @@
   value: storage-cli
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks/blobstore_provider?
-  value: AWS
+  value: s3
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks/connection_config?
   value: &buildpack-blobstore-properties
@@ -23,7 +23,7 @@
   value: storage-cli
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/droplets/blobstore_provider?
-  value: AWS
+  value: s3
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/droplets/connection_config?
   value: &droplet-blobstore-properties
@@ -39,7 +39,7 @@
   value: storage-cli
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/packages/blobstore_provider?
-  value: AWS
+  value: s3
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/packages/connection_config?
   value: &package-blobstore-properties
@@ -55,7 +55,7 @@
   value: storage-cli
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/resource_pool/blobstore_provider?
-  value: AWS
+  value: s3
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/resource_pool/connection_config?
   value: &resource-pool-blobstore-properties
@@ -72,7 +72,7 @@
   value: storage-cli
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/buildpacks/blobstore_provider?
-  value: AWS
+  value: s3
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/buildpacks/connection_config?
   value: *buildpack-blobstore-properties
@@ -85,7 +85,7 @@
   value: storage-cli
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/droplets/blobstore_provider?
-  value: AWS
+  value: s3
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/droplets/connection_config?
   value: *droplet-blobstore-properties
@@ -98,7 +98,7 @@
   value: storage-cli
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/packages/blobstore_provider?
-  value: AWS
+  value: s3
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/packages/connection_config?
   value: *package-blobstore-properties
@@ -111,7 +111,7 @@
   value: storage-cli
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/resource_pool/blobstore_provider?
-  value: AWS
+  value: s3
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/resource_pool/connection_config?
   value: *resource-pool-blobstore-properties
@@ -125,7 +125,7 @@
   value: storage-cli
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/buildpacks/blobstore_provider?
-  value: AWS
+  value: s3
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/buildpacks/connection_config?
   value: *buildpack-blobstore-properties
@@ -138,7 +138,7 @@
   value: storage-cli
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/droplets/blobstore_provider?
-  value: AWS
+  value: s3
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/droplets/connection_config?
   value: *droplet-blobstore-properties
@@ -151,7 +151,7 @@
   value: storage-cli
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/packages/blobstore_provider?
-  value: AWS
+  value: s3
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/packages/connection_config?
   value: *package-blobstore-properties
@@ -164,7 +164,7 @@
   value: storage-cli
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/resource_pool/blobstore_provider?
-  value: AWS
+  value: s3
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/resource_pool/connection_config?
   value: *resource-pool-blobstore-properties
