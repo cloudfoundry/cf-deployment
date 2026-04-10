@@ -1,0 +1,66 @@
+---
+## api / cloud_controller_ng
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks/fog_connection
+  error: "Please apply 'use-external-blobstore.yml' before applying 'use-s3-blobstore.yml'."
+  value: &blobstore-properties
+    # https://docs.cloudfoundry.org/deploying/common/cc-blobstore-config.html#fog-s3-other
+    provider: AWS
+    aws_access_key_id: ((blobstore_access_key_id))
+    aws_secret_access_key: ((blobstore_secret_access_key))
+    region: ((aws_region))
+    aws_signature_version: ((blobstore_signature_version))
+    endpoint: ((blobstore_endpoint))
+    path_style: ((blobstore_path_style))
+
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/droplets/fog_connection
+  value: *blobstore-properties
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/packages/fog_connection
+  value: *blobstore-properties
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/resource_pool/fog_connection
+  value: *blobstore-properties
+
+
+## cc-worker / cloud_controller_worker
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/buildpacks/fog_connection
+  value: *blobstore-properties
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/droplets/fog_connection
+  value: *blobstore-properties
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/packages/fog_connection
+  value: *blobstore-properties
+
+- type: replace
+  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/resource_pool/fog_connection
+  value: *blobstore-properties
+
+
+## scheduler / cloud_controller_clock
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/buildpacks/fog_connection
+  value: *blobstore-properties
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/droplets/fog_connection
+  value: *blobstore-properties
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/packages/fog_connection
+  value: *blobstore-properties
+
+- type: replace
+  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/resource_pool/fog_connection
+  value: *blobstore-properties
