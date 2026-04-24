@@ -964,6 +964,10 @@ instance_groups:
           ca_cert: "((cc_tls.ca))"
           public_cert: "((cc_tls.certificate))"
           private_key: "((cc_tls.private_key))"
+        loggregator_tls: &cc_loggregator_tls
+          ca_cert: "((loggregator_tls_agent.ca))"
+          certificate: "((loggregator_tls_agent.certificate))"
+          private_key: "((loggregator_tls_agent.private_key))"
         prom_scraper_tls:
           ca_cert: ((cc_prom_scraper_scrape_tls.ca))
           private_key: ((cc_prom_scraper_scrape_tls.private_key))
@@ -1176,6 +1180,7 @@ instance_groups:
         droplets: *blobstore-properties
         buildpacks: *blobstore-properties
         mutual_tls: *cc_mutual_tls
+        loggregator_tls: *cc_loggregator_tls
       ccdb: *ccdb
       system_domain: "((system_domain))"
       routing_api: *routing_api
