@@ -767,7 +767,6 @@ jobs:
         stemcell: fips-stemcell
       params:
         STEMCELL_STACK: ubuntu-jammy
-        STEMCELL_OPS_PATH: /stemcells/alias=default
         ORIGINAL_OPS_FILE_PATH: operations/test/fips-stemcell.yml
         UPDATED_OPS_FILE_PATH: operations/test/fips-stemcell.yml
     - put: cf-deployment-develop
