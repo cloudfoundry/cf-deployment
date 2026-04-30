@@ -951,7 +951,7 @@ jobs:
       APP_PUSHABILITY_THRESHOLD: 10
       RECENT_LOGS_THRESHOLD: 10000
       STREAMING_LOGS_THRESHOLD: 10000
-      APP_STATS_THRESHOLD: 10
+      APP_STATS_THRESHOLD: 30
   - in_parallel:
     - task: open-asgs-for-credhub
       file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
@@ -1236,7 +1236,7 @@ jobs:
       APP_PUSHABILITY_THRESHOLD: 10
       RECENT_LOGS_THRESHOLD: 10000
       STREAMING_LOGS_THRESHOLD: 10000
-      APP_STATS_THRESHOLD: 10
+      APP_STATS_THRESHOLD: 30
   - in_parallel:
     - task: open-asgs-for-uaa
       file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
