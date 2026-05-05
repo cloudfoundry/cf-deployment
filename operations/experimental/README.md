@@ -14,6 +14,7 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 | Name | Purpose | Notes | Currently validated in Release Integration CI pipelines? |
 |:---  |:---     |:---   |:---   |
 | [`add-cflinuxfs4.yml`](add-cflinuxfs4.yml) | Add [cflinuxfs4](https://github.com/cloudfoundry/cflinuxfs4) stack. | ***Deprecated as we integrate cflinuxfs4 directly into cf-deployment.yml*** | **NO** |
+| [`add-cflinuxfs5.yml`](add-cflinuxfs5.yml) | Add [cflinuxfs5](https://github.com/cloudfoundry/cflinuxfs5) stack. | Only adds cflinuxfs5 stack; does NOT make it the default stack. | **NO** |
 | [`add-metric-store.yml`](add-metric-store.yml) | **PROMOTED: use `../use-metric-store.yml`** | | **NO** |
 | [`add-otel-collector.yml`](add-otel-collector.yml) | Adds an [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/) to all Linux VMs to egress metrics and traces. | `otel_collector_config` must be filled in with valid OTel Collector configuration. | **NO** |
 | [`add-otel-collector-windows.yml`](add-otel-collector-windows.yml) | Adds an [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/) to all Windows 2019 VMs to egress metrics and traces. | `otel_collector_config` must be filled in with valid OTel Collector configuration. Requires `./add-otel-collector.yml` and `../windows2019-cell.yml`.  | **NO** |
