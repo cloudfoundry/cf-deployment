@@ -1344,12 +1344,12 @@ jobs:
     do:
     - get: experimental-pool
       trigger: true
-      passed: [ experimental-deploy ]
+      passed: [ experimental-cats ]
     - in_parallel:
       - get: cf-acceptance-tests-rc
       - get: relint-envs
       - get: cf-deployment-develop
-        passed: [ experimental-deploy ]
+        passed: [ experimental-cats ]
       - get: cf-deployment-concourse-tasks
     - task: update-integration-configs
       file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
@@ -1371,13 +1371,13 @@ jobs:
 
 - name: experimental-delete-deployment
   serial: true
+  serial_groups: [ experimental-cats-cflinuxfs5 ]
   public: true
   plan:
   - get: experimental-pool
     trigger: true
     passed:
     - experimental-cats
-    - experimental-cats-cflinuxfs5
     - experimental-smoke-tests
   - in_parallel:
     - get: cf-deployment-concourse-tasks
