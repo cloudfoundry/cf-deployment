@@ -1335,6 +1335,7 @@ jobs:
         REPORTER_CONFIG_FILE_PATH: environments/test/hermione/reporter_config.json
         RELINT_VERBOSE_AUTH: "true"
         SKIP_REGEXP: "shows logs and metrics"
+        NODES: 6
 
 - name: experimental-cats-cflinuxfs5
   serial_groups: [ experimental-cats-cflinuxfs5 ]
@@ -1368,7 +1369,7 @@ jobs:
         CONFIG_FILE_PATH: environments/test/hermione/cflinuxfs5_integration_config.json
         REPORTER_CONFIG_FILE_PATH: environments/test/hermione/reporter_config.json
         RELINT_VERBOSE_AUTH: "true"
-    NODES: 6
+        NODES: 6
 
 - name: experimental-delete-deployment
   serial: true
