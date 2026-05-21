@@ -1344,12 +1344,12 @@ jobs:
     do:
     - get: experimental-pool
       trigger: true
-      passed: [ experimental-cats ]
+      passed: [ experimental-deploy ]
     - in_parallel:
       - get: cf-acceptance-tests-rc
       - get: relint-envs
       - get: cf-deployment-develop
-        passed: [ experimental-cats ]
+        passed: [ experimental-deploy ]
       - get: cf-deployment-concourse-tasks
     - task: update-integration-configs
       file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
@@ -1368,10 +1368,10 @@ jobs:
         CONFIG_FILE_PATH: environments/test/hermione/cflinuxfs5_integration_config.json
         REPORTER_CONFIG_FILE_PATH: environments/test/hermione/reporter_config.json
         RELINT_VERBOSE_AUTH: "true"
+    NODES: 6
 
 - name: experimental-delete-deployment
   serial: true
-  serial_groups: [ experimental-cats-cflinuxfs5 ]
   public: true
   plan:
   - get: experimental-pool
