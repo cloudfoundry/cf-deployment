@@ -22,6 +22,7 @@ groups:
   - experimental-deploy
   - experimental-smoke-tests
   - experimental-cats
+  - experimental-cats-cflinuxfs5
   - experimental-delete-deployment
   - lite-acquire-pool
   - lite-deploy
@@ -80,6 +81,7 @@ groups:
   - lint-cf-deployment-manifest
   - experimental-acquire-pool
   - experimental-cats
+  - experimental-cats-cflinuxfs5
   - experimental-deploy
   - experimental-delete-deployment
   - experimental-release-pool-manual
@@ -1111,7 +1113,7 @@ jobs:
       params: {release: experimental-pool}
 
 - name: experimental-deploy
-  serial_groups: [ experimental-cats, experimental-smokes ]
+  serial_groups: [ experimental-cats, experimental-cats-cflinuxfs5, experimental-smokes ]
   public: true
   plan:
   - get: experimental-pool
@@ -1168,6 +1170,7 @@ jobs:
         operations/experimental/enable-containerd-for-processes.yml
         operations/experimental/disable-cf-credhub.yml
         operations/experimental/disable-interpolate-service-bindings.yml
+        operations/experimental/add-cflinuxfs5.yml
         operations/increase-doppler-vm-type-from-minimal-to-small.yml
         operations/scale-diego-cell-to-8.yml
         operations/test/speed-up-dynamic-asgs.yml
@@ -1223,7 +1226,7 @@ jobs:
         operations/experimental/enable-containerd-for-processes.yml
         operations/experimental/disable-cf-credhub.yml
         operations/experimental/disable-interpolate-service-bindings.yml
-        operations/experimental/use-mysql-version-8.4.yml
+        operations/experimental/add-cflinuxfs5.yml
         operations/increase-doppler-vm-type-from-minimal-to-small.yml
         operations/scale-diego-cell-to-8.yml
         operations/test/speed-up-dynamic-asgs.yml
@@ -1331,6 +1334,41 @@ jobs:
         REPORTER_CONFIG_FILE_PATH: environments/test/hermione/reporter_config.json
         RELINT_VERBOSE_AUTH: "true"
         SKIP_REGEXP: "shows logs and metrics"
+        NODES: 6
+
+- name: experimental-cats-cflinuxfs5
+  serial_groups: [ experimental-cats-cflinuxfs5 ]
+  public: true
+  plan:
+  - timeout: 4h
+    do:
+    - get: experimental-pool
+      trigger: true
+      passed: [ experimental-deploy ]
+    - in_parallel:
+      - get: cf-acceptance-tests-rc
+      - get: relint-envs
+      - get: cf-deployment-develop
+        passed: [ experimental-deploy ]
+      - get: cf-deployment-concourse-tasks
+    - task: update-integration-configs
+      file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
+      params:
+        BBL_STATE_DIR: environments/test/hermione/bbl-state
+        CATS_INTEGRATION_CONFIG_FILE: environments/test/hermione/cflinuxfs5_integration_config.json
+      input_mapping:
+        bbl-state: relint-envs
+        integration-configs: relint-envs
+    - task: run-cats
+      input_mapping:
+        integration-config: updated-integration-configs
+        cf-acceptance-tests: cf-acceptance-tests-rc
+      file: cf-deployment-concourse-tasks/run-cats/task.yml
+      params:
+        CONFIG_FILE_PATH: environments/test/hermione/cflinuxfs5_integration_config.json
+        REPORTER_CONFIG_FILE_PATH: environments/test/hermione/reporter_config.json
+        RELINT_VERBOSE_AUTH: "true"
+        NODES: 6
 
 - name: experimental-delete-deployment
   serial: true
