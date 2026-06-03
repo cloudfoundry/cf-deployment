@@ -1529,7 +1529,6 @@ instance_groups:
           server_cert_domain_san: log-cache.((system_domain))
           uris:
           - log-cache.((system_domain))
-          - '*.log-cache.((system_domain))'
     release: routing
   - name: log-cache-cf-auth-proxy
     properties:
@@ -1801,14 +1800,12 @@ instance_groups:
           server_cert_domain_san: doppler.((system_domain))
           uris:
           - doppler.((system_domain))
-          - "*.doppler.((system_domain))"
         - name: rlp-gateway
           tls_port: 8088
           server_cert_domain_san: log-stream.((system_domain))
           registration_interval: 20s
           uris:
           - log-stream.((system_domain))
-          - "*.log-stream.((system_domain))"
 - name: credhub
   azs:
   - z1
@@ -2275,7 +2272,6 @@ variables:
     alternative_names:
     - log-cache
     - log-cache.((system_domain))
-    - "*.log-cache.((system_domain))"
     extended_key_usage:
     - server_auth
 - name: log_cache_proxy_tls
