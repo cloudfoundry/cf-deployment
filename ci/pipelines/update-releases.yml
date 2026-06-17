@@ -14701,8 +14701,6 @@ jobs:
     - get: relint-envs
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-      params:
-        tarball: false
     - get: windows2019fs-offline-release
       trigger: true
       params:
