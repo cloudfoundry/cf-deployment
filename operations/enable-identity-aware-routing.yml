@@ -1,5 +1,6 @@
 ---
 # BOSH DNS alias: *.apps.identity -> router instances
+# (BOSH DNS uses underscore prefix for wildcards; _.apps.identity matches *.apps.identity)
 - type: replace
   path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/-
   value:
@@ -13,6 +14,8 @@
 
 # Configure mTLS domain on gorouter.
 # Gorouter verifies client certs against diego_instance_identity_ca (existing CF PKI).
+# sanitize_set: strips any incoming XFCC header (prevents spoofing) and sets a fresh one from the verified client cert.
+# xfcc_format: envoy format is required by Diego/Envoy sidecars consuming the header.
 - type: replace
   path: /instance_groups/name=router/jobs/name=gorouter/properties/router/domains?
   value:
