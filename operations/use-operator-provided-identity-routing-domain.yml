@@ -1,9 +1,13 @@
 ---
 # Override the hardcoded apps.identity domain set by enable-identity-aware-routing.yml.
-# Apply on top of that ops-file, passing -v identity_routing_domain=<your-domain>.
+# Apply on top of that ops-file:
+#
+#   bosh deploy cf-deployment.yml \
+#     -o operations/enable-identity-aware-routing.yml \
+#     -o operations/use-operator-provided-identity-routing-domain.yml \
+#     -v identity_routing_domain=apps.example.com
 
 # Override BOSH DNS alias domain.
-# Navigate to the entry added by enable-identity-aware-routing.yml via its domain key.
 - type: replace
   path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/domain=_.apps.identity/domain
   value: "_.((identity_routing_domain))"
