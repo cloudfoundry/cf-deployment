@@ -1,0 +1,65 @@
+---
+# BOSH DNS alias: *.apps.identity -> router instances
+- type: replace
+  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/-
+  value:
+    domain: _.apps.identity
+    targets:
+    - deployment: cf
+      domain: bosh
+      instance_group: router
+      network: default
+      query: '*'
+
+# Configure mTLS domain on gorouter.
+# Gorouter verifies client certs against diego_instance_identity_ca (existing CF PKI).
+- type: replace
+  path: /instance_groups/name=router/jobs/name=gorouter/properties/router/domains?
+  value:
+    - name: "*.apps.identity"
+      ca_certs: ((diego_instance_identity_ca.certificate))
+      forwarded_client_cert: sanitize_set
+      xfcc_format: envoy
+
+# Add *.apps.identity TLS cert to gorouter (served via SNI)
+- type: replace
+  path: /instance_groups/name=router/jobs/name=gorouter/properties/router/tls_pem/-
+  value:
+    cert_chain: ((apps_identity_router_tls.certificate))
+    private_key: ((apps_identity_router_tls.private_key))
+
+# Trust apps_identity_ca in cflinuxfs4 app containers so outbound TLS to
+# *.apps.identity succeeds.
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=cflinuxfs4-rootfs-setup/properties/cflinuxfs4-rootfs/trusted_certs/-
+  value: ((apps_identity_ca.certificate))
+
+# Trust apps_identity_ca in the Diego rep container trust store (Envoy sidecars).
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=rep/properties/containers/trusted_ca_certificates/-
+  value: ((apps_identity_ca.certificate))
+
+# Generate apps_identity_ca: self-signed CA that issues the router SNI cert and is
+# trusted by app containers.
+- type: replace
+  path: /variables/-
+  value:
+    name: apps_identity_ca
+    type: certificate
+    options:
+      common_name: apps-identity-ca
+      is_ca: true
+
+# Generate apps_identity_router_tls: server cert for *.apps.identity served via SNI.
+- type: replace
+  path: /variables/-
+  value:
+    name: apps_identity_router_tls
+    type: certificate
+    options:
+      ca: apps_identity_ca
+      common_name: "*.apps.identity"
+      alternative_names:
+        - "*.apps.identity"
+      extended_key_usage:
+        - server_auth
