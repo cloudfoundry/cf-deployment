@@ -1,0 +1,10 @@
+---
+# Trust apps_identity_ca in cflinuxfs5 app containers.
+#
+# Prerequisites (apply in this order):
+#   1. operations/experimental/add-cflinuxfs5.yml
+#   2. operations/enable-identity-aware-routing.yml
+#   3. this file
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=cflinuxfs5-rootfs-setup/properties/cflinuxfs5-rootfs/trusted_certs/-
+  value: ((apps_identity_ca.certificate))
