@@ -1552,6 +1552,15 @@ jobs:
         params:
           repository: updated-bbl-state
           rebase: true
+    - task: bosh-extend-runtime-config
+      file: runtime-ci/tasks/bosh-extend-runtime-config/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+        ops-file: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/snitch/bbl-state
+        OPS_FILE_PATH: environments/test/snitch/bbl-config/warden-noble-dns.yml
+        RUNTIME_CONFIG_NAME: dns
     - put: lite-pool
       params: {release: lite-pool}
 
