@@ -954,14 +954,15 @@ instance_groups:
           private_key: "((cc_logcache_tls.private_key))"
           certificate: "((cc_logcache_tls.certificate))"
         buildpacks: &blobstore-properties
-          blobstore_type: webdav
-          webdav_config:
-            ca_cert: "((blobstore_tls.ca))"
-            blobstore_timeout: 5
+          blobstore_type: storage-cli
+          blobstore_provider: dav
+          connection_config:
+            username: blobstore-user
             password: "((blobstore_admin_users_password))"
             private_endpoint: https://blobstore.service.cf.internal:4443
             public_endpoint: https://blobstore.((system_domain))
-            username: blobstore-user
+            secret: "((blobstore_secure_link_secret))"
+            ca_cert: "((blobstore_tls.ca))"
         resource_pool: *blobstore-properties
         packages: *blobstore-properties
         droplets: *blobstore-properties
