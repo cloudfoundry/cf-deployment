@@ -1,0 +1,15 @@
+---
+# Trust apps_identity_ca in cflinuxfs5 app containers.
+# Kept separate from enable-identity-aware-routing.yml because cflinuxfs5-rootfs-setup
+# is only present when add-cflinuxfs5.yml has been applied; merging into the main
+# ops-file would break deployments that don't use cflinuxfs5.
+#
+# Prerequisites (apply in this order):
+#   1. operations/experimental/add-cflinuxfs5.yml
+#   2. operations/enable-identity-aware-routing.yml
+#   3. this file
+# Note: no '?' on the path — a hard BOSH error is the intended signal if
+# add-cflinuxfs5.yml was not applied first.
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=cflinuxfs5-rootfs-setup/properties/cflinuxfs5-rootfs/trusted_certs/-
+  value: ((apps_identity_ca.certificate))

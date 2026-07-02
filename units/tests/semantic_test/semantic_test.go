@@ -244,6 +244,9 @@ func TestSemantic(t *testing.T) {
 				if ca == "((diego_instance_identity_ca.certificate))" {
 					continue
 				}
+				if ca == "((apps_identity_ca.certificate))" {
+					continue
+				}
 
 				t.Errorf("CAs should be referenced from their certificate variables: %s in %s", ca, strings.Replace(path, operationsSubDirectory, "operations", 1))
 			}
