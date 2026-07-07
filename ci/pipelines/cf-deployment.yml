@@ -842,7 +842,6 @@ jobs:
     params:
       BASE_OPS_FILE_DIR: operations
       NEW_OPS_FILES: |
-        environments/test/trelawney/add-external-ips-for-cloud-sql-db.yml
         environments/test/trelawney/scale-log-api-to-4.yml
   - task: setup-external-ip-db-vars
     file: runtime-ci/tasks/generate-external-ip-db-vars/task.yml
@@ -867,7 +866,6 @@ jobs:
       OPS_FILES: |
         operations/use-compiled-releases.yml
         operations/use-external-dbs.yml
-        operations/add-external-ips-for-cloud-sql-db.yml
         operations/experimental/colocate-smoke-tests-on-cc-worker.yml
         operations/set-cpu-weight.yml
         operations/enable-cpu-throttling.yml
@@ -879,7 +877,6 @@ jobs:
         operations/use-internal-lookup-for-route-services.yml
       VARS_FILES: |
         environments/test/trelawney/external-db-vars.yml
-        environments/test/trelawney/external-public-ip-vars.yml
         environments/test/trelawney/external-db-host-vars.yml
         environments/test/trelawney/gcs-vars.yml
       REGENERATE_CREDENTIALS: true
@@ -906,7 +903,6 @@ jobs:
     params:
       BASE_OPS_FILE_DIR: operations
       NEW_OPS_FILES: |
-        environments/test/trelawney/add-external-ips-for-cloud-sql-db.yml
         environments/test/trelawney/scale-log-api-to-4.yml
   - task: bosh-deploy-cf-develop
     attempts: 1
@@ -922,7 +918,6 @@ jobs:
       OPS_FILES: |
         operations/use-compiled-releases.yml
         operations/use-external-dbs.yml
-        operations/add-external-ips-for-cloud-sql-db.yml
         operations/experimental/colocate-smoke-tests-on-cc-worker.yml
         operations/set-cpu-weight.yml
         operations/enable-cpu-throttling.yml
@@ -935,7 +930,6 @@ jobs:
         operations/test/speed-up-dynamic-asgs.yml
       VARS_FILES: |
         environments/test/trelawney/external-db-vars.yml
-        environments/test/trelawney/external-public-ip-vars.yml
         environments/test/trelawney/external-db-host-vars.yml
         environments/test/trelawney/gcs-vars.yml
       DEPLOY_WITH_UPTIME_MEASUREMENTS: true
