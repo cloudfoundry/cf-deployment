@@ -194,14 +194,19 @@ until confidence is established.
 
 ## Reusable Concourse Task: trigger-github-workflow
 
-All kind jobs use a single reusable task at
-`ci/tasks/trigger-github-workflow/`:
+All kind jobs use a single reusable task that lives in the
+[runtime-ci](https://github.com/cloudfoundry/runtime-ci) repository at
+`tasks/trigger-github-workflow/`:
 
-- **`task.yml`** – Concourse task definition using `alpine:3.20`, with
-  params for `GITHUB_TOKEN`, `GITHUB_REPO`, `WORKFLOW_FILE`, `WORKFLOW_REF`,
-  and `WORKFLOW_INPUTS`.
-- **`task.sh`** – shell script that handles the full dispatch-and-watch
+- **`task.yml`** – Concourse task definition using the
+  `cloudfoundry/cf-deployment-concourse-tasks` image (which provides `gh`
+  and `jq`), with params for `GITHUB_TOKEN`, `GITHUB_REPO`, `WORKFLOW_FILE`,
+  `WORKFLOW_REF`, and `WORKFLOW_INPUTS`.
+- **`task`** – shell script that handles the full dispatch-and-watch
   lifecycle.
+
+The pipeline references it via the `runtime-ci` resource
+(`runtime-ci/tasks/trigger-github-workflow/task.yml`).
 
 ### Run identification mechanism
 
@@ -333,9 +338,14 @@ The pipeline requires a Concourse secret `kind_deployment_github_token` with
 
 | File | Change |
 |------|--------|
-| `ci/pipelines/cf-deployment.yml` | Added `kind-smoke-tests` and `kind-cats` jobs triggered on `develop` after the four unit/lint jobs (same gate as BOSH environments), dispatching `kind-smoke.yaml`/`kind-cats.yaml` on `main` with `fresh-validation: true`. Added `kind-neville` group. `bless-manifest` does not depend on either job (non-blocking). |
-| `ci/tasks/trigger-github-workflow/task.yml` | Reusable Concourse task to dispatch and watch a GitHub workflow |
-| `ci/tasks/trigger-github-workflow/task.sh` | Dispatch-and-watch script with run identification via id/timestamp/actor matching |
+| `ci/pipelines/cf-deployment.yml` | Added `kind-smoke-tests` and `kind-cats` jobs triggered on `develop` after the four unit/lint jobs (same gate as BOSH environments), dispatching `kind-smoke.yaml`/`kind-cats.yaml` on `main` with `fresh-validation: true`. Added `kind-neville` group. `bless-manifest` does not depend on either job (non-blocking). The jobs reference the reusable task from the `runtime-ci` resource. |
+
+### runtime-ci repository (PR #687)
+
+| File | Change |
+|------|--------|
+| `tasks/trigger-github-workflow/task.yml` | Reusable Concourse task to dispatch and watch a GitHub workflow |
+| `tasks/trigger-github-workflow/task` | Dispatch-and-watch script with run identification via id/timestamp/actor matching |
 
 ### kind-deployment repository (already merged — PR #424)
 

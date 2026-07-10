@@ -2145,15 +2145,17 @@ jobs:
   public: true
   serial_groups: [ kind-workflows ]
   plan:
-  - get: cf-deployment-develop
-    trigger: true
-    passed:
-    - unit-test-ops-files
-    - lint-cf-deployment-manifest
-    - unit-test-golang-tests
-    - unit-test-update-releases-coverage
+  - in_parallel:
+    - get: cf-deployment-develop
+      trigger: true
+      passed:
+      - unit-test-ops-files
+      - lint-cf-deployment-manifest
+      - unit-test-golang-tests
+      - unit-test-update-releases-coverage
+    - get: runtime-ci
   - task: trigger-kind-smoke-workflow
-    file: cf-deployment-develop/ci/tasks/trigger-github-workflow/task.yml
+    file: runtime-ci/tasks/trigger-github-workflow/task.yml
     params:
       GITHUB_TOKEN: ((ard_wg_gitbot_token))
       GITHUB_REPO: cloudfoundry/kind-deployment
@@ -2166,15 +2168,17 @@ jobs:
   public: true
   serial_groups: [ kind-workflows ]
   plan:
-  - get: cf-deployment-develop
-    trigger: true
-    passed:
-    - unit-test-ops-files
-    - lint-cf-deployment-manifest
-    - unit-test-golang-tests
-    - unit-test-update-releases-coverage
+  - in_parallel:
+    - get: cf-deployment-develop
+      trigger: true
+      passed:
+      - unit-test-ops-files
+      - lint-cf-deployment-manifest
+      - unit-test-golang-tests
+      - unit-test-update-releases-coverage
+    - get: runtime-ci
   - task: trigger-kind-cats-workflow
-    file: cf-deployment-develop/ci/tasks/trigger-github-workflow/task.yml
+    file: runtime-ci/tasks/trigger-github-workflow/task.yml
     params:
       GITHUB_TOKEN: ((ard_wg_gitbot_token))
       GITHUB_REPO: cloudfoundry/kind-deployment
