@@ -6,17 +6,15 @@ set -eu
 # resulting run, and streams its output until completion.
 #
 # Requires these environment variables:
-#   GITHUB_TOKEN      – PAT or GitHub App token with Actions scope
+#   GITHUB_TOKEN      – ard_wg_gitbot_token with Actions access on the target repo
 #   GITHUB_REPO       – owner/repo  (e.g. cloudfoundry/kind-deployment)
 #   WORKFLOW_FILE     – workflow filename  (e.g. kind-smoke.yaml)
 #   WORKFLOW_REF      – git ref to run against  (default: main)
 #   WORKFLOW_INPUTS   – JSON object of workflow inputs  (default: {})
+#
+# Runs on the cloudfoundry/cf-deployment-concourse-tasks image, which
+# provides the gh CLI and jq.
 ##
-
-# ── install gh CLI and jq ───────────────────────────────────────────
-apk add --no-cache --quiet \
-  --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
-  github-cli jq
 
 export GH_TOKEN="${GITHUB_TOKEN}"
 

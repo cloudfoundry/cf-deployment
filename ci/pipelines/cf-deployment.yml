@@ -2155,7 +2155,7 @@ jobs:
   - task: trigger-kind-smoke-workflow
     file: cf-deployment-develop/ci/tasks/trigger-github-workflow/task.yml
     params:
-      GITHUB_TOKEN: ((kind_deployment_github_token))
+      GITHUB_TOKEN: ((ard_wg_gitbot_token))
       GITHUB_REPO: cloudfoundry/kind-deployment
       WORKFLOW_FILE: kind-smoke.yaml
       WORKFLOW_REF: main
@@ -2176,7 +2176,7 @@ jobs:
   - task: trigger-kind-cats-workflow
     file: cf-deployment-develop/ci/tasks/trigger-github-workflow/task.yml
     params:
-      GITHUB_TOKEN: ((kind_deployment_github_token))
+      GITHUB_TOKEN: ((ard_wg_gitbot_token))
       GITHUB_REPO: cloudfoundry/kind-deployment
       WORKFLOW_FILE: kind-cats.yaml
       WORKFLOW_REF: main
