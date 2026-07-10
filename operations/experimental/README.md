@@ -14,7 +14,7 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 | Name | Purpose | Notes | Currently validated in Release Integration CI pipelines? |
 |:---  |:---     |:---   |:---   |
 | [`add-cflinuxfs4.yml`](add-cflinuxfs4.yml) | Add [cflinuxfs4](https://github.com/cloudfoundry/cflinuxfs4) stack. | ***Deprecated as we integrate cflinuxfs4 directly into cf-deployment.yml*** | **NO** |
-| [`add-cflinuxfs5.yml`](add-cflinuxfs5.yml) | Add [cflinuxfs5](https://github.com/cloudfoundry/cflinuxfs5) stack. | Only adds cflinuxfs5 stack; does NOT make it the default stack. | **NO** |
+| [`add-cflinuxfs5.yml`](add-cflinuxfs5.yml) | Add [cflinuxfs5](https://github.com/cloudfoundry/cflinuxfs5) stack. | ***Deprecated as we integrate cflinuxfs5 directly into cf-deployment.yml*** | **NO** |
 | [`add-metric-store.yml`](add-metric-store.yml) | **PROMOTED: use `../use-metric-store.yml`** | | **NO** |
 | [`add-otel-collector.yml`](add-otel-collector.yml) | Adds an [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/) to all Linux VMs to egress metrics and traces. | `otel_collector_config` must be filled in with valid OTel Collector configuration. | **NO** |
 | [`add-otel-collector-windows.yml`](add-otel-collector-windows.yml) | Adds an [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/) to all Windows 2019 VMs to egress metrics and traces. | `otel_collector_config` must be filled in with valid OTel Collector configuration. Requires `./add-otel-collector.yml` and `../windows2019-cell.yml`.  | **NO** |
@@ -40,7 +40,7 @@ This is the README for Experimental Ops-files. To learn more about `cf-deploymen
 | [`infrastructure-metrics.yml`](infrastructure-metrics.yml) | Add the Prometheus node exporter and Loggregator Prom Scraper to addons. This puts infrastructure metrics into Loggregator's metric stream. | | **NO** |
 | [`rootless-containers.yml`](rootless-containers.yml) | Enable rootless garden-runc containers. | Requires garden-runc 1.9.5 or later and grootfs 0.27.0 or later. This ops file **cannot** be deployed in conjunction with `enable-oci-phase-1.yml`. | **NO** |
 | [`set-cflinuxfs4-default-stack.yml`](set-cflinuxfs4-default-stack.yml) | Set the default stack to [cflinuxfs4](https://github.com/cloudfoundry/cflinuxfs4). | ***Deprecated as we integrate cflinuxfs4 directly into cf-deployment.yml*** Requires `./add-cflinuxfs4.yml`.  | **NO** |
-| [`set-cflinuxfs5-default-stack.yml`](set-cflinuxfs5-default-stack.yml) | Set the default stack to [cflinuxfs5](https://github.com/cloudfoundry/cflinuxfs5). | Requires `./add-cflinuxfs5.yml`. | **NO** |
+| [`set-cflinuxfs5-default-stack.yml`](set-cflinuxfs5-default-stack.yml) | Set the default stack to [cflinuxfs5](https://github.com/cloudfoundry/cflinuxfs5). | cflinuxfs5 is now included in cf-deployment.yml. This ops file no longer requires `./add-cflinuxfs5.yml`. | **NO** |
 | [`set-cpu-weight.yml`](set-cpu-weight.yml) | **PROMOTED: use `../set-cpu-weight.yml`** | | **NO** |
 | [`set-cpu-weight-windows2019.yml`](set-cpu-weight-windows2019.yml) | CPU shares for each garden container are proportional to its memory limits. | Requires `../windows2019-cell.yml` and `../use-online-windows2019fs.yml` | **NO** |
 | [`use-compiled-releases-windows.yml`](use-compiled-releases-windows.yml) | Reverts to source version of releases required for Windows cells | Intended for use with `use-compiled-releases.yml` and any of `windows*-cell.yml` | **YES** |

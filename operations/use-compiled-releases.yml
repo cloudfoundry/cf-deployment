@@ -2,12 +2,12 @@
   path: /releases/name=binary-buildpack
   value:
     name: binary-buildpack
-    sha1: 0031d1aaa73cd6daabd292c28075ee694a3f2ba7
+    sha1: sha256:108f1153f197d1810813bbf4539066a7bc95669908d14c1259a6d6df670636e6
     stemcell:
       os: ubuntu-noble
       version: "1.333"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/binary-buildpack-1.1.21-ubuntu-noble-1.333-20260601-093456-402492496.tgz
-    version: 1.1.21
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/binary-buildpack-2.0.0-ubuntu-noble-1.333-20260618-153429-750368822.tgz
+    version: 2.0.0
 - type: replace
   path: /releases/name=bosh-dns-aliases
   value:
@@ -22,52 +22,52 @@
   path: /releases/name=bpm
   value:
     name: bpm
-    sha1: sha256:7eaddeae7b62e3a62046fed743b1b7aa77ed25a7d3000ada411773c077bff3d0
+    sha1: sha256:6e12187662cfac960b5f563d79ed424dae3ca29068c31760e70c012bcaa7e458
     stemcell:
       os: ubuntu-noble
       version: "1.333"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/bpm-1.4.33-ubuntu-noble-1.333-20260609-101306-245286918.tgz
-    version: 1.4.33
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/bpm-1.4.34-ubuntu-noble-1.333-20260708-023406-823699938.tgz
+    version: 1.4.34
 - type: replace
   path: /releases/name=capi
   value:
     name: capi
-    sha1: sha256:6543eead27e564561ce11215ef0a771045565e276d836bac47dbb6457e0ccaaf
+    sha1: sha256:3978c856c7ee0ce56e0520b4357046f8b9c9edfa431b98f224374950655541dd
     stemcell:
       os: ubuntu-noble
       version: "1.333"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/capi-1.237.0-ubuntu-noble-1.333-20260610-081820-141408765.tgz
-    version: 1.237.0
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/capi-1.239.0-ubuntu-noble-1.333-20260706-180905-215985409.tgz
+    version: 1.239.0
 - type: replace
   path: /releases/name=cf-cli
   value:
     name: cf-cli
-    sha1: 7c2c43be1772e10ba938b1058b8e49b3e7f4dd18
+    sha1: sha256:f1996f9f408928e0b2adf4d624794e2d858224327526fd97bf44a44cbd5d79d1
     stemcell:
       os: ubuntu-noble
       version: "1.333"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/cf-cli-2.8.0-ubuntu-noble-1.333-20260601-093444-009767965.tgz
-    version: 2.8.0
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/cf-cli-2.9.0-ubuntu-noble-1.333-20260702-235726-982648231.tgz
+    version: 2.9.0
 - type: replace
   path: /releases/name=cf-networking
   value:
     name: cf-networking
-    sha1: sha256:13c3eb03caaa45d045a87428075d2823593290bcc9162ba853ed795a6ceaa18f
+    sha1: sha256:7946ed4b49eb126c0ffcd2a2e36f4f73f18aef4e3b83a77b40b3e039d1a17636
     stemcell:
       os: ubuntu-noble
       version: "1.333"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/cf-networking-3.115.0-ubuntu-noble-1.333-20260601-182520-129249715.tgz
-    version: 3.115.0
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/cf-networking-3.117.0-ubuntu-noble-1.333-20260709-162732-550857204.tgz
+    version: 3.117.0
 - type: replace
   path: /releases/name=cf-smoke-tests
   value:
     name: cf-smoke-tests
-    sha1: sha256:d74d02fe8ab425b442ab31b9db2b204a1137296b2dde922786c2df14add1f25b
+    sha1: sha256:db3dd2c469237c061100d387eebad1ef864da9f4cbfeecd89c2dffa6b4ae6d72
     stemcell:
       os: ubuntu-noble
       version: "1.333"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/cf-smoke-tests-42.0.263-ubuntu-noble-1.333-20260603-195006-086069912.tgz
-    version: 42.0.263
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/cf-smoke-tests-42.0.267-ubuntu-noble-1.333-20260708-061319-856333088.tgz
+    version: 42.0.267
 - type: replace
   path: /releases/name=cflinuxfs4
   value:
@@ -82,22 +82,22 @@
   path: /releases/name=credhub
   value:
     name: credhub
-    sha1: sha256:01108f11b0e1e51acc0d57cb5442b2753624e31f60064b6df7e0a152ee002326
+    sha1: sha256:7871be35deb4af666ad7fb96239252ab7ff04870f2cc09b6ddb396eabb150005
     stemcell:
       os: ubuntu-noble
       version: "1.333"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/credhub-2.15.9-ubuntu-noble-1.333-20260612-194318-312175198.tgz
-    version: 2.15.9
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/credhub-2.15.12-ubuntu-noble-1.333-20260702-214633-863032771.tgz
+    version: 2.15.12
 - type: replace
   path: /releases/name=diego
   value:
     name: diego
-    sha1: sha256:31d23d8f3fe9dabe7b578ca0d816ebe0fa79b70218b1ed35fb8f20ab04a64b78
+    sha1: sha256:1034387fd732556f6dcf2bced06eb6ef18d10f553d65cb1077089965fb6facef
     stemcell:
       os: ubuntu-noble
       version: "1.333"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/diego-2.138.0-ubuntu-noble-1.333-20260603-171915-013340622.tgz
-    version: 2.138.0
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/diego-2.141.0-ubuntu-noble-1.333-20260709-230408-170730105.tgz
+    version: 2.141.0
 - type: replace
   path: /releases/name=dotnet-core-buildpack
   value:
@@ -112,92 +112,92 @@
   path: /releases/name=garden-runc
   value:
     name: garden-runc
-    sha1: 6eb2f859284d58bf55d2b6675c01b4e8c1591d08
+    sha1: sha256:1fb55296c6a781a3482262e87f76a3ee4dad8ee7bc42d81d007e5cf86e30b526
     stemcell:
       os: ubuntu-noble
       version: "1.333"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/garden-runc-1.90.0-ubuntu-noble-1.333-20260601-094103-666809926.tgz
-    version: 1.90.0
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/garden-runc-1.92.0-ubuntu-noble-1.333-20260623-163757-805692932.tgz
+    version: 1.92.0
 - type: replace
   path: /releases/name=go-buildpack
   value:
     name: go-buildpack
-    sha1: sha256:ee068860031c929eabf8a26678a23410eef2551e95d623684ba420dfd62a415a
+    sha1: sha256:9f3d726ad5b2e4865c9e1104388dcb86ed692ab6a557f32a9a66cbd39674ddeb
     stemcell:
       os: ubuntu-noble
       version: "1.333"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/go-buildpack-1.10.47-ubuntu-noble-1.333-20260602-160709-726204827.tgz
-    version: 1.10.47
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/go-buildpack-1.10.48-ubuntu-noble-1.333-20260701-142540-630887718.tgz
+    version: 1.10.48
 - type: replace
   path: /releases/name=java-buildpack
   value:
     name: java-buildpack
-    sha1: sha256:358f40f0a258ac15eac1318638459768a025154d6d40b80d1420694b0cad56a5
+    sha1: sha256:fc044c6d76cb37280dc5e516c6b07d538b60072b2e9baad165f353157f4000ff
     stemcell:
       os: ubuntu-noble
       version: "1.333"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/java-buildpack-5.0.4-ubuntu-noble-1.333-20260602-131300-761683236.tgz
-    version: 5.0.4
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/java-buildpack-5.0.5-ubuntu-noble-1.333-20260701-141556-677387644.tgz
+    version: 5.0.5
 - type: replace
   path: /releases/name=log-cache
   value:
     name: log-cache
-    sha1: sha256:2aa237a22da78ee61b690c001efb1ef99a82191e3c4f146a173780c8acd99859
+    sha1: sha256:7d97d29f8eafd2c84da41cfd947fefd8ab5f2efc503cc80cdab874a461610170
     stemcell:
       os: ubuntu-noble
       version: "1.333"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/log-cache-3.2.10-ubuntu-noble-1.333-20260606-224343-660315781.tgz
-    version: 3.2.10
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/log-cache-3.2.12-ubuntu-noble-1.333-20260709-022003-717186593.tgz
+    version: 3.2.12
 - type: replace
   path: /releases/name=loggregator
   value:
     name: loggregator
-    sha1: sha256:ec5b9eebc243199b598c7a858eb938f977599421da42b5fcf487a21912de1c20
+    sha1: sha256:a191b4fed97c9e8cd8c8b97de0a1f386a5df5bf4b8f8b7128c23a594dcb44612
     stemcell:
       os: ubuntu-noble
       version: "1.333"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/loggregator-107.0.31-ubuntu-noble-1.333-20260606-211901-354366142.tgz
-    version: 107.0.31
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/loggregator-107.0.33-ubuntu-noble-1.333-20260709-021803-759432649.tgz
+    version: 107.0.33
 - type: replace
   path: /releases/name=loggregator-agent
   value:
     name: loggregator-agent
-    sha1: sha256:c2db0553456efdd4feb80a7515dbf330b2f48bc7e2f603f72ce6d552d1e3e110
+    sha1: sha256:1fdd340459eccda95823e111e9ff58c420e417ee05eb1c9ee257eb1b2679d34b
     stemcell:
       os: ubuntu-noble
       version: "1.333"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/loggregator-agent-8.3.22-ubuntu-noble-1.333-20260606-213104-998531838.tgz
-    version: 8.3.22
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/loggregator-agent-8.3.24-ubuntu-noble-1.333-20260709-011230-956673162.tgz
+    version: 8.3.24
 - type: replace
   path: /releases/name=nats
   value:
     name: nats
-    sha1: sha256:8b084577588504851e995ab67b2b838cfe03dc84c0fbce5c4611221acf4d5870
+    sha1: sha256:f74b5509169eb58485ac67444d9d57e2d8d6ac548b0d264a01df50f55dde9195
     stemcell:
       os: ubuntu-noble
       version: "1.333"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/nats-57.9.0-ubuntu-noble-1.333-20260611-182439-969665555.tgz
-    version: 57.9.0
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/nats-57.12.0-ubuntu-noble-1.333-20260708-193623-621735231.tgz
+    version: 57.12.0
 - type: replace
   path: /releases/name=nginx-buildpack
   value:
     name: nginx-buildpack
-    sha1: sha256:cbc296cfaad7e10f5431bb57846359c5732130efa2565d74a5b7135d9cf6770d
+    sha1: sha256:7610b863d9333c3e0aa9cfb3354b38518bd6cc0e87d899c8d5ad26a6d469d4ea
     stemcell:
       os: ubuntu-noble
       version: "1.333"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/nginx-buildpack-1.2.38-ubuntu-noble-1.333-20260602-153538-874745556.tgz
-    version: 1.2.38
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/nginx-buildpack-1.2.39-ubuntu-noble-1.333-20260701-141539-044323855.tgz
+    version: 1.2.39
 - type: replace
   path: /releases/name=nodejs-buildpack
   value:
     name: nodejs-buildpack
-    sha1: sha256:2ef9379eb4965dcc0fb65ec3dfb74064a57562cf5245149a0cc3ba3615dc37d7
+    sha1: sha256:3dd2c5f6d3ad4605dc136015104910644716e14abc2f1988dda635a2b1a2b3da
     stemcell:
       os: ubuntu-noble
       version: "1.333"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/nodejs-buildpack-1.9.2-ubuntu-noble-1.333-20260602-135201-787057149.tgz
-    version: 1.9.2
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/nodejs-buildpack-1.9.3-ubuntu-noble-1.333-20260701-165556-728340386.tgz
+    version: 1.9.3
 - type: replace
   path: /releases/name=php-buildpack
   value:
@@ -222,12 +222,12 @@
   path: /releases/name=python-buildpack
   value:
     name: python-buildpack
-    sha1: sha256:57de768c5bfaec41cc03ee3462aa878a1dd7c2cab0e85950b9df988e842678d2
+    sha1: sha256:86070562c9096027553d49a30100d06bae45662fcbf810fa24d0fd7bc9c078d2
     stemcell:
       os: ubuntu-noble
       version: "1.333"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/python-buildpack-1.9.1-ubuntu-noble-1.333-20260602-154133-20415873.tgz
-    version: 1.9.1
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/python-buildpack-1.9.2-ubuntu-noble-1.333-20260701-165449-26896113.tgz
+    version: 1.9.2
 - type: replace
   path: /releases/name=r-buildpack
   value:
@@ -242,12 +242,12 @@
   path: /releases/name=routing
   value:
     name: routing
-    sha1: sha256:b08ce851ba1753b422365128fd99673a0b5750788712dd23adc49e0643ccf6b5
+    sha1: sha256:b01e9ecfeaf8ed57b3bd3ac6aaf070943296627fbc1970fbf7d2533442c1e8f5
     stemcell:
       os: ubuntu-noble
       version: "1.333"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/routing-0.385.0-ubuntu-noble-1.333-20260611-165221-374345143.tgz
-    version: 0.385.0
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/routing-0.386.0-ubuntu-noble-1.333-20260709-204208-844696086.tgz
+    version: 0.386.0
 - type: replace
   path: /releases/name=ruby-buildpack
   value:
@@ -262,39 +262,39 @@
   path: /releases/name=silk
   value:
     name: silk
-    sha1: sha256:7345781f1f27ccb29233eeef869cee49cab8cc67cebc78f53d993266a531f2ec
+    sha1: sha256:a3de3bec9006795635296c81863f77eb746ca56ab68d58cae88dc7b58f729a51
     stemcell:
       os: ubuntu-noble
       version: "1.333"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/silk-3.115.0-ubuntu-noble-1.333-20260601-175935-201938732.tgz
-    version: 3.115.0
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/silk-3.117.0-ubuntu-noble-1.333-20260709-162833-299587144.tgz
+    version: 3.117.0
 - type: replace
   path: /releases/name=staticfile-buildpack
   value:
     name: staticfile-buildpack
-    sha1: sha256:99f785e4278c523c9f5b2960aaa7d2d17691146f0527563ec5fea993a168f8e2
+    sha1: sha256:86d624d0c8b7e602410f6854cdaa569c01ab7d40bd7552c29a862033bc26fc72
     stemcell:
       os: ubuntu-noble
       version: "1.333"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/staticfile-buildpack-1.6.38-ubuntu-noble-1.333-20260602-171954-490885099.tgz
-    version: 1.6.38
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/staticfile-buildpack-1.6.39-ubuntu-noble-1.333-20260701-141227-9340519.tgz
+    version: 1.6.39
 - type: replace
   path: /releases/name=statsd-injector
   value:
     name: statsd-injector
-    sha1: sha256:6da8219064638d6507d340452981aaaa839ff382c2af8815aeb30909ac9519c4
+    sha1: sha256:5dd5c6e809a3fae81b86782e9bee45eaeb880a97fd511ac721f82fc7ae7de222
     stemcell:
       os: ubuntu-noble
       version: "1.333"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/statsd-injector-1.11.56-ubuntu-noble-1.333-20260606-234555-816714807.tgz
-    version: 1.11.56
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/statsd-injector-1.11.58-ubuntu-noble-1.333-20260709-002054-008822696.tgz
+    version: 1.11.58
 - type: replace
   path: /releases/name=uaa
   value:
     name: uaa
-    sha1: sha256:bab8c47b16e1b87a8ddb90fc30fab55808f38678cf6c0c933428ece08c7ea391
+    sha1: sha256:6958212e18f604eca7668aba53e882d9021eb878625961cf01cfbdefdb0f1c3a
     stemcell:
       os: ubuntu-noble
       version: "1.333"
-    url: https://storage.googleapis.com/cf-deployment-compiled-releases/uaa-78.16.0-ubuntu-noble-1.333-20260601-135256-972335557.tgz
-    version: 78.16.0
+    url: https://storage.googleapis.com/cf-deployment-compiled-releases/uaa-79.3.0-ubuntu-noble-1.333-20260630-010444-467622878.tgz
+    version: 79.3.0

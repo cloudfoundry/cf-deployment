@@ -1053,8 +1053,6 @@ jobs:
     - get: relint-envs
     - get: cf-deployment-develop
     - get: cf-deployment-concourse-tasks
-      params:
-        tarball: false
     - get: #@ r.name + "-offline-release"
       trigger: true
       params:
