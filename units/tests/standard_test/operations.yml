@@ -23,11 +23,6 @@ enable-cc-worker-metrics.yml: {}
 enable-scheduler-metrics.yml: {}
 enable-cpu-throttling.yml: {}
 enable-identity-aware-routing.yml: {}
-enable-identity-aware-routing-cflinuxfs5.yml:
-  ops:
-  - experimental/add-cflinuxfs5.yml
-  - enable-identity-aware-routing.yml
-  - enable-identity-aware-routing-cflinuxfs5.yml
 enable-nfs-ldap.yml:
   ops:
   - enable-nfs-volume-service.yml

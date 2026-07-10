@@ -37,6 +37,13 @@
   path: /instance_groups/name=diego-cell/jobs/name=cflinuxfs4-rootfs-setup/properties/cflinuxfs4-rootfs/trusted_certs/-
   value: ((apps_identity_ca.certificate))
 
+# Trust apps_identity_ca in cflinuxfs5 app containers so outbound TLS to
+# *.apps.identity succeeds. cflinuxfs5-rootfs-setup is part of cf-deployment.yml
+# unconditionally (see #1354), so no companion ops-file is needed here.
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/name=cflinuxfs5-rootfs-setup/properties/cflinuxfs5-rootfs/trusted_certs/-
+  value: ((apps_identity_ca.certificate))
+
 # Trust apps_identity_ca in the Diego rep container trust store (Envoy sidecars).
 - type: replace
   path: /instance_groups/name=diego-cell/jobs/name=rep/properties/containers/trusted_ca_certificates/-
