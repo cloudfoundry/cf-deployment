@@ -94,57 +94,11 @@ is in flight at a time.
 
 ---
 
-## Risks
-
-### 1. Missing artifacts
-
-When cf-deployment bumps a version on `develop`, the corresponding container
-image or Helm chart may not yet exist. The artifact creation pipeline in
-kind-deployment works as follows:
-
-- A new GitHub release is created for a BOSH release repo (e.g. capi-release)
-- Renovate bumps the version in `cf-k8s-releases` (runs once a day)
-- The Renovate PR is verified and auto-merged
-- On merge to `main`, Helm charts and Docker images are built and published
-
-Two cases can cause a missing artifact:
-- **cf-deployment is faster than Renovate** — Renovate runs daily, so there
-  can be up to ~24h + verification time before the artifact exists.
-- **Verification failed** — the artifact could not be built automatically.
-
-**Mitigation:** Kind is non-blocking, so missing artifacts won't hold up
-releases.
-
-### 2. GitHub API availability
-
-The task depends on the GitHub API for dispatch and polling.
-
-**Mitigation:** Uses an authenticated token (rate-limit is not a concern).
-Polling retries for up to 10 minutes.
-
-### 3. Serial group throughput
-
-Smoke and CATS run sequentially. If the pipeline triggers frequently, kind
-validation may fall behind.
-
-**Mitigation:** Can split into separate serial groups, or drop smoke tests
-entirely (CATS is a superset — it cannot miss errors that smoke tests would
-catch, though smoke tests provide a faster signal).
-
-### 4. Develop ref drift
-
-The workflow syncs from `develop` at execution time, which may have advanced
-since the Concourse trigger.
-
-**Mitigation:** Acceptable for an informational check. A future enhancement
-could pass an exact commit SHA as a workflow input parameter.
-
----
-
 ## Credentials
 
-The pipeline uses a dedicated token from the WG secret manager (stored as a
-Concourse secret) with `actions: write` on `cloudfoundry/kind-deployment`.
+The pipeline uses `((kind_deployment_github_token))` as the Concourse secret
+name. The value comes from Google Secret Manager: secret `ard-wg-k8s-gitbot`,
+version 2 (labelled "cf-deployment"), created by the WG for this integration.
 
 ---
 
