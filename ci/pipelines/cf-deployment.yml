@@ -609,6 +609,7 @@ jobs:
       REGENERATE_CREDENTIALS: true
   - task: update-integration-configs
     file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
+    attempts: 3
     params:
       BBL_STATE_DIR: environments/test/luna/bbl-state
       CATS_INTEGRATION_CONFIG_FILE: environments/test/luna/integration_config.json
@@ -711,6 +712,7 @@ jobs:
         passed: [ fresh-deploy ]
     - task: update-integration-configs
       file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
+      attempts: 3
       params:
         BBL_STATE_DIR: environments/test/luna/bbl-state
         CATS_INTEGRATION_CONFIG_FILE: environments/test/luna/integration_config.json
@@ -1301,6 +1303,7 @@ jobs:
       - get: cf-deployment-concourse-tasks
     - task: update-integration-configs
       file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
+      attempts: 3
       params:
         BBL_STATE_DIR: environments/test/hermione/bbl-state
         CATS_INTEGRATION_CONFIG_FILE: environments/test/hermione/integration_config.json
@@ -1999,6 +2002,7 @@ jobs:
         SKIP_STEMCELL_UPLOAD: true
     - task: update-integration-configs
       file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
+      attempts: 3
       params:
         BBL_STATE_DIR: environments/test/snape/bbl-state
         CATS_INTEGRATION_CONFIG_FILE: environments/test/snape/integration_config.json
@@ -2083,6 +2087,7 @@ jobs:
               passed: [ fips-deploy ]
         - task: update-integration-configs
           file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
+          attempts: 3
           params:
             BBL_STATE_DIR: environments/test/snape/bbl-state
             CATS_INTEGRATION_CONFIG_FILE: environments/test/snape/integration_config.json
