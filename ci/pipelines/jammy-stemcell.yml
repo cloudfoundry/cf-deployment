@@ -130,6 +130,7 @@ jobs:
                 - get: cf-deployment-concourse-tasks
                 - get: cf-acceptance-tests-rc
           - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
+            attempts: 3
             input_mapping:
               bbl-state: relint-envs
               cf-acceptance-tests: cf-acceptance-tests-rc
