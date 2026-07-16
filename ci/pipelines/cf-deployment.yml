@@ -891,6 +891,7 @@ jobs:
     input_mapping:
       bbl-state: relint-envs
   - task: add-tcp-domain
+    attempts: 3
     file: runtime-ci/tasks/add-tcp-domain/task.yml
     input_mapping:
       bbl-state: relint-envs
@@ -1173,6 +1174,7 @@ jobs:
     input_mapping:
       bbl-state: relint-envs
   - task: add-tcp-domain
+    attempts: 3
     file: runtime-ci/tasks/add-tcp-domain/task.yml
     input_mapping:
       bbl-state: relint-envs
