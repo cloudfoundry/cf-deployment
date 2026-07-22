@@ -1,5 +1,4 @@
 ---
-add-cflinuxfs4.yml: {}
 add-cflinuxfs5.yml: {}
 add-ipv6-security-group.yml: {}
 add-metric-store.yml: {}
@@ -25,7 +24,6 @@ disable-logs-in-firehose.yml: {}
 disable-logs-in-firehose-windows2019.yml:
   ops:
   - ../windows2019-cell.yml
-disable-v2-api.yml: {}
 enable-app-log-rate-limiting.yml:
   vars:
   - app_log_rate_limit=100
@@ -34,7 +32,6 @@ enable-app-log-rate-limiting-windows2019.yml:
   - ../windows2019-cell.yml
   vars:
   - app_log_rate_limit=100
-enable-bpm-garden.yml: {}
 enable-containerd-for-processes.yml: {}
 enable-cpu-throttling.yml: {}
 enable-direct-io-grootfs.yml: {}
@@ -50,9 +47,6 @@ enable-traffic-to-internal-networks.yml: {}
 fast-deploy-with-downtime-and-danger.yml: {}
 infrastructure-metrics.yml: {}
 rootless-containers.yml: {}
-set-cflinuxfs4-default-stack.yml:
-  ops:
-  - ./add-cflinuxfs4.yml
 set-cflinuxfs5-default-stack.yml: {}
 set-cpu-weight-windows2019.yml:
   ops:
@@ -65,12 +59,6 @@ use-compiled-releases-windows.yml:
   - use-compiled-releases-windows.yml
 use-create-swap-delete-vm-strategy.yml: {}
 use-native-garden-runc-runner.yml: {}
-use-trusted-ca-cert-for-apps-cflinuxfs4.yml:
-  ops:
-    - add-cflinuxfs4.yml
-  varsfiles:
-    - ../example-vars-files/vars-use-trusted-ca-cert-for-apps.yml
-use-mysql-version-8.4.yml: {}
 disable-tls-tcp-routing-windows-stage-1-unproxied-ports.yml:
   ops:
   - ../windows2019-cell.yml
