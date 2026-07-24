@@ -2172,10 +2172,7 @@ jobs:
     - get: cf-deployment-develop
       trigger: true
       passed:
-      - unit-test-ops-files
-      - lint-cf-deployment-manifest
-      - unit-test-golang-tests
-      - unit-test-update-releases-coverage
+      - kind-smoke-tests
     - get: runtime-ci
   - task: trigger-kind-cats-workflow
     file: runtime-ci/tasks/trigger-github-workflow/task.yml
