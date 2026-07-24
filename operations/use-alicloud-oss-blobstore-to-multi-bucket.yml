@@ -16,8 +16,6 @@
     aliyun_oss_bucket: ((buildpack_directory_key))
     aliyun_oss_endpoint: ((blobstore_endpoint))
     aliyun_region_id: ((blobstore_region))
-- type: remove
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/buildpacks/fog_connection
 
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/droplets/blobstore_type?
@@ -33,8 +31,6 @@
     aliyun_oss_bucket: ((droplet_directory_key))
     aliyun_oss_endpoint: ((blobstore_endpoint))
     aliyun_region_id: ((blobstore_region))
-- type: remove
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/droplets/fog_connection
 
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/packages/blobstore_type?
@@ -50,8 +46,6 @@
     aliyun_oss_bucket: ((app_package_directory_key))
     aliyun_oss_endpoint: ((blobstore_endpoint))
     aliyun_region_id: ((blobstore_region))
-- type: remove
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/packages/fog_connection
 
 - type: replace
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/resource_pool/blobstore_type?
@@ -67,8 +61,6 @@
     aliyun_oss_bucket: ((resource_directory_key))
     aliyun_oss_endpoint: ((blobstore_endpoint))
     aliyun_region_id: ((blobstore_region))
-- type: remove
-  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/resource_pool/fog_connection
 
 # ========= cc-worker =========
 - type: replace
@@ -80,8 +72,6 @@
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/buildpacks/connection_config?
   value: *buildpack-blobstore-properties
-- type: remove
-  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/buildpacks/fog_connection
 
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/droplets/blobstore_type?
@@ -92,8 +82,6 @@
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/droplets/connection_config?
   value: *droplet-blobstore-properties
-- type: remove
-  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/droplets/fog_connection
 
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/packages/blobstore_type?
@@ -104,8 +92,6 @@
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/packages/connection_config?
   value: *package-blobstore-properties
-- type: remove
-  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/packages/fog_connection
 
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/resource_pool/blobstore_type?
@@ -116,8 +102,6 @@
 - type: replace
   path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/resource_pool/connection_config?
   value: *resource-pool-blobstore-properties
-- type: remove
-  path: /instance_groups/name=cc-worker/jobs/name=cloud_controller_worker/properties/cc/resource_pool/fog_connection
 
 # ========= scheduler (clock) =========
 - type: replace
@@ -129,8 +113,6 @@
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/buildpacks/connection_config?
   value: *buildpack-blobstore-properties
-- type: remove
-  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/buildpacks/fog_connection
 
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/droplets/blobstore_type?
@@ -141,8 +123,6 @@
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/droplets/connection_config?
   value: *droplet-blobstore-properties
-- type: remove
-  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/droplets/fog_connection
 
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/packages/blobstore_type?
@@ -153,8 +133,6 @@
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/packages/connection_config?
   value: *package-blobstore-properties
-- type: remove
-  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/packages/fog_connection
 
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/resource_pool/blobstore_type?
@@ -165,5 +143,3 @@
 - type: replace
   path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/resource_pool/connection_config?
   value: *resource-pool-blobstore-properties
-- type: remove
-  path: /instance_groups/name=scheduler/jobs/name=cloud_controller_clock/properties/cc/resource_pool/fog_connection
