@@ -88,15 +88,6 @@ use-external-blobstore.yml:
 use-external-dbs.yml:
   varsfiles:
   - example-vars-files/vars-use-external-dbs.yml
-use-gcs-blobstore-access-key.yml:
-  ops:
-  - use-external-blobstore.yml
-  - use-gcs-blobstore-access-key.yml
-  vars:
-  - blobstore_access_key_id=TEST_ACCESS_KEY
-  - blobstore_secret_access_key=TEST_SECRET_ACCESS_KEY
-  varsfiles:
-  - example-vars-files/vars-use-gcs-blobstore-access-key.yml
 use-gcs-blobstore-service-account.yml:
   ops:
   - use-external-blobstore.yml
