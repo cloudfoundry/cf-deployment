@@ -41,6 +41,8 @@ groups:
   - fips-smoke-tests
   - fips-cats
   - fips-delete-deployment
+  - kind-smoke-tests
+  - kind-cats
   - bless-manifest
   - ship-it-patch
   - ship-it-minor
@@ -136,6 +138,10 @@ groups:
     - fips-cats
     - fips-delete-deployment
     - bless-manifest
+- name: kind-neville
+  jobs:
+  - kind-smoke-tests
+  - kind-cats
 - name: ship-it
   jobs:
   - ship-it-patch
@@ -2134,6 +2140,49 @@ jobs:
             BBL_STATE_DIR: environments/test/snape/bbl-state
         - put: fips-pool
           params: {release: fips-pool}
+
+- name: kind-smoke-tests
+  public: true
+  serial_groups: [ kind-workflows ]
+  plan:
+  - in_parallel:
+    - get: cf-deployment-develop
+      trigger: true
+      passed:
+      - unit-test-ops-files
+      - lint-cf-deployment-manifest
+      - unit-test-golang-tests
+      - unit-test-update-releases-coverage
+    - get: runtime-ci
+  - task: trigger-kind-smoke-workflow
+    file: runtime-ci/tasks/trigger-github-workflow/task.yml
+    params:
+      GITHUB_TOKEN: ((kind_deployment_github_token))
+      GITHUB_REPO: cloudfoundry/kind-deployment
+      WORKFLOW_FILE: kind-smoke.yaml
+      WORKFLOW_REF: main
+      WORKFLOW_INPUTS: '{"minimal": "true", "fresh-validation": "true"}'
+    timeout: 3h
+
+- name: kind-cats
+  public: true
+  serial_groups: [ kind-workflows ]
+  plan:
+  - in_parallel:
+    - get: cf-deployment-develop
+      trigger: true
+      passed:
+      - kind-smoke-tests
+    - get: runtime-ci
+  - task: trigger-kind-cats-workflow
+    file: runtime-ci/tasks/trigger-github-workflow/task.yml
+    params:
+      GITHUB_TOKEN: ((kind_deployment_github_token))
+      GITHUB_REPO: cloudfoundry/kind-deployment
+      WORKFLOW_FILE: kind-cats.yaml
+      WORKFLOW_REF: main
+      WORKFLOW_INPUTS: '{"fresh-validation": "true"}'
+    timeout: 4h
 
 - name: bless-manifest
   public: true
