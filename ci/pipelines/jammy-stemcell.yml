@@ -57,6 +57,7 @@ jobs:
             operations/use-postgres.yml
           SYSTEM_DOMAIN: cf.bellatrix.env.wg-ard.ci.cloudfoundry.org
           SKIP_STEMCELL_UPLOAD: true
+          REGENERATE_CREDENTIALS: true
         task: deploy-cf
       - in_parallel:
           steps:
