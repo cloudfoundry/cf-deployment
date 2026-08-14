@@ -1,6 +1,13 @@
 # jammy-stemcell
 
-Test cf-d on the Ubuntu Jammy stemcell.
+Backward-compatibility pipeline ensuring `cflinuxfs4` keeps working on the
+Ubuntu **Jammy** stemcell after the base `cf-deployment.yml` default stack
+migrates to `cflinuxfs5`.
+
+The default stack is explicitly pinned to `cflinuxfs4` via
+[`set-cflinuxfs4-default-stack.yml`](../../operations/set-cflinuxfs4-default-stack.yml)
+so the pipeline remains meaningful even after the fs5 flip.
+
 
 ## Triggers
 
