@@ -56,6 +56,7 @@ This is the README for Ops-files. To learn more about `cf-deployment`, go to the
 | [`scale-database-cluster.yml`](scale-database-cluster.yml) | Scales cf-deployment database to 3 nodes across 3 zones (z1, z2, z3). | Cannot be used with postgres as it will not scale. | **YES** |
 | [`scale-to-one-az.yml`](scale-to-one-az.yml) | Scales cf-deployment down to a single instance per instance group, placing them all into a single AZ. | Effectively halves the deployment's footprint. Should be applied before other ops files. | **NO** |
 | [`set-bbs-active-key.yml`](set-bbs-active-key.yml) | Allows a deployer to set the `bbs` active key label by passing a variable `diego_bbs_active_key_label` |  | **YES** |
+| [`set-cflinuxfs4-default-stack.yml`](set-cflinuxfs4-default-stack.yml) | Sets `cflinuxfs4` as the default stack for Cloud Controller and Diego's Docker staging. | | **YES** |
 | [`set-cpu-weight.yml`](set-cpu-weight.yml) | CPU shares for each garden container are proportional to its memory limits. | | **YES** |
 | [`set-router-static-ips.yml`](set-router-static-ips.yml) | Allows a deployer to set the static IPs for the `router` VMs by passing a variable `router_static_ips` | `router_static_ips` variable must be provided as a compacted YAML array, e.g. `-v router_static_ips=[10.0.16.4,10.0.47.5]` | **NO** |
 | [`stop-skipping-tls-validation.yml`](stop-skipping-tls-validation.yml) | Enforces `TLS` validation for all components which skip it in the base `cf-deployment.yml` manifest. | See the base [README](../README.md#tls) for details. | **YES** |
