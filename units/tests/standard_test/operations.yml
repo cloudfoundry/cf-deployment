@@ -46,6 +46,10 @@ scale-to-one-az.yml: {}
 set-bbs-active-key.yml:
   vars:
   - diego_bbs_active_key_label=my_key_name
+set-cflinuxfs4-default-stack.yml:
+  pathvalidator:
+    path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/default_stack
+    expectedvalue: cflinuxfs4
 set-cpu-weight.yml: {}
 set-router-static-ips.yml:
   vars:
