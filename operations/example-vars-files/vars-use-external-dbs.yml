@@ -4,6 +4,12 @@ external_cc_database_name: example-cc-db-name
 external_cc_database_address: cc-db.example.com
 external_cc_database_username: example-cc-db-username
 external_cc_database_password: example-cc-db-password
+# SSL mode for the Cloud Controller database connection. Used when no
+# ccdb.ca_cert is configured. Set the value for your scheme:
+#   MySQL    (mysql2 / MariaDB Connector-C): disabled or required
+#   Postgres (libpq):                        disable, allow, prefer, or require
+# Leave as ~ to defer to the database driver default.
+external_cc_database_ssl_mode: ~
 external_uaa_database_name: example-uaa-db-name
 external_uaa_database_address: uaa-db.example.com
 external_uaa_database_username: example-uaa-db-username
