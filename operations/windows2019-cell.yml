@@ -1,5 +1,5 @@
-- path: /instance_groups/-
-  type: replace
+- type: replace
+  path: /instance_groups/-
   value:
     azs:
     - z1
@@ -168,83 +168,83 @@
     vm_extensions:
     - 100GB_ephemeral_disk
     vm_type: small-highmem
-- path: /stemcells/-
-  type: replace
+- type: replace
+  path: /stemcells/-
   value:
     alias: windows2019
     os: windows2019
     version: "2019.102"
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=windows?
   value:
     description: Windows Server
     name: windows
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=hwc-buildpack-windows?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=hwc-buildpack-windows?
   value:
     name: hwc_buildpack
     package: hwc-buildpack-windows
-- path: /instance_groups/name=api/jobs/name=hwc-buildpack?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=hwc-buildpack?
   value:
     name: hwc-buildpack
     release: hwc-buildpack
-- path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=binary-buildpack-windows?
-  type: replace
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/install_buildpacks/package=binary-buildpack-windows?
   value:
     name: binary_buildpack
     package: binary-buildpack-windows
-- path: /releases/name=hwc-buildpack?
-  type: replace
+- type: replace
+  path: /releases/name=hwc-buildpack?
   value:
     name: hwc-buildpack
     sha1: sha256:25f3e5aeac9bd043e55eb891ec2b3d0039da104c52d174290b6b040cb4f6e56f
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/hwc-buildpack-release?v=3.1.48
     version: 3.1.48
-- path: /releases/name=winc?
-  type: replace
+- type: replace
+  path: /releases/name=winc?
   value:
     name: winc
     sha1: sha256:bd20a1a95af32b8df2f525684c8e5465c90f85b3b9723f30068df2a5d1fff23d
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/winc-release?v=2.75.0
     version: 2.75.0
-- path: /releases/name=windows-utilities?
-  type: replace
+- type: replace
+  path: /releases/name=windows-utilities?
   value:
     name: windows-utilities
     sha1: sha256:3ce4c1822f9fe5865cf2178f45c8a454c56670c8314f5e873162ff4921bf58e6
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/windows-utilities-release?v=0.23.0
     version: 0.23.0
-- path: /instance_groups/name=windows2019-cell/jobs/name=rep_windows/properties/containers?/proxy/enable_unproxied_port_mappings
-  type: replace
+- type: replace
+  path: /instance_groups/name=windows2019-cell/jobs/name=rep_windows/properties/containers?/proxy/enable_unproxied_port_mappings
   value: false
-- path: /instance_groups/name=windows2019-cell/jobs/name=rep_windows/properties/containers?/proxy/require_and_verify_client_certificates
-  type: replace
+- type: replace
+  path: /instance_groups/name=windows2019-cell/jobs/name=rep_windows/properties/containers?/proxy/require_and_verify_client_certificates
   value: true
-- path: /instance_groups/name=windows2019-cell/jobs/name=rep_windows/properties/containers?/proxy/trusted_ca_certificates
-  type: replace
+- type: replace
+  path: /instance_groups/name=windows2019-cell/jobs/name=rep_windows/properties/containers?/proxy/trusted_ca_certificates
   value:
   - ((gorouter_backend_tls.ca))
   - ((ssh_proxy_backends_tls.ca))
   - ((tcp_router_backend_tls.ca))
-- path: /instance_groups/name=windows2019-cell/jobs/name=rep_windows/properties/containers?/proxy/verify_subject_alt_name
-  type: replace
+- type: replace
+  path: /instance_groups/name=windows2019-cell/jobs/name=rep_windows/properties/containers?/proxy/verify_subject_alt_name
   value:
   - gorouter.service.cf.internal
   - ssh-proxy.service.cf.internal
   - tcp-router.service.cf.internal
-- path: /instance_groups/name=windows2019-cell/jobs/name=route_emitter_windows/properties/tcp?/enable_tls
-  type: replace
+- type: replace
+  path: /instance_groups/name=windows2019-cell/jobs/name=route_emitter_windows/properties/tcp?/enable_tls
   value: true
-- path: /instance_groups/name=windows2019-cell/jobs/-
-  type: replace
+- type: replace
+  path: /instance_groups/name=windows2019-cell/jobs/-
   value:
     name: envoy_windows
     release: envoy-nginx
-- path: /releases/name=envoy-nginx?
-  type: replace
+- type: replace
+  path: /releases/name=envoy-nginx?
   value:
     name: envoy-nginx
-    sha1: sha256:8413dfaa8d4335a58f25e286d2bc9f6d228d315d6a66cc2c8fab2a4e2b331179
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/envoy-nginx-release?v=0.76.0
-    version: 0.76.0
+    sha1: sha256:ad3fe8eef49d993b6e6ec6ae3500c0b74b1a3725796ce7b3541bc066ee0921d0
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/envoy-nginx-release?v=0.77.0
+    version: 0.77.0
