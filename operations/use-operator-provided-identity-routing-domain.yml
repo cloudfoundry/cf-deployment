@@ -1,0 +1,28 @@
+---
+# Override the hardcoded apps.identity domain set by enable-identity-aware-routing.yml.
+# Apply on top of that ops-file:
+#
+#   bosh deploy cf-deployment.yml \
+#     -o operations/enable-identity-aware-routing.yml \
+#     -o operations/use-operator-provided-identity-routing-domain.yml \
+#     -v identity_routing_domain=apps.example.com
+
+# Override BOSH DNS alias domain.
+- type: replace
+  path: /addons/name=bosh-dns-aliases/jobs/name=bosh-dns-aliases/properties/aliases/domain=_.apps.identity/domain
+  value: "_.((identity_routing_domain))"
+
+# Override gorouter mTLS domain name.
+- type: replace
+  path: /instance_groups/name=router/jobs/name=gorouter/properties/router/domains/name=*.apps.identity/name
+  value: "*.((identity_routing_domain))"
+
+# Override TLS cert common_name.
+- type: replace
+  path: /variables/name=apps_identity_router_tls/options/common_name
+  value: "*.((identity_routing_domain))"
+
+# Override TLS cert SAN (first and only entry).
+- type: replace
+  path: /variables/name=apps_identity_router_tls/options/alternative_names/0
+  value: "*.((identity_routing_domain))"
