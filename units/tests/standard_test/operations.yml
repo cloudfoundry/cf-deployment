@@ -23,6 +23,7 @@ enable-cc-v2-rate-limiting.yml:
 enable-cc-worker-metrics.yml: {}
 enable-scheduler-metrics.yml: {}
 enable-cpu-throttling.yml: {}
+enable-identity-aware-routing.yml: {}
 enable-nfs-ldap.yml:
   ops:
   - enable-nfs-volume-service.yml
@@ -126,6 +127,12 @@ use-online-windows2019fs.yml:
   ops:
   - windows2019-cell.yml
   - use-online-windows2019fs.yml
+use-operator-provided-identity-routing-domain.yml:
+  ops:
+  - enable-identity-aware-routing.yml
+  - use-operator-provided-identity-routing-domain.yml
+  varsfiles:
+  - example-vars-files/vars-use-operator-provided-identity-routing-domain.yml
 use-operator-provided-router-tls-certificates.yml:
   varsfiles:
   - example-vars-files/vars-use-operator-provided-router-tls-certificates.yml
