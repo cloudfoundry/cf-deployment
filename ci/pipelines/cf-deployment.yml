@@ -850,6 +850,7 @@ jobs:
       BASE_OPS_FILE_DIR: operations
       NEW_OPS_FILES: |
         environments/test/trelawney/scale-log-api-to-4.yml
+        environments/test/trelawney/uaa-db-tls-skip-validation.yml
   - task: setup-external-ip-db-vars
     file: runtime-ci/tasks/generate-external-ip-db-vars/task.yml
     input_mapping:
@@ -873,6 +874,7 @@ jobs:
       OPS_FILES: |
         operations/use-compiled-releases.yml
         operations/use-external-dbs.yml
+        operations/uaa-db-tls-skip-validation.yml
         operations/experimental/colocate-smoke-tests-on-cc-worker.yml
         operations/set-cpu-weight.yml
         operations/enable-cpu-throttling.yml
@@ -884,6 +886,7 @@ jobs:
       VARS_FILES: |
         environments/test/trelawney/external-db-vars.yml
         environments/test/trelawney/external-db-host-vars.yml
+        environments/test/trelawney/credhub-db-ca-vars.yml
         environments/test/trelawney/gcs-vars.yml
       REGENERATE_CREDENTIALS: true
   - task: bosh-run-errand-smoke-tests-latest-release
@@ -911,6 +914,7 @@ jobs:
       BASE_OPS_FILE_DIR: operations
       NEW_OPS_FILES: |
         environments/test/trelawney/scale-log-api-to-4.yml
+        environments/test/trelawney/uaa-db-tls-skip-validation.yml
   - task: bosh-deploy-cf-develop
     attempts: 1
     file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
@@ -925,6 +929,7 @@ jobs:
       OPS_FILES: |
         operations/use-compiled-releases.yml
         operations/use-external-dbs.yml
+        operations/uaa-db-tls-skip-validation.yml
         operations/experimental/colocate-smoke-tests-on-cc-worker.yml
         operations/set-cpu-weight.yml
         operations/enable-cpu-throttling.yml
@@ -937,6 +942,7 @@ jobs:
       VARS_FILES: |
         environments/test/trelawney/external-db-vars.yml
         environments/test/trelawney/external-db-host-vars.yml
+        environments/test/trelawney/credhub-db-ca-vars.yml
         environments/test/trelawney/gcs-vars.yml
       DEPLOY_WITH_UPTIME_MEASUREMENTS: true
       FAIL_ON_DOWNTIME: true
