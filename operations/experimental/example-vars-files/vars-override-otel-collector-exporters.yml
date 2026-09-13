@@ -1,3 +1,4 @@
+# Shows how to configure otel collector to export to file and otlp with mTLS
 ---
 otel_collector_config:
   receivers:
@@ -13,8 +14,22 @@ otel_collector_config:
       path: /tmp/otel-collector-metrics.log
     file/logs:
       path: /tmp/otel-collector-logs.log
-    # otlp/test:
-    #   endpoint: otelcol:4317
+    otlp/test:
+      endpoint: otelcol:4317
+      tls:
+        insecure: false
+        ca_pem: |-
+          -----BEGIN CERTIFICATE-----
+          <example server CA>
+          -----END CERTIFICATE-----
+        cert_pem: |-
+          -----BEGIN CERTIFICATE-----
+          <example client cert>
+          -----END CERTIFICATE-----
+        key_pem: |-
+          -----BEGIN RSA PRIVATE KEY-----
+          <example client key>
+          -----END RSA PRIVATE KEY-----
 
   service:
     pipelines:
@@ -23,16 +38,16 @@ otel_collector_config:
         processors: [batch]
         exporters:
         - file/traces
-        # - otlp/test
+        - otlp/test
       metrics:
         receivers: [otlp/placeholder] # no need to change, receivers are filled in automatically by the release
         processors: [batch]
         exporters:
         - file/metrics
-        # - otlp/test
+        - otlp/test
       logs:
         receivers: [otlp/placeholder] # no need to change, receivers are filled in automatically by the release
         processors: [batch]
         exporters:
         - file/logs
-        # - otlp/test
+        - otlp/test
