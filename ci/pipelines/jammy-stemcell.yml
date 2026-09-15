@@ -63,6 +63,7 @@ jobs:
       - in_parallel:
           steps:
             - file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
+              attempts: 3
               input_mapping:
                 bbl-state: relint-envs
               params:
@@ -72,6 +73,7 @@ jobs:
                 SYSTEM_DOMAIN: cf.bellatrix.env.wg-ard.ci.cloudfoundry.org
               task: open-asgs-for-credhub
             - file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
+              attempts: 3
               input_mapping:
                 bbl-state: relint-envs
               params:
@@ -81,6 +83,7 @@ jobs:
                 SYSTEM_DOMAIN: cf.bellatrix.env.wg-ard.ci.cloudfoundry.org
               task: open-asgs-for-uaa
             - file: cf-deployment-concourse-tasks/set-feature-flags/task.yml
+              attempts: 3
               input_mapping:
                 bbl-state: relint-envs
               params:
