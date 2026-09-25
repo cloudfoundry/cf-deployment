@@ -1170,6 +1170,7 @@ jobs:
         operations/increase-doppler-vm-type-from-minimal-to-small.yml
         operations/scale-diego-cell-to-8.yml
         operations/test/speed-up-dynamic-asgs.yml
+        operations/enable-identity-aware-routing.yml
       VARS_FILES: |
         environments/test/hermione/bbl-state/vars/director-vars-file.yml
         environments/test/hermione/vars-use-operator-provided-router-tls-certificates.yml
@@ -1226,6 +1227,7 @@ jobs:
         operations/increase-doppler-vm-type-from-minimal-to-small.yml
         operations/scale-diego-cell-to-8.yml
         operations/test/speed-up-dynamic-asgs.yml
+        operations/enable-identity-aware-routing.yml
       VARS_FILES: |
         environments/test/hermione/bbl-state/vars/director-vars-file.yml
         environments/test/hermione/vars-use-operator-provided-router-tls-certificates.yml
@@ -1246,6 +1248,15 @@ jobs:
         INSTANCE_GROUP_NAME: uaa
         SYSTEM_DOMAIN: cf.hermione.env.wg-ard.ci.cloudfoundry.org
         SECURITY_GROUP_NAME: uaa
+    - task: open-asgs-for-router
+      file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
+      input_mapping:
+        bbl-state: relint-envs
+      params:
+        BBL_STATE_DIR: environments/test/hermione/bbl-state
+        INSTANCE_GROUP_NAME: router
+        SYSTEM_DOMAIN: cf.hermione.env.wg-ard.ci.cloudfoundry.org
+        SECURITY_GROUP_NAME: identity-aware-routing-router
     - task: set-feature-flags
       file: cf-deployment-concourse-tasks/set-feature-flags/task.yml
       input_mapping:
@@ -1257,6 +1268,33 @@ jobs:
           diego_docker
           task_creation
           service_instance_sharing
+    - task: create-identity-aware-domain
+      config:
+        platform: linux
+        image_resource:
+          type: registry-image
+          source:
+            repository: cloudfoundry/cf-deployment-concourse-tasks
+        inputs:
+          - name: bbl-state
+          - name: cf-deployment-concourse-tasks
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/hermione/bbl-state
+          SYSTEM_DOMAIN: cf.hermione.env.wg-ard.ci.cloudfoundry.org
+        run:
+          path: bash
+          args:
+            - -euc
+            - |
+              source cf-deployment-concourse-tasks/shared-functions
+              setup_bosh_env_vars
+              setup_password_from_credhub cf_admin_password
+              cf api "api.${SYSTEM_DOMAIN}"
+              set +x; cf auth admin "${cf_admin_password}"; set -x
+              cf create-shared-domain apps.identity --enforce-route-policies --scope org || true
+
 
 - name: experimental-ops-files
   public: true
