@@ -109,8 +109,8 @@ resource_types:
 #! TODO remove this resource type declaration when a final release of the resource is available
 - name: bosh-io-stemcell
   source:
-    repository: foundationalinfrastructure/bosh-io-stemcell-resource
-    tag: v1.2.1
+    repository: concourse/bosh-io-stemcell-resource
+    tag: 1.7.0
   type: docker-image
 
 resources:
@@ -202,6 +202,10 @@ resources:
     auth:
       access_key: ((ci_dev_gcp_service_account_hmac_access_key))
       secret_key: ((ci_dev_gcp_service_account_hmac_secret))
+    private_bucket:
+      endpoint: https://storage.googleapis.com
+      bucket: bosh-core-stemcells-fips
+      regexp: '(?P<version>[^/]+)/bosh-stemcell-[^/]+-aws-xen-hvm-ubuntu-jammy-fips-go_agent\.tgz'
 
 - name: stemcell-version-bump-detect
   type: stemcell-version-bump
