@@ -293,15 +293,15 @@ External databases
 will require the use of the [`use-external-dbs.yml`](/operations/use-external-dbs.yml) opsfile.
 
 The following databases are tested as part of the cf-deployment pipeline:
-- MySQL 8.0 using [pxc-release](https://github.com/cloudfoundry/pxc-release) as singleton and as Galera cluster
+- MySQL 8.4 using [pxc-release](https://github.com/cloudfoundry/pxc-release) as singleton and as Galera cluster
 - PostgreSQL 17 using [postgres-release](https://github.com/cloudfoundry/postgres-release)
-- GCP Cloud SQL for MySQL 8.0 as external database
+- GCP Cloud SQL for MySQL 8.4 as external database
 
 The following databases should work (not tested):
 - PostgreSQL 14..16
 
 The following databases are not supported:
-- MySQL <8.0
+- MySQL <8.4
 - PostgreSQL <14
 - MariaDB
 - any other database system
