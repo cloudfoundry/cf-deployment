@@ -68,7 +68,7 @@ Nothing is committed; synced versions are discarded when the run finishes.
 
 | Job | Dispatches | Inputs |
 |-----|-----------|--------|
-| `kind-smoke-tests` | `kind-smoke.yaml` on `main` | `{"minimal": "true", "fresh-validation": "true"}` |
+| `kind-smoke-tests` | `kind-smoke.yaml` on `main` | `{"fresh-validation": "true"}` |
 | `kind-cats` | `kind-cats.yaml` on `main` | `{"fresh-validation": "true"}` |
 
 Both trigger after the same four unit/lint jobs that gate all BOSH

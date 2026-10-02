@@ -2171,7 +2171,7 @@ jobs:
       GITHUB_REPO: cloudfoundry/kind-deployment
       WORKFLOW_FILE: kind-smoke.yaml
       WORKFLOW_REF: main
-      WORKFLOW_INPUTS: '{"minimal": "true", "fresh-validation": "true"}'
+      WORKFLOW_INPUTS: '{"fresh-validation": "true"}'
     timeout: 3h
 
 - name: kind-cats
