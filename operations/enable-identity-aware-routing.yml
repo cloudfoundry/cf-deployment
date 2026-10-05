@@ -24,9 +24,12 @@
       forwarded_client_cert: sanitize_set
       xfcc_format: envoy
 
-# Add *.apps.identity TLS cert to gorouter (served via SNI)
+# Add *.apps.identity TLS cert to gorouter (served via SNI).
+# Uses index 1? (upsert) instead of /- (append) to work both with the base manifest
+# (tls_pem is a single-entry array) and with use-operator-provided-router-tls-certificates.yml
+# (tls_pem is replaced with an unresolved variable reference that /- cannot append to).
 - type: replace
-  path: /instance_groups/name=router/jobs/name=gorouter/properties/router/tls_pem/-
+  path: /instance_groups/name=router/jobs/name=gorouter/properties/router/tls_pem/1?
   value:
     cert_chain: ((apps_identity_router_tls.certificate))
     private_key: ((apps_identity_router_tls.private_key))
