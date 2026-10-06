@@ -1263,6 +1263,8 @@ jobs:
           task_creation
           service_instance_sharing
     - task: create-identity-aware-domain
+      input_mapping:
+        bbl-state: relint-envs
       config:
         platform: linux
         image_resource:
@@ -1272,8 +1274,6 @@ jobs:
         inputs:
           - name: bbl-state
           - name: cf-deployment-concourse-tasks
-        input_mapping:
-          bbl-state: relint-envs
         params:
           BBL_STATE_DIR: environments/test/hermione/bbl-state
           SYSTEM_DOMAIN: cf.hermione.env.wg-ard.ci.cloudfoundry.org
