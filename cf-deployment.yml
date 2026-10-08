@@ -14,6 +14,7 @@ addons:
     - os: ubuntu-bionic
     - os: ubuntu-jammy
     - os: ubuntu-noble
+    - os: ubuntu-resolute
   exclude:
     jobs:
     - name: smoke_tests
@@ -42,6 +43,7 @@ addons:
     - os: ubuntu-bionic
     - os: ubuntu-jammy
     - os: ubuntu-noble
+    - os: ubuntu-resolute
   jobs:
   - name: loggr-forwarder-agent
     release: loggregator-agent
@@ -62,6 +64,7 @@ addons:
     - os: ubuntu-bionic
     - os: ubuntu-jammy
     - os: ubuntu-noble
+    - os: ubuntu-resolute
   exclude:
     jobs:
     - name: smoke_tests
@@ -93,6 +96,7 @@ addons:
       - os: ubuntu-bionic
       - os: ubuntu-jammy
       - os: ubuntu-noble
+      - os: ubuntu-resolute
   exclude:
     jobs:
     - name: smoke_tests
