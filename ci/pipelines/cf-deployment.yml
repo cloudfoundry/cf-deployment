@@ -1068,6 +1068,27 @@ jobs:
       bbl-state: relint-envs
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
+  - in_parallel:
+    - task: empty-packages-bucket
+      file: runtime-ci/tasks/empty-gcs-bucket/task.yml
+      params:
+        GCP_SERVICE_ACCOUNT_JSON: ((trelawney_gcp_service_account_json))
+        GCP_BUCKET: trelawney-upgrade-cc-packages
+    - task: empty-buildpacks-bucket
+      file: runtime-ci/tasks/empty-gcs-bucket/task.yml
+      params:
+        GCP_SERVICE_ACCOUNT_JSON: ((trelawney_gcp_service_account_json))
+        GCP_BUCKET: trelawney-upgrade-cc-buildpacks
+    - task: empty-droplets-bucket
+      file: runtime-ci/tasks/empty-gcs-bucket/task.yml
+      params:
+        GCP_SERVICE_ACCOUNT_JSON: ((trelawney_gcp_service_account_json))
+        GCP_BUCKET: trelawney-upgrade-cc-droplets
+    - task: empty-resources-bucket
+      file: runtime-ci/tasks/empty-gcs-bucket/task.yml
+      params:
+        GCP_SERVICE_ACCOUNT_JSON: ((trelawney_gcp_service_account_json))
+        GCP_BUCKET: trelawney-upgrade-cc-resources
   - task: generate-external-db-vars-file
     file: runtime-ci/tasks/generate-external-db-vars-file/task.yml
     input_mapping:
