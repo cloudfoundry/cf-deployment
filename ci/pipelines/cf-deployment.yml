@@ -1068,6 +1068,39 @@ jobs:
       bbl-state: relint-envs
     params:
       BBL_STATE_DIR: environments/test/trelawney/bbl-state
+  - in_parallel:
+    - task: empty-packages-bucket
+      file: runtime-ci/tasks/empty-gcs-bucket/task.yml
+      input_mapping:
+        vars-file: relint-envs
+      params:
+        GCP_SERVICE_ACCOUNT_JSON: ((trelawney_gcp_service_account_json))
+        VARS_FILE: environments/test/trelawney/gcs-vars.yml
+        BUCKET_KEY: app_package_directory_key
+    - task: empty-buildpacks-bucket
+      file: runtime-ci/tasks/empty-gcs-bucket/task.yml
+      input_mapping:
+        vars-file: relint-envs
+      params:
+        GCP_SERVICE_ACCOUNT_JSON: ((trelawney_gcp_service_account_json))
+        VARS_FILE: environments/test/trelawney/gcs-vars.yml
+        BUCKET_KEY: buildpack_directory_key
+    - task: empty-droplets-bucket
+      file: runtime-ci/tasks/empty-gcs-bucket/task.yml
+      input_mapping:
+        vars-file: relint-envs
+      params:
+        GCP_SERVICE_ACCOUNT_JSON: ((trelawney_gcp_service_account_json))
+        VARS_FILE: environments/test/trelawney/gcs-vars.yml
+        BUCKET_KEY: droplet_directory_key
+    - task: empty-resources-bucket
+      file: runtime-ci/tasks/empty-gcs-bucket/task.yml
+      input_mapping:
+        vars-file: relint-envs
+      params:
+        GCP_SERVICE_ACCOUNT_JSON: ((trelawney_gcp_service_account_json))
+        VARS_FILE: environments/test/trelawney/gcs-vars.yml
+        BUCKET_KEY: resource_directory_key
   - task: generate-external-db-vars-file
     file: runtime-ci/tasks/generate-external-db-vars-file/task.yml
     input_mapping:
@@ -1387,6 +1420,7 @@ jobs:
   - in_parallel:
     - get: cf-deployment-concourse-tasks
     - get: relint-envs
+    - get: runtime-ci
   - task: delete-deployment-cf
     file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
     input_mapping:
@@ -1400,6 +1434,35 @@ jobs:
       bbl-state: relint-envs
     params:
       BBL_STATE_DIR: environments/test/hermione/bbl-state
+  - in_parallel:
+    - task: empty-packages-bucket
+      file: runtime-ci/tasks/empty-s3-bucket/task.yml
+      input_mapping:
+        vars-file: relint-envs
+      params:
+        VARS_FILE: environments/test/hermione/bbl-state/vars/director-vars-file.yml
+        BUCKET_KEY: app_package_directory_key
+    - task: empty-buildpacks-bucket
+      file: runtime-ci/tasks/empty-s3-bucket/task.yml
+      input_mapping:
+        vars-file: relint-envs
+      params:
+        VARS_FILE: environments/test/hermione/bbl-state/vars/director-vars-file.yml
+        BUCKET_KEY: buildpack_directory_key
+    - task: empty-droplets-bucket
+      file: runtime-ci/tasks/empty-s3-bucket/task.yml
+      input_mapping:
+        vars-file: relint-envs
+      params:
+        VARS_FILE: environments/test/hermione/bbl-state/vars/director-vars-file.yml
+        BUCKET_KEY: droplet_directory_key
+    - task: empty-resources-bucket
+      file: runtime-ci/tasks/empty-s3-bucket/task.yml
+      input_mapping:
+        vars-file: relint-envs
+      params:
+        VARS_FILE: environments/test/hermione/bbl-state/vars/director-vars-file.yml
+        BUCKET_KEY: resource_directory_key
   - put: experimental-pool
     params: {release: experimental-pool}
 
