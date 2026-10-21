@@ -137,6 +137,9 @@ use-operator-provided-router-tls-certificates.yml:
   varsfiles:
   - example-vars-files/vars-use-operator-provided-router-tls-certificates.yml
 use-postgres.yml: {}
+set-postgres-password-auth-algorithm-scram-sha-256.yml:
+  ops:
+  - use-postgres.yml
 use-s3-blobstore.yml:
   ops:
   - use-external-blobstore.yml
