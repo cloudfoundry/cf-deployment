@@ -874,7 +874,7 @@ instance_groups:
         url: https://uaa.((system_domain))
       cc:
         diego:
-          docker_staging_stack: cflinuxfs4
+          docker_staging_stack: cflinuxfs5
           droplet_destinations:
             cflinuxfs4: /home/vcap
             cflinuxfs5: /home/vcap
@@ -886,7 +886,7 @@ instance_groups:
             docker: docker_app_lifecycle/docker_app_lifecycle.tgz
             cnb/cflinuxfs4: cnb_app_lifecycle/cnb_app_lifecycle.tgz
             cnb/cflinuxfs5: cnb_app_lifecycle/cnb_app_lifecycle.tgz
-        default_stack: cflinuxfs4
+        default_stack: cflinuxfs5
         stacks:
         - name: cflinuxfs4
           description: Cloud Foundry Linux-based filesystem (Ubuntu 22.04)
