@@ -504,7 +504,6 @@ instance_groups:
             client_cert: "((diego_rep_client.certificate))"
             client_key: "((diego_rep_client.private_key))"
       loggregator: &diego_loggregator_client_properties
-        use_v2_api: true
         ca_cert: "((loggregator_tls_agent.ca))"
         cert: "((loggregator_tls_agent.certificate))"
         key: "((loggregator_tls_agent.private_key))"
@@ -551,7 +550,6 @@ instance_groups:
             ca_cert: "((mysql_server_certificate.ca))"
             require_ssl: true
       loggregator:
-        use_v2_api: true
         ca_cert: "((loggregator_tls_agent.ca))"
         cert: "((loggregator_tls_agent.certificate))"
         key: "((loggregator_tls_agent.private_key))"
