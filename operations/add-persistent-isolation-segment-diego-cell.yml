@@ -94,7 +94,6 @@
           - ((uaa_ssl.ca))
         enable_declarative_healthcheck: true
         loggregator:
-          use_v2_api: true
           ca_cert: "((loggregator_tls_agent.ca))"
           cert: "((loggregator_tls_agent.certificate))"
           key: "((loggregator_tls_agent.private_key))"
@@ -118,7 +117,6 @@
         bpm:
           enabled: true
         loggregator:
-          use_v2_api: true
           ca_cert: "((loggregator_tls_agent.ca))"
           cert: "((loggregator_tls_agent.certificate))"
           key: "((loggregator_tls_agent.private_key))"
@@ -156,7 +154,6 @@
         client_cert: ((network_policy_client.certificate))
         client_key: ((network_policy_client.private_key))
         loggregator:
-          use_v2_api: true
           ca_cert: "((loggregator_tls_agent.ca))"
           cert: "((loggregator_tls_agent.certificate))"
           key: "((loggregator_tls_agent.private_key))"
