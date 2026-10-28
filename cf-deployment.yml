@@ -509,7 +509,6 @@ instance_groups:
             client_cert: "((diego_rep_client.certificate))"
             client_key: "((diego_rep_client.private_key))"
       loggregator: &diego_loggregator_client_properties
-        use_v2_api: true
         ca_cert: "((loggregator_tls_agent.ca))"
         cert: "((loggregator_tls_agent.certificate))"
         key: "((loggregator_tls_agent.private_key))"
@@ -556,7 +555,6 @@ instance_groups:
             ca_cert: "((mysql_server_certificate.ca))"
             require_ssl: true
       loggregator:
-        use_v2_api: true
         ca_cert: "((loggregator_tls_agent.ca))"
         cert: "((loggregator_tls_agent.certificate))"
         key: "((loggregator_tls_agent.private_key))"
@@ -874,7 +872,7 @@ instance_groups:
         url: https://uaa.((system_domain))
       cc:
         diego:
-          docker_staging_stack: cflinuxfs4
+          docker_staging_stack: cflinuxfs5
           droplet_destinations:
             cflinuxfs4: /home/vcap
             cflinuxfs5: /home/vcap
@@ -886,7 +884,7 @@ instance_groups:
             docker: docker_app_lifecycle/docker_app_lifecycle.tgz
             cnb/cflinuxfs4: cnb_app_lifecycle/cnb_app_lifecycle.tgz
             cnb/cflinuxfs5: cnb_app_lifecycle/cnb_app_lifecycle.tgz
-        default_stack: cflinuxfs4
+        default_stack: cflinuxfs5
         stacks:
         - name: cflinuxfs4
           description: Cloud Foundry Linux-based filesystem (Ubuntu 22.04)
@@ -2897,17 +2895,17 @@ releases:
   version: 3.128.0
   sha1: sha256:e176dc20f70b22d39fb3a526c1a63081b1c6194ff608701f910becb1551a1a55
 - name: cf-smoke-tests
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=42.0.280
-  version: 42.0.280
-  sha1: sha256:1b846a11cd6a1fdc46a33842daedd30f838425404eeed9d448f1f54da6ab6be4
+  url: https://bosh.io/d/github.com/cloudfoundry/cf-smoke-tests-release?v=42.0.281
+  version: 42.0.281
+  sha1: sha256:8a8b03e41d04cd7a3767c0533d0381bddd095946f937de599bd7d9041234f217
 - name: cflinuxfs4
-  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs4-release?v=1.332.0
-  version: 1.332.0
-  sha1: sha256:da99e4c09de7ef0a738bd77e96485041f6181043b04b0afedc6a15bc06f7d464
+  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs4-release?v=1.333.0
+  version: 1.333.0
+  sha1: sha256:9503d4612a52cfd6d332d0580a53922d5bbdb2b5f9916e1fe7dedc70cad1ad20
 - name: cflinuxfs5
-  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs5-release?v=0.61.0
-  version: 0.61.0
-  sha1: sha256:ce7d68e060e33da4b84dd16cb50dc3a0fd3121f42212ceb1667e08a56b88faf2
+  url: https://bosh.io/d/github.com/cloudfoundry/cflinuxfs5-release?v=0.62.0
+  version: 0.62.0
+  sha1: sha256:64152a8034796b678ea467a594fa09b71215a6a577299736d7be2b4051a41b9f
 - name: credhub
   url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=2.15.28
   version: 2.15.28
@@ -2929,9 +2927,9 @@ releases:
   version: 1.11.2
   sha1: sha256:c80fccf1cc727d3dbd05610fa943953adede6b8c138d0c05d2f30ef33d7c35ef
 - name: java-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/java-buildpack-release?v=5.1.0
-  version: 5.1.0
-  sha1: sha256:6c4a213ee35eb8521859925f21ffcdd4124a9de4cd05c0da32490d97109b62bd
+  url: https://bosh.io/d/github.com/cloudfoundry/java-buildpack-release?v=5.1.1
+  version: 5.1.1
+  sha1: sha256:00d850c9ab33d32c3efe889604005232a937295a8e3dfbfc3c6eaa02e3a0b9a8
 - name: loggregator
   url: https://bosh.io/d/github.com/cloudfoundry/loggregator-release?v=107.0.38
   version: 107.0.38
@@ -2961,9 +2959,9 @@ releases:
   version: 2.0.14
   sha1: sha256:cb200693a5732c0ee6830a5827a04c04063f6c7b8967de25b214acb7f4287621
 - name: python-buildpack
-  url: https://bosh.io/d/github.com/cloudfoundry/python-buildpack-release?v=1.9.8
-  version: 1.9.8
-  sha1: sha256:84d2655103f1acbcb27dcc8b56d08254a17dd66ae3909ce2acd37aa9e5030b16
+  url: https://bosh.io/d/github.com/cloudfoundry/python-buildpack-release?v=1.9.9
+  version: 1.9.9
+  sha1: sha256:a6ab911a5f1a61239bf6e03ba0dcfae51d024ee65619853b888d8cf60954808b
 - name: routing
   url: https://bosh.io/d/github.com/cloudfoundry/routing-release?v=0.397.0
   version: 0.397.0
@@ -2985,9 +2983,9 @@ releases:
   version: 1.11.63
   sha1: sha256:f2cc66fb8272f514deea645ea5edb713031968e0bc2925a6b29bbd7a9db7dd22
 - name: uaa
-  url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=79.9.0
-  version: 79.9.0
-  sha1: sha256:e4105b2b96439a64cea226b351d4d1e8e062e082296b77d3894a9bd09cb23135
+  url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=79.10.0
+  version: 79.10.0
+  sha1: sha256:6749eba7f59a60b55928cf3b0715ca9dda1f905c0c0a81864b50a3966dcdab59
 - name: loggregator-agent
   url: https://bosh.io/d/github.com/cloudfoundry/loggregator-agent-release?v=8.3.31
   version: 8.3.31
