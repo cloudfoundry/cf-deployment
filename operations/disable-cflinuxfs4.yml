@@ -1,6 +1,8 @@
 ---
 # Apply operations/experimental/set-cflinuxfs5-default-stack.yml before this
 # ops file so Cloud Controller no longer uses cflinuxfs4 as its default stack.
+# If using an isolation segment, apply this after
+# operations/add-persistent-isolation-segment-diego-cell.yml as well.
 - type: remove
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=cflinuxfs4
 - type: remove
@@ -53,5 +55,11 @@
   path: /instance_groups/name=diego-cell/jobs/name=cflinuxfs4-rootfs-setup
 - type: remove
   path: /instance_groups/name=diego-cell/jobs/name=rep/properties/diego/rep/preloaded_rootfses/0
+- type: remove
+  path: /instance_groups/name=isolated-diego-cell/jobs/name=cflinuxfs4-rootfs-setup?
+- type: replace
+  path: /instance_groups/name=isolated-diego-cell/jobs/name=rep/properties/diego/rep/preloaded_rootfses?
+  value:
+  - cflinuxfs5:/var/vcap/packages/cflinuxfs5/rootfs.tar
 - type: remove
   path: /releases/name=cflinuxfs4
