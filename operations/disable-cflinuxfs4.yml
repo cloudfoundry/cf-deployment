@@ -1,6 +1,4 @@
 ---
-# Apply operations/experimental/set-cflinuxfs5-default-stack.yml before this
-# ops file so Cloud Controller no longer uses cflinuxfs4 as its default stack.
 - type: remove
   path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/stacks/name=cflinuxfs4
 - type: remove

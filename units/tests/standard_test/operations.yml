@@ -12,12 +12,10 @@ disable-http2.yml: {}
 disable-dynamic-asgs.yml: {}
 disable-cflinuxfs4.yml:
   ops:
-  - experimental/set-cflinuxfs5-default-stack.yml
   - disable-cflinuxfs4.yml
 disable-cflinuxfs4-isolation-segment.yml:
   ops:
   - add-persistent-isolation-segment-diego-cell.yml
-  - experimental/set-cflinuxfs5-default-stack.yml
   - disable-cflinuxfs4.yml
   - disable-cflinuxfs4-isolation-segment.yml
 enable-cc-rate-limiting.yml:
