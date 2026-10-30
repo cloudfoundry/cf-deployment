@@ -10,6 +10,14 @@ configure-default-router-group.yml:
 disable-router-tls-termination.yml: {}
 disable-http2.yml: {}
 disable-dynamic-asgs.yml: {}
+disable-cflinuxfs4.yml:
+  ops:
+  - disable-cflinuxfs4.yml
+disable-cflinuxfs4-isolation-segment.yml:
+  ops:
+  - add-persistent-isolation-segment-diego-cell.yml
+  - disable-cflinuxfs4.yml
+  - disable-cflinuxfs4-isolation-segment.yml
 enable-cc-rate-limiting.yml:
   vars:
   - cc_rate_limiter_general_limit=blah

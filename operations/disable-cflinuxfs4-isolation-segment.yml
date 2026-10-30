@@ -1,0 +1,7 @@
+---
+# Apply after add-persistent-isolation-segment-diego-cell.yml and
+# disable-cflinuxfs4.yml to remove cflinuxfs4 from the isolated cell.
+- type: remove
+  path: /instance_groups/name=isolated-diego-cell/jobs/name=cflinuxfs4-rootfs-setup
+- type: remove
+  path: /instance_groups/name=isolated-diego-cell/jobs/name=rep/properties/diego/rep/preloaded_rootfses/0
