@@ -55,7 +55,7 @@ eval "$(bbl print-env)"
 
 `cf-deployment` requires that you have uploaded a [runtime-config](https://bosh.io/docs/runtime-config/) for [BOSH DNS](https://bosh.io/docs/dns/).
 
-We recommended that you use the one provided by the [bosh-deployment](https://github.com/cloudfoundry/bosh-deployment/blob/master/runtime-configs/dns.yml) repo:
+We recommended that you use the one provided by the [bosh-deployment](https://github.com/cloudfoundry/bosh-deployment/blob/main/runtime-configs/dns.yml) repo:
 
 ```
 bosh update-runtime-config bosh-deployment/runtime-configs/dns.yml --name dns
