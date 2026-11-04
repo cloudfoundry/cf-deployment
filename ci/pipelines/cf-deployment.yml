@@ -12,6 +12,7 @@ groups:
   - fresh-deploy
   - fresh-smoke-tests
   - fresh-cats
+  - fresh-drats
   - fresh-delete-deployment
   - upgrade-acquire-pool
   - upgrade-deploy
@@ -27,10 +28,6 @@ groups:
   - lite-deploy
   - lite-smoke-tests
   - lite-recreate-director
-  - bbr-acquire-pool
-  - bbr-deploy
-  - bbr-run-drats
-  - bbr-delete-deployment
   - windows-acquire-pool
   - windows-deploy
   - windows-smoke-tests
@@ -59,6 +56,7 @@ groups:
   - fresh-deploy
   - fresh-smoke-tests
   - fresh-cats
+  - fresh-drats
   - fresh-delete-deployment
   - bless-manifest
 - name: upgrade-trelawney
@@ -99,18 +97,6 @@ groups:
   - lite-smoke-tests
   - lite-recreate-director
   - lite-release-pool-manual
-  - bless-manifest
-- name: bbr
-  jobs:
-  - unit-test-ops-files
-  - unit-test-golang-tests
-  - unit-test-update-releases-coverage
-  - lint-cf-deployment-manifest
-  - bbr-acquire-pool
-  - bbr-deploy
-  - bbr-run-drats
-  - bbr-delete-deployment
-  - bbr-release-pool-manual
   - bless-manifest
 - name: windows-cedric
   jobs:
@@ -202,15 +188,6 @@ resources:
     uri: git@github.com:cloudfoundry/relint-ci-pools
     branch: main
     pool: cf-deployment/lite
-    private_key: ((ard_wg_gitbot_ssh_key.private_key))
-
-- name: bbr-pool
-  type: pool
-  icon: pool
-  source:
-    uri: git@github.com:cloudfoundry/relint-ci-pools
-    branch: main
-    pool: bbr
     private_key: ((ard_wg_gitbot_ssh_key.private_key))
 
 - name: windows-pool
@@ -610,6 +587,10 @@ jobs:
         operations/enable-nfs-volume-service.yml
         operations/test/enable-nfs-test-server.yml
         operations/change-deployment-name-for-nfs-test-server.yml
+        operations/enable-smb-volume-service.yml
+        operations/backup-and-restore/enable-backup-restore.yml
+        operations/backup-and-restore/enable-restore-nfs-broker.yml
+        operations/backup-and-restore/enable-restore-smb-broker.yml
       VARS_FILES: |
         environments/test/luna/deployment-name.yml
         environments/test/luna/network-name.yml
@@ -672,14 +653,23 @@ jobs:
           diego_cnb
           diego_docker
           task_creation
-    - task: run-nfs-broker-push-errand
-      file: cf-deployment-concourse-tasks/run-errand/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-      params:
-        BBL_STATE_DIR: environments/test/luna/bbl-state
-        DEPLOYMENT_NAME: luna-cf
-        ERRAND_NAME: nfs-broker-push
+    - do:
+      - task: run-nfs-broker-push-errand
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/luna/bbl-state
+          DEPLOYMENT_NAME: luna-cf
+          ERRAND_NAME: nfs-broker-push
+      - task: run-smb-broker-push-errand
+        file: cf-deployment-concourse-tasks/run-errand/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+        params:
+          BBL_STATE_DIR: environments/test/luna/bbl-state
+          DEPLOYMENT_NAME: luna-cf
+          ERRAND_NAME: smb-broker-push
 
 - name: fresh-smoke-tests
   public: true
@@ -740,6 +730,40 @@ jobs:
         SKIP_REGEXP: "shows logs and metrics"
         NODES: 12
 
+- name: fresh-drats
+  public: true
+  serial_groups: [ fresh-cats, fresh-smokes ]
+  plan:
+  - get: fresh-pool
+    trigger: true
+    passed:
+    - fresh-cats
+    - fresh-smoke-tests
+  - in_parallel:
+    - get: cf-deployment-develop
+      passed:
+      - fresh-cats
+      - fresh-smoke-tests
+    - get: bbr-github-release
+    - get: relint-envs
+    - get: cf-deployment-concourse-tasks
+    - get: disaster-recovery-acceptance-tests
+    - get: runtime-ci
+  - task: generate-drats-config
+    file: runtime-ci/tasks/generate-drats-config/task.yml
+    input_mapping:
+      bbl-state: relint-envs
+    params:
+      BBL_STATE_DIR: environments/test/luna/bbl-state
+      DEPLOYMENT_NAME: luna-cf
+      SYSTEM_DOMAIN: cf.luna.env.wg-ard.ci.cloudfoundry.org
+  - task: run-drats
+    privileged: true
+    file: disaster-recovery-acceptance-tests/ci/tasks/drats-with-integration-config/task.yml
+    input_mapping:
+      bbr-binary-release: bbr-github-release
+      drats-integration-config: drats-config
+
 - name: fresh-delete-deployment
   serial: true
   public: true
@@ -749,8 +773,7 @@ jobs:
     - get: fresh-pool
       trigger: true
       passed:
-      - fresh-cats
-      - fresh-smoke-tests
+      - fresh-drats
     - in_parallel:
       - get: cf-deployment-concourse-tasks
       - get: relint-envs
@@ -1640,174 +1663,6 @@ jobs:
     - put: lite-pool
       params: {release: lite-pool}
 
-- name: bbr-acquire-pool
-  public: true
-  serial: true
-  plan:
-  - in_parallel:
-    - get: cf-deployment-develop
-      trigger: true
-      passed:
-      - unit-test-ops-files
-      - lint-cf-deployment-manifest
-      - unit-test-golang-tests
-      - unit-test-update-releases-coverage
-    - put: bbr-pool
-      params: {acquire: true}
-    timeout: 4h
-
-- name: bbr-release-pool-manual
-  public: true
-  plan:
-  - get: bbr-pool
-  ensure:
-    try:
-      put: bbr-pool
-      params: {release: bbr-pool}
-
-- name: bbr-deploy
-  public: true
-  serial_groups: [ bbr-drats ]
-  plan:
-  - get: bbr-pool
-    trigger: true
-    passed: [ bbr-acquire-pool ]
-  - in_parallel:
-    - get: cf-deployment-develop
-      passed: [bbr-acquire-pool]
-    - get: cf-deployment-concourse-tasks
-    - get: runtime-ci
-    - get: relint-envs
-  - task: guarantee-no-existing-cf-deployment
-    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/bbr/bbl-state
-      IGNORE_ERRORS: true
-  - task: bosh-deploy-cf
-    file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-      cf-deployment: cf-deployment-develop
-      ops-files: cf-deployment-develop
-      vars-files: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/bbr/bbl-state
-      SYSTEM_DOMAIN: cf.baba-yaga.env.wg-ard.ci.cloudfoundry.org
-      OPS_FILES: |
-        operations/use-compiled-releases.yml
-        operations/backup-and-restore/enable-backup-restore.yml
-        operations/enable-nfs-volume-service.yml
-        operations/backup-and-restore/enable-restore-nfs-broker.yml
-        operations/enable-smb-volume-service.yml
-        operations/backup-and-restore/enable-restore-smb-broker.yml
-      REGENERATE_CREDENTIALS: true
-  - in_parallel:
-    - task: enable-docker
-      attempts: 2
-      file: cf-deployment-concourse-tasks/set-feature-flags/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-      params:
-        BBL_STATE_DIR: environments/test/bbr/bbl-state
-        SYSTEM_DOMAIN: cf.baba-yaga.env.wg-ard.ci.cloudfoundry.org
-        ENABLED_FEATURE_FLAGS: |
-          diego_docker
-    - task: open-asgs-for-credhub
-      file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-      params:
-        BBL_STATE_DIR: environments/test/bbr/bbl-state
-        INSTANCE_GROUP_NAME: credhub
-        SYSTEM_DOMAIN: cf.baba-yaga.env.wg-ard.ci.cloudfoundry.org
-        SECURITY_GROUP_NAME: credhub
-    - task: open-asgs-for-uaa
-      file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-      params:
-        BBL_STATE_DIR: environments/test/bbr/bbl-state
-        INSTANCE_GROUP_NAME: uaa
-        SYSTEM_DOMAIN: cf.baba-yaga.env.wg-ard.ci.cloudfoundry.org
-        SECURITY_GROUP_NAME: uaa
-    - do:
-      - task: run-nfs-broker-push-errand
-        file: cf-deployment-concourse-tasks/run-errand/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-        params:
-          BBL_STATE_DIR: environments/test/bbr/bbl-state
-          ERRAND_NAME: nfs-broker-push
-      - task: run-smb-broker-push-errand
-        file: cf-deployment-concourse-tasks/run-errand/task.yml
-        input_mapping:
-          bbl-state: relint-envs
-        params:
-          BBL_STATE_DIR: environments/test/bbr/bbl-state
-          ERRAND_NAME: smb-broker-push
-    - task: run-bosh-cleanup
-      file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
-      input_mapping:
-        bbl-state: relint-envs
-      params:
-        BBL_STATE_DIR: environments/test/bbr/bbl-state
-
-- name: bbr-run-drats
-  public: true
-  serial_groups: [ bbr-drats ]
-  plan:
-  - get: bbr-pool
-    trigger: true
-    passed: [ bbr-deploy ]
-  - in_parallel:
-    - get: cf-deployment-develop
-      passed: [ bbr-deploy ]
-    - get: bbr-github-release
-    - get: relint-envs
-    - get: cf-deployment-concourse-tasks
-    - get: disaster-recovery-acceptance-tests
-    - get: runtime-ci
-  - task: generate-drats-config
-    file: runtime-ci/tasks/generate-drats-config/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/bbr/bbl-state
-      SYSTEM_DOMAIN: cf.baba-yaga.env.wg-ard.ci.cloudfoundry.org
-  - task: run-drats
-    privileged: true
-    file: disaster-recovery-acceptance-tests/ci/tasks/drats-with-integration-config/task.yml
-    input_mapping:
-      bbr-binary-release: bbr-github-release
-      drats-integration-config: drats-config
-
-- name: bbr-delete-deployment
-  public: true
-  plan:
-  - get: bbr-pool
-    passed: [ bbr-run-drats ]
-    trigger: true
-  - in_parallel:
-    - get: cf-deployment-concourse-tasks
-    - get: relint-envs
-  - task: delete-deployment-cf
-    file: cf-deployment-concourse-tasks/bosh-delete-deployment/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/bbr/bbl-state
-      IGNORE_ERRORS: true
-  - task: run-bosh-cleanup
-    file: cf-deployment-concourse-tasks/bosh-cleanup/task.yml
-    input_mapping:
-      bbl-state: relint-envs
-    params:
-      BBL_STATE_DIR: environments/test/bbr/bbl-state
-  - put: bbr-pool
-    params: {release: bbr-pool}
-
 - name: windows-acquire-pool
   public: true
   serial: true
@@ -2304,13 +2159,11 @@ jobs:
   - get: cf-deployment-develop
     trigger: true
     passed:
-    - fresh-cats
-    - fresh-smoke-tests
+    - fresh-drats
     - experimental-cats
     - experimental-smoke-tests
     - upgrade-cats
     - upgrade-smoke-tests
-    - bbr-run-drats
     - lite-smoke-tests
     - windows-cats
     - windows-smoke-tests
