@@ -3,6 +3,7 @@ jobs:
     plan:
       - in_parallel:
           steps:
+            - get: resolute-stemcell
             - get: cf-deployment
             - get: daily
               trigger: true
@@ -19,6 +20,9 @@ jobs:
               passed:
                 - ipv6-acquire-pool
               trigger: true
+            - get: resolute-stemcell
+              passed:
+                - ipv6-acquire-pool
             - get: cf-deployment
               passed:
                 - ipv6-acquire-pool
@@ -32,6 +36,13 @@ jobs:
           BBL_STATE_DIR: environments/test/dobby/bbl-state
           IGNORE_ERRORS: "true"
         task: guarantee-no-existing-cf-deployment
+      - file: runtime-ci/tasks/bosh-upload-stemcell/task.yml
+        input_mapping:
+          bbl-state: relint-envs
+          stemcell: resolute-stemcell
+        params:
+          BBL_STATE_DIR: environments/test/dobby/bbl-state
+        task: upload-resolute-stemcell
       - file: cf-deployment-concourse-tasks/bosh-deploy/task.yml
         input_mapping:
           bbl-state: relint-envs
@@ -39,16 +50,18 @@ jobs:
         params:
           BBL_STATE_DIR: environments/test/dobby/bbl-state
           OPS_FILES: |
+            operations/experimental/use-resolute-stemcell.yml
             operations/stop-skipping-tls-validation.yml
+            operations/use-internal-lookup-for-route-services.yml
             operations/experimental/colocate-smoke-tests-on-cc-worker.yml
-            operations/use-postgres.yml
-            operations/experimental/enable-ipv6-egress.yml
-            operations/experimental/add-ipv6-security-group.yml
           SYSTEM_DOMAIN: cf.dobby.env.wg-ard.ci.cloudfoundry.org
+          SKIP_STEMCELL_UPLOAD: true
+          REGENERATE_CREDENTIALS: true
         task: deploy-cf
       - in_parallel:
           steps:
             - file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
+              attempts: 3
               input_mapping:
                 bbl-state: relint-envs
               params:
@@ -58,6 +71,7 @@ jobs:
                 SYSTEM_DOMAIN: cf.dobby.env.wg-ard.ci.cloudfoundry.org
               task: open-asgs-for-credhub
             - file: cf-deployment-concourse-tasks/open-asgs-for-bosh-instance-group/task.yml
+              attempts: 3
               input_mapping:
                 bbl-state: relint-envs
               params:
@@ -67,6 +81,7 @@ jobs:
                 SYSTEM_DOMAIN: cf.dobby.env.wg-ard.ci.cloudfoundry.org
               task: open-asgs-for-uaa
             - file: cf-deployment-concourse-tasks/set-feature-flags/task.yml
+              attempts: 3
               input_mapping:
                 bbl-state: relint-envs
               params:
@@ -118,6 +133,7 @@ jobs:
                 - get: cf-deployment-concourse-tasks
                 - get: cf-acceptance-tests-rc
           - file: cf-deployment-concourse-tasks/update-integration-configs/task.yml
+            attempts: 3
             input_mapping:
               bbl-state: relint-envs
               cf-acceptance-tests: cf-acceptance-tests-rc
@@ -185,6 +201,11 @@ resources:
     icon: clock-outline
     source:
       interval: 24h
+  - icon: dna
+    name: resolute-stemcell
+    source:
+      name: bosh-aws-xen-hvm-ubuntu-resolute
+    type: bosh-io-stemcell
   - icon: github
     name: cf-acceptance-tests-rc
     source:
@@ -194,7 +215,7 @@ resources:
   - icon: github
     name: cf-deployment
     source:
-      branch: develop
+      branch: release-candidate
       uri: https://github.com/cloudfoundry/cf-deployment.git
     type: git
   - icon: github
