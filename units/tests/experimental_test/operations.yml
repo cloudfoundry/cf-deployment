@@ -7,10 +7,10 @@ add-otel-collector-windows.yml:
   - ../windows2019-cell.yml
   - add-otel-collector.yml
   varsfiles:
-  - example-vars-files/vars-override-otel-collector-exporters.yml
+  - example-vars-files/vars-override-otel-collector-config.yml
 add-otel-collector.yml:
   varsfiles:
-  - example-vars-files/vars-override-otel-collector-exporters.yml
+  - example-vars-files/vars-override-otel-collector-config.yml
 add-system-metrics-agent-windows2019.yml:
   ops:
   - ../windows2019-cell.yml
