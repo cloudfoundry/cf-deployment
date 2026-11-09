@@ -23,6 +23,10 @@ enable-cc-rate-limiting.yml:
   - cc_rate_limiter_general_limit=blah
   - cc_rate_limiter_admin_limit=something
   - cc_rate_limiter_unauthenticated_limit=something
+enable-cc-concurrency-rate-limiting.yml:
+  vars:
+  - cc_concurrency_rate_limiter_logging_limit=10
+  - cc_concurrency_rate_limiter_blocking_limit=-1
 enable-cc-v2-rate-limiting.yml:
   vars:
   - cc_v2_rate_limiter_general_limit=blah
