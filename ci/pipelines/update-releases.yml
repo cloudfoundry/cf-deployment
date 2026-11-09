@@ -13975,7 +13975,7 @@ jobs:
             operations/experimental/use-compiled-releases-windows.yml
           REGENERATE_CREDENTIALS: false
           BOSH_DEPLOY_ARGS: --parallel 50
-          VARS_FILES: operations/experimental/example-vars-files/vars-override-otel-collector-exporters.yml
+          VARS_FILES: operations/experimental/example-vars-files/vars-override-otel-collector-config.yml
       - task: ensure-api-healthy
         file: runtime-ci/tasks/ensure-api-healthy/task.yml
         input_mapping:
