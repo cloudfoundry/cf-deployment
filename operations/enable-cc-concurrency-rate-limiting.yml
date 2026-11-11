@@ -1,0 +1,7 @@
+---
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/cc/concurrency_rate_limiter?
+  value:
+    enabled: true
+    logging_limit: "((cc_concurrency_rate_limiter_logging_limit))"
+    blocking_limit: "((cc_concurrency_rate_limiter_blocking_limit))"
