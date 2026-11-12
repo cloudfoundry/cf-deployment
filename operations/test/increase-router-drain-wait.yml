@@ -1,0 +1,14 @@
+# Increase gorouter drain_wait so the GCP load balancer has time to
+# deregister a draining router before it stops listening.
+#
+# bbl's GCP router health check (terraform/gcp/templates/cf_lb.tf) sets no
+# timing fields, so it runs on GCP defaults: check_interval_sec=5,
+# unhealthy_threshold=2 => ~10s nominal / ~15s worst-case reaction window.
+# gorouter's default drain_wait is 20s, leaving only a few seconds of slack;
+# a small timing shift (e.g. a routing-release rebuild) pushes a request onto
+# a router that has already stopped listening, producing uptimer 503s
+# ("upstream connect error ... remote connection failure") during rolling
+# deploys. 30s clears the worst-case window with margin.
+- type: replace
+  path: /instance_groups/name=router/jobs/name=gorouter/properties/router/drain_wait?
+  value: 30
