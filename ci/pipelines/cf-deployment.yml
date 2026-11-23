@@ -2186,6 +2186,31 @@ jobs:
     - get: cf-deployment-develop
     - get: cf-deployment-release-candidate
       passed: [bless-manifest]
+  - &ensure-main-is-fast-forwardable
+    task: ensure-main-is-fast-forwardable
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: cloudfoundry/bosh-cli
+      inputs:
+      - name: cf-deployment-main
+      - name: cf-deployment-release-candidate
+      run:
+        path: /bin/bash
+        args:
+        - -exc
+        - |
+          main_sha="$(git -C cf-deployment-main rev-parse HEAD)"
+          if ! git -C cf-deployment-release-candidate merge-base --is-ancestor "${main_sha}" HEAD; then
+            echo
+            echo "ERROR: the tip of 'main' (${main_sha}) is not yet contained in 'release-candidate'."
+            echo "Pushing to 'main' would be rejected (non-fast-forward)."
+            echo "This can happen if the validation pipeline has not successfully completed since the last release."
+            exit 1
+          fi
+          echo "OK: 'release-candidate' contains the current tip of 'main'; the push to 'main' will fast-forward."
   - task: check-stemcell-versions
     file: runtime-ci/tasks/check-stemcell-versions/task.yml
   - task: update-cf-deployment-manifest-version
@@ -2213,6 +2238,7 @@ jobs:
     - get: cf-deployment-develop
     - get: cf-deployment-release-candidate
       passed: [bless-manifest]
+  - *ensure-main-is-fast-forwardable
   - task: check-stemcell-versions
     file: runtime-ci/tasks/check-stemcell-versions/task.yml
   - task: update-cf-deployment-manifest-version
@@ -2240,6 +2266,7 @@ jobs:
     - get: cf-deployment-develop
     - get: cf-deployment-release-candidate
       passed: [bless-manifest]
+  - *ensure-main-is-fast-forwardable
   - task: check-stemcell-versions
     file: runtime-ci/tasks/check-stemcell-versions/task.yml
   - task: update-cf-deployment-manifest-version
